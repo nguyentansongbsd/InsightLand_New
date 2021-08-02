@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"         
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             BackgroundColor="White"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true"
+             x:Class="ConasiCRM.Portable.Views.LeadForm">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ExpanderHeaderStyle" TargetType="telerikPrimitives:ExpanderHeader">
+                <Setter Property="IndicatorText" Value="&#xf105;"/>
+                <Setter Property="IndicatorLocation" Value="Start"/>
+                <Setter Property="IndicatorFontSize" Value="16"/>
+                <Setter Property="IndicatorColor" Value="#000000"/>
+                <Setter Property="BackgroundColor" Value="#F2F2F2"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="IndicatorFontFamily" Value="FontAwesomeSolid"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">
+                <StackLayout>
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Text="Thông Tin Cơ Bản" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <StackLayout BackgroundColor="White" Padding="10">
+                                <controls:FormLabelRequired Text="Tiêu đề"/>
+                                <controls:MainEntry Text="{Binding singleLead.bsd_topic_label}" FontSize="15" Placeholder="Nhập tiêu đề" />
+
+                                <controls:FormLabelRequired Text="Họ tên"/>
+                                <controls:MainEntry Text="{Binding singleLead.fullname}" FontSize="15"  Placeholder="Nhập họ tên"/>
+
+                                <controls:FormLabelRequired Text="Số điện thoại"/>
+                                <controls:MainEntry x:Name="mobilephone_text" Text="{Binding singleLead.mobilephone}" Keyboard="Telephone" FontSize="15" Placeholder="Nhập số điện thoại"/>
+
+                                <controls:FormLabel Text="Số điện thoại công ty"/>
+                                <controls:MainEntry x:Name="telephone1_text" Text="{Binding singleLead.telephone1}" Keyboard="Telephone" FontSize="15"  Placeholder="Nhập số điện thoại công ty"/>
+
+                                <controls:FormLabel Text="Chức vụ"/>
+                                <controls:MainEntry x:Name="jobtitle_text" Text="{Binding singleLead.jobtitle}" FontSize="15"  Placeholder="Nhập chức vụ"/>
+
+                                <controls:FormLabel Text="Email"/>
+                                <controls:MainEntry x:Name="emailaddress1_text" Keyboard="Email" Text="{Binding singleLead.emailaddress1}" FontSize="15"  Placeholder="Nhập Email" Margin="0,0,0,5"/>
+
+                                <!--<controls:MyNewEntry Text="{Binding AddressVn}" HasClearButton="false"  Grid.Column="1" Grid.Row="9" OnClicked="DiaChiVN_Clicked"/>-->
+
+                            </StackLayout>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Text="Thông Tin Công Ty" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <StackLayout BackgroundColor="#ffffff" Padding="10" >
+                                <controls:FormLabel VerticalOptions="Center" Text="Tên công ty" FontSize="15" />
+                                <controls:MainEntry x:Name="companyname_text" Text="{Binding singleLead.companyname}" Placeholder="Nhập tên công ty" FontSize="15"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Website" FontSize="15" />
+                                <controls:MainEntry x:Name="websiteurl_text" Text="{Binding singleLead.websiteurl}" Placeholder="Nhập website công ty" FontSize="15"/>
+
+                                <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="Địa chỉ công ty" FontSize="15" />
+                                <Grid>
+                                    <controls:MainEntry Text="{Binding AddressComposite}" Placeholder="Chọn địa chỉ công ty" FontSize="15"/>
+                                    <StackLayout>
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Address_Tapped"/>
+                                        </StackLayout.GestureRecognizers>
+                                    </StackLayout>
+                                </Grid>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Mô tả" FontSize="15"/>
+                                <controls:MainEditor x:Name="description_text" Text="{Binding singleLead.description}" Placeholder="Nhập mô tả" FontSize="15" HeightRequest="100"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Lĩnh vực" FontSize="15"/>
+                                <controls:LookUp x:Name="lookUpLinhVuc" Placeholder="Chọn lĩnh vực" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding IndustryCode}" ItemsSource="{Binding list_industrycode_optionset}"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Doanh thu mỗi năm" FontSize="15" />
+                                <controls:MainEntry x:Name="revenue_text" Keyboard="Numeric" Text="{Binding singleLead.revenue}" Placeholder="Nhập doanh thu mỗi năm" FontSize="15"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Số lượng nhân viên" FontSize="15"/>
+                                <controls:MainEntry x:Name="numberofemployees_text" Text="{Binding singleLead.numberofemployees}" Placeholder="Nhập số lượng nhân viên" Keyboard="Numeric"  FontSize="16"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Mã SIC" FontSize="15"/>
+                                <controls:MainEntry x:Name="sic_text" Text="{Binding singleLead.sic}" Placeholder="Nhập mã SIC" FontSize="15"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Đơn vị tiền tệ" FontSize="15" />
+                                <controls:LookUp x:Name="lookUpCurrency" Placeholder="Chọn đơn vị tiền tệ" BottomModal="{Reference LookUpModal}" ItemsSource="{Binding list_currency_lookup}" SelectedItem="{Binding SelectedCurrency}" NameDisplay="Label"/>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Chiến dịch" FontSize="15"/>
+                                <controls:LookUp x:Name="lookUpChienDich" Placeholder="Chọn chiến dịch" NameDisplay="Label" BottomModal="{Reference LookUpModal}" SelectedItem="{Binding Campaign}" ItemsSource="{Binding list_campaign_lookup}"/>
+
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <controls:FormLabel Grid.Column="0" VerticalOptions="Center" Text="Tài liệu tiếp thị" FontSize="15"/>
+                                    <CheckBox Grid.Column="1" IsChecked="{Binding singleLead.donotsendmm}" HorizontalOptions="End" Color="#1C78C2"/>
+                                </Grid>
+
+                                <controls:FormLabel VerticalOptions="Center" Text="Ngày cuối chiến dịch" FontSize="15"/>
+                                <controls:MainEntry Text="{Binding singleLead.lastusedincampaign,StringFormat='{0:dd/MM/yyy}'}" Placeholder="Ngày cuối chiến dịch" IsEnabled="False"/>
+                            </StackLayout>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+                </StackLayout>
+            </ScrollView>
+            <StackLayout AbsoluteLayout.LayoutBounds="0,1,1,60" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White">
+                <Button x:Name="btn_save_lead" Text="Tạo khách hàng" Clicked="SaveLead_Clicked" Margin="10" Padding="10,5" HeightRequest="40" CornerRadius="10" BackgroundColor="#2196F3" TextColor="White"/>
+            </StackLayout>
+
+            <controls:CenterModal x:Name="centerModalAddress" Title="Thiết lập địa chỉ">
+                <controls:CenterModal.Body>
+                    <ScrollView>
+                        <StackLayout Margin="10">
+                            <controls:FormLabel Text="Quốc gia"/>
+                            <controls:LookUp x:Name="lookUpCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountry}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="Country_Changed"/>
+
+                            <controls:FormLabel Text="ZIP code"/>
+                            <controls:MainEntry Placeholder="Nhập ZIP code" Text="{Binding AddressPostalCode}"/>
+
+                            <controls:FormLabel Text="Tỉnh thành"/>
+                            <controls:LookUp x:Name="lookUpProvince" Placeholder="Chọn tỉnh thành" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvince}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="Province_Changed"/>
+
+                            <controls:FormLabel Text="Quận/Huyện"/>
+                            <controls:LookUp x:Name="lookUpDistrict" Placeholder="Chọn quận/huyện" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCity}" ItemsSource="{Binding list_district_lookup}" SelectedItemChange="District_Changed"/>
+
+                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
+                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1}"/>
+                        </StackLayout>
+                    </ScrollView>
+                </controls:CenterModal.Body>
+                <controls:CenterModal.Footer>
+                    <Grid ColumnDefinitions="*,*" Margin="10">
+                        <Button Grid.Column="0" Text="Đóng" Clicked="CloseAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
+                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
+                    </Grid>
+                </controls:CenterModal.Footer>
+            </controls:CenterModal>
+
+            <controls:BottomModal x:Name="LookUpModal"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

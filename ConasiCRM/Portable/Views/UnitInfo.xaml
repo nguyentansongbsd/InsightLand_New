@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             BackgroundColor="White"
+             Title="{Binding UnitInfo.name}"
+             x:Class="ConasiCRM.Portable.Views.UnitInfo">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateFormatConverter x:Key="DateFormatConverter" />
+            <converter:DecimalFormatConverter x:Key="DecimalFormatConverter" />
+            <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout>
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}">Thông tin căn hộ</Label>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <Grid Padding="10" RowSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <controls:FormLabel Text="Số căn hộ" Grid.Row="0" />
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_units}" Grid.Row="0" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+                                    <Label FontSize="17">Mã căn hộ</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.name}" Grid.Row="1" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
+                                    <Label FontSize="17">Mã căn hộ (dự án)</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.productnumber}" Grid.Row="2" />
+
+                                <controls:FormLabel Text="Trạng thái căn hộ" Grid.Row="3"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.statuscode_format}" Grid.Row="3" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="4">
+                                    <Label FontSize="17">Loại căn hộ</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_unittype_name}" Grid.Row="4" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="5">
+                                    <Label FontSize="17">Dự án</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_project_name}" Grid.Row="5" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="6">
+                                    <Label FontSize="17">Tòa nhà/Khu</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_block_name}" Grid.Row="6" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="7">
+                                    <Label FontSize="17">Tầng</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_floor_name}" Grid.Row="7" />
+
+                                <controls:FormLabel Text="Ưu tiên (VIP)" Grid.Row="8"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_vippriority_format}" Grid.Row="8" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="9">
+                                    <Label FontSize="17">Phí đặt chỗ</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_queuingfee,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="9" />
+
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" Grid.Row="10">
+                                    <Label FontSize="17">Phí đặt cọc</Label>
+                                    <Label TextColor="Red" FontSize="16">*</Label>
+                                </StackLayout>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_depositamount,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="10" />
+                            </Grid>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}">Thông tin diện tích</Label>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <Grid Padding="10" RowSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <controls:FormLabel Text="Biên độ diện tích cho phép (+/-) %" Grid.Row="0" />
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_areavariance,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="0" />
+
+                                <controls:FormLabel Text="Diện tích xây dựng (m2)" Grid.Row="1"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_constructionarea,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="1" />
+
+                                <controls:FormLabel Text="Diện tích sử dụng (m2)" Grid.Row="2"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_netsaleablearea,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="2" />
+                            </Grid>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}">Thông tin giá</Label>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <Grid Padding="10" RowSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <controls:FormLabel Text="Giá bán" Grid.Row="0" />
+                                <controls:FormLabelValue Text="{Binding UnitInfo.price,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="0" />
+
+                                <controls:FormLabel Text="Đơn vị giá trị đất" Grid.Row="1"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_landvalueofunit,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="1" />
+
+                                <controls:FormLabel Text="Giá trị đất" Grid.Row="2"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_landvalue,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="2" />
+
+                                <controls:FormLabel Text="Phí bảo trì (%)" Grid.Row="3"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_maintenancefeespercent,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="3" />
+
+                                <controls:FormLabel Text="Phí bảo trì" Grid.Row="4"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_maintenancefees,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="4" />
+
+                                <controls:FormLabel Text="Thuế (%)" Grid.Row="5"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_taxpercent,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="5" />
+
+                                <controls:FormLabel Text="Thuế" Grid.Row="6"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_vat,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="6" />
+
+                                <controls:FormLabel Text="Tổng tiền" Grid.Row="7"/>
+                                <controls:FormLabelValue TextColor="Red" Text="{Binding UnitInfo.bsd_totalprice,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="7" />
+                            </Grid>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}">Bàn giao</Label>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <Grid Padding="10" RowSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <controls:FormLabel Text="Ngày dự kiến bàn giao" Grid.Row="0" />
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_estimatehandoverdate,Converter={StaticResource DateFormatConverter}}" Grid.Row="0" />
+
+                                <controls:FormLabel Text="Số tháng tính phí quản lý" Grid.Row="1"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_numberofmonthspaidmf}" Grid.Row="1" />
+
+                                <controls:FormLabel Text="Đơn giá tính phí quản lý (tháng/m2)" Grid.Row="2"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_managementamountmonth,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="2" />
+
+                                <controls:FormLabel Text="Điều kiện bàn giao (%)" Grid.Row="3"/>
+                                <controls:FormLabelValue Text="{Binding UnitInfo.bsd_handovercondition,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="3" />
+                            </Grid>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+                </StackLayout>
+            </ScrollView>
+            <Grid BackgroundColor="#ffffff" ColumnSpacing="0" Padding="5,0,5,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <Button Text="Video về căn hộ" Clicked="Button_Clicked_Video" Grid.Column="0" Grid.Row="0"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="FillAndExpand"/>
+                <Button Text="Hình ảnh về căn hộ" Clicked="Button_Clicked"
+                VerticalOptions="CenterAndExpand" Grid.Column="1" Grid.Row="0"
+                HorizontalOptions="FillAndExpand"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

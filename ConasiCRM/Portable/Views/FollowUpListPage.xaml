@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+    xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
+    Title="Danh sách theo dõi"
+    x:Class="ConasiCRM.Portable.Views.FollowUpListPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:GroupConverter x:Key="groupConverter"/>
+            <converters:NullToHideConverter x:Key="nullToHideConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <Grid RowDefinitions="Auto,*">
+                <SearchBar Grid.Row="0" Text="{Binding Keyword}" Placeholder="Từ khoá" SearchButtonPressed="Search_Pressed" TextChanged="Search_TextChanged"/>
+                <controls:BsdListView x:Name="listView" Grid.Row="1" ItemsSource="{Binding Data}" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
+                    <controls:BsdListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="15,10" Margin="0,1">
+                                    <Label Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding bsd_name}" IsVisible="{Binding bsd_name,Converter={StaticResource nullToHideConverter}}" FontSize="16" FontAttributes="Bold" TextColor="#333333"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Text="Dự án: " FontSize="16" TextColor="#444444"/>
+                                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding bsd_name_project}" FontSize="16" TextColor="#333333"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Group: " FontSize="16" TextColor="#444444" />
+                                    <Label Grid.Row="2" Grid.Column="1" Text="{Binding bsd_group,Converter={StaticResource groupConverter}}" FontSize="16" TextColor="#333333"/>
+
+                                    <Label Grid.Row="3" Grid.Column="0" Text="Căn hộ: " FontSize="16" TextColor="#444444"/>
+                                    <Label Grid.Row="3" Grid.Column="1" Text="{Binding name_unit}" FontSize="16" TextColor="#333333"/>
+
+                                    <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="0" >
+                                        <Label Grid.Column="0" Text="Ngày: " FontSize="15" TextColor="Gray"/>
+                                        <Label Grid.Column="1" Text="{Binding bsd_date,StringFormat='{0:dd/MM/yyyy}'}" FontSize="15" TextColor="Gray"/>
+                                        <Label Grid.Column="2" Text=" - "/>
+                                        <Label Grid.Column="3" Text="Ngày hết hạn: " FontSize="15" TextColor="Gray"/>
+                                        <Label Grid.Column="4" Text="{Binding bsd_expiredate,StringFormat='{0:dd/MM/yyyy}'}" FontSize="15" TextColor="Gray"/>
+                                    </Grid>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </controls:BsdListView.ItemTemplate>
+                </controls:BsdListView>
+            </Grid>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

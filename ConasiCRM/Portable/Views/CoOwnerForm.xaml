@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             Title="Người đồng sở hữu"
+             BackgroundColor="White"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             x:Class="ConasiCRM.Portable.Views.CoOwnerForm">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:ObjToBoolConverter x:Key="ObjToBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout Spacing=".5" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <ScrollView>
+                    <StackLayout Padding="5">
+                        <telerikPrimitives:RadExpander x:Name="ExpanderCoOwner" IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Style="{StaticResource ExpanderHeadingText}">Thông tin chung</Label>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                                        <ColumnDefinition Width="6*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <controls:FormLabelRequired Text="Mô tả" Grid.Row="0" />
+                                    <controls:BsdEntry Text="{Binding CoOwner.bsd_name}" Grid.Column="1" Grid.Row="0" />
+
+                                    <controls:FormLabelRequired Text="Khách hàng" Grid.Column="0" Grid.Row="1" />
+                                    <controls:BsdLookUp Placeholder="Chọn khách hàng" SelectedItem="{Binding Customer}" OpenClicked="BsdLookUp_OpenClicked" Grid.Column="1" Grid.Row="1" />
+
+                                    <controls:FormLabelRequired Text="Mối quan hệ" Grid.Column="0" Grid.Row="2" />
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="Center" Grid.Column="1" Grid.Row="2">
+                                        <Picker x:Name="RelatinShipPicker" HorizontalOptions="FillAndExpand" ItemDisplayBinding="{Binding Label}" SelectedItem="{Binding RelationShip, Mode=TwoWay}" ItemsSource="{Binding RelationShipOptionList}" FontSize="16" />
+                                        <Button IsVisible="{Binding RelationShip,Converter={StaticResource ObjToBool}}" BackgroundColor="Transparent" Clicked="ClearOptionSet_Clicked" CommandParameter="RelationShip" Image="clear.png" WidthRequest="40" HeightRequest="40" VerticalOptions="EndAndExpand" />
+                                    </StackLayout>
+
+                                    <controls:FormLabelRequired Text="Báo giá" Grid.Column="0" Grid.Row="3" />
+                                    <controls:FormLabelValue Text="{Binding CoOwner.reservation_name}" Grid.Row="3" />
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                    </StackLayout>
+                </ScrollView>
+                <StackLayout x:Name="btnGroup" Orientation="Horizontal" VerticalOptions="EndAndExpand" BackgroundColor="White">
+                    <Button Clicked="Cancle_Clicked" BackgroundColor="#eeeeee" HorizontalOptions="FillAndExpand" Text="Hủy" TextColor="Black" />
+                    <Button Clicked="Save_Clicked" BackgroundColor="#eeeeee" HorizontalOptions="FillAndExpand" Text="Lưu" TextColor="Black" />
+                </StackLayout>
+            </StackLayout>
+            <controls:ModalContentView x:Name="modalLookUp" />
+            <!--<controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource IndicatorColor}" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>-->
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

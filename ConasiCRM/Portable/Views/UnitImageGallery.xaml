@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage BackgroundColor="White" 
+             xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:telerikDataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls" 
+             xmlns:telerikListView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls" 
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
+             Title="Hình ảnh căn hộ" 
+             x:Class="ConasiCRM.Portable.Views.UnitImageGallery">
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="absoluteLayout" LayoutChanged="Handle_LayoutChanged" Padding="2">
+            <Label x:Name="EmptyText" Text="Không có hình ảnh để hiển thị" TextColor="Gray" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" IsVisible="false"/>
+            <!--<telerikDataControls:RadListView x:Name="listView" SelectionMode="None" ItemsSource="{Binding ImageList}" WidthRequest="{Binding widthListView}" MinimumHeightRequest="{Binding heightListView}">
+                <telerikDataControls:RadListView.LayoutDefinition>
+                    <telerikListView:ListViewGridLayout GroupHeaderLength="34" HorizontalItemSpacing="3" VerticalItemSpacing="3" SpanCount="{Binding noOfColumns}" ItemLength="120" Orientation="Vertical"/>
+                </telerikDataControls:RadListView.LayoutDefinition>
+                <telerikDataControls:RadListView.ItemTemplate>
+                    <DataTemplate>
+                        <telerikListView:ListViewTemplateCell>
+                            <telerikListView:ListViewTemplateCell.View>
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="LstImage_ItemTapped"
+                                              CommandParameter="{Binding}" />
+                                    </Grid.GestureRecognizers>
+                                    <Image Source="{Binding ImageSource}" Aspect="AspectFill"/>
+                                </Grid>
+                            </telerikListView:ListViewTemplateCell.View>
+                        </telerikListView:ListViewTemplateCell>
+                    </DataTemplate>
+                </telerikDataControls:RadListView.ItemTemplate>
+            </telerikDataControls:RadListView>-->
+            <CollectionView x:Name="listView" SelectionMode="None" ItemsSource="{Binding ImageList}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="2">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="LstImage_ItemTapped" CommandParameter="{Binding}" />
+                            </Grid.GestureRecognizers>
+                            <Image x:Name="img" Source="{Binding ImageSource}" HeightRequest="{Binding Path=Width, Source={x:Reference img}}" Aspect="AspectFill"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="{Binding IsBusy}" Color="Black" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>
+            <controls:ModalContentView x:Name="modalImage" IsVisible="False" Padding="0" BackgroundColor="Black">
+                <AbsoluteLayout>
+                    <telerikPrimitives:RadSlideView IsAnimated="true" x:Name="SlideView" 
+                                                    SlideButtonsColor="#C0808080"
+                                                    ShowIndicators="false"
+                                                    IsInfiniteScrollingEnabled="false"
+                                                    ItemsSource="{Binding ImageList}"
+                                                    AutomationId="slideView"
+                                                    AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                                    AbsoluteLayout.LayoutFlags="All">
+                        <telerikPrimitives:RadSlideView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <controls:PinchToZoomContainer x:Name="DetailZoom" OnZoomUpdated="Handle_OnZoomUpdated">
+                                        <controls:PinchToZoomContainer.Content>
+                                            <Image Source="{Binding ImageSource}"/>
+                                        </controls:PinchToZoomContainer.Content>
+                                    </controls:PinchToZoomContainer>
+                                </Grid>
+                            </DataTemplate>
+                        </telerikPrimitives:RadSlideView.ItemTemplate>
+                    </telerikPrimitives:RadSlideView>
+                    
+                    <ImageButton Source="btn_close.png" 
+                                 VerticalOptions="Start"
+                                 BackgroundColor="#C0808080"
+                                 HorizontalOptions="End" 
+                                 Margin="10"
+                                 HeightRequest="30"
+                                 WidthRequest="30"
+                                 Clicked="BtnCloseModalImage_Clicked"
+                                 AbsoluteLayout.LayoutBounds="0,0,1,1" 
+                                 Aspect="AspectFit"
+                                 AbsoluteLayout.LayoutFlags="All"/>
+                </AbsoluteLayout>
+                
+            </controls:ModalContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

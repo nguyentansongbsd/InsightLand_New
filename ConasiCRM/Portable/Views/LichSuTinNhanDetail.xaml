@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ConasiCRM.Portable.Views.LichSuTinNhanDetail">
+    <ContentPage.Content>
+        <ListView HasUnevenRows="true" SelectionMode="None" x:Name="listview">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="{Binding paddingContent}">
+                            <Frame x:Name="frame" CornerRadius="5" BackgroundColor="{Binding backgroundColor}">
+                                <Label Text="{Binding msg}" LineBreakMode="WordWrap" FontSize="15" TextColor="{Binding textColor}"/>
+                            </Frame>
+                            <Label Text="{Binding time}" FontSize="14"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

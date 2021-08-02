@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             AbsoluteLayout.LayoutBounds="0,0,1,1"
+             AbsoluteLayout.LayoutFlags="All"
+             Padding="40"
+             IsVisible="{Binding IsShow}"
+             x:Class="ConasiCRM.Portable.Controls.BsdModal">
+    <ContentView.Content>
+        <StackLayout x:Name="mainStackLayout" BackgroundColor="#ffffff">
+            <StackLayout Orientation="Horizontal" BackgroundColor="{StaticResource ExpanderHeaderBackground}">
+                <Label Margin="0,0,0,10" x:Name="ModalTitle" HorizontalOptions="StartAndExpand" Text="{Binding HeaderText}" TextColor="{StaticResource ExpanderHeaderTextColor}" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18" />
+                <Button HorizontalOptions="End" Text="Đóng" x:Name="btnCloseModal" Clicked="BtnCloseModal_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

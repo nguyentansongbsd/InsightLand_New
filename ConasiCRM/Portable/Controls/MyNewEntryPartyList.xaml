@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+              xmlns:telerikListView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls" 
+             xmlns:telerikDataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls" 
+             BackgroundColor="White"
+             x:Class="ConasiCRM.Portable.Controls.MyNewEntryPartyList">
+    <ContentView.Content>
+        <Grid ColumnDefinitions="*,16">
+            <Entry Focused="EntryUnfocused_Focused" x:Name="entryLine" Grid.Column="0" Grid.ColumnSpan="2"/>
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Grid.Column="0">
+                <StackLayout x:Name="stackLayout_Content" Orientation="Horizontal" VerticalOptions="CenterAndExpand"/>
+            </ScrollView>
+            <ImageButton Clicked="Handle_Tapped" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1" BackgroundColor="Transparent" HeightRequest="16" WidthRequest="16">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FontAwesomeSolid" Color="Gray" Glyph="&#xf078;" Size="Large"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

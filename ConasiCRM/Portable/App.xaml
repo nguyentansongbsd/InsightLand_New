@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             x:Class="ConasiCRM.Portable.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!--CLEAR DATA BUTTON-->
+            <Style x:Key="ClearButtonStyle" TargetType="Button">
+                <Setter Property="Text" Value="&#xf057;" />
+                <Setter Property="TextColor" Value="LightGray" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="BackgroundColor" Value="transparent" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="WidthRequest" Value="34" />
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0" />
+            </Style>
+
+            <Color x:Key="IndicatorColor">#000000</Color>
+            <Color x:Key="GridHeadingBG">#8ba3d3</Color>
+            <Color x:Key="GridHeadingTextColor">#FFFFFF</Color>
+            <Color x:Key="GridHeadingBorder">#d8d4d4</Color>
+            <Color x:Key="SearchBarBG">#e5e3e3</Color>
+            <Color x:Key="SearchBarBorderColor">#666666</Color>
+            <Color x:Key="NavigationPrimary">#1399D5</Color>
+
+            <Color x:Key="ExpanderHeaderBackground">#F3F3F3</Color>
+            <Color x:Key="ExpanderHeaderTextColor">Black</Color>
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="BarTextColor" Value="White" />
+            </Style>
+
+            <Style x:Key="ExpanderHeaderStyle" TargetType="telerikPrimitives:ExpanderHeader">
+                <Setter Property="IndicatorColor" Value="Black" />
+                <Setter Property="IndicatorAnimationDuration" Value="50" />
+                <Setter Property="BackgroundColor" Value="{StaticResource ExpanderHeaderBackground}" />
+                <Setter Property="BorderColor" Value="#BFC5C6" />
+            </Style>
+
+            <Style x:Key="ExpanderHeadingText" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource ExpanderHeaderTextColor}" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

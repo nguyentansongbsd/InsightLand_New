@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             BackgroundColor="White"
+             Title="{Binding Title}"
+             x:Class="ConasiCRM.Portable.Views.SpecialDiscountForm">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <ScrollView>
+                    <StackLayout Padding="5">
+                        <telerikPrimitives:RadExpander x:Name="ExpanderCoOwner" IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Style="{StaticResource ExpanderHeadingText}">Thông tin chung</Label>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*" />
+                                        <ColumnDefinition Width="6*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <controls:FormLabelRequired Text="Báo giá" Grid.Row="0" />
+                                    <controls:BsdEntry Text="{Binding SpecialDiscount.quote_name}" IsEnabled="False" Grid.Column="1" Grid.Row="0"/>
+
+                                    <controls:FormLabelRequired Text="Cách tính" Grid.Row="1" />
+                                    <Picker Grid.Row="1" SelectedItem="{Binding CachTinh}" SelectedIndexChanged="PickerCachTinh_SelectedIndexChanged" Grid.Column="1" x:Name="pickerCachTinh" Title="Chọn cách tính" FontSize="16" ItemsSource="{Binding CachTinh_Options}" ItemDisplayBinding="{Binding Label}" />
+
+                                    <controls:FormLabelRequired x:Name="lblPhanTramGiamGia" Text="Giảm giá(%)" Grid.Row="2" IsVisible="False"/>
+                                    <controls:BsdEntry x:Name="entryPhanTramGiamGia" PropertyChanged="EntryPhanTramGiamGia_PropertyChanged" Grid.Row="2" Grid.Column="1" IsVisible="False"/>
+
+                                    <controls:FormLabelRequired x:Name="lblSoTienGiamGia" Text="Số tiền giảm giá" Grid.Row="2" />
+                                    <controls:BsdEntry x:Name="entrySoTienGiamGia" PropertyChanged="EntrySoTienGiamGia_PropertyChanged" Grid.Row="2" Grid.Column="1" />
+
+                                    <controls:FormLabelRequired Text="Tên" Grid.Row="3"/>
+                                    <controls:BsdEntry Text="{Binding SpecialDiscount.bsd_name}" Grid.Row="3" Grid.Column="1" />
+
+                                    <controls:FormLabelRequired Text="Lý do" Grid.Row="4" />
+                                    <controls:BsdEntry Text="{Binding SpecialDiscount.bsd_reasons}" Grid.Row="4" Grid.Column="1" />
+
+                                    <controls:FormLabelRequired Text="Ngày xác nhận" Grid.Row="5" />
+                                    <DatePicker Date="{Binding SpecialDiscount.bsd_approvaldate}" FontSize="16" Grid.Row="5" Grid.Column="1" />
+
+                                    <controls:FormLabelRequired Text="Người xác nhận" Grid.Row="6" />
+                                    <controls:BsdLookUp Grid.Row="6" Placeholder="Chọn người xác nhận" SelectedItem="{Binding Approver}" OpenClicked="NguoiXacNhan_OpenClicked" Grid.Column="1" />
+
+                                    <controls:FormLabelRequired x:Name="lblCreatedOn" Text="Ngày tạo" Grid.Row="7" IsVisible="False" />
+                                    <controls:BsdEntry x:Name="entryCreatedOn" IsEnabled="False" Grid.Row="7" IsVisible="False" Grid.Column="1" Text="{Binding SpecialDiscount.createdon}" />
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                    </StackLayout>
+                </ScrollView>
+                <Grid VerticalOptions="EndAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" x:Name="btnCancle" Clicked="BtnCancle_Clicked" BackgroundColor="#eeeeee" HorizontalOptions="FillAndExpand" Text="Hủy" TextColor="Black" />
+                    <Button Grid.Column="1" Grid.Row="0" x:Name="btnSave" Clicked="BtnSave_Clicked" BackgroundColor="#eeeeee" HorizontalOptions="FillAndExpand" Text="Lưu" TextColor="Black" />
+                </Grid>
+            </StackLayout>
+            <controls:ModalContentView x:Name="modalLookUp" />
+            <!--<controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource IndicatorColor}" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>-->
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

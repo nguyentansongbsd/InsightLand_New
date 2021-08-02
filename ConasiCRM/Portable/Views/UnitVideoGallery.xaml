@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:video="clr-namespace:FormsVideoLibrary"
+             xmlns:telerikDataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls" 
+             xmlns:telerikListView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls" 
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ConasiCRM.Portable.Views.UnitVideoGallery">
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="absoluteLayout" >
+            <Label x:Name="EmptyText" Text="Không có phim để hiển thị" TextColor="Gray" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" IsVisible="false"/>
+            <ListView x:Name="listview" ItemTapped="LstVideo_ItemTapped" ItemsSource="{Binding VideoList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Margin="10,0" Spacing="10">
+                                <Image Source="video_icon.png" HeightRequest="50"/>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Start" VerticalTextAlignment="Center"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="{Binding IsBusy}" Color="Black" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

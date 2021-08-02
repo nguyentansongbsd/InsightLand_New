@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             x:Class="ConasiCRM.Portable.Controls.MyNewEntry">
+    <ContentView.Content>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+            <controls:EntryUnfocused x:Name="Text_entry" Text="{Binding Text}" FontSize="{Binding FontSize}" TextColor="{Binding TextColor}"
+                       Placeholder="{Binding PlaceHolder}" PlaceholderColor="#bababa" HorizontalOptions="FillAndExpand"/>
+            
+            <ImageButton x:Name="clear_entry_button" IsVisible="{Binding HasClearButton}" HorizontalOptions="Start" BackgroundColor="#ffffff" Source="clear.png" HeightRequest="20" WidthRequest="20"/>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

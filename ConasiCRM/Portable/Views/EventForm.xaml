@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:telerikGrid="clr-namespace:Telerik.XamarinForms.DataGrid;assembly=Telerik.XamarinForms.DataGrid"
+             Title="Sự Kiện"
+             BackgroundColor="#ffffff"
+             x:Class="ConasiCRM.Portable.Views.EventForm">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+                <StackLayout>
+                    <Label Text="Thông Tin Sự Kiện" TextColor="Black" Padding="15,10" FontSize="18" FontAttributes="Bold" BackgroundColor="#F3F3F3"/>
+                    <Grid Padding="10" RowSpacing="15" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
+                        <controls:FormLabel Text="Mã sự kiện" Grid.Row="0" />
+                        <controls:FormLabelValue Text="{Binding Event.bsd_eventcode}" Grid.Row="0" />
+
+                        <controls:FormLabel Text="Tên sự kiện" Grid.Row="1" />
+                        <controls:FormLabelValue Text="{Binding Event.bsd_name}" Grid.Row="1" />
+
+                        <controls:FormLabel Text="Dự án" Grid.Row="2" />
+                        <controls:FormLabelValue Text="{Binding Event.bsd_project_name}" Grid.Row="2" />
+
+                        <controls:FormLabel Text="Đợt mở bán" Grid.Row="3" />
+                        <controls:FormLabelValue Text="{Binding Event.phaselaunch_bsd_name}" Grid.Row="3" />
+
+                        <controls:FormLabel Text="Thời gian bắt đầu" Grid.Row="4" />
+                        <controls:FormLabelValue Text="{Binding Event.bsd_startdate_format}" Grid.Row="4" />
+
+                        <controls:FormLabel Text="Thời gian kết thúc" Grid.Row="5" />
+                        <controls:FormLabelValue Text="{Binding Event.bsd_enddate_format}" Grid.Row="5" />
+
+                        <controls:FormLabel Text="Trạng thái" Grid.Row="6" />
+                        <controls:FormLabelValue Text="{Binding Event.statuscode_format}" Grid.Row="6" />
+
+                        <controls:FormLabel Text="Mô tả" Grid.Row="7" />
+                        <controls:FormLabelValue Text="{Binding Event.bsd_description}" Grid.Row="7" />
+                    </Grid>
+
+                    <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Đợt Mở Bán"/>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <Grid Padding="10" RowSpacing="15" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
+                                <controls:FormLabel Text="Dự án" Grid.Row="0" />
+                                <controls:FormLabelValue Text="{Binding Event.bsd_project_name}" Grid.Row="0" />
+
+                                <controls:FormLabel Text="Bảng giá" Grid.Row="1" />
+                                <controls:FormLabelValue Text="{Binding Event.pricelevel_name}" Grid.Row="1" />
+
+                                <controls:FormLabel Text="Ngày bắt đầu" Grid.Row="2" />
+                                <controls:FormLabelValue Text="{Binding Event.phaselaunch_startdate_format}" Grid.Row="2" />
+
+                                <controls:FormLabel Text="Ngày kết thúc" Grid.Row="3" />
+                                <controls:FormLabelValue Text="{Binding Event.phaselaunch_enddate_format}" Grid.Row="3" />
+
+                                <controls:FormLabel Text="Trạng thái" Grid.Row="4" />
+                                <controls:FormLabelValue Text="{Binding Event.phaselaunch_statuscode_format}" Grid.Row="4" />
+                            </Grid>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+
+                </StackLayout>
+            </ScrollView>
+            <controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="True" Color="{StaticResource IndicatorColor}" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

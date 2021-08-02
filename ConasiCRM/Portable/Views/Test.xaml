@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:view="clr-namespace:ConasiCRM.Portable.Views"
+             x:Class="ConasiCRM.Portable.Views.Test">
+    <ContentPage.Content>
+        <view:AccountsContentView/>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             BackgroundColor="White"
+             Title="{Binding Title}"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             x:Class="ConasiCRM.Portable.Views.HoaHongGiaoDichForm">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateFormatConverter x:Key="DateFormatConverter"/>
+            <converter:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
+            <converter:DecimalToPercentConverter x:Key="DecimalToPercentConverter" />
+            <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout Spacing=".5" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Margin="0,0,0,0" AbsoluteLayout.LayoutFlags="All">
+                <ScrollView>
+                    <StackLayout Padding="5">
+                        <!-- Thông tin cơ bản-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Cơ Bản" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackLayout x:Name="TitleLabel" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="0">
+                                        <Label FontSize="17">Tiêu đề</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="TitleValue" Text="{Binding HoaHongGiaoDich.bsd_name }" Grid.Row="0"  />
+                                    
+                                    <controls:FormLabel Text="Hợp đồng" Grid.Row="1" Grid.Column="0" />
+                                    <controls:FormLabelValue x:Name="salesorder_value" Text="{Binding HoaHongGiaoDich.salesorder_name}" Grid.Row="1" />
+
+                                    <controls:FormLabel Text="Đại lý/Sàn BĐS" Grid.Row="2" Grid.Column="0" />
+                                    <controls:FormLabelValue x:Name="agency" Text="{Binding HoaHongGiaoDich.accounts_bsd_name}" Grid.Row="2" />
+
+                                    <controls:FormLabel Text="Nhân viên kinh doanh" Grid.Row="3" Grid.Column="0" />
+                                    <controls:FormLabelValue x:Name="business" Text="{Binding HoaHongGiaoDich.sale_name}" Grid.Row="3" />
+
+                                    <StackLayout x:Name="bsd_type" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="4">
+                                        <Label FontSize="17">Loại hoa hồng</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="bsd_type_value" Text="{Binding HoaHongGiaoDich.bsd_type_format}" Grid.Row="4" />
+
+                                    <StackLayout x:Name="bsd_method" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="5">
+                                        <Label FontSize="17">Phương thức</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="bsd_method_value" Text="{Binding HoaHongGiaoDich.bsd_method_format}" Grid.Row="5" />
+                                    
+                                    <StackLayout x:Name="bsd_startdate" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="6">
+                                        <Label FontSize="17">Ngày bắt đầu</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="bsd_startdate_value" Text="{Binding HoaHongGiaoDich.bsd_startdate, Converter={StaticResource DateFormatConverter}}" Grid.Row="6" />
+
+                                    <StackLayout x:Name="bsd_enddate" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="7">
+                                        <Label FontSize="17">Ngày kết thúc</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="bsd_enddate_value" Text="{Binding HoaHongGiaoDich.bsd_enddate, Converter={StaticResource DateFormatConverter}}" Grid.Row="7" />
+
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+
+                        <!--Thông tin duyệt-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Duyệt" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:FormLabel Text="Ngày duyệt" Grid.Row="0" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_approvaldate, Converter={StaticResource DateFormatConverter}}" Grid.Row="0" />
+
+                                    <controls:FormLabel Text="Người duyệt" Grid.Row="1" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.systemusers_name}" Grid.Row="1" />
+
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                        
+                        <!--Thông tin bất động sản-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Bất Động Sản" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:FormLabel Text="Phiếu đặt cọc" Grid.Row="0" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.quote_name}" Grid.Row="0" />
+
+                                    <StackLayout x:Name="DuAnLabel" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="1">
+                                        <Label FontSize="17">Dự án</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.project_bsd_name}" Grid.Row="1" />
+
+                                    <StackLayout x:Name="BatDongSanLabel" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="2">
+                                        <Label FontSize="17">Bất động sản</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="BatDongSanValue" Text="{Binding HoaHongGiaoDich.products_name}" Grid.Row="2" />
+
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                        <!--Thông tin thanh toán-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Thanh Toán" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:FormLabel Text="Thanh toán cọc(%)" Grid.Row="0" Grid.Column="0" />
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmscollecteddepositedpercent, Converter={StaticResource DecimalToPercentConverter}}" Grid.Row="0" />
+
+                                    <controls:FormLabel Text="Thanh toán cọc(số tiền)" Grid.Row="1" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmscollecteddepositedamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="1" />
+
+                                    <controls:FormLabel Text="Đủ điều kiện(%)" Grid.Row="2" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmsqualifiedpercent, Converter={StaticResource DecimalToPercentConverter}}" Grid.Row="2" />
+
+                                    <controls:FormLabel Text="Đủ điều kiện(số tiền)" Grid.Row="3" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmsqualifiedamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="3"  />
+
+                                    <controls:FormLabel Text="Ký hợp đồng(%)" Grid.Row="4" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmssigncontractpercent, Converter={StaticResource DecimalToPercentConverter}}" Grid.Row="4" />
+
+                                    <controls:FormLabel Text="Ký hợp đồng(số tiền)" Grid.Row="5" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmssigncontractamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="5"  />
+                                    
+                                    <controls:FormLabel Text="Từng đợt thanh toán" Grid.Row="6" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmsinstallments_format}" Grid.Row="6" />
+
+                                    <controls:FormLabel Text="Đợt thanh toán(%)" Grid.Row="7" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmsiinstallmentercent, Converter={StaticResource DecimalToPercentConverter}}" Grid.Row="7" />
+
+                                    <controls:FormLabel Text="Đợt thanh toán(số tiền)" Grid.Row="8" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_cmssigncontractamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="8"  />
+
+                                    <controls:FormLabel Text="Thời gian tính hoa hồng cho đợt thanh toán" Grid.Row="9" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_typeofcommissiontime_format}" Grid.Row="9"  />
+
+                                    <controls:FormLabel Text="Ngày cố định" Grid.Row="10" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_fixdate, Converter={StaticResource DateFormatConverter}}" Grid.Row="10"  />
+
+                                    <controls:FormLabel Text="Số thứ tự đợt thanh toán" Grid.Row="11" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_installmentno}" Grid.Row="11"  />
+                                    
+                                    <controls:FormLabel Text="Đợt thanh toán" Grid.Row="12" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.paymentschemedetail_name}" Grid.Row="12"  />
+
+                                    <controls:FormLabel Text="Phần trăm được hưởng hoa hồng" Grid.Row="13" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_commissiontransactionpercent, Converter={StaticResource DecimalToPercentConverter}}" Grid.Row="13"  />
+
+                                    <controls:FormLabel Text="Số tiền hưởng hoa hồng" Grid.Row="14" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_commissiontransactionamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="14"  />
+
+                                    <controls:FormLabel Text="Tổng tiền" Grid.Row="15" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding HoaHongGiaoDich.bsd_totalcommission, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="15" />
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+            <controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource IndicatorColor}" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

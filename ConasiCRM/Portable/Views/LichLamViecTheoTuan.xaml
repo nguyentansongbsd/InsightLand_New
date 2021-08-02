@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
+             x:Class="ConasiCRM.Portable.Views.LichLamViecTheoTuan"
+             xmlns:local="clr-namespace:ConasiCRM.Portable.Controls"
+             Title="Lịch Làm Việc Theo Tuần">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:NullToBooleanConvert x:Key="NullToBool" />
+            <local:NotNullToBoolean x:Key="NotNullToBool" />
+            <local:BoolToIntHideGrid x:Key="BoolToInt" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="plus.png" Clicked="AddButton_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <DatePicker Date="{Binding selectedDate}" DateSelected="Handle_DateSelected"/>
+            <ListView x:Name="listView" IsGroupingEnabled="true" 
+                      ItemsSource="{Binding selectedDateEventsGrouped}" 
+                      Grid.Row="1" 
+                      HasUnevenRows="true"
+                      SelectionMode="None"
+                      ItemTapped="Event_Tapped">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="5">
+                                <Label Text="{Binding Key, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" FontSize="Medium"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                           <StackLayout BackgroundColor="Transparent" Padding="0,5">
+                                <Grid Padding="16,0,16,0" BackgroundColor="Transparent">
+                                    <Grid Grid.ColumnSpacing="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid BackgroundColor="{Binding LeadBorderColor}" />
+                                        <StackLayout Grid.Column="1" BackgroundColor="{Binding ItemBackgroundColor}" Padding="8,12,12,12">
+                                            
+                                            <StackLayout VerticalOptions="Start" Orientation="Horizontal" Spacing="15">
+                                                <Label Text="{Binding activitytype_label}" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+                                                <StackLayout Spacing="5" Orientation="Horizontal" IsVisible="{Binding Title,Converter={StaticResource NotNullToBool}}">
+                                                    <Label Text="(" FontAttributes="Italic" FontSize="Micro" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding StartTimeString}" FontAttributes="Italic" FontSize="Micro" VerticalTextAlignment="Center"/>
+                                                    <Label Text="-" FontSize="Micro" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding EndTimeString}" FontAttributes="Italic" FontSize="Micro" VerticalTextAlignment="Center"/>
+                                                    <Label Text=")" FontAttributes="Italic" FontSize="Micro" VerticalTextAlignment="Center"/>
+                                                </StackLayout>
+                                                
+                                            </StackLayout>
+                                            
+                                            
+                                            <Grid VerticalOptions="FillAndExpand">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <Label Text="{Binding Title}" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Center" >
+                                                    <Label.FontSize>
+                                                        <OnPlatform x:TypeArguments="x:Double">
+                                                            <On Platform="Android, UWP">12</On>
+                                                            <On Platform="iOS">14</On>
+                                                        </OnPlatform>
+                                                    </Label.FontSize>
+                                                </Label>
+                                                
+                                                <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding status_label}" TextColor="Gray"/>
+                                            </Grid>
+                                        </StackLayout>
+                                        
+                                    </Grid>
+                                </Grid>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

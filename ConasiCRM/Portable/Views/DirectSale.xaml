@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             BackgroundColor="White"
+             Title="Bán hàng"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             xmlns:directSaleConverter ="clr-namespace:ConasiCRM.Portable.Converters.DirectSale"
+             x:Name="rootPage"
+             x:Class="ConasiCRM.Portable.Views.DirectSale">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateFormatConverter x:Key="DateFormatConverter" />
+            <converter:DecimalFormatConverter x:Key="DecimalFormatConverter" />
+            <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
+            <converter:ObjToBoolConverter x:Key="ObjToBool" />
+            <converter:BoolToBoolConverter x:Key="BoolToBool" />
+            <directSaleConverter:ProjectToVisibleBtn x:Key="ProjectToVisibleBtn" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout Spacing=".5" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <ScrollView>
+                    <StackLayout Spacing="0">
+                        <Label Style="{StaticResource ExpanderHeadingText}" HorizontalOptions="FillAndExpand" BackgroundColor="#F3F3F3" Padding="10,0">Thông tin bán hàng</Label>
+
+                        <controls:FormLabelRequired Text="Dự án" Margin="10,5,10,0"/>
+                        <controls:BsdLookUp Placeholder="Chọn dự án" SelectedItem="{Binding Project}" OpenClicked="Project_Focused" Margin="10,5,10,5"/>
+
+                        <controls:FormLabel Text="Đợt mở bán" Margin="10,5,10,0" />
+                        <controls:BsdLookUp Placeholder="Chọn đợt mở bán" SelectedItem="{Binding PhasesLanch}" OpenClicked="EntryPhasesLaunch_Focused" Margin="10,5,10,5" />
+
+                        <StackLayout Margin="10,5" Orientation="Horizontal">
+                            <controls:FormLabel Text="Sự kiện"/>
+                            <telerikPrimitives:RadCheckBox CheckedColor="{StaticResource NavigationPrimary}" x:Name="checkbox" IsChecked="{Binding IsEvent,Mode=TwoWay}" />
+                        </StackLayout>
+
+                        <controls:FormLabel Text="Mã sản phẩm" Margin="10,5,10,0"/>
+                        <controls:MainEntry Text="{Binding UnitCode}" Placeholder="Mã sản phẩm" Margin="10,5,10,5"/>
+
+                        <controls:FormLabel Text="Hướng nhìn" Margin="10,5,10,0" VerticalOptions="Start"/>
+                        <controls:MultipleSelect x:Name="multipleSelectView" 
+                                                             VerticalOptions="Center"
+                                                             Placeholder="Chọn View"
+                                                             ItemsSource="{Binding BindingContext.ViewOptions,Source={x:Reference rootPage}}"
+                                                             SelectedItems="{Binding BindingContext.SelectedViews,Source={x:Reference rootPage}}"
+                                                             Margin="10,5,10,5"/>
+
+                        <controls:FormLabel Text="Hướng" Margin="10,5,10,0" VerticalOptions="Start"/>
+                        <controls:MultipleSelect x:Name="multipleSelectDirection" 
+                                                             VerticalOptions="Center"
+                                                             Placeholder="Chọn hướng"
+                                                             ItemsSource="{Binding BindingContext.DirectionOptions,Source={x:Reference rootPage}}"
+                                                             SelectedItems="{Binding BindingContext.SelectedDirections,Source={x:Reference rootPage}}"
+                                                             Margin="10,5,10,5"/>
+
+                        <controls:FormLabel Text="Tình trạng BĐS" Margin="10,5,10,0" VerticalOptions="Start"/>
+                        <controls:MultipleSelect x:Name="multipleSelectUnitStatus" 
+                                                             VerticalOptions="Center"
+                                                             Placeholder="Chọn unit status"
+                                                             ItemsSource="{Binding BindingContext.UnitStatusOptions,Source={x:Reference rootPage}}"
+                                                             SelectedItems="{Binding BindingContext.SelectedUnitStatus,Source={x:Reference rootPage}}"
+                                                             Margin="10,5,10,5"/>
+
+                        <controls:FormLabel Text="Diện tích sử dụng (m2)" Margin="10,5" VerticalOptions="Start"/>
+                        <Grid Margin="10,0,10,5" ColumnDefinitions="Auto,*,Auto,*">
+                            <Label Text="Từ" VerticalTextAlignment="Center" Grid.Column="0" FontSize="16"/>
+                            <controls:EntryNumericFormat x:Name="minNetArea" NumericText="{Binding minNetArea}" Grid.Column="1" MaxValue="99999" IsNotNegative="true" Placeholder="50" Unfocused="MinNetArea_Unfocused"/>
+                            <Label Text="Đến" VerticalTextAlignment="Center" Grid.Column="2" FontSize="16"/>
+                            <controls:EntryNumericFormat x:Name="maxNetArea" NumericText="{Binding maxNetArea}" Grid.Column="3" MaxValue="99999" IsNotNegative="true" Placeholder="90" Unfocused="MaxNetArea_Unfocused"/>
+                        </Grid>
+
+                        <controls:FormLabel Text="Giá bán (vnđ)" Margin="10,5" VerticalOptions="Start"/>
+                        <Grid Margin="10,0,10,5" ColumnDefinitions="Auto,*,Auto,*">
+                            <Label Text="Từ" VerticalTextAlignment="Center" Grid.Column="0" FontSize="16"/>
+                            <controls:EntryNumericFormat x:Name="minPrice" NumericText="{Binding minPrice}" Grid.Column="1" MaxValue="9999999999999" IsNotNegative="true" Placeholder="1.000.000.000" Unfocused="MinPrice_Unfocused"/>
+                            <Label Text="Đến" VerticalTextAlignment="Center" Grid.Column="2" FontSize="16"/>
+                            <controls:EntryNumericFormat x:Name="maxPrice" NumericText="{Binding maxPrice}" Grid.Column="3" MaxValue="9999999999999" IsNotNegative="true" Placeholder="4.000.000.000" Unfocused="MaxPrice_Unfocused"/>
+                        </Grid>
+
+                        <StackLayout Margin="10,5" Orientation="Horizontal">
+                            <controls:FormLabel Text="Thu gọn" />
+                            <telerikPrimitives:RadCheckBox CheckedColor="{StaticResource NavigationPrimary}" IsChecked="{Binding IsCollapse,Mode=TwoWay}"/>
+                        </StackLayout>
+
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" Margin="10">
+                            <Button Grid.Column="0" Text="Làm mới" BackgroundColor="#eeeeee" HeightRequest="40" Padding="10,5" CornerRadius="10" TextColor="Black" Clicked="Refresh_CLicked"/>
+                            <Button Grid.Column="1" Text="Tìm kiếm" BackgroundColor="#eeeeee" HeightRequest="40" Padding="10,5"  CornerRadius="10" TextColor="Black" Clicked="SearchClicked"/>
+                        </Grid>
+                    </StackLayout>
+                </ScrollView>
+                <StackLayout x:Name="GroupBtn" IsVisible="{Binding Project,Converter={StaticResource ProjectToVisibleBtn}}" Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                    <Button BackgroundColor="#eeeeee" TextColor="Black" Text="Thông tin" Clicked="ShowInfo" HorizontalOptions="FillAndExpand" />
+                    <Button BackgroundColor="#eeeeee" TextColor="Black" Text="Xem phim" Clicked="VideoList_Clicked" HorizontalOptions="FillAndExpand" />
+                    <Button BackgroundColor="#eeeeee" TextColor="Black" Text="Xem ảnh" Clicked="ImageList_Clicked" HorizontalOptions="FillAndExpand" />
+                </StackLayout>
+            </StackLayout>
+            <controls:ModalContentView x:Name="modalLookUp" />
+            <ContentView x:Name="modalMultipleSelect" IsVisible="False" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="40" BackgroundColor="Red"/>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

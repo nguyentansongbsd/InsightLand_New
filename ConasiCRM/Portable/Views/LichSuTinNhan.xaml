@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ConasiCRM.Portable.Views.LichSuTinNhan"
+             xmlns:local="clr-namespace:ConasiCRM.Portable.Controls"
+             Title="Lịch Sử Tin Nhắn">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <ListView x:Name="listview" ItemsSource="{Binding lstGroupSMS}" SelectionMode="None" HasUnevenRows="true"
+                      AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Spacing="10" Padding="20,10">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="SMS_Tapped" CommandParameter="{Binding}"/>
+                                </StackLayout.GestureRecognizers>
+                                
+                                <!--<Image HeightRequest="50" WidthRequest="50"
+                                       HorizontalOptions="Center" VerticalOptions="Center"
+                                       Source="icon_contact"/>-->
+                                
+                                <StackLayout>
+                                    <Label Text="{Binding name_display}" FontAttributes="Bold" FontSize="16"/>
+                                    <Label Text="{Binding lastSMSContent}" TextColor="Black" FontSize="15" LineBreakMode="NoWrap"/>
+                                    <Label Text="{Binding lastSMSTime}" FontSize="14"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <!--Popup Loading-->
+            <local:ModalContentView x:Name="popup_loading"
+                IsVisible="{Binding IsBusy}">
+                
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    IsRunning="{Binding IsBusy}"
+                    IsVisible="{Binding IsBusy}" Color="#000000">
+                </ActivityIndicator>
+            </local:ModalContentView>
+            <!--End Popup-->
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

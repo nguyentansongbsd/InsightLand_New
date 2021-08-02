@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:ConasiCRM.Portable" 
+    xmlns:view ="clr-namespace:ConasiCRM.Portable.Views"
+    xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+    xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
+    x:Class="ConasiCRM.Portable.BlankPage">
+    <ContentPage.Content>
+        <Grid Margin="0,100,0,0" ColumnDefinitions="Auto,*,Auto">
+            <Label Grid.Column="0" Text="asdf"/>
+            <Grid Grid.Column="1" VerticalOptions="StartAndExpand"  >
+                <telerikChart:RadPieChart  >
+                    <telerikChart:RadPieChart.Series>
+                        <telerikChart:DonutSeries
+                                  InnerRadiusFactor="0.7"
+                                  ValueBinding="Value"
+                                  ItemsSource="{Binding Data}" />
+                    </telerikChart:RadPieChart.Series>
+                    <telerikChart:RadPieChart.Palette>
+                        <telerikChart:ChartPalette>
+                            <telerikChart:ChartPalette.Entries>
+                                <telerikChart:PaletteEntry FillColor="#fdc206" StrokeColor="Transparent"/>
+                                <telerikChart:PaletteEntry FillColor="#06cf79" StrokeColor="Transparent" />
+                                <telerikChart:PaletteEntry FillColor="#03acf5" StrokeColor="Transparent" />
+                                <telerikChart:PaletteEntry FillColor="#04a388" StrokeColor="Transparent" />
+                                <telerikChart:PaletteEntry FillColor="#9a40ab" StrokeColor="Transparent" />
+                                <telerikChart:PaletteEntry FillColor="#fa7901" StrokeColor="Transparent" />
+                                <telerikChart:PaletteEntry FillColor="#808080" StrokeColor="Transparent" />
+                                <telerikChart:PaletteEntry FillColor="#d42a16" StrokeColor="Transparent" />
+                            </telerikChart:ChartPalette.Entries>
+                        </telerikChart:ChartPalette>
+                    </telerikChart:RadPieChart.Palette>
+                </telerikChart:RadPieChart>
+                <Label Text="song song" VerticalOptions="Center" HorizontalOptions="Center"/>
+            </Grid>
+
+            <Label Grid.Column="2" Text="asdf"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

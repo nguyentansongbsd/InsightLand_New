@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:video="clr-namespace:FormsVideoLibrary"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ConasiCRM.Portable.Views.UnitVideoGalleryDetail">
+    <ContentPage.Content>
+        <AbsoluteLayout x:Name="absoluteLayout">
+            <video:VideoPlayer x:Name="VideoPlayer" UpdateStatus="Handle_UpdateStatus" BackgroundColor="Black" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1"/>
+            
+            <controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator x:Name="activityIndicator" IsRunning="{Binding IsBusy}" Color="White" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

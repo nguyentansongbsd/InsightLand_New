@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             BackgroundColor="White"
+             Title="{Binding Title}"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             x:Class="ConasiCRM.Portable.Views.PhiMoGioiGiaoDichForm">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
+            <converter:DecimalFormatConverter x:Key="DecimalFormatConverter" />
+            <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout Spacing=".5" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Margin="0,0,0,0" AbsoluteLayout.LayoutFlags="All">
+                <ScrollView>
+                    <StackLayout Padding="5">
+                        <!-- Thông tin cơ bản-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Cơ Bản" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackLayout x:Name="TitleLabel" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="0">
+                                        <Label FontSize="17">Tiêu đề</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="TitleValue" Text="{Binding PhiMoGioiGD.bsd_name }" Grid.Row="0"  />
+                                    
+                                    <StackLayout x:Name="PMGLabel" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="1">
+                                        <Label FontSize="17">Phi mô giới</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="PMGValue" Text="{Binding PhiMoGioiGD.brokeragefees_name}" Grid.Row="1" />
+
+                                    <controls:FormLabel Text="Khách hàng" Grid.Row="2" Grid.Column="0" />
+                                    <controls:FormLabelValue x:Name="CustomerValue" Text="{Binding PhiMoGioiGD.customer_name}" Grid.Row="2" />
+
+                                    <controls:FormLabel Text="Nhân viên kinh doanh" Grid.Row="3" Grid.Column="0"/>
+                                    <controls:FormLabelValue x:Name="SalesValue" Text="{Binding PhiMoGioiGD.sales_name}" Grid.Row="3" />
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                        <!--Thông tin bất động sản-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Bất Động Sản" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackLayout x:Name="PhieuDatCoLabel" Orientation="Horizontal" VerticalOptions="Center" Grid.Column="0" Grid.Row="0">
+                                        <Label FontSize="17">Phiếu đặt cọc</Label>
+                                        <Label TextColor="Red" FontSize="16">*</Label>
+                                    </StackLayout>
+                                    <controls:FormLabelValue x:Name="PhieuDatCocValue" Text="{Binding PhiMoGioiGD.quote_name}" Grid.Row="0" />
+
+                                    <controls:FormLabel Text="Dự án" Grid.Row="1" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.project_bsd_name}" Grid.Row="1" />
+
+                                    <controls:FormLabel Text="Bất động sản" Grid.Row="2" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.product_name}" Grid.Row="2" />
+
+                                    <controls:FormLabel Text="Lũy tiến" Grid.Row="3" Grid.Column="0"/>
+                                    <telerikPrimitives:RadCheckBox CheckedColor="#333333" x:Name="cb_bsd_collectedqueuingfee" IsEnabled="False" IsChecked="{Binding PhiMoGioiGD.bsd_progressive}" Grid.Row="3" Grid.Column="1" />
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                        <!--Thông tin phí-->
+                        <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                            <telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                    <Label Text="Thông Tin Phí" Style="{StaticResource ExpanderHeadingText}"/>
+                                </telerikPrimitives:ExpanderHeader>
+                            </telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:RadExpander.Content>
+                                <Grid Padding="10" RowSpacing="15">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="6*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:FormLabel Text="Số lượng" Grid.Row="0" Grid.Column="0" />
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.bsd_quantity_format}" Grid.Row="0" />
+
+                                    <controls:FormLabel Text="Số tiền" Grid.Row="1" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.bsd_amount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="1" />
+
+                                    <controls:FormLabel Text="Phí(%)" Grid.Row="2" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.bsd_percent, Converter={StaticResource DecimalFormatConverter}}" Grid.Row="2" />
+
+                                    <controls:FormLabel Text="Phí(số tiền)" Grid.Row="3" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.bsd_feeamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="3"  />
+
+                                    <controls:FormLabel Text="Tổng tiền" Grid.Row="4" Grid.Column="0"/>
+                                    <controls:FormLabelValue Text="{Binding PhiMoGioiGD.bsd_totalamount, Converter={StaticResource DecimalToVndConverter}}" Grid.Row="4" />
+                                </Grid>
+                            </telerikPrimitives:RadExpander.Content>
+                        </telerikPrimitives:RadExpander>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+            <controls:ModalContentView IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource IndicatorColor}" VerticalOptions="Center" HorizontalOptions="Center" />
+            </controls:ModalContentView>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>
