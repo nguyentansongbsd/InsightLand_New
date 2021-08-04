@@ -273,6 +273,25 @@ namespace ConasiCRM.Portable.Views
                 };
             }
         }
-        
+
+        private void EditContact_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            ContactForm newPage = new ContactForm(Id);
+            newPage.OnCompleted = async (OnCompleted) =>
+            {
+                if (OnCompleted == true)
+                {
+                    await Navigation.PushAsync(newPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    await DisplayAlert("Thông Báo", "Không tìm thấy thông tin khách hàng", "Đóng");
+                }
+            };
+        }
+
     }
 }

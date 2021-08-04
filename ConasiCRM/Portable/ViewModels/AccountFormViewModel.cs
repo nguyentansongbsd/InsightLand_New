@@ -296,7 +296,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadOneAccount(Guid accountid)
         {
-            //Debug.WriteLine("abc5" + accountid);
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                 <entity name='account'>
                                     <all-attributes/>
@@ -337,13 +336,10 @@ namespace ConasiCRM.Portable.ViewModels
             var tmp = result.value.FirstOrDefault();
             if (tmp == null)
             {
-                await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
+                return;
             }
-
             this.singleAccount = tmp;
             PrimaryContact = new LookUp() { Id = Guid.Parse(tmp._primarycontactid_value), Name = tmp.primarycontactname };
-            //System.Diagnostics.Debugger.Break();
         }
 
         public async Task LoadListMandatoryPrimary()

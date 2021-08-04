@@ -55,6 +55,9 @@
       <EmbeddedResource Update="Views\AccountContentView.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\AccountDetailPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\AccountForm.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
