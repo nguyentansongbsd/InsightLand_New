@@ -19,7 +19,7 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='bsd_name' />
                     <attribute name='telephone1' />
                     <attribute name='accountid' />
-                    <attribute name='bsd_address' />
+                    <attribute name='address1_composite' alias='bsd_address' />
                     <attribute name='bsd_companycode' />
                     <attribute name='bsd_registrationcode' />
                     <attribute name='bsd_vatregistrationnumber' />
