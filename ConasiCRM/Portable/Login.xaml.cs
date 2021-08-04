@@ -17,10 +17,10 @@ namespace ConasiCRM.Portable
     public partial class Login : ContentPage
     {
         private string _userName;
-        public string UserName { get => _userName ; set { _userName = value;OnPropertyChanged(nameof(UserName)); } }
+        public string UserName { get => _userName; set { _userName = value; OnPropertyChanged(nameof(UserName)); } }
         private string _password;
-        public string Password { get=>_password; set { _password = value;OnPropertyChanged(nameof(Password)); } }
-        private bool _eyePass =false;
+        public string Password { get => _password; set { _password = value; OnPropertyChanged(nameof(Password)); } }
+        private bool _eyePass = false;
         public bool EyePass { get => _eyePass; set { _eyePass = value; OnPropertyChanged(nameof(EyePass)); } }
         private bool _issShowPass = true;
         public bool IsShowPass { get => _issShowPass; set { _issShowPass = value; OnPropertyChanged(nameof(IsShowPass)); } }
@@ -103,7 +103,7 @@ namespace ConasiCRM.Portable
                 {
                     lblEyePass.Margin = new Thickness(0, 0, 0, -10);
                 }
-                
+
                 EyePass = false;
                 entryPassword.Placeholder = "Mật khẩu";
             }
@@ -156,7 +156,7 @@ namespace ConasiCRM.Portable
                         new KeyValuePair<string, string>("username", OrgConfig.UserName),
                         new KeyValuePair<string, string>("password", OrgConfig.Password),
                         new KeyValuePair<string, string>("grant_type", "password"),
-                        
+
                     });
                 request.Content = formContent;
                 var response = await client.SendAsync(request);
@@ -165,7 +165,7 @@ namespace ConasiCRM.Portable
                     var body = await response.Content.ReadAsStringAsync();
                     GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
                     App.Current.Properties["Token"] = tokenData.access_token;
-                    
+
                     EmployeeModel employeeModel = await LoginUser();
                     if (employeeModel != null)
                     {
@@ -183,20 +183,29 @@ namespace ConasiCRM.Portable
                             return;
                         }
 
+                        ImeiNum = await DependencyService.Get<INumImeiService>().GetImei();
+
                         if (string.IsNullOrWhiteSpace(employeeModel.bsd_imeinumber))
                         {
-                            ImeiNum = await DependencyService.Get<INumImeiService>().GetImei();
-                            await UpdateImei(employeeModel.bsd_employeeid);
+                            await UpdateImei(employeeModel.bsd_employeeid.ToString()) ;
                         }
+                        //else if (employeeModel.bsd_imeinumber != ImeiNum)
+                        //{
+                        //    LoadingHelper.Hide();
+                        //    ToastMessageHelper.ShortMessage("Tài khoản không thể đăng nhập trên thiết bị này");
+                        //    return;
+                        //}
 
                         if (checkboxRememberAcc.IsChecked)
                         {
+                            UserLogged.Id = employeeModel.bsd_employeeid;
                             UserLogged.User = employeeModel.bsd_name;
                             UserLogged.Password = employeeModel.bsd_password;
                             UserLogged.IsLogged = true;
                         }
                         else
                         {
+                            UserLogged.Id = Guid.Empty;
                             UserLogged.User = string.Empty;
                             UserLogged.Password = string.Empty;
                             UserLogged.IsLogged = false;
@@ -246,7 +255,7 @@ namespace ConasiCRM.Portable
                 return result.value.FirstOrDefault();
             }
         }
-        
+
         public async Task UpdateImei(string employeeId)
         {
             string path = $"/bsd_employees({employeeId})";
@@ -256,7 +265,7 @@ namespace ConasiCRM.Portable
             {
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Không cập nhật được thông tin Imei");
-                return ;
+                return;
             }
         }
 

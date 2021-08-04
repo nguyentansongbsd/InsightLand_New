@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.Config
 {
@@ -21,5 +22,6 @@ namespace ConasiCRM.Portable.Config
         public const string ClientSecret = "_~~NDM9PVbrSD22Ef-.qRnxioPHcG5xsJ8";
         public const string UserName = "bsddev@conasi.vn";
         public const string Password = "admin123$5";
+
     }
 }

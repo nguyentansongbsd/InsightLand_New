@@ -5,10 +5,15 @@
     xmlns:views="clr-namespace:ConasiCRM.Portable" 
     xmlns:view ="clr-namespace:ConasiCRM.Portable.Views"
     xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+    xmlns:video="clr-namespace:FormsVideoLibrary"
+    xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
     xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
     x:Class="ConasiCRM.Portable.BlankPage">
     <ContentPage.Content>
-        <Grid Margin="0,100,0,0" ColumnDefinitions="Auto,*,Auto">
+        <!--<StackLayout BackgroundColor="Red" VerticalOptions="Center">
+
+
+            <Grid Margin="0,100,0,0" ColumnDefinitions="Auto,*,Auto">            
             <Label Grid.Column="0" Text="asdf"/>
             <Grid Grid.Column="1" VerticalOptions="StartAndExpand"  >
                 <telerikChart:RadPieChart  >
@@ -35,8 +40,16 @@
                 </telerikChart:RadPieChart>
                 <Label Text="song song" VerticalOptions="Center" HorizontalOptions="Center"/>
             </Grid>
-
             <Label Grid.Column="2" Text="asdf"/>
         </Grid>
+            
+            
+            
+        </StackLayout>-->
+        <AbsoluteLayout>
+            <xct:MediaElement x:Name="media" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" MediaOpened="media_MediaOpened"  Aspect="AspectFit"
+                      ShowsPlaybackControls="True" AutoPlay="False" 
+                      BackgroundColor="Yellow"/>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

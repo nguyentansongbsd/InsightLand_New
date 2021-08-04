@@ -9,6 +9,12 @@ namespace ConasiCRM.Portable.Settings
     {
         private static ISettings AppSettings => CrossSettings.Current;
 
+        public static Guid Id
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Id), Guid.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(Id), value);
+        }
+
         public static string Password
         {
             get => AppSettings.GetValueOrDefault(nameof(Password), string.Empty);

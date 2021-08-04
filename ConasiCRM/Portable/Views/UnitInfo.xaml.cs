@@ -17,62 +17,38 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         private UnitInfoViewModel viewModel;
-        private Guid Id;
+
         public UnitInfo(Guid id)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new UnitInfoViewModel();
-            this.Id = id;
-            Load();
+            viewModel.UnitId = id;
+            Init();
         }
-        public async void Load()
+        public async void Init()
         {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-              <entity name='product'>
-                <attribute name='productid' />
-                <attribute name='bsd_units' />
-                <attribute name='name' />
-                <attribute name='productnumber' />
-                <attribute name='bsd_queuingfee' />
-                <attribute name='bsd_depositamount' />
-                <attribute name='bsd_vippriority' />
-                <attribute name='statuscode' />
-                <attribute name='bsd_areavariance' />
-                <attribute name='bsd_constructionarea' />
-                <attribute name='bsd_netsaleablearea' />
-                <attribute name='price' />
-                <attribute name='bsd_landvalueofunit' />
-                <attribute name='bsd_landvalue' />
-                <attribute name='bsd_maintenancefeespercent' />
-                <attribute name='bsd_maintenancefees' />
-                <attribute name='bsd_taxpercent' />
-                <attribute name='bsd_vat' />
-                <attribute name='bsd_totalprice' />
-                <attribute name='bsd_estimatehandoverdate' />
-                <attribute name='bsd_numberofmonthspaidmf' />
-                <attribute name='bsd_managementamountmonth' />
-                <attribute name='bsd_handovercondition' />
-                <filter type='and'>
-                  <condition attribute='productid' operator='eq' uitype='product' value='" + Id.ToString() + @"' />
-                </filter>
-                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' visible='false' link-type='outer' alias='a_a77d98e66ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name' alias='bsd_project_name' />
-                </link-entity>
-                <link-entity name='bsd_floor' from='bsd_floorid' to='bsd_floor' visible='false' link-type='outer' alias='a_4d73a1e06ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name' alias='bsd_floor_name' />
-                </link-entity>
-                <link-entity name='bsd_block' from='bsd_blockid' to='bsd_blocknumber' visible='false' link-type='outer' alias='a_290ca3da6ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name' alias='bsd_block_name' />
-                </link-entity>
-                <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name'  alias='bsd_unittype_name'/>
-                </link-entity>
-              </entity>
-            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<UnitInfoModel>>("products", fetchXml);
-            if (result.value.Count != 0)
+            bool isSuccess = await viewModel.LoadUnit();
+            
+            if (isSuccess)
             {
-                viewModel.UnitInfo = result.value.FirstOrDefault();
+                VisualStateManager.GoToState(radborderThongTin, "Active");
+                VisualStateManager.GoToState(radborderGiaoDich, "InActive");
+                VisualStateManager.GoToState(lblThongTin, "Active");
+                VisualStateManager.GoToState(lblGiaoDich, "InActive");
+
+                viewModel.StatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.UnitInfo.statuscode.ToString());
+                if (!string.IsNullOrWhiteSpace(viewModel.UnitInfo.bsd_direction))
+                {
+                    viewModel.Direction = DirectionData.GetDiretionById(viewModel.UnitInfo.bsd_direction);
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.UnitInfo.bsd_view))
+                {
+                    viewModel.View = ViewData.GetViewById(viewModel.UnitInfo.bsd_view);
+                }
+
+                btnGiuCho.IsVisible = viewModel.UnitInfo.bsd_vippriority ? false : true;
+                
                 OnCompleted?.Invoke(true);
             }
             else
@@ -81,14 +57,76 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void ThongTin_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new UnitImageGallery("Units", Id.ToString(), viewModel.UnitInfo.name, "Hình Ảnh Căn Hộ"));
+            VisualStateManager.GoToState(radborderThongTin, "Active");
+            VisualStateManager.GoToState(radborderGiaoDich, "InActive");
+            VisualStateManager.GoToState(lblThongTin, "Active");
+            VisualStateManager.GoToState(lblGiaoDich, "InActive");
+            stackThongTinCanHo.IsVisible = true;
+            stackGiaoDich.IsVisible = false;
         }
 
-        private void Button_Clicked_Video(object sender, EventArgs e)
+        private async void GiaoDich_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new UnitVideoGallery("Units",Id.ToString(),viewModel.UnitInfo.name,"Phim Căn Hộ"));
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radborderThongTin, "InActive");
+            VisualStateManager.GoToState(radborderGiaoDich, "Active");
+            VisualStateManager.GoToState(lblThongTin, "InActive");
+            VisualStateManager.GoToState(lblGiaoDich, "Active");
+            stackThongTinCanHo.IsVisible = false;
+            stackGiaoDich.IsVisible = true;
+
+            if (viewModel.IsLoaded == false)
+            {
+                await Task.WhenAll(
+                    viewModel.LoadQueuesForContactForm(),
+                    viewModel.LoadReservationForContactForm(),
+                    viewModel.LoadOptoinEntryForContactForm()
+                );
+            }
+            LoadingHelper.Hide();
         }
+
+        private async void ShowMoreDanhSachDatCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachDatCho++;
+            await viewModel.LoadQueuesForContactForm();
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreDanhSachDatCoc_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachDatCoc++;
+            await viewModel.LoadReservationForContactForm();
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreDanhSachHopDong_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachHopDong++;
+            await viewModel.LoadOptoinEntryForContactForm();
+            LoadingHelper.Hide();
+        }
+
+        private void GiuCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+
+            LoadingHelper.Hide();
+        }
+
+        //private void Button_Clicked(object sender, EventArgs e)
+        //{
+        //    Navigation.PushAsync(new UnitImageGallery("Units", Id.ToString(), viewModel.UnitInfo.name, "Hình Ảnh Căn Hộ"));
+        //}
+
+        //private void Button_Clicked_Video(object sender, EventArgs e)
+        //{
+        //    Navigation.PushAsync(new UnitVideoGallery("Units",Id.ToString(),viewModel.UnitInfo.name,"Phim Căn Hộ"));
+        //}
     }
 }
