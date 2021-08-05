@@ -15,99 +15,94 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProjectInfo : ContentPage
     {
-        public ProjectInfoViewModel viewModel;
-        private Guid ProjectId;
         public Action<bool> OnCompleted;
+        public ProjectInfoViewModel viewModel;
+        
         public ProjectInfo(Guid Id)
         {
             InitializeComponent();
-            labeDuAnNghienCu.Text = "Dự án nghiên cứu (R&D)";
-            ProjectId = Id;
             this.BindingContext = viewModel = new ProjectInfoViewModel();
-            viewModel.IsBusy = true;         
-            LoadData();
+            viewModel.ProjectId = Id;
+            Init();
         }
-        
-        public async Task LoadData()
-        {
-            string FetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-              <entity name='bsd_project'>
-                <attribute name='bsd_projectid' />
-                <attribute name='bsd_name' />
-                <attribute name='bsd_loaiduan' />
-                <attribute name='createdon' />
-                <attribute name='bsd_projectcode' />
-                <attribute name='bsd_address' />
-                <attribute name='bsd_addressen' />
-                <attribute name='bsd_depositpercentda' />
-                <attribute name='bsd_esttopdate' />
-                <attribute name='bsd_estimatehandoverdate' />
-                <attribute name='bsd_landvalueofproject' />
-                <attribute name='bsd_maintenancefeespercent' />
-                <attribute name='bsd_numberofmonthspaidmf' />
-                <attribute name='bsd_managementamount' />
-                <attribute name='bsd_bookingfee' />
-                <attribute name='bsd_depositamount' />
-                <attribute name='bsd_description' />
-                <filter type='and'>
-                  <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + ProjectId.ToString() + @"' />
-                </filter>
-                <link-entity name='account' from='accountid' to='bsd_investor' visible='false' link-type='outer' alias='a_8924f6d5b214e911a97f000d3aa04914'>
-                  <attribute name='bsd_name' alias='bsd_investor_name' />
-                </link-entity>
-              </entity>
-            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectInfoModel>>("bsd_projects", FetchXml);
-            if (result == null || result.value.Any() == false)
-            {
-                await DisplayAlert("Thông báo", "Không tìm thấy dự án.", "Đóng");
-                return;
-            }
 
-            var project = result.value.FirstOrDefault();
-            viewModel.Project = project;
+        public async void Init()
+        {
+            VisualStateManager.GoToState(radborderThongKe, "Active");
+            VisualStateManager.GoToState(radborderThongTin, "InActive");
+            VisualStateManager.GoToState(radborderGiuCho, "InActive");
+            VisualStateManager.GoToState(lblThongKe, "Active");
+            VisualStateManager.GoToState(lblThongTin, "InActive");
+            VisualStateManager.GoToState(lblGiuCho, "InActive");
+
+            await Task.WhenAll(
+                viewModel.LoadData(),
+                viewModel.CheckEvent(),
+                viewModel.LoadThongKe(),
+                viewModel.LoadThongKeHopDong(),
+                viewModel.LoadThongKeBangTinhGia()
+            );
 
             if (viewModel.Project != null)
+            {
+                viewModel.ProjectType = ProjectTypeData.GetProjectType(viewModel.Project.bsd_projecttype);
+                viewModel.PropertyUsageType = PropertyUsageTypeData.GetPropertyUsageTypeById(viewModel.Project.bsd_propertyusagetype.ToString());
+                if (viewModel.Project.bsd_handoverconditionminimum.HasValue)
+                {
+                    viewModel.HandoverCoditionMinimum = HandoverCoditionMinimumData.GetHandoverCoditionMinimum(viewModel.Project.bsd_handoverconditionminimum.Value.ToString());
+                }
                 OnCompleted?.Invoke(true);
+            }
             else
+            {
                 OnCompleted?.Invoke(false);
-
-
-            var tasks = new Task[2]
-               {
-                    LoadDuAnCanhTranh(),
-                    LoadDoiThuCanhTrang()
-               };
-            await Task.WhenAll(tasks);
-            viewModel.IsBusy = false;
+            }
         }
-        public async Task LoadDuAnCanhTranh()
+        
+        private async void ThongKe_Tapped(object sender, EventArgs e)
         {
-            viewModel.IsBusy = true;
-            await viewModel.LoadDuAnCanhTranh(ProjectId);           
-            viewModel.IsBusy = false;
-        }
-        public async Task LoadDoiThuCanhTrang()
-        {
-            viewModel.IsBusy = true;
-            await viewModel.LoadDoiThuCanhTrang(ProjectId);          
-            viewModel.IsBusy = false;
+            VisualStateManager.GoToState(radborderThongKe, "Active");
+            VisualStateManager.GoToState(radborderThongTin, "InActive");
+            VisualStateManager.GoToState(radborderGiuCho, "InActive");
+            VisualStateManager.GoToState(lblThongKe, "Active");
+            VisualStateManager.GoToState(lblThongTin, "InActive");
+            VisualStateManager.GoToState(lblGiuCho, "InActive");
+            stackThongKe.IsVisible = true;
+            stackThongTin.IsVisible = false;
+            stackGiuCho.IsVisible = false;
         }
 
-        private async void ShowMoreDuAnCanhTranh_Clicked(object sender, EventArgs e)
+        private async void ThongTin_Tapped(object sender, EventArgs e)
         {
-            viewModel.IsBusy = true;
-            viewModel.PageDuAnCanhTranh++;
-            await viewModel.LoadDuAnCanhTranh(ProjectId);
-            viewModel.IsBusy = false;
+            VisualStateManager.GoToState(radborderThongKe, "InActive");
+            VisualStateManager.GoToState(radborderThongTin, "Active");
+            VisualStateManager.GoToState(radborderGiuCho, "InActive");
+            VisualStateManager.GoToState(lblThongKe, "InActive");
+            VisualStateManager.GoToState(lblThongTin, "Active");
+            VisualStateManager.GoToState(lblGiuCho, "InActive");
+            stackThongKe.IsVisible = false;
+            stackThongTin.IsVisible = true;
+            stackGiuCho.IsVisible = false;
         }
 
-        private async void ShowMoreDoiThuCanhTranh_Clicked(object sender, EventArgs e)
+        private async void GiuCho_Tapped(object sender, EventArgs e)
         {
-            viewModel.IsBusy = true;
-            viewModel.PageDoiThuCanhTranh++;
-            await viewModel.LoadDoiThuCanhTrang(ProjectId);
-            viewModel.IsBusy = false;
+            VisualStateManager.GoToState(radborderThongKe, "InActive");
+            VisualStateManager.GoToState(radborderThongTin, "InActive");
+            VisualStateManager.GoToState(radborderGiuCho, "Active");
+            VisualStateManager.GoToState(lblThongKe, "InActive");
+            VisualStateManager.GoToState(lblThongTin, "InActive");
+            VisualStateManager.GoToState(lblGiuCho, "Active");
+            stackThongKe.IsVisible = false;
+            stackThongTin.IsVisible = false;
+            stackGiuCho.IsVisible = true;
+        }
+
+        private void GiuCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+
+            LoadingHelper.Hide();
         }
     }
 }
