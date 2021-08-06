@@ -87,6 +87,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void GiuCho_Tapped(object sender, EventArgs e)
         {
+            LoadingHelper.Show();
             VisualStateManager.GoToState(radborderThongKe, "InActive");
             VisualStateManager.GoToState(radborderThongTin, "InActive");
             VisualStateManager.GoToState(radborderGiuCho, "Active");
@@ -96,12 +97,26 @@ namespace ConasiCRM.Portable.Views
             stackThongKe.IsVisible = false;
             stackThongTin.IsVisible = false;
             stackGiuCho.IsVisible = true;
+            if (viewModel.IsLoadedGiuCho == false)
+            {
+                await viewModel.LoadGiuCho();
+            }
+            
+            LoadingHelper.Hide();
         }
 
         private void GiuCho_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
 
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreListDatCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageListGiuCho++;
+            await viewModel.LoadGiuCho();
             LoadingHelper.Hide();
         }
     }

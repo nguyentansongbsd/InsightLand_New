@@ -21,6 +21,24 @@ namespace ConasiCRM.Portable.Models
         public Guid account_id { get; set; }
         public string account_name { get; set; }
 
+        public string Customer
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(contact_name))
+                {
+                    return contact_name;
+                }
+                else if (!string.IsNullOrWhiteSpace(account_name))
+                {
+                    return account_name;
+                }else
+                {
+                    return null;
+                }
+            }
+        }
+
         public Guid bsd_customerreferral_account_id { get; set; }
         public string bsd_customerreferral_name { get; set; }
         public Guid bsd_salesagentcompany_account_id { get; set; }

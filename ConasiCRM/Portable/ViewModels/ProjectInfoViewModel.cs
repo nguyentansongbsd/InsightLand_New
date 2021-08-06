@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ namespace ConasiCRM.Portable.ViewModels
         public Guid ProjectId { get; set; }
         public List<UnitChartModel> unitChartModels { get; set; }
         public ObservableCollection<UnitChartModel> UnitChart { get; set; } = new ObservableCollection<UnitChartModel>();
+        public ObservableCollection<QueueFormModel> ListGiuCho { get; set; } = new ObservableCollection<QueueFormModel>();
 
         private ProjectInfoModel _project;
         public ProjectInfoModel Project
@@ -53,6 +55,9 @@ namespace ConasiCRM.Portable.ViewModels
         private int _soBangTinhGia = 0;
         public int SoBangTinhGia { get => _soBangTinhGia; set { _soBangTinhGia = value; OnPropertyChanged(nameof(SoBangTinhGia)); } }
 
+        private bool _showMoreBtnGiuCho;
+        public bool ShowMoreBtnGiuCho { get=>_showMoreBtnGiuCho; set { _showMoreBtnGiuCho = value;OnPropertyChanged(nameof(ShowMoreBtnGiuCho)); } }
+
         public int ChuanBi { get; set; } = 0;
         public int SanSang { get; set; } = 0;
         public int GiuCho { get; set; } = 0;
@@ -63,6 +68,9 @@ namespace ConasiCRM.Portable.ViewModels
         public int DaBan { get; set; } = 0;
 
         public bool IsHasEvent { get; set; }
+        public bool IsLoadedGiuCho { get; set; }
+        
+        public int PageListGiuCho = 1;
 
         public ProjectInfoViewModel()
         {
@@ -170,11 +178,11 @@ namespace ConasiCRM.Portable.ViewModels
                 DaDuTienCoc++;
                 ThanhToanDot1++;
                 DaBan++;
-                IsShowBtnGiuCho = false;
+                IsShowBtnGiuCho = true;
             }
             else
             {
-                IsShowBtnGiuCho = true;
+                IsShowBtnGiuCho = false;
                 var data = result.value;
                 NumUnit = data.Count;
                 foreach (var item in data)
@@ -263,9 +271,50 @@ namespace ConasiCRM.Portable.ViewModels
                                 </link-entity>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuuteModel>>("quotes", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuoteModel>>("quotes", fetchXml);
             if (result == null || result.value.Any() == false) return;
             SoBangTinhGia = result.value.Count();
+        }
+
+        public async Task LoadGiuCho()
+        {
+            IsLoadedGiuCho = true;
+            string fetchXml = $@"<fetch version='1.0' count='10' page='{PageListGiuCho}' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='opportunity'>
+                                <attribute name='name' />
+                                <attribute name='customerid' />
+                                <attribute name='createdon' />
+                                <attribute name='bsd_queuingexpired' />
+                                <order attribute='createdon' descending='true' />
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
+                                    <attribute name='bsd_name' alias='bsd_project_name'/>
+                                  <filter type='and'>
+                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
+                                  </filter>
+                                </link-entity>
+                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ac'>
+                                  <filter type='and'>
+                                    <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}' />
+                                  </filter>
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='a_434f5ec290d1eb11bacc000d3a80021e'>
+                                  <attribute name='name' alias='account_name'/>
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_884f5ec290d1eb11bacc000d3a80021e'>
+                                  <attribute name='bsd_fullname' alias='contact_name'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            List<QueueFormModel> data = result.value;
+            ShowMoreBtnGiuCho = data.Count < 10 ? false : true;
+            foreach (var item in data)
+            {
+                ListGiuCho.Add(item);
+            }
         }
     }
 }

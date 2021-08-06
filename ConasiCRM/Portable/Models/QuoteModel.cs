@@ -1,7 +1,7 @@
 ﻿using System;
 namespace ConasiCRM.Portable.Models
 {
-    public class QuuteModel
+    public class QuoteModel
     {
         public string name { get; set; }
     }
