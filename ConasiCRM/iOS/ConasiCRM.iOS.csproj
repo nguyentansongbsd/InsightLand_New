@@ -107,6 +107,7 @@
     <Compile Include="Renderers\MainEntryRenderer.cs" />
     <Compile Include="Renderers\MainSearchBarRenderer.cs" />
     <Compile Include="Renderers\ExtendedFrameRenderer.cs" />
+    <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
