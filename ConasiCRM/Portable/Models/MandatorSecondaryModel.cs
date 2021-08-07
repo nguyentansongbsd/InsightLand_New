@@ -8,8 +8,10 @@ namespace ConasiCRM.Portable.Models
 {
     public class MandatorySecondaryModel : ContentView
     {
-        public string bsd_mandatorysecondaryid { get; set; }
-        public string bsd_name { get; set; }
+        public Guid bsd_mandatorysecondaryid { get; set; }
+
+        private string _bsd_name;
+        public string bsd_name { get { return _bsd_name; } set { _bsd_name = value; OnPropertyChanged(nameof(bsd_name)); } }
         private DateTime? _createdon;
         public DateTime? createdon
         {
@@ -24,14 +26,24 @@ namespace ConasiCRM.Portable.Models
         }
         public string statuscode { get; set; }
         public string ownerid { get; set; }
-        public string bsd_jobtitlevn { get; set; }
-        public string bsd_jobtitleen { get; set; }
+
+        public string _bsd_jobtitlevn;
+        public string bsd_jobtitlevn { get { return _bsd_jobtitlevn; } set { _bsd_jobtitlevn = value; OnPropertyChanged(nameof(bsd_jobtitlevn)); } }
+
+        public string _bsd_jobtitleen;
+        public string bsd_jobtitleen { get { return _bsd_jobtitleen; } set { _bsd_jobtitleen = value; OnPropertyChanged(nameof(bsd_jobtitleen)); } }
 
         private DateTime? _bsd_effectivedateto;
         public DateTime? bsd_effectivedateto { get { return _bsd_effectivedateto; }
             set { if (value.HasValue) { _bsd_effectivedateto = value.Value.ToLocalTime(); OnPropertyChanged(nameof(bsd_effectivedateto)); } } }
-        public string bsd_effectivedatefrom { get; set; }
-        public string _bsd_developeraccount_value { get; set; }
+
+        private DateTime? _bsd_effectivedatefrom;
+        public DateTime? bsd_effectivedatefrom
+        {
+            get { return _bsd_effectivedatefrom; }
+            set { if (value.HasValue) { _bsd_effectivedatefrom = value.Value.ToLocalTime(); OnPropertyChanged(nameof(bsd_effectivedatefrom)); } }
+        }
+        public Guid _bsd_developeraccount_value { get; set; }
 
         private string _bsd_developeraccount;
         public string bsd_developeraccount { get { return _bsd_developeraccount; } set { _bsd_developeraccount = value; OnPropertyChanged(nameof(bsd_developeraccount)); } }
@@ -41,8 +53,12 @@ namespace ConasiCRM.Portable.Models
         public string _bsd_contact_value { get; set; }
         public string statuscode_title { get; set; }
         public Guid bsd_contactid { get; set; }
-        public string bsd_descriptionsvn { get; set; }
-        public string bsd_descriptionsen { get; set; }
+
+        private string _bsd_descriptionsvn;
+        public string bsd_descriptionsvn { get { return _bsd_descriptionsvn; } set { _bsd_descriptionsvn = value; OnPropertyChanged(nameof(bsd_descriptionsvn)); } }
+
+        private string _bsd_descriptionsen;
+        public string bsd_descriptionsen { get { return _bsd_descriptionsen; } set { _bsd_descriptionsen = value; OnPropertyChanged(nameof(bsd_descriptionsen)); } }
 
     }
 }

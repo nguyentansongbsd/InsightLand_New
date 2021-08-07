@@ -59,7 +59,7 @@
             <Setter Property="IndicatorLocation" Value="End"/>
             <Setter Property="IndicatorFontSize" Value="18"/>
             <Setter Property="IndicatorColor" Value="#939393"/>
-            <Setter Property="BackgroundColor" Value="#F1F1F1"/>
+            <Setter Property="BackgroundColor" Value="#30F3F3F3"/>
             <Setter Property="BorderColor" Value="#F1F1F1"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="17,8"/>
