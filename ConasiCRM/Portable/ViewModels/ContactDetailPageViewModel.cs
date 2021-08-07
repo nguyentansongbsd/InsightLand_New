@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -141,6 +142,11 @@ namespace ConasiCRM.Portable.ViewModels
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
                                     <attribute name='bsd_name'  alias='project_name'/>
                                 </link-entity>
+                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
+                                    <filter type='and'>
+                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                    </filter>
+                                </link-entity>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueListModel>>("opportunities", fetch);
@@ -195,6 +201,11 @@ namespace ConasiCRM.Portable.ViewModels
                             </link-entity>
                             <link-entity name='transactioncurrency' from='transactioncurrencyid' to='transactioncurrencyid' visible='false' link-type='outer'>
                                 <attribute name='currencysymbol'  alias='transaction_currency'/>
+                            </link-entity>
+                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
+                                    <filter type='and'>
+                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                    </filter>
                             </link-entity>
                           </entity>
                         </fetch>";
@@ -251,6 +262,11 @@ namespace ConasiCRM.Portable.ViewModels
                             <link-entity name='product' from='productid' to='bsd_unitnumber' visible='false' link-type='outer'>
                                 <attribute name='name'  alias='bsd_unitnumber_label'/>
                             </link-entity>
+                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
+                                    <filter type='and'>
+                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                    </filter>
+                                </link-entity>
                           </entity>
                         </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionEntry>>("salesorders", fetch);
@@ -297,6 +313,11 @@ namespace ConasiCRM.Portable.ViewModels
                             </link-entity>
                             <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
                                 <attribute name='name'  alias='customerid_label_account'/>
+                            </link-entity>
+                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
+                                    <filter type='and'>
+                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                    </filter>
                             </link-entity>
                           </entity>
                         </fetch>";

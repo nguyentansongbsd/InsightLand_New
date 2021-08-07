@@ -23,7 +23,7 @@
             <StackLayout Spacing=".5" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
                 <ScrollView>
                     <StackLayout>
-                        <Label Text="Thông Tin Cơ Bản" TextColor="Black" Padding="15,10" FontSize="16" FontAttributes="Bold" BackgroundColor="#F3F3F3"/>
+                        <Label Text="Thông Tin Công Ty" TextColor="Black" Padding="15,10" FontSize="16" FontAttributes="Bold" BackgroundColor="#F3F3F3"/>
                         <Grid BackgroundColor="#ffffff" Padding="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*" >
                             <controls:FormLabelRequired VerticalOptions="Center" Text="Tên công ty"  Grid.Column="0" Grid.Row="0"/>
                             <controls:MainEntry x:Name="Entry_nameacc" Text="{Binding singleAccount.bsd_name}" 

@@ -29,6 +29,15 @@ namespace ConasiCRM.Portable.Models
         private string _primarycontactname;
         public string primarycontactname { get { return _primarycontactname; } set { _primarycontactname = value; OnPropertyChanged(nameof(primarycontactname)); } }
 
+        private string _primarycontacttelephohne;
+        public string primarycontacttelephohne { get { return _primarycontacttelephohne; } set { _primarycontacttelephohne = value; OnPropertyChanged(nameof(primarycontacttelephohne)); } }
+
+        private string _primarycontactaddress;
+        public string primarycontactaddress { get { return _primarycontactaddress; } set { _primarycontactaddress = value; OnPropertyChanged(nameof(primarycontactaddress)); } }
+
+        private string _primarycontactpermanentaddress;
+        public string primarycontactpermanentaddress { get { return _primarycontactpermanentaddress; } set { _primarycontactpermanentaddress = value; OnPropertyChanged(nameof(primarycontactpermanentaddress)); } }
+
         private string _bsd_businesstype;
         public string bsd_businesstype { get { return _bsd_businesstype; } set { _bsd_businesstype = value; OnPropertyChanged(nameof(bsd_businesstype)); } }
 

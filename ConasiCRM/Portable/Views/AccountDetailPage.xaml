@@ -7,7 +7,8 @@
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              x:Class="ConasiCRM.Portable.Views.AccountDetailPage"
-             Title="THÔNG TIN KHÁCH HÀNG">
+             Title="THÔNG TIN KHÁCH HÀNG"
+             x:Name="this">
     <ContentPage.Resources>
         <!--header-->
         <Style x:Key="rabBorder_Tab" TargetType="telerikPrimitives:RadBorder">
@@ -30,10 +31,59 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
+        <Style x:Key="Lb_Tab" TargetType="Label">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0,10"/>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="#939393"/>
+                                <Setter Property="FontAttributes" Value="None"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="#2196F3"/>
+                                <Setter Property="FontAttributes" Value="Bold"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <!--tab thong tin-->
+        <Style x:Key="ExpanderHeaderStyle" TargetType="telerikPrimitives:ExpanderHeader">
+            <Setter Property="IndicatorText" Value="&#xf105;"/>
+            <Setter Property="IndicatorLocation" Value="End"/>
+            <Setter Property="IndicatorFontSize" Value="18"/>
+            <Setter Property="IndicatorColor" Value="#939393"/>
+            <Setter Property="BackgroundColor" Value="#30F1F1F1"/>
+            <Setter Property="BorderColor" Value="#F1F1F1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="17,8"/>
+            <Setter Property="IndicatorFontFamily" Value="FontAwesomeSolid"/>
+        </Style>
+        <Style x:Key="ExpanderHeadingText" TargetType="Label">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+            <Setter Property="TextColor" Value="#444444"/>
+        </Style>
+        <Style x:Key="Lb_Title_ThongTin" TargetType="controls:FormLabel">
+            <Setter Property="VerticalOptions" Value="Start"/>
+            <Setter Property="Padding" Value="25,10"/>
+        </Style>
+        <Style  x:Key="Lb_Title_Content" TargetType="controls:FormLabelValue">
+            <Setter Property="Padding" Value="25,10"/>
+            <Setter Property="HorizontalOptions" Value="EndAndExpand"/>
+        </Style>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,40">
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto">
@@ -49,7 +99,7 @@
                                 </Grid>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
                                     <Label Text="Đại diện : " Grid.Column="0" FontSize="15" TextColor="#444444"/>
-                                    <Label Text="{Binding PrimaryContact.Name}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
+                                    <Label Text="{Binding PrimaryContact.bsd_fullname}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
                                 </Grid>
                                 <Label Text="{Binding singleAccount.telephone1}" Grid.Row="4" FontSize="15" TextColor="#444444"/>
                             </Grid>
@@ -73,8 +123,350 @@
                             </Grid>
                         </Grid>
                     </telerikPrimitives:RadBorder>
+                    <Grid ColumnDefinitions="*,*,*" Margin="0,5,0,0">
+                        <BoxView HeightRequest="0.5" BackgroundColor="#939393" Grid.ColumnSpan="3" VerticalOptions="End" />
+                        <telerikPrimitives:RadBorder x:Name="radBorderThongTin" Grid.Column="0" Style="{StaticResource rabBorder_Tab}">
+                            <telerikPrimitives:RadBorder.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ThongTin_Tapped"/>
+                            </telerikPrimitives:RadBorder.GestureRecognizers>
+                            <Label x:Name="lbThongTin" Text="Thông Tin" Style="{StaticResource Lb_Tab}"/>
+                        </telerikPrimitives:RadBorder>
+                        <telerikPrimitives:RadBorder x:Name="radBorderGiaoDich" Grid.Column="1" Style="{StaticResource rabBorder_Tab}">
+                            <telerikPrimitives:RadBorder.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiaoDich_Tapped"/>
+                            </telerikPrimitives:RadBorder.GestureRecognizers>
+                            <Label x:Name="lbGiaoDich" Text="Giao Dịch" Style="{StaticResource Lb_Tab}"/>
+                        </telerikPrimitives:RadBorder>
+                        <telerikPrimitives:RadBorder x:Name="radBorderNguoiUyQuyen" Grid.Column="2" Style="{StaticResource rabBorder_Tab}">
+                            <telerikPrimitives:RadBorder.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="NguoiUyQuyen_Tapped"/>
+                            </telerikPrimitives:RadBorder.GestureRecognizers>
+                            <Label x:Name="lbNguoiUyQuyen" Text="Người Ủy Quyền" Style="{StaticResource Lb_Tab}"/>
+                        </telerikPrimitives:RadBorder>
+                    </Grid>
+                    <Grid>
+                        <!--tab thông tin-->
+                        <StackLayout x:Name="TabThongTin" IsVisible="true" Margin="0,10,0,0">
+                            <telerikPrimitives:RadExpander IsExpanded="True">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Công Ty"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="0">
+                                            <controls:FormLabel Text="Tên công ty (khác)" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_accountnameother}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="1">
+                                            <controls:FormLabel Text="Tên viết tắt" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_companycode}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="2">
+                                            <controls:FormLabel Text="Điện thoại" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.telephone1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="3">
+                                            <controls:FormLabel Text="Email" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.emailaddress1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="4">
+                                            <controls:FormLabel Text="Email 2" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_email2}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="5">
+                                            <controls:FormLabel Text="Fax" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.fax}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#2196F3" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="6">
+                                            <controls:FormLabel Text="Giấy phép kinh doanh" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_registrationcode}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="7">
+                                            <controls:FormLabel Text="Nơi cấp" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_placeofissue}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="8">
+                                            <controls:FormLabel Text="Ngày cấp" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_issuedon,StringFormat='{0:dd/MM/yyyy}'}" LineHeight="1.2" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="9">
+                                            <controls:FormLabel Text="Mã số thuế" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_vatregistrationnumber}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="10">
+                                            <controls:FormLabel Text="Địa chỉ liên lạc" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_address}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="11">
+                                            <controls:FormLabel Text="Địa chỉ thường trú" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding singleAccount.bsd_permanentaddress1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                    </Grid>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
+                            <telerikPrimitives:RadExpander IsExpanded="False">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đại Diện Pháp Luật"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="0">
+                                            <controls:FormLabel Text="Người đại diện" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding PrimaryContact.bsd_fullname}" Grid.Column="1" FontSize="15" TextColor="#2196F3" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
+                                                <controls:FormLabelValue.GestureRecognizers>
+                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="NguoiDaiDien_Tapped"/> 
+                                                </controls:FormLabelValue.GestureRecognizers>
+                                            </controls:FormLabelValue>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="1">
+                                            <controls:FormLabel Text="Số điện thoại" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding PrimaryContact.mobilephone}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="2">
+                                            <controls:FormLabel Text="Địa chỉ liên lạc" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding PrimaryContact.bsd_contactaddress}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="3">
+                                            <controls:FormLabel Text="Địa chỉ thường trú" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabelValue Text="{Binding PrimaryContact.bsd_permanentaddress1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                    </Grid>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
+                        </StackLayout>
+                        <!--tab giao dich-->
+                        <StackLayout x:Name="TabGiaoDich" IsVisible="false" Margin="0,10,0,0">
+                            <telerikPrimitives:RadExpander IsExpanded="False">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đặt Chỗ"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <StackLayout>
+                                        <StackLayout BindableLayout.ItemsSource="{Binding list_thongtinqueing}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="#eeeeee" Spacing="1">
+                                            <BindableLayout.EmptyViewTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                                </DataTemplate>
+                                            </BindableLayout.EmptyViewTemplate>
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
+                                                        <Label Text="{Binding name}" Grid.Row="0" FontSize="14" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Dự án: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding que_nameproject}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Mã đặt chỗ: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding bsd_queuenumber}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Tổng tiền ước tính: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding estimatedvalueformat}" LineBreakMode="TailTruncation" TextColor="Red" FontSize="14" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Label Grid.Row="0" Grid.Column="1" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding createdonformat}" VerticalOptions="Start"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                        <Button Clicked="ShowMoreQueueing_Clicked" IsVisible="{Binding ShowMoreQueueing}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="Xem Thêm" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                                    </StackLayout>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
+                            <telerikPrimitives:RadExpander IsExpanded="False">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đặt Cọc"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <StackLayout>
+                                        <StackLayout BindableLayout.ItemsSource="{Binding list_thongtinquotation}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="#eeeeee" Spacing="1">
+                                            <BindableLayout.EmptyViewTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                                </DataTemplate>
+                                            </BindableLayout.EmptyViewTemplate>
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
+                                                        <Label Text="{Binding quo_nameproject}" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Mã căn hộ: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding quo_nameproduct}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Mã đặt cọc: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding bsd_quotationnumber}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Tổng tiền: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding totalamountformat}" LineBreakMode="TailTruncation" TextColor="Red" FontSize="14" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Label Grid.Row="0" Grid.Column="1" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding createdonformat}" VerticalOptions="Start"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                        <Button Clicked="ShowMoreQuotation_Clicked" IsVisible="{Binding ShowMoreQuotation}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="Xem Thêm" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                                    </StackLayout>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
+                            <telerikPrimitives:RadExpander IsExpanded="False">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Hợp Đồng"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <StackLayout>
+                                        <StackLayout BindableLayout.ItemsSource="{Binding list_thongtincontract}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="#eeeeee" Spacing="1">
+                                            <BindableLayout.EmptyViewTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                                </DataTemplate>
+                                            </BindableLayout.EmptyViewTemplate>
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
+                                                        <Label Text="{Binding contract_nameproject}" Grid.Row="0" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Mã căn hộ: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding contract_nameproduct}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Mã hợp đồng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding bsd_optionno}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                                                            <Label Text="Tổng tiền: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding totalamountformat}" LineBreakMode="TailTruncation" TextColor="Red" FontSize="14" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Label Grid.Row="0" Grid.Column="1" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding createdonformat}" VerticalOptions="Start"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                        <Button Clicked="ShowMoreContract_Clicked" IsVisible="{Binding ShowMoreContract}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="Xem Thêm" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                                    </StackLayout>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
+                            <telerikPrimitives:RadExpander IsExpanded="False">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Chăm Sóc Khách Hàng"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <StackLayout>
+                                        <StackLayout  BindableLayout.ItemsSource="{Binding list_thongtincase}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="#eeeeee" Spacing="1">
+                                            <BindableLayout.EmptyViewTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                                </DataTemplate>
+                                            </BindableLayout.EmptyViewTemplate>
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
+                                                        <Label Text="{Binding title}" FontSize="15" Grid.Row="0" FontAttributes="Bold" TextColor="#2196F3"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                                            <Label Text="Mã số: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding ticketnumber}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" >
+                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" >
+                                                            <Label Text="Ưu tiên: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding prioritycodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" >
+                                                            <Label Text="Nguồn: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding caseorigincodevalue}" LineBreakMode="TailTruncation" TextColor="#333333" FontSize="14" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" >
+                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" TextColor="#333333" FontSize="14" Grid.Column="1"/>
+                                                        </Grid>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                        <Button Clicked="ShowMoreCase_Clicked" IsVisible="{Binding ShowMoreCase}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="Xem Thêm" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                                    </StackLayout>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
+                        </StackLayout>
+                        <!--tab nguoi uy quyen-->
+                        <StackLayout x:Name="TabNguoiUyQuyen" IsVisible="false" Margin="0,10,0,0">
+                            <StackLayout BindableLayout.ItemsSource="{Binding list_MandatorySecondary}" BackgroundColor="#eeeeee" Spacing="1">
+                                <BindableLayout.EmptyViewTemplate>
+                                    <DataTemplate>
+                                        <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                    </DataTemplate>
+                                </BindableLayout.EmptyViewTemplate>
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
+                                            <Label Text="{Binding bsd_contact_name}" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
+                                            <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.ColumnSpan="2">
+                                                <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                <Label Text="{Binding statuscode_title}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                            </Grid>
+                                            <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.ColumnSpan="2">
+                                                <Label Text="Số điện thoại: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                <Label Text="{Binding bsd_contacmobilephone}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                            </Grid>
+                                            <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.ColumnSpan="2">
+                                                <Label Text="Địa chỉ: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
+                                                <Label Text="{Binding bsd_contactaddress}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                            </Grid>
+                                            <Label Text="&#xf057;" TextColor="#333333" FontFamily="FontAwesomeRegular" FontSize="Medium" Grid.Row="0" Grid.Column="1">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="DeleteMandatory_Clicked" NumberOfTapsRequired="1" CommandParameter="{Binding .}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                            <Button Clicked="ShowMoreMandatory_Clicked" IsVisible="{Binding ShowMoreMandatory}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="Xem Thêm" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                        </StackLayout>
+                    </Grid>
                 </StackLayout>
             </ScrollView>
+            <controls:FloatingButtonGroup x:Name="floatingButtonGroup" ItemsSource="{Binding BindingContext.ButtonCommandList,Source={x:Reference this}}"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

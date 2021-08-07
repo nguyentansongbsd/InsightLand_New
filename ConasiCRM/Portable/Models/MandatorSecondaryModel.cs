@@ -32,9 +32,17 @@ namespace ConasiCRM.Portable.Models
             set { if (value.HasValue) { _bsd_effectivedateto = value.Value.ToLocalTime(); OnPropertyChanged(nameof(bsd_effectivedateto)); } } }
         public string bsd_effectivedatefrom { get; set; }
         public string _bsd_developeraccount_value { get; set; }
-        public string bsd_developeraccount { get; set; }
+
+        private string _bsd_developeraccount;
+        public string bsd_developeraccount { get { return _bsd_developeraccount; } set { _bsd_developeraccount = value; OnPropertyChanged(nameof(bsd_developeraccount)); } }
         public string bsd_contact_name { get; set; }
+        public string bsd_contacmobilephone { get; set; }
+        public string bsd_contactaddress { get; set; }        
         public string _bsd_contact_value { get; set; }
+        public string statuscode_title { get; set; }
+        public Guid bsd_contactid { get; set; }
+        public string bsd_descriptionsvn { get; set; }
+        public string bsd_descriptionsen { get; set; }
 
     }
 }
