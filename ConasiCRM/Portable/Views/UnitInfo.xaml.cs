@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
+using ConasiCRM.Portable.Helpers;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -27,9 +28,12 @@ namespace ConasiCRM.Portable.Views
         }
         public async void Init()
         {
-            bool isSuccess = await viewModel.LoadUnit();
+            await Task.WhenAll(
+                viewModel.LoadUnit(),
+                viewModel.CheckShowBtnBangTinhGia()
+                );
             
-            if (isSuccess)
+            if (viewModel.UnitInfo != null)
             {
                 VisualStateManager.GoToState(radborderThongTin, "Active");
                 VisualStateManager.GoToState(radborderGiaoDich, "InActive");
@@ -48,12 +52,38 @@ namespace ConasiCRM.Portable.Views
                 }
 
                 btnGiuCho.IsVisible = viewModel.UnitInfo.bsd_vippriority ? false : true;
-                
+                SetButton();
+
                 OnCompleted?.Invoke(true);
             }
             else
             {
                 OnCompleted?.Invoke(false);
+            }
+        }
+
+        public void SetButton()
+        {
+            if (btnGiuCho.IsVisible ==false && viewModel.IsShowBtnBangTinhGia ==false)
+            {
+                gridButton.IsVisible = false;
+            }
+            else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == true)
+            {
+                Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumn(btnBangTinhGia, 1);
+            }
+            else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == false)
+            {
+                Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumnSpan(btnGiuCho, 2);
+                Grid.SetColumn(btnBangTinhGia, 0);
+            }
+            else if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == true)
+            {
+                Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumn(btnBangTinhGia, 0);
+                Grid.SetColumnSpan(btnBangTinhGia, 2);
             }
         }
 
@@ -115,7 +145,14 @@ namespace ConasiCRM.Portable.Views
         private void GiuCho_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
+            ToastMessageHelper.ShortMessage("chua co page");
+            LoadingHelper.Hide();
+        }
 
+        private void BangTinhGia_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            ToastMessageHelper.ShortMessage("chua co page");
             LoadingHelper.Hide();
         }
 

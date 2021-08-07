@@ -39,6 +39,9 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showMoreDanhSachHopDong;
         public bool ShowMoreDanhSachHopDong { get => _showMoreDanhSachHopDong; set { _showMoreDanhSachHopDong = value; OnPropertyChanged(nameof(ShowMoreDanhSachHopDong)); } }
 
+        private bool _isShowBtnBangTinhGia;
+        public bool IsShowBtnBangTinhGia { get => _isShowBtnBangTinhGia; set { _isShowBtnBangTinhGia = value; OnPropertyChanged(nameof(IsShowBtnBangTinhGia)); } }
+
         public int PageDanhSachHopDong { get; set; } = 1;
         public int PageDanhSachDatCoc { get; set; } = 1;
         public int PageDanhSachDatCho { get; set; } = 1;
@@ -52,7 +55,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         }
 
-        public async Task<bool> LoadUnit()
+        public async Task LoadUnit()
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
               <entity name='product'>
@@ -97,15 +100,8 @@ namespace ConasiCRM.Portable.ViewModels
               </entity>
             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<UnitInfoModel>>("products", fetchXml);
-            if (result == null || result.value.Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                UnitInfo = result.value.FirstOrDefault();
-                return true;
-            }
+            if (result == null || result.value.Count == 0) return;
+            UnitInfo = result.value.FirstOrDefault();
         }
 
         public async Task LoadQueuesForContactForm()
@@ -261,6 +257,38 @@ namespace ConasiCRM.Portable.ViewModels
             foreach (var x in data)
             {
                 list_danhsachhopdong.Add(x);
+            }
+        }
+
+        public async Task CheckShowBtnBangTinhGia()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+                              <entity name='bsd_phaseslaunch'>
+                                <attribute name='bsd_name' />
+                                <attribute name='createdon' />
+                                <attribute name='bsd_phaseslaunchid' />
+                                <order attribute='createdon' descending='true' />
+                                <link-entity name='product' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='al'>
+                                  <filter type='and'>
+                                    <condition attribute='productid' operator='eq' value='{UnitId}' />
+                                  </filter>
+                                </link-entity><link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='an' >
+                                   <attribute name='bsd_startdate' alias='startdate_event' />
+                                   <attribute name='bsd_enddate' alias='enddate_event'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLanchModel>>("bsd_phaseslaunchs", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            var data = result.value;
+            foreach (var item in data)
+            {
+                if (item.startdate_event < DateTime.Now && item.enddate_event > DateTime.Now)
+                {
+                    IsShowBtnBangTinhGia = true;
+                    return;
+                }
             }
         }
     }

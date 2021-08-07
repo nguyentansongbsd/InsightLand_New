@@ -48,5 +48,10 @@ namespace ConasiCRM.Portable.Models
         public decimal? bsd_depositamount { get; set; } // tiền đặt cọc
 
         public string bsd_description { get; set; } // mô tả dự án nghiên cứu r&d
+
+        public string bsd_projecttype { get; set; }
+        public int bsd_propertyusagetype { get; set; }
+
+        public int? bsd_handoverconditionminimum { get; set; }
     }
 }
