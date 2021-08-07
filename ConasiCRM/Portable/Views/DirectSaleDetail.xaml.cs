@@ -36,19 +36,29 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            await viewModel.LoadData();
-            fillterStatus.PreOpenAsync = viewModel.LoadStatusReason;
-            fillterBlock.PreOpenAsync = LoadBlockAsync;
-            fillterFloor.PreOpenAsync = LoadFloorAsync;
-            fillterFloor.PreOpenOneTime = false;
-            if (viewModel.Data != null && viewModel.Data.Count > 0)
-            {
-                OnComplete?.Invoke(true);
-            }
-            else
-            {
-                OnComplete?.Invoke(false);
-            }
+            //await viewModel.LoadData();
+            //fillterStatus.PreOpenAsync = viewModel.LoadStatusReason;
+            //fillterBlock.PreOpenAsync = LoadBlockAsync;
+            //fillterFloor.PreOpenAsync = LoadFloorAsync;
+            //fillterFloor.PreOpenOneTime = false;
+            //if (viewModel.Data != null && viewModel.Data.Count > 0)
+            //{
+            //    OnComplete?.Invoke(true);
+            //}
+            //else
+            //{
+            //    OnComplete?.Invoke(false);
+            //}
+        }
+
+        private void Question_CLicked(object sender,EventArgs e)
+        {
+            stackQuestion.IsVisible = !stackQuestion.IsVisible;
+        }
+
+        private void CloseQuestion_Tapped(object sender, EventArgs e)
+        {
+            stackQuestion.IsVisible = !stackQuestion.IsVisible;
         }
 
         private async Task LoadBlockAsync()
@@ -193,7 +203,7 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     await Application.Current.MainPage.DisplayAlert("", "Lỗi. Vui lòng thử lại", "Đóng");
                 }
-                modalQueueList.IsVisible = true;
+                //modalQueueList.IsVisible = true;
             }
             else if (action == "Tạo đặt cọc")
             {
@@ -233,7 +243,7 @@ namespace ConasiCRM.Portable.Views
 
         private void CloseQueseList_Modal(object sender, EventArgs e)
         {
-            this.modalQueueList.IsVisible = false;
+            //this.modalQueueList.IsVisible = false;
         }
 
         private void ViewQueue_Clicked(object sender, EventArgs e)
@@ -278,8 +288,8 @@ namespace ConasiCRM.Portable.Views
         private async void MainSearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)
         {
             LoadingHelper.Show();
-            viewModel.ResetXml();
-            await viewModel.LoadOnRefreshCommandAsync();
+            //viewModel.ResetXml();
+            //await viewModel.LoadOnRefreshCommandAsync();
             LoadingHelper.Hide();
         }
 
@@ -293,71 +303,71 @@ namespace ConasiCRM.Portable.Views
 
         private async void fillterStatus_SelectedItemChange(System.Object sender, ConasiCRM.Portable.Models.LookUpChangeEvent e)
         {
-            LoadingHelper.Show();
-            if (viewModel.StatusReason.Val == "-1")
-            {
-                viewModel.StatusReason = null;
-                if(viewModel.Block == null && viewModel.Floor == null 
-                    || viewModel.Block != null && viewModel.Floor != null && viewModel.Block.Val == "-1" && viewModel.Floor.Val == "-1")
-                    BtnClear.IsVisible = false;
-            }
-            else
-            {
-                BtnClear.IsVisible = true;
-            }              
-            viewModel.ResetXml();
-            await viewModel.LoadOnRefreshCommandAsync();
-            LoadingHelper.Hide();
+            //LoadingHelper.Show();
+            //if (viewModel.StatusReason.Val == "-1")
+            //{
+            //    viewModel.StatusReason = null;
+            //    if(viewModel.Block == null && viewModel.Floor == null 
+            //        || viewModel.Block != null && viewModel.Floor != null && viewModel.Block.Val == "-1" && viewModel.Floor.Val == "-1")
+            //        BtnClear.IsVisible = false;
+            //}
+            //else
+            //{
+            //    BtnClear.IsVisible = true;
+            //}              
+            //viewModel.ResetXml();
+            //await viewModel.LoadOnRefreshCommandAsync();
+            //LoadingHelper.Hide();
         }
 
         private async void fillterBlock_SelectedItemChange(System.Object sender, ConasiCRM.Portable.Models.LookUpChangeEvent e)
         {
-            LoadingHelper.Show();
-            if (viewModel.Block.Val == "-1")
-            {
-                viewModel.Block = null;
-                if(viewModel.StatusReason == null && viewModel.Floor == null 
-                    || viewModel.StatusReason != null && viewModel.Floor != null && viewModel.StatusReason.Val == "-1" && viewModel.Floor.Val == "-1")
-                    BtnClear.IsVisible = false;
-            }
-            else
-            {
-                BtnClear.IsVisible = true;
-            }             
-            viewModel.ResetXml();
-            await viewModel.LoadOnRefreshCommandAsync();
-            LoadingHelper.Hide();
+            //LoadingHelper.Show();
+            //if (viewModel.Block.Val == "-1")
+            //{
+            //    viewModel.Block = null;
+            //    if(viewModel.StatusReason == null && viewModel.Floor == null 
+            //        || viewModel.StatusReason != null && viewModel.Floor != null && viewModel.StatusReason.Val == "-1" && viewModel.Floor.Val == "-1")
+            //        BtnClear.IsVisible = false;
+            //}
+            //else
+            //{
+            //    BtnClear.IsVisible = true;
+            //}             
+            //viewModel.ResetXml();
+            //await viewModel.LoadOnRefreshCommandAsync();
+            //LoadingHelper.Hide();
         }
 
         private async void fillterFloor_SelectedItemChange(System.Object sender, ConasiCRM.Portable.Models.LookUpChangeEvent e)
         {
-            LoadingHelper.Show();
-            if (viewModel.Floor.Val =="-1")
-            {
-                viewModel.Floor = null;
-                if (viewModel.StatusReason == null && viewModel.Block == null 
-                    || viewModel.StatusReason != null && viewModel.Block != null && viewModel.StatusReason.Val== "-1" && viewModel.Block.Val == "-1")                 
-                    BtnClear.IsVisible = false;
-            }
-            else
-            {
-                BtnClear.IsVisible = true;
-            }
-            viewModel.ResetXml();
-            await viewModel.LoadOnRefreshCommandAsync();
-            LoadingHelper.Hide();
+            //LoadingHelper.Show();
+            //if (viewModel.Floor.Val =="-1")
+            //{
+            //    viewModel.Floor = null;
+            //    if (viewModel.StatusReason == null && viewModel.Block == null 
+            //        || viewModel.StatusReason != null && viewModel.Block != null && viewModel.StatusReason.Val== "-1" && viewModel.Block.Val == "-1")                 
+            //        BtnClear.IsVisible = false;
+            //}
+            //else
+            //{
+            //    BtnClear.IsVisible = true;
+            //}
+            //viewModel.ResetXml();
+            //await viewModel.LoadOnRefreshCommandAsync();
+            //LoadingHelper.Hide();
         }
 
         private async void Clear_Clicked(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            viewModel.Block = null;
-            viewModel.StatusReason = null;
-            viewModel.Floor = null;
-            viewModel.ResetXml();
-            await viewModel.LoadOnRefreshCommandAsync();
-            BtnClear.IsVisible = false;
-            LoadingHelper.Hide();
+            //LoadingHelper.Show();
+            //viewModel.Block = null;
+            //viewModel.StatusReason = null;
+            //viewModel.Floor = null;
+            //viewModel.ResetXml();
+            //await viewModel.LoadOnRefreshCommandAsync();
+            //BtnClear.IsVisible = false;
+            //LoadingHelper.Hide();
         }
     }
 }

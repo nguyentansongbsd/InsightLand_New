@@ -4,22 +4,63 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             Title="Bán hàng"
+             Title="GIỎ HÀNG"
              x:Class="ConasiCRM.Portable.Views.DirectSaleDetail">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:BoolToBoolConverter x:Key="BoolToBool" />
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="Question_CLicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xf059;" FontFamily="FontAwesomeSolid" Size="18" Color="White"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <AbsoluteLayout x:Name="mainAbsoluteLayout">
-            <Grid RowDefinitions="Auto,Auto,*" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" RowSpacing="1">
+        <AbsoluteLayout >
+            <Grid RowDefinitions="Auto,Auto,*">
+
+            </Grid>
+            <controls:BottomModal x:Name="LookUpModal"/>
+            <StackLayout x:Name="stackQuestion" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#90000000">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CloseQuestion_Tapped"/>
+                </StackLayout.GestureRecognizers>
+                <telerikPrimitives:RadBorder BackgroundColor="White" BorderColor="Transparent" BorderThickness="0" CornerRadius="0,0,10,10">
+                    <Grid Margin="20" ColumnDefinitions="30,*,30,Auto" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <BoxView Grid.Row="0" Grid.Column="0" BackgroundColor="#FDC206" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Chuẩn bị" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                        <BoxView Grid.Row="0" Grid.Column="2" BackgroundColor="#06CF79" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="3" Text="Sẵn sàng" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+
+                        <BoxView Grid.Row="1" Grid.Column="0" BackgroundColor="#03ACF5" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Giữ chỗ" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                        <BoxView Grid.Row="1" Grid.Column="2" BackgroundColor="#04A388" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="1" Grid.Column="3" Text="Đặt cọc" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+
+                        <BoxView Grid.Row="2" Grid.Column="0" BackgroundColor="#9A40AB" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="Đồng ý chuyển cọc" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                        <BoxView Grid.Row="2" Grid.Column="2" BackgroundColor="#FA7901" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="2" Grid.Column="3" Text="Đã đủ tiền cọc" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+
+                        <BoxView Grid.Row="3" Grid.Column="0" BackgroundColor="#808080" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="3" Grid.Column="1" Text="Thanh toán đợt 1" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                        <BoxView Grid.Row="3" Grid.Column="2" BackgroundColor="#D42A16" HeightRequest="30" VerticalOptions="Center"/>
+                        <Label Grid.Row="3" Grid.Column="3" Text="Đã bán" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                    </Grid>
+                </telerikPrimitives:RadBorder>
+            </StackLayout>
+
+
+            <!--<Grid RowDefinitions="Auto,Auto,*" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" RowSpacing="1">
                 <controls:SearchBarFrame Grid.Row="0" Margin="10,5,10,0">
                     <controls:SearchBar  Text="{Binding Keyword}" SearchButtonPressed="MainSearchBar_SearchButtonPressed" TextChanged="MainSearchBar_TextChanged"/>
                 </controls:SearchBarFrame>
                 <ScrollView Grid.Row="1" BackgroundColor="White">
                     <StackLayout Margin="10,5" Orientation="Horizontal">
-                        <controls:FilterPicker x:Name="fillterBlock" Placeholder="Toà nhà/Khu" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Block}" ItemsSource="{Binding Blocks}" SelectedItemChange="fillterBlock_SelectedItemChange" /><!--NameDisplay="Name" BottomModal="{Reference LookUpModal}" Placeholder="{x:Static lang:Language.loai_bat_dong_san}" SelectedItem="{Binding LoaiBatDongSan}" ItemsSource="{Binding LoaiBatDongSanList}" SelectedItemChange="LoaiBatDongSan_Changed"-->
+                        <controls:FilterPicker x:Name="fillterBlock" Placeholder="Toà nhà/Khu" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Block}" ItemsSource="{Binding Blocks}" SelectedItemChange="fillterBlock_SelectedItemChange" />NameDisplay="Name" BottomModal="{Reference LookUpModal}" Placeholder="{x:Static lang:Language.loai_bat_dong_san}" SelectedItem="{Binding LoaiBatDongSan}" ItemsSource="{Binding LoaiBatDongSanList}" SelectedItemChange="LoaiBatDongSan_Changed"
                         <controls:FilterPicker x:Name="fillterFloor" Placeholder="Tầng" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Floor}" ItemsSource="{Binding Floors}" SelectedItemChange="fillterFloor_SelectedItemChange"/>
                         <controls:FilterPicker x:Name="fillterStatus" Placeholder="Trạng thái" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding StatusReason}" ItemsSource="{Binding StatusReasons}" SelectedItemChange="fillterStatus_SelectedItemChange"/>
                         <telerikPrimitives:RadBorder x:Name="BtnClear" IsVisible="false" BorderThickness="1" CornerRadius="3" BorderColor="LightGray" Padding="0">
@@ -77,9 +118,8 @@
                         </DataTemplate>
                     </controls:BsdListView.ItemTemplate>
                 </controls:BsdListView>
-            </Grid>
-            <controls:BottomModal x:Name="LookUpModal"/>
-            <controls:ModalContentView x:Name="modalQueueList" IsVisible="False" Padding="20">
+            </Grid>-->
+            <!--<controls:ModalContentView x:Name="modalQueueList" IsVisible="False" Padding="20">
                 <Grid>
                     <Grid  AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" >
                         <Grid.GestureRecognizers>
@@ -153,7 +193,7 @@
                     </StackLayout>
                     </telerikPrimitives:RadBorder>
                 </Grid>
-            </controls:ModalContentView>
+            </controls:ModalContentView>-->
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
