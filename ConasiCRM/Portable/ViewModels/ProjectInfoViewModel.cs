@@ -215,6 +215,9 @@ namespace ConasiCRM.Portable.ViewModels
                         case 100000002:
                             DaBan++;
                             break;
+                        default:
+                            break;
+                            
                     }
                 }
             }
