@@ -27,305 +27,186 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class AccountFormViewModel : FormLookupViewModel
     {
-        //public Account Account { get { return _Account; } set { _Account = value; OnPropertyChanged(nameof(Account)); } }
-        //private Account _Account;
-
-        public ObservableCollection<OptionSet> LoaiHinhOptions { get; set; }
-        public ObservableCollection<string> SelectedLoaiHinh { get; set; }
-
         private AccountFormModel _singleAccount;
         public AccountFormModel singleAccount { get => _singleAccount; set { _singleAccount = value; OnPropertyChanged(nameof(singleAccount)); } }
 
-        private ContactMandatoryPrimary _singleContactMandatoryPrimary;
-        public ContactMandatoryPrimary singleContactMandatoryPrimary { get => _singleContactMandatoryPrimary; set { _singleContactMandatoryPrimary = value; OnPropertyChanged(nameof(singleContactMandatoryPrimary)); } }
-
-        private ListCountry _singleListCountry;
-        public ListCountry singleListCountry { get => _singleListCountry; set { _singleListCountry = value; OnPropertyChanged(nameof(singleListCountry)); } }
-
-        private ListProvince _singleListProvince;
-        public ListProvince singleListProvince { get => _singleListProvince; set { _singleListProvince = value; OnPropertyChanged(nameof(singleListProvince)); } }
-
-        private ListDistrict _singleListDistrict;
-        public ListDistrict singleListDistrict { get => _singleListDistrict; set { _singleListDistrict = value; OnPropertyChanged(nameof(singleListDistrict)); } }
-
-        private ListQueueingAcc _singleListQueueingAcc;
-        public ListQueueingAcc singleListQueueingAcc { get => _singleListQueueingAcc; set { _singleListQueueingAcc = value; OnPropertyChanged(nameof(singleListQueueingAcc)); } }
-
-        private ListQuotationAcc _singleListQuotationAcc;
-        public ListQuotationAcc singleListQuotationAcc { get => _singleListQuotationAcc; set { _singleListQuotationAcc = value; OnPropertyChanged(nameof(singleListQuotationAcc)); } }
-
-        private ListContractAcc _singleListContractAcc;
-        public ListContractAcc singleListContractAcc { get => _singleListContractAcc; set { _singleListContractAcc = value; OnPropertyChanged(nameof(singleListContractAcc)); } }
-
-        private ListCaseAcc _singleListCaseAcc;
-        public ListCaseAcc singleListCaseAcc { get => _singleListCaseAcc; set { _singleListCaseAcc = value; OnPropertyChanged(nameof(singleListCaseAcc)); } }
-
-        private ListActivitiesAcc _singleListActivitiesAcc;
-        public ListActivitiesAcc singleListActivitiesAcc { get => _singleListActivitiesAcc; set { _singleListActivitiesAcc = value; OnPropertyChanged(nameof(singleListActivitiesAcc)); } }
-
-        public OptionSet _singleLocalization;
-        public OptionSet singleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(singleLocalization)); } }
-
-        public OptionSet _singleCustomergroup;
-        public OptionSet singleCustomergroup { get => _singleCustomergroup; set { _singleCustomergroup = value; OnPropertyChanged(nameof(singleCustomergroup)); } }
-
-        public ObservableCollection<ContactMandatoryPrimary> list_lookup_primarycontactid { get; set; }
-        public ObservableCollection<OptionSet> list_picker_bsd_customergroup { get; set; }
-        public ObservableCollection<OptionSet> list_picker_bsd_localization { get; set; }
-
-        public ObservableCollection<ListCountry> list_lookup_Country { get; set; }
-        public ObservableCollection<ListProvince> list_lookup_Province { get; set; }
-        public ObservableCollection<ListDistrict> list_lookup_District { get; set; }
-
-        public ObservableCollection<ListQueueingAcc> list_thongtinqueing { get; set; }
-        public ObservableCollection<ListQuotationAcc> list_thongtinquotation { get; set; }
-        public ObservableCollection<ListContractAcc> list_thongtincontract { get; set; }
-        public ObservableCollection<ListCaseAcc> list_thongtincase { get; set; }
-        public ObservableCollection<ListActivitiesAcc> list_thongtinactivitie { get; set; }
-
-        public int pageLookup_primary;
-        public bool morelookup_primary;
-        public int pageLookup_province;
-        public bool morelookup_province;
-        public int pageLookup_country;
-        public bool morelookup_country;
-        public int pageLookup_district;
-        public bool morelookup_district;
-
-        //--------------------------------------------------------------------//
-        public ObservableCollection<OptionSet> BusinessTypeOptionList { get; set; }
+        private List<OptionSet> _businessTypeOptionList;
+        public List<OptionSet> BusinessTypeOptionList { get => _businessTypeOptionList; set { _businessTypeOptionList = value; OnPropertyChanged(nameof(BusinessTypeOptionList)); } }
         public ObservableCollection<OptionSet> LocalizationOptionList { get; set; }
-        public ObservableCollection<OptionSet> CustomerGroupOptionList { get; set; }
 
-        private Account _account;
-        public Account Account
-        {
-            get { return _account; }
-            set
-            {
-                if (_account != value)
-                {
-                    _account = value;
-                    OnPropertyChanged(nameof(Account));
-                }
-            }
-        }
+        public OptionSet _localization;
+        public OptionSet Localization { get => _localization; set { _localization = value; OnPropertyChanged(nameof(Localization)); } }
+
+        public List<string> _businessType;
+        public List<string> BusinessType { get => _businessType; set { _businessType = value; OnPropertyChanged(nameof(BusinessType)); } }
+
+        public List<LookUp> PrimaryContactOptionList { get; set; }
+
         private LookUp _PrimaryContact;
-        public LookUp PrimaryContact
-        {
-            get => _PrimaryContact;
-            set
-            {
-                if (_PrimaryContact != value)
-                { this._PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); }
-            }
-        }
+        public LookUp PrimaryContact { get => _PrimaryContact; set { _PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); } }
 
-        public LookUpConfig PrimaryContactConfig { get; set; }
-        public LookUpConfig ProjectConfig { get; set; }
-
-        private bool _showBusinessTypeModal;
-        public bool ShowBusinessTypeModal
-        {
-            get { return _showBusinessTypeModal; }
-            set
-            {
-                if (_showBusinessTypeModal != value)
-                {
-                    _showBusinessTypeModal = value;
-                    OnPropertyChanged(nameof(ShowBusinessTypeModal));
-                }
-            }
-        }
-
-        private ObservableCollection<ProjectList> _list_Duanquantam;
-        public ObservableCollection<ProjectList> list_Duanquantam { get { return _list_Duanquantam; } set { _list_Duanquantam = value; OnPropertyChanged(nameof(_list_Duanquantam)); } }
-
-        public ObservableCollection<LookUp> list_popup_topic { get; set; }
         private AccountForm_CheckdataModel _list_check_data;
         public AccountForm_CheckdataModel list_check_data { get { return _list_check_data; } set { _list_check_data = value; OnPropertyChanged(nameof(list_check_data)); } }
 
-        private bool _optionEntryHasOnlyTerminatedStatus;
-        public bool optionEntryHasOnlyTerminatedStatus { get { return _optionEntryHasOnlyTerminatedStatus; } set { _optionEntryHasOnlyTerminatedStatus = value; OnPropertyChanged(nameof(optionEntryHasOnlyTerminatedStatus)); } }
+        private string _addressCompositeContac;
+        public string AddressCompositeContac { get => _addressCompositeContac; set { _addressCompositeContac = value; OnPropertyChanged(nameof(AddressCompositeContac)); } }
 
-        public ObservableCollection<MandatorySecondaryModel> list_MandatorySecondary { get; set; }
+        private LookUp _addressCountryContac;
+        public LookUp AddressCountryContac
+        {
+            get => _addressCountryContac;
+            set
+            {
+                _addressCountryContac = value;
+                OnPropertyChanged(nameof(AddressCountryContac));
+                AddressStateProvinceContac = null;
+                list_province_lookup.Clear();
+            }
+        }
 
-        public int PageQueueing { get; set; } = 1;
-        public int PageQuotation { get; set; } = 1;
-        public int PageContract { get; set; } = 1;
-        public int PageCase { get; set; } = 1;
-        public int PageActivities { get; set; } = 1;
-        public int PageMandatory { get; set; } = 1;
+        private string _addressPostalCodeContac;
+        public string AddressPostalCodeContac { get => _addressPostalCodeContac; set { _addressPostalCodeContac = value; OnPropertyChanged(nameof(AddressPostalCodeContac)); } }
 
-        private bool _showMoreQueueing;
-        public bool ShowMoreQueueing { get => _showMoreQueueing; set { _showMoreQueueing = value; OnPropertyChanged(nameof(ShowMoreQueueing)); } }
+        private LookUp _addressStateProvinceContac;
+        public LookUp AddressStateProvinceContac
+        {
+            get => _addressStateProvinceContac;
+            set
+            {
+                _addressStateProvinceContac = value;
+                OnPropertyChanged(nameof(AddressStateProvinceContac));
+                AddressCityContac = null;
+                list_district_lookup.Clear();
+            }
+        }
 
-        private bool _showMoreQuotation;
-        public bool ShowMoreQuotation { get => _showMoreQuotation; set { _showMoreQuotation = value; OnPropertyChanged(nameof(ShowMoreQuotation)); } }
+        private LookUp _addressCityContac;
+        public LookUp AddressCityContac { get => _addressCityContac; set { _addressCityContac = value; OnPropertyChanged(nameof(AddressCityContac)); } }
 
-        private bool _showMoreContract;
-        public bool ShowMoreContract { get => _showMoreContract; set { _showMoreContract = value; OnPropertyChanged(nameof(ShowMoreContract)); } }
+        private string _addressLine3Contac;
+        public string AddressLine3Contac { get => _addressLine3Contac; set { _addressLine3Contac = value; OnPropertyChanged(nameof(AddressLine3Contac)); } }
 
-        private bool _showMoreCase;
-        public bool ShowMoreCase { get => _showMoreCase; set { _showMoreCase = value; OnPropertyChanged(nameof(ShowMoreCase)); } }
+        private string _addressLine2Contac;
+        public string AddressLine2Contac { get => _addressLine2Contac; set { _addressLine2Contac = value; OnPropertyChanged(nameof(AddressLine2Contac)); } }
 
-        private bool _showMoreActivities;
-        public bool ShowMoreActivities { get => _showMoreActivities; set { _showMoreActivities = value; OnPropertyChanged(nameof(ShowMoreActivities)); } }
+        private string _addressLine1Contac;
+        public string AddressLine1Contac { get => _addressLine1Contac; set { _addressLine1Contac = value; OnPropertyChanged(nameof(AddressLine1Contac)); } }
 
-        private bool _showMoreMandatory;
-        public bool ShowMoreMandatory { get => _showMoreMandatory; set { _showMoreMandatory = value; OnPropertyChanged(nameof(ShowMoreMandatory)); } }
+        private string _addressCompositePermanent;
+        public string AddressCompositePermanent { get => _addressCompositePermanent; set { _addressCompositePermanent = value; OnPropertyChanged(nameof(AddressCompositePermanent)); } }
+
+        private LookUp _addressCountryPermanent;
+        public LookUp AddressCountryPermanent
+        {
+            get => _addressCountryPermanent;
+            set
+            {
+                _addressCountryPermanent = value;
+                OnPropertyChanged(nameof(AddressCountryPermanent));
+                AddressStateProvincePermanent = null;
+                list_province_lookup.Clear();
+            }
+        }
+
+        private LookUp _addressStateProvincePermanent;
+        public LookUp AddressStateProvincePermanent
+        {
+            get => _addressStateProvincePermanent;
+            set
+            {
+                _addressStateProvincePermanent = value;
+                OnPropertyChanged(nameof(AddressStateProvincePermanent));
+                AddressCityPermanent = null;
+                list_district_lookup.Clear();
+            }
+        }
+
+        private LookUp _addressCityPermanent;
+        public LookUp AddressCityPermanent { get => _addressCityPermanent; set { _addressCityPermanent = value; OnPropertyChanged(nameof(AddressCityPermanent)); } }
+
+        private string _addressLine3Permanent;
+        public string AddressLine3Permanent { get => _addressLine3Permanent; set { _addressLine3Permanent = value; OnPropertyChanged(nameof(AddressLine3Permanent)); } }
+
+        private string _addressLine2Permanent;
+        public string AddressLine2Permanent { get => _addressLine2Permanent; set { _addressLine2Permanent = value; OnPropertyChanged(nameof(AddressLine2Permanent)); } }
+
+        private string _addressLine1Permanent;
+        public string AddressLine1Permanent { get => _addressLine1Permanent; set { _addressLine1Permanent = value; OnPropertyChanged(nameof(AddressLine1Permanent)); } }
+
+        public ObservableCollection<LookUp> list_country_lookup { get; set; }
+        public ObservableCollection<LookUp> list_province_lookup { get; set; }
+        public ObservableCollection<LookUp> list_district_lookup { get; set; }
 
         public AccountFormViewModel()
         {
-            SelectedLoaiHinh = new ObservableCollection<string>();
-
-            list_lookup_primarycontactid = new ObservableCollection<ContactMandatoryPrimary>();
-            list_lookup_Country = new ObservableCollection<ListCountry>();
-            list_lookup_Province = new ObservableCollection<ListProvince>();
-            list_lookup_District = new ObservableCollection<ListDistrict>();
-
-            list_thongtinqueing = new ObservableCollection<ListQueueingAcc>();
-            list_thongtinquotation = new ObservableCollection<ListQuotationAcc>();
-            list_thongtincontract = new ObservableCollection<ListContractAcc>();
-            list_thongtincase = new ObservableCollection<ListCaseAcc>();
-            list_thongtinactivitie = new ObservableCollection<ListActivitiesAcc>();
+            singleAccount = new AccountFormModel();
             list_check_data = new AccountForm_CheckdataModel();
-            list_MandatorySecondary = new ObservableCollection<MandatorySecondaryModel>();
+            
+            list_country_lookup = new ObservableCollection<LookUp>();
+            list_province_lookup = new ObservableCollection<LookUp>();
+            list_district_lookup = new ObservableCollection<LookUp>();
 
-            pageLookup_primary = 1;
-            morelookup_primary = true;
-            pageLookup_province = 1;
-            morelookup_province = true;
-            pageLookup_country = 1;
-            morelookup_country = true;
-            pageLookup_province = 1;
-            morelookup_province = true;
-            pageLookup_district = 1;
-            morelookup_district = true;
-            optionEntryHasOnlyTerminatedStatus = true;
-
-            LoaiHinhOptions = new ObservableCollection<OptionSet>()
-            {
-                new OptionSet("100000000","Khách hàng"),
-                new OptionSet("100000001","Cộng tác viên"),
-                new OptionSet("100000002","Người được uỷ quyền"),
-                new OptionSet("100000003","Người đại diện pháp lý")
-            };
-
-            BusinessTypeOptionList = new ObservableCollection<OptionSet>();
-            BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer"));
-            BusinessTypeOptionList.Add(new OptionSet("100000001", "Partner"));
-            BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Argents"));
-            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer"));
-
+            BusinessTypeOptionList = new List<OptionSet>();
             LocalizationOptionList = new ObservableCollection<OptionSet>();
-            LocalizationOptionList.Add(new OptionSet("100000000", "Local"));
-            LocalizationOptionList.Add(new OptionSet("100000001", "Foreigner"));
+            PrimaryContactOptionList = new List<LookUp>();
 
-            CustomerGroupOptionList = new ObservableCollection<OptionSet>();
-            CustomerGroupOptionList.Add(new OptionSet("100000000", "Ưu tiên (VIP)"));
-            CustomerGroupOptionList.Add(new OptionSet("100000001", "An cư"));
-            CustomerGroupOptionList.Add(new OptionSet("100000002", "Đầu tư"));
-            CustomerGroupOptionList.Add(new OptionSet("100000003", "Đền bù"));
-
-
-            _account = new Account();
-
-            PrimaryContactConfig = new LookUpConfig()
-            {
-                FetchXml = @"<fetch version='1.0' count='15' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                  <entity name='contact'>
-                    <attribute name='contactid' alias='Id' />
-                    <attribute name='fullname' alias='Name' />
-                    <attribute name='createdon' alias='Detail' />
-                    <order attribute='fullname' descending='false' />
-                  </entity>
-                </fetch>",
-                EntityName = "contacts",
-                PropertyName = "PrimaryContact",
-                LookUpTitle = "Chọn người đại diện"
-
-            };
-
-            list_Duanquantam = new ObservableCollection<ProjectList>();
-            ProjectConfig = new LookUpConfig()
-            {
-                FetchXml = @"<fetch version='1.0' count='15' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                    <entity name='bsd_project'>
-                        <attribute name='bsd_projectid' alias='Id' />
-                        <attribute name='bsd_name' alias='Name' />
-                        <attribute name='createdon' />
-                        <order attribute='bsd_name' descending='false' />
-                      </entity>
-                </fetch>",
-                EntityName = "bsd_projects",
-                PropertyName = "Project"
-            };
-
-
-            //////////////////////////////////////////////////////////////////
-
-            Account = new Account();
-
-            list_picker_bsd_customergroup = new ObservableCollection<OptionSet>()
-            {
-                new OptionSet { Val="100000000",Label = "Ưu tiên(VIP)"},
-                new OptionSet { Val="100000001",Label = "An cư"},
-                new OptionSet { Val="100000002",Label = "Đầu tư"},
-                new OptionSet { Val="100000003",Label = "Đền bù"}
-             };
-
-            list_picker_bsd_localization = new ObservableCollection<OptionSet>()
-            {
-                new OptionSet { Val="100000000",Label = "Trong nước"},
-                new OptionSet { Val="100000001",Label = "Nước ngoài"},
-             };
-        }
-
-        public OptionSet getCustomergroup(string id)
-        {
-            singleCustomergroup = list_picker_bsd_customergroup.FirstOrDefault(x => x.Val == id);
-            return singleCustomergroup;
-        }
-
-        public OptionSet getLocalization(string id)
-        {
-            singleLocalization = list_picker_bsd_localization.FirstOrDefault(x => x.Val == id);
-            return singleLocalization;
+            Localization = new OptionSet();
+            PrimaryContact = new LookUp();
+            BusinessType = new List<string>();
         }
 
         public async Task LoadOneAccount(Guid accountid)
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+           string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                 <entity name='account'>
-                                    <all-attributes/>
-                                    <order attribute='createdon' descending='true' />
+                                    <attribute name='primarycontactid' />
+                                <attribute name='telephone1' />
+                                <attribute name='bsd_rocnumber2' />
+                                <attribute name='bsd_rocnumber1' />
+                                <attribute name='websiteurl' />
+                                <attribute name='bsd_vatregistrationnumber' />
+                                <attribute name='bsd_incorporatedate' />
+                                <attribute name='bsd_hotlines' />
+                                <attribute name='bsd_generalledgercompanynumber' />
+                                <attribute name='fax' />
+                                <attribute name='emailaddress1' />
+                                <attribute name='bsd_email2' />
+                                <attribute name='bsd_placeofissue' />
+                                <attribute name='bsd_issuedon' />
+                                <attribute name='bsd_permanentaddress1' />
+                                <attribute name='bsd_groupgstregisttationnumber' />
+                                <attribute name='statuscode' />
+                                <attribute name='ownerid' />
+                                <attribute name='createdon' />
+                                <attribute name='address1_composite' alias='bsd_address'/>
+                                <attribute name='bsd_nation' alias='_bsd_country_value' />
+                                <attribute name='bsd_province' alias='_bsd_province_value'/>
+                                <attribute name='bsd_district' alias='_bsd_district_value'/>
+                                <attribute name='bsd_postalcode' />
+                                <attribute name='bsd_housenumberstreet' />
+                                <attribute name='bsd_companycode' />
+                                <attribute name='bsd_registrationcode' />
+                                <attribute name='bsd_accountnameother' />
+                                <attribute name='bsd_localization' />
+                                <attribute name='bsd_name' />
+                                <attribute name='name' />
+                                <attribute name='accountid' />
+                                <attribute name='bsd_businesstypesys' />
+                                <order attribute='createdon' descending='true' />
                                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='contacts'>
                                         <attribute name='bsd_fullname' alias='primarycontactname'/>
+                                        <attribute name='mobilephone' alias='primarycontacttelephohne'/>
+                                        <attribute name='bsd_contactaddress' alias='primarycontactaddress'/>
+                                        <attribute name='bsd_permanentaddress1' alias='primarycontactpermanentaddress'/>
+                                    </link-entity>                                
+                                   <link-entity name='new_district' from='new_districtid' to='bsd_district' link-type='outer' alias='af' >
+                                        <attribute name='new_name' alias='district_name' />                                       
                                     </link-entity>
-                                    <link-entity name='new_district' from='new_districtid' to='bsd_district' visible='false' link-type='outer' alias='new_districts'>
-                                        <attribute name='new_name' alias='district_name' />
-                                        <attribute name='bsd_nameen' alias='district_nameen' />
+                                     <link-entity name='new_province' from='new_provinceid' to='bsd_province' link-type='outer' alias='ag'>
+                                        <attribute name='new_name' alias='province_name' />                                       
                                     </link-entity>
-                                    <link-entity name='new_province' from='new_provinceid' to='bsd_province' visible='false' link-type='outer' alias='new_provinces'>
-                                        <attribute name='new_name' alias='province_name' />
-                                        <attribute name='bsd_nameen' alias='province_nameen' />
-                                    </link-entity>
-                                    <link-entity name='bsd_country' from='bsd_countryid' to='bsd_nation' visible='false' link-type='outer' alias='bsd_countrys'>
-                                        <attribute name='bsd_name' alias='nation_name' />
-                                        <attribute name='bsd_nameen' alias='nation_nameen' />
-                                    </link-entity>
-                                    <link-entity name='new_district' from='new_districtid' to='bsd_permanentdistrict' visible='false' link-type='outer' alias='new_permanentdistricts'>
-                                      <attribute name='new_name' alias='permanentdistrict_name'/> 
-                                      <attribute name='bsd_nameen' alias='permanentdistrict_nameen' />
-                                    </link-entity>
-                                    <link-entity name='new_province' from='new_provinceid' to='bsd_permanentprovince' visible='false' link-type='outer' alias='new_permanentprovinces'>
-                                       <attribute name='new_name' alias='permanentprovince_name'/>
-                                       <attribute name='bsd_nameen' alias='permanentprovince_nameen' />
-                                    </link-entity>
-                                    <link-entity name='bsd_country' from='bsd_countryid' to='bsd_permanentnation' visible='false' link-type='outer' alias='bsd_permanentcountrys'>
-                                      <attribute name='bsd_name' alias='permanentnation_name'/>
-                                      <attribute name='bsd_nameen' alias='permanentnation_nameen' />
+                                   <link-entity name='bsd_country' from='bsd_countryid' to='bsd_nation' link-type='outer' alias='as'>
+                                        <attribute name='bsd_name' alias='country_name' />                                      
                                     </link-entity>
                                     <filter type='and'>
                                         <condition attribute='accountid' operator='eq' value='{" + accountid + @"}' />
@@ -333,531 +214,340 @@ namespace ConasiCRM.Portable.ViewModels
                                 </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountFormModel>>("accounts", fetch);
+            if (result == null)
+                return;
             var tmp = result.value.FirstOrDefault();
             if (tmp == null)
             {
                 return;
             }
             this.singleAccount = tmp;
-            PrimaryContact = new LookUp() { Id = Guid.Parse(tmp._primarycontactid_value), Name = tmp.primarycontactname };
         }
 
-        public async Task LoadListMandatoryPrimary()
+        public void GetPrimaryContactByID()
         {
-            if (morelookup_primary)
-            {
-                string fetch = @"<fetch version='1.0' count='30' page='" + pageLookup_primary + @"' output-format='xml-platform' mapping='logical' distinct='false'>    
-                                <entity name='contact'>      
-                                    <attribute name='fullname' />      
-                                    <attribute name='emailaddress1' />      
-                                    <attribute name='ownerid' />      
-                                    <attribute name='mobilephone' />      
-                                    <attribute name='bsd_identitycardnumber' />      
-                                    <attribute name='gendercode' />      
-                                    <attribute name='statuscode' />      
-                                    <attribute name='createdon' />      
-                                    <attribute name='jobtitle' />      
-                                    <attribute name='birthdate' />      
-                                    <attribute name='bsd_fullname' />      
-                                    <attribute name='bsd_diachi' />      
-                                    <attribute name='contactid' />     
-                                    <order attribute='createdon' descending='true' />      
-                                    <filter type='and'>       
-                                    <condition attribute='statecode' operator='eq' value='0' />      
-                                    </filter>    
-                                </entity>  
-                            </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContactMandatoryPrimary>>("contacts", fetch);
-                if (result == null)
-                {
-                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                    return;
-                }
-                if (result.value.Count == 0)
-                {
-                    morelookup_primary = false;
-                    return;
-                }
+            PrimaryContact = new LookUp{ Name = singleAccount.primarycontactname, Id = singleAccount._primarycontactid_value, Detail = "Contact" };
+        }    
 
-                var data = result.value;
-                foreach (var item in data)
+        public List<OptionSet> GetBusinessType()
+        {
+            var list = new List<OptionSet>();
+            foreach(var item in BusinessTypeOptionList)
+            {
+                if (item.Selected == true)
+                    list.Add(item);
+            }
+            return list;
+        }
+
+        public async Task<bool> createAccount()
+        {
+            string path = "/accounts";
+            singleAccount.accountid = Guid.NewGuid();
+            var content = await this.getContent();
+            CrmApiResponse result = await CrmHelper.PostData(path, content);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<Boolean> updateAccount( )
+        {
+            string path = "/accounts(" + singleAccount.accountid + ")";
+            var content = await this.getContent();
+            CrmApiResponse result = await CrmHelper.PatchData(path, content);
+            if (result.IsSuccess)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<Boolean> DeletLookup(string fieldName, Guid AccountId)
+        {
+            var result = await CrmHelper.SetNullLookupField("accounts", AccountId, fieldName);
+            return result.IsSuccess;
+        }
+
+        private async Task<object> getContent()
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["accountid"] = singleAccount.accountid;
+            data["bsd_name"] = singleAccount.bsd_name;
+            data["bsd_accountnameother"] = singleAccount.bsd_accountnameother;
+            if (singleAccount.bsd_businesstypesys != null)
+            {
+                data["bsd_businesstypesys"] = singleAccount.bsd_businesstypesys.Replace(" ", "");
+            }
+
+            if (singleAccount.bsd_localization != null)
+            {
+                data["bsd_localization"] = int.Parse(singleAccount.bsd_localization);
+            }
+            data["emailaddress1"] = singleAccount.emailaddress1;
+            data["bsd_email2"] = singleAccount.bsd_email2;
+            data["websiteurl"] = singleAccount.websiteurl;
+            data["fax"] = singleAccount.fax;
+            data["telephone1"] = singleAccount.telephone1;
+            data["bsd_registrationcode"] = singleAccount.bsd_registrationcode ?? new Random().Next(1000, 9999).ToString();
+            data["bsd_issuedon"] = singleAccount.bsd_issuedon.HasValue ? (DateTime.Parse(singleAccount.bsd_issuedon.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;
+            data["bsd_placeofissue"] = singleAccount.bsd_placeofissue;
+
+            data["bsd_vatregistrationnumber"] = singleAccount.bsd_vatregistrationnumber;
+            data["address1_composite"] = singleAccount.bsd_address;
+
+            data["bsd_permanentaddress1"] = singleAccount.bsd_permanentaddress1;
+
+            data["bsd_housenumberstreet"] = singleAccount.bsd_housenumberstreet;
+
+            data["bsd_postalcode"] = singleAccount.bsd_postalcode;
+
+            if (singleAccount._primarycontactid_value == null)
+            {
+                await DeletLookup("primarycontactid", singleAccount.accountid);
+            }
+            else
+            {
+                data["primarycontactid@odata.bind"] = "/contacts(" + singleAccount._primarycontactid_value + ")"; /////Lookup Field
+            }
+            if (singleAccount._bsd_country_value == null)
+            {
+                await DeletLookup("bsd_nation", singleAccount.accountid);
+            }
+            else
+            {
+                data["bsd_nation@odata.bind"] = "/bsd_countries(" + singleAccount._bsd_country_value + ")"; /////Lookup Field
+            }
+            if (singleAccount._bsd_province_value == null)
+            {
+                await DeletLookup("bsd_province", singleAccount.accountid);
+            }
+            else
+            {
+                data["bsd_province@odata.bind"] = "/new_provinces(" + singleAccount._bsd_province_value + ")"; /////Lookup Field
+            }
+            if (singleAccount._bsd_district_value == null)
+            {
+                await DeletLookup("bsd_district", singleAccount.accountid);
+            }
+            else
+            {
+                data["bsd_district@odata.bind"] = "/new_districts(" + singleAccount._bsd_district_value + ")"; /////Lookup Field
+            }
+            return data;
+        }
+
+        public void LoadBusinessTypeForLookup()
+        {
+            BusinessTypeOptionList = new List<OptionSet>();
+            BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer", false));
+            BusinessTypeOptionList.Add(new OptionSet("100000001", "Partner", false));
+            BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Argents", false));
+            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer", false));
+            if (singleAccount.bsd_businesstypesys != null)
+            {
+                List<string> listType = new List<string>();
+                var ids = singleAccount.bsd_businesstypesys.Split(',');
+                foreach (var item in ids)
                 {
-                    list_lookup_primarycontactid.Add(new ContactMandatoryPrimary { Id = item.contactid, Name = item.fullname });
+                    if (item == "100000000")
+                    {
+                        BusinessTypeOptionList[0].Selected = true;
+                        BusinessType.Add("100000000");
+                    }
+                    if (item == "100000001")
+                    {
+                        BusinessTypeOptionList[1].Selected = true;
+                        BusinessType.Add("100000001");
+                    }
+                    if (item == "100000002")
+                    {
+                        BusinessTypeOptionList[2].Selected = true;
+                        BusinessType.Add("100000002");
+                    }
+                    if (item == "100000003")
+                    {
+                        BusinessTypeOptionList[3].Selected = true;
+                        BusinessType.Add("100000003");
+                    }
                 }
             }
         }
 
-        public async Task LoadListCountry()
+        public async Task LoadContactForLookup()
         {
-            if (morelookup_country)
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                  <entity name='contact'>
+                    <attribute name='contactid' alias='Id' />
+                    <attribute name='fullname' alias='Name' />
+                    <attribute name='createdon' alias='Detail' />
+                    <order attribute='fullname' descending='false' />
+                  </entity>
+                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("contacts", fetch);
+            if (result == null)
+                return;
+            var data = result.value;
+            foreach (var item in data)
             {
-                string fetch = @"<fetch version='1.0' count='30' page='" + pageLookup_country + @"' output-format='xml-platform' mapping='logical' distinct='false'> 
-                                <entity name='bsd_country'> 
-                                    <attribute name='bsd_name' /> 
-                                    <attribute name='bsd_nameen' />
-                                    <attribute name='createdon' /> 
-                                    <attribute name='bsd_shortname' /> 
-                                    <attribute name='bsd_id' /> 
-                                    <attribute name='bsd_priority' /> 
-                                    <attribute name='bsd_countryname' /> 
-                                    <attribute name='bsd_countryid' /> 
-                                    <order attribute='createdon' descending='false' /> 
-                                </entity> 
-                              </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListCountry>>("bsd_countries", fetch);
-                if (result == null)
-                {
-                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                    return;
-                }
-                if (result.value.Count == 0)
-                {
-                    morelookup_country = false;
-                    return;
-                }
-
-                var data = result.value;
-                foreach (var item in data)
-                {
-                    list_lookup_Country.Add(new ListCountry { Id = item.bsd_countryid, Name = item.bsd_countryname, Nameen = item.bsd_nameen });
-                }
+                PrimaryContactOptionList.Add(item);
             }
         }
-
-        public async Task LoadListProvince()
+        public async Task LoadCountryForLookup()
         {
-            if (morelookup_province)
-            {
-                string fetch = @"<fetch version='1.0' count='30' page='" + pageLookup_province + @"' output-format='xml-platform' mapping='logical' distinct='false'> 
-                                <entity name='new_province'> 
-                                    <attribute name='new_name' /> 
-                                    <attribute name='bsd_nameen' /> 
-                                    <attribute name='createdon' /> 
-                                    <attribute name='new_id' /> 
-                                    <attribute name='bsd_country' /> 
-                                    <attribute name='bsd_priority' /> 
-                                    <attribute name='bsd_provincename' /> 
-                                    <attribute name='new_provinceid' /> 
-                                    <order attribute='bsd_priority' descending='false' /> 
-                                </entity> 
-                              </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListProvince>>("new_provinces", fetch);
-                if (result == null)
-                {
-                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                    return;
-                }
-                if (result.value.Count == 0)
-                {
-                    morelookup_province = false;
-                    return;
-                }
-
-                var data = result.value;
-                foreach (var item in data)
-                {
-                    list_lookup_Province.Add(new ListProvince { Id = item.new_provinceid, Name = item.bsd_provincename, Nameen = item.bsd_nameen });
-                }
-            }
-        }
-
-        public async Task LoadListProvinceId(string provinceid)
-        {
-            if (morelookup_province)
-            {
-                string fetch = @"<fetch version='1.0' count='30' page='" + pageLookup_province + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                        <entity name='new_province'>
-                            <attribute name='new_name' />
-                            <attribute name='bsd_nameen' />
-                            <attribute name='createdon' />
-                            <attribute name='bsd_priority' />
-                            <attribute name='new_id' />
-                            <attribute name='new_provinceid' />
-                            <attribute name='bsd_provincename' />
-                            <attribute name='bsd_country' />
-                            <order attribute='bsd_priority' descending='false' />
-                            <filter type='and'> <condition attribute='bsd_country' operator='eq' value='{" + provinceid + @"}' />
-                            </filter>
-                        </entity>
-                    </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListProvince>>("new_provinces", fetch);
-                if (result == null)
-                {
-                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                    return;
-                }
-                if (result.value.Count == 0)
-                {
-                    morelookup_province = false;
-                    return;
-                }
-
-                list_lookup_Province.Clear();
-                var data = result.value;
-                foreach (var item in data)
-                {
-                    list_lookup_Province.Add(new ListProvince { Id = item.new_provinceid, Name = item.bsd_provincename, Nameen = item.bsd_nameen });
-                }
-            }
-        }
-
-        public async Task LoadListDistrict()
-        {
-            if (morelookup_district)
-            {
-                string fetch = @"<fetch version='1.0' count='30' page='" + pageLookup_district + @"' output-format='xml-platform' mapping='logical' distinct='false'> 
-                                <entity name='new_district'> 
-                                    <attribute name='new_name' /> 
-                                    <attribute name='bsd_nameen' /> 
-                                    <attribute name='createdon' /> 
-                                    <attribute name='new_longitude' /> 
-                                    <attribute name='new_latitude' /> 
-                                    <attribute name='new_id' /> 
-                                    <attribute name='new_province' /> 
-                                    <attribute name='new_districtid' /> 
-                                    <order attribute='new_id' descending='false' /> 
-                                </entity> 
-                            </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListDistrict>>("new_districts", fetch);
-                if (result == null)
-                {
-                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                    return;
-                }
-                if (result.value.Count == 0)
-                {
-                    morelookup_district = false;
-                    return;
-                }
-
-                var data = result.value;
-                foreach (var item in data)
-                {
-                    list_lookup_District.Add(new ListDistrict { Id = item.new_districtid, Name = item.new_name, Nameen = item.bsd_nameen });
-                }
-            }
-        }
-
-        public async Task LoadListDistrictId(string districtid)
-        {
-            if (morelookup_district)
-            {
-                string fetch = @"<fetch version='1.0' count='30' page='" + pageLookup_district + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                                    <entity name='new_district'>
-                                    <attribute name='new_districtid' />
-                                    <attribute name='new_name' />
-                                        <attribute name='bsd_nameen' />
-                                        <attribute name='new_latitude' />
-                                        <attribute name='new_longitude' />
-                                        <attribute name='new_province' />
-                                        <attribute name='createdon' />
-                                        <order attribute='new_name' descending='false' />
-                                        <filter type='and'> <condition attribute='new_province' operator='eq' value='{" + districtid + @"}' />
-                                        </filter>
-                                    </entity>
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_country'>
+                                    <attribute name='bsd_countryname' alias='Name'/>
+                                    <attribute name='bsd_countryid' alias='Id'/>
+                                    <attribute name='bsd_nameen' alias='Detail'/>
+                                    <order attribute='bsd_countryname' descending='false' />
+                                  </entity>
                                 </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListDistrict>>("new_districts", fetch);
-                if (result == null)
-                {
-                    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                    return;
-                }
-                if (result.value.Count == 0)
-                {
-                    morelookup_district = false;
-                    return;
-                }
-
-                list_lookup_District.Clear();
-                var data = result.value;
-                foreach (var item in data)
-                {
-                    list_lookup_District.Add(new ListDistrict { Id = item.new_districtid, Name = item.new_name, Nameen = item.bsd_nameen });
-                }
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
+            if (result == null)
+            {
+                return;
+            }
+            foreach (var x in result.value)
+            {
+                list_country_lookup.Add(x);
             }
         }
 
-        public async Task LoadDSQueueingAccount(Guid accountid)
+        public async Task<LookUp> LoadCountryByName(string CountryName)
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageQueueing}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                <entity name='opportunity'>
-                                    <all-attributes/>
-                                    <order attribute='createdon' descending='true' />
-                                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' alias='bsd_projects'>
-                                        <attribute name='bsd_name' alias='que_nameproject'/>
-                                    </link-entity>
-                                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                        <attribute name='bsd_name' alias='que_nameaccount'/>
-                                    </link-entity>
-                                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                        <attribute name='bsd_fullname' alias='que_namecontact'/>
-                                    </link-entity>
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_country'>
+                                    <attribute name='bsd_countryname' alias='Name'/>
+                                    <attribute name='bsd_countryid' alias='Id'/>
+                                    <order attribute='bsd_countryname' descending='false' />
                                     <filter type='and'>
-                                        <condition attribute='parentaccountid' operator='eq' uitype='account' value='" + accountid + @"' />
+                                      <condition attribute='bsd_countryname' operator='eq' value='" + CountryName + @"' />
                                     </filter>
-                                </entity>
-                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListQueueingAcc>>("opportunities", fetch);
-            //if (result == null)
-            //{
-            //    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-            //    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
-            //}
-            var data = result.value;
-
-            if (data.Count < 3)
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
+            if (result != null && result.value.Count > 0)
             {
-                ShowMoreQueueing = false;
+                LookUp country = new LookUp();
+                country = result.value.FirstOrDefault();
+                return country;
             }
             else
             {
-                ShowMoreQueueing = true;
-            }
-
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.que_nameproject == null)
-                    {
-                        item.que_nameproject = " ";
-                    }
-
-                    if (item.que_nameaccount != null)
-                    {
-                        item.customerid = item.que_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.que_namecontact;
-                    }
-
-                    list_thongtinqueing.Add(item);
-                }
+                return null;
             }
         }
 
-        public async Task LoadDSQuotationAccount(Guid accountid)
+        public async Task LoadProvincesForLookup(LookUp Country)
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageQuotation}' output-format='xml-platform' mapping='logical' distinct='false'>
-                            <entity name='quote'>
-                                <all-attributes/>
-                                <order attribute='createdon' descending='true' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='bsd_projects'>
-                                    <attribute name='bsd_name' alias='quo_nameproject'/>
-                                </link-entity>
-                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                    <attribute name='bsd_name' alias='quo_nameaccount'/>
-                                </link-entity>
-                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                    <attribute name='bsd_fullname' alias='quo_namecontact'/>
-                                </link-entity>
-                                <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='products'>
-                                    <attribute name='name' alias='quo_nameproduct'/>
-                                </link-entity>
+            if (Country == null) return;
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='new_province'>
+                                    <attribute name='bsd_provincename' alias='Name'/>
+                                    <attribute name='new_provinceid' alias='Id'/>
+                                    <attribute name='bsd_nameen' alias='Detail'/>
+                                    <order attribute='bsd_provincename' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_country' operator='eq' value='" + Country.Id + @"' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_provinces", fetch);
+            if (result == null)
+            {
+                return;
+            }
+            foreach (var x in result.value)
+            {
+                list_province_lookup.Add(x);
+            }
+        }
+
+        public async Task<LookUp> LoadProvinceByName(string CountryId, string ProvinceName)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='new_province'>
+                                    <attribute name='bsd_provincename' alias='Name'/>
+                                    <attribute name='new_provinceid' alias='Id'/>
+                                    <order attribute='bsd_provincename' descending='false' />
+                                    <filter type='and'>
+                                        <condition attribute='bsd_country' operator='eq' value='" + CountryId + @"' />
+                                        <condition attribute='bsd_provincename' operator='eq' value='" + ProvinceName + @"' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_provinces", fetch);
+            if (result != null && result.value.Count > 0)
+            {
+                LookUp Province = new LookUp();
+                Province = result.value.FirstOrDefault();
+                return Province;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task LoadDistrictForLookup(LookUp Province)
+        {
+            if (Province == null) return;
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='new_district'>
+                                <attribute name='new_name' alias='Name'/>
+                                <attribute name='new_districtid' alias='Id'/>
+                                <attribute name='bsd_nameen' alias='Detail'/>
+                                <order attribute='new_name' descending='false' />
                                 <filter type='and'>
-                                    <condition attribute='accountid' operator='eq' uitype='account' value='" + accountid + @"' />
+                                  <condition attribute='new_province' operator='eq' value='" + Province.Id + @"' />
                                 </filter>
-                            </entity>
-                        </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListQuotationAcc>>("quotes", fetch);
-            //if (result == null)
-            //{
-            //    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-            //    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
-            //}
-            var data = result.value;
-
-            if (data.Count < 3)
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_districts", fetch);
+            if (result == null)
             {
-                ShowMoreQuotation = false;
+                return;
             }
-            else
+            foreach (var x in result.value)
             {
-                ShowMoreQuotation = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.quo_nameproject == null)
-                    {
-                        item.quo_nameproject = " ";
-                    }
-
-                    if (item.quo_nameproduct == null)
-                    {
-                        item.quo_nameproduct = " ";
-                    }
-
-                    if (item.quo_nameaccount != null)
-                    {
-                        item.customerid = item.quo_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.quo_namecontact;
-                    }
-
-                    list_thongtinquotation.Add(item);
-                }
+                list_district_lookup.Add(x);
             }
         }
 
-        public async Task LoadDSContractAccount(Guid accountid)
+        public async Task<LookUp> LoadDistrictByName(string ProvinceId, string DistrictName)
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageContract}' output-format='xml-platform' mapping='logical' distinct='false'>
-                            <entity name='salesorder'>
-                                <all-attributes/>
-                                <order attribute='createdon' descending='true' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' >
-                                    <attribute name='bsd_name' alias='contract_nameproject'/>
-                                </link-entity>
-                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' >
-                                    <attribute name='bsd_name' alias='contract_nameaccount'/>
-                                </link-entity>
-                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                    <attribute name='bsd_fullname' alias='contract_namecontact'/>
-                                </link-entity>
-                                <link-entity name='product' from='productid' to='bsd_unitnumber' visible='false' link-type='outer' alias='products'>
-                                  <attribute name='name' alias='contract_nameproduct'/>
-                                </link-entity>
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='new_district'>
+                                <attribute name='new_name' alias='Name'/>
+                                <attribute name='new_districtid' alias='Id'/>
+                                <attribute name='bsd_nameen' alias='Detail'/>
+                                <order attribute='new_name' descending='false' />
                                 <filter type='and'>
-                                    <condition attribute='accountid' operator='eq' uitype='account' value='" + accountid + @"' />
+                                    <condition attribute='new_province' operator='eq' value='" + ProvinceId + @"' />
+                                    <condition attribute='new_name' operator='eq' value='" + DistrictName + @"' />
                                 </filter>
-                            </entity>
-                        </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListContractAcc>>("salesorders", fetch);
-            //if (result == null)
-            //{
-            //    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-            //    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
-            //}
-            var data = result.value;
-
-            if (data.Count < 3)
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_districts", fetch);
+            if (result != null && result.value.Count > 0)
             {
-                ShowMoreContract = false;
+                LookUp District = new LookUp();
+                District = result.value.FirstOrDefault();
+                return District;
             }
             else
             {
-                ShowMoreContract = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.contract_nameproject == null)
-                    {
-                        item.contract_nameproject = " ";
-                    }
-
-                    if (item.contract_nameproduct == null)
-                    {
-                        item.contract_nameproduct = " ";
-                    }
-
-                    if (item.contract_nameaccount != null)
-                    {
-                        item.customerid = item.contract_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.contract_namecontact;
-                    }
-                    if (item.statuscode != 100000006) { optionEntryHasOnlyTerminatedStatus = false; }
-
-                    list_thongtincontract.Add(item);
-
-                }
-
-            }
-        }
-
-        public async Task LoadDSCaseAccount(Guid accountid)
-        {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageCase}' output-format='xml-platform' mapping='logical' distinct='false'>
-                        <entity name='incident'>
-                            <all-attributes/>
-                            <order attribute='createdon' descending='true' />
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                <attribute name='bsd_name' alias='case_nameaccount'/>
-                            </link-entity>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                <attribute name='bsd_fullname' alias='case_nameaccontact'/>
-                            </link-entity>
-                            <filter type='and'>
-                                <condition attribute='customerid' operator='eq' uitype='account' value='" + accountid + @"' />
-                            </filter>
-                        </entity>
-                    </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListCaseAcc>>("incidents", fetch);
-            //if (result == null)
-            //{
-            //    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-            //    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
-            //}
-            var data = result.value;
-            if (data.Count < 3)
-            {
-                ShowMoreCase = false;
-            }
-            else
-            {
-                ShowMoreCase = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.case_nameaccount != null)
-                    {
-                        item.customerid = item.case_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.case_nameaccontact;
-                    }
-
-                    list_thongtincase.Add(item);
-                }
-            }
-        }
-
-        public async Task LoadDSActivitiesAccount(Guid accountid)
-        {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageActivities}' output-format='xml-platform' mapping='logical' distinct='false'>
-                            <entity name='activitypointer'>
-                                <all-attributes/>
-                                <order attribute='createdon' descending='true' />
-                                <order attribute='scheduledend' descending='true' />
-                                <link-entity name='account' from='accountid' to='regardingobjectid' link-type='inner' alias='af'>
-                                <filter type='and'><condition attribute='accountid' operator='eq' uitype='account' value='" + accountid + @"' />
-                                </filter>
-                                </link-entity>
-                            </entity>
-                        </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListActivitiesAcc>>("activitypointers", fetch);
-            //if (result == null)
-            //{
-            //    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-            //    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
-            //}
-            var data = result.value;
-            if (data.Count < 3)
-            {
-                ShowMoreActivities = false;
-            }
-            else
-            {
-                ShowMoreActivities = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    list_thongtinactivitie.Add(item);
-                }
+                return null;
             }
         }
 
@@ -890,85 +580,9 @@ namespace ConasiCRM.Portable.ViewModels
             var tmp = result.value.FirstOrDefault();
             if (tmp != null)
             {
-                this.list_check_data = tmp;
                 return false;
             }
             return true;
-            //if (result == null)
         }
-
-        //ADD Sub-grid "Mandatory Secondary"
-        public async Task Load_List_Mandatory_Secondary(string accountid)
-        {
-            string fetchxml = $@"<fetch version='1.0' count='3' page='{PageMandatory}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='bsd_mandatorysecondary'>
-                                    <attribute name='bsd_mandatorysecondaryid' />
-                                    <attribute name='bsd_name' />
-                                    <attribute name='createdon' />
-                                    <attribute name='statuscode' />
-                                    <attribute name='ownerid' />
-                                    <attribute name='bsd_jobtitlevn' />
-                                    <attribute name='bsd_jobtitleen' />
-                                    <attribute name='bsd_effectivedateto' />
-                                    <attribute name='bsd_effectivedatefrom' />
-                                    <attribute name='bsd_developeraccount' />
-                                    <attribute name='bsd_contact' />
-                                    <order attribute='bsd_name' descending='false' />
-                                    <link-entity name='contact' from='contactid' to='bsd_contact' visible='false' link-type='outer' alias='contacts'>
-                                        <attribute name='bsd_fullname' alias='bsd_contact_name'/>
-                                    </link-entity>
-                                    <filter type='and'>
-                                      <condition attribute='bsd_developeraccount' operator='eq' value='{accountid}' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<MandatorySecondaryModel>>("bsd_mandatorysecondaries", fetchxml);
-            if (result == null)
-            {
-                await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                return;
-            }
-            var data = result.value;
-            ShowMoreMandatory = data.Count < 3 ? false : true;
-
-            if (data.Any())
-            {
-                foreach (var x in data)
-                {
-                    x.bsd_developeraccount = singleAccount.bsd_name;
-                    list_MandatorySecondary.Add(x);
-                }
-            }
-
-        }
-        //chưa co quan he nay
-        //public async Task Load_DanhSachDuAn(string accountid)
-        //{
-        //    string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-        //                      <entity name='bsd_project'>
-        //                        <attribute name='bsd_name' />
-        //                        <attribute name='bsd_projectcode' />
-        //                        <attribute name='bsd_landvalueofproject' />
-        //                        <attribute name='bsd_esttopdate' />
-        //                        <attribute name='bsd_acttopdate' />
-        //                        <attribute name='bsd_projectid' />
-        //                        <order attribute='bsd_name' descending='false' />
-        //                        <filter type='and'>
-        //                          <condition attribute='statecode' operator='eq' value='0' />
-        //                        </filter>
-        //                      </entity>
-        //                    </fetch>";
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectList>>("contacts(" + contactid + @")/bsd_contact_bsd_project", fetch);
-        //    if (result == null)
-        //    {
-        //        await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-        //        return;
-        //    }
-
-        //    foreach (var x in result.value)
-        //    {
-        //        list_Duanquantam.Add(x);
-        //    }
-        //}
     };
 }

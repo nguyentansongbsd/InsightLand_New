@@ -47,9 +47,9 @@ namespace ConasiCRM.Portable.Views
             if (Id != null && viewModel.singleAccount == null)
             {
                 await viewModel.LoadOneAccount(Id);
-                if (viewModel.singleAccount.bsd_businesstype != null)
+                if (viewModel.singleAccount.bsd_businesstypesys != null)
                 {
-                    viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstype);
+                    viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
                 }
                 if (viewModel.singleAccount.bsd_localization != null)
                 {
@@ -273,7 +273,22 @@ namespace ConasiCRM.Portable.Views
         }
 
         private async void Update(object sender, EventArgs e)
-        {            
+        {
+            LoadingHelper.Show();
+            AccountForm newPage = new AccountForm(viewModel.singleAccount.accountid);
+            newPage.OnCompleted = async (OnCompleted) =>
+            {
+                if (OnCompleted == true)
+                {
+                    await Navigation.PushAsync(newPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    await DisplayAlert("Thông báo", "Không tìm thấy thông tin. Vui lòng thử lại.", "Đóng");
+                }
+            };    
         }
 
         private async void AddMandatorySecondary(object sender, EventArgs e)

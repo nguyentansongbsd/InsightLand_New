@@ -102,7 +102,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_name' />
                                 <attribute name='name' />
                                 <attribute name='accountid' />
-                                <attribute name='bsd_businesstypesys' alias='bsd_businesstype' />
+                                <attribute name='bsd_businesstypesys' />
                                 <order attribute='createdon' descending='true' />
                                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='contacts'>
                                         <attribute name='bsd_fullname' alias='primarycontactname'/>
@@ -129,7 +129,7 @@ namespace ConasiCRM.Portable.ViewModels
             singleAccount.bsd_permanentaddress1 = LoadAddress(tmp.bsd_permanentaddress1);
             PrimaryContact = new ContactFormModel()
             {
-                contactid = Guid.Parse(tmp._primarycontactid_value)
+                contactid = tmp._primarycontactid_value
                 ,
                 bsd_fullname = tmp.primarycontactname
                 ,
@@ -146,7 +146,7 @@ namespace ConasiCRM.Portable.ViewModels
             if (loai != string.Empty)
             {
                 List<string> listType = new List<string>();
-                var ids = singleAccount.bsd_businesstype.Split(',').ToList();
+                var ids = singleAccount.bsd_businesstypesys.Split(',').ToList();
                 foreach (var item in ids)
                 {
                     OptionSet optionSet = BusinessTypeOptions.Single(x => x.Val == item);

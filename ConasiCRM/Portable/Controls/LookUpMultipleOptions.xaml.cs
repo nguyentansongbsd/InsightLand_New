@@ -188,7 +188,7 @@ namespace ConasiCRM.Portable.Controls
                 Label lb = new Label();
                 lb.TextColor = Color.Black;
                 lb.FontSize = 16;
-                lb.SetBinding(Label.TextProperty, "Name");
+                lb.SetBinding(Label.TextProperty, "Label");
                 Grid.SetColumn(lb, 0);
                 grid.Children.Add(lb);
 

@@ -258,9 +258,9 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 AccountForm newPage = new AccountForm(Guid.Parse(viewModel.singleContact._parentcustomerid_value));
-                newPage.CheckSingleAccount = async (CheckSingleAccount) =>
+                newPage.OnCompleted = async (OnCompleted) =>
                 {
-                    if (CheckSingleAccount == true)
+                    if (OnCompleted == true)
                     {
                         await Navigation.PushAsync(newPage);
                         LoadingHelper.Hide();
