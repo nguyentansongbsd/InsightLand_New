@@ -69,8 +69,9 @@ namespace ConasiCRM.Portable
             {
                 Grid.SetRow(lblUserName, 0);
                 Grid.SetRow(entryUserName, 0);
-                Grid.SetRowSpan(entryUserName, 2);
-                entryUserName.Placeholder = "Tên đăng nhập";
+                Grid.SetRowSpan(entryUserName, 2);             
+                
+                entryUserName.Placeholder = "Tên đăng nhập";               
             }
         }
 
@@ -127,6 +128,14 @@ namespace ConasiCRM.Portable
         private void ShowHidePass_Tapped(object sender, EventArgs e)
         {
             IsShowPass = !IsShowPass;
+            if(IsShowPass)
+            {
+                lblEyePass.Text = "\uf070";
+            }
+            else
+            {
+                lblEyePass.Text = "\uf06e";
+            }    
         }
 
         private async void Button_Clicked(object sender, EventArgs e)

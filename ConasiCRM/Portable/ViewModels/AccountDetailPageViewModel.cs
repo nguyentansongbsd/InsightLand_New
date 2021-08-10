@@ -113,6 +113,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                       <condition attribute='accountid' operator='eq' value='" + accountid + @"' />
                                     </filter>
+                                    <filter type='and'>
+                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                    </filter>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountFormModel>>("accounts", fetch);
@@ -182,7 +185,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                     <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
                                        <filter type='and'>
-                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                        </filter>
                                     </link-entity>
                                     <filter type='and'>
@@ -249,7 +252,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 </link-entity>
                                 <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
                                        <filter type='and'>
-                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                        </filter>
                                     </link-entity>
                                 <filter type='and'>
@@ -320,7 +323,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 </link-entity>
                                 <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
                                        <filter type='and'>
-                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                        </filter>
                                     </link-entity>
                                 <filter type='and'>
@@ -387,7 +390,7 @@ namespace ConasiCRM.Portable.ViewModels
                             </link-entity>
                             <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
                                        <filter type='and'>
-                                          <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                        </filter>
                                     </link-entity>
                             <filter type='and'>
@@ -451,6 +454,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                     <filter type='and'>
                                       <condition attribute='bsd_developeraccount' operator='eq' value='{accountid}' />
+                                    </filter>
+                                    <filter type='and'>
+                                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
                                   </entity>
                                 </fetch>";

@@ -34,7 +34,7 @@ namespace ConasiCRM.Portable.Views
             await LoadDataThongTin(AccountId.ToString());
             viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Người ủy quyền", "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
             viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
-            if (viewModel.singleAccount.accountid != null)
+            if (viewModel.singleAccount.accountid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
                 OnCompleted?.Invoke(false);

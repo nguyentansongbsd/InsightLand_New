@@ -31,7 +31,7 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await LoadDataThongTin(Id.ToString());
-            if (viewModel.singleContact != null)
+            if (viewModel.singleContact.contactid != Guid.Empty)
                 OnCompleted(true);
             else
                 OnCompleted(false);

@@ -46,8 +46,7 @@ namespace ConasiCRM.Portable.Views
         public void Init()
         {
             this.BindingContext = viewModel = new AccountFormViewModel();
-            centerModalContacAddress.Body.BindingContext = viewModel;
-            centerModalPermanentAddress.Body.BindingContext = viewModel;
+            centerModalContacAddress.Body.BindingContext = viewModel;            
             Lookup_BusinessType.BindingContext = viewModel;
             SetPreOpen();
         }
@@ -74,14 +73,14 @@ namespace ConasiCRM.Portable.Views
                 viewModel.Localization.Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
-            if (viewModel.singleAccount.country_name != null)
+            if (viewModel.singleAccount.primarycontactname != null)
             {
                 viewModel.GetPrimaryContactByID();
             }
             this.Title = "Cập Nhật Khách Hàng Cá Nhân";
             btnSave.Text = "Cập Nhật";
             btnSave.Clicked += UpdateContact_Clicked;
-            if (viewModel.singleAccount != null)
+            if (viewModel.singleAccount.accountid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
                 OnCompleted?.Invoke(false);
@@ -104,7 +103,8 @@ namespace ConasiCRM.Portable.Views
             };
             Lookup_BusinessType.PreShow = async () =>
             {
-                viewModel.LoadBusinessTypeForLookup();                    
+                viewModel.LoadBusinessTypeForLookup();
+                Lookup_BusinessType.SetList(viewModel.GetBusinessType());
             };
             Lookup_PrimaryContact.PreOpenAsync = async () =>
             {
@@ -113,11 +113,7 @@ namespace ConasiCRM.Portable.Views
             lookUpContacAddressCountry.PreOpenAsync = async () =>
             {
                 await viewModel.LoadCountryForLookup();
-            };
-            lookUpPermanentAddressCountry.PreOpenAsync = async () =>
-            {
-                await viewModel.LoadCountryForLookup();
-            };
+            };          
         }
 
         private async void SaveData(string id)
@@ -164,7 +160,12 @@ namespace ConasiCRM.Portable.Views
                 {
                     await DisplayAlert("Thông Báo", "Email 2 sai địng dạng. Vui lòng thử lại!", "Đóng");
                     return;
-                }
+                }               
+            }
+            if (viewModel.singleAccount.bsd_registrationcode == null)
+            {
+                await DisplayAlert("Thông Báo", "Vui lòng nhập số giấy phép kinh doanh", "Đóng");
+                return;
             }
             if (viewModel.singleAccount.bsd_registrationcode != null && viewModel.singleAccount.bsd_vatregistrationnumber != null)                       
             {
@@ -248,36 +249,7 @@ namespace ConasiCRM.Portable.Views
 
             LoadingHelper.Hide();
             await centerModalContacAddress.Show();
-        }
-
-        private async void DiaChiThuongTru_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            if (viewModel.AddressLine1Permanent == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_permanenthousenumberstreetwardvn))
-            {
-                viewModel.AddressLine1Permanent = viewModel.singleAccount.bsd_permanenthousenumberstreetwardvn;
-            }
-
-            if (viewModel.AddressCountryPermanent == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.permanentnation_name))
-            {
-                viewModel.AddressCountryPermanent = await viewModel.LoadCountryByName(viewModel.singleAccount.permanentnation_name);
-                await viewModel.LoadProvincesForLookup(viewModel.AddressCountryPermanent);
-            }
-
-            if (viewModel.AddressStateProvincePermanent == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.permanentprovince_name))
-            {
-                viewModel.AddressStateProvincePermanent = await viewModel.LoadProvinceByName(viewModel.singleAccount._bsd_permanentnation_value, viewModel.singleAccount.permanentprovince_name); ;
-                await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvincePermanent);
-            }
-
-            if (viewModel.AddressCityPermanent == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.permanentdistrict_name))
-            {
-                viewModel.AddressCityPermanent = await viewModel.LoadDistrictByName(viewModel.singleAccount._bsd_permanentprovince_value, viewModel.singleAccount.permanentdistrict_name);
-            }
-
-            LoadingHelper.Hide();
-            await centerModalPermanentAddress.Show();
-        }
+        }      
 
         private async void ContacAddressCountry_Changed(object sender, LookUpChangeEvent e)
         {
@@ -359,77 +331,6 @@ namespace ConasiCRM.Portable.Views
             }
             viewModel.singleAccount.bsd_address = viewModel.AddressCompositeContac = string.Join(", ", address);
             await centerModalContacAddress.Hide();
-        }
-
-        private async void PermanentAddressCountry_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadProvincesForLookup(viewModel.AddressCountryPermanent);
-        }
-
-        private async void PermanentAddressProvince_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvincePermanent);
-        }
-
-        private async void ClosePermanentAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalPermanentAddress.Hide();
-        }
-
-        private async void ConfirmPermanentAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
-            {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số nhà/đường/phường", "Đóng");
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
-            {
-                viewModel.singleAccount.bsd_permanenthousenumberstreetwardvn = viewModel.AddressLine1Permanent;
-                address.Add(viewModel.AddressLine1Permanent);
-            }
-            else
-            {
-                viewModel.singleAccount.bsd_permanenthousenumberstreetwardvn = null;
-            }
-
-            if (viewModel.AddressCityPermanent != null)
-            {
-                viewModel.singleAccount.permanentdistrict_name = viewModel.AddressCityPermanent.Name;
-                viewModel.singleAccount._bsd_permanentdistrict_value = viewModel.AddressCityPermanent.Id.ToString();
-                address.Add(viewModel.AddressCityPermanent.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.permanentdistrict_name = null;
-                viewModel.singleAccount._bsd_permanentdistrict_value = null;
-            }
-            if (viewModel.AddressStateProvincePermanent != null)
-            {
-                viewModel.singleAccount.permanentprovince_name = viewModel.AddressStateProvincePermanent.Name;
-                viewModel.singleAccount._bsd_permanentprovince_value = viewModel.AddressStateProvincePermanent.Id.ToString();
-                address.Add(viewModel.AddressStateProvincePermanent.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.permanentprovince_name = null;
-                viewModel.singleAccount._bsd_permanentprovince_value = null;
-            }
-            if (viewModel.AddressCountryPermanent != null)
-            {
-                viewModel.singleAccount.permanentnation_name = viewModel.AddressCountryPermanent.Name;
-                viewModel.singleAccount._bsd_permanentnation_value = viewModel.AddressCountryPermanent.Id.ToString();
-                address.Add(viewModel.AddressCountryPermanent.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.permanentnation_name = null;
-                viewModel.singleAccount._bsd_permanentnation_value = null;
-            }
-            viewModel.singleAccount.bsd_permanentaddress1 = viewModel.AddressCompositePermanent = string.Join(", ", address);
-            await centerModalPermanentAddress.Hide();
         }
     }
 }

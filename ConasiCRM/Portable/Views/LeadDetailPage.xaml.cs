@@ -44,7 +44,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
             }
 
-            if (viewModel.singleLead != null)
+            if (viewModel.singleLead.leadid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
                 OnCompleted?.Invoke(false);
