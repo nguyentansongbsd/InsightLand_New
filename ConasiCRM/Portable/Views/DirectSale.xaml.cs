@@ -60,7 +60,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void SearchClicked(object sender, EventArgs e)
         {
-            //LoadingHelper.Show();
+            LoadingHelper.Show();
             if (viewModel.Project == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
@@ -86,20 +86,19 @@ namespace ConasiCRM.Portable.Views
                 model.maxPrice = viewModel.maxPrice;
                 
                 DirectSaleDetail directSaleDetail = new DirectSaleDetail(model);
-                await Navigation.PushAsync(directSaleDetail);
-                //directSaleDetail.OnComplete = async (IsSuccess) =>
-                //{
-                //    if (IsSuccess)
-                //    {
-                //        await Navigation.PushAsync(directSaleDetail);
-                //        LoadingHelper.Hide();
-                //    }
-                //    else
-                //    {
-                //        LoadingHelper.Hide();
-                //        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
-                //    }
-                //};
+                directSaleDetail.OnComplete = async (IsSuccess) =>
+                {
+                    if (IsSuccess)
+                    {
+                        await Navigation.PushAsync(directSaleDetail);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.LongMessage("Dự án chưa có sản phẩm");
+                    }
+                };
             }
         }
 

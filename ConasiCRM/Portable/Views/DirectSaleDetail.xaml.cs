@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telerik.XamarinForms.DataControls;
 using Telerik.XamarinForms.DataControls.ListView;
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -21,6 +22,7 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnComplete;
         private DirectSaleDetailViewModel viewModel;
         public Unit CurrentUnit;
+        private int currentBlock = 0;
 
         public DirectSaleDetail()
         {
@@ -36,19 +38,19 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            //await viewModel.LoadData();
-            //fillterStatus.PreOpenAsync = viewModel.LoadStatusReason;
-            //fillterBlock.PreOpenAsync = LoadBlockAsync;
-            //fillterFloor.PreOpenAsync = LoadFloorAsync;
-            //fillterFloor.PreOpenOneTime = false;
-            //if (viewModel.Data != null && viewModel.Data.Count > 0)
-            //{
-            //    OnComplete?.Invoke(true);
-            //}
-            //else
-            //{
-            //    OnComplete?.Invoke(false);
-            //}
+            await viewModel.LoadBlocks();
+            viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
+            await viewModel.LoadUnit();
+            SetActiveBlock();
+
+            if (viewModel.Floors != null && viewModel.Floors.Count > 0)
+            {
+                OnComplete?.Invoke(true);
+            }
+            else
+            {
+                OnComplete?.Invoke(false);
+            }
         }
 
         private void Question_CLicked(object sender,EventArgs e)
@@ -61,6 +63,53 @@ namespace ConasiCRM.Portable.Views
             stackQuestion.IsVisible = !stackQuestion.IsVisible;
         }
 
+        public async void Block_Tapped(object sender,EventArgs e)
+        {
+            var blockChoosed = sender as RadBorder;
+            if (stackBlocks.Children.IndexOf(blockChoosed) == currentBlock) return;
+            SetInActiveBlock();
+            this.currentBlock = stackBlocks.Children.IndexOf(blockChoosed);
+            SetActiveBlock();
+
+            LoadingHelper.Show();
+            var block = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            viewModel.blockId = block.bsd_blockid.ToString();
+            viewModel.Floors.Clear();
+            viewModel.NumChuanBiInBlock = 0;
+            viewModel.NumSanSangInBlock = 0;
+            viewModel.NumGiuChoInBlock = 0;
+            viewModel.NumDatCocInBlock = 0;
+            viewModel.NumDongYChuyenCoInBlock = 0;
+            viewModel.NumDaDuTienCocInBlock = 0;
+            viewModel.NumThanhToanDot1InBlock = 0;
+            viewModel.NumDaBanInBlock = 0;
+            await viewModel.LoadUnit();
+            LoadingHelper.Hide();
+        }
+
+        public void SetActiveBlock()
+        {
+            var radblock = (RadBorder)stackBlocks.Children[currentBlock];
+            Label lblblock = (radblock.Content as Label);
+            VisualStateManager.GoToState(radblock, "Active");
+            VisualStateManager.GoToState(lblblock, "Active");
+        }
+
+        public void SetInActiveBlock()
+        {
+            var radblock = (RadBorder)stackBlocks.Children[currentBlock];
+            Label lblblock = (radblock.Content as Label);
+            VisualStateManager.GoToState(radblock, "InActive");
+            VisualStateManager.GoToState(lblblock, "InActive");
+        }
+
+
+
+
+
+
+
+
         private async Task LoadBlockAsync()
         {
             LoadingHelper.Show();
@@ -71,7 +120,7 @@ namespace ConasiCRM.Portable.Views
         private async Task LoadFloorAsync()
         {
             LoadingHelper.Show();
-            await viewModel.LoadFloors();
+            //await viewModel.LoadFloors();
             LoadingHelper.Hide();
         }
 

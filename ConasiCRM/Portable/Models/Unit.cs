@@ -42,35 +42,7 @@ namespace ConasiCRM.Portable.Models
                 return Math.Round(bsd_netsaleablearea, 1, MidpointRounding.AwayFromZero).ToString() + " m2";
             }
         }
-        public string item_background
-        {
-            get
-            {
-                switch (statuscode)
-                {
-                    case 1:
-                        return "#F1C40F";
-                    case 100000000:
-                        return "#2ECC71";
-                    case 100000001:
-                        return "#7F8C8D";  // 1st installmetn
-                    case 100000004:
-                        return "#03A9F4";
-                    case 100000006:
-                        return "#16A085";
-                    case 100000005:
-                        return "#8E44AD";
-                    case 100000003:
-                        return "#E67E22";
-                    case 100000009:
-                        return "#ce8686"; // thoar thuan dat coc
-                    case 100000002:
-                        return "#C0392B";
-                    default:
-                        return "Red";
-                };
-            }
-        }
+        public string item_background { get; set; }
 
         public string statusCodeFormat
         {
@@ -79,32 +51,30 @@ namespace ConasiCRM.Portable.Models
                 switch (statuscode)
                 {
                     case 1:
-                        return "Preparing";
+                        return "Chuẩn bị";
                     case 100000000:
-                        return "Available";
-                    case 100000007:
-                        return "Booking";
+                        return "Sẵn sàng";
                     case 100000004:
-                        return "Queuing";
+                        return "Giữ chỗ";
                     case 100000006:
-                        return "Reserve";
+                        return "Đặt cọc";
                     case 100000005:
-                        return "Collected";
+                        return "Đồng ý chuyển cọc";
                     case 100000003:
-                        return "Deposited";
+                        return "Đã đủ tiền cọc";
                     case 100000001:
-                        return "1st Installment";
-                    case 100000009:
-                        return "Singed D.A";
-                    case 100000008:
-                        return "Qualified";
+                        return "Thanh toán đợt 1";
                     case 100000002:
-                        return "Sold";
+                        return "Đã bán";
                     default:
                         return null;
                 }
             }
         }
+
+        public string queseid { get; set; }
+        public string queses_statuscode { get; set; }
+        public int NumQueses { get; set; }
 
         public DateTime createdon { get; set; }
     }
