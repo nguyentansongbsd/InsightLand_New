@@ -103,6 +103,9 @@
       <EmbeddedResource Update="Views\LookUpView.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\MandatorySecondaryForm.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\PageNotFound.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>

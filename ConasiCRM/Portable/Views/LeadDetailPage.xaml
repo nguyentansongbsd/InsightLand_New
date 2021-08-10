@@ -59,7 +59,7 @@
             <Setter Property="IndicatorLocation" Value="End"/>
             <Setter Property="IndicatorFontSize" Value="18"/>
             <Setter Property="IndicatorColor" Value="#939393"/>
-            <Setter Property="BackgroundColor" Value="#F1F1F1"/>
+            <Setter Property="BackgroundColor" Value="#30F3F3F3"/>
             <Setter Property="BorderColor" Value="#F1F1F1"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="17,8"/>
@@ -119,7 +119,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,50">
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto" RowSpacing="0">
@@ -321,11 +321,7 @@
                         <Image Source="{Binding PhongThuy.image}"/>
                     </controls:PinchToZoomContainer.Content>
                 </controls:PinchToZoomContainer>
-                <ImageButton Clicked="Close_LookUpImagePhongThuy_Clicked" WidthRequest="20" HeightRequest="20" VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="Transparent" Margin="0,10,10,0">
-                    <ImageButton.Source>
-                        <FontImageSource FontFamily="FontAwesomeSolid" Color="#444444" Glyph="&#xf00d;" Size="Large"/>
-                    </ImageButton.Source>
-                </ImageButton>
+                <Button Clicked="Close_LookUpImagePhongThuy_Clicked" FontFamily="FontAwesomeSolid" TextColor="#444444" Text="&#xf00d;" FontSize="Large" WidthRequest="20" HeightRequest="20" VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="Transparent" Margin="0,10,10,0"/>
             </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>

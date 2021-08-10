@@ -1,816 +1,134 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="{Binding Title}"
              BackgroundColor="White"
-             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
-             xmlns:telerikGrid="clr-namespace:Telerik.XamarinForms.DataGrid;assembly=Telerik.XamarinForms.DataGrid"
-             xmlns:telerikDataGrid="clr-namespace:Telerik.XamarinForms.DataGrid;assembly=Telerik.XamarinForms.DataGrid"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
-             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             xmlns:bsdGrid="clr-namespace:ConasiCRM.Portable.Controls.BsdGrid"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true"
              x:Name="rootPage"
              x:Class="ConasiCRM.Portable.Views.AccountForm">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converter:ObjToBoolConverter x:Key="ObjToBool" />
-            <controls:NotNullToBoolean x:Key="NullToBool" />
-            <controls:MyNewCheckBox x:Key="MyNewCheckBox" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <StackLayout Spacing=".5" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                <ScrollView>
-                    <StackLayout>
-                        <Label Text="Thông Tin Cơ Bản" TextColor="Black" Padding="15,10" FontSize="16" FontAttributes="Bold" BackgroundColor="#F3F3F3"/>
-                        <Grid BackgroundColor="#ffffff" Padding="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*" >
-                            <controls:FormLabelRequired VerticalOptions="Center" Text="Tên công ty"  Grid.Column="0" Grid.Row="0"/>
-                            <controls:MainEntry x:Name="Entry_nameacc" Text="{Binding singleAccount.bsd_name}" 
-                                               FontSize="15" TextColor="Black" 
-                                               IsEnabled="{Binding optionEntryHasOnlyTerminatedStatus}"
-                                               Grid.Column="1" Grid.Row="0"/>
+            <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">
+                <StackLayout BackgroundColor="White" Padding="10">
+                    <controls:FormLabelRequired Text="Loại khách hàng"/>
+                    <controls:LookUp x:Name="Lookup_Localization" Placeholder="Chọn loại khách hàng" ItemsSource="{Binding LocalizationOptionList}" SelectedItem="{Binding Localization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label"/>
 
-                            <controls:FormLabel VerticalOptions="Center" Text="Tên công ty (khác)"  Grid.Column="0" Grid.Row="1"/>
-                            <controls:MainEntry Text="{Binding singleAccount.bsd_accountnameother}" FontSize="15" Grid.Column="1" Grid.Row="1"/>
+                    <controls:FormLabel Text="Nhóm khách hàng" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:LookUpMultipleOptions x:Name="Lookup_BusinessType" Placeholder="Chọn nhóm khách hàng" ItemsSource="{Binding BusinessTypeOptionList}" SelectedIds="{Binding BusinessType}" CenterModal="{x:Reference CenterModal}"/>
 
-                            <controls:FormLabel VerticalOptions="Center" Text="Tên viết tắt"  Grid.Column="0" Grid.Row="2"/>
-                            <controls:MainEntry Text="{Binding singleAccount.bsd_companycode}" FontSize="15" Grid.Column="1" Grid.Row="2"/>
+                    <controls:FormLabelRequired Text="Tên công ty" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập tên công ty" Text="{Binding singleAccount.bsd_name}" FontSize="15"/>
 
-                            <controls:FormLabelRequired VerticalOptions="Center" Text="Người đại diện pháp luật"  Grid.Column="0" Grid.Row="3"/>
-                            <controls:BsdLookUp Placeholder="Chọn người đại diện" 
-                                                            SelectedItem="{Binding PrimaryContact}" 
-                                                            OpenClicked="primarycontactname_Focused"
-                                                            HasClearButton="False"
-                                                            Grid.Column="1" Grid.Row="3"/>
+                    <controls:FormLabelRequired Text="Người đại diện" Margin="0,10,0,0"/>
+                    <controls:LookUp x:Name="Lookup_PrimaryContact" Placeholder="Chọn người đại diện" ItemsSource="{Binding PrimaryContactOptionList}" SelectedItem="{Binding PrimaryContact}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                            <controls:FormLabelRequired VerticalOptions="Center" Text="Loại hình kinh doanh"  Grid.Column="0" Grid.Row="4"/>
-                            <controls:MultipleSelect x:Name="multipleSelectLoaiHinh" Grid.Column="1" Grid.Row="4"
-                                                             VerticalOptions="Center"
-                                                             Placeholder="Chọn loại hình kinh doanh"
-                                                             ItemsSource="{Binding BindingContext.LoaiHinhOptions,Source={x:Reference rootPage}}"
-                                                             SelectedItems="{Binding BindingContext.SelectedLoaiHinh,Source={x:Reference rootPage}}"
-                                                             Margin="10,0,10,5"/>
+                    <controls:FormLabelRequired Text="Số điện thoại công ty" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập số điện thoại công ty" Text="{Binding singleAccount.telephone1}" FontSize="15"/>
 
-                            <controls:FormLabelRequired VerticalOptions="Center" Text="Loại doanh nghiệp" Grid.Column="0" Grid.Row="5" />
-                            <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="5" HeightRequest="40" >
-                                <Picker x:Name="localization_value" Title="Chọn loại doanh nghiệp"
-                                        ItemsSource="{Binding list_picker_bsd_localization}"
-                                        VerticalOptions="CenterAndExpand"
-                                        HorizontalOptions="FillAndExpand"
-                                        SelectedItem="{Binding singleLocalization}"
-                                        ItemDisplayBinding="{Binding Label}"
-                                        SelectedIndexChanged="Selectvalue_localization"
-                                        FontSize="15">
-                                </Picker>
-                                <!--<ImageButton x:Name="btn_localization" IsVisible="false" Clicked="Clearvalue_localization" HorizontalOptions="Start" BackgroundColor="#ffffff" Source="clear.png" HeightRequest="20" WidthRequest="20"/>-->
-                            </StackLayout>
+                    <controls:FormLabel Text="Email" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập email" Text="{Binding singleAccount.emailaddress1}" FontSize="15"/>
 
-                            <controls:FormLabel Text="Người uỷ quyền" Grid.Column="0" Grid.Row="6" />
-                            <Grid Grid.Column="1" Grid.Row="6">
-                                <controls:MainEntry Text="Không"/>
-                                <StackLayout/>
-                            </Grid>
+                    <controls:FormLabel Text="Email 2" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập email 2" Text="{Binding singleAccount.bsd_email2}" FontSize="15"/>
 
-                            <controls:FormLabel VerticalOptions="Center" Text="Nhóm khách hàng"  Grid.Column="0" Grid.Row="7"/>
-                            <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="7">
-                                <Picker x:Name="customer_group_value" Title="Chọn nhóm khách hàng"
-                                        ItemsSource="{Binding list_picker_bsd_customergroup}"
-                                        VerticalOptions="CenterAndExpand"
-                                        HorizontalOptions="FillAndExpand"
-                                        SelectedItem="{Binding singleCustomergroup}"
-                                        ItemDisplayBinding="{Binding Label}"
-                                        SelectedIndexChanged="Selectvalue_customer_group"
-                                        FontSize="15">
-                                </Picker>
-                                <ImageButton x:Name="btn_customer_group" IsVisible="false" Clicked="Clearvalue_customer_group" HorizontalOptions="Start" BackgroundColor="#ffffff" Source="clear.png" HeightRequest="20" WidthRequest="20"/>
-                            </StackLayout>
-                        </Grid>
+                    <controls:FormLabel Text="Fax" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập fax của công ty" Text="{Binding singleAccount.fax}" FontSize="15"/>
 
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Liên Hệ"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout BackgroundColor="#cecece" Padding=".8">
-                                    <Grid BackgroundColor="#ffffff" Padding="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
-                                        <controls:FormLabelRequired VerticalOptions="Center" Text="Điện thoại"  Grid.Column="0" Grid.Row="0"/>
-                                        <controls:MainEntry Text="{Binding singleAccount.telephone1}" 
-                                               FontSize="15" TextColor="Black" 
-                                               Keyboard="Telephone"
-                                               Grid.Column="1" Grid.Row="0"/>
+                    <controls:FormLabel Text="Website" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập website của công ty" Text="{Binding singleAccount.websiteurl}" FontSize="15"/>
 
-                                        <controls:FormLabel VerticalOptions="Center" Text="Email" Grid.Column="0" Grid.Row="1" />
-                                        <controls:MainEntry Text="{Binding singleAccount.emailaddress1}" 
-                                               FontSize="15" TextColor="Black" 
-                                               Keyboard="Email"
-                                               Grid.Column="1" Grid.Row="1"/>
+                    <controls:FormLabel Text="Giấy phép kinh doanh" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập số giấy phép kinh doanh" Text="{Binding singleAccount.bsd_registrationcode}" FontSize="15"/>
 
-                                        <controls:FormLabel VerticalOptions="Center" Text="Email 2"  Grid.Column="0" Grid.Row="2"/>
-                                        <controls:MainEntry Text="{Binding singleAccount.bsd_email2}" FontSize="15" TextColor="Black" Grid.Column="1" Grid.Row="2"/>
+                    <controls:FormLabel Text="Ngày cấp" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:DatePickerBorder Date="{Binding singleAccount.bsd_issuedon}" Format="dd/MM/yyyy"/>
 
-                                        <controls:FormLabel VerticalOptions="Center" Text="Fax"  Grid.Column="0" Grid.Row="3"/>
-                                        <controls:MainEntry Text="{Binding singleAccount.fax}" FontSize="15" TextColor="Black" Grid.Column="1" Grid.Row="3"/>
+                    <controls:FormLabel Text="Nơi cấp" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập nơi cấp" Text="{Binding singleAccount.bsd_placeofissue}" FontSize="15"/>
 
-                                        <controls:FormLabel VerticalOptions="Center" Text="Website" Grid.Column="0" Grid.Row="4"/>
-                                        <controls:MainEntry x:Name="txt_url" Text="{Binding singleAccount.websiteurl}" FontSize="15" TextColor="Black" Keyboard="Url" Unfocused="url_unfocused" Grid.Column="1" Grid.Row="4"/>
-                                    </Grid>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
+                    <controls:FormLabel Text="Mã số thuế" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:MainEntry Placeholder="Nhập mã số thuế" Text="{Binding singleAccount.bsd_vatregistrationnumber}" FontSize="15"/>
 
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Mở Rộng"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout BackgroundColor="#cecece" Padding=".8">
-                                    <Grid BackgroundColor="#ffffff" Padding="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
-                                        <controls:FormLabelRequired VerticalOptions="Center" Text="Số giấy phép kinh doanh"  Grid.Column="0" Grid.Row="0"/>
-                                        <controls:MainEntry Text="{Binding singleAccount.bsd_registrationcode}" 
-                                               FontSize="15" TextColor="Black" 
-                                               IsEnabled="{Binding optionEntryHasOnlyTerminatedStatus}"
-                                               Grid.Column="1" Grid.Row="0"/>
+                    <controls:FormLabel Text="Địa chỉ liên lạc" FontSize="15" Margin="0,10,0,0"/>
+                    <Grid>
+                        <controls:MainEntry Text="{Binding singleAccount.bsd_address}" Placeholder="Chọn địa chỉ liên lạc" FontSize="15"/>
+                        <StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiLienLac_Tapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </Grid>
 
-                                        <controls:FormLabel VerticalOptions="Center" Text="Ngày cấp"  Grid.Column="0" Grid.Row="1"/>
-                                        <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                                            <!--<controls:MyDatePicker MinimumDate="01/01/0001" NullableDate="{Binding Lead.new_birthday}" FontSize="15" HorizontalOptions="FillAndExpand"/>-->
-                                            <controls:MyNewDatePicker x:Name="btndate_placeofissues" DateChanged="value_DateChanged" NullableDate="{Binding singleAccount.bsd_issuedon}" HorizontalOptions="FillAndExpand"/>
-                                            <ImageButton x:Name="btnclear_placeofissues" HorizontalOptions="Start" BackgroundColor="#ffffff" Source="clear.png" HeightRequest="20" IsVisible="{Binding singleAccount.bsd_issuedon,Converter={StaticResource NullToBool}}" WidthRequest="20" Clicked="Clear_DateChanged"/>
-                                        </StackLayout>
-
-                                        <controls:FormLabel VerticalOptions="Center" Text="Nơi cấp"  Grid.Column="0" Grid.Row="2"/>
-                                        <controls:MainEntry Text="{Binding singleAccount.bsd_placeofissue}" FontSize="15" TextColor="Black" Grid.Column="1" Grid.Row="2"/>
-
-                                        <controls:FormLabel VerticalOptions="Center" Text="Khách hàng đã giao dịch"  Grid.Column="0" Grid.Row="3"/>
-                                        <controls:MyNewCheckBox IsEnabled="false" IsChecked="{Binding singleAccount.bsd_khachhangdagiaodich}" Grid.Column="1" Grid.Row="3"/>
-
-                                        <controls:FormLabel VerticalOptions="Center" Text="Mã số thuế  VAT"  Grid.Column="0" Grid.Row="4"/>
-                                        <controls:MainEntry Text="{Binding singleAccount.bsd_vatregistrationnumber}" 
-                                               FontSize="15" TextColor="Black" 
-                                               IsEnabled="{Binding optionEntryHasOnlyTerminatedStatus}"
-                                               Keyboard="Numeric"
-                                               Grid.Column="1" Grid.Row="4"/>
-                                    </Grid>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông tin địa chỉ"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout BackgroundColor="#cecece" Padding=".8">
-                                    <Grid BackgroundColor="#ffffff" Padding="10" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
-                                        <controls:FormLabelRequired VerticalOptions="Center" Text="Địa chỉ liên lạc"  Grid.Column="0" Grid.Row="0"/>
-                                        <controls:MyNewEntry Text="{Binding singleAccount.bsd_address}" HasClearButton="false" OnClicked="show_popup_accountaddress" Grid.Column="1" Grid.Row="0"/>
-
-                                        <controls:FormLabel VerticalOptions="Center" Text="Địa chỉ liên lạc (EN)" Grid.Column="0" Grid.Row="1" />
-                                        <controls:MyNewEntry Text="{Binding singleAccount.bsd_diachi}" HasClearButton="false" OnClicked="show_popup_accountaddress" Grid.Column="1" Grid.Row="1"/>
-
-                                        <controls:FormLabelRequired VerticalOptions="Center" Text="Địa chỉ thường trú" Grid.Column="0" Grid.Row="2" />
-                                        <controls:MyNewEntry Text="{Binding singleAccount.bsd_permanentaddress1}" HasClearButton="false" OnClicked="show_popup_permanent_accountaddress" Grid.Column="1" Grid.Row="2"/>
-
-                                        <controls:FormLabel VerticalOptions="Center" Text="Địa chỉ thường trú (EN)"  Grid.Column="0" Grid.Row="3"/>
-                                        <controls:MyNewEntry Text="{Binding singleAccount.bsd_diachithuongtru}" HasClearButton="false" OnClicked="show_popup_permanent_accountaddress" Grid.Column="1" Grid.Row="3"/>
-
-                                    </Grid>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <!--DATAGRID THONG TIN DANH SACH DAT CHO   -->
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" x:Name="datagridQueuing" IsVisible="true">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Danh Sách Đặt Chỗ"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout Spacing="0">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding list_thongtinqueing}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="15,5" Spacing="3" BackgroundColor="White">
-                                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
-                                                        <Label Grid.Column="0" Text="{Binding name}" TextColor="#444444" FontSize="15" FontAttributes="Bold"/>
-                                                        <Label Grid.Column="1" Text="{Binding createdonformat}" FontSize="14" TextColor="#777777" HorizontalTextAlignment="End"/>
-                                                    </Grid>
-
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Dự Án" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding que_nameproject}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mã Đặt Chỗ" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_queuenumber}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Khách Hàng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding customerid}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tình Trạng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding statuscodevalue}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label  FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tổng Tiền Ước Tính" TextColor="#444444"/>
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding estimatedvalueformat}" TextColor="Red" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
-                                    <Button Text="Xem thêm" Clicked="ShowMore_Clicked" IsVisible="{Binding ShowMoreQueueing}" Margin="0,10" BorderWidth="1" BorderColor="#1399D5" TextColor="#1399D5" CornerRadius="10" BackgroundColor="White" HeightRequest="40" HorizontalOptions="Center"/>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <!--DATAGRID THONG TIN DANH SACH DAT COC   -->
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" x:Name="datagridQuotation" IsVisible="true">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Danh Sách Đặt Cọc"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout Spacing="0">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding list_thongtinquotation}" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="15,5" Spacing="3" BackgroundColor="White">
-                                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
-                                                        <Label Grid.Column="0" Text="{Binding quo_nameproject}" TextColor="#444444" FontSize="15" FontAttributes="Bold"/>
-                                                        <Label Grid.Column="1" Text="{Binding createdonformat}" FontSize="14" TextColor="#777777" HorizontalTextAlignment="End"/>
-                                                    </Grid>
-
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mã Căn Hộ" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding quo_nameproduct}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mã Đặt Cọc" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_quotationnumber}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Khách Hàng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding customerid}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tình Trạng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding statuscodevalue}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label  FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tổng Tiền" TextColor="#444444"/>
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding totalamountformat}" TextColor="Red" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
-                                    <Button Text="Xem thêm" Clicked="ShowMoreQuotation_Clicked" IsVisible="{Binding ShowMoreQuotation}" Margin="0,10" BorderWidth="1" BorderColor="#1399D5" TextColor="#1399D5" CornerRadius="10" BackgroundColor="White" HeightRequest="40" HorizontalOptions="Center"/>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <!--DATAGRID THONG TIN DANH SACH HOP DONG   -->
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" x:Name="datagridContract" IsVisible="true">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Danh Sách Hợp Đồng"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout Spacing="0">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding list_thongtincontract}" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="15,5" Spacing="3" BackgroundColor="White">
-                                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
-                                                        <Label Grid.Column="0" Text="{Binding contract_nameproject}" TextColor="#444444" FontSize="15" FontAttributes="Bold"/>
-                                                        <Label Grid.Column="1" Text="{Binding createdonformat}" FontSize="14" TextColor="#777777" HorizontalTextAlignment="End"/>
-                                                    </Grid>
-
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mã Căn Hộ" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding contract_nameproduct}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mã Hợp Đồng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_optionno}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Khách Hàng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding customerid}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tình Trạng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding statuscodevalue}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label  FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tổng Tiền" TextColor="#444444"/>
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding totalamountformat}" TextColor="Red" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
-                                    <Button Text="Xem thêm" Clicked="ShowMoreContract_Clicked" IsVisible="{Binding ShowMoreContract}" Margin="0,10" BorderWidth="1" BorderColor="#1399D5" TextColor="#1399D5" CornerRadius="10" BackgroundColor="White" HeightRequest="40" HorizontalOptions="Center"/>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <!--DATAGRID THONG TIN DANH SACH CHAM SOC KHACH HANG   -->
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" x:Name="datagridCase" IsVisible="true">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Danh Sách Chăm Sóc Khách Hàng"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout Spacing="0">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding list_thongtincase}" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="15,5" Spacing="3" BackgroundColor="White">
-                                                    <Label Text="{Binding title}" TextColor="#444444" FontSize="15" FontAttributes="Bold"/>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mã Số" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding ticketnumber}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Khách Hàng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding customerid}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Ưu Tiên" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding prioritycodevalue}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label  FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Nguồn" TextColor="#444444"/>
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding caseorigincodevalue}"  TextColor="#444444"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tình Trạng" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding statuscodevalue}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
-                                    <Button Text="Xem thêm" Clicked="ShowMoreCase_Clicked" IsVisible="{Binding ShowMoreCase}" Margin="0,10" BorderWidth="1" BorderColor="#1399D5" TextColor="#1399D5" CornerRadius="10" BackgroundColor="White" HeightRequest="40" HorizontalOptions="Center"/>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <!--DATAGRID THONG TIN DANH SACH HOAT DONG   -->
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" x:Name="datagridActivities" IsVisible="true">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Danh Sách Hoạt Động"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout Spacing="0">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding list_thongtinactivitie}" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="15,5" Spacing="3" BackgroundColor="White">
-                                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
-                                                        <Label Grid.Column="0" Text="{Binding subject}" TextColor="#444444" FontSize="15" FontAttributes="Bold"/>
-                                                        <Label Grid.Column="1" Text="{Binding createdonformat}" FontSize="14" TextColor="#777777" HorizontalTextAlignment="End"/>
-                                                    </Grid>
-
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Loại Hoạt Động" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding activitytypecodevalue}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Mô Tả" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding description}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
-                                    <Button Text="Xem thêm" Clicked="ShowMoreActivities_Clicked" IsVisible="{Binding ShowMoreActivities}" Margin="0,10" BorderWidth="1" BorderColor="#1399D5" TextColor="#1399D5" CornerRadius="10" BackgroundColor="White" HeightRequest="40" HorizontalOptions="Center"/>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                        <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="MandatorySecondaryID" x:Name="datagridMandatorySecondary" IsVisible="true">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Mandatory Secondary List"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout Spacing="0">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding list_MandatorySecondary}" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="15,5" Spacing="3" BackgroundColor="White">
-                                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
-                                                        <Label Grid.Column="0" Text="{Binding bsd_name}" TextColor="#444444" FontSize="15" FontAttributes="Bold"/>
-                                                        <Label Grid.Column="1" Text="{Binding createdon}" FontSize="14" TextColor="#777777" HorizontalTextAlignment="End"/>
-                                                    </Grid>
-
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Công ty đại diện" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_developeraccount}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Tên người đại diện" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_contact_name}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Ngày có hiệu lực (từ ngày)" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_effectivedateto}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Ngày có hiệu lực (đến ngày)" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_effectivedatefrom}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Chức vụ (VN)" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_jobtitlevn}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label TextColor="#444444" FontSize="15">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Chức vụ (EN)" />
-                                                                <Span Text=":  "/>
-                                                                <Span Text="{Binding bsd_jobtitleen}" />
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                    <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
-                                    <Button Text="Xem thêm" Clicked="ShowMoreMandatory_Clicked" IsVisible="{Binding ShowMoreMandatory}" Margin="0,10" BorderWidth="1" BorderColor="#1399D5" TextColor="#1399D5" CornerRadius="10" BackgroundColor="White" HeightRequest="40" HorizontalOptions="Center"/>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-
-                    </StackLayout>
-                </ScrollView>
-                <Button x:Name="btnSave" Margin="10,5,10,10" Padding="10,5" HeightRequest="40" TextColor="Black" FontAttributes="Bold" CornerRadius="10" FontSize="16" BackgroundColor="LightGray" BorderWidth="1" BorderColor="LightGray" Clicked="SaveMenu_Clicked"/>
-            </StackLayout>
-
-            <controls:ModalContentView x:Name="PrimaryContactLoopkup" />
-            
-            <!--Popup ContactAddress-->
-            <ContentView x:Name="popup_account_address"
-                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                        AbsoluteLayout.LayoutFlags="All"
-                        IsVisible="False"
-                        BackgroundColor="#C0808080"
-                        Padding="40">
-                <StackLayout BackgroundColor="#ffffff" Padding="10">
-                    <Label Text="Địa Chỉ Liên Lạc" Font="Bold,18" HorizontalTextAlignment="Center"/>
-                    <StackLayout BackgroundColor="#000000" HeightRequest=".9"/>
+                    <controls:FormLabel Text="Địa chỉ thường trú" FontSize="15" Margin="0,10,0,0"/>
+                    <Grid>
+                        <controls:MainEntry Text="{Binding singleAccount.bsd_permanentaddress1}" Placeholder="Chọn địa chỉ thường trú" FontSize="15"/>
+                        <StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiThuongTru_Tapped"/>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+            <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White" VerticalOptions="EndAndExpand">
+                <Button x:Name="btnSave" Margin="10,5,10,10" Padding="10,5" HeightRequest="40" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="16" BackgroundColor="#2196F3" BorderWidth="1" BorderColor="#2196F3" />
+            </Grid>
+            <controls:CenterModal x:Name="centerModalContacAddress" Title="Địa chỉ liên lạc">
+                <controls:CenterModal.Body>
                     <ScrollView>
-                        <StackLayout Padding="20" Spacing="3">
-                            <!--<StackLayout BackgroundColor="#000000" HeightRequest=".9"/>-->
+                        <StackLayout Margin="10">
+                            <controls:FormLabel Text="Quốc gia"/>
+                            <controls:LookUp x:Name="lookUpContacAddressCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountryContac}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="ContacAddressCountry_Changed"/>
 
-                            <StackLayout x:Name="requiredform" Orientation="Horizontal" Spacing="2">
-                                <Label VerticalOptions="Center" Text="Số nhà, đường, phường (VN)" />
-                                <Label HorizontalTextAlignment="End" VerticalOptions="Center" Text="*" TextColor="#fb0000" />
-                            </StackLayout>
-                            <Entry x:Name="popupaccountaddress_housenumberstreet" FontSize="15"/>
+                            <controls:FormLabel Text="ZIP code"/>
+                            <controls:MainEntry Placeholder="Nhập ZIP code" Text="{Binding AddressPostalCodeContac}"/>
 
-                            <StackLayout Orientation="Horizontal" Spacing="2">
-                                <Label VerticalOptions="Center" Text="Số nhà, đường, phường (EN)" />
-                            </StackLayout>
-                            <Entry x:Name="popupaccountaddress_housenumber" FontSize="15"/>
+                            <controls:FormLabel Text="Tỉnh thành"/>
+                            <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvinceContac}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="ContacAddressProvince_Changed"/>
 
-                            <StackLayout Orientation="Horizontal" Spacing="2">
-                                <Label VerticalOptions="Center" Text="Quốc gia" />
-                            </StackLayout>
-                            <Label x:Name="popupaccountaddress_country_id" IsVisible="false"/>
-                            <Label x:Name="popupaccountaddressen_country" IsVisible="false"/>
-                            <controls:MyNewEntry PlaceHolder="Chọn quốc gia" 
-                                              HasClearButton="false"
-                                              x:Name="popupaccountaddress_country"
-                                              OnClicked="show_popup_listview_country"
-                                              ClearClicked="clear_entry_country"/>
+                            <controls:FormLabel Text="Quận/Huyện"/>
+                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityContac}" ItemsSource="{Binding list_district_lookup}"/>
 
-                            <StackLayout Orientation="Horizontal" Spacing="2">
-                                <Label VerticalOptions="Center" Text="Tỉnh/Thành" />
-                            </StackLayout>
-                            <Label x:Name="popupaccountaddress_province_id" IsVisible="false"/>
-                            <Label x:Name="popupaccountaddressen_province" IsVisible="false"/>
-                            <controls:MyNewEntry PlaceHolder="Chọn tỉnh/thành" 
-                                              HasClearButton="false"
-                                              x:Name="popupaccountaddress_province"
-                                              OnClicked="show_popup_listview_province"
-                                              ClearClicked="clear_entry_province"/>
-
-                            <StackLayout Orientation="Horizontal" Spacing="2">
-                                <Label VerticalOptions="Center" Text="Quận/Huyện" />
-                            </StackLayout>
-                            <Label x:Name="popupaccountaddress_district_id" IsVisible="false"/>
-                            <Label x:Name="popupaccountaddressen_district" IsVisible="false"/>
-                            <controls:MyNewEntry PlaceHolder="Chọn quận/huyện" 
-                                              HasClearButton="false"
-                                              x:Name="popupaccountaddress_district"
-                                              OnClicked="show_popup_listview_district"
-                                              ClearClicked="clear_entry_district"/>
-
+                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
+                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Contac}"/>
                         </StackLayout>
                     </ScrollView>
-                    <StackLayout x:Name="popupaccount_footer" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal" Spacing="2">
-                        <Button Text="Đóng" Clicked="hide_popup_accountaddress" HorizontalOptions="FillAndExpand"/>
-                        <Button x:Name="popupaccountaddress_btn_submit" Text="Xác nhận" HorizontalOptions="FillAndExpand"/>
-                    </StackLayout>
+                </controls:CenterModal.Body>
+                <controls:CenterModal.Footer>
+                    <Grid ColumnDefinitions="*,*" Margin="10">
+                        <Button Grid.Column="0" Text="Đóng" Clicked="CloseContacAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
+                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmContacAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="1" CornerRadius="10"/>
+                    </Grid>
+                </controls:CenterModal.Footer>
+            </controls:CenterModal>
+            <controls:CenterModal x:Name="centerModalPermanentAddress" Title="Địa chỉ thường trú">
+                <controls:CenterModal.Body>
+                    <ScrollView>
+                        <StackLayout Margin="10">
+                            <controls:FormLabel Text="Quốc gia"/>
+                            <controls:LookUp x:Name="lookUpPermanentAddressCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountryPermanent}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="PermanentAddressCountry_Changed"/>
 
-                </StackLayout>
-            </ContentView>
-            <!--End Popup-->
+                            <controls:FormLabel Text="Tỉnh thành"/>
+                            <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvincePermanent}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="PermanentAddressProvince_Changed"/>
 
-            <!--Popup ListView Country-->
-            <ContentView x:Name="popup_list_viewCountry"
-                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                        AbsoluteLayout.LayoutFlags="All"
-                        IsVisible="False"
-                        BackgroundColor="#C0808080"
-                        Padding="40">
-                <StackLayout BackgroundColor="#ffffff" Padding="10">
-                    <Label Text="Quốc Gia" Font="Bold,18" HorizontalTextAlignment="Center"/>
+                            <controls:FormLabel Text="Quận/Huyện"/>
+                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityPermanent}" ItemsSource="{Binding list_district_lookup}"/>
 
-                    <StackLayout HeightRequest=".9" BackgroundColor="#000000"/>
-
-                    <StackLayout>
-                        <SearchBar x:Name="searchBarCountry" Placeholder="Tìm kiếm" TextChanged="SearchBar_Country" HeightRequest="50"/>
-                    </StackLayout>
-
-                    <StackLayout x:Name="stack_popupCountry" VerticalOptions="FillAndExpand">
-                        <ListView x:Name="source_listviewpopupCountry" ItemsSource="{Binding list_lookup_Country}" CachingStrategy="RecycleElement" ItemTapped="OnSelectItem_Country" ItemAppearing="ItemAppearingcountry">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Label x:Name="textcell_listviewpopupCountry" Text="{Binding Name}"/>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>
-                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal" Spacing="2">
-                        <Button Text="Đóng" Clicked="Button_Country_Clicked" HorizontalOptions="FillAndExpand"/>
-                    </StackLayout>
-                </StackLayout>
-            </ContentView>
-            <!--End Popup-->
-
-            <!--Popup ListView Province-->
-            <ContentView x:Name="popup_list_viewProvince"
-                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                        AbsoluteLayout.LayoutFlags="All"
-                        IsVisible="False"
-                        BackgroundColor="#C0808080"
-                        Padding="40">
-                <StackLayout BackgroundColor="#ffffff" Padding="10">
-                    <Label Text="Tỉnh Thành" Font="Bold,18" HorizontalTextAlignment="Center"/>
-
-                    <StackLayout HeightRequest=".9" BackgroundColor="#000000"/>
-
-                    <StackLayout>
-                        <SearchBar x:Name="SearBarProvince" Placeholder="Tìm kiếm" TextChanged="SearchBar_Province" HeightRequest="50"/>
-                    </StackLayout>
-
-                    <StackLayout x:Name="stack_popupProvince" VerticalOptions="FillAndExpand">
-                        <ListView x:Name="source_listviewpopupProvince" ItemsSource="{Binding list_lookup_Province}" CachingStrategy="RecycleElement" ItemTapped="OnSelectItem_Province" ItemAppearing="ItemAppearingprovince">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Label x:Name="textcell_listviewpopupProvince" Text="{Binding Name}"/>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>
-                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal" Spacing="2">
-                        <Button Text="Đóng" Clicked="Button_Province_Clicked" HorizontalOptions="FillAndExpand"/>
-                    </StackLayout>
-                </StackLayout>
-            </ContentView>
-            <!--End Popup-->
-
-            <!--Popup ListView District-->
-            <ContentView x:Name="popup_list_viewDistrict"
-                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                        AbsoluteLayout.LayoutFlags="All"
-                        IsVisible="False"
-                        BackgroundColor="#C0808080"
-                        Padding="40">
-                <StackLayout BackgroundColor="#ffffff" Padding="10">
-                    <Label Text="Quận/Huyện" Font="Bold,18" HorizontalTextAlignment="Center"/>
-
-                    <StackLayout HeightRequest=".9" BackgroundColor="#000000"/>
-
-                    <StackLayout>
-                        <SearchBar x:Name="searchBarDistrict" Placeholder="Tìm kiếm" TextChanged="SearchBar_District" HeightRequest="50"/>
-                    </StackLayout>
-
-                    <StackLayout x:Name="stack_popupDistrict" VerticalOptions="FillAndExpand">
-                        <ListView x:Name="source_listviewpopupDistrict" ItemsSource="{Binding list_lookup_District}" CachingStrategy="RecycleElement" ItemTapped="OnSelectItem_District" ItemAppearing="ItemAppearingdistrict">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Label x:Name="textcell_listviewpopupDistrict" Text="{Binding Name}"/>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>
-                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal" Spacing="2">
-                        <Button Text="Đóng" Clicked="Button_District_Clicked" HorizontalOptions="FillAndExpand"/>
-                    </StackLayout>
-                </StackLayout>
-            </ContentView>
-            <!--End Popup-->         
+                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
+                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Permanent}"/>
+                        </StackLayout>
+                    </ScrollView>
+                </controls:CenterModal.Body>
+                <controls:CenterModal.Footer>
+                    <Grid ColumnDefinitions="*,*" Margin="10">
+                        <Button Grid.Column="0" Text="Đóng" Clicked="ClosePermanentAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
+                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmPermanentAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="1" CornerRadius="10"/>
+                    </Grid>
+                </controls:CenterModal.Footer>
+            </controls:CenterModal>
+            <controls:CenterModal x:Name="CenterModal" />
+            <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
