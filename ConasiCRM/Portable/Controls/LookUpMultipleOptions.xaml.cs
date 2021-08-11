@@ -227,11 +227,11 @@ namespace ConasiCRM.Portable.Controls
 
         private async void CancelButton_Clicked(object sender, EventArgs e)
         {
-            ItemsSource.Where(x => x.Selected == true).ToList().ForEach(x => x.Selected = false);
-            if (SelectedIds != null)
-            {
-                ItemsSource.Where(x => SelectedIds.Any(val => val == x.Val)).ToList().ForEach(x => x.Selected = true);
-            }
+            //ItemsSource.Where(x => x.Selected == true).ToList().ForEach(x => x.Selected = false);
+            //if (SelectedIds != null)
+            //{
+            //    ItemsSource.Where(x => SelectedIds.Any(val => val == x.Val)).ToList().ForEach(x => x.Selected = true);
+            //}
             await CenterModal.Hide();
         }
 

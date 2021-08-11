@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using Newtonsoft.Json;
 using Plugin.Media.Abstractions;
@@ -217,6 +218,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                      <condition attribute='contactid' operator='eq' value='" + id + @"' />
                                     </filter>
+                                    <filter type='and'>
+                                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                    </filter>
                               </entity>
                             </fetch>";
 
@@ -375,6 +379,10 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 data["bsd_permanentdistrict@odata.bind"] = "/new_districts(" + contact._bsd_permanentdistrict_value + ")"; /////Lookup Field
+            }
+            if (UserLogged.Id != null)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
             }
 
             return data;

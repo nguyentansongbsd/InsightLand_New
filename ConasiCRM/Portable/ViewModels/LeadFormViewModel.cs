@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -126,6 +127,9 @@ namespace ConasiCRM.Portable.ViewModels
                             <link-entity name='campaign' from='campaignid' to='campaignid' visible='false' link-type='outer'>
                                 <attribute name='name'  alias='campaignid_label'/>
                             </link-entity>
+                            <filter type='and'>
+                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
                           </entity>
                         </fetch>";
 
@@ -218,6 +222,10 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 data["campaignid@odata.bind"] = "/campaigns(" + singleLead._campaignid_value + ")"; /////Lookup Field
+            }
+            if (UserLogged.Id != null)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
             }
             return data;
         }

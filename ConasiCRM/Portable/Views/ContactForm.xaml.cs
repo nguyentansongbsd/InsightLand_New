@@ -71,7 +71,7 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Cập Nhật Khách Hàng Cá Nhân";
             btn_save_contact.Text = "Cập Nhật";
             btn_save_contact.Clicked += UpdateContact_Clicked;
-            if (viewModel.singleContact != null)
+            if (viewModel.singleContact.contactid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
                 OnCompleted?.Invoke(false);

@@ -35,7 +35,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <order attribute='createdon' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='accountid' operator='eq' value='" + accountid + @"' />
-                                    </filter>
+                                    </filter>                                   
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountFormModel>>("accounts", fetch);
@@ -118,15 +118,10 @@ namespace ConasiCRM.Portable.ViewModels
                 data["bsd_developeraccount@odata.bind"] = "/accounts(" + mandatorySecondary._bsd_developeraccount_value + ")";
             }
 
-            if (UserLogged.Id == null)
-            {
-                await DeletLookup("bsd_employee", mandatorySecondary.bsd_mandatorysecondaryid);
-            }
-            else
+            if (UserLogged.Id != null)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
             }
-
             return data;
         }
         public async Task<Boolean> DeletLookup(string fieldName, Guid Id)

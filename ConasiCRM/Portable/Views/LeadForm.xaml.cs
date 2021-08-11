@@ -74,7 +74,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.SelectedCurrency = campaign;
             }
 
-            if (viewModel.singleLead != null)
+            if (viewModel.singleLead.leadid != Guid.Empty)
                 CheckSingleLead?.Invoke(true);
             else
                 CheckSingleLead?.Invoke(false);

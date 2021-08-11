@@ -22,6 +22,7 @@ using System.Net;
 using System.Diagnostics;
 using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms.Xaml;
+using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -91,47 +92,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         private string _addressLine1Contac;
         public string AddressLine1Contac { get => _addressLine1Contac; set { _addressLine1Contac = value; OnPropertyChanged(nameof(AddressLine1Contac)); } }
-
-        private string _addressCompositePermanent;
-        public string AddressCompositePermanent { get => _addressCompositePermanent; set { _addressCompositePermanent = value; OnPropertyChanged(nameof(AddressCompositePermanent)); } }
-
-        private LookUp _addressCountryPermanent;
-        public LookUp AddressCountryPermanent
-        {
-            get => _addressCountryPermanent;
-            set
-            {
-                _addressCountryPermanent = value;
-                OnPropertyChanged(nameof(AddressCountryPermanent));
-                AddressStateProvincePermanent = null;
-                list_province_lookup.Clear();
-            }
-        }
-
-        private LookUp _addressStateProvincePermanent;
-        public LookUp AddressStateProvincePermanent
-        {
-            get => _addressStateProvincePermanent;
-            set
-            {
-                _addressStateProvincePermanent = value;
-                OnPropertyChanged(nameof(AddressStateProvincePermanent));
-                AddressCityPermanent = null;
-                list_district_lookup.Clear();
-            }
-        }
-
-        private LookUp _addressCityPermanent;
-        public LookUp AddressCityPermanent { get => _addressCityPermanent; set { _addressCityPermanent = value; OnPropertyChanged(nameof(AddressCityPermanent)); } }
-
-        private string _addressLine3Permanent;
-        public string AddressLine3Permanent { get => _addressLine3Permanent; set { _addressLine3Permanent = value; OnPropertyChanged(nameof(AddressLine3Permanent)); } }
-
-        private string _addressLine2Permanent;
-        public string AddressLine2Permanent { get => _addressLine2Permanent; set { _addressLine2Permanent = value; OnPropertyChanged(nameof(AddressLine2Permanent)); } }
-
-        private string _addressLine1Permanent;
-        public string AddressLine1Permanent { get => _addressLine1Permanent; set { _addressLine1Permanent = value; OnPropertyChanged(nameof(AddressLine1Permanent)); } }
 
         public ObservableCollection<LookUp> list_country_lookup { get; set; }
         public ObservableCollection<LookUp> list_province_lookup { get; set; }
@@ -210,6 +170,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                     <filter type='and'>
                                         <condition attribute='accountid' operator='eq' value='{" + accountid + @"}' />
+                                    </filter>
+                                    <filter type='and'>
+                                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
                                 </entity>
                             </fetch>";
@@ -342,6 +305,10 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 data["bsd_district@odata.bind"] = "/new_districts(" + singleAccount._bsd_district_value + ")"; /////Lookup Field
+            }
+            if (UserLogged.Id != null)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
             }
             return data;
         }

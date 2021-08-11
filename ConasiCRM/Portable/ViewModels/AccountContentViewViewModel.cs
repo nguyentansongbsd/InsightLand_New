@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,6 +31,9 @@ namespace ConasiCRM.Portable.ViewModels
                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='a'>
                          <attribute name='bsd_fullname' alias='primarycontact_name' />
                     </link-entity>
+                    <filter type='and'>
+                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                       </filter>
                   </entity>
                 </fetch>";
             });
