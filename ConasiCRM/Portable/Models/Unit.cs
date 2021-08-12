@@ -13,7 +13,7 @@ namespace ConasiCRM.Portable.Models
         public string name { get; set; }
         public decimal bsd_totalprice { get; set; }
         public decimal price { get; set; }
-        public int statuscode { get; set; }
+        public int? statuscode { get; set; }
         public Guid _bsd_floor_value { get; set; }
         public string floor_name { get; set; }
         public string block_name { get; set; }

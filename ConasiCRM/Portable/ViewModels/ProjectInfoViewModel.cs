@@ -160,11 +160,9 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_unitscodesams' />
                                 <attribute name='productid' />
                                 <order attribute='createdon' descending='true' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' link-type='inner' alias='ab'>
-                                  <filter type='and'>
-                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
                                   </filter>
-                                </link-entity>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Unit>>("products", fetchXml);

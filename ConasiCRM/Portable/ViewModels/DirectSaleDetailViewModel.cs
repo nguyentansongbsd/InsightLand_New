@@ -183,17 +183,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     '" + minPrice_Condition + @"'
                                     '" + maxPrice_Condition + @"'
                                 </filter>
-                                <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='outer' alias='ae'>
-                                  <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='outer' alias='af'>
-                                      <attribute name='bsd_eventid' alias='event_id' />                                       
-                                   </link-entity>
-                                </link-entity>
                                 <link-entity name='bsd_floor' from='bsd_floorid' to='bsd_floor' link-type='inner' alias='ad'>
                                   <attribute name='bsd_floorid' alias='floorid' />
                                   <attribute name='bsd_name' alias='floor_name' />
-                                  <filter type='and'>
-                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"' />
-                                  </filter>
                                 </link-entity>
                                 <link-entity name='opportunity' from='bsd_units' to='productid' link-type='inner' alias='ag' >
 	                                <attribute name='opportunityid' alias='queseid'/>
@@ -306,7 +298,11 @@ namespace ConasiCRM.Portable.ViewModels
                         unit.NumQueses = 0;
                     }
 
-                    unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.ToString()).Background;
+                    if (unit.statuscode.HasValue)
+                    {
+                        unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.Value.ToString()).Background;
+                    }
+                   
 
                     floor.Units.Add(unit);
                 }
