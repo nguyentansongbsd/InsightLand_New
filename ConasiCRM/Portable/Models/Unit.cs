@@ -13,7 +13,7 @@ namespace ConasiCRM.Portable.Models
         public string name { get; set; }
         public decimal bsd_totalprice { get; set; }
         public decimal price { get; set; }
-        public int statuscode { get; set; }
+        public int? statuscode { get; set; }
         public Guid _bsd_floor_value { get; set; }
         public string floor_name { get; set; }
         public string block_name { get; set; }
@@ -75,6 +75,12 @@ namespace ConasiCRM.Portable.Models
         public string queseid { get; set; }
         public string queses_statuscode { get; set; }
         public int NumQueses { get; set; }
+
+        public decimal bsd_constructionarea { get; set; }
+        public string bsd_unittype_name { get; set; }
+        public string bsd_direction { get; set; }
+        public string bsd_view { get; set; }
+        public bool bsd_vippriority { get; set; }
 
         public DateTime createdon { get; set; }
     }

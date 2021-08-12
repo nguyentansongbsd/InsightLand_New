@@ -39,6 +39,10 @@ namespace ConasiCRM.Portable.Helper
                     var api_Response = JsonConvert.DeserializeObject<T>(body);
                     return api_Response;
                 }
+                else
+                {
+                    var a = response.RequestMessage;
+                }
             }
             catch (Exception ex)
             {

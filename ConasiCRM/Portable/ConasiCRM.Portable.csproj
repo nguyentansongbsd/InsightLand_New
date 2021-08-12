@@ -41,6 +41,15 @@
       <EmbeddedResource Include="Fonts\FontAwesome5BrandsRegular.otf" />
       <EmbeddedResource Include="Fonts\FontAwesome5Regular.otf" />
       <EmbeddedResource Include="Fonts\FontAwesome5Solid.otf" />
+      <EmbeddedResource Include="Fonts\Anton-Regular.ttf" />
+      <EmbeddedResource Include="Fonts\Kanit-Bold.ttf" />
+      <EmbeddedResource Include="Fonts\Kanit-Medium.ttf" />
+      <EmbeddedResource Include="Fonts\Kanit-SemiBold.ttf" />
+      <EmbeddedResource Include="Fonts\SegoeUIBold.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Black.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Bold.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Medium.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Regular.ttf" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Update="AppShell.xaml">
@@ -144,5 +153,14 @@
     </ItemGroup>
     <ItemGroup>
       <None Remove="Xamarin.CommunityToolkit" />
+      <None Remove="Fonts\Anton-Regular.ttf" />
+      <None Remove="Fonts\Kanit-Bold.ttf" />
+      <None Remove="Fonts\Kanit-Medium.ttf" />
+      <None Remove="Fonts\Kanit-SemiBold.ttf" />
+      <None Remove="Fonts\SegoeUIBold.ttf" />
+      <None Remove="Fonts\Roboto-Black.ttf" />
+      <None Remove="Fonts\Roboto-Bold.ttf" />
+      <None Remove="Fonts\Roboto-Medium.ttf" />
+      <None Remove="Fonts\Roboto-Regular.ttf" />
     </ItemGroup>
 </Project>

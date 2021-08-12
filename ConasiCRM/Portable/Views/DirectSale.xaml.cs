@@ -86,12 +86,17 @@ namespace ConasiCRM.Portable.Views
                 model.maxPrice = viewModel.maxPrice;
                 
                 DirectSaleDetail directSaleDetail = new DirectSaleDetail(model);
-                directSaleDetail.OnComplete = async (IsSuccess) =>
+                directSaleDetail.OnComplete = async (Success) =>
                 {
-                    if (IsSuccess)
+                    if (Success == 0)
                     {
                         await Navigation.PushAsync(directSaleDetail);
                         LoadingHelper.Hide();
+                    }
+                    else if (Success == 1)
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.LongMessage("Dự án chưa có blocks");
                     }
                     else
                     {

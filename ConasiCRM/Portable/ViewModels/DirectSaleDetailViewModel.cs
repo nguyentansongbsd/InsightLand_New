@@ -1,19 +1,15 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Telerik.XamarinForms.DataControls.TreeView.Commands;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class DirectSaleDetailViewModel :BaseViewModel //: ListViewBaseViewModel2<Unit>
+    public class DirectSaleDetailViewModel :BaseViewModel 
     {
         public string Keyword { get; set; }
         public string ProjectId { get; set; }
@@ -34,21 +30,12 @@ namespace ConasiCRM.Portable.ViewModels
         private List<OptionSet> _statusReasons;
         public List<OptionSet> StatusReasons { get => _statusReasons; set { _statusReasons = value; OnPropertyChanged(nameof(StatusReasons)); } }
 
-        private OptionSet _block;
-        public OptionSet Block { get => _block; set { _block = value; OnPropertyChanged(nameof(Block)); } }
-
         private List<Block> _blocks;
         public List<Block> Blocks { get=> _blocks; set { _blocks = value;OnPropertyChanged(nameof(Blocks)); } }
 
-        //private OptionSet _floor;
-        //public OptionSet Floor { get => _floor; set { _floor = value; OnPropertyChanged(nameof(Floor)); } }
-
-        //private List<Floor> _floors;
-        //public List<Floor> Floors { get => _floors; set { _floors = value; OnPropertyChanged(nameof(Floors)); } }
-
         public ObservableCollection<Floor> Floors { get; set; } = new ObservableCollection<Floor>();
 
-        public ObservableCollection<QueueListModel_DirectSale> QueueList { get; set; }
+        public ObservableCollection<QueueListModel> QueueList { get; set; } = new ObservableCollection<QueueListModel>();
 
         public string fetchXml { get; set; }
 
@@ -78,6 +65,26 @@ namespace ConasiCRM.Portable.ViewModels
 
         public string blockId;
 
+        private Unit _unit;
+        public Unit Unit { get => _unit; set { _unit = value;OnPropertyChanged(nameof(Unit)); } }
+
+        private StatusCodeModel _unitStatusCode;
+        public StatusCodeModel UnitStatusCode { get => _unitStatusCode; set { _unitStatusCode = value;OnPropertyChanged(nameof(UnitStatusCode)); } }
+
+        private OptionSet _unitDirection;
+        public OptionSet UnitDirection { get => _unitDirection; set { _unitDirection = value;OnPropertyChanged(nameof(UnitDirection)); } }
+
+        private OptionSet _unitView;
+        public OptionSet UnitView { get => _unitView; set { _unitView = value; OnPropertyChanged(nameof(UnitView)); } }
+
+        public int PageDanhSachDatCho = 1;
+
+        private bool _showMoreDanhSachDatCho;
+        public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
+
+        private bool _isShowBtnBangTinhGia;
+        public bool IsShowBtnBangTinhGia { get => _isShowBtnBangTinhGia; set { _isShowBtnBangTinhGia = value; OnPropertyChanged(nameof(IsShowBtnBangTinhGia)); } }
+
 
         public DirectSaleDetailViewModel(DirectSaleSearchModel model)
         {
@@ -92,63 +99,60 @@ namespace ConasiCRM.Portable.ViewModels
             this.maxNetArea = model.maxNetArea;
             this.minPrice = model.minPrice;
             this.maxPrice = model.maxPrice;
-            QueueList = new ObservableCollection<QueueListModel_DirectSale>();
-            
-
         }
 
         public async Task LoadUnit()
         {
-            //string StatusReason_Condition = StatusReason == null ? "" : "<condition attribute='statuscode' operator='eq' value='" + StatusReason.Val + @"' />";
-            //string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(PhasesLanchId))
-            //    ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + this.PhasesLanchId + @"' />"
-            //    : "";
+            string StatusReason_Condition = StatusReason == null ? "" : "<condition attribute='statuscode' operator='eq' value='" + StatusReason.Val + @"' />";
+            string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(PhasesLanchId))
+                ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + this.PhasesLanchId + @"' />"
+                : "";
 
-            //string IsEvent_Condition = IsEvent ? @"<condition entityname='af' attribute='bsd_eventid' operator='not-null'/>" : "";
+            string IsEvent_Condition = IsEvent ? @"<condition entityname='af' attribute='bsd_eventid' operator='not-null'/>" : "";
 
-            //string UnitCode_Condition = !string.IsNullOrEmpty(UnitCode) ? "<condition attribute='name' operator='like' value='%" + UnitCode + "%' />" : "";
+            string UnitCode_Condition = !string.IsNullOrEmpty(UnitCode) ? "<condition attribute='name' operator='eq' value='" + UnitCode + "' />" : "";
 
-            //string Direction_Condition = string.Empty;
-            //if (Directions.Count != 0)
-            //{
-            //    string tmp = string.Empty;
-            //    foreach (var i in Directions)
-            //    {
-            //        tmp += "<value>" + i + "</value>";
-            //    }
-            //    Direction_Condition = @"<condition attribute='bsd_direction' operator='in'>" + tmp + "</condition>";
-            //}
+            string Direction_Condition = string.Empty;
+            if (Directions != null && Directions.Count != 0)
+            {
+                string tmp = string.Empty;
+                foreach (var i in Directions)
+                {
+                    tmp += "<value>" + i + "</value>";
+                }
+                Direction_Condition = @"<condition attribute='bsd_direction' operator='in'>" + tmp + "</condition>";
+            }
 
-            //string View_Condition = string.Empty;
-            //if (Views.Count != 0)
-            //{
-            //    string tmp = string.Empty;
-            //    foreach (var i in Views)
-            //    {
-            //        tmp += "<value>" + i + "</value>";
-            //    }
-            //    View_Condition = @"<condition attribute='bsd_view' operator='in'>" + tmp + "</condition>";
-            //}
+            string View_Condition = string.Empty;
+            if (Views != null && Views.Count != 0)
+            {
+                string tmp = string.Empty;
+                foreach (var i in Views)
+                {
+                    tmp += "<value>" + i + "</value>";
+                }
+                View_Condition = @"<condition attribute='bsd_view' operator='in'>" + tmp + "</condition>";
+            }
 
 
-            //string UnitStatus_Condition = string.Empty;
-            //if (UnitStatuses.Count != 0)
-            //{
-            //    string tmp = string.Empty;
-            //    foreach (var i in UnitStatuses)
-            //    {
-            //        tmp += "<value>" + i + "</value>";
-            //    }
-            //    UnitStatus_Condition = @"<condition attribute='statuscode' operator='in'>" + tmp + "</condition>";
-            //}
+            string UnitStatus_Condition = string.Empty;
+            if (UnitStatuses != null && UnitStatuses.Count != 0)
+            {
+                string tmp = string.Empty;
+                foreach (var i in UnitStatuses)
+                {
+                    tmp += "<value>" + i + "</value>";
+                }
+                UnitStatus_Condition = @"<condition attribute='statuscode' operator='in'>" + tmp + "</condition>";
+            }
 
-            //string minNetArea_Condition = minNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{minNetArea.Value}' />" : null;
-            //string maxNetArea_Condition = maxNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='le' value='{maxNetArea.Value}' />" : "";
+            string minNetArea_Condition = minNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{minNetArea.Value}' />" : null;
+            string maxNetArea_Condition = maxNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='le' value='{maxNetArea.Value}' />" : "";
 
-            //string minPrice_Condition = minPrice.HasValue ? $"<condition attribute='price' operator='ge' value='{minPrice.Value}' />" : "";
-            //string maxPrice_Condition = maxPrice.HasValue ? $"<condition attribute='price' operator='le' value='{maxPrice.Value}' />" : "";
+            string minPrice_Condition = minPrice.HasValue ? $"<condition attribute='price' operator='ge' value='{minPrice.Value}' />" : "";
+            string maxPrice_Condition = maxPrice.HasValue ? $"<condition attribute='price' operator='le' value='{maxPrice.Value}' />" : "";
 
-            //string Block_Condition = Block != null ? $"<condition attribute='bsd_blockid' operator='eq' value='{Block.Val}'/>" : "";
+            string Block_Condition = !string.IsNullOrWhiteSpace(this.blockId) ? $"<condition attribute='bsd_blocknumber' operator='eq' uitype='bsd_block' value='{this.blockId}'/>" : "";
             //string Floor_Condition = Floor != null ? $"<condition attribute='bsd_floorid' operator='eq' value='{Floor.Val}'/>" : "";
 
             fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -159,26 +163,39 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_totalprice' />
                                 <attribute name='price' />
                                 <attribute name='bsd_netsaleablearea' />
+                                <attribute name='bsd_constructionarea' />
+                                <attribute name='bsd_direction' />
+                                <attribute name='bsd_vippriority' />
+                                <attribute name='bsd_view' />
                                 <order attribute='bsd_blocknumber' descending='false' />
                                 <filter type='and'>
                                     <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
-                                    <condition attribute='bsd_blocknumber' operator='eq' uitype='bsd_block' value='" + this.blockId + @"'/>
+                                    '" + Block_Condition + @"'
+                                    '" + UnitCode_Condition + @"'
+                                    '" + IsEvent_Condition + @"'
+                                    '" + StatusReason_Condition + @"'
+                                    '" + PhasesLaunch_Condition + @"'
+                                    '" + View_Condition + @"'
+                                    '" + UnitStatus_Condition + @"'
+                                    '" + Direction_Condition + @"'
+                                    '" + minNetArea_Condition + @"'
+                                    '" + maxNetArea_Condition + @"'
+                                    '" + minPrice_Condition + @"'
+                                    '" + maxPrice_Condition + @"'
                                 </filter>
-                                <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='outer' alias='ae'>
-                                  <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='outer' alias='af'>
-                                      <attribute name='bsd_eventid' alias='event_id' />                                       
-                                   </link-entity>
-                                </link-entity>
                                 <link-entity name='bsd_floor' from='bsd_floorid' to='bsd_floor' link-type='inner' alias='ad'>
                                   <attribute name='bsd_floorid' alias='floorid' />
                                   <attribute name='bsd_name' alias='floor_name' />
-                                  <filter type='and'>
-                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"' />
-                                  </filter>
                                 </link-entity>
                                 <link-entity name='opportunity' from='bsd_units' to='productid' link-type='inner' alias='ag' >
 	                                <attribute name='opportunityid' alias='queseid'/>
                                     <attribute name='statuscode' alias='queses_statuscode'/>
+                                </link-entity>
+                                <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
+                                  <attribute name='bsd_name'  alias='bsd_unittype_name'/>
+                                </link-entity>
+                                <link-entity name='bsd_block' from='bsd_blockid' to='bsd_blocknumber' link-type='inner' alias='ab'>
+                                  <attribute name='bsd_blockid' alias='blockid' />
                                 </link-entity>
                               </entity>
                             </fetch>";
@@ -281,7 +298,11 @@ namespace ConasiCRM.Portable.ViewModels
                         unit.NumQueses = 0;
                     }
 
-                    unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.ToString()).Background;
+                    if (unit.statuscode.HasValue)
+                    {
+                        unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.Value.ToString()).Background;
+                    }
+                   
 
                     floor.Units.Add(unit);
                 }
@@ -311,6 +332,83 @@ namespace ConasiCRM.Portable.ViewModels
             if (block_result == null || block_result.value.Count == 0) return;
 
             this.Blocks = block_result.value;
+        }
+
+        public async Task LoadQueues()
+        {
+            string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
+                      <entity name='opportunity'>
+                        <attribute name='name' alias='unit_name'/>
+                        <attribute name='statuscode' />
+                        <attribute name='bsd_project' />
+                        <attribute name='opportunityid' />
+                        <attribute name='bsd_queuingexpired' />
+                        <order attribute='createdon' descending='true' />
+                        <link-entity name='product' from='productid' to='bsd_units' link-type='inner' alias='ad'>
+                          <filter type='and'>
+                            <condition attribute='productid' operator='eq' value='{Unit.productid}'/>
+                          </filter>
+                        </link-entity>
+                        <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
+                           <filter type='and'>
+                              <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
+                           </filter>
+                        </link-entity>
+                        <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
+                           <attribute name='fullname'  alias='contact_name'/>
+                        </link-entity>
+                        <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
+                           <attribute name='name'  alias='account_name'/>
+                        </link-entity>
+                      </entity>
+                    </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueListModel>>("opportunities", fetch);
+            if (result == null)
+            {
+                return;
+            }
+
+            var data = result.value;
+            ShowMoreDanhSachDatCho = data.Count < 5 ? false : true;
+
+            foreach (var x in data)
+            {
+                x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Label;
+                QueueList.Add(x);
+            }
+        }
+
+        public async Task CheckShowBtnBangTinhGia()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+                              <entity name='bsd_phaseslaunch'>
+                                <attribute name='bsd_name' />
+                                <attribute name='createdon' />
+                                <attribute name='bsd_phaseslaunchid' />
+                                <order attribute='createdon' descending='true' />
+                                <link-entity name='product' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='al'>
+                                  <filter type='and'>
+                                    <condition attribute='productid' operator='eq' value='{Unit.productid}' />
+                                  </filter>
+                                </link-entity><link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='an' >
+                                   <attribute name='bsd_startdate' alias='startdate_event' />
+                                   <attribute name='bsd_enddate' alias='enddate_event'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLanchModel>>("bsd_phaseslaunchs", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            var data = result.value;
+            foreach (var item in data)
+            {
+                if (item.startdate_event < DateTime.Now && item.enddate_event > DateTime.Now)
+                {
+                    IsShowBtnBangTinhGia = true;
+                    return;
+                }
+            }
         }
     }
 }
