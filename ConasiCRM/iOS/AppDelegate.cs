@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ConasiCRM.Portable.IServices;
+using FFImageLoading.Forms.Platform;
 using Foundation;
 using UIKit;
 using Xamarin.Forms;
@@ -26,6 +27,8 @@ namespace ConasiCRM.iOS
             //Rg.Plugins.Popup.Popup.Init();
 
             global::Xamarin.Forms.Forms.Init();
+            Stormlion.PhotoBrowser.iOS.Platform.Init();
+            CachedImageRenderer.Init();
             LoadApplication(new Portable.App());
             DependencyService.Get<ILoadingService>().Initilize();
 
