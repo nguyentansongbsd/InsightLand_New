@@ -374,7 +374,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var x in data)
             {
-                x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Label;
+                x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Name;
                 QueueList.Add(x);
             }
         }

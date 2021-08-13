@@ -63,7 +63,7 @@
                 <FontImageSource FontFamily="FontAwesomeRegular" Color="#666666" Glyph="&#xf2b5;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Đặt chỗ" ContentTemplate="{DataTemplate views:QueueList}">
+        <ShellContent Title="Giữ chỗ" ContentTemplate="{DataTemplate views:QueueList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeRegular" Color="#666666" Glyph="&#xf3d1;" Size="Subtitle"/>
             </ShellContent.Icon>
