@@ -4,7 +4,7 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             Title="GIỎ HÀNG"
+             Title="GIỎ HÀNG" x:Name="this"
              x:Class="ConasiCRM.Portable.Views.DirectSaleDetail">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -83,6 +83,8 @@
             <converter:CustomIndicatorConverter x:Key="customIndicatorConverter" />
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter"/>
             <converter:NullToHideConverter x:Key="NullToHideConverter"/>
+            <converter:UnitItemWidthConverter x:Key="UnitItemWidthConverter"/>
+            <converter:UnitsPaddingConverter x:Key="UnitsPaddingConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -151,15 +153,15 @@
                                             </telerikPrimitives:ExpanderHeader>
                                         </telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:RadExpander.Content >
-                                            <FlexLayout BindableLayout.ItemsSource="{Binding Units}" Padding="15" Wrap="Wrap" FlowDirection="LeftToRight" JustifyContent="Start" AlignItems="Start">
+                                            <FlexLayout x:Name="flexContentUnits" BindableLayout.ItemsSource="{Binding Units}" Padding="{Binding ., Converter={StaticResource UnitsPaddingConverter}}" Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
                                                 <BindableLayout.ItemTemplate>
                                                     <DataTemplate>
-                                                        <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="8" WidthRequest="168">
+                                                        <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest="{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
                                                             <telerikPrimitives:RadBorder.GestureRecognizers>
                                                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding}"/>
                                                             </telerikPrimitives:RadBorder.GestureRecognizers>
                                                             <StackLayout>
-                                                                <Label Text="{Binding name}" TextColor="White" FontSize="25" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
+                                                                <Label Text="{Binding name}" TextColor="White" FontSize="23" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
                                                                 <Label Text="{Binding NumQueses,StringFormat='Giữ chỗ: {0}'}" FontFamily="FontRobotoMedium" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
                                                                 <Label Text="{Binding price_format}" TextColor="White" FontFamily="FontRobotoBold" FontSize="20" HorizontalTextAlignment="Center" />
                                                             </StackLayout>
