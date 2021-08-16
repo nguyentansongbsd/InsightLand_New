@@ -113,9 +113,10 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                       <condition attribute='accountid' operator='eq' value='" + accountid + @"' />
                                     </filter>
-                                    <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
+                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' visible='false' link-type='outer' alias='a_cf81d7378befeb1194ef000d3a81fcba'>
+                                  <attribute name='bsd_employeeid' alias='employee_id'/>
+                                  <attribute name='bsd_name' alias='employee_name'/>
+                                </link-entity>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountFormModel>>("accounts", fetch);

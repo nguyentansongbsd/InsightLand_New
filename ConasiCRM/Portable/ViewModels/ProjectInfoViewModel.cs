@@ -101,6 +101,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 </filter>
                                 <link-entity name='account' from='accountid' to='bsd_investor' visible='false' link-type='outer' alias='a_8924f6d5b214e911a97f000d3aa04914'>
                                   <attribute name='bsd_name' alias='bsd_investor_name' />
+                                  <attribute name='accountid' alias='bsd_investor_id' />
                                 </link-entity>
                               </entity>
                             </fetch>";

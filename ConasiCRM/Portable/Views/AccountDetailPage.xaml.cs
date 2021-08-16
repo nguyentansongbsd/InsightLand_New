@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,16 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await LoadDataThongTin(AccountId.ToString());
-            viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Người ủy quyền", "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
-            viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
+            if ((viewModel.singleAccount.employee_id != Guid.Empty && !string.IsNullOrWhiteSpace(viewModel.singleAccount.employee_name))&& (viewModel.singleAccount.employee_id == UserLogged.Id && viewModel.singleAccount.employee_name == UserLogged.User))
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Người ủy quyền", "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
+            }
+            else
+            {
+                floatingButtonGroup.IsVisible = false;
+            }
+
             if (viewModel.singleAccount.accountid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
