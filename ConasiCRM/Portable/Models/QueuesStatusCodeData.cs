@@ -6,22 +6,38 @@ namespace ConasiCRM.Portable.Models
 {
     public class QueuesStatusCodeData
     {
-        public static OptionSet GetQueuesById(string id)
+        public static QueuesStatusCodeModel GetQueuesById(string id)
         {
-            return GetQueuesData().SingleOrDefault(x => x.Val == id);
+            return GetQueuesData().SingleOrDefault(x => x.Id == id);
         }
-        public static List<OptionSet> GetQueuesData()
+        public static List<QueuesStatusCodeModel> GetQueuesData()
         {
-            return new List<OptionSet>()
+            return new List<QueuesStatusCodeModel>()
             {
-                new OptionSet("1","Draft"),
-                new OptionSet("2","On Hold"),
-                new OptionSet("100000000","Queuing"),
-                new OptionSet("100000001","Collected Queuing Fee"),
-                new OptionSet("100000002","Waiting"),
-                new OptionSet("100000003","Expired"),
-                new OptionSet("100000004","Completed")
+                new QueuesStatusCodeModel("1","Draft","#808080"),
+                new QueuesStatusCodeModel("2","On Hold","#808080"),
+                new QueuesStatusCodeModel("3","Won","#808080"),
+                new QueuesStatusCodeModel("4","Canceled","#808080"),
+                new QueuesStatusCodeModel("5","Out-Sold","#808080"),
+                new QueuesStatusCodeModel("100000000","Giữ chỗ","#00CF79"),
+                new QueuesStatusCodeModel("100000001","Collected Queuing Fee","#808080"),
+                new QueuesStatusCodeModel("100000002","Đang đợi","#FDC206"),
+                new QueuesStatusCodeModel("100000003","Hết hạn","#B3B3B3"),
+                new QueuesStatusCodeModel("100000004","Hoàn thành","#C50147")
             };
+        }
+    }
+
+    public class QueuesStatusCodeModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string BackGroundColor { get; set; }
+        public QueuesStatusCodeModel(string id,string name,string backGroundColor)
+        {
+            Id = id;
+            Name = name;
+            BackGroundColor = backGroundColor;
         }
     }
 }

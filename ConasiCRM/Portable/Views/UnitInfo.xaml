@@ -18,7 +18,7 @@
                 <Setter Property="IndicatorColor" Value="Gray"/>
                 <Setter Property="IndicatorMargin" Value="0,0,18,0"/>
                 <Setter Property="BackgroundColor" Value="#F2F2F2"/>
-                <Setter Property="BorderColor" Value="#666666"/>
+                <Setter Property="BorderColor" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="IndicatorFontFamily" Value="FontAwesomeSolid"/>
             </Style>
@@ -146,7 +146,7 @@
                     <StackLayout x:Name="stackThongTinCanHo" IsVisible="true">
                         <ScrollView Padding="0,0,0,60">
                             <StackLayout>
-                                <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                                <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                             <Label Text="Thông tin căn hộ" TextColor="#333333" FontSize="15" FontAttributes="Bold" Padding="10"/>
@@ -197,7 +197,7 @@
                                     </telerikPrimitives:RadExpander.Content>
                                 </telerikPrimitives:RadExpander>
 
-                                <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                                <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                             <Label Text="Thông tin giá bán" TextColor="#333333" FontSize="15" FontAttributes="Bold" Padding="10"/>
@@ -225,7 +225,7 @@
                                     </telerikPrimitives:RadExpander.Content>
                                 </telerikPrimitives:RadExpander>
 
-                                <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander">
+                                <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                             <Label Text="Bàn giao" FontSize="15" TextColor="#333333" FontAttributes="Bold" Padding="10"/>
@@ -268,7 +268,7 @@
                     <StackLayout x:Name="stackGiaoDich" IsVisible="false">
                         <ScrollView Padding="0,0,0,60">
                             <StackLayout>
-                                <telerikPrimitives:RadExpander x:Name="layout_danhsachdatcho" IsExpanded="False" AutomationId="masterCardExpander">
+                                <telerikPrimitives:RadExpander x:Name="layout_danhsachdatcho" IsExpanded="False" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                             <Label Text="Đặt Chỗ" FontSize="15" TextColor="#333333" FontAttributes="Bold" Padding="10"/>
@@ -337,7 +337,7 @@
                                     </telerikPrimitives:RadExpander.Content>
                                 </telerikPrimitives:RadExpander>
 
-                                <telerikPrimitives:RadExpander x:Name="layout_danhsachdatcoc" IsExpanded="False" AutomationId="masterCardExpander">
+                                <telerikPrimitives:RadExpander x:Name="layout_danhsachdatcoc" IsExpanded="False" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                             <Label Text="Đặt Cọc" FontSize="15" TextColor="#333333" FontAttributes="Bold" Padding="10"/>
@@ -404,7 +404,7 @@
                                     </telerikPrimitives:RadExpander.Content>
                                 </telerikPrimitives:RadExpander>
 
-                                <telerikPrimitives:RadExpander x:Name="layout_danhsachhopdong" IsExpanded="False" AutomationId="masterCardExpander">
+                                <telerikPrimitives:RadExpander x:Name="layout_danhsachhopdong" IsExpanded="False" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                             <Label Text="Hợp Đồng" FontSize="15" TextColor="#333333" FontAttributes="Bold" Padding="10"/>

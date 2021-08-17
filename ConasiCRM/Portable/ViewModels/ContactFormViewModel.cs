@@ -19,7 +19,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class ContactFormViewModel : FormViewModal
+    public class ContactFormViewModel : BaseViewModel
     {
         private ContactFormModel _singleContact;
         public ContactFormModel singleContact { get { return _singleContact; } set { _singleContact = value; OnPropertyChanged(nameof(singleContact)); } }

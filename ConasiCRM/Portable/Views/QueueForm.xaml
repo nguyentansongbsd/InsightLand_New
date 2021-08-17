@@ -78,7 +78,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Margin="0,0,0,0" AbsoluteLayout.LayoutFlags="All" Padding="0,10,0,60">
+            <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,10,0,60">
                     <StackLayout>
                         <telerikPrimitives:RadExpander IsExpanded="True">
                             <telerikPrimitives:RadExpander.Header>

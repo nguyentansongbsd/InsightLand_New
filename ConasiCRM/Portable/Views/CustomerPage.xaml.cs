@@ -37,6 +37,7 @@ namespace ConasiCRM.Portable.Views
                 if (IsSuccess)
                 {
                     CustomerContentView.Children.Add(LeadsContentView);
+                    DataNull.IsVisible = false;
                     LoadingHelper.Hide();
                 }
                 else
@@ -117,7 +118,8 @@ namespace ConasiCRM.Portable.Views
             {
                 if (IsSuccess)
                 {
-                    CustomerContentView.Children.Add(ContactsContentview); ;
+                    CustomerContentView.Children.Add(ContactsContentview);
+                    DataNull.IsVisible = false;
                     LoadingHelper.Hide();
                 }
                 else

@@ -228,6 +228,9 @@ namespace ConasiCRM.Portable.Models
         private bool _bsd_mandatorysecondary;
         public bool bsd_mandatorysecondary { get { return _bsd_mandatorysecondary; } set { _bsd_mandatorysecondary = value; OnPropertyChanged(nameof(bsd_mandatorysecondary)); } }
 
+        public Guid employee_id { get; set; }
+        public string employee_name { get; set; }
+
     }
 }
 

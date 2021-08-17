@@ -5,6 +5,7 @@ using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Linq;
 using Telerik.XamarinForms.Primitives;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -32,6 +33,7 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
+            var a = DeviceDisplay.MainDisplayInfo.Width; //ios mini: 1125 , ios pro: 1170 , android :720, marrin android: 2 width:160, ios marrign :4-8 width: 164,168
             await viewModel.LoadBlocks();
             if (viewModel.Blocks != null && viewModel.Blocks.Count != 0)
             {
