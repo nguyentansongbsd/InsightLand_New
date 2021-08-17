@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -125,17 +126,17 @@ namespace ConasiCRM.Portable.Views
             var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa người ủy quyền không ?", "Đồng ý", "Hủy");
             if (conform == false) return;            
             LoadingHelper.Show();
-            var IsSuccess = await viewModel.DeleteMandatory_Secondary(item.bsd_mandatorysecondaryid.ToString());
+            var IsSuccess = await viewModel.DeleteMandatory_Secondary(item);
             if(IsSuccess)
             {
                 viewModel.list_MandatorySecondary.Remove(item);
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông Báo", "Đã xóa người ủy quyền được chọn!", "Đóng");
+                ToastMessageHelper.ShortMessage("Đã xóa người ủy quyền được chọn");
             }   
             else
             {
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông Báo", "Xóa người ủy quyền thất bại!", "Đóng");
+                ToastMessageHelper.ShortMessage("Xóa người ủy quyền thất bại");
             } 
         }
 
@@ -162,12 +163,12 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Thông Báo", "Số điện thoại sai định dạng. Vui lòng kiểm tra lại", "OK");
+                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
                 }
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Thông Báo", "Khách hàng không có số điện thoại. Vui lòng kiểm tra lại", "OK");
+                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
             }
         }
 
@@ -183,12 +184,12 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Thông Báo", "Số điện thoại sai định dạng. Vui lòng kiểm tra lại", "OK");
+                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
                 }
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Thông Báo", "Khách hàng không có số điện thoại. Vui lòng kiểm tra lại", "OK");
+                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
             }
         }
 
@@ -266,7 +267,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        await Shell.Current.DisplayAlert("Thông báo", "Không tìm thấy thông tin. Vui lòng thử lại.", "Đóng");
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
                     }
                 };
             }
@@ -286,7 +287,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    await DisplayAlert("Thông báo", "Không tìm thấy thông tin. Vui lòng thử lại.", "Đóng");
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
                 }
             };    
         }

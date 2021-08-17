@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
@@ -53,9 +54,10 @@ namespace ConasiCRM.Portable.Views
 
         private void Create()
         {
-            this.Title = "Tạo Mới Khách Hàng Cá Nhân";
+            this.Title = "Tạo Mới Khách Hàng Doanh Nghiệp";
             btnSave.Text = "Tạo Mới";
             btnSave.Clicked += CreateContact_Clicked;
+            viewModel.singleAccount = new AccountFormModel();
         }
 
         private void CreateContact_Clicked(object sender, EventArgs e)
@@ -65,11 +67,13 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
+            viewModel.singleAccount = new AccountFormModel();
             await viewModel.LoadOneAccount(this.AccountId);
             viewModel.LoadBusinessTypeForLookup();
             Lookup_BusinessType.SetList(viewModel.GetBusinessType());
             if (viewModel.singleAccount.bsd_localization != null)
             {
+                viewModel.Localization = new OptionSet();
                 viewModel.Localization.Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
@@ -77,7 +81,7 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.GetPrimaryContactByID();
             }
-            this.Title = "Cập Nhật Khách Hàng Cá Nhân";
+            this.Title = "Cập Nhật Khách Hàng Doanh Nghiệp";
             btnSave.Text = "Cập Nhật";
             btnSave.Clicked += UpdateContact_Clicked;
             if (viewModel.singleAccount.accountid != Guid.Empty)
@@ -92,22 +96,25 @@ namespace ConasiCRM.Portable.Views
         }
 
         public void SetPreOpen()
-        {
+        {                               
             Lookup_Localization.PreOpenAsync = async () =>
             {
+                viewModel.Localization = new OptionSet();
                 AccountLocalization.Localizations();
                 foreach (var item in AccountLocalization.LocalizationOptions)
                 {
                     viewModel.LocalizationOptionList.Add(item);
                 }
-            };
+            };         
             Lookup_BusinessType.PreShow = async () =>
             {
+                viewModel.BusinessType = new List<string>();
                 viewModel.LoadBusinessTypeForLookup();
                 Lookup_BusinessType.SetList(viewModel.GetBusinessType());
-            };
+            };            
             Lookup_PrimaryContact.PreOpenAsync = async () =>
             {
+                viewModel.PrimaryContact = new LookUp();
                 await viewModel.LoadContactForLookup();
             };
             lookUpContacAddressCountry.PreOpenAsync = async () =>
@@ -117,30 +124,26 @@ namespace ConasiCRM.Portable.Views
         }
 
         private async void SaveData(string id)
-        {           
+        {
+            viewModel.singleAccount = new AccountFormModel();
             if(viewModel.Localization == null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng chọn loại khách hàng", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn loại khách hàng");
                 return;
             }
             if (viewModel.singleAccount.bsd_name == null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập tên công ty", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập tên công ty");
                 return;
             }
             if(viewModel.PrimaryContact == null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng chọn người đại diện", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn người đại diện");
                 return;
             }
             if (viewModel.singleAccount.telephone1 == null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số điện thoại công ty", "Đóng");
-                return;
-            }
-            if (!PhoneNumberFormatVNHelper.CheckValidate(viewModel.singleAccount.telephone1))
-            {
-                await DisplayAlert("Thông Báo", "Số điện thoại sai địng dạng. Vui lòng thử lại!", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại công ty");
                 return;
             }
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -149,7 +152,7 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleAccount.emailaddress1);
                 if (!match.Success)
                 {
-                    await DisplayAlert("Thông Báo", "Email sai địng dạng. Vui lòng thử lại!", "Đóng");
+                    ToastMessageHelper.ShortMessage("Email sai địng dạng. Vui lòng thử lại");
                     return;
                 }
             }
@@ -158,20 +161,20 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleAccount.bsd_email2);
                 if (!match.Success)
                 {
-                    await DisplayAlert("Thông Báo", "Email 2 sai địng dạng. Vui lòng thử lại!", "Đóng");
+                    ToastMessageHelper.ShortMessage("Email 2 sai địng dạng. Vui lòng thử lại");
                     return;
                 }               
             }
             if (viewModel.singleAccount.bsd_registrationcode == null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số giấy phép kinh doanh", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số giấy phép kinh doanh");
                 return;
             }
             if (viewModel.singleAccount.bsd_registrationcode != null && viewModel.singleAccount.bsd_vatregistrationnumber != null)                       
             {
                 if (await viewModel.Check_form_keydata(viewModel.singleAccount.bsd_registrationcode, viewModel.singleAccount.bsd_vatregistrationnumber, viewModel.singleAccount.accountid.ToString()))
                 {
-                    await DisplayAlert("Thông Báo", "Số GPKD hoặc mã số thuế đã tạo trong dữ liệu doanh nghiệp", "Đóng");
+                    ToastMessageHelper.ShortMessage("Số GPKD hoặc mã số thuế đã tạo trong dữ liệu doanh nghiệp");
                     return;
                 }
             }
@@ -192,13 +195,11 @@ namespace ConasiCRM.Portable.Views
                 var created = await viewModel.createAccount();
                 if (created)
                 {
-                  //  if (AccountList.NeedToRefresh.HasValue) AccountList.NeedToRefresh = true;
-                  //  await Navigation.PopAsync();
-                    await DisplayAlert("Thông báo", "Tạo khách hàng doanh nghiệp thành công!", "OK");
+                    ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thành công");
                 }
                 else
                 {
-                    await DisplayAlert("Thông báo", "Tạo khách hàng doanh nghiệp thất bại", "OK");
+                    ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thất bại");
                 }
             }   
             else
@@ -208,11 +209,11 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (AccountList.NeedToRefresh.HasValue) AccountList.NeedToRefresh = true;
                     await Navigation.PopAsync();
-                    await  DisplayAlert("Thông báo", "Cập nhật khách hàng doanh nghiệp thành công!", "OK");   
+                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thành công"); 
                 }
                 else
                 {
-                    await DisplayAlert("Thông báo", "Cập nhật khách hàng doanh nghiệp thất bại!", "OK");
+                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thất bại");
                 }
             }    
         }
@@ -270,7 +271,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số nhà/đường/phường", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
                 return;
             }
 

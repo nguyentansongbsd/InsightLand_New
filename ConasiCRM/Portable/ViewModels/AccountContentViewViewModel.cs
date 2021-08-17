@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    class AccountContentViewViewModel : ListViewBaseViewModel2<AccountListModel>
+    public class AccountContentViewViewModel : ListViewBaseViewModel2<AccountListModel>
     {
         public string Keyword { get; set; }
         public AccountContentViewViewModel()

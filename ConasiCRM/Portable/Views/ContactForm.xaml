@@ -39,133 +39,131 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout x:Name="MainScreen" LayoutChanged="Handle_LayoutChanged">
-            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                <ScrollView>
-                    <StackLayout Margin="0,10,0,0">
-                        <telerikPrimitives:RadExpander IsExpanded="True">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Cơ Bản"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout BackgroundColor="White" Padding="10">
-                                    <controls:FormLabelRequired Text="Họ tên"/>
-                                    <controls:MainEntry Placeholder="Nhập họ tên khách hàng" Text="{Binding singleContact.bsd_fullname}" FontSize="15"/>
+            <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <StackLayout Margin="0,10,0,0">
+                    <telerikPrimitives:RadExpander IsExpanded="True">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Cơ Bản"/>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <StackLayout BackgroundColor="White" Padding="10">
+                                <controls:FormLabelRequired Text="Họ tên"/>
+                                <controls:MainEntry Placeholder="Nhập họ tên khách hàng" Text="{Binding singleContact.bsd_fullname}" FontSize="15"/>
 
-                                    <controls:FormLabelRequired Text="Số điện thoại" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập số điện thoại" Text="{Binding singleContact.mobilephone}" FontSize="15"/>
+                                <controls:FormLabelRequired Text="Số điện thoại" Margin="0,10,0,0"/> 
+                                <controls:MainEntry Placeholder="Nhập số điện thoại" Text="{Binding singleContact.mobilephone}" FontSize="15" Keyboard="Telephone"/>
 
-                                    <controls:FormLabelRequired Text="Giới tính" Margin="0,10,0,0"/>
-                                    <controls:LookUp x:Name="Lookup_GenderOptions" Placeholder="Chọn giới tính" ItemsSource="{Binding GenderOptions}" SelectedItem="{Binding singleGender}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedItemChange="Lookup_GenderOptions_SelectedItemChange"/>
+                                <controls:FormLabelRequired Text="Giới tính" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_GenderOptions" Placeholder="Chọn giới tính" ItemsSource="{Binding GenderOptions}" SelectedItem="{Binding singleGender}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" />
 
-                                    <controls:FormLabel Text="Quốc tịch" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:LookUp x:Name="Lookup_LocalizationOptions" Placeholder="Chọn quốc tịch" ItemsSource="{Binding LocalizationOptions}" SelectedItem="{Binding singleLocalization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedItemChange="Lookup_LocalizationOptions_SelectedItemChange"/>
+                                <controls:FormLabel Text="Quốc tịch" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_LocalizationOptions" Placeholder="Chọn quốc tịch" ItemsSource="{Binding LocalizationOptions}" SelectedItem="{Binding singleLocalization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label"/>
 
-                                    <controls:FormLabel Text="Ngày sinh" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:DatePickerBorder Date="{Binding singleContact.birthdate}" Format="dd/MM/yyyy"/>
+                                <controls:FormLabel Text="Ngày sinh" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:DatePickerBorder Date="{Binding singleContact.birthdate}" Format="dd/MM/yyyy"/>
 
-                                    <controls:FormLabel Text="Email" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập email" Text="{Binding singleContact.emailaddress1}" FontSize="15"/>
+                                <controls:FormLabel Text="Email" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập email" Text="{Binding singleContact.emailaddress1}" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Công ty" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:LookUp x:Name="Lookup_Account"  NameDisplay="Name" BottomModal="{Reference BottomModal}" Placeholder="Chọn công ty" SelectedItem="{Binding Account}" ItemsSource="{Binding list_account_lookup}" SelectedItemChange="Lookup_Account_SelectedItemChange"/>
+                                <controls:FormLabel Text="Công ty" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_Account"  NameDisplay="Name" BottomModal="{Reference BottomModal}" Placeholder="Chọn công ty" SelectedItem="{Binding Account}" ItemsSource="{Binding list_account_lookup}"/>
 
-                                    <controls:FormLabel Text="Chức vụ" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập chức vụ" Text="{Binding singleContact.bsd_jobtitlevn}" FontSize="15"/>
+                                <controls:FormLabel Text="Chức vụ" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập chức vụ" Text="{Binding singleContact.bsd_jobtitlevn}" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Số điện thoại kinh doanh" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập số điện thoại kinh doanh" Text="{Binding singleContact.telephone1}" FontSize="15"/>
+                                <controls:FormLabel Text="Số điện thoại kinh doanh" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập số điện thoại kinh doanh" Text="{Binding singleContact.telephone1}" FontSize="15" Keyboard="Telephone"/>
 
-                                    <controls:FormLabel Text="Địa chỉ liên lạc" FontSize="15" Margin="0,10,0,0"/>
-                                    <Grid>
-                                        <controls:MainEntry Text="{Binding singleContact.bsd_contactaddress}" Placeholder="Chọn địa chỉ liên lạc" FontSize="15"/>
-                                        <StackLayout>
-                                            <StackLayout.GestureRecognizers>
-                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiLienLac_Tapped" />
-                                            </StackLayout.GestureRecognizers>
-                                        </StackLayout>
-                                    </Grid>
+                                <controls:FormLabel Text="Địa chỉ liên lạc" FontSize="15" Margin="0,10,0,0"/>
+                                <Grid>
+                                    <controls:MainEntry Text="{Binding singleContact.bsd_contactaddress}" Placeholder="Chọn địa chỉ liên lạc" FontSize="15"/>
+                                    <StackLayout>
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiLienLac_Tapped" />
+                                        </StackLayout.GestureRecognizers>
+                                    </StackLayout>
+                                </Grid>
 
-                                    <controls:FormLabel Text="Địa chỉ thường trú" FontSize="15" Margin="0,10,0,0"/>
-                                    <Grid>
-                                        <controls:MainEntry Text="{Binding singleContact.bsd_permanentaddress1}" Placeholder="Chọn địa chỉ thường trú" FontSize="15"/>
-                                        <StackLayout>
-                                            <StackLayout.GestureRecognizers>
-                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiThuongTru_Tapped"/>
-                                            </StackLayout.GestureRecognizers>
-                                        </StackLayout>
-                                    </Grid>
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
+                                <controls:FormLabel Text="Địa chỉ thường trú" FontSize="15" Margin="0,10,0,0"/>
+                                <Grid>
+                                    <controls:MainEntry Text="{Binding singleContact.bsd_permanentaddress1}" Placeholder="Chọn địa chỉ thường trú" FontSize="15"/>
+                                    <StackLayout>
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiThuongTru_Tapped"/>
+                                        </StackLayout.GestureRecognizers>
+                                    </StackLayout>
+                                </Grid>
+                            </StackLayout>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
 
-                        <telerikPrimitives:RadExpander IsExpanded="False">
-                            <telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                    <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin CMND/Hộ Chiếu"/>
-                                </telerikPrimitives:ExpanderHeader>
-                            </telerikPrimitives:RadExpander.Header>
-                            <telerikPrimitives:RadExpander.Content>
-                                <StackLayout BackgroundColor="White" Padding="10">
-                                    <controls:FormLabel Text="Hình chụp CMND" FontSize="15"/>
-                                    <Grid ColumnDefinitions="*,*">
-                                        <telerikPrimitives:RadBorder x:Name="MatTruocCMND" BorderThickness="1" BorderColor="#f1f1f1f1" CornerRadius="5" Grid.Column="0">
-                                            <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="MatTruocCMND_Tapped" NumberOfTapsRequired="1"/>
-                                            </telerikPrimitives:RadBorder.GestureRecognizers>
-                                            <Grid>
-                                                <Label Text="Mặt trước CMND" FontSize="15" TextColor="#444444" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                                <Image Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFit" IsVisible="{Binding singleContact.bsd_mattruoccmnd, Converter={StaticResource NullToHideConverter}}"/>
-                                            </Grid>
-                                        </telerikPrimitives:RadBorder>
-                                        <telerikPrimitives:RadBorder x:Name="MatSauCMND" BorderThickness="1" BorderColor="#f1f1f1f1" CornerRadius="5" Grid.Column="1">
-                                            <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="MatSauCMND_Tapped" NumberOfTapsRequired="1"/>
-                                            </telerikPrimitives:RadBorder.GestureRecognizers>
-                                            <Grid>
-                                                <Label Text="Mặt sau CMND" FontSize="15" TextColor="#444444" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                                <Image Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFit" IsVisible="{Binding singleContact.bsd_matsaucmnd, Converter={StaticResource NullToHideConverter}}"/>
-                                            </Grid>
-                                        </telerikPrimitives:RadBorder>
-                                    </Grid>
+                    <telerikPrimitives:RadExpander IsExpanded="False">
+                        <telerikPrimitives:RadExpander.Header>
+                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin CMND/Hộ Chiếu"/>
+                            </telerikPrimitives:ExpanderHeader>
+                        </telerikPrimitives:RadExpander.Header>
+                        <telerikPrimitives:RadExpander.Content>
+                            <StackLayout BackgroundColor="White" Padding="10">
+                                <controls:FormLabel Text="Hình chụp CMND" FontSize="15"/>
+                                <Grid ColumnDefinitions="*,*">
+                                    <telerikPrimitives:RadBorder x:Name="MatTruocCMND" BorderThickness="1" BorderColor="#f1f1f1f1" CornerRadius="5" Grid.Column="0">
+                                        <telerikPrimitives:RadBorder.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MatTruocCMND_Tapped" NumberOfTapsRequired="1"/>
+                                        </telerikPrimitives:RadBorder.GestureRecognizers>
+                                        <Grid>
+                                            <Label Text="Mặt trước CMND" FontSize="15" TextColor="#444444" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Image Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFit" IsVisible="{Binding singleContact.bsd_mattruoccmnd, Converter={StaticResource NullToHideConverter}}"/>
+                                        </Grid>
+                                    </telerikPrimitives:RadBorder>
+                                    <telerikPrimitives:RadBorder x:Name="MatSauCMND" BorderThickness="1" BorderColor="#f1f1f1f1" CornerRadius="5" Grid.Column="1">
+                                        <telerikPrimitives:RadBorder.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MatSauCMND_Tapped" NumberOfTapsRequired="1"/>
+                                        </telerikPrimitives:RadBorder.GestureRecognizers>
+                                        <Grid>
+                                            <Label Text="Mặt sau CMND" FontSize="15" TextColor="#444444" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Image Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFit" IsVisible="{Binding singleContact.bsd_matsaucmnd, Converter={StaticResource NullToHideConverter}}"/>
+                                        </Grid>
+                                    </telerikPrimitives:RadBorder>
+                                </Grid>
 
-                                    <controls:FormLabelRequired Text="Số CMND" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập số CMND" Text="{Binding singleContact.bsd_identitycardnumber}" FontSize="15"/>
+                                <controls:FormLabelRequired Text="Số CMND" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập số CMND" Text="{Binding singleContact.bsd_identitycardnumber}" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Ngày cấp" Margin="0,10,0,0"/>
-                                    <controls:DatePickerBorder Date="{Binding singleContact.bsd_dategrant}" Format="dd/MM/yyyy"/>
+                                <controls:FormLabel Text="Ngày cấp" Margin="0,10,0,0"/>
+                                <controls:DatePickerBorder Date="{Binding singleContact.bsd_dategrant}" Format="dd/MM/yyyy"/>
 
-                                    <controls:FormLabel Text="Nơi cấp" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Text="{Binding singleContact.bsd_placeofissue}" Placeholder="Nhập nơi cấp" FontSize="15"/>
+                                <controls:FormLabel Text="Nơi cấp" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Text="{Binding singleContact.bsd_placeofissue}" Placeholder="Nhập nơi cấp" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Số hộ chiếu" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập số hộ chiếu" Text="{Binding singleContact.bsd_passport}" FontSize="15"/>
+                                <controls:FormLabel Text="Số hộ chiếu" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập số hộ chiếu" Text="{Binding singleContact.bsd_passport}" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Ngày cấp hộ chiếu" Margin="0,10,0,0"/>
-                                    <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedonpassport}" Format="dd/MM/yyyy"/>
+                                <controls:FormLabel Text="Ngày cấp hộ chiếu" Margin="0,10,0,0"/>
+                                <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedonpassport}" Format="dd/MM/yyyy"/>
 
-                                    <controls:FormLabel Text="Nơi cấp hộ chiếu" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Text="{Binding singleContact.bsd_placeofissuepassport}" Placeholder="Nhập nơi cấp hộ chiếu" FontSize="15"/>
+                                <controls:FormLabel Text="Nơi cấp hộ chiếu" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Text="{Binding singleContact.bsd_placeofissuepassport}" Placeholder="Nhập nơi cấp hộ chiếu" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Số thẻ căn cước" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập số thẻ căn cước" Text="{Binding singleContact.bsd_idcard}" FontSize="15"/>
+                                <controls:FormLabel Text="Số thẻ căn cước" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập số thẻ căn cước" Text="{Binding singleContact.bsd_idcard}" FontSize="15"/>
 
-                                    <controls:FormLabel Text="Ngày cấp thẻ căn cước" Margin="0,10,0,0"/>
-                                    <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedateidcard}" Format="dd/MM/yyyy"/>
+                                <controls:FormLabel Text="Ngày cấp thẻ căn cước" Margin="0,10,0,0"/>
+                                <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedateidcard}" Format="dd/MM/yyyy"/>
 
-                                    <controls:FormLabel Text="Nơi cấp thẻ căn cước" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Text="{Binding singleContact.bsd_placeofissueidcar}" Placeholder="Nhập nơi cấp thẻ căn cước" FontSize="15"/>
+                                <controls:FormLabel Text="Nơi cấp thẻ căn cước" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Text="{Binding singleContact.bsd_placeofissueidcar}" Placeholder="Nhập nơi cấp thẻ căn cước" FontSize="15"/>
 
-                                </StackLayout>
-                            </telerikPrimitives:RadExpander.Content>
-                        </telerikPrimitives:RadExpander>
-                    </StackLayout>
-                </ScrollView>
-                <Frame HasShadow="True" x:Name="footer_form_lead" Padding="10,15,10,10" BackgroundColor="#F3F3F3">
-                    <Button x:Name="btn_save_contact" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" HeightRequest="40" Padding="10,5" FontSize="16" BorderColor="#1399D5" BorderWidth="1" CornerRadius="5"/>
-                </Frame>
-            </StackLayout>
+                            </StackLayout>
+                        </telerikPrimitives:RadExpander.Content>
+                    </telerikPrimitives:RadExpander>
+                </StackLayout>
+            </ScrollView>
+            <Grid x:Name="footer_form_lead" Padding="10,15,10,10" BackgroundColor="White" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" VerticalOptions="EndAndExpand">
+                <Button x:Name="btn_save_contact" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" HeightRequest="40" Padding="10,5" FontSize="16" BorderColor="#1399D5" BorderWidth="1" CornerRadius="5"/>
+            </Grid>
 
             <controls:MyListViewMenu x:Name="popup_menu_imageCMND" HasTitle="false" IsVisible="false" ItemTapped="MenuItem_Tapped">
                 <controls:MyListViewMenu.ItemTemplate>
