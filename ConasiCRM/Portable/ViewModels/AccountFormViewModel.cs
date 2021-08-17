@@ -302,9 +302,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["bsd_district@odata.bind"] = "/new_districts(" + singleAccount._bsd_district_value + ")"; /////Lookup Field
             }
-            if (UserLogged.Id != null)
+            if (UserLogged.Id != Guid.Empty)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
             return data;
         }

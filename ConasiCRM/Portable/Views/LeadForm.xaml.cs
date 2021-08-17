@@ -350,7 +350,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không cập nhật được khách hàng. Vui lòng thử lại");
                 }
             }
-            
         }
     }
 }

@@ -34,17 +34,8 @@ namespace ConasiCRM.Portable.Views
             }
             LeadsContentView.OnCompleted = async (IsSuccess) =>
             {
-                if (IsSuccess)
-                {
-                    CustomerContentView.Children.Add(LeadsContentView);
-                    DataNull.IsVisible = false;
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    CustomerContentView.Children.Add(DataNull);
-                    LoadingHelper.Hide();
-                }
+                CustomerContentView.Children.Add(LeadsContentView);
+                LoadingHelper.Hide();
             };
         }
 
@@ -82,16 +73,8 @@ namespace ConasiCRM.Portable.Views
             }
             AccountsContentView.OnCompleted = (IsSuccess) =>
             {
-                if (IsSuccess)
-                {
-                    CustomerContentView.Children.Add(AccountsContentView); 
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    CustomerContentView.Children.Add(DataNull);
-                    LoadingHelper.Hide();
-                }
+                CustomerContentView.Children.Add(AccountsContentView);
+                LoadingHelper.Hide();
             };
             LeadsContentView.IsVisible = false;
             AccountsContentView.IsVisible = true;
@@ -116,17 +99,8 @@ namespace ConasiCRM.Portable.Views
             }
             ContactsContentview.OnCompleted = (IsSuccess) =>
             {
-                if (IsSuccess)
-                {
-                    CustomerContentView.Children.Add(ContactsContentview);
-                    DataNull.IsVisible = false;
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    CustomerContentView.Children.Add(DataNull);
-                    LoadingHelper.Hide();
-                }
+                CustomerContentView.Children.Add(ContactsContentview);
+                LoadingHelper.Hide();
             };
             LeadsContentView.IsVisible = false;
             ContactsContentview.IsVisible = true;

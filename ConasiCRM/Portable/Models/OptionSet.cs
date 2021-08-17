@@ -9,7 +9,9 @@ namespace ConasiCRM.Portable.Models
     {
         public string Val { get; set; }
         public string Label { get; set; }
-        public bool Selected { get; set; }
+
+        private bool _selected;
+        public bool Selected { get=>_selected; set { _selected = value;OnPropertyChanged(nameof(Selected)); } }
         public bool IsMultiple { get; set; }
 
         public OptionSet()
