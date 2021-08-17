@@ -141,11 +141,7 @@ namespace ConasiCRM.Portable.ViewModels
         private string checkCMND;
 
         public ContactFormViewModel()
-        {
-            singleContact = new ContactFormModel();
-            singleGender = new OptionSet();
-            Account = new LookUp();
-
+        {                 
             list_lookup = new ObservableCollection<LookUp>();
             list_contact_lookup = new ObservableCollection<LookUp>();
             list_account_lookup = new ObservableCollection<LookUp>();
@@ -161,6 +157,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadOneContact(String id)
         {
+            singleContact = new ContactFormModel();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='contact'>
                                 <attribute name='fullname' />
@@ -295,6 +292,7 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> getContent(ContactFormModel contact)
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
+            data["lastname"] = contact.bsd_fullname;
             data["bsd_fullname"] = contact.bsd_fullname;
             data["emailaddress1"] = contact.emailaddress1;
             data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToLocalTime()).ToString("yyyy-MM-dd") : null;

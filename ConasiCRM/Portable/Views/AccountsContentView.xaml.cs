@@ -16,7 +16,7 @@ namespace ConasiCRM.Portable.Views
     public partial class AccountsContentView : ContentView
     {
         public Action<bool> OnCompleted;
-        AccountContentViewViewModel viewModel;
+        public AccountContentViewViewModel viewModel;
         public AccountsContentView()
         {
             InitializeComponent();

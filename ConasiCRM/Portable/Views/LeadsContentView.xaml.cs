@@ -10,7 +10,7 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LeadsContentView : ContentView
     {
-        private readonly LeadsContentViewViewModel viewModel;
+        public LeadsContentViewViewModel viewModel;
         public Action<bool> OnCompleted;
         public LeadsContentView()
         {

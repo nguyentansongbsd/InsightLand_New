@@ -98,8 +98,7 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<LookUp> list_district_lookup { get; set; }
 
         public AccountFormViewModel()
-        {
-            singleAccount = new AccountFormModel();
+        {           
             list_check_data = new AccountForm_CheckdataModel();
             
             list_country_lookup = new ObservableCollection<LookUp>();
@@ -109,10 +108,7 @@ namespace ConasiCRM.Portable.ViewModels
             BusinessTypeOptionList = new List<OptionSet>();
             LocalizationOptionList = new ObservableCollection<OptionSet>();
             PrimaryContactOptionList = new List<LookUp>();
-
-            Localization = new OptionSet();
-            PrimaryContact = new LookUp();
-            BusinessType = new List<string>();
+           
         }
 
         public async Task LoadOneAccount(Guid accountid)
@@ -316,6 +312,7 @@ namespace ConasiCRM.Portable.ViewModels
         public void LoadBusinessTypeForLookup()
         {
             BusinessTypeOptionList = new List<OptionSet>();
+            BusinessType = new List<string>();
             BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer", false));
             BusinessTypeOptionList.Add(new OptionSet("100000001", "Partner", false));
             BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Argents", false));
@@ -352,6 +349,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadContactForLookup()
         {
+            PrimaryContactOptionList = new List<LookUp>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Id' />

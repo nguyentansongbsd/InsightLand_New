@@ -19,13 +19,14 @@ using Xamarin.Forms.Xaml;
 using permissionType = Plugin.Permissions.Abstractions.Permission;
 using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
 using System.Text.RegularExpressions;
+using ConasiCRM.Portable.Helpers;
 
 namespace ConasiCRM.Portable.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContactForm : ContentPage
     {
-        public Action<bool> OnCompleted;
+        public Action<bool> OnCompleted;      
         private ContactFormViewModel viewModel;
         private Guid Id;
 
@@ -88,16 +89,22 @@ namespace ConasiCRM.Portable.Views
 
             if (contactId != null)
             {
+                viewModel.singleGender = new OptionSet();
                 await viewModel.LoadOneContact(contactId);
                 await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
                 {
+                    viewModel.singleGender = new OptionSet();
                     viewModel.singleGender.Label = ContactGender.GetGenderById(viewModel.singleContact.gendercode);
                     viewModel.singleGender.Val = viewModel.singleContact.gendercode;
                 }
-                if (viewModel.singleContact.bsd_localization != null) { viewModel.LoadOneLocalization(viewModel.singleContact.bsd_localization); }
+                if (viewModel.singleContact.bsd_localization != null)
+                {
+                    viewModel.singleLocalization = new OptionSet();
+                    viewModel.LoadOneLocalization(viewModel.singleContact.bsd_localization); }
                 if (viewModel.singleContact._parentcustomerid_value != null)
                 {
+                    viewModel.Account = new Models.LookUp();
                     viewModel.Account.Name = viewModel.singleContact.parentcustomerid_label;
                     viewModel.Account.Id = Guid.Parse(viewModel.singleContact._parentcustomerid_value);
                 }
@@ -109,22 +116,22 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_fullname))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập họ tên", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số điện thoại", "Đóng");
-                return;
-            }
-            if (!PhoneNumberFormatVNHelper.CheckValidate(viewModel.singleContact.mobilephone))
-            {
-                await DisplayAlert("Thông Báo", "Số điện thoại sai định dạng", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");               
                 return;
             }
             if (viewModel.singleGender == null || viewModel.singleGender.Val == null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng chọn giới tính", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn giới tính");
+                return;
+            }
+            if (viewModel.singleContact.birthdate != null && DateTime.Now.Year - DateTime.Parse(viewModel.singleContact.birthdate.ToString()).Year < 18)
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng phải từ 18 tuổi");
                 return;
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.emailaddress1))
@@ -133,37 +140,35 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleContact.emailaddress1);
                 if (!match.Success)
                 {
-                    await DisplayAlert("Thông Báo", "Email sai định dạng", "Đóng");
+                    ToastMessageHelper.ShortMessage("Email sai định dạng");
                     return;
                 }
 
                 if (!await viewModel.CheckEmail(viewModel.singleContact.emailaddress1, id))
                 {
-                    await DisplayAlert("Thông Báo", "Email đã được sử dụng", "Đóng");
+                    ToastMessageHelper.ShortMessage("Email đã được sử dụng");
                     return;
                 }
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.singleContact.telephone1) && !PhoneNumberFormatVNHelper.CheckValidate(viewModel.singleContact.telephone1))
-            {
-                await DisplayAlert("Thông Báo", "Số điện thoại kinh doanh sai định dạng", "Đóng");
-                return;
-            }
+            }          
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số CMND", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số CMND");
                 return;
             }
             if (!await viewModel.CheckCMND(viewModel.singleContact.bsd_identitycardnumber, id))
             {
-                await DisplayAlert("Thông Báo", "Số CMNND đã được sử dụng", "Đóng");
+                ToastMessageHelper.ShortMessage("Số CMNND đã được sử dụng");
                 return;
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber) && !await viewModel.CheckPassport(viewModel.singleContact.bsd_passport, id))
             {
-                await DisplayAlert("Thông Báo", "Passport đã được sử dụng", "Đóng");
+                ToastMessageHelper.ShortMessage("Passport đã được sử dụng");
                 return;
             }
 
+            viewModel.singleContact.bsd_localization = viewModel.singleLocalization == null ? null : viewModel.singleLocalization.Val;
+            viewModel.singleContact.gendercode = viewModel.singleGender.Val != null ? viewModel.singleGender.Val : null;
+            viewModel.singleContact._parentcustomerid_value = viewModel.Account == null ? null : viewModel.Account.Id.ToString();
 
             if (id == null)
             {
@@ -174,13 +179,14 @@ namespace ConasiCRM.Portable.Views
                 if (created != new Guid())
                 {
                     LoadingHelper.Hide();
+                    if (CustomerPage.NeedToRefresh.HasValue) CustomerPage.NeedToRefresh = true;
                     await Navigation.PopAsync();
-                    await DisplayAlert("Thông Báo", "Đã tạo khách hàng cá nhân thành công", "OK");
+                    ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    await DisplayAlert("Thông Báo", "Tạo khách hàng cá nhân thất bại", "OK");
+                    ToastMessageHelper.ShortMessage("Tạo khách hàng cá nhân thất bại");
                 }
             }
             else
@@ -193,12 +199,12 @@ namespace ConasiCRM.Portable.Views
                 {
                     LoadingHelper.Hide();
                     await Navigation.PopAsync();
-                    await DisplayAlert("Thông Báo", "Đã cập nhật thành công", "OK");
+                    ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    await DisplayAlert("Thông Báo", "Cập nhật thất bại", "OK");
+                    ToastMessageHelper.ShortMessage("Cập nhật thất bại");
                 }
             }
         }
@@ -210,11 +216,13 @@ namespace ConasiCRM.Portable.Views
                 ContactGender.GetGenders();
                 foreach (var item in ContactGender.GenderOptions)
                 {
+                    viewModel.singleGender = new OptionSet();
                     viewModel.GenderOptions.Add(item);
                 }
             };
             Lookup_LocalizationOptions.PreOpenAsync = async () =>
             {
+                viewModel.singleLocalization = new OptionSet();
                 viewModel.loadLocalization();
             }; lookUpContacAddressCountry.PreOpenAsync = async () =>
             {
@@ -226,6 +234,7 @@ namespace ConasiCRM.Portable.Views
             };
             Lookup_Account.PreOpenAsync = async () =>
             {
+                viewModel.Account = new Models.LookUp();
                 await viewModel.LoadAccountsLookup();
             };
         }
@@ -299,17 +308,7 @@ namespace ConasiCRM.Portable.Views
             var tmpHeight = width * 2 / 3;
             MatTruocCMND.HeightRequest = tmpHeight;
             MatSauCMND.HeightRequest = tmpHeight;
-        }
-
-        private void Lookup_LocalizationOptions_SelectedItemChange(object sender, LookUpChangeEvent e)
-        {
-            viewModel.singleContact.bsd_localization = viewModel.singleLocalization == null ? null : viewModel.singleLocalization.Val;
-        }
-
-        private void Lookup_GenderOptions_SelectedItemChange(object sender, LookUpChangeEvent e)
-        {
-            viewModel.singleContact.gendercode = viewModel.singleGender.Val != null ? viewModel.singleGender.Val : null;
-        }
+        }     
 
         private async void ContacAddressCountry_Changed(object sender, LookUpChangeEvent e)
         {
@@ -335,7 +334,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số nhà/đường/phường", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
                 return;
             }
 
@@ -420,7 +419,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập số nhà/đường/phường", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
                 return;
             }
 
@@ -603,11 +602,6 @@ namespace ConasiCRM.Portable.Views
 
             NavigationPage.SetHasNavigationBar(this, true);
             popup_detailCMNDImage.IsVisible = false;
-        }
-
-        private void Lookup_Account_SelectedItemChange(object sender, LookUpChangeEvent e)
-        {
-            viewModel.singleContact._parentcustomerid_value = viewModel.Account == null ? null : viewModel.Account.Id.ToString();
         }
     }
 }

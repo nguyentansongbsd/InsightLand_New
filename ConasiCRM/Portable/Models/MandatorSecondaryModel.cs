@@ -52,13 +52,14 @@ namespace ConasiCRM.Portable.Models
         public string bsd_contactaddress { get; set; }        
         public string _bsd_contact_value { get; set; }
         public string statuscode_title { get; set; }
-        public Guid bsd_contactid { get; set; }
+        public Guid bsd_contactid { get; set; } 
 
         private string _bsd_descriptionsvn;
         public string bsd_descriptionsvn { get { return _bsd_descriptionsvn; } set { _bsd_descriptionsvn = value; OnPropertyChanged(nameof(bsd_descriptionsvn)); } }
 
         private string _bsd_descriptionsen;
         public string bsd_descriptionsen { get { return _bsd_descriptionsen; } set { _bsd_descriptionsen = value; OnPropertyChanged(nameof(bsd_descriptionsen)); } }
-
+        public bool is_employee { get; set; }
+        public Guid bsd_employeeid { get; set; }
     }
 }
