@@ -32,29 +32,8 @@ namespace ConasiCRM.Portable.Models
         public DateTime? actualclosedate { get; set; }
         public string actualclosedate_format { get { return actualclosedate.HasValue ? actualclosedate.Value.ToString("dd/MM/yyyy") : null; } }
         public int statuscode { get; set; }
-        public string statuscode_label
-        {
-            get
-            {
-                switch (statuscode)
-                {
-                    case 1: return "Draf";
-                    case 2: return "On Hold";
-                    case 3: return "Won";
-                    case 4: return "Canceled";
-                    case 5: return "Out-Sold";
-                    case 100000000: return "Queuing";
-                    case 100000002: return "Waiting";
-                    case 100000003: return "Expired";
-                    case 100000004: return "Completed";
-                    case 100000008: return "Đề  nghị huỷ";
-                    case 100000009: return "Huỷ giữ chỗ nhưng chưa hoàn tiền";
-                    case 100000010: return "Huỷ giũ chỗ đã hoàn tiền";
-                    default: return null;
-                }
+        public string statuscode_label { get; set; }
 
-            }
-        }
         public string bsd_queuenumber { get; set; }
         public decimal? estimatedvalue { get; set; }
         public string estimatedvalue_format => estimatedvalue.HasValue ? string.Format("{0:#,0.#}", estimatedvalue.Value) + " đ" : null;
