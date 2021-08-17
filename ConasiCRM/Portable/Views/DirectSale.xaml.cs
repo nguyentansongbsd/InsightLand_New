@@ -28,6 +28,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             if (viewModel.Project == null || viewModel.Project.Id == Guid.Empty)
             {
+                Guid a = viewModel.Project.Id;
                 await DisplayAlert("Thông báo", "Vui lòng chọn Dự án", "Đóng");
                 LoadingHelper.Hide();
             }

@@ -446,18 +446,17 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_effectivedatefrom' />
                                     <attribute name='bsd_developeraccount' />
                                     <attribute name='bsd_contact' />
+                                    <attribute name='bsd_employee' alias='bsd_employeeid' />
                                     <order attribute='bsd_name' descending='false' />
                                     <link-entity name='contact' from='contactid' to='bsd_contact' visible='false' link-type='outer' alias='contacts'>
                                         <attribute name='bsd_fullname' alias='bsd_contact_name'/>
                                         <attribute name='mobilephone' alias='bsd_contacmobilephone'/>
                                         <attribute name='bsd_contactaddress' alias='bsd_contactaddress'/>
                                     </link-entity>
+                                  
                                     <filter type='and'>
                                       <condition attribute='bsd_developeraccount' operator='eq' value='{accountid}' />
-                                    </filter>
-                                    <filter type='and'>
-                                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
+                                    </filter>                                  
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<MandatorySecondaryModel>>("bsd_mandatorysecondaries", fetchxml);
@@ -472,9 +471,14 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 foreach (var x in data)
                 {
-                    if(x.statuscode == "100000000")
+                    if (UserLogged.Id == x.bsd_employeeid)
+                        x.is_employee = true;
+                    else
+                        x.is_employee = false;
+
+                    if (x.statuscode == "100000000")
                     {
-                        x.statuscode_title = "Applying";
+                        x.statuscode_title = "Applying";                                            
                         list_MandatorySecondary.Insert(0,x);
                     }    
                     else
@@ -487,17 +491,21 @@ namespace ConasiCRM.Portable.ViewModels
 
         }
 
-        public async Task<bool> DeleteMandatory_Secondary(string MandatoryId)
+        public async Task<bool> DeleteMandatory_Secondary(MandatorySecondaryModel Mandatory)
         {
-            var deleteResponse = await CrmHelper.DeleteRecord($"/bsd_mandatorysecondaries({MandatoryId})");
-            if (deleteResponse.IsSuccess)
+            if (Mandatory != null)
             {
-                return true;
+                var deleteResponse = await CrmHelper.DeleteRecord($"/bsd_mandatorysecondaries({Mandatory.bsd_mandatorysecondaryid})");
+                if (deleteResponse.IsSuccess)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }        
     }
 }

@@ -57,6 +57,17 @@ namespace ConasiCRM.Portable
         {
             viewModel.OnComplate = false;
         }
+
+        private void MediaElement_MediaFailed(object sender, EventArgs e)
+        {
+            Grid mediaElement = (Grid)sender;
+            var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
+            CollectionData item = a.CommandParameter as CollectionData;
+            if (item != null)
+            {
+                viewModel.Data.Remove(item);               
+            }
+        }
     }
     public class CategoricalData
     {

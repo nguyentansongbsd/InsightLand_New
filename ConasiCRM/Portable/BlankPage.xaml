@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <DataTemplate x:Key="Media">
                 <Grid>
-                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" MediaOpened="MediaElement_MediaOpened"/>
+                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" MediaOpened="MediaElement_MediaOpened" MediaFailed="MediaElement_MediaFailed"/>
                     <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
                     <Image Source="image_placeholder.png" Aspect="AspectFill" IsVisible="{Binding Path= BindingContext.OnComplate, Source={x:Reference carouselView}}"/>
                     <Grid.GestureRecognizers>
