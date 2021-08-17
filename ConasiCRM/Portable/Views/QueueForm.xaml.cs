@@ -85,12 +85,12 @@ namespace ConasiCRM.Portable.Views
                 await DisplayAlert("Thông Báo", "Vui lòng nhập tiêu đề của giữ chỗ", "Đóng");
                 return;
             }    
-            if(viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
+            if(viewModel.Customer == null || viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
             {
                 await DisplayAlert("Thông Báo", "Vui lòng chọn khách hàng tiềm năng", "Đóng");
                 return;
             }
-            if (viewModel.DailyOption.Id == null || viewModel.DailyOption.Id == Guid.Empty)
+            if (viewModel.DailyOption == null || viewModel.DailyOption.Id == null || viewModel.DailyOption.Id == Guid.Empty)
             {
                 await DisplayAlert("Thông Báo", "Vui lòng chọn đại lý", "Đóng");
                 return;
@@ -113,7 +113,6 @@ namespace ConasiCRM.Portable.Views
                 var updated = await viewModel.updateQueue();
                 if (updated)
                 {
-                    if (AccountList.NeedToRefresh.HasValue) AccountList.NeedToRefresh = true;
                     await Navigation.PopAsync();
                     await DisplayAlert("Thông báo", "Cập nhật giữ chỗ thành công!", "OK");
                 }
@@ -204,6 +203,7 @@ namespace ConasiCRM.Portable.Views
                 var item = e.Item as LookUp;
                 if(item != null)
                 {
+                    viewModel.Customer = new LookUp();
                     viewModel.Customer.Id = item.Id;
                     viewModel.Customer.Name = item.Name;
                     viewModel.Customer.Detail = "2";
@@ -220,6 +220,7 @@ namespace ConasiCRM.Portable.Views
                 var item = e.Item as LookUp;
                 if (item != null)
                 {
+                    viewModel.Customer = new LookUp();
                     viewModel.Customer.Id = item.Id;
                     viewModel.Customer.Name = item.Name;
                     viewModel.Customer.Detail = "1";

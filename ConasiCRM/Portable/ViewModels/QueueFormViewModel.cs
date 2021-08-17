@@ -44,8 +44,7 @@ namespace ConasiCRM.Portable.ViewModels
             ContactsLookUp = new List<LookUp>();
             AccountsLookUp = new List<LookUp>();
             DaiLyOptions = new List<LookUp>();
-            Customer = new LookUp();
-            DailyOption = new LookUp();
+          
         }
 
         public async Task LoadFromUnit(Guid UnitId)
