@@ -161,9 +161,18 @@ namespace ConasiCRM.Portable.Views
             base.OnAppearing();
             if (NeedToRefresh == true)
             {
-                await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
-                await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
-                await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
+                if(LeadsContentView != null)
+                {
+                    await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
+                }
+                if (ContactsContentview != null)
+                {
+                    await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
+                }
+                if (AccountsContentView != null)
+                {
+                    await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
+                }               
                 NeedToRefresh = false;
             }
         }
