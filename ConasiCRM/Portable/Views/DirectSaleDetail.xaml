@@ -134,7 +134,7 @@
                                     <telerikPrimitives:RadExpander x:Name="radExpanderFloor" IsExpanded="False" BorderColor="#F9F9F9" BorderThickness="1">
                                         <telerikPrimitives:RadExpander.Header >
                                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}" >
-                                                <StackLayout Spacing="10" Margin="0,10">
+                                                <StackLayout Spacing="15" Margin="0,10">
                                                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
                                                         <Label Grid.Column="0" Text="{Binding bsd_name,StringFormat='Tầng {0}'}" FontSize="16" FontAttributes="Bold" TextColor="#333333" />
                                                         <Label Grid.Column="1" Text="{Binding Source={x:Reference radExpanderFloor},Path=IsExpanded,Converter={StaticResource customIndicatorConverter}}"  FontSize="15" FontFamily="FontAwesomeSolid" VerticalOptions="End"  TextColor="#333333" />
@@ -153,7 +153,7 @@
                                             </telerikPrimitives:ExpanderHeader>
                                         </telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:RadExpander.Content >
-                                            <FlexLayout x:Name="flexContentUnits" BindableLayout.ItemsSource="{Binding Units}" Padding="{Binding ., Converter={StaticResource UnitsPaddingConverter}}" Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
+                                            <FlexLayout x:Name="flexContentUnits" BindableLayout.ItemsSource="{Binding Units}" Padding="10" Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
                                                 <BindableLayout.ItemTemplate>
                                                     <DataTemplate>
                                                         <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest="{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">

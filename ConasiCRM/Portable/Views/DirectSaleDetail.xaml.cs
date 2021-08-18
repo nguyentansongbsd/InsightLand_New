@@ -33,11 +33,10 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            var a = DeviceDisplay.MainDisplayInfo.Width; //ios mini: 1125 , ios pro: 1170 , android :720, marrin android: 2 width:160, ios marrign :4-8 width: 164,168
             await viewModel.LoadBlocks();
             if (viewModel.Blocks != null && viewModel.Blocks.Count != 0)
             {
-                if (string.IsNullOrWhiteSpace(viewModel.UnitCode))// khoong co ma san pham thi load unit theo block dau tien
+                if (string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) && string.IsNullOrWhiteSpace(viewModel.UnitCode))
                 {
                     viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
                     SetActiveBlock();
@@ -54,7 +53,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.Floors != null && viewModel.Floors.Count > 0)
             {
                 ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
-                if (!string.IsNullOrWhiteSpace(viewModel.UnitCode))
+                if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) ||!string.IsNullOrWhiteSpace(viewModel.UnitCode))
                 {
                     Guid blockId = viewModel.Floors.FirstOrDefault().Units.FirstOrDefault().blockid;
                     for (int i = 0; i < viewModel.Blocks.Count; i++)
@@ -170,7 +169,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
                 }
             };
-            
         }
 
         private void CloseUnintInfor_Tapped(object sender,EventArgs e)

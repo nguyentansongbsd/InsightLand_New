@@ -125,7 +125,6 @@ namespace ConasiCRM.Portable.Views
 
         private async void SaveData(string id)
         {
-            viewModel.singleAccount = new AccountFormModel();
             if(viewModel.Localization == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn loại khách hàng");
@@ -178,6 +177,8 @@ namespace ConasiCRM.Portable.Views
                     return;
                 }
             }
+
+            LoadingHelper.Show();
             if(viewModel.Localization.Val != null)
             {
                 viewModel.singleAccount.bsd_localization = viewModel.Localization.Val;
@@ -195,10 +196,14 @@ namespace ConasiCRM.Portable.Views
                 var created = await viewModel.createAccount();
                 if (created)
                 {
+                    if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
                     ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thành công");
+                    await Navigation.PopAsync();
+                    LoadingHelper.Hide();
                 }
                 else
                 {
+                    LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thất bại");
                 }
             }   
@@ -207,12 +212,13 @@ namespace ConasiCRM.Portable.Views
                 var updated = await viewModel.updateAccount();
                 if (updated)
                 {
-                    if (AccountList.NeedToRefresh.HasValue) AccountList.NeedToRefresh = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thành công"); 
+                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thành công");
+                    LoadingHelper.Hide();
                 }
                 else
                 {
+                    LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thất bại");
                 }
             }    

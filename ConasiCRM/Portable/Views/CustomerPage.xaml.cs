@@ -8,7 +8,9 @@ namespace ConasiCRM.Portable.Views
 {
     public partial class CustomerPage : ContentPage
     {
-        public static bool? NeedToRefresh = null;
+        public static bool? NeedToRefreshLead = null;
+        public static bool? NeedToRefreshContact = null;
+        public static bool? NeedToRefreshAccount = null;
         private LeadsContentView LeadsContentView;
         private ContactsContentview ContactsContentview;
         private AccountsContentView AccountsContentView;
@@ -17,7 +19,9 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             InitializeComponent();
-            NeedToRefresh = false;
+            NeedToRefreshLead = false;
+            NeedToRefreshContact = false;
+            NeedToRefreshAccount = false;
             Init();
         }
         public async void Init()
@@ -37,6 +41,34 @@ namespace ConasiCRM.Portable.Views
                 CustomerContentView.Children.Add(LeadsContentView);
                 LoadingHelper.Hide();
             };
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (LeadsContentView != null && NeedToRefreshLead == true)
+            {
+                LoadingHelper.Show();
+                await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshLead = false;
+                LoadingHelper.Hide();
+            }
+
+            if (ContactsContentview != null && NeedToRefreshContact == true)
+            {
+                LoadingHelper.Show();
+                await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshContact = false;
+                LoadingHelper.Hide();
+            }
+
+            if (AccountsContentView != null && NeedToRefreshAccount == true)
+            {
+                LoadingHelper.Show();
+                await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshAccount = false;
+                LoadingHelper.Hide();
+            }
         }
 
         private void Lead_Tapped(object sender, EventArgs e)
@@ -128,18 +160,6 @@ namespace ConasiCRM.Portable.Views
                 await Navigation.PushAsync(new AccountForm());
             }
             LoadingHelper.Hide();
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if (NeedToRefresh == true)
-            {
-                await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
-                await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
-                await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
-                NeedToRefresh = false;
-            }
         }
     }
 }

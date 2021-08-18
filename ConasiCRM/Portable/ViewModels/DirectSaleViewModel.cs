@@ -15,9 +15,9 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class DirectSaleViewModel : FormLookupViewModel
+    public class DirectSaleViewModel : BaseViewModel
     {
-        public ObservableCollection<OptionSet> Projects { get; set; } = new ObservableCollection<OptionSet>();
+        public ObservableCollection<ProjectList> Projects { get; set; } = new ObservableCollection<ProjectList>();
         public ObservableCollection<OptionSet> PhasesLaunchs { get; set; } = new ObservableCollection<OptionSet>();
 
         private List<OptionSet> _viewOptions;
@@ -56,8 +56,8 @@ namespace ConasiCRM.Portable.ViewModels
         private decimal? _maxPrice;
         public decimal? maxPrice { get => _maxPrice; set { _maxPrice = value; OnPropertyChanged(nameof(maxPrice)); } }
 
-        private OptionSet _project;
-        public OptionSet Project
+        private ProjectList _project;
+        public ProjectList Project
         {
             get => _project;
             set
@@ -93,18 +93,19 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadProject()
         {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                 <entity name='bsd_project'>
-                                    <attribute name='bsd_projectid' alias='Val' />
-                                    <attribute name='bsd_name' alias='Label' />
+                                    <attribute name='bsd_projectid'/>
+                                    <attribute name='bsd_projectcode'/>
+                                    <attribute name='bsd_name'/>
                                     <attribute name='createdon' />
                                     <order attribute='bsd_name' descending='false' />
                                   </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_projects", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectList>>("bsd_projects", fetchXml);
             if (result == null || result.value.Any() == false) return;
 
-            var data = result.value;
+             var data = result.value;
             foreach (var item in data)
             {
                 Projects.Add(item);
@@ -122,7 +123,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <filter type='and'>
                           <condition attribute='statecode' operator='eq' value='0' />
                           <condition attribute='statuscode' operator='eq' value='100000000' />
-                          <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + Project.Val + @"' />
+                          <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + Project.bsd_projectid + @"' />
                         </filter>
                       </entity>
                     </fetch>";

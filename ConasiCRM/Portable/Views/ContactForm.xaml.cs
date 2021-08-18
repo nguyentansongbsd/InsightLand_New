@@ -59,6 +59,7 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Tạo Mới Khách Hàng Cá Nhân";
             btn_save_contact.Text = "Tạo Mới";
             btn_save_contact.Clicked += CreateContact_Clicked;
+            viewModel.singleContact = new ContactFormModel();
         }
 
         private void CreateContact_Clicked(object sender, EventArgs e)
@@ -178,10 +179,10 @@ namespace ConasiCRM.Portable.Views
 
                 if (created != new Guid())
                 {
-                    LoadingHelper.Hide();
-                    if (CustomerPage.NeedToRefresh.HasValue) CustomerPage.NeedToRefresh = true;
+                    if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
+                    LoadingHelper.Hide();
                 }
                 else
                 {

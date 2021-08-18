@@ -157,7 +157,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadOneContact(String id)
         {
-            singleContact = new ContactFormModel();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='contact'>
                                 <attribute name='fullname' />
