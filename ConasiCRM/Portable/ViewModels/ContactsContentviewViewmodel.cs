@@ -8,6 +8,7 @@ namespace ConasiCRM.Portable.ViewModels
     public class ContactsContentviewViewmodel : ListViewBaseViewModel2<ContactListModel>
     {
         public string Keyword { get; set; }
+       
         public ContactsContentviewViewmodel()
         {
             PreLoadData = new Command(() =>

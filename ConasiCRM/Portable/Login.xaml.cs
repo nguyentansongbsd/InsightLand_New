@@ -31,7 +31,7 @@ namespace ConasiCRM.Portable
             InitializeComponent();
             this.BindingContext = this;
 
-            if (UserLogged.IsLogged)
+            if (UserLogged.IsLogged && UserLogged.IsSaveInforUser)
             {
                 checkboxRememberAcc.IsChecked = true;
                 UserName = UserLogged.User;
@@ -205,21 +205,14 @@ namespace ConasiCRM.Portable
                         //    return;
                         //}
 
-                        if (checkboxRememberAcc.IsChecked)
-                        {
-                            UserLogged.Id = employeeModel.bsd_employeeid;
-                            UserLogged.User = employeeModel.bsd_name;
-                            UserLogged.Password = employeeModel.bsd_password;
-                            UserLogged.IsLogged = true;
-                        }
-                        else
-                        {
-                            UserLogged.Id = Guid.Empty;
-                            UserLogged.User = string.Empty;
-                            UserLogged.Password = string.Empty;
-                            UserLogged.IsLogged = false;
-                        }
-
+                        UserLogged.Id = employeeModel.bsd_employeeid;
+                        UserLogged.User = employeeModel.bsd_name;
+                        UserLogged.Password = employeeModel.bsd_password;
+                        UserLogged.ManagerId = employeeModel.manager_id;
+                        UserLogged.ManagerName = employeeModel.manager_name;
+                        UserLogged.IsSaveInforUser = checkboxRememberAcc.IsChecked;
+                        UserLogged.IsLogged = true;
+                        
                         App.Current.MainPage = new AppShell();
                         await Task.Delay(1);
                         LoadingHelper.Hide();
@@ -247,10 +240,15 @@ namespace ConasiCRM.Portable
                     <attribute name='createdon' />
                     <attribute name='bsd_password' />
                     <attribute name='bsd_imeinumber' />
+                    <attribute name='bsd_manager' />
                     <order attribute='bsd_name' descending='false' />
                     <filter type='and'>
                       <condition attribute='bsd_name' operator='eq' value='{UserName}' />
                     </filter>
+                    <link-entity name='systemuser' from='systemuserid' to='bsd_manager' visible='false' link-type='outer' alias='a_548d21d0fee9eb11bacb002248163181'>
+                      <attribute name='fullname' alias='manager_name'/>
+                      <attribute name='systemuserid' alias='manager_id' />
+                    </link-entity>
                   </entity>
                 </fetch>";
 
