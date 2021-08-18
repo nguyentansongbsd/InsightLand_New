@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class QueueFormViewModel : FormLookupViewModel
+    public class QueueFormViewModel : BaseViewModel
     {
         private QueueFormModel _queueFormModel;
         public QueueFormModel QueueFormModel { get => _queueFormModel; set { _queueFormModel = value; OnPropertyChanged(nameof(QueueFormModel)); } }

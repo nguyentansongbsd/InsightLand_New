@@ -1,16 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Telerik.XamarinForms.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -188,8 +179,8 @@ namespace ConasiCRM.Portable.Views
             {
                 await viewModel.LoadContactsLookUp();
             }
-            LookUpAccount.SetList(viewModel.AccountsLookUp.Cast<object>().ToList(), "Name");
-            LookUpContact.SetList(viewModel.ContactsLookUp.Cast<object>().ToList(), "Name");
+            LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
+            LookUpContact.SetList(viewModel.ContactsLookUp, "Name");
             LookUpAccount.lookUpListView.ItemTapped += LookUpAccount_ItemTapped;
             LookUpContact.lookUpListView.ItemTapped += LookUpContac_ItemTapped;
         }
@@ -306,12 +297,5 @@ namespace ConasiCRM.Portable.Views
         //    else await DisplayAlert("Thông báo", "Tạo báo giá thất bại ." + res.GetErrorMessage(), "close");
         //    viewModel.IsBusy = false;
         //} 
-    }
-
-    class ActionDirectSaleMoble_Result
-    {
-        public int status { get; set; }
-        public string ReturnId { get; set; }
-        public string Message { get; set; }
     }
 }
