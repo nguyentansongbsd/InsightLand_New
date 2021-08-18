@@ -90,7 +90,6 @@ namespace ConasiCRM.Portable.Views
 
             if (contactId != null)
             {
-                viewModel.singleGender = new OptionSet();
                 await viewModel.LoadOneContact(contactId);
                 await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
@@ -102,12 +101,15 @@ namespace ConasiCRM.Portable.Views
                 if (viewModel.singleContact.bsd_localization != null)
                 {
                     viewModel.singleLocalization = new OptionSet();
-                    viewModel.LoadOneLocalization(viewModel.singleContact.bsd_localization); }
+                    viewModel.LoadOneLocalization(viewModel.singleContact.bsd_localization);
+                }
                 if (viewModel.singleContact._parentcustomerid_value != null)
                 {
-                    viewModel.Account = new Models.LookUp();
-                    viewModel.Account.Name = viewModel.singleContact.parentcustomerid_label;
-                    viewModel.Account.Id = Guid.Parse(viewModel.singleContact._parentcustomerid_value);
+                    viewModel.Account = new Models.LookUp
+                    {
+                        Name = viewModel.singleContact.parentcustomerid_label,
+                        Id = Guid.Parse(viewModel.singleContact._parentcustomerid_value)
+                    };
                 }
             }
             LoadingHelper.Hide();
@@ -217,13 +219,11 @@ namespace ConasiCRM.Portable.Views
                 ContactGender.GetGenders();
                 foreach (var item in ContactGender.GenderOptions)
                 {
-                    viewModel.singleGender = new OptionSet();
                     viewModel.GenderOptions.Add(item);
                 }
             };
             Lookup_LocalizationOptions.PreOpenAsync = async () =>
             {
-                viewModel.singleLocalization = new OptionSet();
                 viewModel.loadLocalization();
             }; lookUpContacAddressCountry.PreOpenAsync = async () =>
             {
@@ -235,7 +235,6 @@ namespace ConasiCRM.Portable.Views
             };
             Lookup_Account.PreOpenAsync = async () =>
             {
-                viewModel.Account = new Models.LookUp();
                 await viewModel.LoadAccountsLookup();
             };
         }

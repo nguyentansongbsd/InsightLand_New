@@ -42,9 +42,11 @@ namespace ConasiCRM.Portable.Models
 
         public DateTime bsd_queuingexpired { get; set; } // Thời gian hết hạn
 
+        public DateTime bsd_bookingtime { get; set; } // Thời gian bat dau
+
         public Guid bsd_project_id { get; set; }
         public string bsd_project_name { get; set; } // dự án
-        public decimal bsd_bookingfee { get; set; }
+        public decimal bsd_bookingf { get; set; }
 
         public Guid bsd_phaseslaunch_id { get; set; }
         public string bsd_phaseslaunch_name { get; set; }
@@ -76,5 +78,7 @@ namespace ConasiCRM.Portable.Models
         public decimal landvalue { get; set; } // giá trị đất
 
         public decimal unit_price { get; set; } // Giá bán , tên gốc price => đổi lại tránh trùng khi trong form update khi lấy thông tin về.
+        public int bsd_longtime { get; set; }
+        public int bsd_shorttime { get; set; }     
     }
 }

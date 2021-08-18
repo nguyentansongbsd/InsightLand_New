@@ -257,7 +257,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["websiteurl"] = singleAccount.websiteurl;
             data["fax"] = singleAccount.fax;
             data["telephone1"] = singleAccount.telephone1;
-            data["bsd_registrationcode"] = singleAccount.bsd_registrationcode ?? new Random().Next(1000, 9999).ToString();
+            data["bsd_registrationcode"] = singleAccount.bsd_registrationcode;
             data["bsd_issuedon"] = singleAccount.bsd_issuedon.HasValue ? (DateTime.Parse(singleAccount.bsd_issuedon.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;
             data["bsd_placeofissue"] = singleAccount.bsd_placeofissue;
 
@@ -351,7 +351,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task LoadContactForLookup()
+        public async Task LoadContactForLookup() // bubg
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
