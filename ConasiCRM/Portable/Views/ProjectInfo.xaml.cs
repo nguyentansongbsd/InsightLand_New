@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -108,7 +109,19 @@ namespace ConasiCRM.Portable.Views
         private void GiuCho_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-
+            QueueForm queue = new QueueForm(viewModel.ProjectId, false);
+            queue.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queue);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
             LoadingHelper.Hide();
         }
 
@@ -118,6 +131,25 @@ namespace ConasiCRM.Portable.Views
             viewModel.PageListGiuCho++;
             await viewModel.LoadGiuCho();
             LoadingHelper.Hide();
+        }
+
+        private void ChuDauTu_Tapped(System.Object sender, System.EventArgs e)
+        {
+            LoadingHelper.Show();
+            var id = (Guid)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            AccountDetailPage accountDetailPage = new AccountDetailPage(id);
+            accountDetailPage.OnCompleted= async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(accountDetailPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin chủ đầu tư");
+                }
+            };
         }
     }
 }

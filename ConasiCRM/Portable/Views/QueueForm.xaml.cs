@@ -19,14 +19,16 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class QueueForm : ContentPage
     {
-        public Action<bool> CheckQueueInfo;
+        public Action<bool> OnCompleted;
         public QueueFormViewModel viewModel;
         public Guid UnitId;
         public Guid QueueId;
+        private bool from;
         public QueueForm(Guid unitId, bool fromDirectSale) // Direct Sales (add)
         {
             InitializeComponent();         
             UnitId = unitId;
+            from = fromDirectSale;
             Init();
             Create();
         }
@@ -36,12 +38,12 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();           
             QueueId = _queueId;          
             Init();
-            Update();
         }
 
         public void Init()
         {          
             this.BindingContext = viewModel = new QueueFormViewModel();
+            viewModel.QueueFormModel.createdon = DateTime.Now;
             SetPreOpen();            
         }
         public async void Create()
@@ -49,11 +51,22 @@ namespace ConasiCRM.Portable.Views
             btnSave.Text = "Lưu";
             btnSave.Clicked += Create_Clicked; ;
             this.Title = "Tạo Giữ Chỗ";
-            await viewModel.LoadFromUnit(this.UnitId);
-            if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
-                CheckQueueInfo?.Invoke(true);
+            if(from)
+            {
+                await viewModel.LoadFromUnit(this.UnitId);
+                if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
+                    OnCompleted?.Invoke(true);
+                else
+                    OnCompleted?.Invoke(false);
+            }
             else
-                CheckQueueInfo?.Invoke(false);            
+            {
+                await viewModel.LoadFromProject(this.UnitId);
+                if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
+                    OnCompleted?.Invoke(true);
+                else
+                    OnCompleted?.Invoke(false);
+            }            
         }
 
         private void Create_Clicked(object sender, EventArgs e)
@@ -61,31 +74,14 @@ namespace ConasiCRM.Portable.Views
             SaveData(null);
         }
 
-        public async void Update()
-        {
-            btnSave.Text = "Cập Nhật";
-            btnSave.Clicked += Update_Clicked;
-            this.Title = "Cập Nhật Giữ Chỗ";
-            await viewModel.LoadQueue(this.QueueId);
-            if (viewModel.QueueFormModel.opportunityid != Guid.Empty)
-                CheckQueueInfo?.Invoke(true);
-            else
-                CheckQueueInfo?.Invoke(false);           
-        }
-
-        private void Update_Clicked(object sender, EventArgs e)
-        {
-            SaveData(this.QueueId.ToString());
-        }
-
         private async void SaveData(string id)
         {
-            if(string.IsNullOrWhiteSpace(viewModel.QueueFormModel.name))
+            if (string.IsNullOrWhiteSpace(viewModel.QueueFormModel.name))
             {
                 await DisplayAlert("Thông Báo", "Vui lòng nhập tiêu đề của giữ chỗ", "Đóng");
                 return;
-            }    
-            if(viewModel.Customer == null || viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
+            }
+            if (viewModel.Customer == null || viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
             {
                 await DisplayAlert("Thông Báo", "Vui lòng chọn khách hàng tiềm năng", "Đóng");
                 return;
@@ -95,35 +91,37 @@ namespace ConasiCRM.Portable.Views
                 await DisplayAlert("Thông Báo", "Vui lòng chọn đại lý", "Đóng");
                 return;
             }
-            if (id == null)
+            if (from)
             {
-                var created = await viewModel.createQueue();
-                if (created)
+               if (!await viewModel.SetQueueTime(this.UnitId))
                 {
-                    await Navigation.PopAsync();
-                    await DisplayAlert("Thông báo", "Tạo giữ chỗ thành công!", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Thông báo", "Tạo giữ chỗ thất bại", "OK");
+                    await DisplayAlert("Thông Báo", "Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này", "Đóng");
+                    return;
                 }
             }
             else
             {
-                var updated = await viewModel.updateQueue();
-                if (updated)
+                if (!await viewModel.SetQueueTimeProject(this.UnitId))
                 {
-                    await Navigation.PopAsync();
-                    await DisplayAlert("Thông báo", "Cập nhật giữ chỗ thành công!", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Thông báo", "Cập nhật giữ chỗ thất bại!", "OK");
+                    await DisplayAlert("Thông Báo", "Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này", "Đóng");
+                    return;
                 }
             }
-        }
 
-      
+            LoadingHelper.Show();
+            var created = await viewModel.createQueue();
+            if (created)
+            {
+                await Navigation.PopAsync(); 
+                LoadingHelper.Hide();
+                await DisplayAlert("Thông báo", "Tạo giữ chỗ thành công!", "OK");
+            }
+            else
+            {
+                LoadingHelper.Hide();
+                await DisplayAlert("Thông báo", "Tạo giữ chỗ thất bại", "OK");
+            }
+        }
 
         private async void KhachHangTiemNang_Tapped(object sender, EventArgs e)
         {

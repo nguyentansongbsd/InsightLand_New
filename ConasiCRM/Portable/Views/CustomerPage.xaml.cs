@@ -37,6 +37,7 @@ namespace ConasiCRM.Portable.Views
                 if (IsSuccess)
                 {
                     CustomerContentView.Children.Add(LeadsContentView);
+                    DataNull.IsVisible = false;
                     LoadingHelper.Hide();
                 }
                 else
@@ -117,7 +118,8 @@ namespace ConasiCRM.Portable.Views
             {
                 if (IsSuccess)
                 {
-                    CustomerContentView.Children.Add(ContactsContentview); ;
+                    CustomerContentView.Children.Add(ContactsContentview);
+                    DataNull.IsVisible = false;
                     LoadingHelper.Hide();
                 }
                 else
@@ -159,9 +161,18 @@ namespace ConasiCRM.Portable.Views
             base.OnAppearing();
             if (NeedToRefresh == true)
             {
-                await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
-                await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
-                await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
+                if(LeadsContentView != null)
+                {
+                    await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
+                }
+                if (ContactsContentview != null)
+                {
+                    await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
+                }
+                if (AccountsContentView != null)
+                {
+                    await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
+                }               
                 NeedToRefresh = false;
             }
         }

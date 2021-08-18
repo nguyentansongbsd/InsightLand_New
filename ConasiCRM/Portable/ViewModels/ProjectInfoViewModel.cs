@@ -101,6 +101,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 </filter>
                                 <link-entity name='account' from='accountid' to='bsd_investor' visible='false' link-type='outer' alias='a_8924f6d5b214e911a97f000d3aa04914'>
                                   <attribute name='bsd_name' alias='bsd_investor_name' />
+                                  <attribute name='accountid' alias='bsd_investor_id' />
                                 </link-entity>
                               </entity>
                             </fetch>";
@@ -160,11 +161,9 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_unitscodesams' />
                                 <attribute name='productid' />
                                 <order attribute='createdon' descending='true' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' link-type='inner' alias='ab'>
-                                  <filter type='and'>
-                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
                                   </filter>
-                                </link-entity>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Unit>>("products", fetchXml);
@@ -215,6 +214,9 @@ namespace ConasiCRM.Portable.ViewModels
                         case 100000002:
                             DaBan++;
                             break;
+                        default:
+                            break;
+                            
                     }
                 }
             }

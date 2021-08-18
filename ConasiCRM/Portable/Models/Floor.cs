@@ -10,39 +10,9 @@ namespace ConasiCRM.Portable.Models
     public class Floor : BaseViewModel
     {
         public Guid bsd_floorid { get; set; }
-        private string _bsd_name;
-        public string bsd_name
-        {
-            get
-            {
-                try
-                {
-                    if (_bsd_name != null)
-                    {
-                        int index = _bsd_name.LastIndexOf('-');
-                        return _bsd_name.Substring(index + 1);
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string a = ex.Message;
-                    Debug.Write("substring floor name : " + a);
-                    return _bsd_name;
-                }
-            }
-            set
-            {
-                _bsd_name = value;
-            }
-        }
-
+        public string bsd_name { get; set; }
+        
         public int UnitCount { get; set; }
-
-        public IList<Test> Tests { get; set; } = new ObservableCollection<Test>() { };
 
         public IList<Unit> Units { get; set; } = new ObservableCollection<Unit>();
 
@@ -55,5 +25,14 @@ namespace ConasiCRM.Portable.Models
         }
 
         public CountUnit CountUnit { get; set; } = new CountUnit();
+
+        public int NumChuanBiInFloor { get; set; }
+        public int NumSanSangInFloor { get; set; }
+        public int NumGiuChoInFloor { get; set; }
+        public int NumDatCocInFloor { get; set; }
+        public int NumDongYChuyenCoInFloor { get; set; }
+        public int NumDaDuTienCocInFloor { get; set; }
+        public int NumThanhToanDot1InFloor { get; set; }
+        public int NumDaBanInFloor { get; set; }
     }
 }

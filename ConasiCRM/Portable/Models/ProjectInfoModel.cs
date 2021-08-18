@@ -9,6 +9,7 @@ namespace ConasiCRM.Portable.Models
         public string bsd_projectcode { get; set; }
         public string bsd_name { get; set; } // tên dự án
 
+        public Guid bsd_investor_id { get; set; }
         public string bsd_investor_name { get; set; } // chủ dự án
 
         public int bsd_loaiduan { get; set; }

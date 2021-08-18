@@ -15,6 +15,7 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<StatusCodeModel>()
             {
+                new StatusCodeModel("0","Nháp","#333333"),
                 new StatusCodeModel("1","Chuẩn bị","#FDC206"),
                 new StatusCodeModel("100000000","Sẵn sàng","#06CF79"),
                 new StatusCodeModel("100000004","Giữ chỗ","#03ACF5"),

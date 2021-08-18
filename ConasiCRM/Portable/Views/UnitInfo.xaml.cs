@@ -145,7 +145,19 @@ namespace ConasiCRM.Portable.Views
         private void GiuCho_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ToastMessageHelper.ShortMessage("chua co page");
+            QueueForm queue = new QueueForm(viewModel.UnitId, true);
+            queue.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queue);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
             LoadingHelper.Hide();
         }
 

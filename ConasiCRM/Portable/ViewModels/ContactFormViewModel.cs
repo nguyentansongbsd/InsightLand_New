@@ -19,7 +19,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class ContactFormViewModel : FormViewModal
+    public class ContactFormViewModel : BaseViewModel
     {
         private ContactFormModel _singleContact;
         public ContactFormModel singleContact { get { return _singleContact; } set { _singleContact = value; OnPropertyChanged(nameof(singleContact)); } }
@@ -29,8 +29,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         private OptionSet _singleLocalization;
         public OptionSet singleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(singleLocalization)); } }
-
-        public ObservableCollection<LookUp> list_contact_lookup { get; set; }
 
         public ObservableCollection<LookUp> list_account_lookup { get; set; }
 
@@ -141,9 +139,10 @@ namespace ConasiCRM.Portable.ViewModels
         private string checkCMND;
 
         public ContactFormViewModel()
-        {                 
+        {
+            singleContact = new ContactFormModel();
+            
             list_lookup = new ObservableCollection<LookUp>();
-            list_contact_lookup = new ObservableCollection<LookUp>();
             list_account_lookup = new ObservableCollection<LookUp>();
             list_country_lookup = new ObservableCollection<LookUp>();
             list_province_lookup = new ObservableCollection<LookUp>();
@@ -157,7 +156,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadOneContact(String id)
         {
-            singleContact = new ContactFormModel();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='contact'>
                                 <attribute name='fullname' />
