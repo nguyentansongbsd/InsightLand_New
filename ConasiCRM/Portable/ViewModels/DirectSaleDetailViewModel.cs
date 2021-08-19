@@ -169,6 +169,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_view' />
                                 <order attribute='bsd_blocknumber' descending='false' />
                                 <filter type='and'>
+                                    <condition attribute='statuscode' operator='ne' value='0' />
                                     <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
                                     '" + Block_Condition + @"'
                                     '" + UnitCode_Condition + @"'
@@ -190,7 +191,6 @@ namespace ConasiCRM.Portable.ViewModels
                                 <link-entity name='opportunity' from='bsd_units' to='productid' link-type='outer' alias='ag' >
 	                                <attribute name='opportunityid' alias='queseid'/>
                                     <attribute name='statuscode' alias='queses_statuscode'/>
-                                    <attribute name='bsd_employee' />
                                 </link-entity>
                                 <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
                                   <attribute name='bsd_name'  alias='bsd_unittype_name'/>
@@ -290,7 +290,7 @@ namespace ConasiCRM.Portable.ViewModels
                         default:
                             break;
                     }
-                    if ((unit._bsd_employee_value != Guid.Empty && unit._bsd_employee_value == UserLogged.Id) && (unit.queses_statuscode == "100000000" || unit.queses_statuscode == "100000002" || unit.queses_statuscode == "100000004"))
+                    if (unit.queses_statuscode == "100000000" || unit.queses_statuscode == "100000002" || unit.queses_statuscode == "100000004")
                     {
                         unit.NumQueses++;
                     }

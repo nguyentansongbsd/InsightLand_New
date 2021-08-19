@@ -4,6 +4,7 @@ using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,24 +13,18 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DirectSale : ContentPage
     {
-        private DirectSaleViewModel viewModel;
+        public DirectSaleViewModel viewModel;
         public DirectSale()
         {
             LoadingHelper.Show();
             InitializeComponent();
-            BindingContext = viewModel = new DirectSaleViewModel();
+            this.BindingContext = viewModel = new DirectSaleViewModel();
             Init();
             LoadingHelper.Hide();
         }
 
         public async void Init()
         {
-            lookupProject.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadProject();
-                LoadingHelper.Hide();
-            };
             lookupMultipleView.PreShow = async () =>
             {
                 LoadingHelper.Show();
@@ -51,11 +46,49 @@ namespace ConasiCRM.Portable.Views
                 }
                 LoadingHelper.Hide();
             };
+            
         }
 
-        private async void Project_Change(object sender, EventArgs e)
+        private async void LoadProject_Tapped(object sender, EventArgs e)
         {
+            LoadingHelper.Show();
+            if (viewModel.Projects.Count == 0)
+            {
+                await viewModel.LoadProject();
+                listviewProject.ItemsSource = viewModel.Projects;
+            }
+            
+            await bottomModalProject.Show();
+            LoadingHelper.Hide();
+        }
+
+        private void SearchBar_SearchButtonPressed(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            listviewProject.ItemsSource = viewModel.Projects.Where(x=>x.bsd_name.ToLower().Contains(searchProject.Text.Trim().ToLower()) || x.bsd_projectcode.ToLower().Contains(searchProject.Text.Trim().ToLower()));
+            LoadingHelper.Hide();
+        }
+
+        private async void SearchBar_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(searchProject.Text))
+            {
+                LoadingHelper.Show();
+                viewModel.Projects.Clear();
+                await viewModel.LoadProject();
+                listviewProject.ItemsSource = viewModel.Projects;
+                LoadingHelper.Hide();
+            }
+        }
+
+        private async void ProjectItem_Tapped(object sender, ItemTappedEventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = e.Item as ProjectList;
+            viewModel.Project = item;
             await viewModel.LoadPhasesLanch();
+            await bottomModalProject.Hide();
+            LoadingHelper.Hide();
         }
 
         private async void SearchClicked(object sender, EventArgs e)
@@ -74,7 +107,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     model.PhasesLanchId = viewModel.PhasesLaunch.Val;
                 }
-                model.ProjectId = viewModel.Project.Val;
+                model.ProjectId = viewModel.Project.bsd_projectid;
                 model.IsEvent = viewModel.IsEvent;
                 model.UnitCode = viewModel.UnitCode;
                 model.Directions = viewModel.SelectedDirections;
@@ -96,12 +129,12 @@ namespace ConasiCRM.Portable.Views
                     else if (Success == 1)
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.LongMessage("Dự án chưa có blocks");
+                        ToastMessageHelper.LongMessage("Không có blocks");
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.LongMessage("Dự án chưa có sản phẩm");
+                        ToastMessageHelper.LongMessage("Không có sản phẩm");
                     }
                 };
             }
@@ -117,7 +150,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            ProjectInfo projectInfo = new ProjectInfo(Guid.Parse(viewModel.Project.Val));
+            ProjectInfo projectInfo = new ProjectInfo(Guid.Parse(viewModel.Project.bsd_projectid));
             projectInfo.OnCompleted = async (IsSuccess) =>
             {
                 if (IsSuccess == true)

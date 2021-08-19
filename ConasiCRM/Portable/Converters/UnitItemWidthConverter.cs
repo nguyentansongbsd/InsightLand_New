@@ -14,8 +14,9 @@ namespace ConasiCRM.Portable.Converters
             var padding = thickness.Left;
             var deviceWidth = DeviceDisplay.MainDisplayInfo.Width;
             var px = deviceWidth / (int)DeviceDisplay.MainDisplayInfo.Density; // convert sang pixel
-
-            var width = (px - (padding * 2 + 8 + 8)) / 2; // padding * 2 la tong trai va phai, 8 la tong marrign trai phai cua 1 item unit
+            //{Binding ., Converter={StaticResource UnitsPaddingConverter}}
+            //(padding * 2 + 8 + 8)
+            var width = (px - (10 * 2 + 8 + 8)) / 2; // padding * 2 la tong trai va phai, 8 la tong marrign trai phai cua 1 item unit
             return width;
         }
 

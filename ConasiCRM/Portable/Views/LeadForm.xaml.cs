@@ -309,12 +309,6 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (!PhoneNumberFormatVNHelper.CheckValidate(viewModel.singleLead.mobilephone))
-            {
-                ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng");
-                return ;
-            }
-
             LoadingHelper.Show();
             viewModel.singleLead.industrycode = viewModel.IndustryCode != null ? viewModel.IndustryCode.Val : null;
             viewModel.singleLead._transactioncurrencyid_value = viewModel.SelectedCurrency != null ? viewModel.SelectedCurrency.Val : null;
@@ -325,9 +319,10 @@ namespace ConasiCRM.Portable.Views
                 var result = await viewModel.createLead();
                 if (result.IsSuccess)
                 {
-                    LoadingHelper.Hide();
+                    if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                     ToastMessageHelper.ShortMessage("Thành công");
                     await Navigation.PopAsync();
+                    LoadingHelper.Hide();
                 }
                 else
                 {
@@ -350,7 +345,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không cập nhật được khách hàng. Vui lòng thử lại");
                 }
             }
-            
         }
     }
 }

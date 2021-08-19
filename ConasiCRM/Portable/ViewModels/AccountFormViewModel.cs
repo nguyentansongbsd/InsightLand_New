@@ -41,7 +41,8 @@ namespace ConasiCRM.Portable.ViewModels
         public List<string> _businessType;
         public List<string> BusinessType { get => _businessType; set { _businessType = value; OnPropertyChanged(nameof(BusinessType)); } }
 
-        public List<LookUp> PrimaryContactOptionList { get; set; }
+        private List<LookUp> _primaryContactOptionList;
+        public List<LookUp> PrimaryContactOptionList { get=>_primaryContactOptionList; set { _primaryContactOptionList = value;OnPropertyChanged(nameof(PrimaryContactOptionList)); } }
 
         private LookUp _PrimaryContact;
         public LookUp PrimaryContact { get => _PrimaryContact; set { _PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); } }
@@ -107,7 +108,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             BusinessTypeOptionList = new List<OptionSet>();
             LocalizationOptionList = new ObservableCollection<OptionSet>();
-            PrimaryContactOptionList = new List<LookUp>();
            
         }
 
@@ -302,9 +302,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["bsd_district@odata.bind"] = "/new_districts(" + singleAccount._bsd_district_value + ")"; /////Lookup Field
             }
-            if (UserLogged.Id != null)
+            if (UserLogged.Id != Guid.Empty)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
             return data;
         }
@@ -349,7 +353,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadContactForLookup() // bubg
         {
-            PrimaryContactOptionList = new List<LookUp>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Id' />
@@ -361,11 +364,7 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("contacts", fetch);
             if (result == null)
                 return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                PrimaryContactOptionList.Add(item);
-            }
+            PrimaryContactOptionList = result.value;
         }
         public async Task LoadCountryForLookup()
         {
