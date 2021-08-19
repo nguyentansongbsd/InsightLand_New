@@ -54,9 +54,6 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<HuongPhongThuy> list_HuongTot { set; get; }
         public ObservableCollection<HuongPhongThuy> list_HuongXau { set; get; }       
 
-        string frontImage_name;
-        string behindImage_name;
-
         public ContactDetailPageViewModel()
         {
             singleGender = new OptionSet();
@@ -79,6 +76,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 <entity name='contact'>
                                     <all-attributes />
                                     <order attribute='createdon' descending='true' />
+                                    <link-entity name='account' from='accountid' to='parentcustomerid' visible='false' link-type='outer' alias='aa'>
+                                          <attribute name='accountid' alias='_parentcustomerid_value' />
+                                          <attribute name='bsd_name' alias='parentcustomerid_label' />
+                                    </link-entity>
                                     <filter type='and'>
                                         <condition attribute='contactid' operator='eq' value='" + id + @"' />
                                     </filter>
@@ -94,14 +95,6 @@ namespace ConasiCRM.Portable.ViewModels
             }    
             var tmp = result.value.FirstOrDefault();
             this.singleContact = tmp;
-            //if (tmp.bsd_loingysinh == false)
-            //{
-            //    checkbirth = true;
-            //    checkbirthy = false;
-            //}
-            //else { checkbirth = false; checkbirthy = true; }
-            frontImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            behindImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
         }
         //Gender
         public void LoadGender()

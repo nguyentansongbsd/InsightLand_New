@@ -109,17 +109,17 @@
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto">
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
+                            <Grid RowDefinitions="Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
                                 <Label Text="{Binding singleContact.bsd_fullname}" FontAttributes="Bold" Grid.Row="0" FontSize="16" TextColor="#026294"/>
-                                <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                <!--<Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                     <Label Text="Nhóm: " Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                     <Label Text="{Binding SingleContactgroup}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
                                 </Grid>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
                                     <Label Text="Loại: " Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                     <Label Text="{Binding SingleType}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
-                                </Grid>
-                                <Label Text="{Binding singleContact.mobilephone}" Grid.Row="3" FontSize="15" TextColor="#444444"/>
+                                </Grid>-->
+                                <Label Text="{Binding singleContact.mobilephone}" Grid.Row="1" FontSize="15" TextColor="#444444"/>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#939393" Grid.Row="1"/>
                             <Grid ColumnDefinitions="*,1,*" Grid.Row="2">

@@ -39,9 +39,6 @@ namespace ConasiCRM.Portable.ViewModels
         private LookUp _daiLyOption;
         public LookUp DailyOption { get => _daiLyOption; set { _daiLyOption = value;OnPropertyChanged(nameof(DailyOption)); } }
 
-        private List<QueueFormModel> QueuesUnit = new List<QueueFormModel>();
-        private object bsd_queuingexpired;
-
         public QueueFormViewModel()
         {
             QueueFormModel = new QueueFormModel();
