@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
-             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
+             xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters"
              x:Class="ConasiCRM.Portable.Views.ContactDetailPage"
              Title="THÔNG TIN KHÁCH HÀNG">
     <ContentPage.Resources>
@@ -102,6 +103,9 @@
             <Setter Property="Padding" Value="0,10,25,10"/>
             <Setter Property="HorizontalOptions" Value="Start"/>
         </Style>
+        <ResourceDictionary>
+            <converter:NullToHideConverter x:Key="NullToBool"/>
+        </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
@@ -109,17 +113,20 @@
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto">
-                            <Grid RowDefinitions="Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
-                                <Label Text="{Binding singleContact.bsd_fullname}" FontAttributes="Bold" Grid.Row="0" FontSize="16" TextColor="#026294"/>
-                                <!--<Grid ColumnDefinitions="Auto,*" Grid.Row="1">
-                                    <Label Text="Nhóm: " Grid.Column="0" FontSize="15" TextColor="#444444"/>
-                                    <Label Text="{Binding SingleContactgroup}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
+                                <Label Text="{Binding singleContact.bsd_fullname}" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" FontSize="16" TextColor="#2196F3" />
+                                <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                    <Label Text="Email: " Grid.Column="0" FontSize="15" TextColor="#444444"/>
+                                    <Label Text="{Binding singleContact.emailaddress1}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
                                 </Grid>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                    <Label Text="Loại: " Grid.Column="0" FontSize="15" TextColor="#444444"/>
-                                    <Label Text="{Binding SingleType}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
-                                </Grid>-->
-                                <Label Text="{Binding singleContact.mobilephone}" Grid.Row="1" FontSize="15" TextColor="#444444"/>
+                                    <Label Text="Số điện thoại: " Grid.Column="0" FontSize="15" TextColor="#444444" />
+                                    <Label Text="{Binding singleContact.mobilephone}" Grid.Column="1" FontSize="15" TextColor="#444444" />
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" Grid.Row="3" IsVisible="{Binding singleContact.bsd_contactaddress,Converter={StaticResource NullToBool}}">
+                                    <Label Text="&#xf3c5;" TextColor="#939393" FontFamily="FontAwesomeSolid" FontSize="Large"/>
+                                    <Label Text="{Binding singleContact.bsd_contactaddress}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
+                                </Grid>
                             </Grid>
                             <BoxView HeightRequest="1" BackgroundColor="#939393" Grid.Row="1"/>
                             <Grid ColumnDefinitions="*,1,*" Grid.Row="2">
@@ -172,24 +179,20 @@
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
-                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="0">
                                             <controls:FormLabel Text="Giới tính" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding singleGender.Label}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
+                                            <controls:FormLabelValue Text="{Binding singleGender}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="1">
                                             <controls:FormLabel Text="Quốc tịch" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding singleLocalization}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
+                                            <controls:FormLabelValue Text="{Binding SingleLocalization}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="2">
                                             <controls:FormLabel Text="Ngày sinh" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.birthdate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="3">
-                                            <controls:FormLabel Text="Email" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding singleContact.emailaddress1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="4">
                                             <controls:FormLabel Text="Tên công ty" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.parentcustomerid_label}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#2196F3" Style="{StaticResource Lb_Title_Content}">
                                                 <controls:FormLabelValue.GestureRecognizers>
@@ -197,19 +200,19 @@
                                                 </controls:FormLabelValue.GestureRecognizers>
                                             </controls:FormLabelValue>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="5">
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="4">
                                             <controls:FormLabel Text="Chức vụ" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.bsd_jobtitlevn}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="6">
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="5">
                                             <controls:FormLabel Text="SDT kinh doanh" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.telephone1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="7">
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="6">
                                             <controls:FormLabel Text="Địa chỉ liên lạc" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.bsd_contactaddress}" LineHeight="1.2" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="8">
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="7">
                                             <controls:FormLabel Text="Địa chỉ thường trú" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.bsd_permanentaddress1}" LineHeight="1.2" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
@@ -469,7 +472,7 @@
                             <Label Text="Thông Tin Gia Chủ" Style="{StaticResource Lb_Title_PhongThuy}" Grid.Column="0"/>
                             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="1">
                                 <controls:FormLabel Text="Giới tính:" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_TenHuong_PhongThuy}"/>
-                                <controls:FormLabelValue Text="{Binding singleGender.Label}" Grid.Row="0" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_ChiTietHuong_PhongThuy}"/>
+                                <controls:FormLabelValue Text="{Binding singleGender}" Grid.Row="0" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_ChiTietHuong_PhongThuy}"/>
                                 <BoxView BackgroundColor="#f1f1f1" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="1"/>
                                 <controls:FormLabel Text="Năm sinh âm lịch:" Grid.Row="2" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_TenHuong_PhongThuy}"/>
                                 <controls:FormLabelValue Text="{Binding PhongThuy.ten_nam_sinh_am_lich}" Grid.Row="2" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_ChiTietHuong_PhongThuy}"/>
@@ -531,7 +534,11 @@
                         <Image Source="{Binding PhongThuy.image}"/>
                     </controls:PinchToZoomContainer.Content>
                 </controls:PinchToZoomContainer>
-                <Button Clicked="Close_LookUpImagePhongThuy_Clicked" WidthRequest="20" FontFamily="FontAwesomeSolid" Text="&#xf00d;" TextColor="#444444" FontSize="Large" HeightRequest="20" VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="Transparent" Margin="0,10,10,0"/>
+                <Label FontFamily="FontAwesomeRegular" Text="&#xf410;" TextColor="#444444" FontSize="Large" VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="White" Margin="0,10,10,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_LookUpImagePhongThuy_Tapped" NumberOfTapsRequired="1"/>
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>

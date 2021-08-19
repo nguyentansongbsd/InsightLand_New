@@ -57,7 +57,7 @@
                                 <controls:FormLabel Text="Quốc tịch" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:LookUp x:Name="Lookup_LocalizationOptions" Placeholder="Chọn quốc tịch" ItemsSource="{Binding LocalizationOptions}" SelectedItem="{Binding singleLocalization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label"/>
 
-                                <controls:FormLabel Text="Ngày sinh" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:FormLabelRequired Text="Ngày sinh" Margin="0,10,0,0"/>
                                 <controls:DatePickerBorder Date="{Binding singleContact.birthdate}" Format="dd/MM/yyyy"/>
 
                                 <controls:FormLabel Text="Email" FontSize="15" Margin="0,10,0,0"/>
@@ -65,7 +65,6 @@
 
                                 <controls:FormLabel Text="Công ty" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:LookUp x:Name="Lookup_Account"  NameDisplay="Name" BottomModal="{Reference BottomModal}" Placeholder="Chọn công ty" SelectedItem="{Binding Account}" ItemsSource="{Binding list_account_lookup}"/>
-
 
                                 <controls:FormLabel Text="Chức vụ" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Placeholder="Nhập chức vụ" Text="{Binding singleContact.bsd_jobtitlevn}" FontSize="15"/>
@@ -127,7 +126,7 @@
                                 </Grid>
 
                                 <controls:FormLabelRequired Text="Số CMND" Margin="0,10,0,0"/>
-                                <controls:MainEntry Placeholder="Nhập số CMND" Text="{Binding singleContact.bsd_identitycardnumber}" FontSize="15"/>
+                                <controls:MainEntry Placeholder="Nhập số CMND" Text="{Binding singleContact.bsd_identitycardnumber}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="Ngày cấp" Margin="0,10,0,0"/>
                                 <controls:DatePickerBorder Date="{Binding singleContact.bsd_dategrant}" Format="dd/MM/yyyy"/>
@@ -136,7 +135,7 @@
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissue}" Placeholder="Nhập nơi cấp" FontSize="15"/>
 
                                 <controls:FormLabel Text="Số hộ chiếu" Margin="0,10,0,0"/>
-                                <controls:MainEntry Placeholder="Nhập số hộ chiếu" Text="{Binding singleContact.bsd_passport}" FontSize="15"/>
+                                <controls:MainEntry Placeholder="Nhập số hộ chiếu" Text="{Binding singleContact.bsd_passport}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="Ngày cấp hộ chiếu" Margin="0,10,0,0"/>
                                 <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedonpassport}" Format="dd/MM/yyyy"/>
@@ -145,10 +144,10 @@
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissuepassport}" Placeholder="Nhập nơi cấp hộ chiếu" FontSize="15"/>
 
                                 <controls:FormLabel Text="Số thẻ căn cước" Margin="0,10,0,0"/>
-                                <controls:MainEntry Placeholder="Nhập số thẻ căn cước" Text="{Binding singleContact.bsd_idcard}" FontSize="15"/>
+                                <controls:MainEntry Placeholder="Nhập số thẻ căn cước" Text="{Binding singleContact.bsd_idcard}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="Ngày cấp thẻ căn cước" Margin="0,10,0,0"/>
-                                <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedateidcard}" Format="dd/MM/yyyy"/>
+                                <controls:DatePickerBorder Date="{Binding singleContact.bsd_issuedateidcard}" Format="dd/MM/yyyy" />
 
                                 <controls:FormLabel Text="Nơi cấp thẻ căn cước" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissueidcar}" Placeholder="Nhập nơi cấp thẻ căn cước" FontSize="15"/>
@@ -211,7 +210,7 @@
                             <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvinceContac}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="ContacAddressProvince_Changed"/>
 
                             <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityContac}" ItemsSource="{Binding list_district_lookup}" SelectedItemChange="ContacAddressDistrict_Changed"/>
+                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityContac}" ItemsSource="{Binding list_district_lookup}"/>
 
                             <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
                             <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Contac}"/>
@@ -221,7 +220,7 @@
                 <controls:CenterModal.Footer>
                     <Grid ColumnDefinitions="*,*" Margin="10">
                         <Button Grid.Column="0" Text="Đóng" Clicked="CloseContacAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmContacAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="1" CornerRadius="10"/>
+                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmContacAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="0" CornerRadius="10"/>
                     </Grid>
                 </controls:CenterModal.Footer>
             </controls:CenterModal>
@@ -236,7 +235,7 @@
                             <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvincePermanent}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="PermanentAddressProvince_Changed"/>
 
                             <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityPermanent}" ItemsSource="{Binding list_district_lookup}" SelectedItemChange="PermanentAddressDistrict_Changed"/>
+                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityPermanent}" ItemsSource="{Binding list_district_lookup}" />
 
                             <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
                             <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Permanent}"/>
@@ -246,7 +245,7 @@
                 <controls:CenterModal.Footer>
                     <Grid ColumnDefinitions="*,*" Margin="10">
                         <Button Grid.Column="0" Text="Đóng" Clicked="ClosePermanentAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmPermanentAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="1" CornerRadius="10"/>
+                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmPermanentAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="0" CornerRadius="10"/>
                     </Grid>
                 </controls:CenterModal.Footer>
             </controls:CenterModal>

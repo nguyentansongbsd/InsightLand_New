@@ -129,12 +129,9 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<OptionSet> GenderOptions { get; set; }
         public ObservableCollection<OptionSet> LocalizationOptions { get; set; }
 
-        private string IMAGE_CMND_FOLDER = "Contact_CMND";
-        string frontImage_name;
-        string behindImage_name;
-
-        public bool checkbirth;
-        public bool checkbirthy;
+        //private string IMAGE_CMND_FOLDER = "Contact_CMND";
+        //string frontImage_name;
+        //string behindImage_name;
 
         private string checkCMND;
 
@@ -149,9 +146,6 @@ namespace ConasiCRM.Portable.ViewModels
             list_district_lookup = new ObservableCollection<LookUp>();
             GenderOptions = new ObservableCollection<OptionSet>();
             LocalizationOptions = new ObservableCollection<OptionSet>();
-
-            checkbirth = false;
-            checkbirthy = false;
         }
 
         public async Task LoadOneContact(String id)
@@ -191,6 +185,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_country' />
                                 <attribute name='bsd_postalcode' />
                                 <attribute name='bsd_contactaddress' />
+                                    <link-entity name='account' from='accountid' to='parentcustomerid' visible='false' link-type='outer' alias='aa'>
+                                          <attribute name='accountid' alias='_parentcustomerid_value' />
+                                          <attribute name='bsd_name' alias='parentcustomerid_label' />
+                                    </link-entity>
                                     <link-entity name='bsd_country' from='bsd_countryid' to='bsd_country' visible='false' link-type='outer'>
                                         <attribute name='bsd_countryname'  alias='bsd_country_label'/>                                        
                                     </link-entity>
@@ -209,7 +207,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='new_district' from='new_districtid' to='bsd_permanentdistrict' visible='false' link-type='outer'>
                                         <attribute name='new_name'  alias='bsd_permanentdistrict_label'/>
                                     </link-entity>
-                                <order attribute='createdon' descending='true' />
+                                    <order attribute='createdon' descending='true' />
                                     <filter type='and'>
                                      <condition attribute='contactid' operator='eq' value='" + id + @"' />
                                     </filter>
@@ -219,28 +217,17 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
 
-
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContactFormModel>>("contacts", fetch);
-            if (result == null)
+            if (result == null || result.value == null)
             {
                 return;
             }
 
             var tmp = result.value.FirstOrDefault();
-            if (tmp == null)
-            {
-                return;
-            }
             this.singleContact = tmp;
-            if (tmp.bsd_loingysinh == false)
-            {
-                checkbirth = true;
-                checkbirthy = false;
-            }
-            else { checkbirth = false; checkbirthy = true; }
 
-            frontImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            behindImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
+            //frontImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
+            //behindImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
 
             checkCMND = tmp.bsd_identitycardnumber;
         }
@@ -315,7 +302,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_postalcode"] = contact.bsd_postalcode;
             if (contact._parentcustomerid_value == null)
             {
-                await DeletLookup("parentcustomerid", contact.contactid);
+                await DeletLookup("parentcustomerid_account", contact.contactid);
             }
             else
             {
@@ -386,18 +373,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             return data;
-        }
-
-        public OptionSet LoadOneLocalization(string id)
-        {
-            this.singleLocalization = LocalizationOptions.FirstOrDefault(x => x.Val == id); ;
-            return singleLocalization;
-        }
-
-        public void loadLocalization()
-        {
-            LocalizationOptions.Add(new OptionSet() { Val = ("100000000"), Label = "Trong nước", });
-            LocalizationOptions.Add(new OptionSet() { Val = ("100000001"), Label = "Nước ngoài", });
         }
 
         public async Task LoadAccountsLookup()
@@ -569,83 +544,85 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task GetImageCMND()
-        {
-            string token = (await CrmHelper.getSharePointToken()).access_token;
-            var client = BsdHttpClient.Instance();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
-            var front_result = await client.SendAsync(front_request);
-            if (front_result.IsSuccessStatusCode)
-            {
-                singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
-            }
+        // chua su dung duoc
+        //public async Task GetImageCMND()
+        //{
+        //    string token = (await CrmHelper.getSharePointToken()).access_token;
+        //    var client = BsdHttpClient.Instance();
+        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
-            var behind_result = await client.SendAsync(behind_request);
-            if (behind_result.IsSuccessStatusCode)
-            {
-                singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
-            }
-            //var front_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER +  "/" + frontImage_name + "&access_token=" + token));
-            //if(front_result != null)
-            //{
-            //    using (var memoryStream1 = new MemoryStream())
-            //    {
-            //        front_result.GetStream().CopyTo(memoryStream);
-            //        file.Dispose();
-            //        return memoryStream.ToArray();
-            //    }
-            //}
+        //    var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+        //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
+        //    var front_result = await client.SendAsync(front_request);
+        //    if (front_result.IsSuccessStatusCode)
+        //    {
+        //        singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
+        //    }
 
-            //var behind_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token));
-        }
+        //    var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+        //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
+        //    var behind_result = await client.SendAsync(behind_request);
+        //    if (behind_result.IsSuccessStatusCode)
+        //    {
+        //        singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
+        //    }
+        //    //var front_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER +  "/" + frontImage_name + "&access_token=" + token));
+        //    //if(front_result != null)
+        //    //{
+        //    //    using (var memoryStream1 = new MemoryStream())
+        //    //    {
+        //    //        front_result.GetStream().CopyTo(memoryStream);
+        //    //        file.Dispose();
+        //    //        return memoryStream.ToArray();
+        //    //    }
+        //    //}
 
-        public async Task uploadImageCMND()
-        {
-            string token = (await CrmHelper.getSharePointToken()).access_token;
+        //    //var behind_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token));
+        //}
 
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //public async Task uploadImageCMND()
+        //{
+        //    string token = (await CrmHelper.getSharePointToken()).access_token;
 
-                if (singleContact.bsd_mattruoccmnd_base64 != null)
-                {
-                    byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
+        //    using (var client = new HttpClient())
+        //    {
+        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                    using (var response = client.PostAsync
-                    (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + frontImage_name + "',overwrite=true)")
-                    , new StreamContent(new MemoryStream(arrByteFront))).Result)
-                    {
-                        if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt trước CMND thất bại", "OK"); }
-                    }
-                }
-                else
-                {
-                    await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')"));
-                }
+        //        if (singleContact.bsd_mattruoccmnd_base64 != null)
+        //        {
+        //            byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
 
-                if (singleContact.bsd_matsaucmnd_base64 != null)
-                {
-                    byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
+        //            using (var response = client.PostAsync
+        //            (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + frontImage_name + "',overwrite=true)")
+        //            , new StreamContent(new MemoryStream(arrByteFront))).Result)
+        //            {
+        //                if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt trước CMND thất bại", "OK"); }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')"));
+        //        }
 
-                    using (var response = client.PostAsync
-                    (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + behindImage_name + "',overwrite=true)")
-                    , new StreamContent(new MemoryStream(arrByteBehind))).Result)
-                    {
-                        if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt sau CMND thất bại", "OK"); }
-                    }
-                }
-                else
-                {
-                    await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')"));
-                }
-            }
-        }
+        //        if (singleContact.bsd_matsaucmnd_base64 != null)
+        //        {
+        //            byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
+
+        //            using (var response = client.PostAsync
+        //            (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + behindImage_name + "',overwrite=true)")
+        //            , new StreamContent(new MemoryStream(arrByteBehind))).Result)
+        //            {
+        //                if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt sau CMND thất bại", "OK"); }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')"));
+        //        }
+        //    }
+        //}
 
         public async Task<bool> CheckCMND(string identitycardnumber, string contactid)
         {
