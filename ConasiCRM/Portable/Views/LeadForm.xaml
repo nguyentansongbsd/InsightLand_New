@@ -72,13 +72,18 @@
                                 <controls:MainEntry x:Name="websiteurl_text" Text="{Binding singleLead.websiteurl}" Placeholder="Nhập website công ty" FontSize="15"/>
 
                                 <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="Địa chỉ công ty" FontSize="15" />
-                                <Grid>
-                                    <controls:MainEntry Text="{Binding AddressComposite}" Placeholder="Chọn địa chỉ công ty" FontSize="15"/>
-                                    <StackLayout>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <controls:MainEntry Grid.ColumnSpan="2"  Text="{Binding AddressComposite}" ShowClearButton="False" Placeholder="Chọn địa chỉ công ty" FontSize="15"/>
+                                    <StackLayout Grid.Column="0">
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Address_Tapped"/>
                                         </StackLayout.GestureRecognizers>
                                     </StackLayout>
+                                    <Label Grid.Column="1" Text="&#xf057;" IsVisible="{Binding IsShowbtnClearAddress}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#888888" VerticalOptions="Center" Padding="5">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ClearAddress_Tapped"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                 </Grid>
 
                                 <controls:FormLabel VerticalOptions="Center" Text="Mô tả" FontSize="15"/>
@@ -88,7 +93,7 @@
                                 <controls:LookUp x:Name="lookUpLinhVuc" Placeholder="Chọn lĩnh vực" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding IndustryCode}" ItemsSource="{Binding list_industrycode_optionset}"/>
 
                                 <controls:FormLabel VerticalOptions="Center" Text="Doanh thu mỗi năm" FontSize="15" />
-                                <controls:MainEntry Keyboard="Numeric" Text="{Binding singleLead.revenue}" Placeholder="Nhập doanh thu mỗi năm" FontSize="15"/>
+                                <controls:DecimalEntry x:Name="test" Price="{Binding singleLead.revenue}" Placeholder="Nhập doanh thu mỗi năm" />
 
                                 <controls:FormLabel VerticalOptions="Center" Text="Số lượng nhân viên" FontSize="15"/>
                                 <controls:MainEntry x:Name="numberofemployees_text" Text="{Binding singleLead.numberofemployees}" Placeholder="Nhập số lượng nhân viên" Keyboard="Numeric"  FontSize="16"/>

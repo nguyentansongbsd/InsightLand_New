@@ -1,13 +1,9 @@
-﻿using ConasiCRM.Portable.Controls;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Telerik.XamarinForms.Primitives;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -79,7 +75,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    await Shell.Current.DisplayAlert("", "Đã xảy ra lỗi. Vui lòng thử lại.", "OK");
+                    ToastMessageHelper.ShortMessage("Đã xảy ra lỗi. Vui lòng thử lại.");
                 }
             };
             
@@ -93,12 +89,12 @@ namespace ConasiCRM.Portable.Views
             {
                 await viewModel.LoadOneLead(Id.ToString());
                 LoadingHelper.Hide();
-                await Shell.Current.DisplayAlert("", "Thành công", "OK");
+                ToastMessageHelper.ShortMessage("Thành công");
             }
             else
             {
                 LoadingHelper.Hide();
-                await Shell.Current.DisplayAlert("", "Đã xảy ra lỗi. Vui lòng thử lại.", "OK");
+                ToastMessageHelper.ShortMessage("Đã xảy ra lỗi. Vui lòng thử lại.");
             }
             
         }
@@ -114,13 +110,13 @@ namespace ConasiCRM.Portable.Views
                     await Sms.ComposeAsync(sms);                   
                 }
                 else
-                {                   
-                    await Application.Current.MainPage.DisplayAlert("Thông Báo", "Số điện thoại sai định dạng. Vui lòng kiểm tra lại", "OK");
+                {
+                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
                 }
             }
             else
-            {                
-                await Application.Current.MainPage.DisplayAlert("Thông Báo", "Khách hàng không có số điện thoại. Vui lòng kiểm tra lại", "OK");
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
             }
         }
 
@@ -135,13 +131,13 @@ namespace ConasiCRM.Portable.Views
                     await Launcher.OpenAsync($"tel:{phone}");                   
                 }
                 else
-                {                    
-                    await Application.Current.MainPage.DisplayAlert("Thông Báo", "Số điện thoại sai định dạng. Vui lòng kiểm tra lại", "OK");
+                {
+                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
                 }
             }
             else
-            {               
-                await Application.Current.MainPage.DisplayAlert("Thông Báo", "Khách hàng không có số điện thoại. Vui lòng kiểm tra lại", "OK");
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
             }
         }
         // Tab Thong tin

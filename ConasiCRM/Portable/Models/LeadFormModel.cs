@@ -111,7 +111,7 @@ namespace ConasiCRM.Portable.Models
         //private decimal? _revenue;
         //public decimal? revenue { get { return _revenue; } set { _revenue = value; OnPropertyChanged(nameof(revenue)); } }
 
-        public string revenue { get; set; }
+        public decimal? revenue { get; set; }
         public string numberofemployees { get; set; }
 
         private string _sic;

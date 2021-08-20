@@ -31,8 +31,28 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _campaign;
         public OptionSet Campaign { get => _campaign; set { _campaign = value; OnPropertyChanged(nameof(Campaign)); } }
 
+        private bool _isShowbtnClearAddress;
+        public bool IsShowbtnClearAddress { get => _isShowbtnClearAddress; set { _isShowbtnClearAddress = value; OnPropertyChanged(nameof(IsShowbtnClearAddress)); } }
+
+        //IsShowbtnClearAddress
         private string _addressComposite;
-        public string AddressComposite { get => _addressComposite; set { _addressComposite = value; OnPropertyChanged(nameof(AddressComposite)); } }
+        public string AddressComposite
+        {
+            get => _addressComposite;
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(_addressComposite))
+                {
+                    IsShowbtnClearAddress = true;
+                }
+                else
+                {
+                    IsShowbtnClearAddress = false;
+                }
+                _addressComposite = value;
+                OnPropertyChanged(nameof(AddressComposite));
+            }
+        }
 
         private LookUp _addressCountry;
         public LookUp AddressCountry
@@ -66,17 +86,8 @@ namespace ConasiCRM.Portable.ViewModels
         private LookUp _addressCity;
         public LookUp AddressCity { get => _addressCity; set { _addressCity = value; OnPropertyChanged(nameof(AddressCity)); } }
 
-        private string _addressLine3;
-        public string AddressLine3 { get => _addressLine3; set { _addressLine3 = value; OnPropertyChanged(nameof(AddressLine3)); } }
-
-        private string _addressLine2;
-        public string AddressLine2 { get => _addressLine2; set { _addressLine2 = value; OnPropertyChanged(nameof(AddressLine2)); } }
-
         private string _addressLine1;
         public string AddressLine1 { get => _addressLine1; set { _addressLine1 = value; OnPropertyChanged(nameof(AddressLine1)); } }
-
-        private string _revenue;
-        public string Revenue { get => _revenue; set { _revenue = value; OnPropertyChanged(nameof(Revenue)); } }
 
         public ObservableCollection<LookUp> list_country_lookup { get; set; } = new ObservableCollection<LookUp>();
         public ObservableCollection<LookUp> list_province_lookup { get; set; } = new ObservableCollection<LookUp>();
@@ -198,14 +209,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["address1_country"] = singleLead.address1_country;
             data["description"] = singleLead.description;
             data["industrycode"] = singleLead.industrycode;
-            if (!string.IsNullOrWhiteSpace(singleLead.revenue))
-            {
-                data["revenue"] = decimal.Parse(singleLead.revenue);
-            }
-            else
-            {
-                data["revenue"] = null;
-            }
+            data["revenue"] = singleLead?.revenue;
             if (!string.IsNullOrWhiteSpace(singleLead.numberofemployees))
             {
                 data["numberofemployees"] = int.Parse(singleLead.numberofemployees);
@@ -214,7 +218,7 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["numberofemployees"] = null;
             }
-            
+
             data["sic"] = singleLead.sic;
             data["donotsendmm"] = singleLead.donotsendmm.ToString();
             data["lastusedincampaign"] = singleLead.lastusedincampaign.HasValue ? (DateTime.Parse(singleLead.lastusedincampaign.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;
@@ -461,7 +465,7 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_districts", fetch);
-            if (result == null || result.value.Count ==0)return;
+            if (result == null || result.value.Count == 0) return;
 
             foreach (var x in result.value)
             {
