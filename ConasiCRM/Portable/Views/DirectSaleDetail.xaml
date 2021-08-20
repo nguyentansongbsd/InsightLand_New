@@ -4,7 +4,7 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             Title="GIỎ HÀNG" x:Name="this"
+             Title="GIỎ HÀNG" x:Name="this" NavigationPage.BackButtonTitle="asdfasd"
              x:Class="ConasiCRM.Portable.Views.DirectSaleDetail">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -84,7 +84,6 @@
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter"/>
             <converter:NullToHideConverter x:Key="NullToHideConverter"/>
             <converter:UnitItemWidthConverter x:Key="UnitItemWidthConverter"/>
-            <converter:UnitsPaddingConverter x:Key="UnitsPaddingConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -153,10 +152,10 @@
                                             </telerikPrimitives:ExpanderHeader>
                                         </telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:RadExpander.Content >
-                                            <FlexLayout x:Name="flexContentUnits" BindableLayout.ItemsSource="{Binding Units}" Padding="10" Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
+                                            <FlexLayout x:Name="flexContentUnits" FlexLayout.AlignSelf="Start" BindableLayout.ItemsSource="{Binding Units}" Padding="8" Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Start" SizeChanged="ScreenChange_SizeChanged">
                                                 <BindableLayout.ItemTemplate>
                                                     <DataTemplate>
-                                                        <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest="{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
+                                                        <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
                                                             <telerikPrimitives:RadBorder.GestureRecognizers>
                                                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding}"/>
                                                             </telerikPrimitives:RadBorder.GestureRecognizers>
@@ -184,7 +183,7 @@
                 <ContentView.GestureRecognizers>
                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CloseUnintInfor_Tapped"/>
                 </ContentView.GestureRecognizers>
-                <telerikPrimitives:RadBorder VerticalOptions="Center" CornerRadius="10" BackgroundColor="White" Margin="15,30">
+                <telerikPrimitives:RadBorder VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="White" Margin="15,30">
                     <telerikPrimitives:RadBorder.GestureRecognizers>
                         <TapGestureRecognizer/>
                     </telerikPrimitives:RadBorder.GestureRecognizers>
@@ -286,8 +285,8 @@
                             </ScrollView>
                         </StackLayout>
                         <Grid x:Name="gridButton" Grid.Row="2" ColumnDefinitions="*,*" BackgroundColor="White" Padding="10,5">
-                            <Button x:Name="btnGiuCho" Text="Giữ chỗ" Clicked="GiuCho_Clicked" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" />
-                            <Button x:Name="btnBangTinhGia" Text="Bảng tính giá" Clicked="BangTinhGia_Clicked" IsVisible="{Binding IsShowBtnBangTinhGia}" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10"/>
+                            <!--<Button x:Name="btnGiuCho" Text="Giữ chỗ" Clicked="GiuCho_Clicked" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" />
+                            <Button x:Name="btnBangTinhGia" Text="Bảng tính giá" Clicked="BangTinhGia_Clicked" IsVisible="{Binding IsShowBtnBangTinhGia}" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10"/>-->
                         </Grid>
                     </Grid>
                 </telerikPrimitives:RadBorder>
