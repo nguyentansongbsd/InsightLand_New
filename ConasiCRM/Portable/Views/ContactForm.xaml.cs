@@ -59,7 +59,6 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Tạo Mới Khách Hàng Cá Nhân";
             btn_save_contact.Text = "Tạo Mới";
             btn_save_contact.Clicked += CreateContact_Clicked;
-            viewModel.singleContact = new ContactFormModel();
         }
 
         private void CreateContact_Clicked(object sender, EventArgs e)
@@ -90,18 +89,22 @@ namespace ConasiCRM.Portable.Views
 
             if (contactId != null)
             {
-                await viewModel.LoadOneContact(contactId);
-                await viewModel.GetImageCMND();
+                await viewModel.LoadOneContact(contactId);                
                 if (viewModel.singleContact.gendercode != null)
                 {
-                    viewModel.singleGender = new OptionSet();
-                    viewModel.singleGender.Label = ContactGender.GetGenderById(viewModel.singleContact.gendercode);
-                    viewModel.singleGender.Val = viewModel.singleContact.gendercode;
+                    viewModel.singleGender = new OptionSet
+                    {
+                        Label = ContactGender.GetGenderById(viewModel.singleContact.gendercode),
+                        Val = viewModel.singleContact.gendercode
+                    };
                 }
                 if (viewModel.singleContact.bsd_localization != null)
                 {
-                    viewModel.singleLocalization = new OptionSet();
-                    viewModel.LoadOneLocalization(viewModel.singleContact.bsd_localization);
+                    viewModel.singleLocalization = new OptionSet
+                    {
+                        Label = AccountLocalization.GetLocalizationById(viewModel.singleContact.bsd_localization),
+                        Val = viewModel.singleContact.bsd_localization
+                    };
                 }
                 if (viewModel.singleContact._parentcustomerid_value != null)
                 {
@@ -132,7 +135,12 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn giới tính");
                 return;
             }
-            if (viewModel.singleContact.birthdate != null && DateTime.Now.Year - DateTime.Parse(viewModel.singleContact.birthdate.ToString()).Year < 18)
+            if (viewModel.singleContact.birthdate == null)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn ngày sinh");
+                return;
+            }
+            if (DateTime.Now.Year - DateTime.Parse(viewModel.singleContact.birthdate.ToString()).Year < 18)
             {
                 ToastMessageHelper.ShortMessage("Khách hàng phải từ 18 tuổi");
                 return;
@@ -165,18 +173,17 @@ namespace ConasiCRM.Portable.Views
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber) && !await viewModel.CheckPassport(viewModel.singleContact.bsd_passport, id))
             {
-                ToastMessageHelper.ShortMessage("Passport đã được sử dụng");
+                ToastMessageHelper.ShortMessage("Số hộ chiếu đã được sử dụng");
                 return;
             }
 
-            viewModel.singleContact.bsd_localization = viewModel.singleLocalization == null ? null : viewModel.singleLocalization.Val;
-            viewModel.singleContact.gendercode = viewModel.singleGender.Val != null ? viewModel.singleGender.Val : null;
-            viewModel.singleContact._parentcustomerid_value = viewModel.Account == null ? null : viewModel.Account.Id.ToString();
+            viewModel.singleContact.bsd_localization = viewModel.singleLocalization != null && viewModel.singleLocalization.Val != null ? viewModel.singleLocalization.Val : null;
+            viewModel.singleContact.gendercode = viewModel.singleGender != null && viewModel.singleGender.Val != null ? viewModel.singleGender.Val : null;
+            viewModel.singleContact._parentcustomerid_value = viewModel.Account != null && viewModel.Account.Id != null ? viewModel.Account.Id.ToString() : null;
 
             if (id == null)
             {
-                LoadingHelper.Show();
-                await viewModel.uploadImageCMND();
+                LoadingHelper.Show();               
                 var created = await viewModel.createContact(viewModel.singleContact);
 
                 if (created != new Guid())
@@ -194,8 +201,7 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
-                LoadingHelper.Show();
-                await viewModel.uploadImageCMND();
+                LoadingHelper.Show();               
                 var updated = await viewModel.updateContact(viewModel.singleContact);
 
                 if (updated)
@@ -216,26 +222,41 @@ namespace ConasiCRM.Portable.Views
         {
             Lookup_GenderOptions.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 ContactGender.GetGenders();
                 foreach (var item in ContactGender.GenderOptions)
                 {
                     viewModel.GenderOptions.Add(item);
                 }
+                LoadingHelper.Hide();
             };
             Lookup_LocalizationOptions.PreOpenAsync = async () =>
             {
-                viewModel.loadLocalization();
-            }; lookUpContacAddressCountry.PreOpenAsync = async () =>
+                LoadingHelper.Show();
+                AccountLocalization.Localizations();
+                foreach (var item in AccountLocalization.LocalizationOptions)
+                {
+                    viewModel.LocalizationOptions.Add(item);
+                }
+                LoadingHelper.Hide();                
+            }; 
+            lookUpContacAddressCountry.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 await viewModel.LoadCountryForLookup();
+                LoadingHelper.Hide();
             };
             lookUpPermanentAddressCountry.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 await viewModel.LoadCountryForLookup();
+                LoadingHelper.Hide();
             };
             Lookup_Account.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 await viewModel.LoadAccountsLookup();
+                LoadingHelper.Hide();
             };
         }
 
@@ -320,11 +341,6 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
         }
 
-        private void ContacAddressDistrict_Changed(object sender, LookUpChangeEvent e)
-        {
-
-        }
-
         private async void CloseContacAddress_Clicked(object sender, EventArgs e)
         {
             await centerModalContacAddress.Hide();
@@ -348,16 +364,6 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.singleContact.bsd_housenumberstreet = null;
             }
-
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                viewModel.singleContact.bsd_postalcode = viewModel.AddressPostalCodeContac;
-            }
-            else
-            {
-                viewModel.singleContact.bsd_postalcode = null;
-            }
-
             if (viewModel.AddressCityContac != null)
             {
                 viewModel.singleContact.bsd_district_label = viewModel.AddressCityContac.Name;
@@ -379,6 +385,15 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.singleContact.bsd_province_label = null;
                 viewModel.singleContact._bsd_province_value = null;
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
+            {
+                viewModel.singleContact.bsd_postalcode = viewModel.AddressPostalCodeContac;
+                address.Add(viewModel.AddressPostalCodeContac);
+            }
+            else
+            {
+                viewModel.singleContact.bsd_postalcode = null;
             }
             if (viewModel.AddressCountryContac != null)
             {
@@ -403,12 +418,7 @@ namespace ConasiCRM.Portable.Views
         private async void PermanentAddressProvince_Changed(object sender, LookUpChangeEvent e)
         {
             await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvincePermanent);
-        }
-
-        private void PermanentAddressDistrict_Changed(object sender, LookUpChangeEvent e)
-        {
-
-        }
+        }       
 
         private async void ClosePermanentAddress_Clicked(object sender, EventArgs e)
         {
@@ -599,7 +609,6 @@ namespace ConasiCRM.Portable.Views
 
         void BtnCloseModalImage_Clicked(object sender, System.EventArgs e)
         {
-
             NavigationPage.SetHasNavigationBar(this, true);
             popup_detailCMNDImage.IsVisible = false;
         }

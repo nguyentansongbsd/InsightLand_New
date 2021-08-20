@@ -8,7 +8,9 @@ namespace ConasiCRM.Portable.Models
     public class OptionSet : BaseViewModel
     {
         public string Val { get; set; }
-        public string Label { get; set; }
+
+        public string _label;
+        public string Label { get => _label; set { _label = value; OnPropertyChanged(nameof(Label)); } }
 
         private bool _selected;
         public bool Selected { get=>_selected; set { _selected = value;OnPropertyChanged(nameof(Selected)); } }
