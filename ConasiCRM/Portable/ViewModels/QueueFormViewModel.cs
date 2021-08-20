@@ -121,70 +121,7 @@ namespace ConasiCRM.Portable.ViewModels
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
         }
 
-        public async Task<bool> SetQueueTime(Guid UnitId)
-        {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='opportunity'>
-                                <attribute name='name' />
-                                <attribute name='customerid' />
-                                <attribute name='estimatedvalue' />
-                                <attribute name='statuscode' />
-                                <attribute name='createdon' />
-                                <attribute name='bsd_queuenumber' />
-                                <attribute name='bsd_project' />
-                                <attribute name='opportunityid' />
-                                <attribute name='bsd_queuingexpired' />
-                                <attribute name='bsd_bookingtime' />
-                                <order attribute='createdon' descending='true' />      
-                                <link-entity name='contact' from='contactid' to='parentcontactid' visible='false' link-type='outer' alias='a_7eff24578704e911a98b000d3aa2e890'>
-                                      <attribute name='contactid' alias='contact_id' />
-                                      <attribute name='bsd_fullname' alias='contact_name' />
-                                </link-entity>
-                                <link-entity name='account' from='accountid' to='parentaccountid' visible='false' link-type='outer' alias='a_77ff24578704e911a98b000d3aa2e890'>
-                                      <attribute name='accountid' alias='account_id' />
-                                      <attribute name='bsd_name' alias='account_name' />
-                                </link-entity>
-                                <filter type='and'>
-                                  <condition attribute='bsd_units' operator='eq' uitype='product' value='{" + UnitId.ToString() + @"}' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-            if (result == null)
-                return false;
-            var data = result.value;
-            if (data == null)
-                return false;                    
-
-            if (data.SingleOrDefault(x => x.account_id == Customer.Id) != null || data.SingleOrDefault(x => x.contact_id == Customer.Id) != null)
-            {
-                return false;
-            }          
-
-            if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
-            {
-                QueueFormModel.bsd_bookingtime = DateTime.Now;
-                QueueFormModel.statuscode = 100000000;
-            }
-            else
-            {
-                var queue = (QueueFormModel)data.OrderBy(x => x.bsd_queuingexpired).LastOrDefault();
-                QueueFormModel.bsd_bookingtime = queue.bsd_queuingexpired;
-                QueueFormModel.statuscode = 100000002;
-            }
-
-            if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
-            {
-                QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);                
-            }
-            else
-            {
-                QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);              
-            }
-            return true;
-        }
-
-        public async Task<bool> SetQueueTimeProject(Guid ProjectID)
+        public async Task<bool> SetQueueTime(bool from)
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
@@ -208,20 +145,41 @@ namespace ConasiCRM.Portable.ViewModels
                                       <attribute name='bsd_name' alias='account_name' />
                                 </link-entity>
                                 <filter type='and'>
-                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{" + ProjectID.ToString() + @"}' />
+                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{" + QueueFormModel.bsd_project_id + @"}' />
                                 </filter>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-            if (result == null)
+            if (result == null || result.value == null)
                 return false;
             var data = result.value;
-            if (data == null)
-                return false;
 
-            if (data.SingleOrDefault(x => x.account_id == Customer.Id) != null || data.SingleOrDefault(x => x.contact_id == Customer.Id) != null)
+            if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
             {
                 return false;
+            }
+            if (from)
+            {
+                if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
+                {
+                    QueueFormModel.bsd_bookingtime = DateTime.Now;
+                    QueueFormModel.statuscode = 100000000;
+                }
+                else
+                {
+                    var queue = (QueueFormModel)data.OrderBy(x => x.bsd_queuingexpired).LastOrDefault();
+                    QueueFormModel.bsd_bookingtime = queue.bsd_queuingexpired;
+                    QueueFormModel.statuscode = 100000002;
+                }
+
+                if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
+                {
+                    QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
+                }
+                else
+                {
+                    QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
+                }
             }
             return true;
         }
@@ -232,22 +190,6 @@ namespace ConasiCRM.Portable.ViewModels
             QueueFormModel.opportunityid = Guid.NewGuid();
             var content = await this.getContent();
             CrmApiResponse result = await CrmHelper.PostData(path, content);
-            if (result.IsSuccess)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-
-        public async Task<Boolean> updateQueue()
-        {
-            string path = "/opportunities(" + QueueFormModel.opportunityid + ")";
-            var content = await this.getContent();
-            CrmApiResponse result = await CrmHelper.PatchData(path, content);
             if (result.IsSuccess)
             {
                 return true;
@@ -312,7 +254,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='accountid' alias='Id' />
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_businesstypesys' operator='eq' value='100000002' />                                 
+                                       <condition attribute='bsd_businesstypesys' operator='contain-values'>
+                                         <value>100000002</value>
+                                       </condition>                                
                                       <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
                                   </entity>
@@ -393,6 +337,10 @@ namespace ConasiCRM.Portable.ViewModels
             if (UserLogged.Id != null)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
             if (QueueFormModel.statuscode != 0)
             {

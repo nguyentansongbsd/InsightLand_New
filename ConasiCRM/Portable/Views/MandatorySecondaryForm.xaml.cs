@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,9 @@ namespace ConasiCRM.Portable.Views
         {
             Lookup_Account.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 await viewModel.LoadContactsLookup();
+                LoadingHelper.Hide();
             };
         }
 
@@ -40,22 +43,22 @@ namespace ConasiCRM.Portable.Views
         {
             if(string.IsNullOrWhiteSpace(viewModel.mandatorySecondary.bsd_name))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập topic", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập topic");
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.mandatorySecondary.bsd_descriptionsvn))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập mô tả (VN)", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả (VN)");
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.mandatorySecondary.bsd_descriptionsen))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập mô tả (EN)", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả (EN)");
                 return;
             }
             if(viewModel.Contact.Id==null)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng chọn người ủy quyền", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn người ủy quyền");
                 return;
             }
             LoadingHelper.Show();
@@ -63,35 +66,36 @@ namespace ConasiCRM.Portable.Views
             if(await viewModel.Save())
             {
                 LoadingHelper.Hide();
+                if (AccountDetailPage.NeedToRefreshMandatory.HasValue) AccountDetailPage.NeedToRefreshMandatory = true;
                 await Navigation.PopAsync();
-                await DisplayAlert("Thông Báo", "Đã tạo người uỷ quyền thành công", "OK");
+                ToastMessageHelper.ShortMessage("Đã tạo người uỷ quyền thành công");
             }
             else
             {
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông Báo", "Tạo người uỷ quyền thất bại", "OK");
+                ToastMessageHelper.ShortMessage("Tạo người uỷ quyền thất bại");
             }
         }
 
-        private async void Effectivedateto_DateSelected(object sender, DateChangedEventArgs e)
+        private void Effectivedateto_DateSelected(object sender, DateChangedEventArgs e)
         {
             if (viewModel.mandatorySecondary.bsd_effectivedatefrom == null)
                 viewModel.mandatorySecondary.bsd_effectivedatefrom = DateTime.Now;
             if (this.compareDateTime(viewModel.mandatorySecondary.bsd_effectivedatefrom, viewModel.mandatorySecondary.bsd_effectivedateto) == -1)
             {
                 viewModel.mandatorySecondary.bsd_effectivedateto = viewModel.mandatorySecondary.bsd_effectivedatefrom;
-                await DisplayAlert("Thông Báo", "Ngày hết hiệu lực phải lớn hơn ngày bắt đầu", "Đóng");
+                ToastMessageHelper.ShortMessage("Ngày hết hiệu lực phải lớn hơn ngày bắt đầu");
             }
         }
 
-        private async void Effectivedatefrom_DateSelected(object sender, DateChangedEventArgs e)
+        private void Effectivedatefrom_DateSelected(object sender, DateChangedEventArgs e)
         {
             if (viewModel.mandatorySecondary.bsd_effectivedateto == null)
                 viewModel.mandatorySecondary.bsd_effectivedateto = DateTime.Now;
             if (this.compareDateTime(viewModel.mandatorySecondary.bsd_effectivedatefrom,viewModel.mandatorySecondary.bsd_effectivedateto) == -1)
             {
                 viewModel.mandatorySecondary.bsd_effectivedatefrom = viewModel.mandatorySecondary.bsd_effectivedateto;
-                await DisplayAlert("Thông Báo", "Ngày hết hiệu lực phải lớn hơn ngày bắt đầu", "Đóng");
+                ToastMessageHelper.ShortMessage("Ngày hết hiệu lực phải lớn hơn ngày bắt đầu");
             }    
         }
 

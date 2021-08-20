@@ -19,6 +19,7 @@ namespace ConasiCRM.Portable.Views
     public partial class ContactDetailPage : ContentPage
     {
         public Action<bool> OnCompleted;
+        public static bool? NeedToRefresh = null;
         private ContactDetailPageViewModel viewModel;
         private Guid Id;
         public ContactDetailPage(Guid contactId)
@@ -26,6 +27,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.BindingContext = viewModel = new ContactDetailPageViewModel();
             LoadingHelper.Show();
+            NeedToRefresh = false;
             Tab_Tapped(1);
             Id = contactId;
             Init();
@@ -41,11 +43,17 @@ namespace ConasiCRM.Portable.Views
         }
         protected override async void OnAppearing()
         {
-            viewModel.singleContact = new ContactFormModel();
-            await LoadDataThongTin(this.Id.ToString());
-            viewModel.PhongThuy = null;
-            LoadDataPhongThuy();
             base.OnAppearing();
+            if (NeedToRefresh == true)
+            {
+                LoadingHelper.Show();
+                viewModel.singleContact = new ContactFormModel();
+                await LoadDataThongTin(this.Id.ToString());
+                viewModel.PhongThuy = null;
+                LoadDataPhongThuy();
+                NeedToRefresh = false;
+                LoadingHelper.Hide();
+            }
         }
 
         // tab thong tin
@@ -230,7 +238,6 @@ namespace ConasiCRM.Portable.Views
         private async void ThongTin_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(1);
-            await LoadDataThongTin(Id.ToString());
         }
 
         private async void GiaoDich_Tapped(object sender, EventArgs e)

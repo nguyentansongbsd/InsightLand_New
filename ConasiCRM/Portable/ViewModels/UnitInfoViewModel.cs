@@ -14,7 +14,8 @@ namespace ConasiCRM.Portable.ViewModels
     {
         public Guid UnitId { get; set; }
 
-        public ObservableCollection<QueueListModel> list_danhsachdatcho { get; set; } = new ObservableCollection<QueueListModel>();
+        public ObservableCollection<QueueListModel> _list_danhsachdatcho;
+        public ObservableCollection<QueueListModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
         public ObservableCollection<QuotationReseravtion> list_danhsachdatcoc { get; set; } = new ObservableCollection<QuotationReseravtion>();
         public ObservableCollection<OptionEntry> list_danhsachhopdong { get; set; } = new ObservableCollection<OptionEntry>();
 
@@ -52,7 +53,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public UnitInfoViewModel()
         {
-
+            list_danhsachdatcho = new ObservableCollection<QueueListModel>();
         }
 
         public async Task LoadUnit()

@@ -67,7 +67,7 @@
                 </StackLayout>
             </ScrollView>
             <Grid Padding="20,10" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" VerticalOptions="EndAndExpand" BackgroundColor="White">
-                <Button Text="Lưu" Clicked="AddMandatorySecondary_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="1" CornerRadius="10"/>
+                <Button Text="Lưu" Clicked="AddMandatorySecondary_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="0" CornerRadius="10"/>
             </Grid>
             <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>

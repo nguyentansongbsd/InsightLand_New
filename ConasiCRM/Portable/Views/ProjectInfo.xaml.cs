@@ -17,12 +17,14 @@ namespace ConasiCRM.Portable.Views
     public partial class ProjectInfo : ContentPage
     {
         public Action<bool> OnCompleted;
+        public static bool? NeedToRefreshQueue = null;
         public ProjectInfoViewModel viewModel;
         
         public ProjectInfo(Guid Id)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ProjectInfoViewModel();
+            NeedToRefreshQueue = false;
             viewModel.ProjectId = Id;
             Init();
         }
@@ -59,7 +61,21 @@ namespace ConasiCRM.Portable.Views
                 OnCompleted?.Invoke(false);
             }
         }
-        
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if(NeedToRefreshQueue == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageListGiuCho = 1;
+                viewModel.ListGiuCho.Clear();
+                await viewModel.LoadGiuCho();
+                NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }    
+        }
+
         private async void ThongKe_Tapped(object sender, EventArgs e)
         {
             VisualStateManager.GoToState(radborderThongKe, "Active");
@@ -101,8 +117,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.IsLoadedGiuCho == false)
             {
                 await viewModel.LoadGiuCho();
-            }
-            
+            }            
             LoadingHelper.Hide();
         }
 

@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -22,13 +23,6 @@ namespace ConasiCRM.Portable.Views
             from = fromDirectSale;
             Init();
             Create();
-        }
-
-        public QueueForm(Guid _queueId) // update
-        {
-            InitializeComponent();           
-            QueueId = _queueId;          
-            Init();
         }
 
         public void Init()
@@ -69,48 +63,48 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.QueueFormModel.name))
             {
-                await DisplayAlert("Thông Báo", "Vui lòng nhập tiêu đề của giữ chỗ", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề của giữ chỗ");
                 return;
             }
             if (viewModel.Customer == null || viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng chọn khách hàng tiềm năng", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng tiềm năng");
                 return;
             }
             if (viewModel.DailyOption == null || viewModel.DailyOption.Id == null || viewModel.DailyOption.Id == Guid.Empty)
             {
-                await DisplayAlert("Thông Báo", "Vui lòng chọn đại lý", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn đại lý");
                 return;
             }
-            if (from)
+            if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
             {
-               if (!await viewModel.SetQueueTime(this.UnitId))
+                if (!await viewModel.SetQueueTime(from))
                 {
-                    await DisplayAlert("Thông Báo", "Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này", "Đóng");
+                    ToastMessageHelper.ShortMessage("Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này");
                     return;
                 }
             }
             else
             {
-                if (!await viewModel.SetQueueTimeProject(this.UnitId))
-                {
-                    await DisplayAlert("Thông Báo", "Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này", "Đóng");
-                    return;
-                }
-            }
+                ToastMessageHelper.ShortMessage("Không tìm thấy dự án");
+                return;
+            } 
 
             LoadingHelper.Show();
             var created = await viewModel.createQueue();
             if (created)
             {
-                await Navigation.PopAsync(); 
+                if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
+                if (DirectSaleDetail.NeedToRefreshQueue.HasValue) DirectSaleDetail.NeedToRefreshQueue = true;
+                if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
+                await Navigation.PopAsync();               
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông báo", "Tạo giữ chỗ thành công!", "OK");
+                ToastMessageHelper.ShortMessage("Tạo giữ chỗ thành công");
             }
             else
             {
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông báo", "Tạo giữ chỗ thất bại", "OK");
+                ToastMessageHelper.ShortMessage("Tạo giữ chỗ thất bại");
             }
         }
 
@@ -118,8 +112,8 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             Tab_Tapped(1);           
-            LoadingHelper.Hide();
             await centerModalKHTN.Show();
+            LoadingHelper.Hide();
         }
 
         private void Contact_Tapped(object sender, EventArgs e)
@@ -169,15 +163,21 @@ namespace ConasiCRM.Portable.Views
         {
             lookUpDaiLy.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 await viewModel.LoadSalesAgent();
+                LoadingHelper.Hide();
             };
             if (viewModel.AccountsLookUp.Count <= 0)
             {
+                LoadingHelper.Show();
                 await viewModel.LoadAccountsLookUp();
+                LoadingHelper.Hide();
             }
             if (viewModel.ContactsLookUp.Count <= 0)
             {
+                LoadingHelper.Show();
                 await viewModel.LoadContactsLookUp();
+                LoadingHelper.Hide();
             }
             LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
             LookUpContact.SetList(viewModel.ContactsLookUp, "Name");

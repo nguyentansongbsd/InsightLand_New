@@ -36,7 +36,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             if (selected == "Chi tiết")
             {
-                await Application.Current.MainPage.Navigation.PushAsync(new QueueForm(val.opportunityid));
+              //  await Application.Current.MainPage.Navigation.PushAsync(new QueueForm(val.opportunityid));
                 this.Owner.CommandService.ExecuteDefaultCommand(DataGridCommandId.CellTap, parameter);
             }                     
         }

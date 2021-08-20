@@ -35,7 +35,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         public ObservableCollection<Floor> Floors { get; set; } = new ObservableCollection<Floor>();
 
-        public ObservableCollection<QueueListModel> QueueList { get; set; } = new ObservableCollection<QueueListModel>();
+        private ObservableCollection<QueueListModel> _queueList;
+        public ObservableCollection<QueueListModel> QueueList { get => _queueList; set { _queueList = value; OnPropertyChanged(nameof(QueueList)); } }
 
         public string fetchXml { get; set; }
 
@@ -99,6 +100,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.maxNetArea = model.maxNetArea;
             this.minPrice = model.minPrice;
             this.maxPrice = model.maxPrice;
+            QueueList = new ObservableCollection<QueueListModel>();
         }
 
         public async Task LoadUnit()

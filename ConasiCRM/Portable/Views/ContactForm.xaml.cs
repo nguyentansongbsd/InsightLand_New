@@ -207,6 +207,7 @@ namespace ConasiCRM.Portable.Views
                 if (updated)
                 {
                     LoadingHelper.Hide();
+                    if (ContactDetailPage.NeedToRefresh.HasValue) ContactDetailPage.NeedToRefresh = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
                 }

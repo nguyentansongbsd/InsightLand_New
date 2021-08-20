@@ -16,6 +16,7 @@ namespace ConasiCRM.Portable.Views
     public partial class DirectSaleDetail : ContentPage
     {
         public Action<int> OnComplete;
+        public static bool? NeedToRefreshQueue = null;
         private DirectSaleDetailViewModel viewModel;
         public Unit CurrentUnit;
         private int currentBlock = 0;
@@ -32,6 +33,7 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             BindingContext = viewModel = new DirectSaleDetailViewModel(model);
+            NeedToRefreshQueue = false;
             Init();
         }
 
@@ -108,6 +110,20 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if(NeedToRefreshQueue == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.QueueList.Clear();
+                await viewModel.LoadQueues();
+                NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }
+        }
+
         private void Question_CLicked(object sender,EventArgs e)
         {
             stackQuestion.IsVisible = !stackQuestion.IsVisible;
@@ -168,8 +184,6 @@ namespace ConasiCRM.Portable.Views
             var item = ((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as Unit;
 
             gridButton.Children.Clear();
-            
-            
 
             viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(item.statuscode.ToString());
             if (!string.IsNullOrWhiteSpace(item.bsd_direction))
