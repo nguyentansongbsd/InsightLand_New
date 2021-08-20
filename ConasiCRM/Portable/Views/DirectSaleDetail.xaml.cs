@@ -39,8 +39,12 @@ namespace ConasiCRM.Portable.Views
             base.OnAppearing();
             if (NeedToRefreshQueues == true)
             {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.QueueList.Clear();
                 await viewModel.LoadQueues();
                 NeedToRefreshQueues = false;
+                LoadingHelper.Hide();
             }
         }
 
@@ -89,20 +93,6 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 OnComplete?.Invoke(2); // loi khong co unit
-            }
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if(NeedToRefreshQueue == true)
-            {
-                LoadingHelper.Show();
-                viewModel.PageDanhSachDatCho = 1;
-                viewModel.QueueList.Clear();
-                await viewModel.LoadQueues();
-                NeedToRefreshQueue = false;
-                LoadingHelper.Hide();
             }
         }
 
