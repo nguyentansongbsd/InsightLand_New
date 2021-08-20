@@ -73,9 +73,6 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                         <condition attribute='contactid' operator='eq' value='" + id + @"' />
                                     </filter>
-                                    <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
                                 </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContactFormModel>>("contacts", fetch);

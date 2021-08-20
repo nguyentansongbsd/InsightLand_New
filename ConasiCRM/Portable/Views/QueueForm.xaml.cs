@@ -103,6 +103,7 @@ namespace ConasiCRM.Portable.Views
             var created = await viewModel.createQueue();
             if (created)
             {
+                if (DirectSaleDetail.NeedToRefreshQueues.HasValue) DirectSaleDetail.NeedToRefreshQueues = true;
                 await Navigation.PopAsync(); 
                 LoadingHelper.Hide();
                 await DisplayAlert("Thông báo", "Tạo giữ chỗ thành công!", "OK");
