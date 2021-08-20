@@ -1,32 +1,15 @@
 ﻿using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
-using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.Forms;
-
 using ConasiCRM.Portable.Helper;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Collections;
-using ConasiCRM.Portable.Config;
-using System.Net.Http.Headers;
-using System.Net;
-
-using System.Diagnostics;
-using Telerik.XamarinForms.Primitives;
-using Xamarin.Forms.Xaml;
 using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class AccountFormViewModel : FormLookupViewModel
+    public class AccountFormViewModel : BaseViewModel
     {
         private AccountFormModel _singleAccount;
         public AccountFormModel singleAccount { get => _singleAccount; set { _singleAccount = value; OnPropertyChanged(nameof(singleAccount)); } }
@@ -213,7 +196,6 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
-
         }
 
         public async Task<Boolean> updateAccount( )

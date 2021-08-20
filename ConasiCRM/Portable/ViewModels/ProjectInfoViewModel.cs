@@ -46,7 +46,7 @@ namespace ConasiCRM.Portable.ViewModels
         public int NumUnit { get => _numUnit; set { _numUnit = value; OnPropertyChanged(nameof(NumUnit)); } }
 
         private int _soGiuCho = 0;
-        public int SoGiuCho { get=> _soGiuCho; set { _soGiuCho = value; OnPropertyChanged(nameof(SoGiuCho)); } }
+        public int SoGiuCho { get => _soGiuCho; set { _soGiuCho = value; OnPropertyChanged(nameof(SoGiuCho)); } }
 
         private int _soDatCoc = 0;
         public int SoDatCoc { get => _soDatCoc; set { _soDatCoc = value; OnPropertyChanged(nameof(SoDatCoc)); } }
@@ -58,7 +58,7 @@ namespace ConasiCRM.Portable.ViewModels
         public int SoBangTinhGia { get => _soBangTinhGia; set { _soBangTinhGia = value; OnPropertyChanged(nameof(SoBangTinhGia)); } }
 
         private bool _showMoreBtnGiuCho;
-        public bool ShowMoreBtnGiuCho { get=>_showMoreBtnGiuCho; set { _showMoreBtnGiuCho = value;OnPropertyChanged(nameof(ShowMoreBtnGiuCho)); } }
+        public bool ShowMoreBtnGiuCho { get => _showMoreBtnGiuCho; set { _showMoreBtnGiuCho = value; OnPropertyChanged(nameof(ShowMoreBtnGiuCho)); } }
 
         public int ChuanBi { get; set; } = 0;
         public int SanSang { get; set; } = 0;
@@ -71,7 +71,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public bool IsHasEvent { get; set; }
         public bool IsLoadedGiuCho { get; set; }
-        
+
         public int PageListGiuCho = 1;
 
         public ProjectInfoViewModel()
@@ -199,7 +199,6 @@ namespace ConasiCRM.Portable.ViewModels
                             break;
                         case 100000004:
                             GiuCho++;
-                            SoGiuCho++;
                             break;
                         case 100000006:
                             DatCoc++;
@@ -219,7 +218,7 @@ namespace ConasiCRM.Portable.ViewModels
                             break;
                         default:
                             break;
-                            
+
                     }
                 }
             }
@@ -239,6 +238,27 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 UnitChart.Add(item);
             }
+        }
+
+        public async Task LoadThongKeGiuCho()
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='opportunity'>
+                                    <attribute name='name' />
+                                    <order attribute='createdon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{" + ProjectId + @"}' />
+                                      <condition attribute='statuscode' operator='in'>
+                                        <value>100000000</value>
+                                        <value>100000002</value>
+                                      </condition>
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            SoGiuCho = result.value.Count();
         }
 
         public async Task LoadThongKeHopDong()

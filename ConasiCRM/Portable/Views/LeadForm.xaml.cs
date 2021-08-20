@@ -25,7 +25,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.Title = "TẠO MỚI KHÁCH HÀNG";
             Init();
-            
+
         }
         public LeadForm(Guid Id)
         {
@@ -82,7 +82,8 @@ namespace ConasiCRM.Portable.Views
 
         public void SetPreOpen()
         {
-            lookUpCurrency.PreOpenAsync = async () => {
+            lookUpCurrency.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 await viewModel.LoadCurrenciesForLookup();
                 if (viewModel.list_currency_lookup.Count == 0)
@@ -92,13 +93,15 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             };
 
-            lookUpLinhVuc.PreOpenAsync = async () => {
+            lookUpLinhVuc.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 viewModel.loadIndustrycode();
                 LoadingHelper.Hide();
             };
 
-            lookUpChienDich.PreOpenAsync = async () => {
+            lookUpChienDich.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 await viewModel.LoadCampainsForLookup();
                 if (viewModel.list_campaign_lookup.Count == 0)
@@ -119,7 +122,8 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             };
 
-            lookUpProvince.PreOpenAsync = async () => {
+            lookUpProvince.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 await viewModel.loadProvincesForLookup();
                 if (viewModel.list_province_lookup.Count == 0)
@@ -129,7 +133,8 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             };
 
-            lookUpDistrict.PreOpenAsync= async () => {
+            lookUpDistrict.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 await viewModel.loadDistrictForLookup();
                 if (viewModel.list_district_lookup.Count == 0)
@@ -226,9 +231,8 @@ namespace ConasiCRM.Portable.Views
 
         private async void District_Changed(object sender, EventArgs e)
         {
-            
-        }
 
+        }
 
         private async void ConfirmAddress_Clicked(object sender, EventArgs e)
         {
@@ -241,52 +245,48 @@ namespace ConasiCRM.Portable.Views
             List<string> address = new List<string>();
             if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1))
             {
-                viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
                 address.Add(viewModel.AddressLine1);
             }
-            else
-            {
-                viewModel.singleLead.address1_line1 = null;
-            }
-            
+
             if (viewModel.AddressCity != null)
             {
-                viewModel.singleLead.address1_city = viewModel.AddressCity.Name;
                 address.Add(viewModel.AddressCity.Name);
             }
-            else
-            {
-                viewModel.singleLead.address1_city = null;
-            }
+
             if (viewModel.AddressStateProvince != null)
             {
-                viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince.Name;
                 address.Add(viewModel.AddressStateProvince.Name);
             }
-            else
-            {
-                viewModel.singleLead.address1_stateorprovince = null;
-            }
+            
             if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCode))
             {
-                viewModel.singleLead.address1_postalcode = viewModel.AddressPostalCode;
                 address.Add(viewModel.AddressPostalCode);
             }
-            else
-            {
-                viewModel.singleLead.address1_postalcode = null;
-            }
+            
             if (viewModel.AddressCountry != null)
             {
-                viewModel.singleLead.address1_country = viewModel.AddressCountry.Name;
                 address.Add(viewModel.AddressCountry.Name);
             }
-            else
-            {
-                viewModel.singleLead.address1_country = null;
-            }
-            viewModel.singleLead.address1_composite = viewModel.AddressComposite = string.Join(",", address);
+            
+            viewModel.AddressComposite = string.Join(",", address);
             await centerModalAddress.Hide();
+        }
+
+        private void ClearAddress_Tapped(object sender, EventArgs e)
+        {
+            viewModel.AddressComposite = null;
+            viewModel.AddressLine1 = null;
+            viewModel.AddressCity = null;
+            viewModel.AddressPostalCode = null;
+            viewModel.AddressStateProvince = null;
+            viewModel.AddressCountry = null;
+
+            viewModel.singleLead.address1_line1 = null;
+            viewModel.singleLead.address1_city = null;
+            viewModel.singleLead.address1_postalcode = null;
+            viewModel.singleLead.address1_stateorprovince = null;
+            viewModel.singleLead.address1_country = null;
+            viewModel.singleLead.address1_composite = null;
         }
 
         private async void SaveLead_Clicked(object sender, EventArgs e)
@@ -297,7 +297,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(viewModel.singleLead.fullname))
+            if (string.IsNullOrWhiteSpace(viewModel.singleLead.lastname))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
                 return;
@@ -308,8 +308,16 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");
                 return;
             }
-
             LoadingHelper.Show();
+
+            viewModel.singleLead.address1_city = viewModel.AddressCity != null ? viewModel.AddressCity.Name : null;
+            viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ?viewModel.AddressStateProvince.Name : null;
+            viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
+
+            viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
+            viewModel.singleLead.address1_postalcode = viewModel.AddressPostalCode;
+            viewModel.singleLead.address1_composite = viewModel.AddressComposite;
+
             viewModel.singleLead.industrycode = viewModel.IndustryCode != null ? viewModel.IndustryCode.Val : null;
             viewModel.singleLead._transactioncurrencyid_value = viewModel.SelectedCurrency != null ? viewModel.SelectedCurrency.Val : null;
             viewModel.singleLead._campaignid_value = viewModel.Campaign != null ? viewModel.Campaign.Val : null;
@@ -335,9 +343,11 @@ namespace ConasiCRM.Portable.Views
                 bool IsSuccess = await viewModel.updateLead();
                 if (IsSuccess)
                 {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Thành công");
+                    if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
+                    if (LeadDetailPage.NeedToRefreshLeadDetail.HasValue) LeadDetailPage.NeedToRefreshLeadDetail = true;
                     await Navigation.PopAsync();
+                    ToastMessageHelper.ShortMessage("Thành công");
+                    LoadingHelper.Hide();
                 }
                 else
                 {

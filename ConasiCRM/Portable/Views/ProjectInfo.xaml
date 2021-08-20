@@ -129,7 +129,7 @@
                                         <Label Text="Giữ chỗ" FontSize="15" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                     </StackLayout>
                                     <StackLayout Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" Spacing="10">
-                                        <Label Text="&#xf02d;" TextColor="#808080" FontFamily="FontAwesomeSolid" FontSize="18" HorizontalTextAlignment="Center"/>
+                                        <Label Text="&#xf570;" TextColor="#808080" FontFamily="FontAwesomeSolid" FontSize="18" HorizontalTextAlignment="Center"/>
                                         <Label Text="{Binding SoBangTinhGia}" FontSize="18" FontAttributes="Bold" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                         <Label Text="Bảng tính giá" FontSize="15" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                     </StackLayout>
@@ -159,12 +159,12 @@
                                         </StackLayout>
                                     </Grid>
                                     <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center" Spacing="10">
-                                        <Label Text="&#xf02d;" TextColor="#808080" FontFamily="FontAwesomeSolid" FontSize="18" HorizontalTextAlignment="Center"/>
+                                        <Label Text="&#xf573;" TextColor="#808080" FontFamily="FontAwesomeSolid" FontSize="18" HorizontalTextAlignment="Center"/>
                                         <Label Text="{Binding SoHopDong}" FontSize="18" FontAttributes="Bold" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                         <Label Text="Hợp đồng" FontSize="15" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                     </StackLayout>
                                     <StackLayout Grid.Row="1" Grid.Column="2" HorizontalOptions="Center" Spacing="10">
-                                        <Label Text="&#xf02d;" TextColor="#808080" FontFamily="FontAwesomeSolid" FontSize="18" HorizontalTextAlignment="Center"/>
+                                        <Label Text="&#xf46d;" TextColor="#808080" FontFamily="FontAwesomeSolid" FontSize="18" HorizontalTextAlignment="Center"/>
                                         <Label Text="{Binding SoDatCoc}" FontSize="18" FontAttributes="Bold" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                         <Label Text="Đặt cọc" FontSize="15" TextColor="#808080" HorizontalTextAlignment="Center"/>
                                     </StackLayout>
