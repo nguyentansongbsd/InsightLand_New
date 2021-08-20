@@ -159,9 +159,9 @@ namespace ConasiCRM.Portable.ViewModels
             if (data.SingleOrDefault(x => x.account_id == Customer.Id) != null || data.SingleOrDefault(x => x.contact_id == Customer.Id) != null)
             {
                 return false;
-            }
+            }          
 
-            if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000) == null)
+            if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
             {
                 QueueFormModel.bsd_bookingtime = DateTime.Now;
                 QueueFormModel.statuscode = 100000000;
