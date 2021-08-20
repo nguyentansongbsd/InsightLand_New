@@ -19,14 +19,12 @@ namespace ConasiCRM.Portable.ViewModels
         private ContactFormModel _singleContact;
         public ContactFormModel singleContact { get { return _singleContact; } set { _singleContact = value; OnPropertyChanged(nameof(singleContact)); } }
 
-        private OptionSet _singleGender;
-        public OptionSet singleGender { get => _singleGender; set { _singleGender = value; OnPropertyChanged(nameof(singleGender)); } }
-        public ObservableCollection<OptionSet> list_gender_optionset { get; set; }
-        private string _singleContactgroup;
-        public string SingleContactgroup { get => _singleContactgroup; set { _singleContactgroup = value; OnPropertyChanged(nameof(SingleContactgroup)); } }
-        private string _singleType;
-        public string SingleType { get => _singleType; set { _singleType = value; OnPropertyChanged(nameof(SingleType)); } }
-    
+        private string _singleGender;
+        public string singleGender { get => _singleGender; set { _singleGender = value; OnPropertyChanged(nameof(singleGender)); } }
+
+        private string _singleLocalization;
+        public string SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
+       
         public ObservableCollection<QueueListModel> list_danhsachdatcho { get; set; }
         private bool _showMoreDanhSachDatCho;
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
@@ -54,31 +52,24 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<HuongPhongThuy> list_HuongTot { set; get; }
         public ObservableCollection<HuongPhongThuy> list_HuongXau { set; get; }       
 
-        string frontImage_name;
-        string behindImage_name;
-
         public ContactDetailPageViewModel()
         {
-            singleGender = new OptionSet();
-            list_gender_optionset = new ObservableCollection<OptionSet>();
-            list_danhsachdatcho = new ObservableCollection<QueueListModel>();
-            list_danhsachdatcoc = new ObservableCollection<QuotationReseravtion>();
-            list_danhsachhopdong = new ObservableCollection<OptionEntry>();
-            list_chamsockhachhang = new ObservableCollection<Case>();
+            singleContact = new ContactFormModel();            
             list_HuongTot = new ObservableCollection<HuongPhongThuy>();
-            list_HuongXau = new ObservableCollection<HuongPhongThuy>();            
-            optionEntryHasOnlyTerminatedStatus = true;
-            LoadGender();           
+            list_HuongXau = new ObservableCollection<HuongPhongThuy>();                          
         }
 
         // load one contat
         public async Task loadOneContact(String id)
         {
-            singleContact = new ContactFormModel();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                 <entity name='contact'>
                                     <all-attributes />
                                     <order attribute='createdon' descending='true' />
+                                    <link-entity name='account' from='accountid' to='parentcustomerid' visible='false' link-type='outer' alias='aa'>
+                                          <attribute name='accountid' alias='_parentcustomerid_value' />
+                                          <attribute name='bsd_name' alias='parentcustomerid_label' />
+                                    </link-entity>
                                     <filter type='and'>
                                         <condition attribute='contactid' operator='eq' value='" + id + @"' />
                                     </filter>
@@ -94,31 +85,11 @@ namespace ConasiCRM.Portable.ViewModels
             }    
             var tmp = result.value.FirstOrDefault();
             this.singleContact = tmp;
-            //if (tmp.bsd_loingysinh == false)
-            //{
-            //    checkbirth = true;
-            //    checkbirthy = false;
-            //}
-            //else { checkbirth = false; checkbirthy = true; }
-            frontImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            behindImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
         }
-        //Gender
-        public void LoadGender()
-        {
-            list_gender_optionset.Add(new OptionSet() { Val = ("1"), Label = "Nam", });
-            list_gender_optionset.Add(new OptionSet() { Val = ("2"), Label = "Nữ", });
-            list_gender_optionset.Add(new OptionSet() { Val = ("100000000"), Label = "Khác", });
-        }
-
-        public OptionSet LoadOneGender(string id)
-        {
-            this.singleGender = list_gender_optionset.FirstOrDefault(x => x.Val == id); ;
-            return singleGender;
-        }
+      
         // giao dich
 
-        //DANH SACH DAT COC
+        //DANH SACH DAT CHO
         public async Task LoadQueuesForContactForm(string customerId)
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -349,13 +320,15 @@ namespace ConasiCRM.Portable.ViewModels
         // phon thuy
         public void LoadPhongThuy()
         {
-            PhongThuy = new PhongThuyModel();
-            LoadOneGender(singleContact.gendercode);
+            if (singleContact.gendercode != null)
+            {
+                singleGender = ContactGender.GetGenderById(singleContact.gendercode);
+            }
             if (list_HuongTot != null || list_HuongXau != null)
             {
                 list_HuongTot.Clear();
                 list_HuongXau.Clear();
-                if (singleContact != null && singleContact.gendercode != null && singleGender != null && singleGender.Val != null)
+                if (singleContact != null && singleContact.gendercode != null && singleGender != null)
                 {
                     PhongThuy.gioi_tinh = Int32.Parse(singleContact.gendercode);
                     PhongThuy.nam_sinh = singleContact.birthdate.HasValue ? singleContact.birthdate.Value.Year : 0;

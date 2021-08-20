@@ -1,8 +1,10 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,51 +39,73 @@ namespace ConasiCRM.Portable.Views
                 OnCompleted(false);
             LoadingHelper.Hide();
         }
+        protected override async void OnAppearing()
+        {
+            viewModel.singleContact = new ContactFormModel();
+            await LoadDataThongTin(this.Id.ToString());
+            viewModel.PhongThuy = null;
+            LoadDataPhongThuy();
+            base.OnAppearing();
+        }
 
         // tab thong tin
         private async Task LoadDataThongTin(string Id)
         {
-            if (Id != null && viewModel.singleContact == null)
+            if (Id != null && viewModel.singleContact.contactid == Guid.Empty)
             {
+                LoadingHelper.Show();
                 await viewModel.loadOneContact(Id);
                 if (viewModel.singleContact.gendercode != null)
                 { 
-                   viewModel.LoadOneGender(viewModel.singleContact.gendercode); 
+                   viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode); 
                 }
-                if (viewModel.singleContact.bsd_customergroup != null)
+                if (viewModel.singleContact.bsd_localization != null)
                 {
-                    viewModel.SingleContactgroup = ContactGroup.GetContactGroupById(viewModel.singleContact.bsd_customergroup);
+                    viewModel.SingleLocalization = AccountLocalization.GetLocalizationById(viewModel.singleContact.bsd_localization);
                 }
-                if(viewModel.singleContact.bsd_type !=null)
+                else
                 {
-                    viewModel.SingleType = ContactType.GetTypeById(viewModel.singleContact.bsd_type);
+                    viewModel.SingleLocalization = null;
                 }
+                LoadingHelper.Hide();
             }
         }
 
         #region Tab giao dich
         private async Task LoadDataGiaoDich(string Id)
         {
-            if (viewModel.list_danhsachdatcho.Count == 0)
+            if (viewModel.list_danhsachdatcho == null || viewModel.list_danhsachdatcoc == null || viewModel.list_danhsachhopdong == null || viewModel.list_chamsockhachhang == null)
             {
-                viewModel.PageDanhSachDatCho = 1;
-                await viewModel.LoadQueuesForContactForm(Id);
-            }
-            if (viewModel.list_danhsachdatcoc.Count == 0)
-            {
-                viewModel.PageDanhSachDatCoc = 1;
-                await viewModel.LoadReservationForContactForm(Id);
-            }
-            if (viewModel.list_danhsachhopdong.Count == 0)
-            {
-                viewModel.PageDanhSachHopDong = 1;
-                await viewModel.LoadOptoinEntryForContactForm(Id);
-            }
-            if (viewModel.list_chamsockhachhang.Count == 0)
-            {
-                viewModel.PageChamSocKhachHang = 1;
-                await viewModel.LoadCaseForContactForm(Id);
-            }            
+                LoadingHelper.Show();
+                if (viewModel.list_danhsachdatcho == null)
+                {
+                    viewModel.list_danhsachdatcho = new ObservableCollection<QueueListModel>();
+                    viewModel.PageDanhSachDatCho = 1;
+                    await viewModel.LoadQueuesForContactForm(Id);
+                    LoadingHelper.Hide();
+                }
+                if (viewModel.list_danhsachdatcoc == null)
+                {
+                    viewModel.list_danhsachdatcoc = new ObservableCollection<QuotationReseravtion>();
+                    viewModel.PageDanhSachDatCoc = 1;
+                    await viewModel.LoadReservationForContactForm(Id);
+                    LoadingHelper.Hide();
+                }
+                if (viewModel.list_danhsachhopdong == null)
+                {
+                    viewModel.list_danhsachhopdong = new ObservableCollection<OptionEntry>();
+                    viewModel.PageDanhSachHopDong = 1;
+                    await viewModel.LoadOptoinEntryForContactForm(Id);
+                    LoadingHelper.Hide();
+                }
+                if (viewModel.list_chamsockhachhang == null)
+                {
+                    viewModel.list_chamsockhachhang = new ObservableCollection<Case>();
+                    viewModel.PageChamSocKhachHang = 1;
+                    await viewModel.LoadCaseForContactForm(Id);
+                    LoadingHelper.Hide();
+                } 
+            }          
         }
         // danh sach dat cho
         private async void ShowMoreDanhSachDatCho_Clicked(object sender, EventArgs e)
@@ -126,7 +150,8 @@ namespace ConasiCRM.Portable.Views
         {
             if(viewModel.PhongThuy == null)
             {
-                viewModel.LoadPhongThuy();
+               viewModel.PhongThuy = new PhongThuyModel();
+               viewModel.LoadPhongThuy();
             }
         }
         private void ShowImage_Tapped(object sender, EventArgs e)
@@ -144,7 +169,7 @@ namespace ConasiCRM.Portable.Views
             return base.OnBackButtonPressed();
         }
 
-        private void Close_LookUpImagePhongThuy_Clicked(object sender, EventArgs e)
+        private void Close_LookUpImagePhongThuy_Tapped(object sender, EventArgs e)
         {
             LookUpImagePhongThuy.IsVisible = false;
         }
@@ -155,21 +180,25 @@ namespace ConasiCRM.Portable.Views
         {           
             string phone = viewModel.singleContact.mobilephone;
             if (phone != string.Empty)
-            {               
+            {
+                LoadingHelper.Show();
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
                 if (checkVadate == true)
                 {
                     SmsMessage sms = new SmsMessage(null, phone);
-                    await Sms.ComposeAsync(sms);                  
+                    await Sms.ComposeAsync(sms);
+                    LoadingHelper.Hide();
                 }
                 else
-                {                    
-                    await Application.Current.MainPage.DisplayAlert("Thông Báo", "Số điện thoại sai định dạng. Vui lòng kiểm tra lại", "OK");
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
                 }
             }
             else
-            {                
-                await Application.Current.MainPage.DisplayAlert("Thông Báo", "Khách hàng không có số điện thoại. Vui lòng kiểm tra lại", "OK");
+            {
+                LoadingHelper.Hide();
+                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
             }
         }
 
@@ -177,20 +206,24 @@ namespace ConasiCRM.Portable.Views
         {          
             string phone = viewModel.singleContact.mobilephone;
             if (phone != string.Empty)
-            {             
+            {
+                LoadingHelper.Show();
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
                 if (checkVadate == true)
                 {
-                    await Launcher.OpenAsync($"tel:{phone}");                   
+                   await Launcher.OpenAsync($"tel:{phone}");
+                    LoadingHelper.Hide();
                 }
                 else
-                {                
-                    await Application.Current.MainPage.DisplayAlert("Thông Báo", "Số điện thoại sai định dạng. Vui lòng kiểm tra lại", "OK");
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
                 }
             }
             else
-            {               
-                await Application.Current.MainPage.DisplayAlert("Thông Báo", "Khách hàng không có số điện thoại. Vui lòng kiểm tra lại", "OK");
+            {
+                LoadingHelper.Hide();
+                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
             }
         }
 
@@ -254,10 +287,10 @@ namespace ConasiCRM.Portable.Views
 
         private void ThongTinCongTy_Tapped(object sender, EventArgs e)
         {            
-            if (viewModel.singleContact._parentcustomerid_value != string.Empty)
+            if (!string.IsNullOrEmpty(viewModel.singleContact._parentcustomerid_value))
             {
                 LoadingHelper.Show();
-                AccountForm newPage = new AccountForm(Guid.Parse(viewModel.singleContact._parentcustomerid_value));
+                AccountDetailPage newPage = new AccountDetailPage(Guid.Parse(viewModel.singleContact._parentcustomerid_value));
                 newPage.OnCompleted = async (OnCompleted) =>
                 {
                     if (OnCompleted == true)
@@ -268,7 +301,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy thông tin công ty", "Đóng");
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin công ty");
                     }
                 };
             }
@@ -288,10 +321,9 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    await DisplayAlert("Thông Báo", "Không tìm thấy thông tin khách hàng", "Đóng");
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin khách hàng");
                 }
             };
         }
-
     }
 }

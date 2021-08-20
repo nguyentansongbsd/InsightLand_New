@@ -23,7 +23,7 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='bsd_diachithuongtru' />
                     <attribute name='createdon' />
                     <attribute name='contactid' />
-                    <order attribute='fullname' descending='false' />
+                    <order attribute='createdon' descending='false' />
                     <filter type='and'>
                       <condition attribute='bsd_fullname' operator='like' value='%{Keyword}%' />
                     </filter>
