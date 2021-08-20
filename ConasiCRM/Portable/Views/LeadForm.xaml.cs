@@ -297,7 +297,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(viewModel.singleLead.fullname))
+            if (string.IsNullOrWhiteSpace(viewModel.singleLead.lastname))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
                 return;
@@ -310,6 +310,18 @@ namespace ConasiCRM.Portable.Views
             }
 
             LoadingHelper.Show();
+
+            //if (viewModel.Revenue != 0)
+            //{
+            //    viewModel.singleLead.revenue = viewModel.Revenue;
+            //}
+            //else
+            //{
+            //    viewModel.singleLead.revenue = null;
+            //}
+
+            //viewModel.Revenue = decimal.Parse(test.Text, CultureInfo.InvariantCulture);
+
             viewModel.singleLead.industrycode = viewModel.IndustryCode != null ? viewModel.IndustryCode.Val : null;
             viewModel.singleLead._transactioncurrencyid_value = viewModel.SelectedCurrency != null ? viewModel.SelectedCurrency.Val : null;
             viewModel.singleLead._campaignid_value = viewModel.Campaign != null ? viewModel.Campaign.Val : null;
@@ -335,9 +347,11 @@ namespace ConasiCRM.Portable.Views
                 bool IsSuccess = await viewModel.updateLead();
                 if (IsSuccess)
                 {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Thành công");
+                    if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
+                    if (LeadDetailPage.NeedToRefreshLeadDetail.HasValue) LeadDetailPage.NeedToRefreshLeadDetail = true;
                     await Navigation.PopAsync();
+                    ToastMessageHelper.ShortMessage("Thành công");
+                    LoadingHelper.Hide();
                 }
                 else
                 {

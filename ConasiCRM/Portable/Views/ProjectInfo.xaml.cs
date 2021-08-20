@@ -40,6 +40,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.LoadData(),
                 viewModel.CheckEvent(),
                 viewModel.LoadThongKe(),
+                viewModel.LoadThongKeGiuCho(),
                 viewModel.LoadThongKeHopDong(),
                 viewModel.LoadThongKeBangTinhGia()
             );

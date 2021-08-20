@@ -75,6 +75,8 @@ namespace ConasiCRM.Portable.ViewModels
         private string _addressLine1;
         public string AddressLine1 { get => _addressLine1; set { _addressLine1 = value; OnPropertyChanged(nameof(AddressLine1)); } }
 
+        private string _revenue;
+        public string Revenue { get => _revenue; set { _revenue = value; OnPropertyChanged(nameof(Revenue)); } }
 
         public ObservableCollection<LookUp> list_country_lookup { get; set; } = new ObservableCollection<LookUp>();
         public ObservableCollection<LookUp> list_province_lookup { get; set; } = new ObservableCollection<LookUp>();
@@ -94,7 +96,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                           <entity name='lead'>
-                            <attribute name='fullname' />
+                            <attribute name='lastname' />
                             <attribute name='companyname' />
                             <attribute name='subject' alias='bsd_topic_label'/>
                             <attribute name='statuscode' />
@@ -181,8 +183,7 @@ namespace ConasiCRM.Portable.ViewModels
             IDictionary<string, object> data = new Dictionary<string, object>();
             data["leadid"] = singleLead.leadid;
             data["subject"] = singleLead.bsd_topic_label;
-            data["fullname"] = singleLead.fullname;
-            data["firstname"] = singleLead.fullname;
+            data["lastname"] = singleLead.lastname;
             data["mobilephone"] = singleLead.mobilephone;
             data["telephone1"] = singleLead.telephone1;
             data["jobtitle"] = singleLead.jobtitle;
@@ -197,11 +198,23 @@ namespace ConasiCRM.Portable.ViewModels
             data["address1_country"] = singleLead.address1_country;
             data["description"] = singleLead.description;
             data["industrycode"] = singleLead.industrycode;
-            //if (!string.IsNullOrWhiteSpace(singleLead.revenue))
-            //{
-            data["revenue"] = singleLead.revenue; //decimal.Parse(singleLead.revenue);
-            //}
-            data["numberofemployees"] = singleLead.numberofemployees;
+            if (!string.IsNullOrWhiteSpace(singleLead.revenue))
+            {
+                data["revenue"] = decimal.Parse(singleLead.revenue);
+            }
+            else
+            {
+                data["revenue"] = null;
+            }
+            if (!string.IsNullOrWhiteSpace(singleLead.numberofemployees))
+            {
+                data["numberofemployees"] = int.Parse(singleLead.numberofemployees);
+            }
+            else
+            {
+                data["numberofemployees"] = null;
+            }
+            
             data["sic"] = singleLead.sic;
             data["donotsendmm"] = singleLead.donotsendmm.ToString();
             data["lastusedincampaign"] = singleLead.lastusedincampaign.HasValue ? (DateTime.Parse(singleLead.lastusedincampaign.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;

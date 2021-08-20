@@ -129,7 +129,7 @@
                                     <BoxView  IsVisible="{Binding singleLead.statuscode,Converter={StaticResource NullToBool}}" WidthRequest="1" HeightRequest="15" BackgroundColor="#939393" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
                                     <Label Text="{Binding singleLead.leadqualitycode,Converter={StaticResource LeadQualityCodeConverter}}" Grid.Column="2" TextColor="#939393" FontSize="15"/>
                                 </Grid>
-                                <Label Text="{Binding singleLead.fullname}" FontAttributes="Bold" Grid.Row="1" FontSize="16" TextColor="#026294"/>
+                                <Label Text="{Binding singleLead.lastname}" FontAttributes="Bold" Grid.Row="1" FontSize="16" TextColor="#026294"/>
                                 <Label Text="{Binding singleLead.bsd_topic_label}" Grid.Row="2" FontSize="15" TextColor="#444444"/>
                                 <Label Text="{Binding singleLead.mobilephone}" Grid.Row="3" FontSize="15" TextColor="#444444"/>
                             </Grid>

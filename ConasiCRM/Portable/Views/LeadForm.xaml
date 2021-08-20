@@ -37,7 +37,7 @@
                                 <controls:MainEntry Text="{Binding singleLead.bsd_topic_label}" FontSize="15" Placeholder="Nhập tiêu đề" />
 
                                 <controls:FormLabelRequired Text="Họ tên"/>
-                                <controls:MainEntry Text="{Binding singleLead.fullname}" FontSize="15"  Placeholder="Nhập họ tên"/>
+                                <controls:MainEntry Text="{Binding singleLead.lastname}" FontSize="15"  Placeholder="Nhập họ tên"/>
 
                                 <controls:FormLabelRequired Text="Số điện thoại"/>
                                 <controls:MainEntry x:Name="mobilephone_text" Text="{Binding singleLead.mobilephone}" Keyboard="Telephone" FontSize="15" Placeholder="Nhập số điện thoại"/>
@@ -88,7 +88,7 @@
                                 <controls:LookUp x:Name="lookUpLinhVuc" Placeholder="Chọn lĩnh vực" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding IndustryCode}" ItemsSource="{Binding list_industrycode_optionset}"/>
 
                                 <controls:FormLabel VerticalOptions="Center" Text="Doanh thu mỗi năm" FontSize="15" />
-                                <controls:MainEntry x:Name="revenue_text" Keyboard="Numeric" Text="{Binding singleLead.revenue}" Placeholder="Nhập doanh thu mỗi năm" FontSize="15"/>
+                                <controls:MainEntry Keyboard="Numeric" Text="{Binding singleLead.revenue}" Placeholder="Nhập doanh thu mỗi năm" FontSize="15"/>
 
                                 <controls:FormLabel VerticalOptions="Center" Text="Số lượng nhân viên" FontSize="15"/>
                                 <controls:MainEntry x:Name="numberofemployees_text" Text="{Binding singleLead.numberofemployees}" Placeholder="Nhập số lượng nhân viên" Keyboard="Numeric"  FontSize="16"/>

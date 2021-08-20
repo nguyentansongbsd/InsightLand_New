@@ -17,6 +17,7 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LeadDetailPage : ContentPage
     {
+        public static bool? NeedToRefreshLeadDetail = null;
         public Action<bool> OnCompleted;
         private LeadDetailPageViewModel viewModel;
         private Guid Id;
@@ -26,7 +27,8 @@ namespace ConasiCRM.Portable.Views
             this.Title = "THÔNG TIN KHÁCH HÀNG";
             this.Id = id;
             this.BindingContext = viewModel = new LeadDetailPageViewModel();
-            LoadingHelper.Show();          
+            LoadingHelper.Show();
+            NeedToRefreshLeadDetail = false;
             Init();
         }
 
@@ -49,6 +51,18 @@ namespace ConasiCRM.Portable.Views
             else
                 OnCompleted?.Invoke(false);
             LoadingHelper.Hide();
+        }
+
+        protected async override void OnAppearing()
+        {
+            if (NeedToRefreshLeadDetail==true)
+            {
+                await viewModel.LoadOneLead(Id.ToString()) ;
+                if (viewModel.singleLead.new_gender != null) { await viewModel.loadOneGender(viewModel.singleLead.new_gender); }
+                if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
+                NeedToRefreshLeadDetail = false;
+            }
+            base.OnAppearing();
         }
 
         private async void Update(object sender, EventArgs e)

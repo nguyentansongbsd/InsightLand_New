@@ -9,9 +9,6 @@ namespace ConasiCRM.Portable.Models
 {
     public class LeadFormModel : BaseViewModel
     {
-        private string _fulname;
-        public string fullname { get { return _fulname; } set { _fulname = value; OnPropertyChanged(nameof(fullname)); } }
-
         private string _companyname;
         public string companyname { get { return _companyname; } set { _companyname = value; OnPropertyChanged(nameof(companyname)); } }
 
@@ -19,7 +16,7 @@ namespace ConasiCRM.Portable.Models
         public string subject { get { return _subject; } set { _subject = value; OnPropertyChanged(nameof(subject)); } }
 
         private string _statuscode;
-        public string statuscode { get { return _statecode; } set { _statecode = value; OnPropertyChanged(nameof(statecode)); } }
+        public string statuscode { get { return _statuscode; } set { _statuscode = value; OnPropertyChanged(nameof(statecode)); } }
 
         private string _statecode;
         public string statecode { get { return _statecode; } set { _statecode = value; OnPropertyChanged(nameof(statecode)); } }
@@ -111,11 +108,11 @@ namespace ConasiCRM.Portable.Models
         private bool _industrycode_notnull;
         public bool industrycode_notnull { get { return _industrycode_notnull; } set { _industrycode_notnull = value; OnPropertyChanged(nameof(industrycode_notnull)); } }
 
-        private decimal? _revenue;
-        public decimal? revenue { get { return _revenue; } set { _revenue = value; OnPropertyChanged(nameof(revenue)); } }
+        //private decimal? _revenue;
+        //public decimal? revenue { get { return _revenue; } set { _revenue = value; OnPropertyChanged(nameof(revenue)); } }
 
-        private string _numberofemployees;
-        public string numberofemployees { get { return _numberofemployees; } set { _numberofemployees = value; OnPropertyChanged(nameof(numberofemployees)); } }
+        public string revenue { get; set; }
+        public string numberofemployees { get; set; }
 
         private string _sic;
         public string sic { get { return _sic; } set { _sic = value; OnPropertyChanged(nameof(sic)); } }
