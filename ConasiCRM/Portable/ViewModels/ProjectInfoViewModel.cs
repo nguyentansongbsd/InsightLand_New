@@ -15,7 +15,9 @@ namespace ConasiCRM.Portable.ViewModels
         public Guid ProjectId { get; set; }
         public List<UnitChartModel> unitChartModels { get; set; }
         public ObservableCollection<UnitChartModel> UnitChart { get; set; } = new ObservableCollection<UnitChartModel>();
-        public ObservableCollection<QueueFormModel> ListGiuCho { get; set; } = new ObservableCollection<QueueFormModel>();
+
+        private ObservableCollection<QueueFormModel> _listGiuCho;
+        public ObservableCollection<QueueFormModel> ListGiuCho { get => _listGiuCho; set { _listGiuCho = value; OnPropertyChanged(nameof(ListGiuCho)); } }
 
         private ProjectInfoModel _project;
         public ProjectInfoModel Project
@@ -74,6 +76,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public ProjectInfoViewModel()
         {
+            ListGiuCho = new ObservableCollection<QueueFormModel>();
         }
 
         public async Task LoadData()

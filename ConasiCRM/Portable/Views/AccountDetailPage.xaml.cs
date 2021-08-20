@@ -5,6 +5,7 @@ using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,15 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         private Guid AccountId;
+        public static bool? NeedToRefreshMandatory = null;
         private AccountDetailPageViewModel viewModel;
         
         public AccountDetailPage(Guid accountId)
         {
             InitializeComponent();
             AccountId = accountId;
-            this.BindingContext = viewModel = new AccountDetailPageViewModel();
+            this.BindingContext = viewModel = new AccountDetailPageViewModel();          
+            NeedToRefreshMandatory = false;
             LoadingHelper.Show();
             Tab_Tapped(1);
             Init();
@@ -49,6 +52,20 @@ namespace ConasiCRM.Portable.Views
             else
                 OnCompleted?.Invoke(false);
             LoadingHelper.Hide();
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();            
+            if (NeedToRefreshMandatory == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageMandatory = 1;
+                viewModel.list_MandatorySecondary.Clear();
+                await LoadDataNguoiUyQuyen(AccountId.ToString());
+                NeedToRefreshMandatory = false;
+                LoadingHelper.Hide();
+            }
         }
 
         // tab thong tin
@@ -202,10 +219,9 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private async void ThongTin_Tapped(object sender, EventArgs e)
+        private void ThongTin_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(1);
-            await LoadDataThongTin(AccountId.ToString());
         }
 
         private async void GiaoDich_Tapped(object sender, EventArgs e)

@@ -92,6 +92,20 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if(NeedToRefreshQueue == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.QueueList.Clear();
+                await viewModel.LoadQueues();
+                NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }
+        }
+
         private void Question_CLicked(object sender,EventArgs e)
         {
             stackQuestion.IsVisible = !stackQuestion.IsVisible;

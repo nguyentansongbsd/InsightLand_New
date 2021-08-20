@@ -23,7 +23,6 @@ namespace ConasiCRM.Portable.ViewModels
         {
             mandatorySecondary = new MandatorySecondaryModel();
             list_contact_lookup = new ObservableCollection<LookUp>();
-            Contact = new LookUp();
         }
         public async Task GetOneAccountById( string accountid)
         {
@@ -93,7 +92,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
             data["bsd_name"] = mandatorySecondary.bsd_name;
-            data["statuscode"] = mandatorySecondary.statuscode = "100000000";
+            data["statuscode"] = mandatorySecondary.statuscode = "1";
             data["bsd_descriptionsvn"] = mandatorySecondary.bsd_descriptionsvn;
             data["bsd_descriptionsen"] = mandatorySecondary.bsd_descriptionsen;
             data["bsd_jobtitlevn"] = mandatorySecondary.bsd_jobtitlevn;
@@ -118,9 +117,13 @@ namespace ConasiCRM.Portable.ViewModels
                 data["bsd_developeraccount@odata.bind"] = "/accounts(" + mandatorySecondary._bsd_developeraccount_value + ")";
             }
 
-            if (UserLogged.Id != null)
+            if (UserLogged.Id != Guid.Empty)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
             return data;
         }

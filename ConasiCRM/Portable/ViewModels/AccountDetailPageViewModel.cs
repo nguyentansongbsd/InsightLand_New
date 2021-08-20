@@ -31,7 +31,9 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<ListQuotationAcc> list_thongtinquotation { get; set; }
         public ObservableCollection<ListContractAcc> list_thongtincontract { get; set; }
         public ObservableCollection<ListCaseAcc> list_thongtincase { get; set; }
-        public ObservableCollection<MandatorySecondaryModel> list_MandatorySecondary { get; set; }
+
+        public ObservableCollection<MandatorySecondaryModel> _list_MandatorySecondary;
+        public ObservableCollection<MandatorySecondaryModel> list_MandatorySecondary { get => _list_MandatorySecondary; set { _list_MandatorySecondary = value; OnPropertyChanged(nameof(list_MandatorySecondary)); } }
 
         public int PageQueueing { get; set; } = 1;
         public int PageQuotation { get; set; } = 1;
@@ -448,7 +450,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_developeraccount' />
                                     <attribute name='bsd_contact' />
                                     <attribute name='bsd_employee' alias='bsd_employeeid' />
-                                    <order attribute='bsd_name' descending='false' />
+                                    <order attribute='createdon' descending='true' />
                                     <link-entity name='contact' from='contactid' to='bsd_contact' visible='false' link-type='outer' alias='contacts'>
                                         <attribute name='bsd_fullname' alias='bsd_contact_name'/>
                                         <attribute name='mobilephone' alias='bsd_contacmobilephone'/>

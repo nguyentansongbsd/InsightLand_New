@@ -17,12 +17,14 @@ namespace ConasiCRM.Portable.Views
     public partial class UnitInfo : ContentPage
     {
         public Action<bool> OnCompleted;
+        public static bool? NeedToRefreshQueue = null;
         private UnitInfoViewModel viewModel;
 
         public UnitInfo(Guid id)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new UnitInfoViewModel();
+            NeedToRefreshQueue = false;
             viewModel.UnitId = id;
             Init();
         }
@@ -60,6 +62,20 @@ namespace ConasiCRM.Portable.Views
             {
                 OnCompleted?.Invoke(false);
             }
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if(NeedToRefreshQueue == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.list_danhsachdatcho.Clear();
+                await viewModel.LoadQueuesForContactForm();
+                NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }    
         }
 
         public void SetButton()
