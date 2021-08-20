@@ -3,6 +3,7 @@ using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Telerik.XamarinForms.Primitives;
 using Xamarin.Essentials;
@@ -19,6 +20,9 @@ namespace ConasiCRM.Portable.Views
         public Unit CurrentUnit;
         private int currentBlock = 0;
 
+        private Button btnGiuCho;
+        private Button btnBangTinhGia;
+
         public DirectSaleDetail()
         {
             InitializeComponent();
@@ -31,6 +35,13 @@ namespace ConasiCRM.Portable.Views
             Init();
         }
 
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            
+            //var a = (((stackFloors.Children as List<RadBorder>).Content as RadExpander).Content as FlexLayout).Children as RadBorder;
+        }
+
         public async void Init()
         {
             await viewModel.LoadBlocks();
@@ -38,8 +49,8 @@ namespace ConasiCRM.Portable.Views
             {
                 if (string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) && string.IsNullOrWhiteSpace(viewModel.UnitCode))
                 {
-                    viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
-                    SetActiveBlock();
+                    viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid;
+                    SetActiveBlock(); 
                 }
             }
             else
@@ -55,16 +66,39 @@ namespace ConasiCRM.Portable.Views
                 ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
                 if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) ||!string.IsNullOrWhiteSpace(viewModel.UnitCode))
                 {
-                    Guid blockId = viewModel.Floors.FirstOrDefault().Units.FirstOrDefault().blockid;
                     for (int i = 0; i < viewModel.Blocks.Count; i++)
                     {
-                        if (viewModel.Blocks[i].bsd_blockid ==  blockId)
+                        if (viewModel.Blocks[i].bsd_blockid == viewModel.blockId)
                         {
                             currentBlock = i;
                         }
                     }
                     SetActiveBlock();
                 }
+
+                btnGiuCho = new Button()
+                {
+                    Text = "Giữ chỗ",
+                    TextColor = Color.White,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 16,
+                    HeightRequest = 40,
+                    BackgroundColor = (Color)App.Current.Resources["NavigationPrimary"],
+                    CornerRadius = 10,
+                };
+
+                btnBangTinhGia = new Button()
+                {
+                    Text = "Bảng tính giá",
+                    TextColor = Color.White,
+                    FontAttributes = FontAttributes.Bold,
+                    FontSize = 16,
+                    HeightRequest = 40,
+                    BackgroundColor = (Color)App.Current.Resources["NavigationPrimary"],
+                    CornerRadius = 10,
+                };
+                btnGiuCho.Clicked += GiuCho_Clicked;
+                btnBangTinhGia.Clicked += BangTinhGia_Clicked;
 
                 OnComplete?.Invoke(0);
             }
@@ -94,7 +128,7 @@ namespace ConasiCRM.Portable.Views
 
             LoadingHelper.Show();
             var block = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            viewModel.blockId = block.bsd_blockid.ToString();
+            viewModel.blockId = block.bsd_blockid;
             viewModel.Floors.Clear();
             viewModel.NumChuanBiInBlock = 0;
             viewModel.NumSanSangInBlock = 0;
@@ -133,6 +167,10 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = ((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as Unit;
 
+            gridButton.Children.Clear();
+            
+            
+
             viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(item.statuscode.ToString());
             if (!string.IsNullOrWhiteSpace(item.bsd_direction))
             {
@@ -147,8 +185,9 @@ namespace ConasiCRM.Portable.Views
             viewModel.QueueList.Clear();
             await viewModel.LoadQueues();
             await viewModel.CheckShowBtnBangTinhGia();
-            SetButton();
 
+            SetButton();
+            
             contentUnitInfor.IsVisible = true;
             LoadingHelper.Hide();
         }
@@ -186,6 +225,8 @@ namespace ConasiCRM.Portable.Views
 
         public void SetButton()
         {
+            gridButton.Children.Add(btnGiuCho);
+            gridButton.Children.Add(btnBangTinhGia);
             if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == false)
             {
                 gridButton.IsVisible = false;
@@ -197,12 +238,16 @@ namespace ConasiCRM.Portable.Views
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == false)
             {
+                btnGiuCho.IsVisible = true;
+                btnBangTinhGia.IsVisible = viewModel.IsShowBtnBangTinhGia;
                 Grid.SetColumn(btnGiuCho, 0);
                 Grid.SetColumnSpan(btnGiuCho, 2);
                 Grid.SetColumn(btnBangTinhGia, 0);
             }
             else if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == true)
             {
+                btnGiuCho.IsVisible = false;
+                btnBangTinhGia.IsVisible = viewModel.IsShowBtnBangTinhGia;
                 Grid.SetColumn(btnGiuCho, 0);
                 Grid.SetColumn(btnBangTinhGia, 0);
                 Grid.SetColumnSpan(btnBangTinhGia, 2);
@@ -233,6 +278,28 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
 
             LoadingHelper.Hide();
+        }
+
+        private void ScreenChange_SizeChanged(System.Object sender, System.EventArgs e)
+        {
+            //WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}"
+            //((stackFloors.Children.Content as RadExpander).Content as FlexLayout).Children as RadBorder;
+            // a.WidthRequest = 100;
+
+            //List<RadBorder> radBorders = new List<RadBorder>();
+            //foreach (var item in stackFloors.Children)
+            //{
+            //    radBorders.Add((RadBorder)item);
+            //}
+
+            //foreach (var item in radBorders)
+            //{
+            //    var a = item.Content as RadExpander;
+
+            //}
+
+
+
         }
     }
 }

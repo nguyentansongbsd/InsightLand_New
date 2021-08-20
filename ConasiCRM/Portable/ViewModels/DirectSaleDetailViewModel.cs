@@ -63,7 +63,7 @@ namespace ConasiCRM.Portable.ViewModels
         private int _numDaBanInBlock;
         public int NumDaBanInBlock { get => _numDaBanInBlock; set { _numDaBanInBlock = value; OnPropertyChanged(nameof(NumDaBanInBlock)); } }
 
-        public string blockId;
+        public Guid blockId;
 
         private Unit _unit;
         public Unit Unit { get => _unit; set { _unit = value;OnPropertyChanged(nameof(Unit)); } }
@@ -152,7 +152,7 @@ namespace ConasiCRM.Portable.ViewModels
             string minPrice_Condition = minPrice.HasValue ? $"<condition attribute='price' operator='ge' value='{minPrice.Value}' />" : "";
             string maxPrice_Condition = maxPrice.HasValue ? $"<condition attribute='price' operator='le' value='{maxPrice.Value}' />" : "";
 
-            string Block_Condition = !string.IsNullOrWhiteSpace(this.blockId) ? $"<condition attribute='bsd_blocknumber' operator='eq' uitype='bsd_block' value='{this.blockId}'/>" : "";
+            string Block_Condition = this.blockId != Guid.Empty ? $"<condition attribute='bsd_blocknumber' operator='eq' uitype='bsd_block' value='{this.blockId}'/>" : "";
             //string Floor_Condition = Floor != null ? $"<condition attribute='bsd_floorid' operator='eq' value='{Floor.Val}'/>" : "";
 
             fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -205,10 +205,24 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (result == null || result.value.Any() == false) return;
 
-            var unitInBlock = result.value.GroupBy(x=>new {
-                unitid= x.productid,
-                statuscode= x.statuscode
-            }).Select(y=>y.First()).ToList();
+            #region Tinh so luong unit trong 1 block
+            List<Unit> unitInBlock = new List<Unit>();
+            if (this.blockId != Guid.Empty) // truong hop khi tu gio hang khoong chon DMB va khoong nhap san pham
+            {
+                unitInBlock= result.value.GroupBy(x => new {
+                    unitid = x.productid,
+                    statuscode = x.statuscode
+                }).Select(y => y.First()).ToList();
+            }
+            else
+            {
+                this.blockId = result.value.FirstOrDefault().blockid;
+                unitInBlock = result.value.Where(x=>x.blockid == blockId).GroupBy(y => new
+                {
+                    unitid = y.productid,
+                    statuscode = y.statuscode
+                }).Select(z => z.First()).ToList();
+            }
             foreach (var item in unitInBlock)
             {
                 switch (item.statuscode)
@@ -241,11 +255,16 @@ namespace ConasiCRM.Portable.ViewModels
                         break;
                 }
             }
+            #endregion
 
-            List<Unit> unitsGroupByFloor = result.value.GroupBy(i => new
+            #region Tinh so luong unit trong 1 floor. Danh sach unit trong 1 floor
+            List<Unit> unitsGroupByFloor = unitInBlock.GroupBy(i => new
             {
                 floorId = i.floorid,
             }).Select(x=>x.First()).ToList();
+
+            // lay danh sach unit co nhung trang thai giu cho la: queuing, waiting,completed
+            List<Unit> listUnitByQueue = result.value.Where(x => x.queses_statuscode == "100000000" || x.queses_statuscode == "100000002" || x.queses_statuscode == "100000004").ToList();
 
             foreach (var item in unitsGroupByFloor)
             {
@@ -261,7 +280,7 @@ namespace ConasiCRM.Portable.ViewModels
                 }).Select(y => y.First()).ToList();
                 foreach (var unit in unitGroupBy)
                 {
-                    switch (unit.statuscode)
+                    switch (unit.statuscode) // dem so luong trang thai cua unit
                     {
                         case 1:
                             floor.NumChuanBiInFloor++;
@@ -290,27 +309,28 @@ namespace ConasiCRM.Portable.ViewModels
                         default:
                             break;
                     }
-                    if (unit.queses_statuscode == "100000000" || unit.queses_statuscode == "100000002" || unit.queses_statuscode == "100000004")
-                    {
-                        unit.NumQueses++;
-                    }
-                    else
-                    {
-                        unit.NumQueses = 0;
-                    }
 
-                    if (unit.statuscode.HasValue)
+                    int count = 0;
+                    foreach (var unitbyQueue in listUnitByQueue) // dem so giu cho cua unit
+                    {
+                        if (unitbyQueue.productid == unit.productid)
+                        {
+                            count ++;
+                        }
+                    }
+                    unit.NumQueses = count;
+                    
+                    if (unit.statuscode.HasValue)// set backgroundcolor cho tung unit
                     {
                         unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.Value.ToString()).Background;
                     }
                    
-
                     floor.Units.Add(unit);
                 }
 
                 Floors.Add(floor);
             }
-
+            #endregion
         }
 
         public async Task LoadBlocks()
