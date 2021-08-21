@@ -24,8 +24,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         private string _singleLocalization;
         public string SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
-       
         public ObservableCollection<QueueFormModel> list_danhsachdatcho { get; set; } = new ObservableCollection<QueueFormModel>();
+
         private bool _showMoreDanhSachDatCho;
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
         public int PageDanhSachDatCho { get; set; } = 1;
@@ -56,7 +56,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             singleContact = new ContactFormModel();            
             list_HuongTot = new ObservableCollection<HuongPhongThuy>();
-            list_HuongXau = new ObservableCollection<HuongPhongThuy>();                          
+            list_HuongXau = new ObservableCollection<HuongPhongThuy>();          
         }
 
         // load one contat
