@@ -3,11 +3,7 @@ using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -164,6 +160,25 @@ namespace ConasiCRM.Portable.Views
                 {
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Không tìm thấy thông tin chủ đầu tư");
+                }
+            };
+        }
+
+        private void GiuChoItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
+            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queuesDetialPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
                 }
             };
         }

@@ -310,6 +310,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='customerid' />
                                 <attribute name='createdon' />
                                 <attribute name='bsd_queuingexpired' />
+                                <attribute name='opportunityid' />
                                 <order attribute='createdon' descending='true' />
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
                                     <attribute name='bsd_name' alias='bsd_project_name'/>
@@ -338,7 +339,18 @@ namespace ConasiCRM.Portable.ViewModels
             ShowMoreBtnGiuCho = data.Count < 10 ? false : true;
             foreach (var item in data)
             {
-                ListGiuCho.Add(item);
+                QueueFormModel queue = new QueueFormModel();
+                queue = item;
+                if (!string.IsNullOrWhiteSpace(item.contact_name))
+                {
+                    queue.customer_name = item.contact_name;
+                }
+                else if (!string.IsNullOrWhiteSpace(item.account_name))
+                {
+                    queue.customer_name = item.account_name;
+                }
+
+                ListGiuCho.Add(queue);
             }
         }
     }

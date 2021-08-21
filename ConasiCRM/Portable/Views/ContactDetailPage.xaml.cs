@@ -1,14 +1,11 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Telerik.XamarinForms.Primitives;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -35,6 +32,12 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await LoadDataThongTin(Id.ToString());
+
+            if (viewModel.singleContact.employee_id != UserLogged.Id)
+            {
+                frameEdit.IsVisible = false;
+            }
+
             if (viewModel.singleContact.contactid != Guid.Empty)
                 OnCompleted(true);
             else
@@ -85,9 +88,8 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.list_danhsachdatcho == null || viewModel.list_danhsachdatcoc == null || viewModel.list_danhsachhopdong == null || viewModel.list_chamsockhachhang == null)
             {
                 LoadingHelper.Show();
-                if (viewModel.list_danhsachdatcho == null)
+                if (viewModel.list_danhsachdatcho.Count == 0)
                 {
-                    viewModel.list_danhsachdatcho = new ObservableCollection<QueueListModel>();
                     viewModel.PageDanhSachDatCho = 1;
                     await viewModel.LoadQueuesForContactForm(Id);
                     LoadingHelper.Hide();
@@ -329,6 +331,25 @@ namespace ConasiCRM.Portable.Views
                 {
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Không tìm thấy thông tin khách hàng");
+                }
+            };
+        }
+
+        private void GiuChoItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
+            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queuesDetialPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
                 }
             };
         }

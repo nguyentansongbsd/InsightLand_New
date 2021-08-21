@@ -24,12 +24,23 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='bsd_companycode' />
                     <attribute name='bsd_registrationcode' />
                     <attribute name='bsd_vatregistrationnumber' />
+                    <attribute name='bsd_postalcode' />
+                    <attribute name='bsd_housenumberstreet' />
                     <order attribute='createdon' descending='true' />
                     <filter type='and'>
                       <condition attribute='name' operator='like' value='%{Keyword}%' />
                     </filter>
                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='a'>
                          <attribute name='bsd_fullname' alias='primarycontact_name' />
+                    </link-entity>
+                    <link-entity name='new_district' from='new_districtid' to='bsd_district' link-type='outer' alias='af' >
+                         <attribute name='new_name' alias='district_name' />                                       
+                    </link-entity>
+                    <link-entity name='new_province' from='new_provinceid' to='bsd_province' link-type='outer' alias='ag'>
+                         <attribute name='new_name' alias='province_name' />                                       
+                    </link-entity>
+                    <link-entity name='bsd_country' from='bsd_countryid' to='bsd_nation' link-type='outer' alias='as'>
+                        <attribute name='bsd_name' alias='country_name' />                                      
                     </link-entity>
                     <filter type='and'>
                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />

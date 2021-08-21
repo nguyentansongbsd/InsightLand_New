@@ -21,7 +21,7 @@
                                     </Grid>
                                     <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="Auto,*">
                                         <Label Grid.Column="0" Text="Địa chỉ: " FontSize="15" TextColor="#444444"/>
-                                        <Label Grid.Column="1" Text="{Binding bsd_diachithuongtru}" FontSize="15" TextColor="#444444" LineBreakMode="TailTruncation"/>
+                                        <Label Grid.Column="1" Text="{Binding bsd_contactaddress}" FontSize="15" TextColor="#444444" LineBreakMode="TailTruncation"/>
                                     </Grid>
                                 </Grid>
                             </ViewCell>

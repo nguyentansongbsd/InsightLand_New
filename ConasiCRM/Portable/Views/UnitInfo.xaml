@@ -271,7 +271,7 @@
                                 <telerikPrimitives:RadExpander x:Name="layout_danhsachdatcho" IsExpanded="False" AutomationId="masterCardExpander" BorderColor="Transparent">
                                     <telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                            <Label Text="Đặt Chỗ" FontSize="15" TextColor="#333333" FontAttributes="Bold" Padding="10"/>
+                                            <Label Text="Giữ Chỗ" FontSize="15" TextColor="#333333" FontAttributes="Bold" Padding="10"/>
                                         </telerikPrimitives:ExpanderHeader>
                                     </telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:RadExpander.Content>
@@ -285,6 +285,9 @@
                                                 <BindableLayout.ItemTemplate>
                                                     <DataTemplate>
                                                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="15,10" Margin="0,1">
+                                                            <Grid.GestureRecognizers>
+                                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
+                                                            </Grid.GestureRecognizers>
                                                             <Label Grid.Row="0" Grid.Column="0" LineBreakMode="TailTruncation" FontSize="15">
                                                                 <Label.FormattedText>
                                                                     <FormattedString>

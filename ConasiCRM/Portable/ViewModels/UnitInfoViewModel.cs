@@ -138,7 +138,6 @@ namespace ConasiCRM.Portable.ViewModels
                         <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
                            <attribute name='bsd_name'  alias='project_name'/>
                         </link-entity>
-                        
                       </entity>
                     </fetch>";
 
