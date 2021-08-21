@@ -24,9 +24,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         private string _singleLocalization;
         public string SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
+        public ObservableCollection<QueueFormModel> list_danhsachdatcho { get; set; } = new ObservableCollection<QueueFormModel>();
 
-        public ObservableCollection<QueueListModel> _list_danhsachdatcho;
-        public ObservableCollection<QueueListModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
         private bool _showMoreDanhSachDatCho;
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
         public int PageDanhSachDatCho { get; set; } = 1;
@@ -71,6 +70,9 @@ namespace ConasiCRM.Portable.ViewModels
                                           <attribute name='accountid' alias='_parentcustomerid_value' />
                                           <attribute name='bsd_name' alias='parentcustomerid_label' />
                                     </link-entity>
+                                    <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' visible='false' link-type='outer' alias='a_cf81d7378befeb1194ef000d3a81fcba'>
+                                      <attribute name='bsd_employeeid' alias='employee_id'/>
+                                    </link-entity>
                                     <filter type='and'>
                                         <condition attribute='contactid' operator='eq' value='" + id + @"' />
                                     </filter>
@@ -90,52 +92,49 @@ namespace ConasiCRM.Portable.ViewModels
         //DANH SACH DAT CHO
         public async Task LoadQueuesForContactForm(string customerId)
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
-                                <attribute name='opportunityid' />
-                                <attribute name='customerid' alias='customer_id' />
-                                <attribute name='name' alias='unit_name'/>
-                                <attribute name='bsd_queuenumber' />
-                                <attribute name='bsd_project' alias='project_id' />
-                                <attribute name='estimatedvalue' />
-                                <attribute name='statuscode' />
-                                <attribute name='actualclosedate' />
+                                <attribute name='name' />
+                                <attribute name='customerid' />
                                 <attribute name='createdon' />
-                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                                    <attribute name='fullname'  alias='contact_name'/>
+                                <attribute name='bsd_queuingexpired' />
+                                <attribute name='opportunityid' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                  <condition attribute='parentcontactid' operator='eq' uitype='contact' value='{customerId}' />
+                                  <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                </filter> 
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
+                                    <attribute name='bsd_name' alias='bsd_project_name'/>
                                 </link-entity>
-                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                    <attribute name='name'  alias='account_name'/>
+                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='a_434f5ec290d1eb11bacc000d3a80021e'>
+                                  <attribute name='name' alias='account_name'/>
                                 </link-entity>
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
-                                    <attribute name='bsd_name'  alias='project_name'/>
+                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_884f5ec290d1eb11bacc000d3a80021e'>
+                                  <attribute name='bsd_fullname' alias='contact_name'/>
                                 </link-entity>
-                                <order attribute='actualclosedate' descending='true' />
-                               <filter type='and'>
-                                  <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                  <condition attribute='customerid' operator='eq' uitype='contact' value='"+customerId+@"' />
-                                </filter>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueListModel>>("opportunities", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
             if (result == null)
             {
                 return;
             }
             var data = result.value;
-
-            if (data.Count < 3)
+            ShowMoreDanhSachDatCho = data.Count < 3 ? false : true;
+            foreach (var item in data)
             {
-                ShowMoreDanhSachDatCho = false;
-            }
-            else
-            {
-                ShowMoreDanhSachDatCho = true;
-            }
-
-            foreach (var x in data)
-            {
-                list_danhsachdatcho.Add(x);
+                QueueFormModel queue = new QueueFormModel();
+                queue = item;
+                if (!string.IsNullOrWhiteSpace(item.contact_name))
+                {
+                    queue.customer_name = item.contact_name;
+                }
+                else if (!string.IsNullOrWhiteSpace(item.account_name))
+                {
+                    queue.customer_name = item.account_name;
+                }
+                list_danhsachdatcho.Add(queue);
             }
         }
         // DANH SACH DAT COC

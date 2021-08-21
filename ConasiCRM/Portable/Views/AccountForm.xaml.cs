@@ -6,6 +6,7 @@ using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -57,10 +58,15 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
+            viewModel.singleAccount = new AccountFormModel();
+            this.Title = "Cập Nhật Khách Hàng Doanh Nghiệp";
+            btnSave.Text = "Cập Nhật";
+            btnSave.Clicked += UpdateContact_Clicked;
+
             await viewModel.LoadOneAccount(this.AccountId);
             viewModel.LoadBusinessTypeForLookup();
             Lookup_BusinessType.SaveButton_Clicked(null, null);
-           // Lookup_BusinessType.SetList(viewModel.GetBusinessType());
+
             if (viewModel.singleAccount.bsd_localization != null)
             {
                 viewModel.Localization = new OptionSet { 
@@ -73,13 +79,42 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.GetPrimaryContactByID();
             }
-            this.Title = "Cập Nhật Khách Hàng Doanh Nghiệp";
-            btnSave.Text = "Cập Nhật";
-            btnSave.Clicked += UpdateContact_Clicked;
+
+            viewModel.singleAccount.bsd_address = await SetAddress();
+
             if (viewModel.singleAccount.accountid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
                 OnCompleted?.Invoke(false);
+        }
+
+        private async Task<string> SetAddress()
+        {
+            List<string> listaddress = new List<string>();
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_housenumberstreet))
+            {
+                listaddress.Add(viewModel.singleAccount.bsd_housenumberstreet);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.district_name))
+            {
+                listaddress.Add(viewModel.singleAccount.district_name);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.province_name))
+            {
+                listaddress.Add(viewModel.singleAccount.province_name);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_postalcode))
+            {
+                listaddress.Add(viewModel.singleAccount.bsd_postalcode);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.country_name))
+            {
+                listaddress.Add(viewModel.singleAccount.country_name);
+            }
+
+            string address = string.Join(", ", listaddress);
+
+            return address;
         }
 
         private void UpdateContact_Clicked(object sender, EventArgs e)
@@ -214,6 +249,8 @@ namespace ConasiCRM.Portable.Views
                 var updated = await viewModel.updateAccount();
                 if (updated)
                 {
+                    if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
+                    if (AccountDetailPage.NeedToRefreshAccount.HasValue) AccountDetailPage.NeedToRefreshAccount = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thành công");
                     LoadingHelper.Hide();

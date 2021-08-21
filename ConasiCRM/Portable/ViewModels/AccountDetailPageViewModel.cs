@@ -27,7 +27,7 @@ namespace ConasiCRM.Portable.ViewModels
         private ContactFormModel _PrimaryContact;
         public ContactFormModel PrimaryContact { get => _PrimaryContact; set { if (_PrimaryContact != value) { this._PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); } } }
 
-        public ObservableCollection<ListQueueingAcc> list_thongtinqueing { get; set; }
+        public ObservableCollection<QueueFormModel> list_thongtinqueing { get; set; }
         public ObservableCollection<ListQuotationAcc> list_thongtinquotation { get; set; }
         public ObservableCollection<ListContractAcc> list_thongtincontract { get; set; }
         public ObservableCollection<ListCaseAcc> list_thongtincase { get; set; }
@@ -64,7 +64,7 @@ namespace ConasiCRM.Portable.ViewModels
             BusinessTypeOptions.Add(new OptionSet("100000002", "Sales Argents"));
             BusinessTypeOptions.Add(new OptionSet("100000003", "Developer"));
 
-            list_thongtinqueing = new ObservableCollection<ListQueueingAcc>();
+            list_thongtinqueing = new ObservableCollection<QueueFormModel>();
             list_thongtinquotation = new ObservableCollection<ListQuotationAcc>();
             list_thongtincontract = new ObservableCollection<ListContractAcc>();
             list_thongtincase = new ObservableCollection<ListCaseAcc>();
@@ -104,6 +104,8 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_name' />
                                 <attribute name='name' />
                                 <attribute name='accountid' />
+                                <attribute name='bsd_postalcode' />
+                                <attribute name='bsd_housenumberstreet' />
                                 <attribute name='bsd_businesstypesys' />
                                 <order attribute='createdon' descending='true' />
                                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='contacts'>
@@ -115,6 +117,15 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                       <condition attribute='accountid' operator='eq' value='" + accountid + @"' />
                                     </filter>
+                                    <link-entity name='new_district' from='new_districtid' to='bsd_district' link-type='outer' alias='af' >
+                                        <attribute name='new_name' alias='district_name' />                                       
+                                    </link-entity>
+                                     <link-entity name='new_province' from='new_provinceid' to='bsd_province' link-type='outer' alias='ag'>
+                                        <attribute name='new_name' alias='province_name' />                                       
+                                    </link-entity>
+                                   <link-entity name='bsd_country' from='bsd_countryid' to='bsd_nation' link-type='outer' alias='as'>
+                                        <attribute name='bsd_name' alias='country_name' />                                      
+                                    </link-entity>
                                 <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' visible='false' link-type='outer' alias='a_cf81d7378befeb1194ef000d3a81fcba'>
                                   <attribute name='bsd_employeeid' alias='employee_id'/>
                                   <attribute name='bsd_name' alias='employee_name'/>
@@ -173,65 +184,53 @@ namespace ConasiCRM.Portable.ViewModels
         //tab giao dich
         public async Task LoadDSQueueingAccount(Guid accountid)
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageQueueing}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                <entity name='opportunity'>
-                                    <all-attributes/>
-                                    <order attribute='createdon' descending='true' />
-                                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' alias='bsd_projects'>
-                                        <attribute name='bsd_name' alias='que_nameproject'/>
-                                    </link-entity>
-                                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                        <attribute name='bsd_name' alias='que_nameaccount'/>
-                                    </link-entity>
-                                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                        <attribute name='bsd_fullname' alias='que_namecontact'/>
-                                    </link-entity>
-                                    <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                       <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                       </filter>
-                                    </link-entity>
-                                    <filter type='and'>
-                                        <condition attribute='parentaccountid' operator='eq' uitype='account' value='" + accountid + @"' />
-                                    </filter>                                    
-                                </entity>
-                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListQueueingAcc>>("opportunities", fetch);
+            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageQueueing}' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='opportunity'>
+                                <attribute name='name' />
+                                <attribute name='customerid' />
+                                <attribute name='createdon' />
+                                <attribute name='bsd_queuingexpired' />
+                                <attribute name='opportunityid' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='parentaccountid' operator='eq' uitype='account' value='{accountid}' />
+                                </filter>  
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
+                                    <attribute name='bsd_name' alias='bsd_project_name'/>
+                                </link-entity>
+                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ac'>
+                                  <filter type='and'>
+                                    <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}' />
+                                  </filter>
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='a_434f5ec290d1eb11bacc000d3a80021e'>
+                                  <attribute name='name' alias='account_name'/>
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_884f5ec290d1eb11bacc000d3a80021e'>
+                                  <attribute name='bsd_fullname' alias='contact_name'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
             if (result == null)
             {
                 return;
             }
             var data = result.value;
-
-            if (data.Count < 3)
+            ShowMoreQueueing = data.Count < 3 ? false : true;
+            foreach (var item in data)
             {
-                ShowMoreQueueing = false;
-            }
-            else
-            {
-                ShowMoreQueueing = true;
-            }
-
-            if (data.Any())
-            {
-                foreach (var item in data)
+                QueueFormModel queue = new QueueFormModel();
+                queue = item;
+                if (!string.IsNullOrWhiteSpace(item.contact_name))
                 {
-                    if (item.que_nameproject == null)
-                    {
-                        item.que_nameproject = " ";
-                    }
-
-                    if (item.que_nameaccount != null)
-                    {
-                        item.customerid = item.que_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.que_namecontact;
-                    }
-
-                    list_thongtinqueing.Add(item);
+                    queue.customer_name = item.contact_name;
                 }
+                else if (!string.IsNullOrWhiteSpace(item.account_name))
+                {
+                    queue.customer_name = item.account_name;
+                }
+                list_thongtinqueing.Add(item);
             }
         }
 

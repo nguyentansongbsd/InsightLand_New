@@ -21,6 +21,7 @@ namespace ConasiCRM.Portable.Models
 
         public string emailaddress1 { get; set; }
         public string bsd_diachithuongtru { get; set; }
+        public string bsd_contactaddress { get; set; }
         public Guid contactid { get; set; }
 
         public DateTime? createdon { get; set; }

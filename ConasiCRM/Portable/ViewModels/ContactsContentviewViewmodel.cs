@@ -20,7 +20,7 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='mobilephone' />
                     <attribute name='birthdate' />
                     <attribute name='emailaddress1' />
-                    <attribute name='bsd_diachithuongtru' />
+                    <attribute name='bsd_contactaddress' />
                     <attribute name='createdon' />
                     <attribute name='contactid' />
                     <order attribute='createdon' descending='false' />

@@ -285,12 +285,15 @@
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate>
                                             <StackLayout Padding="16" BackgroundColor="White">
+                                                <StackLayout.GestureRecognizers>
+                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
+                                                </StackLayout.GestureRecognizers>
                                                 <Label Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
                                                 <Label FontSize="15" TextColor="#333333">
                                                     <Label.FormattedText>
                                                         <FormattedString>
                                                             <Span Text="Khách hàng: "/>
-                                                            <Span Text="{Binding Customer}"/>
+                                                            <Span Text="{Binding customer_name}"/>
                                                         </FormattedString>
                                                     </Label.FormattedText>
                                                 </Label>

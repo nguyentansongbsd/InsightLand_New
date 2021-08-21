@@ -1,10 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ConasiCRM.Portable.Models;
@@ -182,6 +178,25 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             ToastMessageHelper.ShortMessage("chua co page");
             LoadingHelper.Hide();
+        }
+
+        private void GiuChoItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
+            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queuesDetialPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
         }
 
         //private void Button_Clicked(object sender, EventArgs e)

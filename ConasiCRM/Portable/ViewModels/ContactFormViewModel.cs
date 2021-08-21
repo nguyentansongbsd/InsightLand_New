@@ -1,21 +1,11 @@
-﻿using ConasiCRM.Portable.Config;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
-using ConasiCRM.Portable.ViewModels;
-using Newtonsoft.Json;
-using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -210,9 +200,6 @@ namespace ConasiCRM.Portable.ViewModels
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
                                      <condition attribute='contactid' operator='eq' value='" + id + @"' />
-                                    </filter>
-                                    <filter type='and'>
-                                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
                               </entity>
                             </fetch>";

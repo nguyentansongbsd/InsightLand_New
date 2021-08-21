@@ -147,9 +147,6 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                         <condition attribute='accountid' operator='eq' value='{" + accountid + @"}' />
                                     </filter>
-                                    <filter type='and'>
-                                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
                                 </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountFormModel>>("accounts", fetch);
@@ -218,6 +215,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["accountid"] = singleAccount.accountid;
             data["bsd_name"] = singleAccount.bsd_name;
             data["bsd_accountnameother"] = singleAccount.bsd_accountnameother;
+            data["bsd_companycode"] = singleAccount.bsd_companycode;
             if (singleAccount.bsd_businesstypesys != null)
             {
                 data["bsd_businesstypesys"] = singleAccount.bsd_businesstypesys.Replace(" ", "");
