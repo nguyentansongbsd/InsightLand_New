@@ -257,6 +257,9 @@
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
                                                 <StackLayout Padding="10" BackgroundColor="White">
+                                                    <StackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
+                                                    </StackLayout.GestureRecognizers>
                                                     <Label Text="{Binding unit_name}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
                                                     <Label Text="{Binding statuscode_label}" FontAttributes="Bold" FontSize="15" TextColor="#333333"/>
                                                     <Label FontSize="15" TextColor="#333333">

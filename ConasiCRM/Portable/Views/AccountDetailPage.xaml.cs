@@ -5,9 +5,6 @@ using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -20,6 +17,7 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         private Guid AccountId;
+        public static bool? NeedToRefreshAccount= null;
         public static bool? NeedToRefreshMandatory = null;
         private AccountDetailPageViewModel viewModel;
         
@@ -27,7 +25,8 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             AccountId = accountId;
-            this.BindingContext = viewModel = new AccountDetailPageViewModel();          
+            this.BindingContext = viewModel = new AccountDetailPageViewModel();
+            NeedToRefreshAccount = false;
             NeedToRefreshMandatory = false;
             LoadingHelper.Show();
             Tab_Tapped(1);
@@ -56,13 +55,29 @@ namespace ConasiCRM.Portable.Views
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();            
+            base.OnAppearing();
+            if (NeedToRefreshAccount == true)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadOneAccount(AccountId.ToString());
+                if (viewModel.singleAccount.bsd_businesstypesys != null)
+                {
+                    viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
+                }
+                if (viewModel.singleAccount.bsd_localization != null)
+                {
+                    viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
+                }
+                NeedToRefreshAccount = false;
+                LoadingHelper.Hide();
+            }
             if (NeedToRefreshMandatory == true)
             {
                 LoadingHelper.Show();
                 viewModel.PageMandatory = 1;
                 viewModel.list_MandatorySecondary.Clear();
                 await LoadDataNguoiUyQuyen(AccountId.ToString());
+                NeedToRefreshAccount = false;
                 NeedToRefreshMandatory = false;
                 LoadingHelper.Hide();
             }
@@ -74,6 +89,9 @@ namespace ConasiCRM.Portable.Views
             if (Id != null && viewModel.singleAccount == null)
             {
                 await viewModel.LoadOneAccount(Id);
+
+                viewModel.singleAccount.bsd_address = await SetAddress();
+
                 if (viewModel.singleAccount.bsd_businesstypesys != null)
                 {
                     viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
@@ -83,6 +101,42 @@ namespace ConasiCRM.Portable.Views
                     viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
                 }
             }
+        }
+
+        private async Task<string> SetAddress()
+        {
+            List<string> listaddress = new List<string>();
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_housenumberstreet))
+            {
+                listaddress.Add(viewModel.singleAccount.bsd_housenumberstreet);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.district_name))
+            {
+                listaddress.Add(viewModel.singleAccount.district_name);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.province_name))
+            {
+                listaddress.Add(viewModel.singleAccount.province_name);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_postalcode))
+            {
+                listaddress.Add(viewModel.singleAccount.bsd_postalcode);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.country_name))
+            {
+                listaddress.Add(viewModel.singleAccount.country_name);
+            }
+
+            string address = string.Join(", ", listaddress);
+
+            return address;
+        }
+
+        private async void Website_Tapped(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Xamarin.Essentials.Browser.OpenAsync(viewModel.singleAccount.websiteurl);
+            LoadingHelper.Hide();
         }
 
         #region tab giao dich
@@ -323,6 +377,25 @@ namespace ConasiCRM.Portable.Views
             MandatorySecondaryForm newPage = new MandatorySecondaryForm(viewModel.singleAccount.accountid);
             await Navigation.PushAsync(newPage);
             LoadingHelper.Hide();
+        }
+
+        private void GiuChoItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
+            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queuesDetialPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
         }
     }
 }

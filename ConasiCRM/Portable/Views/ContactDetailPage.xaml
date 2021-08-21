@@ -281,12 +281,12 @@
                             <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đặt Chỗ"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Giữ Chỗ"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout>
-                                        <StackLayout BindableLayout.ItemsSource="{Binding list_danhsachdatcho}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="#eeeeee" Spacing="1">
+                                        <StackLayout BindableLayout.ItemsSource="{Binding list_danhsachdatcho}" BackgroundColor="#eeeeee" Spacing="1">
                                             <BindableLayout.EmptyViewTemplate>
                                                 <DataTemplate>
                                                     <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
@@ -294,29 +294,37 @@
                                             </BindableLayout.EmptyViewTemplate>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
-                                                        <Grid ColumnDefinitions="Auto,Auto" Grid.Row="0" Grid.Column="0">
-                                                            <Label Text="{Binding customername}" FontSize="15" FontAttributes="Bold" TextColor="#444444" Grid.Column="0"/>
-                                                            <Label Text="{Binding statuscode_label,Converter={StaticResource InformationLabelConverter}}" FontSize="15" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Dự Án: " FontSize="14" TextColor="#444444" Grid.Column="0"/>
-                                                            <Label Text="{Binding project_name}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#444444" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Mã Đặt Chỗ: " FontSize="14" TextColor="#444444" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_queuenumber}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#444444" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Đề Mục: " FontSize="14" TextColor="#444444" Grid.Column="0"/>
-                                                            <Label Text="{Binding unit_name}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#444444" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Tổng Tiền Ước Tính: " FontSize="14" TextColor="#444444" Grid.Column="0"/>
-                                                            <Label Text="{Binding estimatedvalue_format}" LineBreakMode="TailTruncation" TextColor="Red" FontSize="14" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Label Grid.Row="0" Grid.Column="1" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding actualclosedate_format}" VerticalOptions="Start"/>
-                                                    </Grid>
+                                                    <StackLayout BackgroundColor ="White" Padding="25,15" Margin="0,1" Spacing="10">
+                                                        <StackLayout.GestureRecognizers>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
+                                                        </StackLayout.GestureRecognizers>
+                                                        <Label Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
+                                                        <Label FontSize="15" TextColor="#333333">
+                                                            <Label.FormattedText>
+                                                                <FormattedString>
+                                                                    <Span Text="Khách hàng: "/>
+                                                                    <Span Text="{Binding customer_name}"/>
+                                                                </FormattedString>
+                                                            </Label.FormattedText>
+                                                        </Label>
+                                                        <Label FontSize="15" TextColor="#333333">
+                                                            <Label.FormattedText>
+                                                                <FormattedString>
+                                                                    <Span Text="Dự án: "/>
+                                                                    <Span Text="{Binding bsd_project_name}"/>
+                                                                </FormattedString>
+                                                            </Label.FormattedText>
+                                                        </Label>
+                                                        <Label FontSize="15" TextColor="#333333">
+                                                            <Label.FormattedText>
+                                                                <FormattedString>
+                                                                    <Span Text="Thời gian hết hạn: "/>
+                                                                    <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
+                                                                    <Span Text="{Binding bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
+                                                                </FormattedString>
+                                                            </Label.FormattedText>
+                                                        </Label>
+                                                    </StackLayout>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </StackLayout>
@@ -525,7 +533,7 @@
                     </Grid>
                 </StackLayout>
             </ScrollView>
-            <controls:ExtendedFrame AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#1399D5" Padding="0" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">
+            <controls:ExtendedFrame x:Name="frameEdit" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#1399D5" Padding="0" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">
                 <Button Text="&#xf044;" Clicked="EditContact_Clicked"  TextColor="White" FontSize="20" FontFamily="FontAwesomeRegular" WidthRequest="44" HeightRequest="44" CornerRadius="22" BackgroundColor="#1399D5" VerticalOptions="Center" Padding="5,0,0,2"/>
             </controls:ExtendedFrame>
             <Grid x:Name="LookUpImagePhongThuy" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">

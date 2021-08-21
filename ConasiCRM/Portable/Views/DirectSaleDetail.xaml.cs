@@ -266,6 +266,25 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
+        private void GiuChoItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
+            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queuesDetialPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
         private void ScreenChange_SizeChanged(System.Object sender, System.EventArgs e)
         {
             //WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}"

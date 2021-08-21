@@ -139,5 +139,6 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(ex.Message);
             }
         }
+
     }
 }
