@@ -450,13 +450,13 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_developeraccount' />
                                     <attribute name='bsd_contact' />
                                     <attribute name='bsd_employee' alias='bsd_employeeid' />
+                                    <order attribute='statuscode' descending='false' />
                                     <order attribute='createdon' descending='true' />
                                     <link-entity name='contact' from='contactid' to='bsd_contact' visible='false' link-type='outer' alias='contacts'>
                                         <attribute name='bsd_fullname' alias='bsd_contact_name'/>
                                         <attribute name='mobilephone' alias='bsd_contacmobilephone'/>
                                         <attribute name='bsd_contactaddress' alias='bsd_contactaddress'/>
-                                    </link-entity>
-                                  
+                                    </link-entity>                                  
                                     <filter type='and'>
                                       <condition attribute='bsd_developeraccount' operator='eq' value='{accountid}' />
                                     </filter>                                  
