@@ -15,14 +15,11 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DirectSaleDetail : ContentPage
     {
+        public static bool? NeedToRefreshQueues = null;
         public Action<int> OnComplete;
-        public static bool? NeedToRefreshQueue = null;
         private DirectSaleDetailViewModel viewModel;
         public Unit CurrentUnit;
         private int currentBlock = 0;
-
-        private Button btnGiuCho;
-        private Button btnBangTinhGia;
 
         public DirectSaleDetail()
         {
@@ -33,8 +30,22 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             BindingContext = viewModel = new DirectSaleDetailViewModel(model);
-            NeedToRefreshQueue = false;
+            NeedToRefreshQueues = false;
             Init();
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (NeedToRefreshQueues == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.QueueList.Clear();
+                await viewModel.LoadQueues();
+                NeedToRefreshQueues = false;
+                LoadingHelper.Hide();
+            }
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -77,50 +88,11 @@ namespace ConasiCRM.Portable.Views
                     }
                     SetActiveBlock();
                 }
-
-                btnGiuCho = new Button()
-                {
-                    Text = "Giữ chỗ",
-                    TextColor = Color.White,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    HeightRequest = 40,
-                    BackgroundColor = (Color)App.Current.Resources["NavigationPrimary"],
-                    CornerRadius = 10,
-                };
-
-                btnBangTinhGia = new Button()
-                {
-                    Text = "Bảng tính giá",
-                    TextColor = Color.White,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 16,
-                    HeightRequest = 40,
-                    BackgroundColor = (Color)App.Current.Resources["NavigationPrimary"],
-                    CornerRadius = 10,
-                };
-                btnGiuCho.Clicked += GiuCho_Clicked;
-                btnBangTinhGia.Clicked += BangTinhGia_Clicked;
-
                 OnComplete?.Invoke(0);
             }
             else
             {
                 OnComplete?.Invoke(2); // loi khong co unit
-            }
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if(NeedToRefreshQueue == true)
-            {
-                LoadingHelper.Show();
-                viewModel.PageDanhSachDatCho = 1;
-                viewModel.QueueList.Clear();
-                await viewModel.LoadQueues();
-                NeedToRefreshQueue = false;
-                LoadingHelper.Hide();
             }
         }
 
@@ -183,8 +155,6 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = ((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as Unit;
 
-            gridButton.Children.Clear();
-
             viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(item.statuscode.ToString());
             if (!string.IsNullOrWhiteSpace(item.bsd_direction))
             {
@@ -239,16 +209,18 @@ namespace ConasiCRM.Portable.Views
 
         public void SetButton()
         {
-            gridButton.Children.Add(btnGiuCho);
-            gridButton.Children.Add(btnBangTinhGia);
             if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == false)
             {
                 gridButton.IsVisible = false;
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == true)
             {
+                btnGiuCho.IsVisible = true;
+                btnBangTinhGia.IsVisible = viewModel.IsShowBtnBangTinhGia;
                 Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumnSpan(btnGiuCho, 1);
                 Grid.SetColumn(btnBangTinhGia, 1);
+                Grid.SetColumnSpan(btnBangTinhGia, 1);
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == false)
             {

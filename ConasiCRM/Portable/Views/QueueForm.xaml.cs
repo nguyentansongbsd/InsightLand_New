@@ -95,11 +95,11 @@ namespace ConasiCRM.Portable.Views
             if (created)
             {
                 if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
-                if (DirectSaleDetail.NeedToRefreshQueue.HasValue) DirectSaleDetail.NeedToRefreshQueue = true;
+                if (DirectSaleDetail.NeedToRefreshQueues.HasValue) DirectSaleDetail.NeedToRefreshQueues = true;
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
-                await Navigation.PopAsync();               
-                LoadingHelper.Hide();
+                await Navigation.PopAsync();       
                 ToastMessageHelper.ShortMessage("Tạo giữ chỗ thành công");
+                LoadingHelper.Hide();
             }
             else
             {

@@ -1,32 +1,15 @@
 ﻿using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
-using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.Forms;
-
 using ConasiCRM.Portable.Helper;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Collections;
-using ConasiCRM.Portable.Config;
-using System.Net.Http.Headers;
-using System.Net;
-
-using System.Diagnostics;
-using Telerik.XamarinForms.Primitives;
-using Xamarin.Forms.Xaml;
 using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class AccountFormViewModel : FormLookupViewModel
+    public class AccountFormViewModel : BaseViewModel
     {
         private AccountFormModel _singleAccount;
         public AccountFormModel singleAccount { get => _singleAccount; set { _singleAccount = value; OnPropertyChanged(nameof(singleAccount)); } }
@@ -46,9 +29,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         private LookUp _PrimaryContact;
         public LookUp PrimaryContact { get => _PrimaryContact; set { _PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); } }
-
-        private AccountForm_CheckdataModel _list_check_data;
-        public AccountForm_CheckdataModel list_check_data { get { return _list_check_data; } set { _list_check_data = value; OnPropertyChanged(nameof(list_check_data)); } }
 
         private string _addressCompositeContac;
         public string AddressCompositeContac { get => _addressCompositeContac; set { _addressCompositeContac = value; OnPropertyChanged(nameof(AddressCompositeContac)); } }
@@ -99,15 +79,15 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<LookUp> list_district_lookup { get; set; }
 
         public AccountFormViewModel()
-        {           
-            list_check_data = new AccountForm_CheckdataModel();
-            
+        {
+            singleAccount = new AccountFormModel();                   
             list_country_lookup = new ObservableCollection<LookUp>();
             list_province_lookup = new ObservableCollection<LookUp>();
             list_district_lookup = new ObservableCollection<LookUp>();
 
             BusinessTypeOptionList = new List<OptionSet>();
             LocalizationOptionList = new ObservableCollection<OptionSet>();
+            PrimaryContactOptionList = new List<LookUp>();
            
         }
 
@@ -173,13 +153,9 @@ namespace ConasiCRM.Portable.ViewModels
                                 </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountFormModel>>("accounts", fetch);
-            if (result == null)
+            if (result == null || result.value == null)
                 return;
             var tmp = result.value.FirstOrDefault();
-            if (tmp == null)
-            {
-                return;
-            }
             this.singleAccount = tmp;
         }
 
@@ -213,7 +189,6 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
-
         }
 
         public async Task<Boolean> updateAccount( )
@@ -522,10 +497,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_vatregistrationnumber' />
                                 <attribute name='bsd_registrationcode' />
                                 <attribute name='accountid' />
-                                <order attribute='createdon' descending='true' />
-                                <link-entity name='account' from='accountid' to='accountid' visible='false' link-type='outer' alias='has_account'>
-                                        <attribute name='bsd_name' alias='bsd_account_name'/>
-                                    </link-entity>
+                                <order attribute='createdon' descending='true' />                              
                                 <filter type='and'>
                                   <filter type='or'>
                                     <filter type='and'>
@@ -541,8 +513,37 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountForm_CheckdataModel>>("accounts", fetchxml);
-            var tmp = result.value.FirstOrDefault();
-            if (tmp != null)
+            if (result != null && result.value.Count > 0)
+            {
+                return false;
+            }
+            return true;           
+        }
+
+        public async Task<bool> Check_GPKD(string bsd_vatregistrationnumber, string bsd_registrationcode, string accountid)
+        {
+            var fetchxml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='account'>
+                                <attribute name='bsd_vatregistrationnumber' />
+                                <attribute name='bsd_registrationcode' />
+                                <attribute name='accountid' />
+                                <order attribute='createdon' descending='true' />                              
+                                <filter type='and'>
+                                  <filter type='or'>
+                                    <filter type='and'>
+                                      <condition attribute='accountid' operator='ne' value='{" + accountid + @"}' />
+                                      <condition attribute='bsd_vatregistrationnumber' operator='eq' value='" + bsd_vatregistrationnumber + @"' />
+                                    </filter>
+                                    <filter type='and'>
+                                      <condition attribute='bsd_registrationcode' operator='eq' value='" + bsd_registrationcode + @"' />
+                                      <condition attribute='accountid' operator='ne' value='{" + accountid + @"}' />
+                                    </filter>
+                                  </filter>
+                                </filter>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<AccountForm_CheckdataModel>>("accounts", fetchxml);
+            if (result != null && result.value.Count > 0)
             {
                 return false;
             }

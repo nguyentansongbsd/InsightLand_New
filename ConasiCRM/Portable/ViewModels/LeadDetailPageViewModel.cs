@@ -59,7 +59,7 @@ namespace ConasiCRM.Portable.ViewModels
             singleLead = new LeadFormModel();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                 <entity name='lead'>
-                                    <attribute name='fullname' />
+                                    <attribute name='lastname' />
                                     <attribute name='subject' alias='bsd_topic_label'/>
                                     <attribute name='statuscode' />
                                     <attribute name='leadqualitycode' />

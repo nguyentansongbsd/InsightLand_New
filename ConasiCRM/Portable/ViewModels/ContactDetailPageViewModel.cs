@@ -24,8 +24,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private string _singleLocalization;
         public string SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
-       
-        public ObservableCollection<QueueListModel> list_danhsachdatcho { get; set; }
+
+        public ObservableCollection<QueueListModel> _list_danhsachdatcho;
+        public ObservableCollection<QueueListModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
         private bool _showMoreDanhSachDatCho;
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
         public int PageDanhSachDatCho { get; set; } = 1;
@@ -56,7 +57,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             singleContact = new ContactFormModel();            
             list_HuongTot = new ObservableCollection<HuongPhongThuy>();
-            list_HuongXau = new ObservableCollection<HuongPhongThuy>();                          
+            list_HuongXau = new ObservableCollection<HuongPhongThuy>();          
         }
 
         // load one contat
@@ -72,9 +73,6 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                     <filter type='and'>
                                         <condition attribute='contactid' operator='eq' value='" + id + @"' />
-                                    </filter>
-                                    <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
                                 </entity>
                             </fetch>";
@@ -103,10 +101,6 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='statuscode' />
                                 <attribute name='actualclosedate' />
                                 <attribute name='createdon' />
-                                <order attribute='actualclosedate' descending='true' />
-                                <filter type='and'>
-                                  <condition attribute='customerid' operator='eq' value='{customerId}' />
-                                </filter>
                                 <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                                     <attribute name='fullname'  alias='contact_name'/>
                                 </link-entity>
@@ -116,11 +110,11 @@ namespace ConasiCRM.Portable.ViewModels
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
                                     <attribute name='bsd_name'  alias='project_name'/>
                                 </link-entity>
-                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                    <filter type='and'>
-                                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                                </link-entity>
+                                <order attribute='actualclosedate' descending='true' />
+                               <filter type='and'>
+                                  <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                  <condition attribute='customerid' operator='eq' uitype='contact' value='"+customerId+@"' />
+                                </filter>
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueListModel>>("opportunities", fetch);

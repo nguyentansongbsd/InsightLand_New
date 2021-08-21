@@ -237,7 +237,6 @@ namespace ConasiCRM.Portable.Controls
 
         public async void SaveButton_Clicked(object sender, EventArgs e)
         {
-
             var checkedItems = ItemsSource.Where(x => x.Selected).ToList();
             if (checkedItems.Any())
             {

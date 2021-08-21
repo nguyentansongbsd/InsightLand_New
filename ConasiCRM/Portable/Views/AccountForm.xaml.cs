@@ -5,16 +5,7 @@ using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Mail;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -57,7 +48,6 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Tạo Mới Khách Hàng Doanh Nghiệp";
             btnSave.Text = "Tạo Mới";
             btnSave.Clicked += CreateContact_Clicked;
-            viewModel.singleAccount = new AccountFormModel();
         }
 
         private void CreateContact_Clicked(object sender, EventArgs e)
@@ -67,14 +57,16 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
-            viewModel.singleAccount = new AccountFormModel();
             await viewModel.LoadOneAccount(this.AccountId);
             viewModel.LoadBusinessTypeForLookup();
-            Lookup_BusinessType.SetList(viewModel.GetBusinessType());
+            Lookup_BusinessType.SaveButton_Clicked(null, null);
+           // Lookup_BusinessType.SetList(viewModel.GetBusinessType());
             if (viewModel.singleAccount.bsd_localization != null)
             {
-                viewModel.Localization = new OptionSet();
-                viewModel.Localization.Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
+                viewModel.Localization = new OptionSet { 
+                    Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization),
+                    Val = viewModel.singleAccount.bsd_localization
+                };
             }
 
             if (viewModel.singleAccount.primarycontactname != null)
@@ -99,33 +91,38 @@ namespace ConasiCRM.Portable.Views
         {                               
             Lookup_Localization.PreOpenAsync = async () =>
             {
-                viewModel.Localization = new OptionSet();
+                LoadingHelper.Show();
                 AccountLocalization.Localizations();
                 foreach (var item in AccountLocalization.LocalizationOptions)
                 {
                     viewModel.LocalizationOptionList.Add(item);
                 }
+                LoadingHelper.Hide();
             };         
             Lookup_BusinessType.PreShow = async () =>
             {
-                viewModel.BusinessType = new List<string>();
+                LoadingHelper.Show();
                 viewModel.LoadBusinessTypeForLookup();
-                Lookup_BusinessType.SetList(viewModel.GetBusinessType());
+             //   Lookup_BusinessType.SetList(viewModel.GetBusinessType());
+                LoadingHelper.Hide();
             };            
             Lookup_PrimaryContact.PreOpenAsync = async () =>
             {
-                viewModel.PrimaryContact = new LookUp();
+                LoadingHelper.Show();
                 await viewModel.LoadContactForLookup();
+                LoadingHelper.Hide();
             };
             lookUpContacAddressCountry.PreOpenAsync = async () =>
             {
+                LoadingHelper.Show();
                 await viewModel.LoadCountryForLookup();
+                LoadingHelper.Hide();
             };          
         }
 
         private async void SaveData(string id)
         {
-            if(viewModel.Localization == null)
+            if (viewModel.Localization == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn loại khách hàng");
                 return;
@@ -135,7 +132,7 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng nhập tên công ty");
                 return;
             }
-            if(viewModel.PrimaryContact == null)
+            if (viewModel.PrimaryContact == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn người đại diện");
                 return;
@@ -162,35 +159,40 @@ namespace ConasiCRM.Portable.Views
                 {
                     ToastMessageHelper.ShortMessage("Email 2 sai địng dạng. Vui lòng thử lại");
                     return;
-                }               
+                }
             }
             if (viewModel.singleAccount.bsd_registrationcode == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập số giấy phép kinh doanh");
                 return;
             }
-            if (viewModel.singleAccount.bsd_registrationcode != null && viewModel.singleAccount.bsd_vatregistrationnumber != null)                       
+            if (!await viewModel.Check_form_keydata(null, viewModel.singleAccount.bsd_registrationcode, viewModel.singleAccount.accountid.ToString()))
             {
-                if (await viewModel.Check_form_keydata(viewModel.singleAccount.bsd_registrationcode, viewModel.singleAccount.bsd_vatregistrationnumber, viewModel.singleAccount.accountid.ToString()))
+                ToastMessageHelper.ShortMessage("Số giấy phép kinh doanh đã tạo trong dữ liệu doanh nghiệp");
+                return;
+            }
+            if (viewModel.singleAccount.bsd_vatregistrationnumber != null)
+            {
+                if (!await viewModel.Check_form_keydata(viewModel.singleAccount.bsd_vatregistrationnumber, null, viewModel.singleAccount.accountid.ToString()))
                 {
-                    ToastMessageHelper.ShortMessage("Số GPKD hoặc mã số thuế đã tạo trong dữ liệu doanh nghiệp");
+                    ToastMessageHelper.ShortMessage("Mã số thuế đã tạo trong dữ liệu doanh nghiệp");
                     return;
                 }
             }
 
             LoadingHelper.Show();
-            if(viewModel.Localization.Val != null)
+            if (viewModel.Localization != null && viewModel.Localization.Val != null)
             {
                 viewModel.singleAccount.bsd_localization = viewModel.Localization.Val;
             }
-            if (viewModel.PrimaryContact.Id != null)
+            if (viewModel.PrimaryContact != null && viewModel.PrimaryContact.Id != null)
             {
                 viewModel.singleAccount._primarycontactid_value = viewModel.PrimaryContact.Id;
             }
-            if (viewModel.BusinessType != null)
+            if (viewModel.BusinessType != null && viewModel.BusinessType.Count > 0)
             {
-              viewModel.singleAccount.bsd_businesstypesys = string.Join(", ", viewModel.BusinessType);
-            }    
+                viewModel.singleAccount.bsd_businesstypesys = string.Join(", ", viewModel.BusinessType);
+            }
             if (id == null)
             {
                 var created = await viewModel.createAccount();
@@ -206,7 +208,7 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thất bại");
                 }
-            }   
+            }
             else
             {
                 var updated = await viewModel.updateAccount();
@@ -221,7 +223,7 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thất bại");
                 }
-            }    
+            }
         }
 
         private async void DiaChiLienLac_Tapped(object sender, EventArgs e)

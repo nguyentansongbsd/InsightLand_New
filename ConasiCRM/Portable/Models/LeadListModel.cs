@@ -7,7 +7,7 @@ namespace ConasiCRM.Portable.Models
     public class LeadListModel
     {
         public Guid leadid { get; set; }
-        public string fullname { get; set; }
+        public string lastname { get; set; }
         public string mobilephone { get; set; }
         public string subject { get; set; }
         public int statuscode { get; set; }

@@ -19,7 +19,7 @@ namespace ConasiCRM.Portable.ViewModels
                 EntityName = "leads";
                 FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='lead'>
-                        <attribute name='fullname' />
+                        <attribute name='lastname' />
                         <attribute name='subject' />
                         <attribute name='mobilephone'/>
                         <attribute name='emailaddress1' />
@@ -28,7 +28,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='leadqualitycode' />
                         <order attribute='createdon' descending='true' />
                         <filter type='and'>
-                            <condition attribute='fullname' operator='like' value='%{Keyword}%' />
+                            <condition attribute='lastname' operator='like' value='%{Keyword}%' />
                         </filter>
                         <filter type='and'>
                              <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
