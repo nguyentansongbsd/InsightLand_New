@@ -50,33 +50,7 @@ namespace ConasiCRM.Portable.Controls
         public bool PreOpenOneTime { get; set; } = true;
         public async Task Show()
         {
-            if (PreShow != null)
-            {
-                await PreShow();
-                if (PreOpenOneTime)
-                {
-                    PreShow = null;
-                }
-            }
-
-            if (init == false)
-            {
-                SetUpGridButton();
-                SetUpListView();
-                init = true;
-            }
-            else
-            {
-                if (searchBar.Text != null && searchBar.Text.Length > 0)
-                {
-                    searchBar.Text = "";
-                }
-            }
-
-            CenterModal.CustomCloseButton(CancelButton_Clicked);
-            CenterModal.Title = Placeholder;
-            CenterModal.Footer = gridButton;
-            CenterModal.Body = gridMain;
+            SetUpModal();
             await CenterModal.Show();
         }
 
@@ -328,6 +302,37 @@ namespace ConasiCRM.Portable.Controls
         {
             LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;
             control.setData();
+        }
+
+        public async void SetUpModal()
+        {
+            if (PreShow != null)
+            {
+                await PreShow();
+                if (PreOpenOneTime)
+                {
+                    PreShow = null;
+                }
+            }
+
+            if (init == false)
+            {
+                SetUpGridButton();
+                SetUpListView();
+                init = true;
+            }
+            else
+            {
+                if (searchBar.Text != null && searchBar.Text.Length > 0)
+                {
+                    searchBar.Text = "";
+                }
+            }
+
+            CenterModal.CustomCloseButton(CancelButton_Clicked);
+            CenterModal.Title = Placeholder;
+            CenterModal.Footer = gridButton;
+            CenterModal.Body = gridMain;
         }
     }
 }

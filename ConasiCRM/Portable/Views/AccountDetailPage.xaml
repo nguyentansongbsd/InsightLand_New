@@ -91,7 +91,7 @@
                                 <Label Text="{Binding singleAccount.bsd_name}" FontAttributes="Bold" Grid.Row="0" FontSize="16" TextColor="#026294"/>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                     <Label Text="Nhóm: " Grid.Column="0" FontSize="15" TextColor="#444444"/>
-                                    <Label Text="{Binding Localization}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
+                                    <Label Text="{Binding Localization.Label}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
                                 </Grid>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
                                     <Label Text="Loại: " Grid.Column="0" FontSize="15" TextColor="#444444"/>

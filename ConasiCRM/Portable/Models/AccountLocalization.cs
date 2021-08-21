@@ -17,19 +17,13 @@ namespace ConasiCRM.Portable.Models
                 new OptionSet("100000001", "Nước ngoài")
             };
         }
-        public static string GetLocalizationById(string listId)
+        public static OptionSet GetLocalizationById(string Id)
         {
             Localizations();
-            if (listId != string.Empty)
+            if (Id != string.Empty)
             {
-                List<string> list = new List<string>();
-                var ids = listId.Split(',');
-                foreach (var item in ids)
-                {
-                    OptionSet optionSet = LocalizationOptions.Single(x => x.Val == item);
-                    list.Add(optionSet.Label);
-                }
-                return string.Join(", ", list);
+                OptionSet optionSet = LocalizationOptions.Single(x => x.Val == Id);
+                return optionSet;
             }
             return null;
         }

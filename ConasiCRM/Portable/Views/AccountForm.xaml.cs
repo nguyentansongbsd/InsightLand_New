@@ -65,14 +65,12 @@ namespace ConasiCRM.Portable.Views
 
             await viewModel.LoadOneAccount(this.AccountId);
             viewModel.LoadBusinessTypeForLookup();
+            Lookup_BusinessType.SetUpModal();
             Lookup_BusinessType.SaveButton_Clicked(null, null);
 
             if (viewModel.singleAccount.bsd_localization != null)
             {
-                viewModel.Localization = new OptionSet { 
-                    Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization),
-                    Val = viewModel.singleAccount.bsd_localization
-                };
+                viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
             if (viewModel.singleAccount.primarycontactname != null)
@@ -138,7 +136,6 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 viewModel.LoadBusinessTypeForLookup();
-             //   Lookup_BusinessType.SetList(viewModel.GetBusinessType());
                 LoadingHelper.Hide();
             };            
             Lookup_PrimaryContact.PreOpenAsync = async () =>

@@ -92,19 +92,11 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadOneContact(contactId);                
                 if (viewModel.singleContact.gendercode != null)
                 {
-                    viewModel.singleGender = new OptionSet
-                    {
-                        Label = ContactGender.GetGenderById(viewModel.singleContact.gendercode),
-                        Val = viewModel.singleContact.gendercode
-                    };
+                    viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode);
                 }
                 if (viewModel.singleContact.bsd_localization != null)
                 {
-                    viewModel.singleLocalization = new OptionSet
-                    {
-                        Label = AccountLocalization.GetLocalizationById(viewModel.singleContact.bsd_localization),
-                        Val = viewModel.singleContact.bsd_localization
-                    };
+                    viewModel.singleLocalization = AccountLocalization.GetLocalizationById(viewModel.singleContact.bsd_localization);
                 }
                 if (viewModel.singleContact._parentcustomerid_value != null)
                 {

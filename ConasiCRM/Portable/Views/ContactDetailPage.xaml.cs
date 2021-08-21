@@ -88,33 +88,23 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.list_danhsachdatcho == null || viewModel.list_danhsachdatcoc == null || viewModel.list_danhsachhopdong == null || viewModel.list_chamsockhachhang == null)
             {
                 LoadingHelper.Show();
-                if (viewModel.list_danhsachdatcho.Count == 0)
-                {
-                    viewModel.PageDanhSachDatCho = 1;
-                    await viewModel.LoadQueuesForContactForm(Id);
-                    LoadingHelper.Hide();
-                }
-                if (viewModel.list_danhsachdatcoc == null)
-                {
-                    viewModel.list_danhsachdatcoc = new ObservableCollection<QuotationReseravtion>();
-                    viewModel.PageDanhSachDatCoc = 1;
-                    await viewModel.LoadReservationForContactForm(Id);
-                    LoadingHelper.Hide();
-                }
-                if (viewModel.list_danhsachhopdong == null)
-                {
-                    viewModel.list_danhsachhopdong = new ObservableCollection<OptionEntry>();
-                    viewModel.PageDanhSachHopDong = 1;
-                    await viewModel.LoadOptoinEntryForContactForm(Id);
-                    LoadingHelper.Hide();
-                }
-                if (viewModel.list_chamsockhachhang == null)
-                {
-                    viewModel.list_chamsockhachhang = new ObservableCollection<Case>();
-                    viewModel.PageChamSocKhachHang = 1;
-                    await viewModel.LoadCaseForContactForm(Id);
-                    LoadingHelper.Hide();
-                } 
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.PageDanhSachDatCoc = 1;
+                viewModel.PageDanhSachHopDong = 1;
+                viewModel.PageChamSocKhachHang = 1;
+
+                viewModel.list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
+                viewModel.list_danhsachdatcoc = new ObservableCollection<QuotationReseravtion>();
+                viewModel.list_danhsachhopdong = new ObservableCollection<OptionEntry>();
+                viewModel.list_chamsockhachhang = new ObservableCollection<Case>();
+
+                await Task.WhenAll(
+                   viewModel.LoadQueuesForContactForm(Id),
+                   viewModel.LoadReservationForContactForm(Id),
+                   viewModel.LoadOptoinEntryForContactForm(Id),
+                   viewModel.LoadCaseForContactForm(Id)
+               );
+                LoadingHelper.Hide();
             }          
         }
         // danh sach dat cho
