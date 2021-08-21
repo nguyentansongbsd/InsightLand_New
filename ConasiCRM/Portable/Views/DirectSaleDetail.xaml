@@ -152,7 +152,7 @@
                                             </telerikPrimitives:ExpanderHeader>
                                         </telerikPrimitives:RadExpander.Header>
                                         <telerikPrimitives:RadExpander.Content >
-                                            <FlexLayout x:Name="flexContentUnits" FlexLayout.AlignSelf="Start" BindableLayout.ItemsSource="{Binding Units}" Padding="8" Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Start" SizeChanged="ScreenChange_SizeChanged">
+                                            <FlexLayout x:Name="flexContentUnits" BindableLayout.ItemsSource="{Binding Units}" Padding="8" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" SizeChanged="ScreenChange_SizeChanged">
                                                 <BindableLayout.ItemTemplate>
                                                     <DataTemplate>
                                                         <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
