@@ -155,7 +155,8 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = ((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as Unit;
 
-            viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(item.statuscode.ToString());
+            viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(item.statuscode.ToString());          
+
             if (!string.IsNullOrWhiteSpace(item.bsd_direction))
             {
                 viewModel.UnitDirection = DirectionData.GetDiretionById(item.bsd_direction);
@@ -169,6 +170,15 @@ namespace ConasiCRM.Portable.Views
             viewModel.QueueList.Clear();
             await viewModel.LoadQueues();
             await viewModel.CheckShowBtnBangTinhGia();
+
+            if (viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000" || viewModel.UnitStatusCode.Id == "100000004")
+            {
+                btnGiuCho.IsVisible = true;
+            }
+            else
+            {
+                btnGiuCho.IsVisible = false;
+            }
 
             SetButton();
             
@@ -215,6 +225,7 @@ namespace ConasiCRM.Portable.Views
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == true)
             {
+                gridButton.IsVisible = true;
                 btnGiuCho.IsVisible = true;
                 btnBangTinhGia.IsVisible = viewModel.IsShowBtnBangTinhGia;
                 Grid.SetColumn(btnGiuCho, 0);
@@ -224,6 +235,7 @@ namespace ConasiCRM.Portable.Views
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == false)
             {
+                gridButton.IsVisible = true;
                 btnGiuCho.IsVisible = true;
                 btnBangTinhGia.IsVisible = viewModel.IsShowBtnBangTinhGia;
                 Grid.SetColumn(btnGiuCho, 0);
@@ -232,6 +244,7 @@ namespace ConasiCRM.Portable.Views
             }
             else if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == true)
             {
+                gridButton.IsVisible = true;
                 btnGiuCho.IsVisible = false;
                 btnBangTinhGia.IsVisible = viewModel.IsShowBtnBangTinhGia;
                 Grid.SetColumn(btnGiuCho, 0);

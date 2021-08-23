@@ -27,18 +27,18 @@ namespace ConasiCRM.Portable.Views
 
         public void Init()
         {          
-            this.BindingContext = viewModel = new QueueFormViewModel();
-            viewModel.QueueFormModel.createdon = DateTime.Now;
+            this.BindingContext = viewModel = new QueueFormViewModel();          
             SetPreOpen();            
         }
         public async void Create()
         {
-            btnSave.Text = "Lưu";
+            btnSave.Text = "Tạo Giữ Chỗ";
             btnSave.Clicked += Create_Clicked; ;
             this.Title = "Tạo Giữ Chỗ";
             if(from)
             {
                 await viewModel.LoadFromUnit(this.UnitId);
+                topic.Text = viewModel.QueueFormModel.bsd_units_name;
                 if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
                 else
@@ -47,6 +47,7 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 await viewModel.LoadFromProject(this.UnitId);
+                topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
                 else

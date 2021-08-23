@@ -25,6 +25,12 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty SelectedIdsProperty = BindableProperty.Create(nameof(SelectedIds), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
         public List<string> SelectedIds { get => (List<string>)GetValue(SelectedIdsProperty); set { SetValue(SelectedIdsProperty, value); } }
 
+        public static readonly BindableProperty ShowClearButtonProperty = BindableProperty.Create(nameof(ShowClearButton), typeof(bool), typeof(MainEntry), true, BindingMode.TwoWay);
+        public bool ShowClearButton { get => (bool)GetValue(ShowClearButtonProperty); set { SetValue(ShowClearButtonProperty, value); } }
+
+        public static readonly BindableProperty ShowCloseButtonProperty = BindableProperty.Create(nameof(ShowCloseButton), typeof(bool), typeof(MainEntry), true, BindingMode.TwoWay);
+        public bool ShowCloseButton { get => (bool)GetValue(ShowCloseButtonProperty); set { SetValue(ShowCloseButtonProperty, value); } }
+
         private string _text;
         public string Text { get => _text; set { _text = value; OnPropertyChanged(nameof(Text)); } }
 
@@ -77,6 +83,7 @@ namespace ConasiCRM.Portable.Controls
                 Padding = new Thickness(10, 5),
                 BorderWidth = 1
             };
+            deleteButton.SetBinding(Button.IsVisibleProperty, new Binding("ShowClearButton") { Source = this });
             deleteButton.Clicked += async (object sender, EventArgs e) =>
             {
                 this.ClearData();
@@ -94,17 +101,16 @@ namespace ConasiCRM.Portable.Controls
                 Padding = new Thickness(10, 5),
                 BorderWidth = 1
             };
+            cancelButton.SetBinding(Button.IsVisibleProperty, new Binding("ShowCloseButton") { Source = this });
             cancelButton.Clicked += CancelButton_Clicked;
 
             gridButton = new Grid()
             {
-                ColumnSpacing = 2,
-                Margin = new Thickness(5, 0, 5, 5)
+                ColumnSpacing = 5,
+                Padding = new Thickness(5, 0, 5, 5)
             };
 
             gridButton.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(35) });
-            gridButton.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-            gridButton.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             gridButton.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
             gridButton.Children.Add(cancelButton);
@@ -114,9 +120,31 @@ namespace ConasiCRM.Portable.Controls
             Grid.SetRow(deleteButton, 0);
             Grid.SetRow(saveButton, 0);
 
-            Grid.SetColumn(cancelButton, 0);
-            Grid.SetColumn(deleteButton, 1);
-            Grid.SetColumn(saveButton, 2);
+            if (deleteButton.IsVisible == false && cancelButton.IsVisible == false)
+            {
+                Grid.SetColumn(saveButton, 0);
+            }
+            else
+            {
+                gridButton.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                if (deleteButton.IsVisible == false)
+                {
+                    Grid.SetColumn(cancelButton, 0);
+                    Grid.SetColumn(saveButton, 1);
+                }
+                else if (cancelButton.IsVisible == false)
+                {
+                    Grid.SetColumn(deleteButton, 0);
+                    Grid.SetColumn(saveButton, 1);
+                }
+                else
+                {
+                    gridButton.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                    Grid.SetColumn(cancelButton, 0);
+                    Grid.SetColumn(deleteButton, 1);
+                    Grid.SetColumn(saveButton, 2);
+                }
+            }
         }
 
         private void SetUpListView()

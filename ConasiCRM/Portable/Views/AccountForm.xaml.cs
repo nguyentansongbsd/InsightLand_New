@@ -5,6 +5,7 @@ using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -66,8 +67,17 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadOneAccount(this.AccountId);
             viewModel.LoadBusinessTypeForLookup();
             Lookup_BusinessType.SetUpModal();
-            Lookup_BusinessType.SaveButton_Clicked(null, null);
-
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))
+            {
+                List<string> ids = new List<string>();
+                var businesstypes = viewModel.singleAccount.bsd_businesstypesys.Split(',');
+                foreach (var item in businesstypes)
+                {
+                    var businessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
+                    ids.Add(businessType);
+                }
+                viewModel.BusinessType = ids;
+            }
             if (viewModel.singleAccount.bsd_localization != null)
             {
                 viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
