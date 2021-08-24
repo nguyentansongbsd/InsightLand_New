@@ -19,11 +19,11 @@ namespace ConasiCRM.Portable.ViewModels
         private ContactFormModel _singleContact;
         public ContactFormModel singleContact { get { return _singleContact; } set { _singleContact = value; OnPropertyChanged(nameof(singleContact)); } }
 
-        private string _singleGender;
-        public string singleGender { get => _singleGender; set { _singleGender = value; OnPropertyChanged(nameof(singleGender)); } }
+        private OptionSet _singleGender;
+        public OptionSet singleGender { get => _singleGender; set { _singleGender = value; OnPropertyChanged(nameof(singleGender)); } }
 
-        private string _singleLocalization;
-        public string SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
+        private OptionSet _singleLocalization;
+        public OptionSet SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
         public ObservableCollection<QueueFormModel> list_danhsachdatcho { get; set; } = new ObservableCollection<QueueFormModel>();
 
         private bool _showMoreDanhSachDatCho;

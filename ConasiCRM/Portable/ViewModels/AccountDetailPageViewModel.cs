@@ -18,8 +18,8 @@ namespace ConasiCRM.Portable.ViewModels
         private string _businessTypes;
         public string BusinessTypes { get => _businessTypes; set { _businessTypes = value; OnPropertyChanged(nameof(BusinessTypes)); } }
 
-        private string _localization;
-        public string Localization { get => _localization; set { _localization = value; OnPropertyChanged(nameof(Localization)); } }
+        private OptionSet _localization;
+        public OptionSet Localization { get => _localization; set { _localization = value; OnPropertyChanged(nameof(Localization)); } }
 
         private AccountFormModel _singleAccount;
         public AccountFormModel singleAccount { get => _singleAccount; set { _singleAccount = value; OnPropertyChanged(nameof(singleAccount)); } }

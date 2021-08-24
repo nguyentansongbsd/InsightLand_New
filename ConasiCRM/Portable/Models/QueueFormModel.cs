@@ -79,6 +79,6 @@ namespace ConasiCRM.Portable.Models
 
         public decimal unit_price { get; set; } // Giá bán , tên gốc price => đổi lại tránh trùng khi trong form update khi lấy thông tin về.
         public int bsd_longtime { get; set; }
-        public int bsd_shorttime { get; set; }     
+        public int bsd_shorttime { get; set; }       
     }
 }

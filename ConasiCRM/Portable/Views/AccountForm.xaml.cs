@@ -67,25 +67,21 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadOneAccount(this.AccountId);
 
             viewModel.LoadBusinessTypeForLookup();
-
-            var a = viewModel.singleAccount.bsd_businesstypesys.Split(',');
-            List<string> ids = new List<string>() ;
-            foreach (var item in a)
+            Lookup_BusinessType.SetUpModal();
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))
             {
-                var b = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
-                ids.Add(b);
+                List<string> ids = new List<string>();
+                var businesstypes = viewModel.singleAccount.bsd_businesstypesys.Split(',');
+                foreach (var item in businesstypes)
+                {
+                    var businessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
+                    ids.Add(businessType);
+                }
+                viewModel.BusinessType = ids;
             }
-            viewModel.BusinessType = ids;
-
-
-            //Lookup_BusinessType.SaveButton_Clicked(null, null);
-
             if (viewModel.singleAccount.bsd_localization != null)
             {
-                viewModel.Localization = new OptionSet { 
-                    Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization),
-                    Val = viewModel.singleAccount.bsd_localization
-                };
+                viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
             if (viewModel.singleAccount.primarycontactname != null)
@@ -151,7 +147,6 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 viewModel.LoadBusinessTypeForLookup();
-             //   Lookup_BusinessType.SetList(viewModel.GetBusinessType());
                 LoadingHelper.Hide();
             };            
             Lookup_PrimaryContact.PreOpenAsync = async () =>

@@ -289,41 +289,10 @@ namespace ConasiCRM.Portable.ViewModels
         public List<OptionSet> LoadBusinessTypeForLookup()
         {
             BusinessTypeOptionList = new List<OptionSet>();
-            //BusinessType = new List<string>();
             BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer"));
             BusinessTypeOptionList.Add(new OptionSet("100000001", "Partner"));
-            BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Argents"));
-            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer"));
-
-            return BusinessTypeOptionList;
-            //if (singleAccount.bsd_businesstypesys != null)
-            //{
-            //    List<string> listType = new List<string>();
-            //    var ids = singleAccount.bsd_businesstypesys.Split(',');
-            //    foreach (var item in ids)
-            //    {
-            //        if (item == "100000000")
-            //        {
-            //            BusinessTypeOptionList[0].Selected = true;
-            //            BusinessType.Add("100000000");
-            //        }
-            //        if (item == "100000001")
-            //        {
-            //            BusinessTypeOptionList[1].Selected = true;
-            //            BusinessType.Add("100000001");
-            //        }
-            //        if (item == "100000002")
-            //        {
-            //            BusinessTypeOptionList[2].Selected = true;
-            //            BusinessType.Add("100000002");
-            //        }
-            //        if (item == "100000003")
-            //        {
-            //            BusinessTypeOptionList[3].Selected = true;
-            //            BusinessType.Add("100000003");
-            //        }
-            //    }
-            //}
+            BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Agents"));
+            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer"));          
         }
 
         public async Task LoadContactForLookup() // bubg
