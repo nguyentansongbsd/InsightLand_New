@@ -91,7 +91,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private async void SearchClicked(object sender, EventArgs e)
+        private void SearchClicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             if (viewModel.Project == null)
@@ -166,73 +166,73 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private int CompareInt(string a, string b)
-        {
-            if (a != string.Empty && b != string.Empty)
-            {
-                if (Int32.TryParse(a, out int value1) && Int32.TryParse(b, out int value2))
-                {
-                    if (value1 > value2)
-                        return 1;
-                    if (value2 == value1)
-                        return 0;
-                    if (value1 < value2)
-                        return -1;
-                }
-                if (!Int32.TryParse(a, out int i) || !Int32.TryParse(b, out int j))
-                {
-                    if (!Int32.TryParse(a, out int c))
-                        return -1;
-                    if (!Int32.TryParse(b, out int d))
-                        return 1;
-                    return 0;
-                }
-            }
-            return 0;
-        }
+        //private int CompareInt(string a, string b)
+        //{
+        //    if (a != string.Empty && b != string.Empty)
+        //    {
+        //        if (Int32.TryParse(a, out int value1) && Int32.TryParse(b, out int value2))
+        //        {
+        //            if (value1 > value2)
+        //                return 1;
+        //            if (value2 == value1)
+        //                return 0;
+        //            if (value1 < value2)
+        //                return -1;
+        //        }
+        //        if (!Int32.TryParse(a, out int i) || !Int32.TryParse(b, out int j))
+        //        {
+        //            if (!Int32.TryParse(a, out int c))
+        //                return -1;
+        //            if (!Int32.TryParse(b, out int d))
+        //                return 1;
+        //            return 0;
+        //        }
+        //    }
+        //    return 0;
+        //}
 
-        private void MinPrice_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.minPrice.ToString(), viewModel.maxPrice.ToString()) == 1)
-                {
-                    ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
-                }
-            }
-        }
+        //private void MinPrice_Unfocused(object sender, FocusEventArgs e)
+        //{
+        //    if (e.IsFocused == false)
+        //    {
+        //        if (CompareInt(viewModel.minPrice.ToString(), viewModel.maxPrice.ToString()) == 1)
+        //        {
+        //            ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
+        //        }
+        //    }
+        //}
 
-        private void MaxPrice_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.maxPrice.ToString(), viewModel.minPrice.ToString()) == -1)
-                {
-                    ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
-                }
-            }
-        }
+        //private void MaxPrice_Unfocused(object sender, FocusEventArgs e)
+        //{
+        //    if (e.IsFocused == false)
+        //    {
+        //        if (CompareInt(viewModel.maxPrice.ToString(), viewModel.minPrice.ToString()) == -1)
+        //        {
+        //            ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
+        //        }
+        //    }
+        //}
 
-        private void MinNetArea_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.minNetArea.ToString(), viewModel.maxNetArea.ToString()) == 1)
-                {
-                    ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
-                }
-            }
-        }
+        //private void MinNetArea_Unfocused(object sender, FocusEventArgs e)
+        //{
+        //    if (e.IsFocused == false)
+        //    {
+        //        if (CompareInt(viewModel.minNetArea.ToString(), viewModel.maxNetArea.ToString()) == 1)
+        //        {
+        //            ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
+        //        }
+        //    }
+        //}
 
-        private void MaxNetArea_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.maxNetArea.ToString(), viewModel.minNetArea.ToString()) == -1)
-                {
-                    ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
-                }
-            }
-        }
+        //private void MaxNetArea_Unfocused(object sender, FocusEventArgs e)
+        //{
+        //    if (e.IsFocused == false)
+        //    {
+        //        if (CompareInt(viewModel.maxNetArea.ToString(), viewModel.minNetArea.ToString()) == -1)
+        //        {
+        //            ToastMessageHelper.ShortMessage("Giá trị không hợp lệ. Vui lòng thử lại!");
+        //        }
+        //    }
+        //}
     }
 }

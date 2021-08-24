@@ -35,7 +35,7 @@ namespace ConasiCRM.Portable.ViewModels
         public bool IsShowbtnClearAddress { get => _isShowbtnClearAddress; set { _isShowbtnClearAddress = value; OnPropertyChanged(nameof(IsShowbtnClearAddress)); } }
 
         //IsShowbtnClearAddress
-        private string _addressComposite;
+        private string _addressComposite; 
         public string AddressComposite
         {
             get => _addressComposite;
@@ -150,8 +150,7 @@ namespace ConasiCRM.Portable.ViewModels
             var tmp = result.value.FirstOrDefault();
             if (result == null || tmp == null)
             {
-                await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
+                return;
             }
 
             this.singleLead = tmp;
@@ -172,6 +171,8 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
+
+
         }
 
         public async Task<CrmApiResponse> createLead()
