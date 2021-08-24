@@ -15,7 +15,7 @@
                     <controls:LookUp x:Name="Lookup_Localization" Placeholder="Chọn loại khách hàng" ItemsSource="{Binding LocalizationOptionList}" SelectedItem="{Binding Localization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label"/>
 
                     <controls:FormLabel Text="Nhóm khách hàng" FontSize="15" Margin="0,10,0,0"/>
-                    <controls:LookUpMultipleOptions x:Name="Lookup_BusinessType" Placeholder="Chọn nhóm khách hàng" ItemsSource="{Binding BusinessTypeOptionList}" SelectedIds="{Binding BusinessType}" CenterModal="{x:Reference CenterModal}"/>
+                    <controls:LookUpMultipleOptions x:Name="Lookup_BusinessType" Placeholder="Chọn nhóm khách hàng" ItemsSource="{Binding BusinessTypeOptionList}" SelectedIds="{Binding BusinessType}" CenterModal="{x:Reference CenterModal}" ShowClearButton="False" ShowCloseButton="False"/>
 
                     <controls:FormLabelRequired Text="Tên công ty" Margin="0,10,0,0"/>
                     <controls:MainEntry Placeholder="Nhập tên công ty" Text="{Binding singleAccount.bsd_name}" FontSize="15"/>

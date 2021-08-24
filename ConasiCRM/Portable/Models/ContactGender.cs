@@ -18,19 +18,13 @@ namespace ConasiCRM.Portable.Models
                 new OptionSet("100000000","Khác")
             };
         }
-        public static string GetGenderById(string listId)
+        public static OptionSet GetGenderById(string Id)
         {
             GetGenders();
-            if (listId != string.Empty)
+            if (Id != string.Empty)
             {
-                List<string> list = new List<string>();
-                var ids = listId.Split(',');
-                foreach (var item in ids)
-                {
-                    OptionSet optionSet = GenderOptions.Single(x => x.Val == item);
-                    list.Add(optionSet.Label);
-                }
-                return string.Join(", ", list);
+                OptionSet optionSet = GenderOptions.Single(x => x.Val == Id);
+                return optionSet;
             }
             return null;
         }

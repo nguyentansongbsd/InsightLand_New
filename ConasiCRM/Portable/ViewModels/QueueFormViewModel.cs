@@ -75,6 +75,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             this.QueueFormModel = tmp;
             QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
+            QueueFormModel.createdon = DateTime.Now;
         }
 
         public async Task LoadFromUnit(Guid UnitId)
@@ -119,6 +120,7 @@ namespace ConasiCRM.Portable.ViewModels
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_units_queuingfee;
             else if (QueueFormModel.bsd_bookingf > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
+            QueueFormModel.createdon = DateTime.Now;
         }
 
         public async Task<bool> SetQueueTime(bool from)
@@ -348,7 +350,7 @@ namespace ConasiCRM.Portable.ViewModels
                 data["bsd_bookingtime"] = QueueFormModel.bsd_bookingtime;
                 data["bsd_queuingexpired"] = QueueFormModel.bsd_queuingexpired;
             }
-            data["createdon"] = QueueFormModel.createdon.ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"");
+            data["createdon"] = QueueFormModel.createdon;
 
             return data;
         }

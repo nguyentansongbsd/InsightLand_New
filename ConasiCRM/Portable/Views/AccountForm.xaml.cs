@@ -5,6 +5,7 @@ using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -65,14 +66,21 @@ namespace ConasiCRM.Portable.Views
 
             await viewModel.LoadOneAccount(this.AccountId);
             viewModel.LoadBusinessTypeForLookup();
-            Lookup_BusinessType.SaveButton_Clicked(null, null);
-
+            Lookup_BusinessType.SetUpModal();
+            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))
+            {
+                List<string> ids = new List<string>();
+                var businesstypes = viewModel.singleAccount.bsd_businesstypesys.Split(',');
+                foreach (var item in businesstypes)
+                {
+                    var businessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
+                    ids.Add(businessType);
+                }
+                viewModel.BusinessType = ids;
+            }
             if (viewModel.singleAccount.bsd_localization != null)
             {
-                viewModel.Localization = new OptionSet { 
-                    Label = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization),
-                    Val = viewModel.singleAccount.bsd_localization
-                };
+                viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
             if (viewModel.singleAccount.primarycontactname != null)
@@ -138,7 +146,6 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 viewModel.LoadBusinessTypeForLookup();
-             //   Lookup_BusinessType.SetList(viewModel.GetBusinessType());
                 LoadingHelper.Hide();
             };            
             Lookup_PrimaryContact.PreOpenAsync = async () =>
