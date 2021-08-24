@@ -186,7 +186,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     '" + minPrice_Condition + @"'
                                     '" + maxPrice_Condition + @"'
                                 </filter>
-                                <link-entity name='bsd_floor' from='bsd_floorid' to='bsd_floor' link-type='inner' alias='ad'>
+                                <link-entity name='bsd_floor' count='10' page='1' from='bsd_floorid' to='bsd_floor' link-type='inner' alias='ad'>
                                   <attribute name='bsd_floorid' alias='floorid' />
                                   <attribute name='bsd_name' alias='floor_name' />
                                 </link-entity>
@@ -211,7 +211,8 @@ namespace ConasiCRM.Portable.ViewModels
             List<Unit> unitInBlock = new List<Unit>();
             if (this.blockId != Guid.Empty) // truong hop khi tu gio hang khoong chon DMB va khoong nhap san pham
             {
-                unitInBlock= result.value.GroupBy(x => new {
+                unitInBlock = result.value.GroupBy(x => new
+                {
                     unitid = x.productid,
                     statuscode = x.statuscode
                 }).Select(y => y.First()).ToList();
@@ -219,15 +220,15 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 this.blockId = result.value.FirstOrDefault().blockid;
-                unitInBlock = result.value.Where(x=>x.blockid == blockId).GroupBy(y => new
+                unitInBlock = result.value.Where(x => x.blockid == blockId).GroupBy(y => new
                 {
                     unitid = y.productid,
                     statuscode = y.statuscode
                 }).Select(z => z.First()).ToList();
             }
-            foreach (var item in unitInBlock)
+            for (int i = 0; i < unitInBlock.Count; i++)
             {
-                switch (item.statuscode)
+                switch (unitInBlock[i].statuscode)
                 {
                     case 1:
                         NumChuanBiInBlock++;
@@ -263,18 +264,18 @@ namespace ConasiCRM.Portable.ViewModels
             List<Unit> unitsGroupByFloor = unitInBlock.GroupBy(i => new
             {
                 floorId = i.floorid,
-            }).Select(x=>x.First()).ToList();
+            }).Select(x => x.First()).ToList();
 
             // lay danh sach unit co nhung trang thai giu cho la: queuing, waiting,completed
             List<Unit> listUnitByQueue = result.value.Where(x => x.queses_statuscode == "100000000" || x.queses_statuscode == "100000002" || x.queses_statuscode == "100000004").ToList();
 
-            foreach (var item in unitsGroupByFloor)
+            for (int i = 0; i < unitsGroupByFloor.Count; i++)
             {
                 Floor floor = new Floor();
-                floor.bsd_floorid = item.floorid;
-                floor.bsd_name = item.floor_name;
+                floor.bsd_floorid = unitsGroupByFloor[i].floorid;
+                floor.bsd_name = unitsGroupByFloor[i].floor_name;
 
-                var units = result.value.Where(x => x.floorid == item.floorid);
+                var units = result.value.Where(x => x.floorid == unitsGroupByFloor[i].floorid);
                 var unitGroupBy = units.GroupBy(x => new
                 {
                     unitid = x.productid,
@@ -288,7 +289,7 @@ namespace ConasiCRM.Portable.ViewModels
                             floor.NumChuanBiInFloor++;
                             break;
                         case 100000000:
-                            floor.NumSanSangInFloor++ ;
+                            floor.NumSanSangInFloor++;
                             break;
                         case 100000004:
                             floor.NumGiuChoInFloor++;
@@ -317,16 +318,16 @@ namespace ConasiCRM.Portable.ViewModels
                     {
                         if (unitbyQueue.productid == unit.productid)
                         {
-                            count ++;
+                            count++;
                         }
                     }
                     unit.NumQueses = count;
-                    
+
                     if (unit.statuscode.HasValue)// set backgroundcolor cho tung unit
                     {
                         unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.Value.ToString()).Background;
                     }
-                   
+
                     floor.Units.Add(unit);
                 }
 
@@ -414,7 +415,8 @@ namespace ConasiCRM.Portable.ViewModels
                                   <filter type='and'>
                                     <condition attribute='productid' operator='eq' value='{Unit.productid}' />
                                   </filter>
-                                </link-entity><link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='an' >
+                                </link-entity>
+                                <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='an' >
                                    <attribute name='bsd_startdate' alias='startdate_event' />
                                    <attribute name='bsd_enddate' alias='enddate_event'/>
                                 </link-entity>

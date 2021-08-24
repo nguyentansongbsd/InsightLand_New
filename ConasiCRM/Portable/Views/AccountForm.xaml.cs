@@ -5,6 +5,7 @@ using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -64,8 +65,20 @@ namespace ConasiCRM.Portable.Views
             btnSave.Clicked += UpdateContact_Clicked;
 
             await viewModel.LoadOneAccount(this.AccountId);
+
             viewModel.LoadBusinessTypeForLookup();
-            Lookup_BusinessType.SaveButton_Clicked(null, null);
+
+            var a = viewModel.singleAccount.bsd_businesstypesys.Split(',');
+            List<string> ids = new List<string>() ;
+            foreach (var item in a)
+            {
+                var b = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
+                ids.Add(b);
+            }
+            viewModel.BusinessType = ids;
+
+
+            //Lookup_BusinessType.SaveButton_Clicked(null, null);
 
             if (viewModel.singleAccount.bsd_localization != null)
             {
