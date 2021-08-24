@@ -63,7 +63,7 @@ namespace ConasiCRM.Portable.Views
                 if (string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) && string.IsNullOrWhiteSpace(viewModel.UnitCode))
                 {
                     viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid;
-                    SetActiveBlock(); 
+                    SetActiveBlock();
                 }
             }
             else
@@ -71,13 +71,13 @@ namespace ConasiCRM.Portable.Views
                 OnComplete?.Invoke(1);// loi khong co blocks
                 return;
             }
-            
+
             await viewModel.LoadUnit();
-            
+            //OnComplete?.Invoke(0);
             if (viewModel.Floors != null && viewModel.Floors.Count > 0)
             {
                 ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
-                if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) ||!string.IsNullOrWhiteSpace(viewModel.UnitCode))
+                if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) || !string.IsNullOrWhiteSpace(viewModel.UnitCode))
                 {
                     for (int i = 0; i < viewModel.Blocks.Count; i++)
                     {
@@ -94,6 +94,13 @@ namespace ConasiCRM.Portable.Views
             {
                 OnComplete?.Invoke(2); // loi khong co unit
             }
+        }
+
+        private void test_tapped(object sender, EventArgs e)
+        {
+            var b= stackFloors.TabIndex;
+            var a = (stackFloors.Children[1] as RadBorder).Content as RadExpander;
+            a.IsExpanded = true;
         }
 
         private void Question_CLicked(object sender,EventArgs e)

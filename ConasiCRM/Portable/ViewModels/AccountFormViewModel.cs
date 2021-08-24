@@ -286,7 +286,7 @@ namespace ConasiCRM.Portable.ViewModels
             return data;
         }
 
-        public void LoadBusinessTypeForLookup()
+        public List<OptionSet> LoadBusinessTypeForLookup()
         {
             BusinessTypeOptionList = new List<OptionSet>();
             BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer"));
