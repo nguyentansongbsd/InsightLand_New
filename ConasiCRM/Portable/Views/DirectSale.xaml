@@ -44,16 +44,16 @@
 
                     <controls:FormLabel Text="Diện tích sử dụng (m2)" Margin="0,5,0,0"/>
                     <Grid ColumnDefinitions="*,Auto,*" Margin="0,0,0,5">
-                        <controls:MainEntry x:Name="minNetArea" Text="{Binding minNetArea}" Grid.Column="0" Keyboard="Numeric" Placeholder="Diện tích từ" Unfocused="MinNetArea_Unfocused"/>
+                        <controls:DecimalEntry x:Name="minNetArea" Price="{Binding minNetArea}" Grid.Column="0" Placeholder="Diện tích từ" />
                         <Label Text=" - " VerticalTextAlignment="Center" Grid.Column="1" FontSize="16"/>
-                        <controls:MainEntry x:Name="maxNetArea" Text="{Binding maxNetArea}" Grid.Column="2" Keyboard="Numeric" Placeholder="Diện tích đến" Unfocused="MaxNetArea_Unfocused"/>
+                        <controls:DecimalEntry x:Name="maxNetArea" Price="{Binding maxNetArea}" Grid.Column="2" Placeholder="Diện tích đến" />
                     </Grid>
 
                     <controls:FormLabel Text="Giá bán (vnđ)" Margin="0,5,0,0"/>
                     <Grid ColumnDefinitions="*,Auto,*" Margin="0,0,0,5">
-                        <controls:MainEntry x:Name="minPrice" Text="{Binding minPrice}" Grid.Column="0" Keyboard="Numeric" Placeholder="Giá bán từ" Unfocused="MinPrice_Unfocused"/>
+                        <controls:DecimalEntry x:Name="minPrice" Price="{Binding minPrice}" Grid.Column="0" Placeholder="Giá bán từ"/>
                         <Label Text=" - " VerticalTextAlignment="Center" Grid.Column="1" FontSize="16"/>
-                        <controls:MainEntry x:Name="maxPrice" Text="{Binding maxPrice}" Grid.Column="2" Keyboard="Numeric" Placeholder="Giá bán đến" Unfocused="MaxPrice_Unfocused"/>
+                        <controls:DecimalEntry x:Name="maxPrice" Price="{Binding maxPrice}" Grid.Column="2" Placeholder="Giá bán đến"/>
                     </Grid>
                 </StackLayout>
             </ScrollView>

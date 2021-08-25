@@ -32,7 +32,7 @@ namespace ConasiCRM.Portable.Views
         {
             await LoadDataThongTin(Id.ToString());
 
-            if (viewModel.singleLead.statuscode == "3") // qualified
+            if (viewModel.singleLead.statecode == "1") // qualified
             {
                 floatingButtonGroup.IsVisible = false;
             }
@@ -84,19 +84,63 @@ namespace ConasiCRM.Portable.Views
         private async void LeadQualify(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            bool IsSuccess = await viewModel.Qualify(viewModel.singleLead.leadid);
-            if (IsSuccess)
+            bool IsSuccessQualify = await viewModel.Qualify(viewModel.singleLead.leadid);
+            if (IsSuccessQualify == true)
             {
-                await viewModel.LoadOneLead(Id.ToString());
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Thành công");
+                await Task.WhenAll(
+                      viewModel.CreateContact(),
+                        viewModel.CreateAccount()                     
+                    );
+                if(!string.IsNullOrWhiteSpace(viewModel.singleLead.companyname))
+                {
+                    if (viewModel.IsSuccessContact == true && viewModel.IsSuccessAccount == true)
+                    {
+                        await viewModel.LoadOneLead(Id.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Thành công");
+                    }
+                    else
+                    {
+                        if (viewModel.IsSuccessContact != true && viewModel.IsSuccessAccount != true)
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Đã xảy ra lỗi. Vui lòng thử lại.");
+                        }
+                        else if (viewModel.IsSuccessContact == true)
+                        {
+                            await viewModel.LoadOneLead(Id.ToString());
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Qualify Contact thành công, Qualify Account thất bại");
+                        }
+                        else
+                        {
+                            await viewModel.LoadOneLead(Id.ToString());
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Qualify Account thành công, Qualify Contact thất bại");
+                        }
+                    }
+                }
+                else
+                {
+                    if (viewModel.IsSuccessContact == true)
+                    {
+                        await viewModel.LoadOneLead(Id.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Thành công");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Đã xảy ra lỗi. Vui lòng thử lại.");
+                    }
+                }
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Đã xảy ra lỗi. Vui lòng thử lại.");
+                ToastMessageHelper.ShortMessage("Không thể qualify");
             }
-            
+
         }
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
