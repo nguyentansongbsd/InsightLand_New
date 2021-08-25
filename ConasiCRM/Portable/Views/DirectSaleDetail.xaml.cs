@@ -48,59 +48,53 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height);
-            
-            //var a = (((stackFloors.Children as List<RadBorder>).Content as RadExpander).Content as FlexLayout).Children as RadBorder;
-        }
-
         public async void Init()
         {
             await viewModel.LoadBlocks();
-            if (viewModel.Blocks != null && viewModel.Blocks.Count != 0)
-            {
-                if (string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) && string.IsNullOrWhiteSpace(viewModel.UnitCode))
-                {
-                    viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid;
-                    SetActiveBlock();
-                }
-            }
-            else
-            {
-                OnComplete?.Invoke(1);// loi khong co blocks
-                return;
-            }
+            //if (viewModel.Blocks != null && viewModel.Blocks.Count != 0)
+            //{
+            //    if (string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) && string.IsNullOrWhiteSpace(viewModel.UnitCode))
+            //    {
+            //        viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid;
+            //        SetActiveBlock();
+            //    }
+            //}
+            //else
+            //{
+            //    OnComplete?.Invoke(1);// loi khong co blocks
+            //    return;
+            //}
 
             await viewModel.LoadUnit();
-            //OnComplete?.Invoke(0);
-            if (viewModel.Floors != null && viewModel.Floors.Count > 0)
-            {
-                ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
-                if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) || !string.IsNullOrWhiteSpace(viewModel.UnitCode))
-                {
-                    for (int i = 0; i < viewModel.Blocks.Count; i++)
-                    {
-                        if (viewModel.Blocks[i].bsd_blockid == viewModel.blockId)
-                        {
-                            currentBlock = i;
-                        }
-                    }
-                    SetActiveBlock();
-                }
-                OnComplete?.Invoke(0);
-            }
-            else
-            {
-                OnComplete?.Invoke(2); // loi khong co unit
-            }
+            OnComplete?.Invoke(0);
+            //if (viewModel.Floors != null && viewModel.Floors.Count > 0)
+            //{
+            //    ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
+            //    if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) || !string.IsNullOrWhiteSpace(viewModel.UnitCode))
+            //    {
+            //        for (int i = 0; i < viewModel.Blocks.Count; i++)
+            //        {
+            //            if (viewModel.Blocks[i].bsd_blockid == viewModel.blockId)
+            //            {
+            //                currentBlock = i;
+            //            }
+            //        }
+            //        SetActiveBlock();
+            //    }
+            //    OnComplete?.Invoke(0);
+            //}
+            //else
+            //{
+            //    OnComplete?.Invoke(2); // loi khong co unit
+            //}
         }
 
         private void test_tapped(object sender, EventArgs e)
         {
-            var b= stackFloors.TabIndex;
-            var a = (stackFloors.Children[1] as RadBorder).Content as RadExpander;
-            a.IsExpanded = true;
+            var content = ((sender as RadBorder).Content as StackLayout).Children[2] as FlexLayout;
+            content.IsVisible = !content.IsVisible ;
+
+            
         }
 
         private void Question_CLicked(object sender,EventArgs e)

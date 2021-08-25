@@ -286,13 +286,13 @@ namespace ConasiCRM.Portable.ViewModels
             return data;
         }
 
-        public List<OptionSet> LoadBusinessTypeForLookup()
+        public void LoadBusinessTypeForLookup()
         {
             BusinessTypeOptionList = new List<OptionSet>();
             BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer"));
             BusinessTypeOptionList.Add(new OptionSet("100000001", "Partner"));
             BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Agents"));
-            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer"));          
+            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer"));
         }
 
         public async Task LoadContactForLookup() // bubg

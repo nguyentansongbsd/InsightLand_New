@@ -18,5 +18,6 @@ namespace ConasiCRM.Portable.Models
         public decimal? maxNetArea { get; set; }
         public decimal? minPrice { get; set; }
         public decimal? maxPrice { get; set; }
+        public List<Block> Blocks { get; set; }
     }
 }

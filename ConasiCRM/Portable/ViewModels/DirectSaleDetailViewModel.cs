@@ -275,61 +275,61 @@ namespace ConasiCRM.Portable.ViewModels
                 floor.bsd_floorid = unitsGroupByFloor[i].floorid;
                 floor.bsd_name = unitsGroupByFloor[i].floor_name;
 
-                var units = result.value.Where(x => x.floorid == unitsGroupByFloor[i].floorid);
-                var unitGroupBy = units.GroupBy(x => new
-                {
-                    unitid = x.productid,
-                    statuscode = x.statuscode
-                }).Select(y => y.First()).ToList();
-                foreach (var unit in unitGroupBy)
-                {
-                    switch (unit.statuscode) // dem so luong trang thai cua unit
-                    {
-                        case 1:
-                            floor.NumChuanBiInFloor++;
-                            break;
-                        case 100000000:
-                            floor.NumSanSangInFloor++;
-                            break;
-                        case 100000004:
-                            floor.NumGiuChoInFloor++;
-                            break;
-                        case 100000006:
-                            floor.NumDatCocInFloor++;
-                            break;
-                        case 100000005:
-                            floor.NumDongYChuyenCoInFloor++;
-                            break;
-                        case 100000003:
-                            floor.NumDaDuTienCocInFloor++;
-                            break;
-                        case 100000001:
-                            floor.NumThanhToanDot1InFloor++;
-                            break;
-                        case 100000002:
-                            floor.NumDaBanInFloor++;
-                            break;
-                        default:
-                            break;
-                    }
+                //var units = result.value.Where(x => x.floorid == unitsGroupByFloor[i].floorid);
+                //var unitGroupBy = units.GroupBy(x => new
+                //{
+                //    unitid = x.productid,
+                //    statuscode = x.statuscode
+                //}).Select(y => y.First()).ToList();
+                //foreach (var unit in unitGroupBy)
+                //{
+                //    switch (unit.statuscode) // dem so luong trang thai cua unit
+                //    {
+                //        case 1:
+                //            floor.NumChuanBiInFloor++;
+                //            break;
+                //        case 100000000:
+                //            floor.NumSanSangInFloor++;
+                //            break;
+                //        case 100000004:
+                //            floor.NumGiuChoInFloor++;
+                //            break;
+                //        case 100000006:
+                //            floor.NumDatCocInFloor++;
+                //            break;
+                //        case 100000005:
+                //            floor.NumDongYChuyenCoInFloor++;
+                //            break;
+                //        case 100000003:
+                //            floor.NumDaDuTienCocInFloor++;
+                //            break;
+                //        case 100000001:
+                //            floor.NumThanhToanDot1InFloor++;
+                //            break;
+                //        case 100000002:
+                //            floor.NumDaBanInFloor++;
+                //            break;
+                //        default:
+                //            break;
+                //    }
 
-                    int count = 0;
-                    foreach (var unitbyQueue in listUnitByQueue) // dem so giu cho cua unit
-                    {
-                        if (unitbyQueue.productid == unit.productid)
-                        {
-                            count++;
-                        }
-                    }
-                    unit.NumQueses = count;
+                //    int count = 0;
+                //    foreach (var unitbyQueue in listUnitByQueue) // dem so giu cho cua unit
+                //    {
+                //        if (unitbyQueue.productid == unit.productid)
+                //        {
+                //            count++;
+                //        }
+                //    }
+                //    unit.NumQueses = count;
 
-                    if (unit.statuscode.HasValue)// set backgroundcolor cho tung unit
-                    {
-                        unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.Value.ToString()).Background;
-                    }
+                //    if (unit.statuscode.HasValue)// set backgroundcolor cho tung unit
+                //    {
+                //        unit.item_background = StatusCodeUnit.GetStatusCodeById(unit.statuscode.Value.ToString()).Background;
+                //    }
 
-                    floor.Units.Add(unit);
-                }
+                //    floor.Units.Add(unit);
+                //}
 
                 Floors.Add(floor);
             }
