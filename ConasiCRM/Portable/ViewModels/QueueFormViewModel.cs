@@ -125,7 +125,43 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> SetQueueTime(bool from)
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            List<QueueFormModel> data;
+            if (from)
+            {
+                string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='opportunity'>
+                                <attribute name='name' />
+                                <attribute name='customerid' />
+                                <attribute name='estimatedvalue' />
+                                <attribute name='statuscode' />
+                                <attribute name='createdon' />
+                                <attribute name='bsd_queuenumber' />
+                                <attribute name='bsd_project' />
+                                <attribute name='opportunityid' />
+                                <attribute name='bsd_queuingexpired' />
+                                <attribute name='bsd_bookingtime' />
+                                <order attribute='createdon' descending='true' />                               
+                                <link-entity name='contact' from='contactid' to='parentcontactid' visible='false' link-type='outer' alias='a_7eff24578704e911a98b000d3aa2e890'>
+                                      <attribute name='contactid' alias='contact_id' />
+                                      <attribute name='bsd_fullname' alias='contact_name' />
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='parentaccountid' visible='false' link-type='outer' alias='a_77ff24578704e911a98b000d3aa2e890'>
+                                      <attribute name='accountid' alias='account_id' />
+                                      <attribute name='bsd_name' alias='account_name' />
+                                </link-entity>
+                                <filter type='and'>
+                                    <condition attribute='bsd_units' operator='eq' uitype='product' value='{" + QueueFormModel.bsd_units_id + @"}' />
+                                </filter>
+                              </entity>
+                            </fetch>";
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
+                if (result == null || result.value == null)
+                    return false;
+                data = result.value;
+            }
+            else
+            {
+                string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
                                 <attribute name='name' />
                                 <attribute name='customerid' />
@@ -151,15 +187,16 @@ namespace ConasiCRM.Portable.ViewModels
                                 </filter>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-            if (result == null || result.value == null)
-                return false;
-            var data = result.value;
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
+                if (result == null || result.value == null)
+                    return false;
+                data = result.value;
+            }
 
-            //if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
-            //{
-            //    return false;
-            //}
+            if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
+            {
+                return false;
+            }
             if (from)
             {
                 if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
@@ -349,6 +386,11 @@ namespace ConasiCRM.Portable.ViewModels
                 data["statuscode"] = QueueFormModel.statuscode;
                 data["bsd_bookingtime"] = QueueFormModel.bsd_bookingtime;
                 data["bsd_queuingexpired"] = QueueFormModel.bsd_queuingexpired;
+                data["bsd_queueforproject"] = false;
+            }
+            else
+            {
+                data["bsd_queueforproject"] = true;
             }
             data["createdon"] = QueueFormModel.createdon;
 
