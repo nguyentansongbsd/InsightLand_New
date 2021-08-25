@@ -156,10 +156,10 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             var data = result.value;
 
-            if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
-            {
-                return false;
-            }
+            //if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
+            //{
+            //    return false;
+            //}
             if (from)
             {
                 if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
@@ -188,7 +188,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> createQueue()
         {
-            string path = "/opportunities";
+            string path = "/opportunities"; /// sai
             QueueFormModel.opportunityid = Guid.NewGuid();
             var content = await this.getContent();
             CrmApiResponse result = await CrmHelper.PostData(path, content);

@@ -45,26 +45,24 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Grid Padding="20,5" ColumnSpacing="20" IsEnabled="{Binding numberFormated, Converter={StaticResource NotNullToBool}}">
+                                    <Grid Padding="20,5" ColumnSpacing="20" ColumnDefinitions="*,Auto" IsEnabled="{Binding numberFormated, Converter={StaticResource NotNullToBool}}">
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped"
                                                   CommandParameter="{Binding}"/>
                                         </Grid.GestureRecognizers>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition Width="80" />
-                                        </Grid.ColumnDefinitions>
                                         <StackLayout Margin="0" Grid.Column="0" VerticalOptions="Center">
                                             <Label FontSize="18" TextColor="Black" Text="{Binding Name}" />
                                             <Label FontSize="15" Text="{Binding numberFormated}" TextColor="#999999" />
                                         </StackLayout>
-                                        <telerikPrimitives:RadCheckBox Grid.Column="1"
-                                                       HorizontalOptions="End"
+                                        <Grid HorizontalOptions="End" Grid.Column="1">
+                                            <telerikPrimitives:RadCheckBox
                                                         CheckedColor="DarkGreen"
                                                        IsEnabled="False"
                                                        VerticalOptions="Center"
                                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                       IsVisible="{Binding numberFormated, Converter={StaticResource NotNullToBool}}"/>
+                                                       IsVisible="{Binding numberFormated, Converter={StaticResource NotNullToBool}}" HorizontalOptions="Center"/>
+                                            <Label Text="Đã Chuyển" FontSize="15" TextColor="#444444" BackgroundColor="White" HorizontalOptions="Center" IsVisible="{Binding IsConvertToLead}" VerticalOptions="Center" Padding="5"/>
+                                        </Grid>
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>
