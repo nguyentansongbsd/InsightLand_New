@@ -38,7 +38,8 @@ namespace ConasiCRM.Portable.Models
 
         public int statuscode { get; set; } // chi su dung trong form update.
 
-        public DateTime createdon { get; set; } // Thời gian đặt chỗ 
+        public DateTime _createdon;
+        public DateTime createdon { get => _createdon.AddHours(7) ; set { _createdon = value; OnPropertyChanged(nameof(createdon)); } } // Thời gian đặt chỗ 
 
         public DateTime bsd_queuingexpired { get; set; } // Thời gian hết hạn
 
@@ -79,6 +80,7 @@ namespace ConasiCRM.Portable.Models
 
         public decimal unit_price { get; set; } // Giá bán , tên gốc price => đổi lại tránh trùng khi trong form update khi lấy thông tin về.
         public int bsd_longtime { get; set; }
-        public int bsd_shorttime { get; set; }       
+        public int bsd_shorttime { get; set; }
+        public DateTime _queue_createdon { get; set; }
     }
 }
