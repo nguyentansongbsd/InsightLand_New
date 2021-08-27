@@ -78,6 +78,9 @@
       <EmbeddedResource Update="Views\AccountList.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\ActivityList.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\ContactDetailPage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>

@@ -141,7 +141,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate vs:BlankPage}">
+        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate views:ActivityList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
