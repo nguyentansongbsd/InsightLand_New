@@ -14,7 +14,7 @@ namespace ConasiCRM.Portable.Models
         
         public int UnitCount { get; set; }
 
-        public IList<Unit> Units { get; set; } = new ObservableCollection<Unit>();
+        public List<Unit> Units { get; set; } = new List<Unit>();
 
         public new string Title
         {

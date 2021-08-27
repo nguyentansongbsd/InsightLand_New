@@ -5,6 +5,7 @@ using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Telerik.XamarinForms.Primitives;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -18,7 +19,6 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshQueues = null;
         public Action<int> OnComplete;
         private DirectSaleDetailViewModel viewModel;
-        public Unit CurrentUnit;
         private int currentBlock = 0;
 
         public DirectSaleDetail()
@@ -42,7 +42,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.PageDanhSachDatCho = 1;
                 viewModel.QueueList.Clear();
-                await viewModel.LoadQueues();
+                await viewModel.LoadQueues(viewModel.Unit.productid);
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
@@ -50,72 +50,55 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            await viewModel.LoadBlocks();
-            //if (viewModel.Blocks != null && viewModel.Blocks.Count != 0)
-            //{
-            //    if (string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) && string.IsNullOrWhiteSpace(viewModel.UnitCode))
-            //    {
-            //        viewModel.blockId = viewModel.Blocks.FirstOrDefault().bsd_blockid;
-            //        SetActiveBlock();
-            //    }
-            //}
-            //else
-            //{
-            //    OnComplete?.Invoke(1);// loi khong co blocks
-            //    return;
-            //}
+            await viewModel.LoadTotalDirectSale();
 
-            await viewModel.LoadUnit();
-            OnComplete?.Invoke(0);
-            //if (viewModel.Floors != null && viewModel.Floors.Count > 0)
-            //{
-            //    ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
-            //    if (!string.IsNullOrWhiteSpace(viewModel.PhasesLanchId) || !string.IsNullOrWhiteSpace(viewModel.UnitCode))
-            //    {
-            //        for (int i = 0; i < viewModel.Blocks.Count; i++)
-            //        {
-            //            if (viewModel.Blocks[i].bsd_blockid == viewModel.blockId)
-            //            {
-            //                currentBlock = i;
-            //            }
-            //        }
-            //        SetActiveBlock();
-            //    }
-            //    OnComplete?.Invoke(0);
-            //}
-            //else
-            //{
-            //    OnComplete?.Invoke(2); // loi khong co unit
-            //}
+            if (viewModel.Floors.Count != 0)
+            {
+                var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
+                await viewModel.LoadUnitByFloor(floorId);
+
+                currentBlock = viewModel.Blocks.FindIndex(x => x.bsd_blockid == viewModel.blockId);
+                SetActiveBlock();
+
+                var content = ((stackFloors.Children[0] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
+                BindableLayout.SetItemsSource(content, viewModel.Floors[0].Units);
+                content.IsVisible = true;
+
+                OnComplete?.Invoke(0);
+            }
+            else
+            {
+                OnComplete?.Invoke(1);
+            }
         }
 
-        private void test_tapped(object sender, EventArgs e)
+        private async void ItemFloor_Tapped(object sender, EventArgs e)
         {
-            var content = ((sender as RadBorder).Content as StackLayout).Children[2] as FlexLayout;
-            content.IsVisible = !content.IsVisible ;
-
+            LoadingHelper.Show();
+            var item = sender as RadBorder;
+            int CurrentFloor = stackFloors.Children.IndexOf(item);
+            FlexLayout units = ((stackFloors.Children[CurrentFloor] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
+            if (viewModel.Floors[CurrentFloor].Units.Count == 0)
+            {
+                var floorId = (Guid)(item.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+                await viewModel.LoadUnitByFloor(floorId);
+                BindableLayout.SetItemsSource(units, viewModel.Floors[CurrentFloor].Units);
+            }
             
-        }
-
-        private void Question_CLicked(object sender,EventArgs e)
-        {
-            stackQuestion.IsVisible = !stackQuestion.IsVisible;
-        }
-
-        private void CloseQuestion_Tapped(object sender, EventArgs e)
-        {
-            stackQuestion.IsVisible = !stackQuestion.IsVisible;
+            units.IsVisible = !units.IsVisible ;
+            LoadingHelper.Hide();
         }
 
         public async void Block_Tapped(object sender,EventArgs e)
         {
+            LoadingHelper.Show();
+            await Task.Delay(1);
             var blockChoosed = sender as RadBorder;
             if (stackBlocks.Children.IndexOf(blockChoosed) == currentBlock) return;
             SetInActiveBlock();
             this.currentBlock = stackBlocks.Children.IndexOf(blockChoosed);
             SetActiveBlock();
 
-            LoadingHelper.Show();
             var block = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             viewModel.blockId = block.bsd_blockid;
             viewModel.Floors.Clear();
@@ -127,11 +110,45 @@ namespace ConasiCRM.Portable.Views
             viewModel.NumDaDuTienCocInBlock = 0;
             viewModel.NumThanhToanDot1InBlock = 0;
             viewModel.NumDaBanInBlock = 0;
-            await viewModel.LoadUnit();
-            if (viewModel.Floors.Count != 0)
+
+            var totalBlock = viewModel.ApiResponse.SingleOrDefault(x => x.ID == viewModel.blockId.ToString());
+            if (totalBlock != null)
             {
-                ((stackFloors.Children[0] as RadBorder).Content as RadExpander).IsExpanded = true;
+                var arrStatusBlock = totalBlock.stringQty.Split(',');
+                viewModel.NumChuanBiInBlock = int.Parse(arrStatusBlock[0]);
+                viewModel.NumSanSangInBlock = int.Parse(arrStatusBlock[1]);
+                viewModel.NumGiuChoInBlock = int.Parse(arrStatusBlock[2]);
+                viewModel.NumDatCocInBlock = int.Parse(arrStatusBlock[3]);
+                viewModel.NumDongYChuyenCoInBlock = int.Parse(arrStatusBlock[4]);
+                viewModel.NumDaDuTienCocInBlock = int.Parse(arrStatusBlock[5]);
+                viewModel.NumThanhToanDot1InBlock = int.Parse(arrStatusBlock[6]);
+                viewModel.NumDaBanInBlock = int.Parse(arrStatusBlock[7]);
+
+                foreach (var item in totalBlock.listFloor)
+                {
+                    Floor floor = new Floor();
+                    floor.bsd_floorid = Guid.Parse(item.ID);
+                    floor.bsd_name = item.name;
+                    var arrStatusInFloor = item.stringQty.Split(',');
+                    floor.NumChuanBiInFloor = int.Parse(arrStatusInFloor[0]);
+                    floor.NumSanSangInFloor = int.Parse(arrStatusInFloor[1]);
+                    floor.NumGiuChoInFloor = int.Parse(arrStatusInFloor[2]);
+                    floor.NumDatCocInFloor = int.Parse(arrStatusInFloor[3]);
+                    floor.NumDongYChuyenCoInFloor = int.Parse(arrStatusInFloor[4]);
+                    floor.NumDaDuTienCocInFloor = int.Parse(arrStatusInFloor[5]);
+                    floor.NumThanhToanDot1InFloor = int.Parse(arrStatusInFloor[6]);
+                    floor.NumDaBanInFloor = int.Parse(arrStatusInFloor[7]);
+                    viewModel.Floors.Add(floor);
+                };
+                
+                var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
+                await viewModel.LoadUnitByFloor(floorId);
+
+                var content = ((stackFloors.Children[0] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
+                BindableLayout.SetItemsSource(content, viewModel.Floors[0].Units);
+                content.IsVisible = true;
             }
+            
             LoadingHelper.Hide();
         }
 
@@ -154,23 +171,25 @@ namespace ConasiCRM.Portable.Views
         private async void UnitItem_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            var item = ((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as Unit;
+            var unitId = (Guid)((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
 
-            viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(item.statuscode.ToString());          
-
-            if (!string.IsNullOrWhiteSpace(item.bsd_direction))
-            {
-                viewModel.UnitDirection = DirectionData.GetDiretionById(item.bsd_direction);
-            }
-            if (!string.IsNullOrWhiteSpace(item.bsd_view))
-            {
-                viewModel.UnitView = ViewData.GetViewById(item.bsd_view);
-            }
-            viewModel.Unit = item;
             viewModel.PageDanhSachDatCho = 1;
             viewModel.QueueList.Clear();
-            await viewModel.LoadQueues();
-            await viewModel.CheckShowBtnBangTinhGia();
+            await Task.WhenAll(
+                viewModel.LoadQueues(unitId),
+                viewModel.CheckShowBtnBangTinhGia(unitId),
+                viewModel.LoadUnitById(unitId)
+                );
+
+            viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
+            if (!string.IsNullOrWhiteSpace(viewModel.Unit.bsd_direction))
+            {
+                viewModel.UnitDirection = DirectionData.GetDiretionById(viewModel.Unit.bsd_direction);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.Unit.bsd_view))
+            {
+                viewModel.UnitView = ViewData.GetViewById(viewModel.Unit.bsd_view);
+            }
 
             if (viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000" || viewModel.UnitStatusCode.Id == "100000004")
             {
@@ -184,37 +203,6 @@ namespace ConasiCRM.Portable.Views
             SetButton();
             
             contentUnitInfor.IsVisible = true;
-            LoadingHelper.Hide();
-        }
-
-        private void UnitInfor_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            UnitInfo unitInfo = new UnitInfo(viewModel.Unit.productid);
-            unitInfo.OnCompleted= async (IsSuccess) => {
-                if (IsSuccess)
-                {
-                    await Navigation.PushAsync(unitInfo);
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
-                }
-            };
-        }
-
-        private void CloseUnintInfor_Tapped(object sender,EventArgs e)
-        {
-            contentUnitInfor.IsVisible = false;
-        }
-
-        private async void ShowMoreDanhSachDatCho_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            viewModel.PageDanhSachDatCho++;
-            await viewModel.LoadQueues();
             LoadingHelper.Hide();
         }
 
@@ -252,6 +240,37 @@ namespace ConasiCRM.Portable.Views
                 Grid.SetColumn(btnBangTinhGia, 0);
                 Grid.SetColumnSpan(btnBangTinhGia, 2);
             }
+        }
+
+        private void UnitInfor_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            UnitInfo unitInfo = new UnitInfo(viewModel.Unit.productid);
+            unitInfo.OnCompleted= async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(unitInfo);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
+        }
+
+        private void CloseUnintInfor_Tapped(object sender,EventArgs e)
+        {
+            contentUnitInfor.IsVisible = false;
+        }
+
+        private async void ShowMoreDanhSachDatCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachDatCho++;
+            await viewModel.LoadQueues(viewModel.Unit.productid);
+            LoadingHelper.Hide();
         }
 
         private void GiuCho_Clicked(object sender, EventArgs e)
@@ -319,6 +338,16 @@ namespace ConasiCRM.Portable.Views
 
 
 
+        }
+
+        private void Question_CLicked(object sender, EventArgs e)
+        {
+            stackQuestion.IsVisible = !stackQuestion.IsVisible;
+        }
+
+        private void CloseQuestion_Tapped(object sender, EventArgs e)
+        {
+            stackQuestion.IsVisible = !stackQuestion.IsVisible;
         }
     }
 }

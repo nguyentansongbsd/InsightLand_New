@@ -84,6 +84,7 @@
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter"/>
             <converter:NullToHideConverter x:Key="NullToHideConverter"/>
             <converter:UnitItemWidthConverter x:Key="UnitItemWidthConverter"/>
+            <converter:BackgroundUnitConverter x:Key="BackgroundUnitConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -105,7 +106,7 @@
                                         <telerikPrimitives:RadBorder.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Block_Tapped" CommandParameter="{Binding}" />
                                         </telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <Label Text="{Binding bsd_name,StringFormat='Toà {0}'}" Style="{StaticResource lblBlocks}" TextColor="#B3B3B3" FontSize="15"/>
+                                        <Label Text="{Binding bsd_name}" Style="{StaticResource lblBlocks}" TextColor="#B3B3B3" FontSize="15"/><!--,StringFormat='Toà {0}'-->
                                     </telerikPrimitives:RadBorder>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -129,17 +130,16 @@
                     <StackLayout x:Name="stackFloors" BindableLayout.ItemsSource="{Binding Floors}" Spacing="20" >
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
-                                <telerikPrimitives:RadBorder x:Name="test" CornerRadius="12" BorderColor="Transparent" BorderThickness="0" BackgroundColor="#F9F9F9">
+                                <telerikPrimitives:RadBorder CornerRadius="12" BorderColor="Transparent" BorderThickness="0" BackgroundColor="#F9F9F9" Padding="0,16">
                                     <telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="test_tapped"/>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ItemFloor_Tapped" CommandParameter="{Binding bsd_floorid}"/>
                                     </telerikPrimitives:RadBorder.GestureRecognizers>
-                                    <StackLayout Spacing="15" Margin="0,10">
-
-                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                                    <StackLayout Spacing="0">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto" Margin="16,0,16,0">
                                             <Label Grid.Column="0" Text="{Binding bsd_name,StringFormat='Tầng {0}'}" FontSize="16" FontAttributes="Bold" TextColor="#333333" />
-                                            <!--<Label Grid.Column="1" Text="{Binding Source={x:Reference radExpanderFloor},Path=IsExpanded,Converter={StaticResource customIndicatorConverter}}"  FontSize="15" FontFamily="FontAwesomeSolid" VerticalOptions="End"  TextColor="#333333" />-->
+                                            <Label Grid.Column="1" Text="{Binding Source={x:Reference flexContentUnits},Path=IsVisible,Converter={StaticResource customIndicatorConverter}}"  FontSize="15" FontFamily="FontAwesomeSolid" VerticalOptions="End"  TextColor="#333333" />
                                         </Grid>
-                                        <Grid ColumnDefinitions="*,*,*,*,*,*,*,*" RowDefinitions="Auto" HorizontalOptions="Center" >
+                                        <Grid ColumnDefinitions="*,*,*,*,*,*,*,*" RowDefinitions="Auto" HorizontalOptions="Center" Margin="10,16,10,0">
                                             <Label Grid.Column="0" Text="{Binding NumChuanBiInFloor}" BackgroundColor="#FDC206" Style="{StaticResource lblNumStatusInFloor}"/>
                                             <Label Grid.Column="1" Text="{Binding NumSanSangInFloor}" BackgroundColor="#06CF79" Style="{StaticResource lblNumStatusInFloor}"/>
                                             <Label Grid.Column="2" Text="{Binding NumGiuChoInFloor}" BackgroundColor="#03ACF5" Style="{StaticResource lblNumStatusInFloor}"/>
@@ -149,12 +149,15 @@
                                             <Label Grid.Column="6" Text="{Binding NumThanhToanDot1InFloor}" BackgroundColor="#808080" Style="{StaticResource lblNumStatusInFloor}"/>
                                             <Label Grid.Column="7" Text="{Binding NumDaBanInFloor}" BackgroundColor="#D42A16" Style="{StaticResource lblNumStatusInFloor}"/>
                                         </Grid>
-                                        <FlexLayout x:Name="flexContentUnits" IsVisible="false" BindableLayout.ItemsSource="{Binding Units}" Padding="8" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" SizeChanged="ScreenChange_SizeChanged">
+
+                                        <BoxView HeightRequest="1" BackgroundColor="LightGray" Margin="0,16" IsVisible="{Binding Source={x:Reference flexContentUnits},Path=IsVisible}"/>
+                                         
+                                        <FlexLayout x:Name="flexContentUnits" IsVisible="false" Padding="8,0" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" SizeChanged="ScreenChange_SizeChanged">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
+                                                    <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding statuscode, Converter={StaticResource BackgroundUnitConverter}}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
                                                         <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding}"/>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding productid}"/>
                                                         </telerikPrimitives:RadBorder.GestureRecognizers>
                                                         <StackLayout>
                                                             <Label Text="{Binding name}" TextColor="White" FontSize="23" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
@@ -166,14 +169,12 @@
                                             </BindableLayout.ItemTemplate>
                                         </FlexLayout>
                                     </StackLayout>
-
-
-                                    <!--<telerikPrimitives:RadExpander x:Name="radExpanderFloor" IsExpanded="False" BorderColor="#F9F9F9" BorderThickness="1" >
+                                    <!--<telerikPrimitives:RadExpander x:Name="radExpanderFloor" IsExpanded="False" BorderColor="#F9F9F9" BorderThickness="1">
                                         <telerikPrimitives:RadExpander.Header >
                                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}" >
                                                 <StackLayout Spacing="15" Margin="0,10">
                                                     <StackLayout.GestureRecognizers>
-                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="test_tapped" CommandParameter="{Binding Source={Reference test},Path=test}"/>
+                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="test_tapped"/>
                                                     </StackLayout.GestureRecognizers>
                                                     <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
                                                         <Label Grid.Column="0" Text="{Binding bsd_name,StringFormat='Tầng {0}'}" FontSize="16" FontAttributes="Bold" TextColor="#333333" />

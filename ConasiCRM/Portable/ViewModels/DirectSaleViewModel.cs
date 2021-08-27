@@ -23,8 +23,11 @@ namespace ConasiCRM.Portable.ViewModels
         private List<OptionSet> _viewOptions;
         public List<OptionSet> ViewOptions { get => _viewOptions; set { _viewOptions = value;OnPropertyChanged(nameof(ViewOptions)); } }
 
-        private List<string> _selectedViews;
-        public List<string> SelectedViews { get=>_selectedViews; set { _selectedViews = value;OnPropertyChanged(nameof(SelectedViews)); } }
+        private List<Block> _blocks;
+        public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
+
+        //private List<string> _selectedViews;
+        //public List<string> SelectedViews { get=>_selectedViews; set { _selectedViews = value;OnPropertyChanged(nameof(SelectedViews)); } }
 
         private List<OptionSet> _directionOptions;
         public List<OptionSet> DirectionOptions { get=>_directionOptions; set { _directionOptions = value;OnPropertyChanged(nameof(DirectionOptions)); } }
@@ -135,6 +138,25 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 PhasesLaunchs.Add(item);
             }
+        }
+
+        public async Task LoadBlocks()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_block'>
+                                    <attribute name='bsd_name' />
+                                    <attribute name='bsd_blockid' />
+                                    <order attribute='bsd_name' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{Project.bsd_projectid}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+
+            var block_result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Block>>("bsd_blocks", fetchXml);
+            if (block_result == null || block_result.value.Count == 0) return;
+
+            this.Blocks = block_result.value;
         }
     }
 }

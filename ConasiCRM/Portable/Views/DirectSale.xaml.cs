@@ -5,6 +5,7 @@ using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,12 +26,12 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            lookupMultipleView.PreShow = async () =>
-            {
-                LoadingHelper.Show();
-                viewModel.ViewOptions = ViewData.Views();
-                LoadingHelper.Hide();
-            };
+            //lookupMultipleView.PreShow = async () =>
+            //{
+            //    LoadingHelper.Show();
+            //    viewModel.ViewOptions = ViewData.Views();
+            //    LoadingHelper.Hide();
+            //};
             lookupMultipleDirection.PreShow = async () => {
                 LoadingHelper.Show();
                 viewModel.DirectionOptions = DirectionData.Directions();
@@ -86,7 +87,10 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = e.Item as ProjectList;
             viewModel.Project = item;
-            await viewModel.LoadPhasesLanch();
+            await Task.WhenAll(
+                //viewModel.LoadBlocks(),
+                viewModel.LoadPhasesLanch()
+                );
             await bottomModalProject.Hide();
             LoadingHelper.Hide();
         }
@@ -99,6 +103,11 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
                 LoadingHelper.Hide();
             }
+            //else if(viewModel.Blocks == null)
+            //{
+            //    ToastMessageHelper.ShortMessage("Dự án không có blocks");
+            //    LoadingHelper.Hide();
+            //}
             else
             {
                 DirectSaleSearchModel model = new DirectSaleSearchModel();
@@ -111,12 +120,13 @@ namespace ConasiCRM.Portable.Views
                 model.IsEvent = viewModel.IsEvent;
                 model.UnitCode = viewModel.UnitCode;
                 model.Directions = viewModel.SelectedDirections;
-                model.Views = viewModel.SelectedViews;
+                //model.Views = viewModel.SelectedViews;
                 model.UnitStatuses = viewModel.SelectedUnitStatus;
                 model.minNetArea = viewModel.minNetArea;
                 model.maxNetArea = viewModel.maxNetArea;
                 model.minPrice = viewModel.minPrice;
                 model.maxPrice = viewModel.maxPrice;
+                //model.Blocks = viewModel.Blocks;
                 
                 DirectSaleDetail directSaleDetail = new DirectSaleDetail(model);
                 directSaleDetail.OnComplete = async (Success) =>
@@ -127,11 +137,6 @@ namespace ConasiCRM.Portable.Views
                         LoadingHelper.Hide();
                     }
                     else if (Success == 1)
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.LongMessage("Không có blocks");
-                    }
-                    else
                     {
                         LoadingHelper.Hide();
                         ToastMessageHelper.LongMessage("Không có sản phẩm");
