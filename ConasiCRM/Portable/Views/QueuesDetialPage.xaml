@@ -157,6 +157,11 @@
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal" Padding="16,10" BackgroundColor="White">
+                                    <Label Text="Giữ chỗ dự án" FontSize="15" TextColor="#333333"/>
+                                    <Label Text="{Binding QueueProject}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15"/>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal" Padding="16,10" BackgroundColor="White">
                                     <Label Text="Thời gian giữ chỗ " FontSize="15" TextColor="#333333"/>
                                     <Label HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15">
                                         <Label.FormattedText>

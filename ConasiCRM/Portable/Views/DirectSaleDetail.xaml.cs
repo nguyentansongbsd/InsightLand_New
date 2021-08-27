@@ -47,7 +47,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
-
         public async void Init()
         {
             await viewModel.LoadTotalDirectSale();

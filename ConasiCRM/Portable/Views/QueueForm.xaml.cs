@@ -74,22 +74,22 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.DailyOption == null || viewModel.DailyOption.Id == null || viewModel.DailyOption.Id == Guid.Empty)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn đại lý");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn đại lý bán hàng");
                 return;
             }
-            if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
+            if (from)
             {
-                if (!await viewModel.SetQueueTime(from))
+                if (!await viewModel.SetQueueTime())
                 {
                     ToastMessageHelper.ShortMessage("Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này");
                     return;
                 }
             }
-            else
+            if (viewModel.Customer != null && viewModel.Customer.Id != Guid.Empty && viewModel.DailyOption != null && viewModel.DailyOption.Id != Guid.Empty && viewModel.DailyOption.Id == viewModel.Customer.Id)
             {
-                ToastMessageHelper.ShortMessage("Không tìm thấy dự án");
+                ToastMessageHelper.ShortMessage("Khách hàng tiềm năng phải khác Đại lý bán hàng");
                 return;
-            } 
+            }
 
             LoadingHelper.Show();
             var created = await viewModel.createQueue();
