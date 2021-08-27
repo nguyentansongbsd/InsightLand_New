@@ -1,5 +1,4 @@
-﻿using ConasiCRM.Portable.Config;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using Newtonsoft.Json;
@@ -7,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
@@ -28,6 +25,9 @@ namespace ConasiCRM.Portable.ViewModels
         public decimal? minPrice { get; set; }
         public decimal? maxPrice { get; set; }
 
+        private List<DirectSaleModel> _directSaleResult;
+        public List<DirectSaleModel> DirectSaleResult { get => _directSaleResult; set { _directSaleResult = value; OnPropertyChanged(nameof(DirectSaleResult)); } }
+
         private OptionSet _statusReason;
         public OptionSet StatusReason { get => _statusReason; set { _statusReason = value; OnPropertyChanged(nameof(StatusReason)); } }
 
@@ -37,9 +37,6 @@ namespace ConasiCRM.Portable.ViewModels
         private List<Block> _blocks;
         public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
 
-        private List<Root> _apiResponse;
-        public List<Root> ApiResponse { get => _apiResponse; set { _apiResponse = value; OnPropertyChanged(nameof(ApiResponse)); } }
-
         public ObservableCollection<Floor> Floors { get; set; } = new ObservableCollection<Floor>();
 
         private ObservableCollection<QueueListModel> _queueList;
@@ -47,29 +44,29 @@ namespace ConasiCRM.Portable.ViewModels
 
         public string fetchXml { get; set; }
 
-        private int _numChuanBiInBlock;
-        public int NumChuanBiInBlock { get => _numChuanBiInBlock; set { _numChuanBiInBlock = value; OnPropertyChanged(nameof(NumChuanBiInBlock)); } }
+        private string _numChuanBiInBlock;
+        public string NumChuanBiInBlock { get => _numChuanBiInBlock; set { _numChuanBiInBlock = value; OnPropertyChanged(nameof(NumChuanBiInBlock)); } }
 
-        private int _numSanSangInBlock;
-        public int NumSanSangInBlock { get => _numSanSangInBlock; set { _numSanSangInBlock = value; OnPropertyChanged(nameof(NumSanSangInBlock)); } }
+        private string _numSanSangInBlock;
+        public string NumSanSangInBlock { get => _numSanSangInBlock; set { _numSanSangInBlock = value; OnPropertyChanged(nameof(NumSanSangInBlock)); } }
 
-        private int _numGiuChoInBlock;
-        public int NumGiuChoInBlock { get => _numGiuChoInBlock; set { _numGiuChoInBlock = value; OnPropertyChanged(nameof(NumGiuChoInBlock)); } }
+        private string _numGiuChoInBlock;
+        public string NumGiuChoInBlock { get => _numGiuChoInBlock; set { _numGiuChoInBlock = value; OnPropertyChanged(nameof(NumGiuChoInBlock)); } }
 
-        private int _numDatCocInBlock;
-        public int NumDatCocInBlock { get => _numDatCocInBlock; set { _numDatCocInBlock = value; OnPropertyChanged(nameof(NumDatCocInBlock)); } }
+        private string _numDatCocInBlock;
+        public string NumDatCocInBlock { get => _numDatCocInBlock; set { _numDatCocInBlock = value; OnPropertyChanged(nameof(NumDatCocInBlock)); } }
 
-        private int _numDongYChuyenCoInBlock;
-        public int NumDongYChuyenCoInBlock { get => _numDongYChuyenCoInBlock; set { _numDongYChuyenCoInBlock = value; OnPropertyChanged(nameof(NumDongYChuyenCoInBlock)); } }
+        private string _numDongYChuyenCoInBlock;
+        public string NumDongYChuyenCoInBlock { get => _numDongYChuyenCoInBlock; set { _numDongYChuyenCoInBlock = value; OnPropertyChanged(nameof(NumDongYChuyenCoInBlock)); } }
 
-        private int _numDaDuTienCocInBlock;
-        public int NumDaDuTienCocInBlock { get => _numDaDuTienCocInBlock; set { _numDaDuTienCocInBlock = value; OnPropertyChanged(nameof(NumDaDuTienCocInBlock)); } }
+        private string _numDaDuTienCocInBlock;
+        public string NumDaDuTienCocInBlock { get => _numDaDuTienCocInBlock; set { _numDaDuTienCocInBlock = value; OnPropertyChanged(nameof(NumDaDuTienCocInBlock)); } }
 
-        private int _numThanhToanDot1InBlock;
-        public int NumThanhToanDot1InBlock { get => _numThanhToanDot1InBlock; set { _numThanhToanDot1InBlock = value; OnPropertyChanged(nameof(NumThanhToanDot1InBlock)); } }
+        private string _numThanhToanDot1InBlock;
+        public string NumThanhToanDot1InBlock { get => _numThanhToanDot1InBlock; set { _numThanhToanDot1InBlock = value; OnPropertyChanged(nameof(NumThanhToanDot1InBlock)); } }
 
-        private int _numDaBanInBlock;
-        public int NumDaBanInBlock { get => _numDaBanInBlock; set { _numDaBanInBlock = value; OnPropertyChanged(nameof(NumDaBanInBlock)); } }
+        private string _numDaBanInBlock;
+        public string NumDaBanInBlock { get => _numDaBanInBlock; set { _numDaBanInBlock = value; OnPropertyChanged(nameof(NumDaBanInBlock)); } }
 
         public Guid blockId;
 
@@ -111,87 +108,36 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadTotalDirectSale()
         {
-            try
+            var content = new
             {
-                var content = new
-                {
-                    ProjectId = this.ProjectId,
-                    PhasesLanchId = this.PhasesLanchId,
-                    IsEvent = this.IsEvent,
-                    UnitCode = this.UnitCode,
-                    Directions = (this.Directions != null && this.Directions.Count != 0) ? string.Join(",", this.Directions) : null,
-                    UnitStatuses = (this.UnitStatuses != null && this.UnitStatuses.Count != 0) ? string.Join(",", this.UnitStatuses) : null,
-                    minNetArea = this.minNetArea,
-                    maxNetArea = this.maxNetArea,
-                    //minPrice = this.minPrice,
-                    //maxPrice = this.maxPrice
-                };
-                string json = JsonConvert.SerializeObject(content);
-                var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{OrgConfig.ApiUrl}/bsd_GetTotalQtyDirectSale(input='{json}')");
+                ProjectId = this.ProjectId,
+                PhasesLanchId = this.PhasesLanchId,
+                IsEvent = this.IsEvent,
+                UnitCode = this.UnitCode,
+                Directions = (this.Directions != null && this.Directions.Count != 0) ? string.Join(",", this.Directions) : null,
+                UnitStatuses = (this.UnitStatuses != null && this.UnitStatuses.Count != 0) ? string.Join(",", this.UnitStatuses) : null,
+                minNetArea = this.minNetArea,
+                maxNetArea = this.maxNetArea,
+                //minPrice = this.minPrice,
+                //maxPrice = this.maxPrice
+            };
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await client.SendAsync(request);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    var body = await response.Content.ReadAsStringAsync();
-                    string a = body.Replace(@"\", "");
-                    string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
-                    string a2 = a1.Substring(0, a1.Length - 2);
-                    ApiResponse = JsonConvert.DeserializeObject<List<Root>>(a2);
-                    if (ApiResponse.Count == 0) return;
+            string json = JsonConvert.SerializeObject(content);
+            DirectSaleResult = await CrmHelper.Get<List<DirectSaleModel>>($"bsd_GetTotalQtyDirectSale(input='{json}')");
+            if (DirectSaleResult == null || DirectSaleResult.Any() == false) return;
 
-                    List<Block> blocks = new List<Block>();
-                    foreach (var item in ApiResponse)
-                    {
-                        Block block = new Block();
-                        block.bsd_blockid = Guid.Parse(item.ID);
-                        block.bsd_name = item.name;
-                        blocks.Add(block);
-                    }
-                    Blocks = blocks;
-
-                    var result = ApiResponse.FirstOrDefault();
-                    blockId = Guid.Parse(result.ID);
-                    var arrStatus = result.stringQty.Split(',');
-                    NumChuanBiInBlock = int.Parse(arrStatus[0]);
-                    NumSanSangInBlock = int.Parse(arrStatus[1]);
-                    NumGiuChoInBlock = int.Parse(arrStatus[2]);
-                    NumDatCocInBlock = int.Parse(arrStatus[3]);
-                    NumDongYChuyenCoInBlock = int.Parse(arrStatus[4]);
-                    NumDaDuTienCocInBlock = int.Parse(arrStatus[5]);
-                    NumThanhToanDot1InBlock = int.Parse(arrStatus[6]);
-                    NumDaBanInBlock = int.Parse(arrStatus[7]);
-
-                    foreach (var item in result.listFloor)
-                    {
-                        Floor floor = new Floor();
-                        floor.bsd_floorid = Guid.Parse(item.ID);
-                        floor.bsd_name = item.name;
-                        var arrStatusInFloor = item.stringQty.Split(',');
-                        floor.NumChuanBiInFloor = int.Parse(arrStatusInFloor[0]);
-                        floor.NumSanSangInFloor = int.Parse(arrStatusInFloor[1]);
-                        floor.NumGiuChoInFloor = int.Parse(arrStatusInFloor[2]);
-                        floor.NumDatCocInFloor = int.Parse(arrStatusInFloor[3]);
-                        floor.NumDongYChuyenCoInFloor = int.Parse(arrStatusInFloor[4]);
-                        floor.NumDaDuTienCocInFloor = int.Parse(arrStatusInFloor[5]);
-                        floor.NumThanhToanDot1InFloor = int.Parse(arrStatusInFloor[6]);
-                        floor.NumDaBanInFloor = int.Parse(arrStatusInFloor[7]);
-                        Floors.Add(floor);
-                    };
-
-                }
-                else
-                {
-                    var a = response.RequestMessage;
-                }
-            }
-            catch (Exception ex)
+            List<Block> blocks = new List<Block>();
+            foreach (var item in DirectSaleResult)
             {
-                string mess = ex.Message;
+                Block block = new Block();
+                block.bsd_blockid = Guid.Parse(item.ID);
+                block.bsd_name = item.name;
+                blocks.Add(block);
             }
+            Blocks = blocks;
+
+            var firstBlock = DirectSaleResult.FirstOrDefault();
+            ResetDirectSale(firstBlock);
         }
 
         public async Task LoadUnitByFloor(Guid floorId)
@@ -200,7 +146,13 @@ namespace ConasiCRM.Portable.ViewModels
             string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(PhasesLanchId))
                 ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + this.PhasesLanchId + @"' />"
                 : "";
-            string IsEvent_Condition = IsEvent ? @"<condition entityname='af' attribute='bsd_eventid' operator='not-null'/>" : "";
+            string isEvent = IsEvent ? @"<link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='as'>
+                                          <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='at'>
+                                            <filter type='and'>
+                                              <condition attribute='bsd_eventid' operator='not-null' />
+                                            </filter>
+                                          </link-entity>
+                                        </link-entity>" : "";
 
             string UnitCode_Condition = !string.IsNullOrEmpty(UnitCode) ? "<condition attribute='name' operator='eq' value='" + UnitCode + "' />" : "";
 
@@ -245,7 +197,6 @@ namespace ConasiCRM.Portable.ViewModels
                                     <condition attribute='bsd_floor' operator='eq' uitype='bsd_floor' value='{floorId}' />
                                     '{PhasesLaunch_Condition}'
                                     '{UnitCode_Condition}'
-                                    '{IsEvent_Condition}'
                                     '{StatusReason_Condition}'
                                     '{UnitStatus_Condition}'
                                     '{Direction_Condition}'
@@ -257,6 +208,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <link-entity name='opportunity' from='bsd_units' to='productid' link-type='outer' alias='ag' >
                                     <attribute name='statuscode' alias='queses_statuscode'/>
                                 </link-entity>
+                                '{isEvent}'
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Unit>>("products", fetchXml);
@@ -384,30 +336,36 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-    }
-    public class ListFloor
-    {
-        [JsonProperty("ID")]
-        public string ID { get; set; }
-        [JsonProperty("name")]
-        public string name { get; set; }
-        [JsonProperty("sumQty")]
-        public string sumQty { get; set; }
-        [JsonProperty("stringQty")]
-        public string stringQty { get; set; }
-    }
+        public void ResetDirectSale(DirectSaleModel directSaleModel)
+        {
+            blockId = Guid.Parse(directSaleModel.ID);
+            var arrStatus = directSaleModel.stringQty.Split(',');
+            NumChuanBiInBlock = arrStatus[0];
+            NumSanSangInBlock = arrStatus[1];
+            NumGiuChoInBlock = arrStatus[2];
+            NumDatCocInBlock = arrStatus[3];
+            NumDongYChuyenCoInBlock = arrStatus[4];
+            NumDaDuTienCocInBlock = arrStatus[5];
+            NumThanhToanDot1InBlock = arrStatus[6];
+            NumDaBanInBlock = arrStatus[7];
 
-    public class Root
-    {
-        [JsonProperty("ID")]
-        public string ID { get; set; }
-        [JsonProperty("name")]
-        public string name { get; set; }
-        [JsonProperty("sumQty")]
-        public string sumQty { get; set; }
-        [JsonProperty("stringQty")]
-        public string stringQty { get; set; }
-        [JsonProperty("listFloor")]
-        public List<ListFloor> listFloor { get; set; }
+            foreach (var item in directSaleModel.listFloor)
+            {
+                Floor floor = new Floor();
+                floor.bsd_floorid = Guid.Parse(item.ID);
+                floor.bsd_name = item.name;
+                var arrStatusInFloor = item.stringQty.Split(',');
+                floor.NumChuanBiInFloor = arrStatusInFloor[0];
+                floor.NumSanSangInFloor = arrStatusInFloor[1];
+                floor.NumGiuChoInFloor = arrStatusInFloor[2];
+                floor.NumDatCocInFloor = arrStatusInFloor[3];
+                floor.NumDongYChuyenCoInFloor = arrStatusInFloor[4];
+                floor.NumDaDuTienCocInFloor = arrStatusInFloor[5];
+                floor.NumThanhToanDot1InFloor = arrStatusInFloor[6];
+                floor.NumDaBanInFloor = arrStatusInFloor[7];
+                Floors.Add(floor);
+            };
+        }
+
     }
 }

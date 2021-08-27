@@ -99,47 +99,22 @@ namespace ConasiCRM.Portable.Views
             this.currentBlock = stackBlocks.Children.IndexOf(blockChoosed);
             SetActiveBlock();
 
-            var block = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            viewModel.blockId = block.bsd_blockid;
+            var item = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            viewModel.blockId = item.bsd_blockid;
             viewModel.Floors.Clear();
-            viewModel.NumChuanBiInBlock = 0;
-            viewModel.NumSanSangInBlock = 0;
-            viewModel.NumGiuChoInBlock = 0;
-            viewModel.NumDatCocInBlock = 0;
-            viewModel.NumDongYChuyenCoInBlock = 0;
-            viewModel.NumDaDuTienCocInBlock = 0;
-            viewModel.NumThanhToanDot1InBlock = 0;
-            viewModel.NumDaBanInBlock = 0;
+            viewModel.NumChuanBiInBlock = "0";
+            viewModel.NumSanSangInBlock = "0";
+            viewModel.NumGiuChoInBlock = "0";
+            viewModel.NumDatCocInBlock = "0";
+            viewModel.NumDongYChuyenCoInBlock = "0";
+            viewModel.NumDaDuTienCocInBlock = "0";
+            viewModel.NumThanhToanDot1InBlock = "0";
+            viewModel.NumDaBanInBlock = "0";
 
-            var totalBlock = viewModel.ApiResponse.SingleOrDefault(x => x.ID == viewModel.blockId.ToString());
-            if (totalBlock != null)
+            var block = viewModel.DirectSaleResult.SingleOrDefault(x => x.ID == viewModel.blockId.ToString());
+            if (block != null)
             {
-                var arrStatusBlock = totalBlock.stringQty.Split(',');
-                viewModel.NumChuanBiInBlock = int.Parse(arrStatusBlock[0]);
-                viewModel.NumSanSangInBlock = int.Parse(arrStatusBlock[1]);
-                viewModel.NumGiuChoInBlock = int.Parse(arrStatusBlock[2]);
-                viewModel.NumDatCocInBlock = int.Parse(arrStatusBlock[3]);
-                viewModel.NumDongYChuyenCoInBlock = int.Parse(arrStatusBlock[4]);
-                viewModel.NumDaDuTienCocInBlock = int.Parse(arrStatusBlock[5]);
-                viewModel.NumThanhToanDot1InBlock = int.Parse(arrStatusBlock[6]);
-                viewModel.NumDaBanInBlock = int.Parse(arrStatusBlock[7]);
-
-                foreach (var item in totalBlock.listFloor)
-                {
-                    Floor floor = new Floor();
-                    floor.bsd_floorid = Guid.Parse(item.ID);
-                    floor.bsd_name = item.name;
-                    var arrStatusInFloor = item.stringQty.Split(',');
-                    floor.NumChuanBiInFloor = int.Parse(arrStatusInFloor[0]);
-                    floor.NumSanSangInFloor = int.Parse(arrStatusInFloor[1]);
-                    floor.NumGiuChoInFloor = int.Parse(arrStatusInFloor[2]);
-                    floor.NumDatCocInFloor = int.Parse(arrStatusInFloor[3]);
-                    floor.NumDongYChuyenCoInFloor = int.Parse(arrStatusInFloor[4]);
-                    floor.NumDaDuTienCocInFloor = int.Parse(arrStatusInFloor[5]);
-                    floor.NumThanhToanDot1InFloor = int.Parse(arrStatusInFloor[6]);
-                    floor.NumDaBanInFloor = int.Parse(arrStatusInFloor[7]);
-                    viewModel.Floors.Add(floor);
-                };
+                viewModel.ResetDirectSale(block);
                 
                 var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
                 await viewModel.LoadUnitByFloor(floorId);
