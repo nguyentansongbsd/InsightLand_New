@@ -11,7 +11,7 @@ namespace ConasiCRM.Portable.ViewModels
         public Guid QueueId { get; set; }
         public string NumPhone { get; set; }
         private QueuesDetailModel _queue;
-        public QueuesDetailModel Queue { get => _queue; set { _queue = value; OnPropertyChanged(nameof(Queue)); } }
+        public QueuesDetailModel Queue { get => _queue ; set { _queue = value; OnPropertyChanged(nameof(Queue)); } }
 
         private string _customer;
         public string Customer { get => _customer;set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
@@ -19,6 +19,8 @@ namespace ConasiCRM.Portable.ViewModels
         private QueuesStatusCodeModel _queueStatusCode;
         public QueuesStatusCodeModel QueueStatusCode { get => _queueStatusCode; set { _queueStatusCode = value;OnPropertyChanged(nameof(QueueStatusCode)); } }
 
+        private string _queueProject;
+        public string QueueProject { get => _queueProject; set { _queueProject = value; OnPropertyChanged(nameof(QueueProject)); } }
         public QueuesDetialPageViewModel()
         {
         }
@@ -89,6 +91,15 @@ namespace ConasiCRM.Portable.ViewModels
             else if (!string.IsNullOrWhiteSpace(data.PhoneContact))
             {
                 NumPhone = data.PhoneContact;
+            }
+
+            if(data.unit_name != null)
+            {
+                QueueProject = "Không";
+            }
+            else
+            {
+                QueueProject = "Có";
             }
 
             this.QueueStatusCode = QueuesStatusCodeData.GetQueuesById(data.statuscode.ToString());

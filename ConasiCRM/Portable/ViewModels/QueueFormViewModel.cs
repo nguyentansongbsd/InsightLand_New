@@ -75,7 +75,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             this.QueueFormModel = tmp;
             QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
-            QueueFormModel.createdon = DateTime.Now;
+            QueueFormModel._queue_createdon = DateTime.Now;
         }
 
         public async Task LoadFromUnit(Guid UnitId)
@@ -120,12 +120,12 @@ namespace ConasiCRM.Portable.ViewModels
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_units_queuingfee;
             else if (QueueFormModel.bsd_bookingf > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
-            QueueFormModel.createdon = DateTime.Now;
+            QueueFormModel._queue_createdon = DateTime.Now;
         }
 
-        public async Task<bool> SetQueueTime(bool from)
-        {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+        public async Task<bool> SetQueueTime()
+        {                    
+                string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
                                 <attribute name='name' />
                                 <attribute name='customerid' />
@@ -147,21 +147,21 @@ namespace ConasiCRM.Portable.ViewModels
                                       <attribute name='bsd_name' alias='account_name' />
                                 </link-entity>
                                 <filter type='and'>
-                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{" + QueueFormModel.bsd_project_id + @"}' />
+                                    <condition attribute='bsd_queueforproject' operator='eq' value='0' />
+                                    <condition attribute='bsd_units' operator='eq' uitype='product' value='{" + QueueFormModel.bsd_units_id + @"}' />
                                 </filter>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-            if (result == null || result.value == null)
-                return false;
-            var data = result.value;
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
+                if (result == null || result.value == null)
+                    return false;
+               var data = result.value;
 
-            if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
-            {
-                return false;
-            }
-            if (from)
-            {
+                if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
+                {
+                    return false;
+                }
+                
                 if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
                 {
                     QueueFormModel.bsd_bookingtime = DateTime.Now;
@@ -182,13 +182,13 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
                 }
-            }
+                
             return true;
         }
 
         public async Task<bool> createQueue()
         {
-            string path = "/opportunities";
+            string path = "/opportunities"; /// sai
             QueueFormModel.opportunityid = Guid.NewGuid();
             var content = await this.getContent();
             CrmApiResponse result = await CrmHelper.PostData(path, content);
@@ -349,8 +349,13 @@ namespace ConasiCRM.Portable.ViewModels
                 data["statuscode"] = QueueFormModel.statuscode;
                 data["bsd_bookingtime"] = QueueFormModel.bsd_bookingtime;
                 data["bsd_queuingexpired"] = QueueFormModel.bsd_queuingexpired;
+                data["bsd_queueforproject"] = false;
             }
-            data["createdon"] = QueueFormModel.createdon;
+            else
+            {
+                data["bsd_queueforproject"] = true;
+            }
+            data["createdon"] = QueueFormModel._queue_createdon;
 
             return data;
         }
