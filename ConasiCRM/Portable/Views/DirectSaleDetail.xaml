@@ -169,49 +169,6 @@
                                             </BindableLayout.ItemTemplate>
                                         </FlexLayout>
                                     </StackLayout>
-                                    <!--<telerikPrimitives:RadExpander x:Name="radExpanderFloor" IsExpanded="False" BorderColor="#F9F9F9" BorderThickness="1">
-                                        <telerikPrimitives:RadExpander.Header >
-                                            <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}" >
-                                                <StackLayout Spacing="15" Margin="0,10">
-                                                    <!--<StackLayout.GestureRecognizers>
-                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="test_tapped"/>
-                                                    </StackLayout.GestureRecognizers>-->
-                                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
-                                                        <Label Grid.Column="0" Text="{Binding bsd_name,StringFormat='Tầng {0}'}" FontSize="16" FontAttributes="Bold" TextColor="#333333" />
-                                                        <Label Grid.Column="1" Text="{Binding Source={x:Reference radExpanderFloor},Path=IsExpanded,Converter={StaticResource customIndicatorConverter}}"  FontSize="15" FontFamily="FontAwesomeSolid" VerticalOptions="End"  TextColor="#333333" />
-                                                    </Grid>
-                                                    <Grid ColumnDefinitions="*,*,*,*,*,*,*,*" RowDefinitions="Auto" HorizontalOptions="Center" >
-                                                        <Label Grid.Column="0" Text="{Binding NumChuanBiInFloor}" BackgroundColor="#FDC206" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="1" Text="{Binding NumSanSangInFloor}" BackgroundColor="#06CF79" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="2" Text="{Binding NumGiuChoInFloor}" BackgroundColor="#03ACF5" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="3" Text="{Binding NumDatCocInFloor}" BackgroundColor="#04A388" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="4" Text="{Binding NumDongYChuyenCoInFloor}" BackgroundColor="#9A40AB" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="5" Text="{Binding NumDaDuTienCocInFloor}" BackgroundColor="#FA7901" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="6" Text="{Binding NumThanhToanDot1InFloor}" BackgroundColor="#808080" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                        <Label Grid.Column="7" Text="{Binding NumDaBanInFloor}" BackgroundColor="#D42A16" Style="{StaticResource lblNumStatusInFloor}"/>
-                                                    </Grid>
-                                                </StackLayout>
-                                            </telerikPrimitives:ExpanderHeader>
-                                        </telerikPrimitives:RadExpander.Header>
-                                        <telerikPrimitives:RadExpander.Content >
-                                            <FlexLayout x:Name="flexContentUnits" BindableLayout.ItemsSource="{Binding Units}" Padding="8" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" SizeChanged="ScreenChange_SizeChanged">
-                                                <BindableLayout.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding item_background}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
-                                                            <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding}"/>
-                                                            </telerikPrimitives:RadBorder.GestureRecognizers>
-                                                            <StackLayout>
-                                                                <Label Text="{Binding name}" TextColor="White" FontSize="23" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
-                                                                <Label Text="{Binding NumQueses,StringFormat='Giữ chỗ: {0}'}" FontFamily="FontRobotoMedium" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-                                                                <Label Text="{Binding price_format}" TextColor="White" FontFamily="FontRobotoBold" FontSize="20" HorizontalTextAlignment="Center" />
-                                                            </StackLayout>
-                                                        </telerikPrimitives:RadBorder>
-                                                    </DataTemplate>
-                                                </BindableLayout.ItemTemplate>
-                                            </FlexLayout>
-                                        </telerikPrimitives:RadExpander.Content>
-                                    </telerikPrimitives:RadExpander>-->
                                 </telerikPrimitives:RadBorder>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
