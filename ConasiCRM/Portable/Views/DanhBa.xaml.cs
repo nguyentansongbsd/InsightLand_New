@@ -9,27 +9,24 @@ using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
 using System.Linq;
 using Telerik.XamarinForms.Primitives;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Helpers;
+using System.Collections.ObjectModel;
 
 namespace ConasiCRM.Portable.Views
 {
     public partial class DanhBa : ContentPage
     {
         public DanhBaViewModel viewModel;
-        private DanhBaItemModel lastEmptyItem;
-
+        private ObservableCollection<DanhBaItemModel> SelectedContact = new ObservableCollection<DanhBaItemModel>();
         public DanhBa()
         {
             InitializeComponent();
             this.BindingContext = viewModel = new DanhBaViewModel();
-            LoadingHelper.Show();
+            LoadingHelper.Show();           
             viewModel.isCheckedAll = false;
             viewModel.total = 0;
             viewModel.numberChecked = 0;
-
-            lastEmptyItem = new DanhBaItemModel()
-            {
-                Name = "\n\n",
-            };
 
             LoadContacts().GetAwaiter();
             LoadingHelper.Hide();
@@ -39,7 +36,7 @@ namespace ConasiCRM.Portable.Views
         {
             button_toLead.isVisible = false;
             viewModel.reset();
-
+            SelectedContact.Clear();
             LoadContacts().GetAwaiter();
         }
 
@@ -50,7 +47,7 @@ namespace ConasiCRM.Portable.Views
                 await Navigation.PopAsync();
                 return;
             }
-
+            await viewModel.LoadLeadConvert();
             LoadingHelper.Show();
             var contacts = (await Plugin.ContactService.CrossContactService.Current.GetContactListAsync()).Where(x => x.Name != null);
             foreach (var tmp in contacts.OrderBy(x => x.Name))
@@ -58,25 +55,33 @@ namespace ConasiCRM.Portable.Views
                 var numbers = tmp.Numbers;
                 foreach (var n in numbers)
                 {
-                    viewModel.Contacts.Add(new Models.DanhBaItemModel()
-                    {
+                    var sdt = n.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", "");
+
+                    var item = new Models.DanhBaItemModel {
                         Name = tmp.Name,
-                        numberFormated = n,
-                        Email = tmp.Email,
-                        IsSelected = false,
-                    });
+                        numberFormated = sdt,
+                        IsSelected = false
+                    };
+                    if (viewModel.LeadConvert.Where(x => x.mobilephone == sdt).ToList().Count <= 0)
+                    {
+                        item.IsConvertToLead = false;
+                        viewModel.Contacts.Add(item);
+                        SelectedContact.Add(item);
+                    }
+                    else
+                    {
+                        item.IsConvertToLead = true;
+                        viewModel.Contacts.Add(item);
+                    }                   
                 }
-            }
-
-            viewModel.total = viewModel.Contacts.Count();
-
-            viewModel.Contacts.Add(lastEmptyItem);
+            }          
+            viewModel.total = SelectedContact.Count();
             LoadingHelper.Hide();
         }
 
         private void checkAll_IsCheckedChanged(object sender, Telerik.XamarinForms.Primitives.CheckBox.IsCheckedChangedEventArgs e)
         {
-            foreach (var item in viewModel.Contacts)
+            foreach (var item in SelectedContact)
             {
                 if(item.numberFormated != null)
                 {
@@ -111,15 +116,22 @@ namespace ConasiCRM.Portable.Views
 
             if (item.IsSelected == true) // đang là true đổi qua false thì set check all thành false.
             {
-                viewModel.isCheckedAll = false;
+                if (viewModel.isCheckedAll == true)
+                {
+                    viewModel.isCheckedAll = false;
+                    if (SelectedContact.Count > 1)
+                        viewModel.numberChecked = 2;
+                    else
+                        viewModel.numberChecked = 1;
+                }
                 viewModel.numberChecked -= 1;
             }
             else
             {
                 viewModel.numberChecked++;
             }
-            item.IsSelected = !item.IsSelected;
-
+            if (SelectedContact.Count > 1)
+                item.IsSelected = !item.IsSelected;
             // check all
             viewModel.isCheckedAll = viewModel.numberChecked == viewModel.total;
             button_toLead.isVisible = viewModel.numberChecked == 0 ? false : true;
@@ -127,10 +139,9 @@ namespace ConasiCRM.Portable.Views
 
         private async void ConvertToLead_Clicked(object sender, EventArgs e)
         {
-            var SelectedContact = this.viewModel.Contacts.Where(x => x.IsSelected);
             if (SelectedContact.Any() == false)
             {
-                await DisplayAlert("Thông báo", "Vui lòng chọn Contact để chuyển sang khách hàng tiềm năng", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn Contact để chuyển sang khách hàng tiềm năng");
                 return;
             }
 
@@ -143,26 +154,52 @@ namespace ConasiCRM.Portable.Views
 
         private async void ConvertToLead(IEnumerable<DanhBaItemModel> SelectedContact)
         {
-            LoadingHelper.Show();
-            LeadFormViewModel leadViewModel = new LeadFormViewModel();
+            LoadingHelper.Show();          
             foreach (var i in SelectedContact)
             {
-                //var re = await leadViewModel.createLead(new LeadFormModel()
-                //{
-                //    firstname = i.Name,
-                //    mobilephone = i.numberFormated,
-                //    emailaddress1 = i.Email
-                //});
+                var re = await createLead(new LeadFormModel()
+                {
+                    leadid = Guid.NewGuid(),
+                    bsd_topic_label = "Khách Hàng Tiềm Năng Từ Danh Bạ",
+                    lastname = i.Name,
+                    mobilephone = i.numberFormated,
+                });
 
-                //if (re == new Guid())
-                //{
-                //    await DisplayAlert("", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                //    LoadingHelper.Hide();
-                //    return;
-                //}
+                if (!re.IsSuccess)
+                {
+                    ToastMessageHelper.ShortMessage("Đã có lỗi xảy ra. Vui lòng thử lại sau");
+                    LoadingHelper.Hide();
+                    return;
+                }
             }
-            await DisplayAlert("", "Chuyển thành công", "OK");
+            ToastMessageHelper.ShortMessage("Chuyển thành công");
             this.reset();
+        }
+
+        public async Task<CrmApiResponse> createLead(LeadFormModel leadFormModel)
+        {
+            string path = "/leads";
+            var content = await this.getContent(leadFormModel);
+            CrmApiResponse result = await CrmHelper.PostData(path, content);
+            return result;
+        }
+
+        private async Task<object> getContent(LeadFormModel leadFormModel)
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["leadid"] = leadFormModel.leadid;
+            data["subject"] = leadFormModel.bsd_topic_label;
+            data["lastname"] = leadFormModel.lastname;
+            data["mobilephone"] = leadFormModel.mobilephone;           
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            }
+            return data;
         }
     }
 }

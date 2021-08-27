@@ -51,8 +51,13 @@ namespace ConasiCRM.Portable.Views
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            
+
             //var a = (((stackFloors.Children as List<RadBorder>).Content as RadExpander).Content as FlexLayout).Children as RadBorder;
+
+
+
+
+
         }
 
         public async void Init()

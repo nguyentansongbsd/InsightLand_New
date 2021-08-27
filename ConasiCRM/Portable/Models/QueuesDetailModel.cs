@@ -1,7 +1,8 @@
-﻿using System;
+﻿using ConasiCRM.Portable.ViewModels;
+using System;
 namespace ConasiCRM.Portable.Models
 {
-    public class QueuesDetailModel
+    public class QueuesDetailModel : BaseViewModel
     {
         public string opportunityid { get; set; }
         public string name { get; set; }
@@ -35,7 +36,9 @@ namespace ConasiCRM.Portable.Models
 
         public int statuscode { get; set; }
         public DateTime bsd_bookingtime { get; set; }
-        public DateTime createdon { get; set; }
+
+        public DateTime _createdon;
+        public DateTime createdon { get => _createdon.AddHours(7); set { _createdon = value; OnPropertyChanged(nameof(createdon)); } }
         public DateTime bsd_queuingexpired { get; set; }
     }
 }
