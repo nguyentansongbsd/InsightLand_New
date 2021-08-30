@@ -37,7 +37,7 @@
                     <controls:LookUpMultipleOptions x:Name="lookupMultipleView" Placeholder="Chọn View" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedViews}" ItemsSource="{Binding ViewOptions}"/>-->
 
                     <controls:FormLabel Text="Hướng" Margin="0,5,0,0"/>
-                    <controls:LookUpMultipleOptions x:Name="lookupMultipleDirection" Placeholder="Chọn hướng" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedDirections}" ItemsSource="{Binding DirectionOptions}"/>
+                    <controls:LookUpMultipleOptions x:Name="lookupMultipleDirection" Placeholder="Chọn hướng" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedDirections}" ItemsSource="{Binding DirectionOptions}" ShowClearButton="False" ShowCloseButton="False"/>
 
                     <controls:FormLabel Text="Tình trạng sản phẩm" Margin="0,5,0,0"/>
                     <controls:LookUpMultipleOptions x:Name="lookupMultipleUnitStatus" Placeholder="Chọn tình trạng sản phẩm" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedUnitStatus}" ItemsSource="{Binding UnitStatusOptions}"/>
