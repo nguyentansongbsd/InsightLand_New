@@ -65,6 +65,7 @@ namespace ConasiCRM.Portable.Views
             btnSave.Clicked += UpdateContact_Clicked;
 
             await viewModel.LoadOneAccount(this.AccountId);
+
             viewModel.LoadBusinessTypeForLookup();
             Lookup_BusinessType.SetUpModal();
             if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))

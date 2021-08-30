@@ -135,8 +135,8 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_queuenumber' />
                                 <attribute name='bsd_project' />
                                 <attribute name='opportunityid' />
-                                <attribute name='bsd_queuingexpired' />
-                                <attribute name='bsd_bookingtime' />
+                                <attribute name='bsd_queuingexpired' alias='_queue_bsd_queuingexpired' />
+                                <attribute name='bsd_bookingtime' alias='_queue_bsd_bookingtime' />
                                 <order attribute='createdon' descending='true' />                               
                                 <link-entity name='contact' from='contactid' to='parentcontactid' visible='false' link-type='outer' alias='a_7eff24578704e911a98b000d3aa2e890'>
                                       <attribute name='contactid' alias='contact_id' />
@@ -164,23 +164,23 @@ namespace ConasiCRM.Portable.ViewModels
                 
                 if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
                 {
-                    QueueFormModel.bsd_bookingtime = DateTime.Now;
+                    QueueFormModel._queue_bsd_bookingtime = DateTime.Now;
                     QueueFormModel.statuscode = 100000000;
                 }
                 else
                 {
-                    var queue = (QueueFormModel)data.OrderBy(x => x.bsd_queuingexpired).LastOrDefault();
-                    QueueFormModel.bsd_bookingtime = queue.bsd_queuingexpired;
+                    var queue = (QueueFormModel)data.OrderBy(x => x._queue_bsd_queuingexpired).LastOrDefault();
+                    QueueFormModel._queue_bsd_bookingtime = queue._queue_bsd_queuingexpired;
                     QueueFormModel.statuscode = 100000002;
                 }
 
                 if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
                 {
-                    QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
+                    QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
                 }
                 else
                 {
-                    QueueFormModel.bsd_queuingexpired = QueueFormModel.bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
+                    QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
                 }
                 
             return true;
@@ -347,8 +347,8 @@ namespace ConasiCRM.Portable.ViewModels
             if (QueueFormModel.statuscode != 0)
             {
                 data["statuscode"] = QueueFormModel.statuscode;
-                data["bsd_bookingtime"] = QueueFormModel.bsd_bookingtime;
-                data["bsd_queuingexpired"] = QueueFormModel.bsd_queuingexpired;
+                data["bsd_bookingtime"] = QueueFormModel._queue_bsd_bookingtime;
+                data["bsd_queuingexpired"] = QueueFormModel._queue_bsd_queuingexpired;
                 data["bsd_queueforproject"] = false;
             }
             else

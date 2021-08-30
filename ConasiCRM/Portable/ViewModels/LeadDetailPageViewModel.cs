@@ -136,11 +136,13 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task CreateContact()
         {
             string path = "/contacts";
+            singleLead.contactid = Guid.NewGuid();
             var content = await this.getContentContact();
             CrmApiResponse result = await CrmHelper.PostData(path, content);
             if (result.IsSuccess)
             {
                 IsSuccessContact = true;
+                await CreateAccount();
             }
             else
             {
@@ -296,6 +298,7 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> getContentContact()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
+            data["contactid"] = singleLead.contactid;
             data["lastname"] = singleLead.lastname;
             data["bsd_fullname"] = singleLead.lastname;
             data["emailaddress1"] = singleLead.emailaddress1;
@@ -331,6 +334,14 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 data["numberofemployees"] = null;
+            }
+            if (singleLead.contactid == Guid.Empty)
+            {
+                await DeletLookup("accounts", "primarycontactid", accountid);
+            }
+            else
+            {
+                data["primarycontactid@odata.bind"] = "/contacts(" + singleLead.contactid + ")"; /////Lookup Field
             }
             data["lastusedincampaign"] = singleLead.lastusedincampaign.HasValue ? (DateTime.Parse(singleLead.lastusedincampaign.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;
             data["industrycode"] = singleLead.industrycode;

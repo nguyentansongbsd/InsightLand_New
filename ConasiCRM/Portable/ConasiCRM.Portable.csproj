@@ -155,7 +155,6 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Settings\" />
       <Folder Include="Fonts\" />
       <Folder Include="IServices\" />
     </ItemGroup>

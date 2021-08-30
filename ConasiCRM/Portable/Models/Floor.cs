@@ -14,7 +14,7 @@ namespace ConasiCRM.Portable.Models
         
         public int UnitCount { get; set; }
 
-        public IList<Unit> Units { get; set; } = new ObservableCollection<Unit>();
+        public List<Unit> Units { get; set; } = new List<Unit>();
 
         public new string Title
         {
@@ -26,13 +26,13 @@ namespace ConasiCRM.Portable.Models
 
         public CountUnit CountUnit { get; set; } = new CountUnit();
 
-        public int NumChuanBiInFloor { get; set; }
-        public int NumSanSangInFloor { get; set; }
-        public int NumGiuChoInFloor { get; set; }
-        public int NumDatCocInFloor { get; set; }
-        public int NumDongYChuyenCoInFloor { get; set; }
-        public int NumDaDuTienCocInFloor { get; set; }
-        public int NumThanhToanDot1InFloor { get; set; }
-        public int NumDaBanInFloor { get; set; }
+        public string NumChuanBiInFloor { get; set; }
+        public string NumSanSangInFloor { get; set; }
+        public string NumGiuChoInFloor { get; set; }
+        public string NumDatCocInFloor { get; set; }
+        public string NumDongYChuyenCoInFloor { get; set; }
+        public string NumDaDuTienCocInFloor { get; set; }
+        public string NumThanhToanDot1InFloor { get; set; }
+        public string NumDaBanInFloor { get; set; }
     }
 }

@@ -51,6 +51,38 @@ namespace ConasiCRM.Portable.Helper
             return null;
         }
 
+        public static async Task<T> Get<T>(string content) where T : class
+        {
+            try
+            {
+                var client = BsdHttpClient.Instance();
+                string Token = App.Current.Properties["Token"] as string;
+                var request = new HttpRequestMessage(HttpMethod.Get, $"{OrgConfig.ApiUrl}/{content}");
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.SendAsync(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                    var a = body.Replace(@"\","");
+                    string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0,11);
+                    string a2 = a1.Substring(0, a1.Length - 2);
+                    var api_Response = JsonConvert.DeserializeObject<T>(a2);
+                    return api_Response;
+                }
+                else
+                {
+                    var a = response.RequestMessage;
+                }
+            }
+            catch (Exception ex)
+            {
+                string mess = ex.Message;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Set giá trị Null cho field lookup
         /// </summary>

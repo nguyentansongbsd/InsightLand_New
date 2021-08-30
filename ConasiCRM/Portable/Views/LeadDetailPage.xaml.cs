@@ -87,10 +87,7 @@ namespace ConasiCRM.Portable.Views
             bool IsSuccessQualify = await viewModel.Qualify(viewModel.singleLead.leadid);
             if (IsSuccessQualify == true)
             {
-                await Task.WhenAll(
-                      viewModel.CreateContact(),
-                        viewModel.CreateAccount()                     
-                    );
+                await viewModel.CreateContact();
                 if(!string.IsNullOrWhiteSpace(viewModel.singleLead.companyname))
                 {
                     if (viewModel.IsSuccessContact == true && viewModel.IsSuccessAccount == true)

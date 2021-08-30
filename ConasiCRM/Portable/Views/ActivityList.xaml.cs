@@ -92,9 +92,9 @@ namespace ConasiCRM.Portable.Views
             {
                 SearchBar_SearchButtonPressed(null, EventArgs.Empty);
             }
-        }
+        }      
 
-        private async Task NewActivity_ClickedAsync(object sender, EventArgs e)
+        private async void NewActivity_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             string[] options = new string[] { "Tạo Cuộc Họp", "Tạo Cuộc Gọi", "Tạo Công Việc" };
