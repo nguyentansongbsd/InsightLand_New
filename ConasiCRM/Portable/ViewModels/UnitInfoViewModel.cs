@@ -289,6 +289,10 @@ namespace ConasiCRM.Portable.ViewModels
                     IsShowBtnBangTinhGia = true;
                     return;
                 }
+                else
+                {
+                    IsShowBtnBangTinhGia = false;
+                }
             }
         }
     }
