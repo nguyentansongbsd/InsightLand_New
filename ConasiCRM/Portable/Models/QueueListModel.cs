@@ -1,11 +1,12 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ConasiCRM.Portable.Models
 {
-    public class QueueListModel
+    public class QueueListModel : BaseViewModel
     {
         public Guid opportunityid { get; set; }
         public Guid customer_id { get; set; }
@@ -21,9 +22,12 @@ namespace ConasiCRM.Portable.Models
         }
 
         public string unit_name { get; set; }
-        public DateTime? createdon { get; set; }
 
-        public DateTime? bsd_queuingexpired { get; set; }
+        private DateTime _createdon;
+        public DateTime createdon { get => _createdon.AddHours(7); set { _createdon = value; OnPropertyChanged(nameof(createdon)); } }
+
+        private DateTime _bsd_queuingexpired;
+        public DateTime bsd_queuingexpired { get => _bsd_queuingexpired.AddHours(7); set { _bsd_queuingexpired = value; OnPropertyChanged(nameof(bsd_queuingexpired)); } }
         public string bsd_queuingexpired_format
         {
             get => StringHelper.DateFormat(bsd_queuingexpired);

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
+
 namespace ConasiCRM.Portable.Models
 {
-    public class HoatDongListModel
+    public class HoatDongListModel : BaseViewModel
     {
         public Guid activityid { get; set; }
         public string subject { get; set; }

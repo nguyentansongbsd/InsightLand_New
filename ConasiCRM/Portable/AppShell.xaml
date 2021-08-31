@@ -124,7 +124,12 @@
         </ShellContent>
         <ShellContent Title="Hoa hồng giao dịch" ContentTemplate="{DataTemplate views:HoaHongGiaoDichList}">
             <ShellContent.Icon>
-                <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf4c0;" Size="18"/>
+                <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate views:ActivityList}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
     </FlyoutItem>

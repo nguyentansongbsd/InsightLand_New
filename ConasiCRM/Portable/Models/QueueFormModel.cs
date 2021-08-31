@@ -39,11 +39,13 @@ namespace ConasiCRM.Portable.Models
         public int statuscode { get; set; } // chi su dung trong form update.
 
         public DateTime _createdon;
-        public DateTime createdon { get => _createdon.AddHours(7) ; set { _createdon = value; OnPropertyChanged(nameof(createdon)); } } // Thời gian đặt chỗ 
+        public DateTime createdon { get => _createdon.AddHours(7); set { _createdon = value; OnPropertyChanged(nameof(createdon)); } } // Thời gian đặt chỗ 
 
-        public DateTime bsd_queuingexpired { get; set; } // Thời gian hết hạn
+        public DateTime _bsd_queuingexpired;
+        public DateTime bsd_queuingexpired { get => _bsd_queuingexpired.AddHours(7); set { _bsd_queuingexpired = value; OnPropertyChanged(nameof(bsd_queuingexpired)); } } // Thời gian đặt chỗ  // Thời gian hết hạn
 
-        public DateTime bsd_bookingtime { get; set; } // Thời gian bat dau
+        public DateTime _bsd_bookingtime;
+        public DateTime bsd_bookingtime { get => _bsd_bookingtime.AddHours(7); set { _bsd_bookingtime = value; OnPropertyChanged(nameof(bsd_bookingtime)); } } // Thời gian bat dau
 
         public Guid bsd_project_id { get; set; }
         public string bsd_project_name { get; set; } // dự án
@@ -82,5 +84,7 @@ namespace ConasiCRM.Portable.Models
         public int bsd_longtime { get; set; }
         public int bsd_shorttime { get; set; }
         public DateTime _queue_createdon { get; set; }
+        public DateTime _queue_bsd_queuingexpired { get; set; }
+        public DateTime _queue_bsd_bookingtime { get; set; }
     }
 }

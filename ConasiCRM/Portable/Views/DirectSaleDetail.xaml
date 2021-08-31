@@ -286,7 +286,7 @@
                                 </StackLayout>
                             </ScrollView>
                         </StackLayout>
-                        <Grid x:Name="gridButton" Grid.Row="2" ColumnDefinitions="*,*" BackgroundColor="White" Padding="10,5">
+                        <Grid x:Name="gridButton" Grid.Row="2" ColumnDefinitions="*,*" BackgroundColor="White" Padding="10,5" Margin="0,0,0,5">
                             <Button x:Name="btnGiuCho" Text="Giữ chỗ" Clicked="GiuCho_Clicked" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" />
                             <Button x:Name="btnBangTinhGia" Text="Bảng tính giá" Clicked="BangTinhGia_Clicked" IsVisible="{Binding IsShowBtnBangTinhGia}" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10"/>
                         </Grid>

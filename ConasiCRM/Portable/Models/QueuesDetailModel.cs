@@ -35,10 +35,14 @@ namespace ConasiCRM.Portable.Models
         public string bsd_nameofstaffagent { get; set; }
 
         public int statuscode { get; set; }
-        public DateTime bsd_bookingtime { get; set; }
+
+        public DateTime _bsd_bookingtime;
+        public DateTime bsd_bookingtime { get => _bsd_bookingtime.AddHours(7); set { _bsd_bookingtime = value; OnPropertyChanged(nameof(bsd_bookingtime)); } }
 
         public DateTime _createdon;
         public DateTime createdon { get => _createdon.AddHours(7); set { _createdon = value; OnPropertyChanged(nameof(createdon)); } }
-        public DateTime bsd_queuingexpired { get; set; }
+
+        public DateTime _bsd_queuingexpired;
+        public DateTime bsd_queuingexpired { get => _bsd_queuingexpired.AddHours(7); set { _bsd_queuingexpired = value; OnPropertyChanged(nameof(bsd_queuingexpired)); } }
     }
 }

@@ -256,6 +256,7 @@ namespace ConasiCRM.Portable.Models
         public string bsd_district_label { get; set; }
         public string bsd_district_en { get; set; }
         public int leadqualitycode { get; set; }
+        public Guid contactid { get; set; }
 
     }
 }
