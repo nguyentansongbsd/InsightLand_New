@@ -17,6 +17,7 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         public static bool? NeedToRefresh = null;
+        public static bool? NeedToRefreshQueues = null;
         private ContactDetailPageViewModel viewModel;
         private Guid Id;
         public ContactDetailPage(Guid contactId)
@@ -55,6 +56,15 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PhongThuy = null;
                 LoadDataPhongThuy();
                 NeedToRefresh = false;
+                LoadingHelper.Hide();
+            }
+            if (NeedToRefreshQueues == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.list_danhsachdatcho.Clear();
+                await viewModel.LoadQueuesForContactForm(viewModel.singleContact.contactid.ToString());
+                NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
         }

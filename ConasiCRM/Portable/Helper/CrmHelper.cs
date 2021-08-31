@@ -39,9 +39,37 @@ namespace ConasiCRM.Portable.Helper
                     var api_Response = JsonConvert.DeserializeObject<T>(body);
                     return api_Response;
                 }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    //var client1 = BsdHttpClient.Instance();
+                    //var request1 = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/common/oauth2/token");//OrgConfig.LinkLogin
+                    //var formContent = new FormUrlEncodedContent(new[]
+                    //    {
+                    //    new KeyValuePair<string, string>("resource", OrgConfig.Resource),
+                    //    //new KeyValuePair<string, string>("client_id", OrgConfig.ClientId),
+                    //    //new KeyValuePair<string, string>("client_secret", OrgConfig.ClientSecret),
+                    //    //new KeyValuePair<string, string>("grant_type", "client_credentials")
+                    //    new KeyValuePair<string, string>("client_id", "2ad88395-b77d-4561-9441-d0e40824f9bc"),
+                    //    new KeyValuePair<string, string>("username", OrgConfig.UserName),
+                    //    new KeyValuePair<string, string>("password", OrgConfig.Password),
+                    //    new KeyValuePair<string, string>("grant_type", "password"),
+
+                    //});
+                    //request1.Content = formContent;
+                    //var response1 = await client1.SendAsync(request1);
+                    //if (response1.IsSuccessStatusCode)
+                    //{
+                    //    var body = await response.Content.ReadAsStringAsync();
+                    //    GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                    //    App.Current.Properties["Token"] = tokenData.access_token;
+
+                    //    await RetrieveMultiple<T>(EntityName, FetchXml);
+                    //}
+                }
                 else
                 {
                     var a = response.RequestMessage;
+                    
                 }
             }
             catch (Exception ex)

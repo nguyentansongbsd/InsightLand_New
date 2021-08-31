@@ -19,6 +19,7 @@ namespace ConasiCRM.Portable.Views
         private Guid AccountId;
         public static bool? NeedToRefreshAccount= null;
         public static bool? NeedToRefreshMandatory = null;
+        public static bool? NeedToRefreshQueues = null;
         private AccountDetailPageViewModel viewModel;
         
         public AccountDetailPage(Guid accountId)
@@ -77,8 +78,17 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageMandatory = 1;
                 viewModel.list_MandatorySecondary.Clear();
                 await LoadDataNguoiUyQuyen(AccountId.ToString());
-                NeedToRefreshAccount = false;
                 NeedToRefreshMandatory = false;
+                LoadingHelper.Hide();
+            }
+
+            if (NeedToRefreshQueues == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageQueueing = 1;
+                viewModel.list_thongtinqueing.Clear();
+                await viewModel.LoadDSQueueingAccount(AccountId);
+                NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
         }
