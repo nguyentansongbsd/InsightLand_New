@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telerik.XamarinForms.Primitives;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -92,12 +91,12 @@ namespace ConasiCRM.Portable.Views
         public async void Block_Tapped(object sender,EventArgs e)
         {
             LoadingHelper.Show();
-            await Task.Delay(1);
             var blockChoosed = sender as RadBorder;
             if (stackBlocks.Children.IndexOf(blockChoosed) == currentBlock) return;
             SetInActiveBlock();
             this.currentBlock = stackBlocks.Children.IndexOf(blockChoosed);
             SetActiveBlock();
+            await Task.Delay(1);
 
             var item = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             viewModel.blockId = item.bsd_blockid;
