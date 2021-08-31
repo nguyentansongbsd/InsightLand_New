@@ -6,6 +6,7 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using FormsVideoLibrary;
+using Newtonsoft.Json;
 using Stormlion.PhotoBrowser;
 using Xamarin.CommunityToolkit.Core;
 using Xamarin.CommunityToolkit.UI.Views;
@@ -66,6 +67,16 @@ namespace ConasiCRM.Portable
             if (item != null)
             {
                 viewModel.Data.Remove(item);               
+            }
+        }
+
+        private async void Button_Clicked(System.Object sender, System.EventArgs e)
+        {
+            var response = await LoginHelper.Login();
+            if (response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
             }
         }
     }

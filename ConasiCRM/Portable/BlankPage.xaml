@@ -34,7 +34,10 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>
+            <!--<CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>-->
+
+
+            <Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

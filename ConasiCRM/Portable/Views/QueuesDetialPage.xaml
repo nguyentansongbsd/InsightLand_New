@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
     xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    ios:Page.UseSafeArea="true"
     Title="THÔNG TIN GIỮ CHỖ"
     x:Class="ConasiCRM.Portable.Views.QueuesDetialPage">
     <ContentPage.Resources>
@@ -24,7 +26,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,20">
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderColor="#808080" CornerRadius="10" BorderThickness="1" VerticalOptions="Start" Margin="8">
                         <Grid RowDefinitions="*,Auto" RowSpacing="1" BackgroundColor="#808080">
@@ -202,6 +204,10 @@
                     </telerikPrimitives:RadExpander>
                 </StackLayout>
             </ScrollView>
+            <Grid x:Name="gridButtons" IsVisible="{Binding ShowButtons}" AbsoluteLayout.LayoutBounds="0,1,1,50" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White" Padding="10,5">
+                <Button x:Name="btnHuyGiuCho" Text="Hủy giữ chỗ" Clicked="HuyGiuCho_Clicked" IsVisible="{Binding ShowBtnHuyGiuCho}" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" />
+                <Button x:Name="btnBangTinhGia" Text="Tạo Bảng tính giá" TextColor="White" IsVisible="{Binding ShowBtnBangTinhGia}" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10"/>
+            </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
