@@ -41,11 +41,11 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _phasesLaunch;
         public OptionSet PhasesLaunch { get => _phasesLaunch; set { _phasesLaunch = value; OnPropertyChanged(nameof(PhasesLaunch)); } }
 
-        private List<OptionSet> _netAreas;
-        public List<OptionSet> NetAreas { get=>_netAreas; set { _netAreas = value; OnPropertyChanged(nameof(NetAreas)); } }
+        private List<NetAreaDirectSaleModel> _netAreas;
+        public List<NetAreaDirectSaleModel> NetAreas { get=>_netAreas; set { _netAreas = value; OnPropertyChanged(nameof(NetAreas)); } }
 
-        private OptionSet _netArea;
-        public OptionSet NetArea { get => _netArea; set { _netArea = value; OnPropertyChanged(nameof(NetArea)); } }
+        private NetAreaDirectSaleModel _netArea;
+        public NetAreaDirectSaleModel NetArea { get => _netArea; set { _netArea = value; OnPropertyChanged(nameof(NetArea)); } }
 
         private List<PriceDirectSaleModel> _prices;
         public List<PriceDirectSaleModel> Prices { get => _prices; set { _prices = value; OnPropertyChanged(nameof(Prices)); } }
