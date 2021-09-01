@@ -188,7 +188,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> createQueue()
         {
-            string path = "/opportunities"; /// sai
+            string path = "/opportunities";
             QueueFormModel.opportunityid = Guid.NewGuid();
             var content = await this.getContent();
             CrmApiResponse result = await CrmHelper.PostData(path, content);

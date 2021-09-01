@@ -3,6 +3,7 @@ using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telerik.XamarinForms.Primitives;
@@ -41,6 +42,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageDanhSachDatCho = 1;
                 viewModel.QueueList.Clear();
                 await viewModel.LoadQueues(viewModel.Unit.productid);
+                UpdateStatusUnit();
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
@@ -166,10 +168,19 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000" || viewModel.UnitStatusCode.Id == "100000004")
             {
                 btnGiuCho.IsVisible = true;
+                if (viewModel.UnitStatusCode.Id != "1" && viewModel.IsShowBtnBangTinhGia == true)
+                {
+                    viewModel.IsShowBtnBangTinhGia = true;
+                }
+                else
+                {
+                    viewModel.IsShowBtnBangTinhGia = false;
+                }    
             }
             else
             {
                 btnGiuCho.IsVisible = false;
+                viewModel.IsShowBtnBangTinhGia = false;
             }
 
             SetButton();
@@ -320,6 +331,40 @@ namespace ConasiCRM.Portable.Views
         private void CloseQuestion_Tapped(object sender, EventArgs e)
         {
             stackQuestion.IsVisible = !stackQuestion.IsVisible;
+        }
+
+        private async void UpdateStatusUnit()
+        {
+            if(viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000")
+            {
+                await updateStatusUnit();
+                await viewModel.LoadUnitById(viewModel.Unit.productid);
+                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
+            }    
+        }
+
+        public async Task<Boolean> updateStatusUnit()
+        {
+            string path = "/products(" + viewModel.Unit.productid + ")";
+            var content = await this.getContent();
+            CrmApiResponse result = await CrmHelper.PatchData(path, content);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private async Task<object> getContent()
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = 0;
+            data["statuscode"] = 100000004;            
+            return data;
         }
     }
 }

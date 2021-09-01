@@ -49,7 +49,23 @@ namespace ConasiCRM.Portable.Views
                     viewModel.View = ViewData.GetViewById(viewModel.UnitInfo.bsd_view);
                 }
 
-                btnGiuCho.IsVisible = viewModel.UnitInfo.bsd_vippriority ? false : true;
+                if (viewModel.UnitInfo.statuscode == 1 || viewModel.UnitInfo.statuscode == 100000000 || viewModel.UnitInfo.statuscode == 100000004)
+                {
+                    btnGiuCho.IsVisible = viewModel.UnitInfo.bsd_vippriority ? false : true;
+                    if (viewModel.UnitInfo.statuscode != 1 && viewModel.IsShowBtnBangTinhGia == true)
+                    {
+                        viewModel.IsShowBtnBangTinhGia = true;
+                    }
+                    else
+                    {
+                        viewModel.IsShowBtnBangTinhGia = false;
+                    }
+                }
+                else
+                {
+                    btnGiuCho.IsVisible = false;
+                    viewModel.IsShowBtnBangTinhGia = false;
+                }
                 SetButton();
 
                 OnCompleted?.Invoke(true);
@@ -82,17 +98,20 @@ namespace ConasiCRM.Portable.Views
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == true)
             {
+                gridButton.IsVisible = true;
                 Grid.SetColumn(btnGiuCho, 0);
                 Grid.SetColumn(btnBangTinhGia, 1);
             }
             else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == false)
             {
+                gridButton.IsVisible = true;
                 Grid.SetColumn(btnGiuCho, 0);
                 Grid.SetColumnSpan(btnGiuCho, 2);
                 Grid.SetColumn(btnBangTinhGia, 0);
             }
             else if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == true)
             {
+                gridButton.IsVisible = true;
                 Grid.SetColumn(btnGiuCho, 0);
                 Grid.SetColumn(btnBangTinhGia, 0);
                 Grid.SetColumnSpan(btnBangTinhGia, 2);
