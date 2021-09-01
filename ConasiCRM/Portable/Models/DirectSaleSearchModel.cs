@@ -11,13 +11,20 @@ namespace ConasiCRM.Portable.Models
         public string PhasesLanchId { get; set; }
         public bool? IsEvent { get; set; }
         public string UnitCode { get; set; }
-        public List<string> Directions { get; set; }
-        //public List<string> Views { get; set; }
-        public List<string> UnitStatuses { get; set; }
-        public decimal? minNetArea { get; set; }
-        public decimal? maxNetArea { get; set; }
-        public decimal? minPrice { get; set; }
-        public decimal? maxPrice { get; set; }
-        public List<Block> Blocks { get; set; }
+        public string Directions { get; set; }
+        public string UnitStatuses { get; set; }
+        public string NetArea { get; set; }
+        public string Price { get; set; }
+        public DirectSaleSearchModel(string projectId, string phasesLanchId, bool? isEvent = null, string unitCode = null, string directions = null, string unitStatuses = null, string netArea = null, string price = null)
+        {
+            ProjectId = projectId;
+            PhasesLanchId = phasesLanchId;
+            IsEvent = isEvent;
+            UnitCode = unitCode;
+            Directions = directions;
+            UnitStatuses = unitStatuses;
+            NetArea = netArea;
+            Price = price;
+        }
     }
 }

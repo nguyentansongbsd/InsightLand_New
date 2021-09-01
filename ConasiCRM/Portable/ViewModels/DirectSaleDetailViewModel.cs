@@ -13,17 +13,14 @@ namespace ConasiCRM.Portable.ViewModels
     public class DirectSaleDetailViewModel : BaseViewModel
     {
         public string Keyword { get; set; }
-        public string ProjectId { get; set; }
-        public string PhasesLanchId { get; set; }
-        public bool IsEvent { get; set; }
-        public string UnitCode { get; set; }
-        public List<string> Directions { get; set; }
-        //public List<string> Views { get; set; }
-        public List<string> UnitStatuses { get; set; }
-        public decimal? minNetArea { get; set; }
-        public decimal? maxNetArea { get; set; }
-        public decimal? minPrice { get; set; }
-        public decimal? maxPrice { get; set; }
+
+        public ObservableCollection<Floor> Floors { get; set; } = new ObservableCollection<Floor>();
+
+        private ObservableCollection<QueueListModel> _queueList;
+        public ObservableCollection<QueueListModel> QueueList { get => _queueList; set { _queueList = value; OnPropertyChanged(nameof(QueueList)); } }
+
+        private DirectSaleSearchModel _filter;
+        public DirectSaleSearchModel Filter { get => _filter; set { _filter = value; OnPropertyChanged(nameof(Filter)); } }
 
         private List<DirectSaleModel> _directSaleResult;
         public List<DirectSaleModel> DirectSaleResult { get => _directSaleResult; set { _directSaleResult = value; OnPropertyChanged(nameof(DirectSaleResult)); } }
@@ -37,12 +34,17 @@ namespace ConasiCRM.Portable.ViewModels
         private List<Block> _blocks;
         public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
 
-        public ObservableCollection<Floor> Floors { get; set; } = new ObservableCollection<Floor>();
+        private Unit _unit;
+        public Unit Unit { get => _unit; set { _unit = value; OnPropertyChanged(nameof(Unit)); } }
 
-        private ObservableCollection<QueueListModel> _queueList;
-        public ObservableCollection<QueueListModel> QueueList { get => _queueList; set { _queueList = value; OnPropertyChanged(nameof(QueueList)); } }
+        private StatusCodeModel _unitStatusCode;
+        public StatusCodeModel UnitStatusCode { get => _unitStatusCode; set { _unitStatusCode = value; OnPropertyChanged(nameof(UnitStatusCode)); } }
 
-        public string fetchXml { get; set; }
+        private OptionSet _unitDirection;
+        public OptionSet UnitDirection { get => _unitDirection; set { _unitDirection = value; OnPropertyChanged(nameof(UnitDirection)); } }
+
+        private OptionSet _unitView;
+        public OptionSet UnitView { get => _unitView; set { _unitView = value; OnPropertyChanged(nameof(UnitView)); } }
 
         private string _numChuanBiInBlock;
         public string NumChuanBiInBlock { get => _numChuanBiInBlock; set { _numChuanBiInBlock = value; OnPropertyChanged(nameof(NumChuanBiInBlock)); } }
@@ -68,41 +70,18 @@ namespace ConasiCRM.Portable.ViewModels
         private string _numDaBanInBlock;
         public string NumDaBanInBlock { get => _numDaBanInBlock; set { _numDaBanInBlock = value; OnPropertyChanged(nameof(NumDaBanInBlock)); } }
 
-        public Guid blockId;
-
-        private Unit _unit;
-        public Unit Unit { get => _unit; set { _unit = value; OnPropertyChanged(nameof(Unit)); } }
-
-        private StatusCodeModel _unitStatusCode;
-        public StatusCodeModel UnitStatusCode { get => _unitStatusCode; set { _unitStatusCode = value; OnPropertyChanged(nameof(UnitStatusCode)); } }
-
-        private OptionSet _unitDirection;
-        public OptionSet UnitDirection { get => _unitDirection; set { _unitDirection = value; OnPropertyChanged(nameof(UnitDirection)); } }
-
-        private OptionSet _unitView;
-        public OptionSet UnitView { get => _unitView; set { _unitView = value; OnPropertyChanged(nameof(UnitView)); } }
-
-        public int PageDanhSachDatCho = 1;
-
         private bool _showMoreDanhSachDatCho;
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
 
         private bool _isShowBtnBangTinhGia;
         public bool IsShowBtnBangTinhGia { get => _isShowBtnBangTinhGia; set { _isShowBtnBangTinhGia = value; OnPropertyChanged(nameof(IsShowBtnBangTinhGia)); } }
 
-        public DirectSaleDetailViewModel(DirectSaleSearchModel model)
+        public Guid blockId;
+        public int PageDanhSachDatCho = 1;
+
+        public DirectSaleDetailViewModel(DirectSaleSearchModel filter)
         {
-            this.ProjectId = model.ProjectId;
-            this.PhasesLanchId = model.PhasesLanchId;
-            this.IsEvent = model.IsEvent.Value;
-            this.UnitCode = model.UnitCode;
-            this.Directions = model.Directions;
-            this.UnitStatuses = model.UnitStatuses;
-            this.minNetArea = model.minNetArea;
-            this.maxNetArea = model.maxNetArea;
-            this.minPrice = model.minPrice;
-            this.maxPrice = model.maxPrice;
-            //this.Blocks = model.Blocks;
+            Filter = filter;
             QueueList = new ObservableCollection<QueueListModel>();
         }
 
@@ -110,16 +89,13 @@ namespace ConasiCRM.Portable.ViewModels
         {
             var content = new
             {
-                ProjectId = this.ProjectId,
-                PhasesLanchId = this.PhasesLanchId,
-                IsEvent = this.IsEvent,
-                UnitCode = this.UnitCode,
-                Directions = (this.Directions != null && this.Directions.Count != 0) ? string.Join(",", this.Directions) : null,
-                UnitStatuses = (this.UnitStatuses != null && this.UnitStatuses.Count != 0) ? string.Join(",", this.UnitStatuses) : null,
-                minNetArea = this.minNetArea,
-                maxNetArea = this.maxNetArea,
-                //minPrice = this.minPrice,
-                //maxPrice = this.maxPrice
+                ProjectId = Filter.ProjectId,
+                PhasesLanchId = Filter.PhasesLanchId,
+                IsEvent = Filter.IsEvent,
+                UnitCode = Filter.UnitCode,
+                Directions = Filter.Directions,
+                UnitStatuses = Filter.UnitStatuses
+
             };
 
             string json = JsonConvert.SerializeObject(content);
@@ -143,10 +119,10 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadUnitByFloor(Guid floorId)
         {
             string StatusReason_Condition = StatusReason == null ? "" : "<condition attribute='statuscode' operator='eq' value='" + StatusReason.Val + @"' />";
-            string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(PhasesLanchId))
-                ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + this.PhasesLanchId + @"' />"
+            string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(Filter.PhasesLanchId))
+                ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + Filter.PhasesLanchId + @"' />"
                 : "";
-            string isEvent = IsEvent ? @"<link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='as'>
+            string isEvent = (Filter.IsEvent.HasValue && Filter.IsEvent.Value) ? @"<link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='as'>
                                           <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='at'>
                                             <filter type='and'>
                                               <condition attribute='bsd_eventid' operator='not-null' />
@@ -154,35 +130,43 @@ namespace ConasiCRM.Portable.ViewModels
                                           </link-entity>
                                         </link-entity>" : "";
 
-            string UnitCode_Condition = !string.IsNullOrEmpty(UnitCode) ? "<condition attribute='name' operator='eq' value='" + UnitCode + "' />" : "";
+            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.UnitCode) ? "<condition attribute='name' operator='eq' value='" + Filter.UnitCode + "' />" : "";
 
             string Direction_Condition = string.Empty;
-            if (Directions != null && Directions.Count != 0)
+            if (!string.IsNullOrWhiteSpace(Filter.Directions))
             {
-                string tmp = string.Empty;
-                foreach (var i in Directions)
+                var Directions = Filter.Directions.Split(',').ToList();
+                if (Directions != null && Directions.Count != 0)
                 {
-                    tmp += "<value>" + i + "</value>";
+                    string tmp = string.Empty;
+                    foreach (var i in Directions)
+                    {
+                        tmp += "<value>" + i + "</value>";
+                    }
+                    Direction_Condition = @"<condition attribute='bsd_direction' operator='in'>" + tmp + "</condition>";
                 }
-                Direction_Condition = @"<condition attribute='bsd_direction' operator='in'>" + tmp + "</condition>";
             }
 
             string UnitStatus_Condition = string.Empty;
-            if (UnitStatuses != null && UnitStatuses.Count != 0)
+            if (!string.IsNullOrWhiteSpace(Filter.UnitStatuses))
             {
-                string tmp = string.Empty;
-                foreach (var i in UnitStatuses)
+                var UnitStatuses = Filter.UnitStatuses.Split(',').ToList();
+                if (UnitStatuses != null && UnitStatuses.Count != 0)
                 {
-                    tmp += "<value>" + i + "</value>";
+                    string tmp = string.Empty;
+                    foreach (var i in UnitStatuses)
+                    {
+                        tmp += "<value>" + i + "</value>";
+                    }
+                    UnitStatus_Condition = @"<condition attribute='statuscode' operator='in'>" + tmp + "</condition>";
                 }
-                UnitStatus_Condition = @"<condition attribute='statuscode' operator='in'>" + tmp + "</condition>";
             }
+            
+            //string minNetArea_Condition = minNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{minNetArea.Value}' />" : null;
+            //string maxNetArea_Condition = maxNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='le' value='{maxNetArea.Value}' />" : "";
 
-            string minNetArea_Condition = minNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{minNetArea.Value}' />" : null;
-            string maxNetArea_Condition = maxNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='le' value='{maxNetArea.Value}' />" : "";
-
-            string minPrice_Condition = minPrice.HasValue ? $"<condition attribute='price' operator='ge' value='{minPrice.Value}' />" : "";
-            string maxPrice_Condition = maxPrice.HasValue ? $"<condition attribute='price' operator='le' value='{maxPrice.Value}' />" : "";
+            //string minPrice_Condition = minPrice.HasValue ? $"<condition attribute='price' operator='ge' value='{minPrice.Value}' />" : "";
+            //string maxPrice_Condition = maxPrice.HasValue ? $"<condition attribute='price' operator='le' value='{maxPrice.Value}' />" : "";
 
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='product'>
@@ -193,17 +177,13 @@ namespace ConasiCRM.Portable.ViewModels
                                 <order attribute='name' descending='false' />
                                 <filter type='and'>
                                     <condition attribute='statuscode' operator='ne' value='0' />
-                                    <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='{this.ProjectId}'/>
+                                    <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='{Filter.ProjectId}'/>
                                     <condition attribute='bsd_floor' operator='eq' uitype='bsd_floor' value='{floorId}' />
                                     '{PhasesLaunch_Condition}'
                                     '{UnitCode_Condition}'
                                     '{StatusReason_Condition}'
                                     '{UnitStatus_Condition}'
                                     '{Direction_Condition}'
-                                    '{minNetArea_Condition}'
-                                    '{maxNetArea_Condition}'
-                                    '{minPrice_Condition}'
-                                    '{maxPrice_Condition}'
                                 </filter>
                                 <link-entity name='opportunity' from='bsd_units' to='productid' link-type='outer' alias='ag' >
                                     <attribute name='statuscode' alias='queses_statuscode'/>

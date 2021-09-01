@@ -28,12 +28,6 @@ namespace ConasiCRM.Portable.Helper
                     });
             request.Content = formContent;
             var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                var body = await response.Content.ReadAsStringAsync();
-                GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-            }
-
             return response;
         }
     }

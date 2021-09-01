@@ -4,7 +4,7 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             Title="GIỎ HÀNG" x:Name="this" NavigationPage.BackButtonTitle="asdfasd"
+             Title="{OnPlatform Android='GIỎ HÀNG'}" x:Name="this" NavigationPage.BackButtonTitle="asdfasd"
              x:Class="ConasiCRM.Portable.Views.DirectSaleDetail">
     <ContentPage.Resources>
         <ResourceDictionary>

@@ -19,15 +19,12 @@ namespace ConasiCRM.Portable.ViewModels
     {
         public ObservableCollection<ProjectList> Projects { get; set; } = new ObservableCollection<ProjectList>();
         public ObservableCollection<OptionSet> PhasesLaunchs { get; set; } = new ObservableCollection<OptionSet>();
-
+        
         private List<OptionSet> _viewOptions;
         public List<OptionSet> ViewOptions { get => _viewOptions; set { _viewOptions = value;OnPropertyChanged(nameof(ViewOptions)); } }
 
         private List<Block> _blocks;
         public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
-
-        //private List<string> _selectedViews;
-        //public List<string> SelectedViews { get=>_selectedViews; set { _selectedViews = value;OnPropertyChanged(nameof(SelectedViews)); } }
 
         private List<OptionSet> _directionOptions;
         public List<OptionSet> DirectionOptions { get=>_directionOptions; set { _directionOptions = value;OnPropertyChanged(nameof(DirectionOptions)); } }
@@ -44,20 +41,20 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _phasesLaunch;
         public OptionSet PhasesLaunch { get => _phasesLaunch; set { _phasesLaunch = value; OnPropertyChanged(nameof(PhasesLaunch)); } }
 
+        private List<OptionSet> _netAreas;
+        public List<OptionSet> NetAreas { get=>_netAreas; set { _netAreas = value; OnPropertyChanged(nameof(NetAreas)); } }
+
+        private OptionSet _netArea;
+        public OptionSet NetArea { get => _netArea; set { _netArea = value; OnPropertyChanged(nameof(NetArea)); } }
+
+        private List<PriceDirectSaleModel> _prices;
+        public List<PriceDirectSaleModel> Prices { get => _prices; set { _prices = value; OnPropertyChanged(nameof(Prices)); } }
+
+        private PriceDirectSaleModel _price;
+        public PriceDirectSaleModel Price { get => _price; set { _price = value; OnPropertyChanged(nameof(Price)); } }
+
         private string _unitCode;
         public string UnitCode { get => _unitCode; set { _unitCode = value; OnPropertyChanged(nameof(UnitCode)); } }
-
-        private decimal? _minNetArea;
-        public decimal? minNetArea { get => _minNetArea; set { _minNetArea = value; OnPropertyChanged(nameof(minNetArea)); } }
-
-        private decimal? _maxNetArea;
-        public decimal? maxNetArea { get => _maxNetArea; set { _maxNetArea = value; OnPropertyChanged(nameof(maxNetArea)); } }
-
-        private decimal? _minPrice;
-        public decimal? minPrice { get => _minPrice; set { _minPrice = value; OnPropertyChanged(nameof(minPrice)); } }
-
-        private decimal? _maxPrice;
-        public decimal? maxPrice { get => _maxPrice; set { _maxPrice = value; OnPropertyChanged(nameof(maxPrice)); } }
 
         private ProjectList _project;
         public ProjectList Project
