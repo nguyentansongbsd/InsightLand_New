@@ -26,12 +26,16 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            //lookupMultipleView.PreShow = async () =>
-            //{
-            //    LoadingHelper.Show();
-            //    viewModel.ViewOptions = ViewData.Views();
-            //    LoadingHelper.Hide();
-            //};
+            lookupNetArea.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                viewModel.NetAreas = NetAreaDirectSaleData.NetAreaData();
+                LoadingHelper.Hide();
+            };
+            lookupPrice.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                viewModel.Prices = PriceDirectSaleData.PriceData();
+                LoadingHelper.Hide();
+            };
             lookupMultipleDirection.PreShow = async () => {
                 LoadingHelper.Show();
                 viewModel.DirectionOptions = DirectionData.Directions();
@@ -103,32 +107,19 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
                 LoadingHelper.Hide();
             }
-            //else if(viewModel.Blocks == null)
-            //{
-            //    ToastMessageHelper.ShortMessage("Dự án không có blocks");
-            //    LoadingHelper.Hide();
-            //}
             else
             {
-                DirectSaleSearchModel model = new DirectSaleSearchModel();
-
+                string phasesLanchId = string.Empty;
                 if (viewModel.PhasesLaunch != null)
                 {
-                    model.PhasesLanchId = viewModel.PhasesLaunch.Val;
+                    phasesLanchId = viewModel.PhasesLaunch.Val;
                 }
-                model.ProjectId = viewModel.Project.bsd_projectid;
-                model.IsEvent = viewModel.IsEvent;
-                model.UnitCode = viewModel.UnitCode;
-                model.Directions = viewModel.SelectedDirections;
-                //model.Views = viewModel.SelectedViews;
-                model.UnitStatuses = viewModel.SelectedUnitStatus;
-                model.minNetArea = viewModel.minNetArea;
-                model.maxNetArea = viewModel.maxNetArea;
-                model.minPrice = viewModel.minPrice;
-                model.maxPrice = viewModel.maxPrice;
-                //model.Blocks = viewModel.Blocks;
-                
-                DirectSaleDetail directSaleDetail = new DirectSaleDetail(model);
+                string directions = (viewModel.SelectedDirections != null && viewModel.SelectedDirections.Count != 0) ? string.Join(",", viewModel.SelectedDirections) : null;
+                string unitStatus = (viewModel.SelectedUnitStatus != null && viewModel.SelectedUnitStatus.Count != 0) ? string.Join(",", viewModel.SelectedUnitStatus) : null;
+
+                DirectSaleSearchModel filter = new DirectSaleSearchModel(viewModel.Project.bsd_projectid, phasesLanchId, viewModel.IsEvent,viewModel.UnitCode, directions, unitStatus,viewModel.NetArea?.Val,viewModel.Price?.Id);
+
+                DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter);
                 directSaleDetail.OnComplete = async (Success) =>
                 {
                     if (Success == 0)
