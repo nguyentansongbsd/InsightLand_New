@@ -24,10 +24,10 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
         }
 
-        public DirectSaleDetail(DirectSaleSearchModel model)
+        public DirectSaleDetail(DirectSaleSearchModel filter)
         {
             InitializeComponent();
-            BindingContext = viewModel = new DirectSaleDetailViewModel(model);
+            this.BindingContext = viewModel = new DirectSaleDetailViewModel(filter);
             NeedToRefreshQueues = false;
             Init();
         }

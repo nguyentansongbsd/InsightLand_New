@@ -157,8 +157,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
             else
             {
-                await LoginHelper.Login();
-
                 //OutOfData = false;
                 //Data.Clear();
                 //_page = 1;

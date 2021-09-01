@@ -41,30 +41,16 @@ namespace ConasiCRM.Portable.Helper
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    //var client1 = BsdHttpClient.Instance();
-                    //var request1 = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/common/oauth2/token");//OrgConfig.LinkLogin
-                    //var formContent = new FormUrlEncodedContent(new[]
-                    //    {
-                    //    new KeyValuePair<string, string>("resource", OrgConfig.Resource),
-                    //    //new KeyValuePair<string, string>("client_id", OrgConfig.ClientId),
-                    //    //new KeyValuePair<string, string>("client_secret", OrgConfig.ClientSecret),
-                    //    //new KeyValuePair<string, string>("grant_type", "client_credentials")
-                    //    new KeyValuePair<string, string>("client_id", "2ad88395-b77d-4561-9441-d0e40824f9bc"),
-                    //    new KeyValuePair<string, string>("username", OrgConfig.UserName),
-                    //    new KeyValuePair<string, string>("password", OrgConfig.Password),
-                    //    new KeyValuePair<string, string>("grant_type", "password"),
+                    var reLoginResponse = await LoginHelper.Login();
+                    if (reLoginResponse.IsSuccessStatusCode)
+                    {
+                        var body = await reLoginResponse.Content.ReadAsStringAsync();
+                        GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                        App.Current.Properties["Token"] = tokenData.access_token;
 
-                    //});
-                    //request1.Content = formContent;
-                    //var response1 = await client1.SendAsync(request1);
-                    //if (response1.IsSuccessStatusCode)
-                    //{
-                    //    var body = await response.Content.ReadAsStringAsync();
-                    //    GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                    //    App.Current.Properties["Token"] = tokenData.access_token;
-
-                    //    await RetrieveMultiple<T>(EntityName, FetchXml);
-                    //}
+                        var api_Response = await RetrieveMultiple<T>(EntityName, FetchXml);
+                        return api_Response;
+                    }
                 }
                 else
                 {
@@ -93,11 +79,24 @@ namespace ConasiCRM.Portable.Helper
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var body = await response.Content.ReadAsStringAsync();
-                    var a = body.Replace(@"\","");
-                    string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0,11);
+                    var a = body.Replace(@"\", "");
+                    string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
                     string a2 = a1.Substring(0, a1.Length - 2);
                     var api_Response = JsonConvert.DeserializeObject<T>(a2);
                     return api_Response;
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var reLoginResponse = await LoginHelper.Login();
+                    if (reLoginResponse.IsSuccessStatusCode)
+                    {
+                        var body = await reLoginResponse.Content.ReadAsStringAsync();
+                        GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                        App.Current.Properties["Token"] = tokenData.access_token;
+
+                        var api_Response = await Get<T>(content);
+                        return api_Response;
+                    }
                 }
                 else
                 {
@@ -134,6 +133,27 @@ namespace ConasiCRM.Portable.Helper
                     {
                         IsSuccess = true
                     };
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var reLoginResponse = await LoginHelper.Login();
+                    if (reLoginResponse.IsSuccessStatusCode)
+                    {
+                        var body = await reLoginResponse.Content.ReadAsStringAsync();
+                        GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                        App.Current.Properties["Token"] = tokenData.access_token;
+
+                        var api_response= await SetNullLookupField(EntityName, Id, FieldName);
+                        return api_response;
+                    }
+                    else
+                    {
+                        return new CrmApiResponse()
+                        {
+                            IsSuccess = false,
+                            ErrorResponse = new ErrorResponse() {error = new Error() { message = reLoginResponse.RequestMessage.ToString() } }
+                        };
+                    }
                 }
                 else
                 {
@@ -200,6 +220,19 @@ namespace ConasiCRM.Portable.Helper
                     res.Content = body;
                     res.IsSuccess = true;
                 }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var reLoginResponse = await LoginHelper.Login();
+                    if (reLoginResponse.IsSuccessStatusCode)
+                    {
+                        var body = await reLoginResponse.Content.ReadAsStringAsync();
+                        GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                        App.Current.Properties["Token"] = tokenData.access_token;
+
+                        var api_Response = await PostData(path, formContent);
+                        return api_Response;
+                    }
+                }
                 else
                 {
                     var body = await response.Content.ReadAsStringAsync();
@@ -257,6 +290,19 @@ namespace ConasiCRM.Portable.Helper
                 {
                     res.IsSuccess = true;
                 }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var reLoginResponse = await LoginHelper.Login();
+                    if (reLoginResponse.IsSuccessStatusCode)
+                    {
+                        var body = await reLoginResponse.Content.ReadAsStringAsync();
+                        GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                        App.Current.Properties["Token"] = tokenData.access_token;
+
+                        var api_Response = await PatchData(path, formContent);
+                        return api_Response;
+                    }
+                }
                 else
                 {
                     var body = await response.Content.ReadAsStringAsync();
@@ -294,6 +340,19 @@ namespace ConasiCRM.Portable.Helper
                 {
                     res.IsSuccess = true;
                     // xoa du lieu thi thanh cong ko co content tra ve.. xac dinh viec xoa thanh cong hay ko bang bien isSuccess.
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var reLoginResponse = await LoginHelper.Login();
+                    if (reLoginResponse.IsSuccessStatusCode)
+                    {
+                        var body = await reLoginResponse.Content.ReadAsStringAsync();
+                        GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+                        App.Current.Properties["Token"] = tokenData.access_token;
+
+                        var api_Response = await DeleteRecord(path);
+                        return api_Response;
+                    }
                 }
                 else
                 {
