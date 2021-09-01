@@ -34,11 +34,22 @@ namespace ConasiCRM.Portable.Controls
         private string _text;
         public string Text { get => _text; set { _text = value; OnPropertyChanged(nameof(Text)); } }
 
+        //edit
+        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSet>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
+        public List<List<OptionSet>> ListListView { get => (List<List<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
+
+        public static readonly BindableProperty ListTabProperty = BindableProperty.Create(nameof(ListTab), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
+        public List<string> ListTab { get => (List<string>)GetValue(ListTabProperty); set { SetValue(ListTabProperty, value); } }
+
         private ListView lookUpListView;
         private Grid gridMain;
         private Grid gridButton;
         private SearchBar searchBar;
         private Button saveButton, cancelButton;
+        private List<RadBorder> ListRadBorderTab { get; set; }
+        private List<Label> ListLabelTab { get; set; }
+        private int indexTab { get; set; }
+       // private List<List<OptionSet>> ListListView { get; set; }
         public LookUpMultipleOptions()
         {
             InitializeComponent();
@@ -149,12 +160,7 @@ namespace ConasiCRM.Portable.Controls
 
         private void SetUpListView()
         {
-            gridMain = new Grid();
-            gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            gridMain.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-
-            StackLayout stSearchBar = new StackLayout();
-            stSearchBar.Padding = new Thickness(10, 10, 10, 0);
+            StackLayout stSearchBar = new StackLayout();          
 
             searchBar = new SearchBar();
             searchBar.Placeholder = "Từ khoá";
@@ -164,9 +170,6 @@ namespace ConasiCRM.Portable.Controls
             searchBarFrame.Content = searchBar;
 
             stSearchBar.Children.Add(searchBarFrame);
-
-            gridMain.Children.Add(stSearchBar);
-            Grid.SetRow(stSearchBar, 0);
 
             lookUpListView = new ListView(ListViewCachingStrategy.RecycleElement);
             lookUpListView.BackgroundColor = Color.White;
@@ -206,12 +209,44 @@ namespace ConasiCRM.Portable.Controls
                 return new ViewCell { View = st };
             });
             lookUpListView.ItemTemplate = dataTemplate;
-            lookUpListView.ItemsSource = ItemsSource;
 
             lookUpListView.ItemTapped += LookUpListView_ItemTapped;
 
-            gridMain.Children.Add(lookUpListView);
-            Grid.SetRow(lookUpListView, 1);
+            //edit          
+
+            if (ListListView != null && ListListView.Count>0 && ListTab != null && ListTab.Count>0)
+            {
+                Grid tabs = SetUpTabs(ListTab);
+                gridMain = new Grid();
+                gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                gridMain.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+                Grid.SetRow(tabs, 0);
+                gridMain.Children.Add(tabs);
+
+                stSearchBar.Padding = new Thickness(10, 5, 10, 0);
+                gridMain.Children.Add(stSearchBar);
+                Grid.SetRow(stSearchBar, 1);
+
+                gridMain.Children.Add(lookUpListView);
+                Grid.SetRow(lookUpListView, 2);
+                indexTab = 0;
+                IndexTab(indexTab);
+            }
+            else
+            {
+                gridMain = new Grid();
+                gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                gridMain.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+
+                stSearchBar.Padding = new Thickness(10, 10, 10, 0);
+                gridMain.Children.Add(stSearchBar);
+                Grid.SetRow(stSearchBar, 0);
+
+                gridMain.Children.Add(lookUpListView);
+                Grid.SetRow(lookUpListView, 1);
+                lookUpListView.ItemsSource = ItemsSource;
+            }
         }
 
         private void SearchBar_TextChangedEventArgs(object sender, TextChangedEventArgs e)
@@ -219,11 +254,25 @@ namespace ConasiCRM.Portable.Controls
             var text = e.NewTextValue;
             if (string.IsNullOrWhiteSpace(text))
             {
-                lookUpListView.ItemsSource = this.ItemsSource;
+                if (ListListView != null && ListListView.Count > 0 && ListTab != null && ListTab.Count > 0)
+                {
+                    lookUpListView.ItemsSource = this.ListListView[indexTab];
+                }
+                else
+                {
+                    lookUpListView.ItemsSource = this.ItemsSource;
+                }
             }
             else
             {
-                lookUpListView.ItemsSource = this.ItemsSource.Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                if (ListListView != null && ListListView.Count > 0 && ListTab != null && ListTab.Count > 0)
+                {
+                    lookUpListView.ItemsSource = this.ListListView[indexTab].Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                }
+                else
+                {
+                    lookUpListView.ItemsSource = this.ItemsSource.Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                }
             }
         }
 
@@ -361,6 +410,69 @@ namespace ConasiCRM.Portable.Controls
             CenterModal.Title = Placeholder;
             CenterModal.Footer = gridButton;
             CenterModal.Body = gridMain;
+        }
+
+        public Grid SetUpTabs(List<string> tabs)
+        {
+            ListLabelTab = new List<Label>();
+            ListRadBorderTab = new List<RadBorder>();
+            Grid grid = new Grid();
+            grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                RadBorder rd = new RadBorder();
+                rd.Style = (Style)Application.Current.Resources["rabBorder_Tab"];
+                Label lb = new Label();
+                lb.Style = (Style)Application.Current.Resources["Lb_Tab"];
+                lb.Text = tabs[i];
+                rd.Content = lb;
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += Tab_Tapped;
+                lb.GestureRecognizers.Add(tapGestureRecognizer);
+                ListLabelTab.Add(lb);
+                ListRadBorderTab.Add(rd);
+
+                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                grid.Children.Add(rd);
+                Grid.SetColumn(rd, i);
+                Grid.SetRow(rd, 0);
+            }
+            BoxView boxView = new BoxView();
+            boxView.HeightRequest = 1;
+            boxView.BackgroundColor = Color.FromHex("F1F1F1");
+            boxView.VerticalOptions = LayoutOptions.EndAndExpand;
+            grid.Children.Add(boxView);
+            Grid.SetColumn(boxView, 0);
+            Grid.SetRow(boxView, 0);
+            Grid.SetColumnSpan(boxView, tabs.Count);
+            return grid;
+        }
+        private void Tab_Tapped(object sender, EventArgs e)
+        {
+            var button = sender as Label;
+            indexTab = ListRadBorderTab.IndexOf(ListRadBorderTab.FirstOrDefault(x => x.Children.Last() == button));
+            IndexTab(indexTab);
+        }
+
+        private void IndexTab(int index)
+        {
+            if (ListRadBorderTab != null && ListRadBorderTab.Count>0)
+            {
+                for (int i = 0; i < ListRadBorderTab.Count; i++)
+                {
+                    if (i == index)
+                    {
+                        VisualStateManager.GoToState(ListRadBorderTab[i], "Selected");
+                        VisualStateManager.GoToState(ListLabelTab[i], "Selected");
+                        lookUpListView.ItemsSource = ListListView[i];
+                    }
+                    else
+                    {
+                        VisualStateManager.GoToState(ListRadBorderTab[i], "Normal");
+                        VisualStateManager.GoToState(ListLabelTab[i], "Normal");
+                    }
+                }
+            }          
         }
     }
 }

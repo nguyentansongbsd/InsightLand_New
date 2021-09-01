@@ -67,7 +67,7 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadOneAccount(this.AccountId);
 
             viewModel.LoadBusinessTypeForLookup();
-            Lookup_BusinessType.SetUpModal();
+            Lookup_BusinessType.SetUpModal();           
             if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))
             {
                 List<string> ids = new List<string>();
@@ -77,7 +77,7 @@ namespace ConasiCRM.Portable.Views
                     var businessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
                     ids.Add(businessType);
                 }
-                viewModel.BusinessType = ids;
+                viewModel.BusinessType = ids;              
             }
             if (viewModel.singleAccount.bsd_localization != null)
             {
@@ -132,7 +132,7 @@ namespace ConasiCRM.Portable.Views
         }
 
         public void SetPreOpen()
-        {                               
+        {
             Lookup_Localization.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();

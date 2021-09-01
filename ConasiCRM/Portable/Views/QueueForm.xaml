@@ -143,8 +143,9 @@
                                     <controls:LookUp x:Name="lookUpDaiLy" Grid.Column="1" Grid.Row="3" Placeholder="Chọn đại lý" ItemsSource="{Binding DaiLyOptions}" SelectedItem="{Binding DailyOption}" NameDisplay="Name" BottomModal="{x:Reference LookUpModal}" />
 
                                     <controls:FormLabel Text="Nhân viên đại lý" FontSize="15" Margin="0,10,0,0"/>
-                                    <controls:MainEntry Placeholder="Nhập nhân viên đại lý" Text="{Binding QueueFormModel.bsd_nameofstaffagent}" FontSize="15" />
-                                </StackLayout>
+                                <controls:MainEntry Placeholder="Nhập nhân viên đại lý" Text="{Binding QueueFormModel.bsd_nameofstaffagent}" FontSize="15" />
+                                    
+                            </StackLayout>
                             </telerikPrimitives:RadExpander.Content>
                         </telerikPrimitives:RadExpander>
                     </StackLayout>
