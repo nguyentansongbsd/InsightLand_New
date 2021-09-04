@@ -1,11 +1,5 @@
 ﻿using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.Globalization;
-using System.Linq;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Models
 {
@@ -43,36 +37,6 @@ namespace ConasiCRM.Portable.Models
 
         private string _bsd_businesstypesys;
         public string bsd_businesstypesys { get { return _bsd_businesstypesys; } set { _bsd_businesstypesys = value; OnPropertyChanged(nameof(bsd_businesstypesys)); } }
-
-        private string _bsd_businesstypevalue;
-        public string bsd_businesstypevalue { get { return _bsd_businesstypevalue; } 
-        set {
-            _bsd_businesstypevalue = value;
-            if(value != null)
-                {
-                    var tmp = value.Split(',');
-                    foreach(var item in tmp)
-                    {
-                        if (item == "100000000")
-                        {
-                            bsd_businesstype_customer = true;
-                        }
-                        else if (item == "100000001")
-                        {
-                            bsd_businesstype_partner = true;
-                        }
-                        else if (item == "100000002")
-                        {
-                            bsd_businesstype_saleagents = true;
-                        }
-                        else if (item == "100000003")
-                        {
-                            bsd_businesstype_deverloper = true;
-                        }
-                    }
-                }
-                OnPropertyChanged(nameof(bsd_businesstypevalue)); 
-         } }
 
         private bool _bsd_businesstype_customer;
         public bool bsd_businesstype_customer { get { return _bsd_businesstype_customer; } set { _bsd_businesstype_customer = value; OnPropertyChanged(nameof(bsd_businesstype_customer)); } }
@@ -128,6 +92,7 @@ namespace ConasiCRM.Portable.Models
 
         private string _bsd_postalcode;
         public string bsd_postalcode { get { return _bsd_postalcode; } set { _bsd_postalcode = value; OnPropertyChanged(nameof(bsd_postalcode)); } }
+
         private string _bsd_address;
         public string bsd_address { get { return _bsd_address; } set { _bsd_address = value; OnPropertyChanged(nameof(bsd_address)); } }
 
@@ -152,20 +117,8 @@ namespace ConasiCRM.Portable.Models
         private string _bsd_permanenthousenumberstreetward;
         public string bsd_permanenthousenumberstreetward { get { return _bsd_permanenthousenumberstreetward; } set { _bsd_permanenthousenumberstreetward = value; OnPropertyChanged(nameof(bsd_permanenthousenumberstreetward)); } }
 
-        //private string _bsd_nation;
-        //public string bsd_nation { get { return _bsd_nation; } set { _bsd_nation = value; OnPropertyChanged(nameof(bsd_nation)); } }
-
-        //private string _bsd_province;
-        //public string bsd_province { get { return _bsd_province; } set { _bsd_province = value; OnPropertyChanged(nameof(bsd_province)); } }
-
-        //private string _bsd_district;
-        //public string bsd_district { get { return _bsd_district; } set { _bsd_district = value; OnPropertyChanged(nameof(bsd_district)); } }
-
         private string _country_name;
         public string country_name { get { return _country_name; } set { _country_name = value; OnPropertyChanged(nameof(country_name)); } }
-
-        private string _nation_nameen;
-        public string nation_nameen { get { return _nation_nameen; } set { _nation_nameen = value; OnPropertyChanged(nameof(nation_nameen)); } }
 
         private string __bsd_country_value;
         public string _bsd_country_value { get { return __bsd_country_value; } set { __bsd_country_value = value; OnPropertyChanged(nameof(_bsd_country_value)); } }
@@ -173,36 +126,17 @@ namespace ConasiCRM.Portable.Models
         private string _province_name;
         public string province_name { get { return _province_name; } set { _province_name = value; OnPropertyChanged(nameof(province_name)); } }
 
-        private string _province_nameen;
-        public string province_nameen { get { return _province_nameen; } set { _province_nameen = value; OnPropertyChanged(nameof(province_nameen)); } }
-
         private string __bsd_province_value;
         public string _bsd_province_value { get { return __bsd_province_value; } set { __bsd_province_value = value; OnPropertyChanged(nameof(_bsd_province_value)); } }
 
         private string _district_name;
         public string district_name { get { return _district_name; } set { _district_name = value; OnPropertyChanged(nameof(district_name)); } }
 
-        private string _district_nameen;
-        public string district_nameen { get { return _district_nameen; } set { _district_nameen = value; OnPropertyChanged(nameof(district_nameen)); } }
-
         private string __bsd_district_value;
         public string _bsd_district_value { get { return __bsd_district_value; } set { __bsd_district_value = value; OnPropertyChanged(nameof(_bsd_district_value)); } }
 
-
-        //private string _bsd_permanentnation;
-        //public string bsd_permanentnation { get { return _bsd_permanentnation; } set { _bsd_permanentnation = value; OnPropertyChanged(nameof(bsd_permanentnation)); } }
-
-        //private string _bsd_permanentprovince;
-        //public string bsd_permanentprovince { get { return _bsd_permanentprovince; } set { _bsd_permanentprovince = value; OnPropertyChanged(nameof(bsd_permanentprovince)); } }
-
-        //private string _bsd_permanentdistrict;
-        //public string bsd_permanentdistrict { get { return _bsd_permanentdistrict; } set { _bsd_permanentdistrict = value; OnPropertyChanged(nameof(bsd_permanentdistrict)); } }
-
         private string _permanentnation_name;
         public string permanentnation_name { get { return _permanentnation_name; } set { _permanentnation_name = value; OnPropertyChanged(nameof(permanentnation_name)); } }
-
-        private string _permanentnation_nameen;
-        public string permanentnation_nameen { get { return _permanentnation_nameen; } set { _permanentnation_nameen = value; OnPropertyChanged(nameof(permanentnation_nameen)); } }
 
         private string __bsd_permanentnation_value;
         public string _bsd_permanentnation_value { get { return __bsd_permanentnation_value; } set { __bsd_permanentnation_value = value; OnPropertyChanged(nameof(_bsd_permanentnation_value)); } }
@@ -210,17 +144,11 @@ namespace ConasiCRM.Portable.Models
         private string _permanentprovince_name;
         public string permanentprovince_name { get { return _permanentprovince_name; } set { _permanentprovince_name = value; OnPropertyChanged(nameof(permanentprovince_name)); } }
 
-        private string _permanentprovince_nameen;
-        public string permanentprovince_nameen { get { return _permanentprovince_nameen; } set { _permanentprovince_nameen = value; OnPropertyChanged(nameof(permanentprovince_nameen)); } }
-
         private string __bsd_permanentprovince_value;
         public string _bsd_permanentprovince_value { get { return __bsd_permanentprovince_value; } set { __bsd_permanentprovince_value = value; OnPropertyChanged(nameof(_bsd_permanentprovince_value)); } }
 
         private string _permanentdistrict_name;
         public string permanentdistrict_name { get { return _permanentdistrict_name; } set { _permanentdistrict_name = value; OnPropertyChanged(nameof(permanentdistrict_name)); } }
-
-        private string _permanentdistrict_nameen;
-        public string permanentdistrict_nameen { get { return _permanentdistrict_nameen; } set { _permanentdistrict_nameen = value; OnPropertyChanged(nameof(permanentdistrict_nameen)); } }
 
         private string __bsd_permanentdistrict_value;
         public string _bsd_permanentdistrict_value { get { return __bsd_permanentdistrict_value; } set { __bsd_permanentdistrict_value = value; OnPropertyChanged(nameof(_bsd_permanentdistrict_value)); } }
