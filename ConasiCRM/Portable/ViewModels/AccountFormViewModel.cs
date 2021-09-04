@@ -77,7 +77,7 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<LookUp> list_country_lookup { get; set; }
         public ObservableCollection<LookUp> list_province_lookup { get; set; }
         public ObservableCollection<LookUp> list_district_lookup { get; set; }
-
+        
         public AccountFormViewModel()
         {
             singleAccount = new AccountFormModel();                   
@@ -87,8 +87,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             BusinessTypeOptionList = new List<OptionSet>();
             LocalizationOptionList = new ObservableCollection<OptionSet>();
-            PrimaryContactOptionList = new List<LookUp>();
-           
+            PrimaryContactOptionList = new List<LookUp>();          
         }
 
         public async Task LoadOneAccount(Guid accountid)

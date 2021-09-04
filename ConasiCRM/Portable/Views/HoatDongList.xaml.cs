@@ -79,15 +79,15 @@ namespace ConasiCRM.Portable.Views
             }
             else if (val.activitytypecode == "phonecall")
             {
-                PhoneCallForm newPage = new PhoneCallForm(val.activityid);
-                newPage.CheckPhoneCell = async (CheckEventData) =>
-                {
-                    if (CheckEventData == true)
-                    {
-                        await Navigation.PushAsync(newPage);
-                    }
-                    LoadingHelper.Hide();
-                };
+                //PhoneCallForm newPage = new PhoneCallForm(val.activityid);
+                //newPage.CheckPhoneCell = async (CheckEventData) =>
+                //{
+                //    if (CheckEventData == true)
+                //    {
+                //        await Navigation.PushAsync(newPage);
+                //    }
+                //    LoadingHelper.Hide();
+                //};
             }
             else if (val.activitytypecode == "appointment")
             {

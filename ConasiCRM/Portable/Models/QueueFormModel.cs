@@ -86,5 +86,6 @@ namespace ConasiCRM.Portable.Models
         public DateTime _queue_createdon { get; set; }
         public DateTime _queue_bsd_queuingexpired { get; set; }
         public DateTime _queue_bsd_bookingtime { get; set; }
+        public int UnitStatusCode { get; set; }
     }
 }

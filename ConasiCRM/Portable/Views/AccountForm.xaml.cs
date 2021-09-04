@@ -135,7 +135,7 @@ namespace ConasiCRM.Portable.Views
         }
 
         public void SetPreOpen()
-        {                               
+        {
             Lookup_Localization.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();

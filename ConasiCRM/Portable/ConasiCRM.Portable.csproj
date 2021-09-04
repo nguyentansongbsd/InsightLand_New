@@ -57,6 +57,9 @@
       <EmbeddedResource Update="AppShell.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Controls\LookUpMultipleTabs.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Login.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>

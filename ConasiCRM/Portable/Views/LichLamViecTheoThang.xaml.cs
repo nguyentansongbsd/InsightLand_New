@@ -60,7 +60,7 @@ namespace ConasiCRM.Portable.Views
             }
             else if (choice == "Cuộc gọi")
             {
-                await Navigation.PushAsync(new PhoneCallForm(viewModel.selectedDate.Value));
+               // await Navigation.PushAsync(new PhoneCallForm(viewModel.selectedDate.Value));
                 LoadingHelper.Hide();
             }
             else if (choice == "Cuộc họp")
@@ -94,20 +94,20 @@ namespace ConasiCRM.Portable.Views
             }
             else if (val.Activity.activitytypecode == "phonecall")
             {
-                PhoneCallForm newPage = new PhoneCallForm(val.Activity.activityid);
-                newPage.CheckPhoneCell = async (CheckEventData) =>
-                {
-                    if (CheckEventData == true)
-                    {
-                        await Navigation.PushAsync(newPage);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
-                    }
-                };
+                //PhoneCallForm newPage = new PhoneCallForm(val.Activity.activityid);
+                //newPage.CheckPhoneCell = async (CheckEventData) =>
+                //{
+                //    if (CheckEventData == true)
+                //    {
+                //        await Navigation.PushAsync(newPage);
+                //        LoadingHelper.Hide();
+                //    }
+                //    else
+                //    {
+                //        LoadingHelper.Hide();
+                //        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
+                //    }
+                //};
             }
             else if (val.Activity.activitytypecode == "appointment")
             {

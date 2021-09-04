@@ -198,7 +198,7 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 VisualStateManager.GoToState(radBorderContact, "Normal");
-                VisualStateManager.GoToState(radBorderContact, "Normal");
+                VisualStateManager.GoToState(lbContact, "Normal");
                 LookUpContact.IsVisible = false;
             }
             if (tab == 2)
