@@ -1,17 +1,9 @@
-﻿using ConasiCRM.Portable.Controls;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Telerik.XamarinForms.Primitives;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -73,8 +65,8 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        private bool _isEvent;
-        public bool IsEvent
+        private bool? _isEvent =false;
+        public bool? IsEvent
         {
             get => _isEvent;
             set

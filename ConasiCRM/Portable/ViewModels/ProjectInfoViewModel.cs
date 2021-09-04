@@ -84,6 +84,7 @@ namespace ConasiCRM.Portable.ViewModels
             string FetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='bsd_project'>
                                 <attribute name='bsd_projectid' />
+                                <attribute name='bsd_projectcode' />
                                 <attribute name='bsd_name' />
                                 <attribute name='createdon' />
                                 <attribute name='bsd_address' />
@@ -97,7 +98,6 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_managementamount' />
                                 <attribute name='bsd_bookingfee' />
                                 <attribute name='bsd_depositamount' />
-                                <attribute name='bsd_handoverconditionminimum' />
                                 <order attribute='bsd_name' descending='false' />
                                 <filter type='and'>
                                   <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + ProjectId.ToString() + @"' />

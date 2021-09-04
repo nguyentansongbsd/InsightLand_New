@@ -87,19 +87,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadTotalDirectSale()
         {
-            var content = new
-            {
-                Project = Filter.Project,
-                Phase = Filter.Phase,
-                Event = Filter.Event,
-                Unit = Filter.Unit,
-                Direction = Filter.Direction,
-                stsUnit = Filter.stsUnit,
-                Area = Filter.Area?.Id,
-                Price = Filter.Price?.Id
-            };
-
-            string json = JsonConvert.SerializeObject(content);
+            string json = JsonConvert.SerializeObject(Filter);
             DirectSaleResult = await CrmHelper.Get<List<DirectSaleModel>>($"bsd_GetTotalQtyDirectSale(input='{json}')");
             if (DirectSaleResult == null || DirectSaleResult.Any() == false) return;
 
@@ -164,20 +152,21 @@ namespace ConasiCRM.Portable.ViewModels
             }
             string maxNetArea_Condition = string.Empty;
             string minNetArea_Condition = string.Empty;
-            if (Filter.Area != null)
+            if (!string.IsNullOrWhiteSpace(Filter.Area))
             {
-                if (Filter.Area.From != null && Filter.Area.To == null)
+                var area = NetAreaDirectSaleData.GetNetAreaById(Filter.Area);
+                if (area.From != null && area.To == null)
                 {
-                    maxNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='le' value='{Filter.Area.From}' />";
+                    maxNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='le' value='{area.From}' />";
                 }
-                else if (Filter.Area.From == null && Filter.Area.To != null)
+                else if (area.From == null && area.To != null)
                 {
-                    minNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{Filter.Area.To}' />";
+                    minNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{area.To}' />";
                 }
-                else if(Filter.Area.From != null && Filter.Area.To != null)
+                else if(area.From != null && area.To != null)
                 {
-                    minNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{Filter.Area.From}' />" ;
-                    maxNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='le' value='{Filter.Area.To}' />";
+                    minNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{area.From}' />" ;
+                    maxNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='le' value='{area.To}' />";
                 }
                 else
                 {
@@ -188,20 +177,21 @@ namespace ConasiCRM.Portable.ViewModels
 
             string minPrice_Condition = string.Empty;
             string maxPrice_Condition = string.Empty;
-            if (Filter.Price != null)
+            if (!string.IsNullOrWhiteSpace(Filter.Price))
             {
-                if (Filter.Price.From != null && Filter.Price.To == null)
+                var price = PriceDirectSaleData.GetPriceById(Filter.Price);
+                if (price.From != null && price.To == null)
                 {
-                    maxPrice_Condition = $"<condition attribute='price' operator='le' value='{Filter.Price.From}' />";
+                    maxPrice_Condition = $"<condition attribute='price' operator='le' value='{price.From}' />";
                 }
-                else if (Filter.Price.From == null && Filter.Price.To != null)
+                else if (price.From == null && price.To != null)
                 {
-                    minPrice_Condition = $"<condition attribute='price' operator='ge' value='{Filter.Price.To}' />";
+                    minPrice_Condition = $"<condition attribute='price' operator='ge' value='{price.To}' />";
                 }
-                else if (Filter.Price.From != null && Filter.Price.To != null)
+                else if (price.From != null && price.To != null)
                 {
-                    minPrice_Condition = $"<condition attribute='price' operator='ge' value='{Filter.Price.From}' />";
-                    maxPrice_Condition = $"<condition attribute='price' operator='le' value='{Filter.Price.To}' />";
+                    minPrice_Condition = $"<condition attribute='price' operator='ge' value='{price.From}' />";
+                    maxPrice_Condition = $"<condition attribute='price' operator='le' value='{price.To}' />";
                 }
                 else
                 {

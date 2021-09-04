@@ -62,6 +62,11 @@
                                     <Label Text="Ngân sách: " FontSize="15" TextColor="#333333" />
                                     <Label Text="{Binding Queue.budgetamount,StringFormat='{0:#0,0} đ'}" IsVisible="{Binding Queue.budgetamount,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Giữ chỗ dự án: " FontSize="15" TextColor="#333333"/>
+                                    <Label Text="{Binding QueueProject}" TextColor="#333333" FontSize="15"/>
+                                </StackLayout>
                             </StackLayout>
                             <Grid Grid.Row="1" ColumnDefinitions="*,1,*" BackgroundColor="White">
                                 <Label Grid.Column="0" TextColor="#939393" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Margin="0,8">
@@ -139,11 +144,6 @@
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="#dddddd" Spacing="1">
-                                <StackLayout Orientation="Horizontal" Padding="16,10" BackgroundColor="White">
-                                    <Label Text="Mô tả" FontSize="15" TextColor="#333333"/>
-                                    <Label Text="{Binding Queue.description}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15"/>
-                                </StackLayout>
-
                                 <Grid ColumnDefinitions="4*,6*" Padding="16,10" BackgroundColor="White">
                                     <Label Grid.Column="0" Text="Đại lý bán hàng" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
                                     <Label Grid.Column="1" Text="{Binding Queue.salesagentcompany_name}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#2196F3" FontAttributes="Bold" FontSize="14">
@@ -159,17 +159,12 @@
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal" Padding="16,10" BackgroundColor="White">
-                                    <Label Text="Giữ chỗ dự án" FontSize="15" TextColor="#333333"/>
-                                    <Label Text="{Binding QueueProject}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15"/>
-                                </StackLayout>
-
-                                <StackLayout Orientation="Horizontal" Padding="16,10" BackgroundColor="White">
                                     <Label Text="Thời gian giữ chỗ " FontSize="15" TextColor="#333333"/>
                                     <Label HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Queue.createdon,StringFormat='{0:hh:mm tt} - '}"/>
-                                                <Span Text="{Binding Queue.createdon,StringFormat=' {0:dd/MM/yyyy}'}" />
+                                                <Span Text="{Binding Queue.createdon,StringFormat='{0:dd/MM/yyyy} - '}" />
+                                                <Span Text="{Binding Queue.createdon,StringFormat=' {0:hh:mm tt}'}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -180,8 +175,8 @@
                                     <Label HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Queue.bsd_bookingtime,StringFormat='{0:hh:mm tt} - '}"/>
-                                                <Span Text="{Binding Queue.bsd_bookingtime,StringFormat=' {0:dd/MM/yyyy}'}" />
+                                                <Span Text="{Binding Queue.bsd_bookingtime,StringFormat='{0:dd/MM/yyyy} - '}" />
+                                                <Span Text="{Binding Queue.bsd_bookingtime,StringFormat=' {0:hh:mm tt}'}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -192,11 +187,17 @@
                                     <Label Text="{Binding Queue.bsd_queuingexpired}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat='{0:hh:mm tt} - '}"/>
-                                                <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat=' {0:dd/MM/yyyy}'}" />
+                                                <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" />
+                                                <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat=' {0:hh:mm tt}'}"/>
+                                                
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal" Padding="16,10" BackgroundColor="White">
+                                    <Label Text="Mô tả" FontSize="15" TextColor="#333333"/>
+                                    <Label Text="{Binding Queue.description}" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End" TextColor="#333333" FontSize="15"/>
                                 </StackLayout>
 
                             </StackLayout>

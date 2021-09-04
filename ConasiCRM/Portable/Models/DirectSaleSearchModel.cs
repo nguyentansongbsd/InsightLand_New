@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace ConasiCRM.Portable.Models
 {
     public class DirectSaleSearchModel
     {
         public string Project { get; set; }
+        [JsonProperty("Phase", NullValueHandling = NullValueHandling.Ignore)]
         public string Phase { get; set; }
+        [JsonProperty("Event", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Event { get; set; }
+        [JsonProperty("Unit", NullValueHandling = NullValueHandling.Ignore)]
         public string Unit { get; set; }
+        [JsonProperty("Direction", NullValueHandling = NullValueHandling.Ignore)]
         public string Direction { get; set; }
+        [JsonProperty("stsUnit", NullValueHandling = NullValueHandling.Ignore)]
         public string stsUnit { get; set; }
-        public NetAreaDirectSaleModel Area { get; set; }
-        public PriceDirectSaleModel Price { get; set; }
-        public DirectSaleSearchModel(string projectId, string phasesLanchId, bool? isEvent = null, string unitCode = null, string directions = null, string unitStatuses = null, NetAreaDirectSaleModel netArea = null, PriceDirectSaleModel price = null)
+        [JsonProperty("Area", NullValueHandling = NullValueHandling.Ignore)]
+        public string Area { get; set; }
+        [JsonProperty("Price", NullValueHandling = NullValueHandling.Ignore)]
+        public string Price { get; set; }
+        public DirectSaleSearchModel(string projectId, string phasesLanchId = null, bool? isEvent = null, string unitCode = null, string directions = null, string unitStatuses = null, string netArea = null, string price = null)
         {
             Project = projectId;
             Phase = phasesLanchId;

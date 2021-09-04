@@ -74,7 +74,14 @@
                 <telerikPrimitives:RadBorder BorderColor="#808080" CornerRadius="10" BorderThickness="1" BackgroundColor="White" Margin="8">
                     <StackLayout Margin="15" Spacing="10">
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
-                            <Label Grid.Column="0" Text="{Binding Project.bsd_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Grid.Column="0" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Project.bsd_name" />
+                                        <Binding Path="Project.bsd_projectcode" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
                             <StackLayout Grid.Column="1" IsVisible="{Binding IsHasEvent}" HorizontalOptions="End" Orientation="Horizontal">
                                 <Label Text="Sự kiện" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
                                 <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
@@ -219,19 +226,13 @@
                                         </Label.GestureRecognizers>
                                     </Label>
                                 </Grid>
-
-                                <Grid ColumnDefinitions="4*,6*" BackgroundColor="White" Padding="15">
-                                    <Label Grid.Column="0" Text="Điều kiện bàn giao tối thiểu" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                    <Label Grid.Column="1" Text="{Binding HandoverCoditionMinimum.Label}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
-                                </Grid>
-
                                 <Grid ColumnDefinitions="3*,7*" BackgroundColor="White" Padding="15">
                                     <Label Grid.Column="0" Text="Địa chỉ" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
                                     <Label Grid.Column="1" Text="{Binding Project.bsd_address}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
                                 </Grid>
 
                                 <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                    <Label Grid.Column="0" Text="Phần trăm cọc(%)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                    <Label Grid.Column="0" Text="Phần trăm cọc (%)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
                                     <Label Grid.Column="1" Text="{Binding Project.bsd_depositpercentda,StringFormat='{0:#,0.#0}%'}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
                                 </Grid>
 
@@ -241,7 +242,7 @@
                                 </Grid>
 
                                 <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                    <Label Grid.Column="0" Text="Giá đất dự án" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                    <Label Grid.Column="0" Text="Giá trị QSDĐ (m2)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
                                     <Label Grid.Column="1" Text="{Binding Project.bsd_landvalueofproject,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
                                 </Grid>
 
