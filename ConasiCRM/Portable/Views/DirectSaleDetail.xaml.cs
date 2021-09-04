@@ -42,7 +42,8 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageDanhSachDatCho = 1;
                 viewModel.QueueList.Clear();
                 await viewModel.LoadQueues(viewModel.Unit.productid);
-                UpdateStatusUnit();
+                await viewModel.LoadUnitById(viewModel.Unit.productid);
+                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
@@ -331,40 +332,6 @@ namespace ConasiCRM.Portable.Views
         private void CloseQuestion_Tapped(object sender, EventArgs e)
         {
             stackQuestion.IsVisible = !stackQuestion.IsVisible;
-        }
-
-        private async void UpdateStatusUnit()
-        {
-            if(viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000")
-            {
-                await updateStatusUnit();
-                await viewModel.LoadUnitById(viewModel.Unit.productid);
-                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
-            }    
-        }
-
-        public async Task<Boolean> updateStatusUnit()
-        {
-            string path = "/products(" + viewModel.Unit.productid + ")";
-            var content = await this.getContent();
-            CrmApiResponse result = await CrmHelper.PatchData(path, content);
-            if (result.IsSuccess)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-
-        private async Task<object> getContent()
-        {
-            IDictionary<string, object> data = new Dictionary<string, object>();
-            data["statecode"] = 0;
-            data["statuscode"] = 100000004;            
-            return data;
         }
     }
 }

@@ -216,6 +216,12 @@ namespace ConasiCRM.Portable.Controls
 
             if (ListListView != null && ListListView.Count>0 && ListTab != null && ListTab.Count>0)
             {
+                ItemsSource = new List<OptionSet>();
+                for(int i=0;i<ListListView.Count;i++)
+                {
+                    ItemsSource.AddRange(ListListView[i]);
+                }    
+
                 Grid tabs = SetUpTabs(ListTab);
                 gridMain = new Grid();
                 gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });

@@ -85,7 +85,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='product'>
                                     <attribute name='name' alias='bsd_units_name' />                                   
                                     <attribute name='description' />                                
-                                    <attribute name='statuscode' />
+                                    <attribute name='statuscode' alias='UnitStatusCode'/>
                                     <attribute name='bsd_projectcode' />                                 
                                     <attribute name='productid' alias='bsd_units_id' />
                                     <attribute name='bsd_queuingfee' alias='bsd_units_queuingfee' />
@@ -194,6 +194,7 @@ namespace ConasiCRM.Portable.ViewModels
             CrmApiResponse result = await CrmHelper.PostData(path, content);
             if (result.IsSuccess)
             {
+                UpdateStatusUnit();
                 return true;
             }
             else
@@ -364,6 +365,38 @@ namespace ConasiCRM.Portable.ViewModels
         {
             var result = await CrmHelper.SetNullLookupField("opportunities", AccountId, fieldName);
             return result.IsSuccess;
+        }
+
+        private async void UpdateStatusUnit()
+        {
+            if (QueueFormModel.UnitStatusCode == 1 || QueueFormModel.UnitStatusCode == 100000000)
+            {
+                await updateStatusUnit();
+            }
+        }
+
+        public async Task<Boolean> updateStatusUnit()
+        {
+            string path = "/products(" + QueueFormModel.bsd_units_id + ")";
+            var content = await this.getContentUnit();
+            CrmApiResponse result = await CrmHelper.PatchData(path, content);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private async Task<object> getContentUnit()
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = 0;
+            data["statuscode"] = 100000004;
+            return data;
         }
     }
 }
