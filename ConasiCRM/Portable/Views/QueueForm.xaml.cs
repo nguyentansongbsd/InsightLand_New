@@ -12,6 +12,8 @@ namespace ConasiCRM.Portable.Views
     public partial class QueueForm : ContentPage
     {
         public Action<bool> OnCompleted;
+        public static bool? NeedToRefreshContactList = null;
+        public static bool? NeedToRefreshAccountList = null;
         public QueueFormViewModel viewModel;
         public Guid UnitId;
         public Guid QueueId;
@@ -27,9 +29,62 @@ namespace ConasiCRM.Portable.Views
 
         public void Init()
         {          
-            this.BindingContext = viewModel = new QueueFormViewModel();          
+            this.BindingContext = viewModel = new QueueFormViewModel();
+            NeedToRefreshAccountList = false;
+            NeedToRefreshContactList = false;
             SetPreOpen();            
         }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (NeedToRefreshAccountList == true)
+            {
+                LoadingHelper.Show();
+                viewModel.AccountsLookUp.Clear();
+                await viewModel.LoadAccountsLookUp();
+                LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
+                NeedToRefreshAccountList = false;
+                LoadingHelper.Hide();
+            }
+
+            if (NeedToRefreshContactList == true)
+            {
+                LoadingHelper.Show();
+                viewModel.ContactsLookUp.Clear();
+                await viewModel.LoadContactsLookUp();
+                //LookUpContact.SetList(viewModel.ContactsLookUp, "Name");
+                NeedToRefreshContactList = false;
+                LoadingHelper.Hide();
+            }
+        }
+
+        public async void SetPreOpen()
+        {
+            lookUpDaiLy.PreOpenAsync = async () =>
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadSalesAgent();
+                LoadingHelper.Hide();
+            };
+            if (viewModel.AccountsLookUp.Count <= 0)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadAccountsLookUp();
+                LoadingHelper.Hide();
+            }
+            if (viewModel.ContactsLookUp.Count <= 0)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadContactsLookUp();
+                LoadingHelper.Hide();
+            }
+            LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
+            LookUpContact.SetList(viewModel.ContactsLookUp, "Name");
+            LookUpAccount.lookUpListView.ItemTapped += LookUpAccount_ItemTapped;
+            LookUpContact.lookUpListView.ItemTapped += LookUpContac_ItemTapped;
+        }
+
         public async void Create()
         {
             btnSave.Text = "Tạo Giữ Chỗ";
@@ -160,32 +215,6 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        public async void SetPreOpen()
-        {
-            lookUpDaiLy.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadSalesAgent();
-                LoadingHelper.Hide();
-            };
-            if (viewModel.AccountsLookUp.Count <= 0)
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadAccountsLookUp();
-                LoadingHelper.Hide();
-            }
-            if (viewModel.ContactsLookUp.Count <= 0)
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadContactsLookUp();
-                LoadingHelper.Hide();
-            }
-            LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
-            LookUpContact.SetList(viewModel.ContactsLookUp, "Name");
-            LookUpAccount.lookUpListView.ItemTapped += LookUpAccount_ItemTapped;
-            LookUpContact.lookUpListView.ItemTapped += LookUpContac_ItemTapped;
-        }
-
         private async void LookUpContac_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e != null)
@@ -220,83 +249,18 @@ namespace ConasiCRM.Portable.Views
             await centerModalKHTN.Hide();
         }      
 
-        //private async void CancleQueue_Clicked(object sender, EventArgs e)
-        //{
-        //    bool confirm = await DisplayAlert("Xác nhận", "Bạn có muốn hủy đặt chỗ này không ?", "Đồng ý", "Hủy");
-        //    if (confirm == false) return;
+        private async void AddContact_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new ContactForm());
+            LoadingHelper.Hide();
+        }
 
-        //    viewModel.IsBusy = true;
-        //    if (this.QueueId != Guid.Empty)
-        //    {
-        //        string url_action = $"/opportunities({this.QueueId})/Microsoft.Dynamics.CRM.bsd_Action_Queue_CancelQueuing";
-        //        CrmApiResponse res = await CrmHelper.PostData(url_action, null);
-        //        if (res.IsSuccess)
-        //        {
-        //            url_action = $"/opportunities({this.QueueId})/Microsoft.Dynamics.CRM.bsd_Action_Opportunity_HuyGiuChoCoTien";
-        //            res = await CrmHelper.PostData(url_action, null);
-        //            //await Navigation.PushAsync(new QueueForm(this.QueueId));
-        //            Navigation.RemovePage(this);
-        //        }
-        //        else
-        //        {
-        //            await DisplayAlert("Thông báo", "Hủy báo giá thất bại." + res.GetErrorMessage(), "close");
-        //        }
-        //    }
-        //    viewModel.IsBusy = false;
-        //}
-
-        //private async void BtnDatCoc_Clicked(object sender, EventArgs e)
-        //{
-        //    bool confirm = await DisplayAlert("Xác nhận", "Bạn có muốn tạo báo giá không ?", "Đồng ý", "Hủy");
-        //    if (confirm == false) return;
-
-        //    viewModel.IsBusy = true;
-        //    var data = new
-        //    {
-        //        Command = "Reservation",
-        //        Parameters = "[" + JsonConvert.SerializeObject(new
-        //        {
-        //            action = "Reservation",
-        //            name = "opportunity",
-        //            value = this.QueueId.ToString()
-        //        }) + "]"
-        //    };
-
-        //    var res = await CrmHelper.PostData($"/products({viewModel.QueueFormModel.bsd_units_id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
-        //    if (res.IsSuccess)
-        //    {
-        //        DirectSaleActionResponse directSaleActionResponse = JsonConvert.DeserializeObject<DirectSaleActionResponse>(res.Content);
-        //        DirectSaleActionSubResponse subResponse = directSaleActionResponse.GetSubResponse();
-        //        if (subResponse.type == "Success")
-        //        {
-        //            // tạo báo giá thành công, thì lấy Discount List từ PhasedLanch đưa vào Reservation.
-        //            // tạo báo giá thành công thì cũng cập nhật lại field Queue trên đặt cọc.
-        //            Guid CreateReservationId = Guid.Parse(subResponse.content);
-        //            if (viewModel.QueueFormModel.bsd_discountlist_id != Guid.Empty)
-        //            {
-        //                // update lại reservation field discount list
-        //                var updateData = new Dictionary<string, object>();
-        //                updateData["bsd_discountlist@odata.bind"] = $"discounttypes({viewModel.QueueFormModel.bsd_discountlist_id})";
-        //                var updateDiscountListResponse = await CrmHelper.PatchData($"/quotes({CreateReservationId})", updateData);
-        //                if (updateDiscountListResponse.IsSuccess == false)
-        //                {
-        //                    await DisplayAlert("Thông báo", "Tạo báo giá thành công. Không cập nhật được Discount List từ Đợt mở bán", "Đóng");
-        //                }
-        //                else
-        //                {
-        //                    await DisplayAlert("Thông báo", "Tạo báo giá thành công. ", "Đóng");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                await DisplayAlert("Thông báo", "Tạo báo giá thành công. ", "Đóng");
-        //            }
-        //            await Navigation.PushAsync(new ReservationForm(CreateReservationId));
-        //        }
-        //        else await DisplayAlert("Thông báo", "Tạo báo giá thất bạn. " + subResponse.content, "Đóng");
-        //    }
-        //    else await DisplayAlert("Thông báo", "Tạo báo giá thất bại ." + res.GetErrorMessage(), "close");
-        //    viewModel.IsBusy = false;
-        //} 
+        private async void AddAccount_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new AccountForm());
+            LoadingHelper.Hide();
+        }
     }
 }
