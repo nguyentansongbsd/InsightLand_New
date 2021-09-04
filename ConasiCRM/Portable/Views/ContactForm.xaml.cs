@@ -1,18 +1,12 @@
-﻿using ConasiCRM.Portable.Controls;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Telerik.XamarinForms.Common.DataAnnotations;
-using Telerik.XamarinForms.DataGrid;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -181,6 +175,7 @@ namespace ConasiCRM.Portable.Views
                 if (created != new Guid())
                 {
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
+                    if (QueueForm.NeedToRefreshContactList.HasValue) QueueForm.NeedToRefreshContactList = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
                     LoadingHelper.Hide();
@@ -199,6 +194,7 @@ namespace ConasiCRM.Portable.Views
                 if (updated)
                 {
                     LoadingHelper.Hide();
+                    if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (ContactDetailPage.NeedToRefresh.HasValue) ContactDetailPage.NeedToRefresh = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
@@ -236,13 +232,19 @@ namespace ConasiCRM.Portable.Views
             lookUpContacAddressCountry.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadCountryForLookup();
+                if(viewModel.list_country_lookup.Count == 0)
+                {
+                    await viewModel.LoadCountryForLookup();
+                }
                 LoadingHelper.Hide();
             };
             lookUpPermanentAddressCountry.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadCountryForLookup();
+                if (viewModel.list_country_lookup.Count == 0)
+                {
+                    await viewModel.LoadCountryForLookup();
+                }
                 LoadingHelper.Hide();
             };
             Lookup_Account.PreOpenAsync = async () =>

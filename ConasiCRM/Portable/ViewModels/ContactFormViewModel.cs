@@ -389,7 +389,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_countryname' alias='Name'/>
                                     <attribute name='bsd_countryid' alias='Id'/>
                                     <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_countryname' descending='false' />
+                                    <order attribute='bsd_priority' descending='false' />
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
@@ -436,7 +436,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_provincename' alias='Name'/>
                                     <attribute name='new_provinceid' alias='Id'/>
                                     <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_provincename' descending='false' />
+                                    <order attribute='bsd_priority' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='bsd_country' operator='eq' value='" + Country.Id + @"' />
                                     </filter>

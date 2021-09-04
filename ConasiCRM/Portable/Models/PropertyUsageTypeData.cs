@@ -15,8 +15,8 @@ namespace ConasiCRM.Portable.Models
             return new List<OptionSet>()
             {
                 new OptionSet("1","Condo"),
-                new OptionSet("2","Apartment"),
-                new OptionSet("3","Townhouse"),
+                new OptionSet("2","Chung cư"),
+                new OptionSet("3","Nhà phố"),
             };
         }
     }
