@@ -41,7 +41,7 @@ namespace ConasiCRM.Portable.Views
         {
             this.BindingContext = viewModel = new AccountFormViewModel();
             centerModalContacAddress.Body.BindingContext = viewModel;            
-            Lookup_BusinessType.BindingContext = viewModel;
+            //Lookup_BusinessType.BindingContext = viewModel;
             SetPreOpen();
         }
 
@@ -50,6 +50,8 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Tạo Mới Khách Hàng Doanh Nghiệp";
             btnSave.Text = "Tạo Mới";
             btnSave.Clicked += CreateContact_Clicked;
+            viewModel.LoadBusinessTypeForLookup();
+            viewModel.BusinessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == "100000000");
         }
 
         private void CreateContact_Clicked(object sender, EventArgs e)
@@ -67,18 +69,19 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadOneAccount(this.AccountId);
 
             viewModel.LoadBusinessTypeForLookup();
-            Lookup_BusinessType.SetUpModal();
-            if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))
-            {
-                List<string> ids = new List<string>();
-                var businesstypes = viewModel.singleAccount.bsd_businesstypesys.Split(',');
-                foreach (var item in businesstypes)
-                {
-                    var businessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
-                    ids.Add(businessType);
-                }
-                viewModel.BusinessType = ids;
-            }
+            viewModel.BusinessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == "100000000");
+            //Lookup_BusinessType.SetUpModal();
+            //if (!string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_businesstypesys))
+            //{
+            //    List<string> ids = new List<string>();
+            //    var businesstypes = viewModel.singleAccount.bsd_businesstypesys.Split(',');
+            //    foreach (var item in businesstypes)
+            //    {
+            //        var businessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == item).Val;
+            //        ids.Add(businessType);
+            //    }
+            //    viewModel.BusinessType = ids;
+            //}
             if (viewModel.singleAccount.bsd_localization != null)
             {
                 viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
@@ -143,12 +146,12 @@ namespace ConasiCRM.Portable.Views
                 }
                 LoadingHelper.Hide();
             };         
-            Lookup_BusinessType.PreShow = async () =>
-            {
-                LoadingHelper.Show();
-                viewModel.LoadBusinessTypeForLookup();
-                LoadingHelper.Hide();
-            };            
+            //Lookup_BusinessType.PreShow = async () =>
+            //{
+            //    LoadingHelper.Show();
+            //    viewModel.LoadBusinessTypeForLookup();
+            //    LoadingHelper.Hide();
+            //};            
             Lookup_PrimaryContact.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
@@ -232,15 +235,16 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.singleAccount._primarycontactid_value = viewModel.PrimaryContact.Id;
             }
-            if (viewModel.BusinessType != null && viewModel.BusinessType.Count > 0)
-            {
-                viewModel.singleAccount.bsd_businesstypesys = string.Join(", ", viewModel.BusinessType);
-            }
+            //if (viewModel.BusinessType != null && viewModel.BusinessType.Count > 0)
+            //{
+            //    viewModel.singleAccount.bsd_businesstypesys = string.Join(", ", viewModel.BusinessType);
+            //}
             if (id == null)
             {
                 var created = await viewModel.createAccount();
                 if (created)
                 {
+                    if (QueueForm.NeedToRefreshAccountList.HasValue) QueueForm.NeedToRefreshAccountList = true;
                     if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
                     ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thành công");
                     await Navigation.PopAsync();

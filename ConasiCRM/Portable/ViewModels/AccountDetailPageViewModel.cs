@@ -59,10 +59,10 @@ namespace ConasiCRM.Portable.ViewModels
         public AccountDetailPageViewModel()
         {
             BusinessTypeOptions = new ObservableCollection<OptionSet>();
-            BusinessTypeOptions.Add(new OptionSet("100000000", "Customer"));
-            BusinessTypeOptions.Add(new OptionSet("100000001", "Partner"));
-            BusinessTypeOptions.Add(new OptionSet("100000002", "Sales Argents"));
-            BusinessTypeOptions.Add(new OptionSet("100000003", "Developer"));
+            BusinessTypeOptions.Add(new OptionSet("100000000", "Khách hàng"));
+            BusinessTypeOptions.Add(new OptionSet("100000001", "Đối tác"));
+            BusinessTypeOptions.Add(new OptionSet("100000002", "Đại lý"));
+            BusinessTypeOptions.Add(new OptionSet("100000003", "Chủ đầu tư"));
 
             list_thongtinqueing = new ObservableCollection<QueueFormModel>();
             list_thongtinquotation = new ObservableCollection<ListQuotationAcc>();

@@ -21,8 +21,8 @@ namespace ConasiCRM.Portable.ViewModels
         public OptionSet _localization;
         public OptionSet Localization { get => _localization; set { _localization = value; OnPropertyChanged(nameof(Localization)); } }
 
-        public List<string> _businessType;
-        public List<string> BusinessType { get => _businessType; set { _businessType = value; OnPropertyChanged(nameof(BusinessType)); } }
+        public OptionSet _businessType;
+        public OptionSet BusinessType { get => _businessType; set { _businessType = value; OnPropertyChanged(nameof(BusinessType)); } }
 
         private List<LookUp> _primaryContactOptionList;
         public List<LookUp> PrimaryContactOptionList { get=>_primaryContactOptionList; set { _primaryContactOptionList = value;OnPropertyChanged(nameof(PrimaryContactOptionList)); } }
@@ -161,17 +161,6 @@ namespace ConasiCRM.Portable.ViewModels
             PrimaryContact = new LookUp{ Name = singleAccount.primarycontactname, Id = singleAccount._primarycontactid_value, Detail = "Contact" };
         }    
 
-        public List<OptionSet> GetBusinessType()
-        {
-            var list = new List<OptionSet>();
-            foreach(var item in BusinessTypeOptionList)
-            {
-                if (item.Selected == true)
-                    list.Add(item);
-            }
-            return list;
-        }
-
         public async Task<bool> createAccount()
         {
             string path = "/accounts";
@@ -216,10 +205,11 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_name"] = singleAccount.bsd_name;
             data["bsd_accountnameother"] = singleAccount.bsd_accountnameother;
             data["bsd_companycode"] = singleAccount.bsd_companycode;
-            if (singleAccount.bsd_businesstypesys != null)
-            {
-                data["bsd_businesstypesys"] = singleAccount.bsd_businesstypesys.Replace(" ", "");
-            }
+            //if (singleAccount.bsd_businesstypesys != null)
+            //{
+            //    data["bsd_businesstypesys"] = singleAccount.bsd_businesstypesys.Replace(" ", "");
+            //}
+            data["bsd_businesstypesys"] = this.BusinessType.Val;
 
             if (singleAccount.bsd_localization != null)
             {
@@ -289,10 +279,10 @@ namespace ConasiCRM.Portable.ViewModels
         public void LoadBusinessTypeForLookup()
         {
             BusinessTypeOptionList = new List<OptionSet>();
-            BusinessTypeOptionList.Add(new OptionSet("100000000", "Customer"));
-            BusinessTypeOptionList.Add(new OptionSet("100000001", "Partner"));
-            BusinessTypeOptionList.Add(new OptionSet("100000002", "Sales Agents"));
-            BusinessTypeOptionList.Add(new OptionSet("100000003", "Developer"));
+            BusinessTypeOptionList.Add(new OptionSet("100000000", "Khách hàng"));
+            BusinessTypeOptionList.Add(new OptionSet("100000001", "Đối tác"));
+            BusinessTypeOptionList.Add(new OptionSet("100000002", "Đại lý"));
+            BusinessTypeOptionList.Add(new OptionSet("100000003", "Chủ đầu tư"));
         }
 
         public async Task LoadContactForLookup() // bubg
@@ -320,7 +310,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_countryname' alias='Name'/>
                                     <attribute name='bsd_countryid' alias='Id'/>
                                     <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_countryname' descending='false' />
+                                    <order attribute='bsd_priority' descending='false' />
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
@@ -367,7 +357,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_provincename' alias='Name'/>
                                     <attribute name='new_provinceid' alias='Id'/>
                                     <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_provincename' descending='false' />
+                                    <order attribute='bsd_priority' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='bsd_country' operator='eq' value='" + Country.Id + @"' />
                                     </filter>

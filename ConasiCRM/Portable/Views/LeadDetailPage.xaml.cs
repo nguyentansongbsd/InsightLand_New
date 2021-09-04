@@ -38,7 +38,7 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Lead Qualify", "FontAwesomeSolid", "\uf12e", null, LeadQualify));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chuyển đổi khách hàng", "FontAwesomeSolid", "\uf12e", null, LeadQualify));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
             }
 
