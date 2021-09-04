@@ -94,6 +94,7 @@ namespace ConasiCRM.Portable.Views
                     {
                         await viewModel.LoadOneLead(Id.ToString());
                         LoadingHelper.Hide();
+                        floatingButtonGroup.IsVisible = false;
                         ToastMessageHelper.ShortMessage("Thành công");
                     }
                     else
@@ -123,6 +124,7 @@ namespace ConasiCRM.Portable.Views
                     {
                         await viewModel.LoadOneLead(Id.ToString());
                         LoadingHelper.Hide();
+                        floatingButtonGroup.IsVisible = false;
                         ToastMessageHelper.ShortMessage("Thành công");
                     }
                     else

@@ -12,27 +12,7 @@ namespace ConasiCRM.Portable.Models
         public Guid bsd_investor_id { get; set; }
         public string bsd_investor_name { get; set; } // chủ dự án
 
-        public int bsd_loaiduan { get; set; }
-        public string bsd_loaiduan_format
-        {
-            get
-            {
-                switch (bsd_loaiduan)
-                {
-                    case 100000000:
-                        return "Dự án đơn";
-                    case 100000001:
-                        return "Dự án phức tạp";
-                    case 100000002:
-                        return "Dự án nghiên cứu";
-                    default:
-                        return "";
-                }
-            }
-        }
-
         public string bsd_address { get; set; } // địa chỉ vn
-        public string bsd_addressen { get; set; } // dia chỉ en
 
         public decimal bsd_depositpercentda { get; set; } // phần trăm cọc
 

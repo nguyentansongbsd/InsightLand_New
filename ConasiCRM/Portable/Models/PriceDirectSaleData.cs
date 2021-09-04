@@ -10,13 +10,13 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<PriceDirectSaleModel>()
             {
-                new PriceDirectSaleModel("1","Dưới 1 tỷ"),
-                new PriceDirectSaleModel("2","1 tỷ -> 2 tỷ"),
-                new PriceDirectSaleModel("3","2 tỷ -> 5 tỷ"),
-                new PriceDirectSaleModel("4","5 tỷ -> 10 tỷ"),
-                new PriceDirectSaleModel("5","10 tỷ -> 20 tỷ"),
-                new PriceDirectSaleModel("6","20 tỷ -> 50 tỷ"),
-                new PriceDirectSaleModel("7","50 tỷ trở lên")
+                new PriceDirectSaleModel("1","Dưới 1 tỷ","1000000000"),
+                new PriceDirectSaleModel("2","1 tỷ -> 2 tỷ","1000000000","2000000000"),
+                new PriceDirectSaleModel("3","2 tỷ -> 5 tỷ","2000000000","5000000000"),
+                new PriceDirectSaleModel("4","5 tỷ -> 10 tỷ","5000000000","10000000000"),
+                new PriceDirectSaleModel("5","10 tỷ -> 20 tỷ","10000000000","20000000000"),
+                new PriceDirectSaleModel("6","20 tỷ -> 50 tỷ","20000000000","50000000000"),
+                new PriceDirectSaleModel("7","50 tỷ trở lên",null,"50000000000")
             };
         }
         public static PriceDirectSaleModel GetPriceById(string Id)

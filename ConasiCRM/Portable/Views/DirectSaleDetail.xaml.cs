@@ -302,28 +302,6 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private void ScreenChange_SizeChanged(System.Object sender, System.EventArgs e)
-        {
-            //WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}"
-            //((stackFloors.Children.Content as RadExpander).Content as FlexLayout).Children as RadBorder;
-            // a.WidthRequest = 100;
-
-            //List<RadBorder> radBorders = new List<RadBorder>();
-            //foreach (var item in stackFloors.Children)
-            //{
-            //    radBorders.Add((RadBorder)item);
-            //}
-
-            //foreach (var item in radBorders)
-            //{
-            //    var a = item.Content as RadExpander;
-
-            //}
-
-
-
-        }
-
         private void Question_CLicked(object sender, EventArgs e)
         {
             stackQuestion.IsVisible = !stackQuestion.IsVisible;

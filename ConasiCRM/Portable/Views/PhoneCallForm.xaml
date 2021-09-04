@@ -37,36 +37,29 @@
                         <controls:MainEntry Placeholder="Nhập chủ đề cuộc gọi" Text="{Binding PhoneCellModel.subject}" FontSize="15"/>
 
                         <controls:FormLabelRequired Text="Gọi từ" Margin="0,10,0,0"/>
-                        <controls:LookUpMultipleTabs x:Name="Lookup_CallFrom" Placeholder="Chọn người thực hiện cuộc gọi" ListListView="{Binding AllsLookUp}" ListTab="{Binding Tabs}" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding CallF}" NameDisplay="Label"/>
+                        <controls:LookUpMultipleTabs x:Name="Lookup_CallFrom" Placeholder="Chọn người thực hiện cuộc gọi" ListListView="{Binding AllsLookUp}" ListTab="{Binding Tabs}" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding CallFrom}" NameDisplay="Label"/>
 
                         <controls:FormLabelRequired Text="Gọi đến" Margin="0,10,0,0"/>
                         <controls:LookUpMultipleOptions x:Name="Lookup_CallTo" Placeholder="Chọn người nhận cuộc gọi" CenterModal="{x:Reference CenterModal}" ListListView="{Binding AllsLookUp}" ListTab="{Binding Tabs}" SelectedIds="{Binding CallTo}" ShowClearButton="False" ShowCloseButton="False"/>
 
                         <controls:FormLabelRequired Text="Số điện thoại" Margin="0,10,0,0"/>
-                        <controls:MainEntry Placeholder="Nhập số điện thoại" Text="{Binding PhoneCellModel.subject}" FontSize="15"/>
+                        <controls:MainEntry Placeholder="Nhập số điện thoại" Text="{Binding PhoneCellModel.phonenumber}" FontSize="15"/>
 
                         <controls:FormLabel Text="Người liên quan" FontSize="15" Margin="0,10,0,0"/>
-                        <Grid>
-                            <controls:MainEntry Text="{Binding PhoneCellModel.Customer.Name}" Placeholder="Chọn người liên quan" FontSize="15"/>
-                            <StackLayout>
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChonNguoiLienQuan_Tapped"/>
-                                </StackLayout.GestureRecognizers>
-                            </StackLayout>
-                        </Grid>
+                        <controls:LookUpMultipleTabs x:Name="Lookup_Customer" Placeholder="Chọn người thực hiện cuộc gọi" ListListView="{Binding AllsLookUp}" ListTab="{Binding Tabs}" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding Customer}" NameDisplay="Label"/>
 
                         <controls:FormLabelRequired Text="Thời gian bắt đầu" Margin="0,10,0,0"/>
                         <Grid ColumnDefinitions="Auto,Auto,*">
-                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.timeStart}" Format="hh:mm tt" Grid.Column="0"/>
+                            <controls:TimePickerBorder Time="{Binding PhoneCellModel.timeStart}" Format="hh:mm tt" Grid.Column="0" PropertyChanged="TimeStart_PropertyChanged"/>
                             <Label Text="-" Padding="5" Grid.Column="1" TextColor="#444444" FontSize="15"/>
-                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.scheduledstart}" Format="dd/MM/yyyy" Grid.Column="2"/>
+                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.scheduledstart}" Format="dd/MM/yyyy" Grid.Column="2" DateSelected="DateStart_DateSelected"/>
                         </Grid>
 
                         <controls:FormLabelRequired Text="Thời gian kết thúc" Margin="0,10,0,0"/>
                         <Grid ColumnDefinitions="Auto,Auto,*">
-                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.timeEnd}" Format="hh:mm tt" Grid.Column="0"/>
+                            <controls:TimePickerBorder Time="{Binding PhoneCellModel.timeEnd}" Format="hh:mm tt" Grid.Column="0" PropertyChanged="TimeEnd_PropertyChanged"/>
                             <Label Text="-" Padding="5" Grid.Column="1" TextColor="#444444" FontSize="15"/>
-                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.scheduledend}" Format="dd/MM/yyyy" Grid.Column="2"/>
+                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.scheduledend}" Format="dd/MM/yyyy" Grid.Column="2" DateSelected="DateEnd_DateSelected"/>
                         </Grid>
 
                         <controls:FormLabel Text="Mô tả" FontSize="15" Margin="0,10,0,0"/>
@@ -76,35 +69,6 @@
                 <Grid Padding="10,15,10,5" VerticalOptions="EndAndExpand" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
                     <Button Clicked="CreatePhoneCall_Clicked" Text="Thêm Cuộc Gọi" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" HeightRequest="35" Padding="10,5" FontSize="16" CornerRadius="5"/>
                 </Grid>
-                <controls:CenterModal x:Name="centerModalKH">
-                    <controls:CenterModal.Body>
-                        <Grid RowDefinitions="Auto,*" Padding="0,0,0,10">
-                            <Grid ColumnDefinitions="*,*,*" Grid.Row="0">
-                                <telerikPrimitives:RadBorder x:Name="radBorderLead" Grid.Column="0" Style="{StaticResource rabBorder_Tab}">
-                                    <telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Lead_Tapped"/>
-                                    </telerikPrimitives:RadBorder.GestureRecognizers>
-                                    <Label x:Name="lbLead" Text="KH Tiềm Năng" Style="{StaticResource Lb_Tab}"/>
-                                </telerikPrimitives:RadBorder>
-                                <telerikPrimitives:RadBorder x:Name="radBorderContact" Grid.Column="1" Style="{StaticResource rabBorder_Tab}">
-                                    <telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Contact_Tapped"/>
-                                    </telerikPrimitives:RadBorder.GestureRecognizers>
-                                    <Label x:Name="lbContact" Text="KH Cá Nhân" Style="{StaticResource Lb_Tab}"/>
-                                </telerikPrimitives:RadBorder>
-                                <telerikPrimitives:RadBorder x:Name="radBorderAccount" Grid.Column="2" Style="{StaticResource rabBorder_Tab}">
-                                    <telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Account_Tapped"/>
-                                    </telerikPrimitives:RadBorder.GestureRecognizers>
-                                    <Label x:Name="lbAccount" Text="KH Doanh Nghiệp" Style="{StaticResource Lb_Tab}"/>
-                                </telerikPrimitives:RadBorder>
-                            </Grid>
-                            <controls:LookUpView x:Name="LookUpLead" Grid.Row="1" Margin="0,10,0,0"/>
-                            <controls:LookUpView x:Name="LookUpContact" Grid.Row="1" Margin="0,10,0,0"/>
-                            <controls:LookUpView x:Name="LookUpAccount" Grid.Row="1" Margin="0,10,0,0"/>
-                        </Grid>
-                    </controls:CenterModal.Body>
-                </controls:CenterModal>
                 <controls:CenterModal x:Name="CenterModal"/>
             </AbsoluteLayout>
         </StackLayout>

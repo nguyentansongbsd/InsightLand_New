@@ -2,28 +2,36 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace ConasiCRM.Portable.Models
 {
     public class DirectSaleSearchModel
     {
-        public string ProjectId { get; set; }
-        public string PhasesLanchId { get; set; }
-        public bool? IsEvent { get; set; }
-        public string UnitCode { get; set; }
-        public string Directions { get; set; }
-        public string UnitStatuses { get; set; }
-        public string NetArea { get; set; }
+        public string Project { get; set; }
+        [JsonProperty("Phase", NullValueHandling = NullValueHandling.Ignore)]
+        public string Phase { get; set; }
+        [JsonProperty("Event", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Event { get; set; }
+        [JsonProperty("Unit", NullValueHandling = NullValueHandling.Ignore)]
+        public string Unit { get; set; }
+        [JsonProperty("Direction", NullValueHandling = NullValueHandling.Ignore)]
+        public string Direction { get; set; }
+        [JsonProperty("stsUnit", NullValueHandling = NullValueHandling.Ignore)]
+        public string stsUnit { get; set; }
+        [JsonProperty("Area", NullValueHandling = NullValueHandling.Ignore)]
+        public string Area { get; set; }
+        [JsonProperty("Price", NullValueHandling = NullValueHandling.Ignore)]
         public string Price { get; set; }
-        public DirectSaleSearchModel(string projectId, string phasesLanchId, bool? isEvent = null, string unitCode = null, string directions = null, string unitStatuses = null, string netArea = null, string price = null)
+        public DirectSaleSearchModel(string projectId, string phasesLanchId = null, bool? isEvent = null, string unitCode = null, string directions = null, string unitStatuses = null, string netArea = null, string price = null)
         {
-            ProjectId = projectId;
-            PhasesLanchId = phasesLanchId;
-            IsEvent = isEvent;
-            UnitCode = unitCode;
-            Directions = directions;
-            UnitStatuses = unitStatuses;
-            NetArea = netArea;
+            Project = projectId;
+            Phase = phasesLanchId;
+            Event = isEvent;
+            Unit = unitCode;
+            Direction = directions;
+            stsUnit = unitStatuses;
+            Area = netArea;
             Price = price;
         }
     }

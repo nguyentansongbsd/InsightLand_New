@@ -23,14 +23,17 @@ namespace ConasiCRM.Portable.ViewModels
         private LookUp _customer;
         public LookUp Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
 
-        private LookUp _callFrom;
-        public LookUp CallFrom { get => _callFrom; set { _callFrom = value; OnPropertyChanged(nameof(CallFrom)); } }
-
-        private OptionSet _callF;
-        public OptionSet CallF { get => _callF; set { _callF = value; OnPropertyChanged(nameof(CallF)); } }
+        private OptionSet _callFrom;
+        public OptionSet CallFrom { get => _callFrom; set { _callFrom = value; OnPropertyChanged(nameof(CallFrom)); } }
 
         public List<string> _callTo;
         public List<string> CallTo { get => _callTo; set { _callTo = value; OnPropertyChanged(nameof(CallTo)); } }
+
+        string CodeAccount = "3";
+
+        string CodeContac = "2";
+
+        string CodeLead = "1";
 
         public PhoneCallViewModel()
         {
@@ -62,6 +65,7 @@ namespace ConasiCRM.Portable.ViewModels
             var data = result.value;
             foreach (var item in data)
             {
+                item.Title = CodeLead;
                 LeadsLookUp.Add(item);
             }
         }
@@ -84,6 +88,7 @@ namespace ConasiCRM.Portable.ViewModels
             var data = result.value;
             foreach (var item in data)
             {
+                item.Title = CodeContac;
                 ContactsLookUp.Add(item);
             }
         }
@@ -106,6 +111,7 @@ namespace ConasiCRM.Portable.ViewModels
             var data = result.value;
             foreach (var item in data)
             {
+                item.Title = CodeAccount;
                 AccountsLookUp.Add(item);
             }
         }
@@ -118,9 +124,12 @@ namespace ConasiCRM.Portable.ViewModels
                 await LoadContactsLookUp();
                 await LoadAccountsLookUp();
             }
-            AllsLookUp.Add(LeadsLookUp);
-            AllsLookUp.Add(ContactsLookUp);
-            AllsLookUp.Add(AccountsLookUp);
+            if (AllsLookUp.Count <= 0)
+            {              
+                AllsLookUp.Add(LeadsLookUp);
+                AllsLookUp.Add(ContactsLookUp);
+                AllsLookUp.Add(AccountsLookUp);
+            }
         }
     }
 }

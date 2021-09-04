@@ -163,7 +163,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void HuyGiuCho_Clicked(object sender, EventArgs e)
         {
-            bool confirm = await DisplayAlert("Xác nhận", "Bạn có muốn hủy đặt chỗ này không ?", "Đồng ý", "Hủy");
+            bool confirm = await DisplayAlert("Xác nhận", "Bạn có muốn hủy giữ chỗ này không ?", "Đồng ý", "Hủy");
             if (confirm == false) return;
 
             LoadingHelper.Show();

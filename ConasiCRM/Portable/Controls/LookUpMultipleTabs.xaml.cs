@@ -19,8 +19,8 @@ namespace ConasiCRM.Portable.Controls
 
         public event EventHandler<LookUpChangeEvent> SelectedItemChange;
 
-        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<IEnumerable>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay, null);
-        public List<IEnumerable> ListListView { get => (List<IEnumerable>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
+        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSet>>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay, null);
+        public List<List<OptionSet>> ListListView { get => (List<List<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
 
         public static readonly BindableProperty ListTabProperty = BindableProperty.Create(nameof(ListTab), typeof(List<string>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay, null);
         public List<string> ListTab { get => (List<string>)GetValue(ListTabProperty); set { SetValue(ListTabProperty, value); } }
@@ -91,7 +91,7 @@ namespace ConasiCRM.Portable.Controls
                 }
             }
 
-            if (this.ListListView == null || this.CenterModal == null) return;
+            if (this.ListListView == null || this.ListListView.Count == 0 || this.CenterModal == null) return;
 
             if (_lookUpView == null)
             {

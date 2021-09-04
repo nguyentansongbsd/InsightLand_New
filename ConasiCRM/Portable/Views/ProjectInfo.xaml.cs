@@ -47,10 +47,10 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.ProjectType = ProjectTypeData.GetProjectType(viewModel.Project.bsd_projecttype);
                 viewModel.PropertyUsageType = PropertyUsageTypeData.GetPropertyUsageTypeById(viewModel.Project.bsd_propertyusagetype.ToString());
-                if (viewModel.Project.bsd_handoverconditionminimum.HasValue)
-                {
-                    viewModel.HandoverCoditionMinimum = HandoverCoditionMinimumData.GetHandoverCoditionMinimum(viewModel.Project.bsd_handoverconditionminimum.Value.ToString());
-                }
+                //if (viewModel.Project.bsd_handoverconditionminimum.HasValue)
+                //{
+                //    viewModel.HandoverCoditionMinimum = HandoverCoditionMinimumData.GetHandoverCoditionMinimum(viewModel.Project.bsd_handoverconditionminimum.Value.ToString());
+                //}
                 OnCompleted?.Invoke(true);
             }
             else

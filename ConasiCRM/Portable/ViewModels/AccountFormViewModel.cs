@@ -296,12 +296,15 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadContactForLookup() // bubg
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Id' />
                     <attribute name='fullname' alias='Name' />
                     <attribute name='createdon' alias='Detail' />
                     <order attribute='fullname' descending='false' />
+                    <filter type='and'>
+                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                    </filter>
                   </entity>
                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("contacts", fetch);

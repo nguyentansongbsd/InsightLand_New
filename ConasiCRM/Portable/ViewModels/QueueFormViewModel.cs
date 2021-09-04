@@ -194,7 +194,10 @@ namespace ConasiCRM.Portable.ViewModels
             CrmApiResponse result = await CrmHelper.PostData(path, content);
             if (result.IsSuccess)
             {
-                UpdateStatusUnit();
+                if (QueueFormModel.UnitStatusCode > 0)
+                {
+                    UpdateStatusUnit();
+                }
                 return true;
             }
             else
@@ -260,7 +263,6 @@ namespace ConasiCRM.Portable.ViewModels
                                        <condition attribute='bsd_businesstypesys' operator='contain-values'>
                                          <value>100000002</value>
                                        </condition>                                
-                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
                                   </entity>
                                 </fetch>";
