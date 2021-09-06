@@ -52,14 +52,14 @@
                         <Grid ColumnDefinitions="Auto,Auto,*">
                             <controls:TimePickerBorder Time="{Binding PhoneCellModel.timeStart}" Format="hh:mm tt" Grid.Column="0" PropertyChanged="TimeStart_PropertyChanged"/>
                             <Label Text="-" Padding="5" Grid.Column="1" TextColor="#444444" FontSize="15"/>
-                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.scheduledstart}" Format="dd/MM/yyyy" Grid.Column="2" DateSelected="DateStart_DateSelected"/>
+                            <controls:DatePickerControl Date="{Binding PhoneCellModel.scheduledstart}" Placeholder="Chọn thời gian bắt đầu" Grid.Column="2" DateSelected="DateStart_DateSelected"/>
                         </Grid>
 
                         <controls:FormLabelRequired Text="Thời gian kết thúc" Margin="0,10,0,0"/>
                         <Grid ColumnDefinitions="Auto,Auto,*">
                             <controls:TimePickerBorder Time="{Binding PhoneCellModel.timeEnd}" Format="hh:mm tt" Grid.Column="0" PropertyChanged="TimeEnd_PropertyChanged"/>
                             <Label Text="-" Padding="5" Grid.Column="1" TextColor="#444444" FontSize="15"/>
-                            <controls:DatePickerBorder Date="{Binding PhoneCellModel.scheduledend}" Format="dd/MM/yyyy" Grid.Column="2" DateSelected="DateEnd_DateSelected"/>
+                            <controls:DatePickerControl Date="{Binding PhoneCellModel.scheduledend}" Placeholder="Chọn thời gian kết thúc" Grid.Column="2" DateSelected="DateEnd_DateSelected"/>
                         </Grid>
 
                         <controls:FormLabel Text="Mô tả" FontSize="15" Margin="0,10,0,0"/>

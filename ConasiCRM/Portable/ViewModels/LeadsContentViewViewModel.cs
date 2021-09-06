@@ -16,10 +16,12 @@ namespace ConasiCRM.Portable.ViewModels
         {                   
             PreLoadData = new Command(() =>
             {
-                string filter = string.Empty;
+                string filter_name = string.Empty;
+                string filter_phone = string.Empty;
                 if (!string.IsNullOrWhiteSpace(Keyword))
                 {
-                    filter = $@"<condition attribute='lastname' operator='like' value='%{Keyword}%' />";
+                    filter_name = $@"<condition attribute='lastname' operator='like' value='%25{Keyword}%25' />";
+                    filter_phone = $@"<condition attribute='mobilephone' operator='like' value='%25{Keyword}%25' />";
                 }
                 EntityName = "leads";
                 FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -34,7 +36,10 @@ namespace ConasiCRM.Portable.ViewModels
                         <order attribute='createdon' descending='true' />
                         <filter type='and'>
                              <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                             '" + filter + @"'   
+                             <filter type='or'>
+                                 '" + filter_name + @"'
+                                 '" + filter_phone + @"'   
+                             </filter>
                         </filter>
                       </entity>
                     </fetch>";

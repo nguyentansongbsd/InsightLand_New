@@ -90,19 +90,6 @@ namespace ConasiCRM.Portable.ViewModels
             string json = JsonConvert.SerializeObject(Filter);
             DirectSaleResult = await CrmHelper.Get<List<DirectSaleModel>>($"bsd_GetTotalQtyDirectSale(input='{json}')");
             if (DirectSaleResult == null || DirectSaleResult.Any() == false) return;
-
-            List<Block> blocks = new List<Block>();
-            foreach (var item in DirectSaleResult)
-            {
-                Block block = new Block();
-                block.bsd_blockid = Guid.Parse(item.ID);
-                block.bsd_name = item.name;
-                blocks.Add(block);
-            }
-            Blocks = blocks;
-
-            var firstBlock = DirectSaleResult.FirstOrDefault();
-            ResetDirectSale(firstBlock);
         }
 
         public async Task LoadUnitByFloor(Guid floorId)
@@ -257,6 +244,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_view' />
                                     <attribute name='bsd_direction' />
                                     <attribute name='bsd_constructionarea' />
+                                    <attribute name='bsd_floor' alias='floorid'/>
+                                    <attribute name='bsd_blocknumber' alias='blockid'/>
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{unitId}' />

@@ -15,6 +15,7 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DirectSaleDetail : ContentPage
     {
+        public static bool? NeedToRefreshDirectSale = null;
         public static bool? NeedToRefreshQueues = null;
         public Action<int> OnComplete;
         private DirectSaleDetailViewModel viewModel;
@@ -30,6 +31,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.BindingContext = viewModel = new DirectSaleDetailViewModel(filter);
             NeedToRefreshQueues = false;
+            NeedToRefreshDirectSale = false;
             Init();
         }
 
@@ -47,22 +49,37 @@ namespace ConasiCRM.Portable.Views
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
+
+            if (NeedToRefreshDirectSale == true)
+            {
+                LoadingHelper.Show();
+                viewModel.Floors.Clear();
+                await viewModel.LoadTotalDirectSale();
+                var firstBlock = viewModel.DirectSaleResult.SingleOrDefault(x=>x.ID == viewModel.Unit.blockid.ToString());
+                viewModel.ResetDirectSale(firstBlock);
+
+                await viewModel.LoadUnitByFloor(viewModel.Unit.floorid);
+                int indexFloor = viewModel.Floors.IndexOf(viewModel.Floors.SingleOrDefault(x => x.bsd_floorid == viewModel.Unit.floorid));
+                SetContentFloor(indexFloor);
+                LoadingHelper.Hide();
+            }
         }
         public async void Init()
         {
             await viewModel.LoadTotalDirectSale();
+            SetBlocks();
+
+            var firstBlock = viewModel.DirectSaleResult.FirstOrDefault();
+            viewModel.ResetDirectSale(firstBlock);
 
             if (viewModel.Floors.Count != 0)
             {
-                var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
-                await viewModel.LoadUnitByFloor(floorId);
-
                 currentBlock = viewModel.Blocks.FindIndex(x => x.bsd_blockid == viewModel.blockId);
                 SetActiveBlock();
 
-                var content = ((stackFloors.Children[0] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
-                BindableLayout.SetItemsSource(content, viewModel.Floors[0].Units);
-                content.IsVisible = true;
+                var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
+                await viewModel.LoadUnitByFloor(floorId);
+                SetContentFloor();
 
                 OnComplete?.Invoke(0);
             }
@@ -70,6 +87,26 @@ namespace ConasiCRM.Portable.Views
             {
                 OnComplete?.Invoke(1);
             }
+        }
+
+        private void SetBlocks()
+        {
+            List<Block> blocks = new List<Block>();
+            foreach (var item in viewModel.DirectSaleResult)
+            {
+                Block block = new Block();
+                block.bsd_blockid = Guid.Parse(item.ID);
+                block.bsd_name = item.name;
+                blocks.Add(block);
+            }
+            viewModel.Blocks = blocks;
+        }
+
+        private void SetContentFloor(int index = 0)
+        {
+            var content = ((stackFloors.Children[index] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
+            BindableLayout.SetItemsSource(content, viewModel.Floors[index].Units);
+            content.IsVisible = true;
         }
 
         private async void ItemFloor_Tapped(object sender, EventArgs e)

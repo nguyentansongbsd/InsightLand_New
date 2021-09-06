@@ -40,7 +40,7 @@ namespace ConasiCRM.Portable.Views
             Update();
         }
 
-        public void Init()
+        public async void Init()
         {
             this.BindingContext = viewModel = new ContactFormViewModel();
             centerModalContacAddress.Body.BindingContext = viewModel;

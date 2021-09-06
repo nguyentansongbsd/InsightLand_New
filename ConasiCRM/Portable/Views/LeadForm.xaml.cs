@@ -25,7 +25,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.Title = "TẠO MỚI KHÁCH HÀNG";
             Init();
-
+            viewModel.Rating = RatingData.GetRatingById("2");//mac dinh la warm
         }
         public LeadForm(Guid Id)
         {
@@ -42,6 +42,7 @@ namespace ConasiCRM.Portable.Views
             this.BindingContext = viewModel = new LeadFormViewModel();
             centerModalAddress.Body.BindingContext = viewModel;
             SetPreOpen();
+            lookUpDanhGia.HideClearButton();
             CheckSingleLead?.Invoke(true);
         }
 
@@ -53,6 +54,7 @@ namespace ConasiCRM.Portable.Views
             viewModel.AddressPostalCode = viewModel.singleLead.address1_postalcode;
 
             viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
+            viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
 
             if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
             {
@@ -82,6 +84,11 @@ namespace ConasiCRM.Portable.Views
 
         public void SetPreOpen()
         {
+            lookUpDanhGia.PreOpenAsync =async () => {
+                LoadingHelper.Show();
+                viewModel.Ratings = RatingData.Ratings();
+                LoadingHelper.Hide();
+            };
             lookUpCurrency.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
