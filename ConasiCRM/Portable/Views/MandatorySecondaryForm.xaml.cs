@@ -77,7 +77,7 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private void Effectivedateto_DateSelected(object sender, DateChangedEventArgs e)
+        private void Effectivedateto_DateSelected(object sender, EventArgs e)
         {
             if (viewModel.mandatorySecondary.bsd_effectivedatefrom == null)
                 viewModel.mandatorySecondary.bsd_effectivedatefrom = DateTime.Now;
@@ -88,7 +88,7 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private void Effectivedatefrom_DateSelected(object sender, DateChangedEventArgs e)
+        private void Effectivedatefrom_DateSelected(object sender, EventArgs e)
         {
             if (viewModel.mandatorySecondary.bsd_effectivedateto == null)
                 viewModel.mandatorySecondary.bsd_effectivedateto = DateTime.Now;

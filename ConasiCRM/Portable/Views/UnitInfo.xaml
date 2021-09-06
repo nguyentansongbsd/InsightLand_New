@@ -100,7 +100,7 @@
                         <Label FontSize="15" TextColor="#444444">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="Diện tích: "/>
+                                    <Span Text="Diện tích sử dụng: "/>
                                     <Span Text="{Binding UnitInfo.bsd_constructionarea,StringFormat='{0:#,0.#0} m2'}"/>
                                 </FormattedString>
                             </Label.FormattedText>
@@ -175,7 +175,7 @@
                                             </StackLayout>
 
                                             <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
-                                                <Label Text="Biên độ diện tích cho phép (+/-) %" FontSize="15" TextColor="#333333" />
+                                                <Label Text="% Biên độ diện tích DT (+/-)" FontSize="15" TextColor="#333333" />
                                                 <Label Text="{Binding UnitInfo.bsd_areavariance,StringFormat='{0:#,0.00}'}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" TextColor="#333333" />
                                             </StackLayout>
 
@@ -206,11 +206,11 @@
                                     <telerikPrimitives:RadExpander.Content>
                                         <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                             <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
-                                                <Label Text="Đơn vị giá trị đất" FontSize="15" TextColor="#333333" />
+                                                <Label Text="Giá trị QSDĐ/m2" FontSize="15" TextColor="#333333" />
                                                 <Label Text="{Binding UnitInfo.bsd_landvalueofunit,Converter={StaticResource DecimalToVndConverter}}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" TextColor="#333333" />
                                             </StackLayout>
                                             <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
-                                                <Label Text="Giá trị đất" FontSize="15" TextColor="#333333" />
+                                                <Label Text="Tổng giá trị" FontSize="15" TextColor="#333333" />
                                                 <Label Text="{Binding UnitInfo.bsd_landvalue,Converter={StaticResource DecimalToVndConverter}}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" TextColor="#333333" />
                                             </StackLayout>
                                             <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
@@ -284,53 +284,36 @@
                                                 </BindableLayout.EmptyViewTemplate>
                                                 <BindableLayout.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="15,10" Margin="0,1">
+                                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="15,10">
                                                             <Grid.GestureRecognizers>
                                                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
                                                             </Grid.GestureRecognizers>
-                                                            <Label Grid.Row="0" Grid.Column="0" LineBreakMode="TailTruncation" FontSize="15">
+                                                            <Label Grid.Row="0" Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
+                                                            <Label Grid.Row="1" FontSize="15" TextColor="#333333">
                                                                 <Label.FormattedText>
                                                                     <FormattedString>
-                                                                        <Span Text="{Binding customername}" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
-                                                                        <Span Text="{Binding statuscode_label,Converter={StaticResource InformationLabelConverter}}" TextColor="#333333"/>
+                                                                        <Span Text="Khách hàng: "/>
+                                                                        <Span Text="{Binding customer_name}"/>
                                                                     </FormattedString>
                                                                 </Label.FormattedText>
                                                             </Label>
-                                                            <Label Grid.Row="0" Grid.Column="1" TextColor="#333333" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding actualclosedate_format}" VerticalOptions="Start"/>
-
-                                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#333333" LineBreakMode="TailTruncation" FontSize="15">
+                                                            <Label Grid.Row="2" FontSize="15" TextColor="#333333">
                                                                 <Label.FormattedText>
                                                                     <FormattedString>
-                                                                        <Span Text="Dự Án: "/>
-                                                                        <Span Text="{Binding project_name}" />
+                                                                        <Span Text="Dự án: "/>
+                                                                        <Span Text="{Binding bsd_project_name}"/>
                                                                     </FormattedString>
                                                                 </Label.FormattedText>
                                                             </Label>
-                                                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#333333" LineBreakMode="TailTruncation" FontSize="15">
+                                                            <Label Grid.Row="3" FontSize="15" TextColor="#333333">
                                                                 <Label.FormattedText>
                                                                     <FormattedString>
-                                                                        <Span Text="Mã Đặt Chỗ: "/>
-                                                                        <Span Text="{Binding bsd_queuenumber}" />
+                                                                        <Span Text="Thời gian hết hạn: "/>
+                                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
+                                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
                                                                     </FormattedString>
                                                                 </Label.FormattedText>
                                                             </Label>
-                                                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#333333" LineBreakMode="TailTruncation" FontSize="15">
-                                                                <Label.FormattedText>
-                                                                    <FormattedString>
-                                                                        <Span Text="Đề Mục: "/>
-                                                                        <Span Text="{Binding unit_name}" />
-                                                                    </FormattedString>
-                                                                </Label.FormattedText>
-                                                            </Label>
-                                                            <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"  LineBreakMode="TailTruncation" FontSize="15">
-                                                                <Label.FormattedText>
-                                                                    <FormattedString>
-                                                                        <Span Text="Tổng Tiền Ước Tính: " TextColor="#333333"/>
-                                                                        <Span Text="{Binding estimatedvalue_format}" TextColor="Red"/>
-                                                                    </FormattedString>
-                                                                </Label.FormattedText>
-                                                            </Label>
-
                                                         </Grid>
                                                     </DataTemplate>
                                                 </BindableLayout.ItemTemplate>

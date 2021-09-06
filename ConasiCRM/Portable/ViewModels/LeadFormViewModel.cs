@@ -31,6 +31,12 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _campaign;
         public OptionSet Campaign { get => _campaign; set { _campaign = value; OnPropertyChanged(nameof(Campaign)); } }
 
+        private OptionSet _rating;
+        public OptionSet Rating { get => _rating; set { _rating = value; OnPropertyChanged(nameof(Rating)); } }
+
+        private List<OptionSet> _ratings;
+        public List<OptionSet> Ratings { get => _ratings; set { _ratings = value; OnPropertyChanged(nameof(Ratings)); } }
+
         private bool _isShowbtnClearAddress;
         public bool IsShowbtnClearAddress { get => _isShowbtnClearAddress; set { _isShowbtnClearAddress = value; OnPropertyChanged(nameof(IsShowbtnClearAddress)); } }
 
@@ -130,6 +136,7 @@ namespace ConasiCRM.Portable.ViewModels
                             <attribute name='emailaddress1' />
                             <attribute name='createdon' />
                             <attribute name='leadid' />
+                            <attribute name='leadqualitycode' />
                             <order attribute='createdon' descending='true' />
                             <filter type='and'>
                                 <condition attribute='leadid' operator='eq' value='{" + LeadId + @"}' />
@@ -211,6 +218,8 @@ namespace ConasiCRM.Portable.ViewModels
             data["description"] = singleLead.description;
             data["industrycode"] = singleLead.industrycode;
             data["revenue"] = singleLead?.revenue;
+            data["leadqualitycode"] = Rating.Val;
+
             if (!string.IsNullOrWhiteSpace(singleLead.numberofemployees))
             {
                 data["numberofemployees"] = int.Parse(singleLead.numberofemployees);

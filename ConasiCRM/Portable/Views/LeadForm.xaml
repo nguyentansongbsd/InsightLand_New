@@ -36,6 +36,9 @@
                                 <controls:FormLabelRequired Text="Tiêu đề"/>
                                 <controls:MainEntry Text="{Binding singleLead.bsd_topic_label}" FontSize="15" Placeholder="Nhập tiêu đề" />
 
+                                <controls:FormLabel Text="Đánh giá"/>
+                                <controls:LookUp x:Name="lookUpDanhGia" Placeholder="Chọn đánh giá" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Rating}" ItemsSource="{Binding Ratings}"/>
+
                                 <controls:FormLabelRequired Text="Họ tên"/>
                                 <controls:MainEntry Text="{Binding singleLead.lastname}" FontSize="15"  Placeholder="Nhập họ tên"/>
 

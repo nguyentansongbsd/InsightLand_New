@@ -16,8 +16,8 @@ namespace ConasiCRM.Portable.ViewModels
         private QueueFormModel _queueFormModel;
         public QueueFormModel QueueFormModel { get => _queueFormModel; set { _queueFormModel = value; OnPropertyChanged(nameof(QueueFormModel)); } }
 
-        public List<LookUp> ContactsLookUp { get; set; }
-        public List<LookUp> AccountsLookUp { get; set; }
+        public ObservableCollection<LookUp> ContactsLookUp { get; set; } = new ObservableCollection<LookUp>();
+        public ObservableCollection<LookUp> AccountsLookUp { get; set; } = new ObservableCollection<LookUp>();
 
         private LookUp _customer;
         public LookUp Customer
@@ -42,8 +42,6 @@ namespace ConasiCRM.Portable.ViewModels
         public QueueFormViewModel()
         {
             QueueFormModel = new QueueFormModel();
-            ContactsLookUp = new List<LookUp>();
-            AccountsLookUp = new List<LookUp>();
             DaiLyOptions = new List<LookUp>();
           
         }
@@ -213,8 +211,7 @@ namespace ConasiCRM.Portable.ViewModels
                   <entity name='contact'>
                     <attribute name='contactid' alias='Id' />
                     <attribute name='fullname' alias='Name' />
-                    <attribute name='createdon' alias='Detail' />
-                    <order attribute='fullname' descending='false' />                   
+                    <order attribute='createdon' descending='true' />                   
                     <filter type='and'>
                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                     </filter>

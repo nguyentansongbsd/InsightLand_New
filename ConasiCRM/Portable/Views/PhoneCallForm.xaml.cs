@@ -69,12 +69,12 @@ namespace ConasiCRM.Portable.Views
 
         }
 
-        private void DateEnd_DateSelected(object sender, DateChangedEventArgs e)
+        private void DateEnd_DateSelected(object sender, EventArgs e)
         {
 
         }
 
-        private void DateStart_DateSelected(object sender, DateChangedEventArgs e)
+        private void DateStart_DateSelected(object sender, EventArgs e)
         {
 
         }

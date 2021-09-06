@@ -7,6 +7,8 @@
     xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
     xmlns:video="clr-namespace:FormsVideoLibrary"
     xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+    xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
+    xmlns:telerikprim="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
     xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
     xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     x:Class="ConasiCRM.Portable.BlankPage">
@@ -36,8 +38,14 @@
         <AbsoluteLayout>
             <!--<CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>-->
 
+            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Margin="0,100,0,0">
+                
+                <controls:DatePickerControl Date="{Binding mydate}" Placeholder="song song"/>
+                <Button Text="test" Clicked="Button_Clicked_1"/>
+            </StackLayout>
+            <!--<controls:DatePickerBorder Date="{Binding mydate}"  HorizontalOptions="Center" />-->
 
-            <Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>
+            <!--<Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>-->
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

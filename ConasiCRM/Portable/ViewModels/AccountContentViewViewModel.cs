@@ -21,14 +21,13 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='telephone1' />
                     <attribute name='accountid' />
                     <attribute name='address1_composite' alias='bsd_address' />
-                    <attribute name='bsd_companycode' />
-                    <attribute name='bsd_registrationcode' />
-                    <attribute name='bsd_vatregistrationnumber' />
                     <attribute name='bsd_postalcode' />
                     <attribute name='bsd_housenumberstreet' />
                     <order attribute='createdon' descending='true' />
-                    <filter type='and'>
-                      <condition attribute='name' operator='like' value='%{Keyword}%' />
+                    <filter type='or'>
+                      <condition attribute='name' operator='like' value='%25{Keyword}%25' />
+                      <condition attribute='telephone1' operator='like' value='%25{Keyword}%25' />
+                      <condition attribute='bsd_registrationcode' operator='like' value='%25{Keyword}%25' />
                     </filter>
                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='a'>
                          <attribute name='bsd_fullname' alias='primarycontact_name' />

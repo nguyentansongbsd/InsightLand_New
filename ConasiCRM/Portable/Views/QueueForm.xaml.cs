@@ -30,6 +30,7 @@ namespace ConasiCRM.Portable.Views
         public void Init()
         {          
             this.BindingContext = viewModel = new QueueFormViewModel();
+            centerModalKHTN.Body.BindingContext = viewModel;
             NeedToRefreshAccountList = false;
             NeedToRefreshContactList = false;
             SetPreOpen();            
@@ -43,7 +44,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.AccountsLookUp.Clear();
                 await viewModel.LoadAccountsLookUp();
-                LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
                 NeedToRefreshAccountList = false;
                 LoadingHelper.Hide();
             }
@@ -53,7 +53,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.ContactsLookUp.Clear();
                 await viewModel.LoadContactsLookUp();
-                //LookUpContact.SetList(viewModel.ContactsLookUp, "Name");
                 NeedToRefreshContactList = false;
                 LoadingHelper.Hide();
             }
@@ -79,10 +78,6 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadContactsLookUp();
                 LoadingHelper.Hide();
             }
-            LookUpAccount.SetList(viewModel.AccountsLookUp, "Name");
-            LookUpContact.SetList(viewModel.ContactsLookUp, "Name");
-            LookUpAccount.lookUpListView.ItemTapped += LookUpAccount_ItemTapped;
-            LookUpContact.lookUpListView.ItemTapped += LookUpContac_ItemTapped;
         }
 
         public async void Create()
@@ -151,6 +146,7 @@ namespace ConasiCRM.Portable.Views
             if (created)
             {
                 if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
+                if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                 if (DirectSaleDetail.NeedToRefreshQueues.HasValue) DirectSaleDetail.NeedToRefreshQueues = true;
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 await Navigation.PopAsync();       
@@ -215,36 +211,30 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private async void LookUpContac_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void LookUpContact_ItemTapped(object sender, EventArgs e)
         {
-            if (e != null)
+            var item = (LookUp)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item != null)
             {
-                var item = e.Item as LookUp;
-                if(item != null)
-                {
-                    viewModel.Customer = new LookUp();
-                    viewModel.Customer.Id = item.Id;
-                    viewModel.Customer.Name = item.Name;
-                    viewModel.Customer.Detail = "2";
-                    viewModel.QueueFormModel.customer_name = item.Name;
-                }    
+                viewModel.Customer = new LookUp();
+                viewModel.Customer.Id = item.Id;
+                viewModel.Customer.Name = item.Name;
+                viewModel.Customer.Detail = "2";
+                viewModel.QueueFormModel.customer_name = item.Name;
             }
             await centerModalKHTN.Hide();
         }
 
-        private async void LookUpAccount_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void LookUpAccount_ItemTapped(object sender, EventArgs e)
         {
-            if (e != null)
+            var item = (LookUp)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item != null)
             {
-                var item = e.Item as LookUp;
-                if (item != null)
-                {
-                    viewModel.Customer = new LookUp();
-                    viewModel.Customer.Id = item.Id;
-                    viewModel.Customer.Name = item.Name;
-                    viewModel.Customer.Detail = "1";
-                    viewModel.QueueFormModel.customer_name = item.Name;
-                }
+                viewModel.Customer = new LookUp();
+                viewModel.Customer.Id = item.Id;
+                viewModel.Customer.Name = item.Name;
+                viewModel.Customer.Detail = "1";
+                viewModel.QueueFormModel.customer_name = item.Name;
             }
             await centerModalKHTN.Hide();
         }      
