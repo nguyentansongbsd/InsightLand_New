@@ -17,10 +17,12 @@ namespace ConasiCRM.Portable
     public partial class BlankPage : ContentPage
     {
         public ViewModel viewModel;
+        public DateTime? mydate { get; set; }
         public BlankPage()
         {
             InitializeComponent();
-            this.BindingContext = viewModel = new ViewModel();
+            this.BindingContext = this;
+            //this.BindingContext = viewModel = new ViewModel();
           //  media1.Source = MediaSource.FromUri("https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/Screen%20-%20CNS%20-%20Figma%202021-07-20%2016-28-24.mp4?alt=media&token=4a31d437-ffe2-4a98-8ac3-e39a6ce57fd3");
           ////  media1.Source = MediaSource.FromUri("https://www.deviantart.com/sakimichan/art/Ahri-D-vafied-nsfw-optional-681732764");
           //  image.Source = "https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg";
@@ -78,6 +80,11 @@ namespace ConasiCRM.Portable
                 var body = await response.Content.ReadAsStringAsync();
                 GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
             }
+        }
+
+        void Button_Clicked_1(System.Object sender, System.EventArgs e)
+        {
+            var a = mydate;
         }
     }
     public class CategoricalData

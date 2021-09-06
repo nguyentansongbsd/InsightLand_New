@@ -173,18 +173,19 @@ namespace ConasiCRM.Portable.Views
             {
                 await viewModel.LoadQueue();
                 SetButtons();
+                if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                 if (DirectSaleDetail.NeedToRefreshQueues.HasValue) DirectSaleDetail.NeedToRefreshQueues = true;
                 if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 if (AccountDetailPage.NeedToRefreshQueues.HasValue) AccountDetailPage.NeedToRefreshQueues = true;
                 if (ContactDetailPage.NeedToRefreshQueues.HasValue) ContactDetailPage.NeedToRefreshQueues = true;
-                ToastMessageHelper.ShortMessage("Huỷ giữ chổ thành công");
+                ToastMessageHelper.ShortMessage("Huỷ giữ chỗ thành công");
                 LoadingHelper.Hide();
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Huỷ giữ chổ thất bại");
+                ToastMessageHelper.ShortMessage("Huỷ giữ chỗ thất bại");
             }
         }
 

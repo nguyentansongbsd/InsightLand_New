@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
@@ -46,7 +47,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    await Shell.Current.DisplayAlert("Thông báo", "Không tìm thấy thông tin. Vui lòng thử lại.", "Đóng");
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
                 }
             };
         }

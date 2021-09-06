@@ -116,53 +116,6 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private void DateEnd_DateSelected(object sender, DateChangedEventArgs e)
-        {
-            DateTime timeNew = e.NewDate;
-            TimeSpan time = viewModel.PhoneCellModel.timeEnd;
-            DateTime _scheduledend = new DateTime(timeNew.Year, timeNew.Month, timeNew.Day, time.Hours, time.Minutes, time.Seconds);
-
-            if (viewModel.PhoneCellModel.scheduledstart != null )
-            {
-                if (this.compareDateTime(viewModel.PhoneCellModel.scheduledstart, _scheduledend) == -1)
-                {
-                    viewModel.PhoneCellModel.scheduledend = _scheduledend;
-                }
-                else
-                {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
-                    viewModel.PhoneCellModel.scheduledend = viewModel.PhoneCellModel.scheduledstart;               
-                }
-            }
-            else
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
-            }
-        }
-
-        private void DateStart_DateSelected(object sender, DateChangedEventArgs e)
-        {
-            DateTime timeNew = e.NewDate;
-            TimeSpan time = viewModel.PhoneCellModel.timeStart;
-            var scheduledstart = new DateTime(timeNew.Year, timeNew.Month, timeNew.Day, time.Hours, time.Minutes, time.Seconds);
-            if (viewModel.PhoneCellModel.scheduledend != null)
-            {
-                if (this.compareDateTime(scheduledstart, viewModel.PhoneCellModel.scheduledend) == -1)
-                {
-                    viewModel.PhoneCellModel.scheduledstart = scheduledstart;
-                }
-                else
-                {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
-                    viewModel.PhoneCellModel.scheduledstart = viewModel.PhoneCellModel.scheduledend;
-                }
-            }
-            else
-            {
-                viewModel.PhoneCellModel.scheduledstart = scheduledstart;
-            }
-        }
-
         private int compareDateTime(DateTime? date, DateTime? date1)
         {
             if (date != null && date1 != null )
@@ -229,6 +182,57 @@ namespace ConasiCRM.Portable.Views
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu và thời gian kết thúc");
             }
+        }       
+
+        private void DatePickerStart_DateSelected(object sender, EventArgs e)
+        {
+            DateTime timeNew = (DateTime)DatePickerStart.Date;
+            TimeSpan time = viewModel.PhoneCellModel.timeStart;
+            var scheduledstart = new DateTime(timeNew.Year, timeNew.Month, timeNew.Day, time.Hours, time.Minutes, time.Seconds);
+            if (viewModel.PhoneCellModel.scheduledend != null)
+            {
+                if (this.compareDateTime(scheduledstart, viewModel.PhoneCellModel.scheduledend) == -1)
+                {
+                    viewModel.PhoneCellModel.scheduledstart = scheduledstart;
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                    viewModel.PhoneCellModel.scheduledstart = viewModel.PhoneCellModel.scheduledend;
+                }
+            }
+            else
+            {
+                viewModel.PhoneCellModel.scheduledstart = scheduledstart;
+            }
+        }
+
+        private void DatePickerEnd_DateSelected(object sender, EventArgs e)
+        {
+            DateTime timeNew = (DateTime)DatePickerStart.Date;
+            TimeSpan time = viewModel.PhoneCellModel.timeStart;
+            var scheduledstart = new DateTime(timeNew.Year, timeNew.Month, timeNew.Day, time.Hours, time.Minutes, time.Seconds);
+            if (viewModel.PhoneCellModel.scheduledend != null)
+            {
+                if (this.compareDateTime(scheduledstart, viewModel.PhoneCellModel.scheduledend) == -1)
+                {
+                    viewModel.PhoneCellModel.scheduledstart = scheduledstart;
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                    viewModel.PhoneCellModel.scheduledstart = viewModel.PhoneCellModel.scheduledend;
+                }
+            }
+            else
+            {
+                viewModel.PhoneCellModel.scheduledstart = scheduledstart;
+            }
+        }
+
+        private void DatePickerStart_DateSelected_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

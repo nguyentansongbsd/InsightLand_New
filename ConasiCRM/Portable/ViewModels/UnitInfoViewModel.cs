@@ -14,8 +14,8 @@ namespace ConasiCRM.Portable.ViewModels
     {
         public Guid UnitId { get; set; }
 
-        public ObservableCollection<QueueListModel> _list_danhsachdatcho;
-        public ObservableCollection<QueueListModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
+        public ObservableCollection<QueueFormModel> _list_danhsachdatcho;
+        public ObservableCollection<QueueFormModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
         public ObservableCollection<QuotationReseravtion> list_danhsachdatcoc { get; set; } = new ObservableCollection<QuotationReseravtion>();
         public ObservableCollection<OptionEntry> list_danhsachhopdong { get; set; } = new ObservableCollection<OptionEntry>();
 
@@ -53,7 +53,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public UnitInfoViewModel()
         {
-            list_danhsachdatcho = new ObservableCollection<QueueListModel>();
+            list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
         }
 
         public async Task LoadUnit()
@@ -109,14 +109,10 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='opportunity'>
-                        <attribute name='name' alias='unit_name'/>
+                        <attribute name='name' />
                         <attribute name='customerid' />
-                        <attribute name='estimatedvalue' />
-                        <attribute name='statuscode' />
                         <attribute name='createdon' />
-                        <attribute name='bsd_queuenumber' />
-                        <attribute name='actualclosedate' />
-                        <attribute name='bsd_project' />
+                        <attribute name='bsd_queuingexpired' />
                         <attribute name='opportunityid' />
                         <order attribute='createdon' descending='true' />
                         <link-entity name='product' from='productid' to='bsd_units' link-type='inner' alias='ad'>
@@ -141,7 +137,7 @@ namespace ConasiCRM.Portable.ViewModels
                       </entity>
                     </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueListModel>>("opportunities", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
             if (result == null)
             {
                 return;
