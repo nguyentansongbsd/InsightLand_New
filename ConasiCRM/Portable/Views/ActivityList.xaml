@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" xmlns:helper="clr-namespace:ConasiCRM.Portable.Helper"
-             x:Class="ConasiCRM.Portable.Views.ActivityList">
+             x:Class="ConasiCRM.Portable.Views.ActivityList"
+             Title="Hoạt Động">
     <ContentPage.Resources>
-        <ResourceDictionary>
+        <!--<ResourceDictionary> chưa dùng 
             <DataTemplate x:Key="Task">
                 <ViewCell>
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
@@ -67,15 +68,36 @@
                 </ViewCell>
             </DataTemplate>
             <helper:ActivityDataTemplateSelector x:Key="ItemTemplate" Phone="{StaticResource Phone}" Task="{StaticResource Task}" Meet="{StaticResource Meet}"/>
-        </ResourceDictionary>
+        </ResourceDictionary>-->
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid RowDefinitions="Auto,*" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                <controls:SearchBarFrame x:Name="searchBar" Grid.Row="0" Margin="10,5">
+                <controls:SearchBarFrame x:Name="searchBar" Grid.Row="0" Margin="10,10,10,5">
                     <controls:SearchBar  Text="{Binding Keyword}" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
                 </controls:SearchBarFrame>
-                <controls:BsdListView x:Name="listView" Grid.Row="1" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" HasUnevenRows="True" ItemTapped="listView_ItemTapped" BackgroundColor="White">
+                <controls:BsdListView x:Name="listView" Grid.Row="1" ItemsSource="{Binding Data}" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
+                    <controls:BsdListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
+                                    <Label Text="{Binding activitytypecode_format}" FontAttributes="Bold" FontSize="16" TextColor="#026294" Grid.Row="0"/>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                        <Label Text="Khách hàng: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding regarding_name}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
+                                        <Label Text="Thời gian bắt đầu: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding scheduledstart_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
+                                        <Label Text="Thời gian kết thúc: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding scheduledend_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                    </Grid>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </controls:BsdListView.ItemTemplate>
                 </controls:BsdListView>
             </Grid>
             <controls:ExtendedFrame AbsoluteLayout.LayoutBounds="0,1,1,59" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="#1399D5" Padding="0" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">

@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -38,45 +39,35 @@ namespace ConasiCRM.Portable.Views
 
         private void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            LoadingHelper.Show();
-            //HoatDongListModel val = e.Item as HoatDongListModel;
-            //if (val.activitytypecode == "task")
-            //{
-            //    TaskForm newPage = new TaskForm(val.activityid);
-            //    newPage.CheckTaskForm = async (CheckEventData) =>
-            //    {
-            //        if (CheckEventData == true)
-            //        {
-            //            await Navigation.PushAsync(newPage);
-            //        }
-            //        LoadingHelper.Hide();
-            //    };
-            //}
-            //else if (val.activitytypecode == "phonecall")
-            //{
-            //    PhoneCallForm newPage = new PhoneCallForm(val.activityid);
-            //    newPage.CheckPhoneCell = async (CheckEventData) =>
-            //    {
-            //        if (CheckEventData == true)
-            //        {
-            //            await Navigation.PushAsync(newPage);
-            //        }
-            //        LoadingHelper.Hide();
-            //    };
-            //}
-            //else if (val.activitytypecode == "appointment")
-            //{
-            //    MeetingForm newPage = new MeetingForm(val.activityid);
-            //    newPage.CheckMeeting = async (CheckEventData) =>
-            //    {
-            //        if (CheckEventData == true)
-            //        {
-            //            await Navigation.PushAsync(newPage);
-            //        }
-            //        LoadingHelper.Hide();
-            //    };
-            //}
-            LoadingHelper.Hide();
+            if (e.Item != null)
+            {               
+                var item = e.Item as HoatDongListModel;
+                if (item.activityid != Guid.Empty)
+                {
+                    if (item.activitytypecode == "phonecall")
+                    {
+                        LoadingHelper.Show();
+                        PhoneCallForm newPage = new PhoneCallForm(item.activityid);
+                        newPage.OnCompleted = async (OnCompleted) =>
+                        {
+                            if (OnCompleted == true)
+                            {
+                                await Navigation.PushAsync(newPage);
+                                LoadingHelper.Hide();
+                            }
+                            else
+                            {
+                                LoadingHelper.Hide();
+                                ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                            }
+                        };
+                    }
+                    else if (item.activitytypecode == "task")
+                    { }
+                    else
+                    { }
+                }
+            }
         }
 
         private async void SearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)
@@ -100,16 +91,14 @@ namespace ConasiCRM.Portable.Views
             string[] options = new string[] { "Tạo Cuộc Họp", "Tạo Cuộc Gọi", "Tạo Công Việc" };
             string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
             if (asw == "Tạo Cuộc Họp")
-            {
-                await Navigation.PushAsync(new LeadForm());
+            {             
             }
             else if (asw == "Tạo Cuộc Gọi")
             {
-                await Navigation.PushAsync(new ContactForm());
+                await Navigation.PushAsync(new PhoneCallForm());
             }
             else if (asw == "Tạo Công Việc")
-            {
-                await Navigation.PushAsync(new AccountForm());
+            {              
             }
             LoadingHelper.Hide();
         }

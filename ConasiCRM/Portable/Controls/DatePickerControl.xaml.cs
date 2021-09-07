@@ -13,14 +13,13 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty DateProperty = BindableProperty.Create(nameof(Date), typeof(DateTime?), typeof(DatePickerControl), null,BindingMode.TwoWay);
         public DateTime? Date
         {
-            get => (DateTime?)GetValue(DateProperty);
+            get { 
+                return (DateTime?)GetValue(DateProperty);
+            }
             set
             {
                 SetValue(DateProperty, value);
-                if (Date != value)
-                {
-                    OnAccept();
-                }
+                OnAccept();
             }
         }
 

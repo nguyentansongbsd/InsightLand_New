@@ -109,7 +109,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf073;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Hoạt động" ContentTemplate="{DataTemplate views:HoatDongList}">
+        <ShellContent Title="Hoạt động" ContentTemplate="{DataTemplate views:ActivityList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ae;" Size="18"/>
             </ShellContent.Icon>
