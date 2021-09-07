@@ -112,7 +112,7 @@ namespace ConasiCRM.Portable.Views
                 DirectSaleSearchModel filter = new DirectSaleSearchModel(viewModel.Project.bsd_projectid, viewModel.PhasesLaunch?.Val, viewModel.IsEvent,viewModel.UnitCode, directions, unitStatus,viewModel.NetArea?.Id,viewModel.Price?.Id);
 
                 DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter);
-                directSaleDetail.OnComplete = async (Success) =>
+                directSaleDetail.OnCompleted = async (Success) =>
                 {
                     if (Success == 0)
                     {
@@ -123,6 +123,11 @@ namespace ConasiCRM.Portable.Views
                     {
                         LoadingHelper.Hide();
                         ToastMessageHelper.LongMessage("Không có sản phẩm");
+                    }
+                    else if (Success == 2)
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.LongMessage("Dự án chưa có block");
                     }
                 };
             }
