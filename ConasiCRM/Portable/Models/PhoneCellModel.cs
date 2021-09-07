@@ -16,12 +16,12 @@ namespace ConasiCRM.Portable.Models
             get => this._scheduledstart;
             set
             {
-                if (_scheduledstart != value)
+                if (value.HasValue)
                 {
                     _scheduledstart = value;
                     OnPropertyChanged(nameof(scheduledstart));
                 }
-            }
+            }            
         }
         public TimeSpan _timeStart { get; set; }
         public TimeSpan timeStart
@@ -42,7 +42,7 @@ namespace ConasiCRM.Portable.Models
             get => this._scheduledend;
             set
             {
-                if (_scheduledend != value)
+                if (value.HasValue)
                 {
                     _scheduledend = value;
                     OnPropertyChanged(nameof(scheduledend));
@@ -193,7 +193,8 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
-        public string phonenumber { get; set; }
+        private string _phonenumber;
+        public string phonenumber { get => _phonenumber; set { _phonenumber = value; OnPropertyChanged(nameof(phonenumber)); } }
         public bool directioncode { get; set; }
 
         // call from

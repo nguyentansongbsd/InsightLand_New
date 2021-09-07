@@ -21,12 +21,20 @@ namespace ConasiCRM.Portable.Views
 	{
         public Action<bool> OnCompleted;
         public PhoneCallViewModel viewModel;
+        private Guid PhoneCallId;
 
         public PhoneCallForm()
         {
             InitializeComponent();            
             Init();
             Create();
+        }
+        public PhoneCallForm(Guid id)
+        {
+            InitializeComponent();
+            Init();           
+            PhoneCallId = id;
+            Update();
         }
 
         private void Init()
@@ -38,24 +46,42 @@ namespace ConasiCRM.Portable.Views
 
         private void Create()
         {
-            viewModel.Title = "Tạo mới cuộc gọi";
+            this.Title = "Tạo mới cuộc gọi";
+            BtnSave.Text = "Thêm cuộc gọi";
+            BtnSave.Clicked += Create_Clicked;
+        }
+
+        private void Create_Clicked(object sender, EventArgs e)
+        {
+            SaveData(Guid.Empty);
+        }
+
+        private async void Update()
+        {
+            this.Title = "Cập nhật cuộc gọi";
+            BtnSave.Text = "Cập nhật";
+            BtnSave.Clicked += Update_Clicked;
+            await viewModel.loadPhoneCall(this.PhoneCallId);
+            await viewModel.loadFromTo(this.PhoneCallId);
+            if(viewModel.PhoneCellModel.activityid != Guid.Empty)
+                OnCompleted?.Invoke(true);
+            else
+                OnCompleted?.Invoke(false);
+        }
+
+        private void Update_Clicked(object sender, EventArgs e)
+        {
+            SaveData(this.PhoneCallId);
         }
 
         public void SetPreOpen()
         {
-            Lookup_CallFrom.PreOpenAsync = async () =>
+            Lookup_CallTo.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
                 await viewModel.LoadAllLookUp();
                 LoadingHelper.Hide();
-            };
-
-            Lookup_CallTo.PreShow = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadAllLookUp();
-                LoadingHelper.Hide();
-            };
+            };        
 
             Lookup_Customer.PreOpenAsync = async () =>
             {
@@ -63,25 +89,15 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadAllLookUp();
                 LoadingHelper.Hide();
             };
-        }
+        }       
 
-        private void CreatePhoneCall_Clicked(object sender, EventArgs e)
-        {
-            SaveData();
-        }
-
-        private async void SaveData()
+        private async void SaveData(Guid id)
         {
             if (string.IsNullOrWhiteSpace(viewModel.PhoneCellModel.subject))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập chủ đề cuộc gọi");
                 return;
-            }
-            if (viewModel.CallFrom == null)
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người thực hiện cuộc gọi");
-                return;
-            }
+            }         
             if (viewModel.CallTo == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn người nhận cuộc gọi");
@@ -105,14 +121,27 @@ namespace ConasiCRM.Portable.Views
                     return;
                 }
             }
-            viewModel.ConvertStringToOptionSet();
-            if (await viewModel.createPhoneCall())
+            if (id == Guid.Empty)
             {
-                ToastMessageHelper.ShortMessage("Đã thêm cuộc gọi");
+                if (await viewModel.createPhoneCall())
+                {
+                    ToastMessageHelper.ShortMessage("Đã thêm cuộc gọi");
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage("Thêm cuộc gọi thất bại");
+                }
             }
             else
             {
-                ToastMessageHelper.ShortMessage("Thêm cuộc gọi thất bại");
+                if (await viewModel.UpdatePhoneCall(id))
+                {
+                    ToastMessageHelper.ShortMessage("Cập nhật thành công");
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage("Cập nhật cuộc gọi thất bại");
+                }
             }
         }
 
@@ -209,30 +238,48 @@ namespace ConasiCRM.Portable.Views
 
         private void DatePickerEnd_DateSelected(object sender, EventArgs e)
         {
-            DateTime timeNew = (DateTime)DatePickerStart.Date;
-            TimeSpan time = viewModel.PhoneCellModel.timeStart;
-            var scheduledstart = new DateTime(timeNew.Year, timeNew.Month, timeNew.Day, time.Hours, time.Minutes, time.Seconds);
-            if (viewModel.PhoneCellModel.scheduledend != null)
+            DateTime timeNew = (DateTime)DatePickerEnd.Date;
+            TimeSpan time = viewModel.PhoneCellModel.timeEnd;
+            var scheduledend = new DateTime(timeNew.Year, timeNew.Month, timeNew.Day, time.Hours, time.Minutes, time.Seconds);
+            if (viewModel.PhoneCellModel.scheduledstart != null)
             {
-                if (this.compareDateTime(scheduledstart, viewModel.PhoneCellModel.scheduledend) == -1)
+                if (this.compareDateTime(viewModel.PhoneCellModel.scheduledstart, scheduledend) == -1)
                 {
-                    viewModel.PhoneCellModel.scheduledstart = scheduledstart;
+                    viewModel.PhoneCellModel.scheduledend = scheduledend;
                 }
                 else
                 {
                     ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
-                    viewModel.PhoneCellModel.scheduledstart = viewModel.PhoneCellModel.scheduledend;
+                    viewModel.PhoneCellModel.scheduledend = viewModel.PhoneCellModel.scheduledstart;
                 }
             }
             else
             {
-                viewModel.PhoneCellModel.scheduledstart = scheduledstart;
+                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");               
             }
         }
 
-        private void DatePickerStart_DateSelected_1(object sender, EventArgs e)
+        private async void Lookup_CallTo_SelectedItemChange(object sender, LookUpChangeEvent e)
         {
-
+            if (viewModel.CallTo != null)
+            {
+                if (viewModel.CallTo.Title == viewModel.CodeLead)
+                {
+                    await viewModel.LoadOneLead(viewModel.CallTo.Val);
+                }
+                else if (viewModel.CallTo.Title == viewModel.CodeContac)
+                {
+                    await viewModel.loadOneContact(viewModel.CallTo.Val);
+                }
+                else if (viewModel.CallTo.Title == viewModel.CodeAccount)
+                {
+                    await viewModel.LoadOneAccount(viewModel.CallTo.Val);
+                }
+            }
+            else
+            {
+                viewModel.PhoneCellModel.phonenumber = string.Empty;
+            }
         }
     }
 }
