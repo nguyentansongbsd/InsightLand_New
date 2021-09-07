@@ -168,13 +168,13 @@ namespace ConasiCRM.Portable.Views
 
             LoadingHelper.Show();
             string url_action = $"/opportunities({this.viewModel.QueueId})/Microsoft.Dynamics.CRM.bsd_Action_Queue_CancelQueuing";
-            CrmApiResponse res = await CrmHelper.PostData(url_action, null);
+            var content = new { };
+            CrmApiResponse res = await CrmHelper.PostData(url_action, content);
             if (res.IsSuccess)
             {
                 await viewModel.LoadQueue();
                 SetButtons();
                 if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
-                if (DirectSaleDetail.NeedToRefreshQueues.HasValue) DirectSaleDetail.NeedToRefreshQueues = true;
                 if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 if (AccountDetailPage.NeedToRefreshQueues.HasValue) AccountDetailPage.NeedToRefreshQueues = true;

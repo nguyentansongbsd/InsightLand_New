@@ -16,8 +16,8 @@ namespace ConasiCRM.Portable.Views
     public partial class DirectSaleDetail : ContentPage
     {
         public static bool? NeedToRefreshDirectSale = null;
-        public static bool? NeedToRefreshQueues = null;
-        public Action<int> OnComplete;
+        private bool RefreshDirectSale { get; set; }
+        public Action<int> OnCompleted;
         private DirectSaleDetailViewModel viewModel;
         private int currentBlock = 0;
 
@@ -30,7 +30,6 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.BindingContext = viewModel = new DirectSaleDetailViewModel(filter);
-            NeedToRefreshQueues = false;
             NeedToRefreshDirectSale = false;
             Init();
         }
@@ -38,40 +37,41 @@ namespace ConasiCRM.Portable.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            if (NeedToRefreshQueues == true)
-            {
-                LoadingHelper.Show();
-                viewModel.PageDanhSachDatCho = 1;
-                viewModel.QueueList.Clear();
-                await viewModel.LoadQueues(viewModel.Unit.productid);
-                await viewModel.LoadUnitById(viewModel.Unit.productid);
-                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
-                NeedToRefreshQueues = false;
-                LoadingHelper.Hide();
-            }
 
+            // giu cho thanh cong hoac huy giu cho thanh cong
             if (NeedToRefreshDirectSale == true)
             {
                 LoadingHelper.Show();
-                viewModel.Floors.Clear();
-                await viewModel.LoadTotalDirectSale();
-                var firstBlock = viewModel.DirectSaleResult.SingleOrDefault(x=>x.ID == viewModel.Unit.blockid.ToString());
-                viewModel.ResetDirectSale(firstBlock);
+                
+                viewModel.QueueList.Clear();
+                viewModel.PageDanhSachDatCho = 1;
 
-                await viewModel.LoadUnitByFloor(viewModel.Unit.floorid);
-                int indexFloor = viewModel.Floors.IndexOf(viewModel.Floors.SingleOrDefault(x => x.bsd_floorid == viewModel.Unit.floorid));
-                SetContentFloor(indexFloor);
+                await viewModel.LoadQueues(viewModel.Unit.productid);
+                await viewModel.LoadUnitById(viewModel.Unit.productid);
+                
+                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
+
+                RefreshDirectSale = true;
+                NeedToRefreshDirectSale = false;
                 LoadingHelper.Hide();
             }
         }
+
         public async void Init()
         {
             await viewModel.LoadTotalDirectSale();
-            SetBlocks();
-
-            var firstBlock = viewModel.DirectSaleResult.FirstOrDefault();
-            viewModel.ResetDirectSale(firstBlock);
-
+            if (viewModel.DirectSaleResult.Count != 0)
+            {
+                SetBlocks();
+                var firstBlock = viewModel.DirectSaleResult.FirstOrDefault();
+                viewModel.ResetDirectSale(firstBlock);
+            }
+            else
+            {
+                OnCompleted?.Invoke(2);
+                return;
+            }
+            
             if (viewModel.Floors.Count != 0)
             {
                 currentBlock = viewModel.Blocks.FindIndex(x => x.bsd_blockid == viewModel.blockId);
@@ -81,11 +81,11 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadUnitByFloor(floorId);
                 SetContentFloor();
 
-                OnComplete?.Invoke(0);
+                OnCompleted?.Invoke(0);
             }
             else
             {
-                OnComplete?.Invoke(1);
+                OnCompleted?.Invoke(1);
             }
         }
 
@@ -281,9 +281,27 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private void CloseUnintInfor_Tapped(object sender,EventArgs e)
+        private async void CloseUnintInfor_Tapped(object sender,EventArgs e)
         {
+            LoadingHelper.Show();
+
+            //Load lai thong tin directsale khi giu cho, huy giu cho thanh cong
+            if (RefreshDirectSale==true)
+            {
+                viewModel.Floors.Clear();
+
+                await viewModel.LoadTotalDirectSale();
+                var currentBlock = viewModel.DirectSaleResult.SingleOrDefault(x => x.ID == viewModel.Unit.blockid.ToString());
+                viewModel.ResetDirectSale(currentBlock);
+                await viewModel.LoadUnitByFloor(viewModel.Unit.floorid);
+
+                int indexFloor = viewModel.Floors.IndexOf(viewModel.Floors.SingleOrDefault(x => x.bsd_floorid == viewModel.Unit.floorid));
+                SetContentFloor(indexFloor);
+                RefreshDirectSale = false;
+            }
+            
             contentUnitInfor.IsVisible = false;
+            LoadingHelper.Hide();
         }
 
         private async void ShowMoreDanhSachDatCho_Clicked(object sender, EventArgs e)
