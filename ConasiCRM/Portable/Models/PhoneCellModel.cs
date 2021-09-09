@@ -8,12 +8,13 @@ namespace ConasiCRM.Portable.Models
     public class PhoneCellModel : BaseViewModel
     {
         public Guid activityid { get; set; }
-        public string subject { get; set; }
+        private string _subject;
+        public string subject { get => _subject; set { _subject = value; OnPropertyChanged(nameof(subject)); } }
         public string description { get; set; }
         public DateTime? _scheduledstart;
         public DateTime? scheduledstart
         {
-            get => this._scheduledstart;
+            get => _scheduledstart;
             set
             {
                 if (value.HasValue)
@@ -21,7 +22,7 @@ namespace ConasiCRM.Portable.Models
                     _scheduledstart = value;
                     OnPropertyChanged(nameof(scheduledstart));
                 }
-            }            
+            }
         }
         public TimeSpan _timeStart { get; set; }
         public TimeSpan timeStart
@@ -39,7 +40,7 @@ namespace ConasiCRM.Portable.Models
         public DateTime? _scheduledend;
         public DateTime? scheduledend
         {
-            get => this._scheduledend;
+            get => _scheduledend;
             set
             {
                 if (value.HasValue)
@@ -72,11 +73,8 @@ namespace ConasiCRM.Portable.Models
             get => _durationValue;
             set
             {
-                if (_durationValue != value)
-                {
-                    _durationValue = value;
-                    OnPropertyChanged(nameof(durationValue));
-                }
+                _durationValue = value;
+                OnPropertyChanged(nameof(durationValue));
             }
         }
         public Guid account_id { get; set; }
@@ -198,6 +196,10 @@ namespace ConasiCRM.Portable.Models
         public bool directioncode { get; set; }
 
         // call from
+        private string _call_from;
+        public string call_from { get => _call_from; set { _call_from = value; OnPropertyChanged(nameof(call_from)); } }
 
+        private string _call_to;
+        public string call_to { get => _call_to; set { _call_to = value; OnPropertyChanged(nameof(call_to)); } }
     }
 }

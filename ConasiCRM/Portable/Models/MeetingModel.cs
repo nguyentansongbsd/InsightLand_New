@@ -184,5 +184,11 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
+
+        private string _required;
+        public string required { get => _required; set { _required = value; OnPropertyChanged(nameof(required)); } }
+
+        private string _optional;
+        public string optional { get => _optional; set { _optional = value; OnPropertyChanged(nameof(optional)); } }
     }
 }
