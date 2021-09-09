@@ -88,8 +88,17 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadTotalDirectSale()
         {
             string json = JsonConvert.SerializeObject(Filter);
-            DirectSaleResult = await CrmHelper.Get<List<DirectSaleModel>>($"bsd_GetTotalQtyDirectSale(input='{json}')");
-            if (DirectSaleResult == null || DirectSaleResult.Any() == false) return;
+            var input = new
+            {
+                input = json
+            };
+            string body = JsonConvert.SerializeObject(input);
+            CrmApiResponse result = await CrmHelper.PostData("/bsd_Action_DirectSale_GetTotalQty", body);
+            if (result.IsSuccess == false && result.Content == null) return;
+
+            string content = result.Content;
+            ResponseActino responseActions = JsonConvert.DeserializeObject<ResponseActino>(content);
+            DirectSaleResult = JsonConvert.DeserializeObject<List<DirectSaleModel>>(responseActions.output);
         }
 
         public async Task LoadUnitByFloor(Guid floorId)
@@ -372,5 +381,9 @@ namespace ConasiCRM.Portable.ViewModels
             };
         }
 
+    }
+    public class ResponseActino
+    {
+        public string output { get; set; }
     }
 }

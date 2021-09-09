@@ -127,7 +127,7 @@ namespace ConasiCRM.Portable.Views
                     else if (Success == 2)
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.LongMessage("Dự án chưa có block");
+                        ToastMessageHelper.LongMessage("Không có sản phẩm");
                     }
                 };
             }
