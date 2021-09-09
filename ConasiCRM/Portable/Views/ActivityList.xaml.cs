@@ -52,7 +52,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
-
         private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item != null)
@@ -162,6 +161,7 @@ namespace ConasiCRM.Portable.Views
             }
             else if (asw == "Tạo Công Việc")
             {
+                await Navigation.PushAsync(new TaskForm());
             }
             LoadingHelper.Hide();
         }
