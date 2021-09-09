@@ -53,6 +53,7 @@ namespace ConasiCRM.Portable.ViewModels
             Tabs.Add("KH Cá Nhân");
             Tabs.Add("KH Doanh Nghiệp");
             CallFrom = UserLogged.User;
+            ShowButton = true;
         }
 
         public async Task<Boolean> DeletLookup(string fieldName, Guid id)
@@ -66,8 +67,8 @@ namespace ConasiCRM.Portable.ViewModels
             data["activityid"] = PhoneCellModel.activityid.ToString();
             data["subject"] = PhoneCellModel.subject;
             data["description"] = PhoneCellModel.description;
-            data["scheduledstart"] = PhoneCellModel.scheduledstart;
-            data["scheduledend"] = PhoneCellModel.scheduledend;
+            data["scheduledstart"] = PhoneCellModel.scheduledstart.Value.ToUniversalTime();
+            data["scheduledend"] = PhoneCellModel.scheduledend.Value.ToUniversalTime();
             data["actualdurationminutes"] = PhoneCellModel.actualdurationminutes;
             data["statecode"] = PhoneCellModel.statecode;
             data["statuscode"] = PhoneCellModel.statuscode;           
@@ -123,14 +124,14 @@ namespace ConasiCRM.Portable.ViewModels
 
             data["phonecall_activity_parties"] = dataFromTo;
 
-            //if (UserLogged.Id != Guid.Empty)
-            //{
-            //    data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
-            //}
             if (UserLogged.ManagerId != Guid.Empty)
             {
                 data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
+            //if (UserLogged.Id != Guid.Empty)
+            //{
+            //    data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            //}
             return data;
         }
 
@@ -178,19 +179,18 @@ namespace ConasiCRM.Portable.ViewModels
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
             <entity name='phonecall'>
                 <attribute name='subject' />
-                <attribute name='to' /> 
-                <attribute name='from' /> 
                 <attribute name='statecode' />
                 <attribute name='prioritycode' />
-                <attribute name='scheduledstart' />
-                <attribute name='scheduledend' />
+                <attribute name='scheduledend' alias='scheduledend' />
                 <attribute name='createdby' />
                 <attribute name='regardingobjectid' />
+                <attribute name='activityid' />
+                <attribute name='statuscode' />
+                <attribute name='scheduledstart' alias='scheduledstart' />
                 <attribute name='actualdurationminutes' />
                 <attribute name='description' />
+                <attribute name='activitytypecode' />
                 <attribute name='phonenumber' />
-                <attribute name='directioncode' />
-                <attribute name='activityid' />
                 <order attribute='subject' descending='false' />
                 <filter type='and'>
                     <condition attribute='activityid' operator='eq' uitype='phonecall' value='" + id + @"' />
@@ -207,6 +207,10 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='leadid' alias='lead_id'/>                  
                     <attribute name='fullname' alias='lead_name'/>
                 </link-entity>
+                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='outer' alias='aa'>
+                    <attribute name='bsd_name' alias='user_name'/>
+                    <attribute name='bsd_employeeid' alias='user_id'/>
+                </link-entity>
             </entity>
           </fetch>";
 
@@ -215,10 +219,14 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             var data = result.value.FirstOrDefault();
             PhoneCellModel = data;
+            if (data.scheduledend != null && data.scheduledstart != null)
+            {
+                PhoneCellModel.scheduledend = data.scheduledend.Value.ToLocalTime();
+                PhoneCellModel.scheduledstart = data.scheduledstart.Value.ToLocalTime();
 
-            PhoneCellModel.timeStart = data.scheduledstart.Value.TimeOfDay;
-            PhoneCellModel.timeEnd = data.scheduledend.Value.TimeOfDay;
-
+                PhoneCellModel.timeStart = PhoneCellModel.scheduledstart.Value.TimeOfDay;
+                PhoneCellModel.timeEnd = PhoneCellModel.scheduledend.Value.TimeOfDay;
+            }
             if (PhoneCellModel.contact_id != Guid.Empty)
             {
                 Customer = new OptionSet

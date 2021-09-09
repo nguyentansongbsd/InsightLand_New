@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -154,10 +155,6 @@ namespace ConasiCRM.Portable.Views
                 <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='leads'>
                     <attribute name='leadid' alias='lead_id'/>                  
                     <attribute name='fullname' alias='lead_name'/>
-                </link-entity>
-                <link-entity name='bsd_systemsetup' from='bsd_systemsetupid' to='regardingobjectid' visible='false' link-type='outer' alias='users'>
-                    <attribute name='bsd_name' alias='user_id'/>
-                    <attribute name='bsd_systemsetupid' alias='user_name'/>
                 </link-entity>
             </entity>
           </fetch>";
@@ -1052,6 +1049,15 @@ namespace ConasiCRM.Portable.Views
                 arrayMeeting.Add(item_to);
             }
             data["appointment_activity_parties"] = arrayMeeting;
+
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            }
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
             return data;
         }
 
