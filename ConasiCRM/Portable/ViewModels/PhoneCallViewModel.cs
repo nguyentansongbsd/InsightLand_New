@@ -29,7 +29,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public OptionSet _callTo;
         public OptionSet CallTo { get => _callTo; set { _callTo = value; OnPropertyChanged(nameof(CallTo)); } }
-        public List<OptionSet> CallToOptionSet { get; set; }
 
         public string CodeAccount = "3";
 
@@ -47,7 +46,6 @@ namespace ConasiCRM.Portable.ViewModels
             LeadsLookUp = new List<OptionSet>();
             AccountsLookUp = new List<OptionSet>();
             AllsLookUp = new List<List<OptionSet>>();
-            CallToOptionSet = new List<OptionSet>();
             Tabs = new List<string>();
             Tabs.Add("KH Tiềm Năng");
             Tabs.Add("KH Cá Nhân");
@@ -128,10 +126,10 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
-            //if (UserLogged.Id != Guid.Empty)
-            //{
-            //    data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
-            //}
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee_PhoneCall@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
             return data;
         }
 
@@ -218,40 +216,44 @@ namespace ConasiCRM.Portable.ViewModels
             if (result == null || result.value == null)
                 return;
             var data = result.value.FirstOrDefault();
-            PhoneCellModel = data;
+            PhoneCellModel.activityid = data.activityid;
+            PhoneCellModel.subject = data.subject;
+            PhoneCellModel.statecode = data.statecode;
+            PhoneCellModel.statuscode = data.statuscode;
+            PhoneCellModel.phonenumber = data.phonenumber;
+            PhoneCellModel.description = data.description;
+    //        PhoneCellModel = data;
             if (data.scheduledend != null && data.scheduledstart != null)
             {
                 PhoneCellModel.scheduledend = data.scheduledend.Value.ToLocalTime();
                 PhoneCellModel.scheduledstart = data.scheduledstart.Value.ToLocalTime();
-
-                PhoneCellModel.timeStart = PhoneCellModel.scheduledstart.Value.TimeOfDay;
-                PhoneCellModel.timeEnd = PhoneCellModel.scheduledend.Value.TimeOfDay;
             }
-            if (PhoneCellModel.contact_id != Guid.Empty)
+
+            if (data.contact_id != Guid.Empty)
             {
                 Customer = new OptionSet
                 {
                     Title = CodeContac,
-                    Val = PhoneCellModel.contact_id.ToString(),
-                    Label = PhoneCellModel.contact_name
+                    Val = data.contact_id.ToString(),
+                    Label = data.contact_name
                 };
             }
-            else if (PhoneCellModel.account_id != Guid.Empty)
+            else if (data.account_id != Guid.Empty)
             {
                 Customer = new OptionSet
                 {
                     Title = CodeAccount,
-                    Val = PhoneCellModel.account_id.ToString(),
-                    Label = PhoneCellModel.account_name
+                    Val = data.account_id.ToString(),
+                    Label = data.account_name
                 };
             }
-            else if (PhoneCellModel.lead_id != Guid.Empty)
+            else if (data.lead_id != Guid.Empty)
             {
                 Customer = new OptionSet
                 {
                     Title = CodeLead,
-                    Val = PhoneCellModel.lead_id.ToString(),
-                    Label = PhoneCellModel.lead_name
+                    Val = data.lead_id.ToString(),
+                    Label = data.lead_name
                 };
             }
 
@@ -419,26 +421,7 @@ namespace ConasiCRM.Portable.ViewModels
                 AllsLookUp.Add(ContactsLookUp);
                 AllsLookUp.Add(AccountsLookUp);
             }
-        }
-
-        //public void ConvertStringToOptionSet()
-        //{
-        //    if (CallTo != null && CallTo.Count > 0)
-        //    {
-        //        foreach (var id in CallTo)
-        //        {
-        //            var item = new OptionSet();
-        //            item.Val = id;
-        //            if (LeadsLookUp.SingleOrDefault(x => x.Val == id) != null)
-        //                item.Title = CodeLead;
-        //            else if (ContactsLookUp.SingleOrDefault(x => x.Val == id) != null)
-        //                item.Title = CodeContac;
-        //            else if (AccountsLookUp.SingleOrDefault(x => x.Val == id) != null)
-        //                item.Title = CodeAccount;
-        //            CallToOptionSet.Add(item);
-        //        }
-        //    }
-        //}
+        }      
 
         public async Task LoadOneAccount(string accountid)
         {
