@@ -1,16 +1,9 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
-using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
