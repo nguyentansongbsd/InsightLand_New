@@ -17,6 +17,7 @@ namespace ConasiCRM.Portable.Views
     public partial class ActivityList : ContentPage
     {
         public static bool? NeedToRefreshPhoneCall = null;
+        public static bool? NeedToRefreshMeet = null;
         public Action<bool> OnCompleted;
         public ActivityListViewModel viewModel;
         public ActivityList()
@@ -24,6 +25,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             BindingContext = viewModel = new ActivityListViewModel();
             NeedToRefreshPhoneCall = false;
+            NeedToRefreshMeet = false;
             Init();
         }
         public async void Init()
@@ -46,9 +48,24 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 await viewModel.LoadOnRefreshCommandAsync();
-                await viewModel.loadPhoneCall(viewModel.PhoneCall.activityid);
-                await viewModel.loadFromTo(viewModel.PhoneCall.activityid);
+                if (viewModel.PhoneCall.activityid != Guid.Empty)
+                {
+                    await viewModel.loadPhoneCall(viewModel.PhoneCall.activityid);
+                    await viewModel.loadFromTo(viewModel.PhoneCall.activityid);
+                }
                 NeedToRefreshPhoneCall = false;
+                LoadingHelper.Hide();
+            }
+            if (viewModel.Data != null && NeedToRefreshMeet == true)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadOnRefreshCommandAsync();
+                if (viewModel.Meet.activityid != Guid.Empty)
+                {
+                    await viewModel.loadMeet(viewModel.Meet.activityid);
+                    await viewModel.loadFromToMeet(viewModel.Meet.activityid);
+                }
+                NeedToRefreshMeet = false;
                 LoadingHelper.Hide();
             }
         }
@@ -154,6 +171,7 @@ namespace ConasiCRM.Portable.Views
             string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
             if (asw == "Tạo Cuộc Họp")
             {
+                await Navigation.PushAsync(new MeetingForm());
             }
             else if (asw == "Tạo Cuộc Gọi")
             {
@@ -193,11 +211,39 @@ namespace ConasiCRM.Portable.Views
             }
             else if (viewModel.Task.activityid != Guid.Empty)
             {
-                await Navigation.PushAsync(new TaskForm(viewModel.Task.activityid));
+                LoadingHelper.Show();
+                TaskForm newPage = new TaskForm(viewModel.Task.activityid);
+                newPage.CheckTaskForm = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
             }
             else if (viewModel.Meet.activityid != Guid.Empty)
             {
-               
+                LoadingHelper.Show();
+                MeetingForm newPage = new MeetingForm(viewModel.Meet.activityid);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
             }
         }
 

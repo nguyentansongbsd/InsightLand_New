@@ -65,8 +65,8 @@ namespace ConasiCRM.Portable.Views
             }
             else if (choice == "Cuộc họp")
             {
-                await Navigation.PushAsync(new MeetingForm(viewModel.selectedDate.Value));
-                LoadingHelper.Hide();              
+                //await Navigation.PushAsync(new MeetingForm(viewModel.selectedDate.Value));
+                //LoadingHelper.Hide();              
             }
             LoadingHelper.Hide();
         }
@@ -111,20 +111,20 @@ namespace ConasiCRM.Portable.Views
             }
             else if (val.Activity.activitytypecode == "appointment")
             {
-                MeetingForm newPage = new MeetingForm(val.Activity.activityid);
-                newPage.CheckMeeting = async (CheckEventData) =>
-                {
-                    if (CheckEventData == true)
-                    {
-                        await Navigation.PushAsync(newPage);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
-                    }
-                };
+                //MeetingForm newPage = new MeetingForm(val.Activity.activityid);
+                //newPage.CheckMeeting = async (CheckEventData) =>
+                //{
+                //    if (CheckEventData == true)
+                //    {
+                //        await Navigation.PushAsync(newPage);
+                //        LoadingHelper.Hide();
+                //    }
+                //    else
+                //    {
+                //        LoadingHelper.Hide();
+                //        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
+                //    }
+                //};
             }
         }     
     }
