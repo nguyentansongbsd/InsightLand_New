@@ -10,7 +10,9 @@ namespace ConasiCRM.Portable.Models
         public Guid activityid { get; set; }
         private string _subject;
         public string subject { get => _subject; set { _subject = value; OnPropertyChanged(nameof(subject)); } }
-        public string description { get; set; }
+
+        private string _description;
+        public string description { get => _description; set { _description = value; OnPropertyChanged(nameof(description)); } }
         public DateTime? _scheduledstart;
         public DateTime? scheduledstart
         {

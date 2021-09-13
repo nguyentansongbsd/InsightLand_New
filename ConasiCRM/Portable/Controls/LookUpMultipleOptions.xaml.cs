@@ -216,11 +216,11 @@ namespace ConasiCRM.Portable.Controls
 
             if (ListListView != null && ListListView.Count>0 && ListTab != null && ListTab.Count>0)
             {
-                ItemsSource = new List<OptionSet>();
-                for(int i=0;i<ListListView.Count;i++)
-                {
-                    ItemsSource.AddRange(ListListView[i]);
-                }    
+                //ItemsSource = new List<OptionSet>();
+                //for (int i = 0; i < ListListView.Count; i++)
+                //{
+                //    ItemsSource.AddRange(ListListView[i]);
+                //}
 
                 Grid tabs = SetUpTabs(ListTab);
                 gridMain = new Grid();
@@ -383,8 +383,8 @@ namespace ConasiCRM.Portable.Controls
 
         private static void ItemSourceChange(BindableObject bindable, object oldValue, object value)
         {
-            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;
-            control.setData();
+            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;         
+            control.setData();            
         }
 
         public async void SetUpModal()
