@@ -340,7 +340,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
-                                <attribute name='fullname' alias='Label' />
+                                <attribute name='lastname' alias='Label' />
                                 <attribute name='leadid' alias='Val' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>

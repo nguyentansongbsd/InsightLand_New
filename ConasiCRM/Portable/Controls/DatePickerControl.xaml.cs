@@ -32,6 +32,9 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty DefaultDisplayProperty = BindableProperty.Create(nameof(DefaultDisplay), typeof(DateTime), typeof(DatePickerControl), null, BindingMode.TwoWay);
         public DateTime DefaultDisplay { get => (DateTime)GetValue(DefaultDisplayProperty); set => SetValue(DefaultDisplayProperty, value); }
 
+        public static readonly BindableProperty DisplayFormatProperty = BindableProperty.Create(nameof(DisplayFormat), typeof(string), typeof(DatePickerControl), null, BindingMode.TwoWay);
+        public string DisplayFormat { get => (string)GetValue(DisplayFormatProperty); set => SetValue(DisplayFormatProperty, value); }
+
         public DatePickerControl()
         {
             InitializeComponent();
@@ -39,6 +42,7 @@ namespace ConasiCRM.Portable.Controls
             radDate.SetBinding(RadDateTimePicker.PlaceholderProperty, new Binding("Placeholder") { Source = this });
             radDate.SetBinding(RadDateTimePicker.SpinnerFormatStringProperty, new Binding("SpinnerFormat") { Source = this });
             radDate.SetBinding(RadDateTimePicker.DefaultDisplayDateProperty, new Binding("DefaultDisplay") { Source = this });
+            radDate.SetBinding(RadDateTimePicker.DisplayStringFormatProperty, new Binding("DisplayFormat") { Source = this });
         }
 
         private void OnAccept()
