@@ -4,11 +4,6 @@ using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -20,26 +15,97 @@ namespace ConasiCRM.Portable.Views
     public partial class TaskForm : ContentPage
     {
         public Action<bool> CheckTaskForm;
-        private Guid _idActivity;
         public TaskFormViewModel viewModel;
-        
+
         public TaskForm()
         {
             InitializeComponent();
             Init();
+            InitAdd();
+        }
 
+        public TaskForm(Guid taskId)
+        {
+            InitializeComponent();
+            Init();
+            viewModel.TaskId = taskId;
+            InitUpdate();
         }
 
         public async void Init()
         {
             this.BindingContext = viewModel = new TaskFormViewModel();
+        }
+
+        public async void InitAdd()
+        {
             viewModel.Title = "Tạo Công Việc";
             viewModel.TaskFormModel = new TaskFormModel();
             dateTimeTGBatDau.DefaultDisplay = DateTime.Now;
             dateTimeTGKetThuc.DefaultDisplay = DateTime.Now;
+
+            Lookup_NguoiLienQuan.PreOpenAsync = async () =>
+            {
+                LoadingHelper.Show();
+                viewModel.Tabs = new List<string>() { "KH Tiềm Năng", "KH Cá Nhân", "KH Doanh Nghiệp" };
+                await Task.WhenAll(
+                    viewModel.LoadLeads(),
+                    viewModel.LoadContact(),
+                    viewModel.LoadAccount()
+                    );
+                viewModel.AllsLookUp = new List<List<OptionSet>>() { viewModel.Leads, viewModel.Contacts, viewModel.Accounts }; ;
+                LoadingHelper.Hide();
+            };
         }
 
-        private async void CreateTask_Clicked(object sender,EventArgs e)
+        public async void InitUpdate()
+        {
+            await viewModel.LoadTask();
+        }
+
+        private void DateStart_Selected(object sender, EventArgs e)
+        {
+            if (viewModel.ScheduledStart.HasValue && viewModel.ScheduledEnd.HasValue)
+            {
+                if (viewModel.ScheduledStart > viewModel.ScheduledEnd)
+                {
+                    ToastMessageHelper.ShortMessage("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+                }
+            }
+        }
+
+        private void DateEnd_Selected(object sender, EventArgs e)
+        {
+            if (viewModel.ScheduledStart.HasValue && viewModel.ScheduledEnd.HasValue)
+            {
+                if (viewModel.ScheduledStart > viewModel.ScheduledEnd)
+                {
+                    ToastMessageHelper.ShortMessage("Thời gian kết thúc phải lớn hơn thời gian bắt đầu");
+                }
+            }
+        }
+
+        private void EventAllDay_Tapped(object sender, EventArgs e)
+        {
+            viewModel.IsEventAllDay = !viewModel.IsEventAllDay;
+        }
+
+        private void CheckedBoxEventAllDay_Change(object sender, EventArgs e)
+        {
+            if (!viewModel.ScheduledStart.HasValue)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                viewModel.IsEventAllDay = false;
+                return;
+            }
+            if (viewModel.IsEventAllDay == true)
+            {
+                viewModel.ScheduledStart = new DateTime(viewModel.ScheduledStart.Value.Year, viewModel.ScheduledStart.Value.Month, viewModel.ScheduledStart.Value.Day, 8, 0, 0); ;
+                viewModel.ScheduledEnd = viewModel.ScheduledStart.Value.AddDays(1);
+            }
+        }
+
+        private async void SaveTask_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(viewModel.TaskFormModel.subject))
             {
@@ -47,7 +113,45 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            await viewModel.CreateTask();
+            if (!viewModel.ScheduledStart.HasValue)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                return;
+            }
+
+            if (!viewModel.ScheduledEnd.HasValue)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc");
+                return;
+            }
+
+            if ((viewModel.ScheduledStart.HasValue && viewModel.ScheduledEnd.HasValue) && (viewModel.ScheduledStart > viewModel.ScheduledEnd))
+            {
+                ToastMessageHelper.ShortMessage("Thời gian kết thúc phải lớn hơn thời gian bắt đầu");
+                return;
+            }
+
+            LoadingHelper.Show();
+            if (viewModel.TaskFormModel.activityid == Guid.Empty)
+            {
+                bool isSuccess = await viewModel.CreateTask();
+                if (isSuccess)
+                {
+                    ToastMessageHelper.ShortMessage("Tạo công việc thành công");
+                    await Navigation.PopAsync();
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Tạo công việc thất bại");
+                }
+            }
+            else
+            {
+
+            }
+
 
         }
 
@@ -71,20 +175,11 @@ namespace ConasiCRM.Portable.Views
             //grid_updateTask.IsVisible = false;
             // setDefault create task
             TaskFormModel taskFormModel = new TaskFormModel();
-            taskFormModel.editable = true;
-            taskFormModel.scheduledstart = new DateTime(dateTimeNew.Year, dateTimeNew.Month, dateTimeNew.Day, dateTimeNew.Hour, dateTimeNew.Minute, 0);
-            taskFormModel.timeStart = new TimeSpan(dateTimeNew.Hour, dateTimeNew.Minute, 0);
-            
-            viewModel.TaskFormModel = taskFormModel;
-        }
 
-        public TaskForm(Guid idActivity)
-        {
-            InitializeComponent();
-            this.BindingContext = viewModel = new TaskFormViewModel();
-            this._idActivity = idActivity;
-            viewModel.IsBusy = true;
-            //Init();
+            taskFormModel.scheduledstart = new DateTime(dateTimeNew.Year, dateTimeNew.Month, dateTimeNew.Day, dateTimeNew.Hour, dateTimeNew.Minute, 0);
+            //taskFormModel.timeStart = new TimeSpan(dateTimeNew.Hour, dateTimeNew.Minute, 0);
+
+            viewModel.TaskFormModel = taskFormModel;
         }
 
         //public async void Init()
@@ -230,34 +325,34 @@ namespace ConasiCRM.Portable.Views
         //    viewModel.IsBusy = false;
         //}
 
-        private void Actualduration_value_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int valueDate = int.Parse(viewModel.TaskFormModel.durationValue.Val);
+        //private void Actualduration_value_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    int valueDate = int.Parse(viewModel.TaskFormModel.durationValue.Val);
 
-            if (viewModel.TaskFormModel.scheduledstart == null)
-            {
-                var start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
-                var time = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, 0);
+        //    if (viewModel.TaskFormModel.scheduledstart == null)
+        //    {
+        //        var start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
+        //        var time = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
-                viewModel.TaskFormModel.scheduledstart = start;
-                viewModel.TaskFormModel.timeStart = time;
-                viewModel.TaskFormModel.scheduledend = start.AddMinutes(valueDate);
-                viewModel.TaskFormModel.timeEnd = new TimeSpan(viewModel.TaskFormModel.scheduledend.Value.Hour, viewModel.TaskFormModel.scheduledend.Value.Minute, 0);
-            }
-            else
-            {
-                viewModel.TaskFormModel.scheduledend = new DateTime(viewModel.TaskFormModel.scheduledstart.Value.Year, viewModel.TaskFormModel.scheduledstart.Value.Month, viewModel.TaskFormModel.scheduledstart.Value.Day, viewModel.TaskFormModel.scheduledstart.Value.Hour, viewModel.TaskFormModel.scheduledstart.Value.Minute, 0).AddMinutes(valueDate);
-                viewModel.TaskFormModel.timeEnd = new TimeSpan(viewModel.TaskFormModel.scheduledend.Value.Hour, viewModel.TaskFormModel.scheduledend.Value.Minute, 0);
-            }
+        //        viewModel.TaskFormModel.scheduledstart = start;
+        //        viewModel.TaskFormModel.timeStart = time;
+        //        viewModel.TaskFormModel.scheduledend = start.AddMinutes(valueDate);
+        //        viewModel.TaskFormModel.timeEnd = new TimeSpan(viewModel.TaskFormModel.scheduledend.Value.Hour, viewModel.TaskFormModel.scheduledend.Value.Minute, 0);
+        //    }
+        //    else
+        //    {
+        //        viewModel.TaskFormModel.scheduledend = new DateTime(viewModel.TaskFormModel.scheduledstart.Value.Year, viewModel.TaskFormModel.scheduledstart.Value.Month, viewModel.TaskFormModel.scheduledstart.Value.Day, viewModel.TaskFormModel.scheduledstart.Value.Hour, viewModel.TaskFormModel.scheduledstart.Value.Minute, 0).AddMinutes(valueDate);
+        //        viewModel.TaskFormModel.timeEnd = new TimeSpan(viewModel.TaskFormModel.scheduledend.Value.Hour, viewModel.TaskFormModel.scheduledend.Value.Minute, 0);
+        //    }
 
-            viewModel.TaskFormModel.actualdurationminutes = valueDate;
-        }
+        //    viewModel.TaskFormModel.actualdurationminutes = valueDate;
+        //}
 
         // close popup customer
-        private void ClearLookup_Clicked(object sender, EventArgs e)
-        {
-            viewModel.TaskFormModel.Customer = null;
-        }
+        //private void ClearLookup_Clicked(object sender, EventArgs e)
+        //{
+        //    viewModel.TaskFormModel.Customer = null;
+        //}
 
         // opent popup customer and loading 
         //private void OpenModel_Clicked(object sender, EventArgs e)
@@ -501,16 +596,6 @@ namespace ConasiCRM.Portable.Views
         //    }
         //}
 
-        private void DatePickerEnd_Focused(object sender, FocusEventArgs e)
-        {
-            viewModel.FocusDateTimeEnd = true;
-        }
-
-        private void DatePicker_Focused(object sender, FocusEventArgs e)
-        {
-            viewModel.FocusDateTimeStart = true;
-        }
-
         // tinh thời lượng khi change (thời gian bắt đầu, thời gian kết thúc)
         //private void totalDuration()
         //{
@@ -520,7 +605,7 @@ namespace ConasiCRM.Portable.Views
         //        DateTime dateTimeEnd = new DateTime(viewModel.TaskFormModel.scheduledend.Value.Year, viewModel.TaskFormModel.scheduledend.Value.Month, viewModel.TaskFormModel.scheduledend.Value.Day, viewModel.TaskFormModel.timeEnd.Hours, viewModel.TaskFormModel.timeEnd.Minutes, viewModel.TaskFormModel.timeEnd.Seconds);
 
         //        TimeSpan difference = dateTimeEnd - dateTimeStart;
-                
+
         //        double _minutes = Math.Round(difference.TotalMinutes);
 
         //        if(_minutes < 0)
@@ -620,82 +705,82 @@ namespace ConasiCRM.Portable.Views
         //}
 
         // Check the required information (scheduledstart, scheduledend, )
-        private async Task<bool> checkData()
-        {
-            var dataTask = viewModel.TaskFormModel;
-            if (!string.IsNullOrWhiteSpace(dataTask.subject) && dataTask.scheduledstart != null && dataTask.scheduledend != null && dataTask.Customer != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //private async Task<bool> checkData()
+        //{
+        //    var dataTask = viewModel.TaskFormModel;
+        //    if (!string.IsNullOrWhiteSpace(dataTask.subject) && dataTask.scheduledstart != null && dataTask.scheduledend != null && dataTask.Customer != null)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
-        private async Task<object> getContent(TaskFormViewModel tasks)
-        {
-            var dataTask = tasks.TaskFormModel;
-            IDictionary<string, object> data = new Dictionary<string, object>();
-            data["activityid"] = dataTask.activityid.ToString();
-            data["subject"] = dataTask.subject;
-            data["description"] = dataTask.description ?? "";
-            data["scheduledstart"] = dataTask.scheduledstart.Value.ToUniversalTime();
-            data["scheduledend"] = dataTask.scheduledend.Value.ToUniversalTime();
-            data["actualdurationminutes"] = dataTask.actualdurationminutes;
-            data["statecode"] = dataTask.statecode;
-            if (dataTask.Customer.Type == 1)
-            {
-                data["regardingobjectid_contact_task@odata.bind"] = "/contacts(" + dataTask.Customer.Id.ToString() + ")";
-            }
-            else if (dataTask.Customer.Type == 2)
-            {
-                data["regardingobjectid_account_task@odata.bind"] = "/accounts(" + dataTask.Customer.Id.ToString() + ")";
-            }
-            else
-            {
-                data["regardingobjectid_lead_task@odata.bind"] = "/leads(" + dataTask.Customer.Id.ToString() + ")";
-            }
-            return data;
-        }
+        //private async Task<object> getContent(TaskFormViewModel tasks)
+        //{
+        //    var dataTask = tasks.TaskFormModel;
+        //    IDictionary<string, object> data = new Dictionary<string, object>();
+        //    data["activityid"] = dataTask.activityid.ToString();
+        //    data["subject"] = dataTask.subject;
+        //    data["description"] = dataTask.description ?? "";
+        //    data["scheduledstart"] = dataTask.scheduledstart.Value.ToUniversalTime();
+        //    data["scheduledend"] = dataTask.scheduledend.Value.ToUniversalTime();
+        //    data["actualdurationminutes"] = dataTask.actualdurationminutes;
+        //    data["statecode"] = dataTask.statecode;
+        //    if (dataTask.Customer.Type == 1)
+        //    {
+        //        data["regardingobjectid_contact_task@odata.bind"] = "/contacts(" + dataTask.Customer.Id.ToString() + ")";
+        //    }
+        //    else if (dataTask.Customer.Type == 2)
+        //    {
+        //        data["regardingobjectid_account_task@odata.bind"] = "/accounts(" + dataTask.Customer.Id.ToString() + ")";
+        //    }
+        //    else
+        //    {
+        //        data["regardingobjectid_lead_task@odata.bind"] = "/leads(" + dataTask.Customer.Id.ToString() + ")";
+        //    }
+        //    return data;
+        //}
 
-        public async Task<Guid> createTask(TaskFormViewModel task)
-        {
-            task.TaskFormModel.activityid = Guid.NewGuid();
-            string path = "/tasks";
-            var content = await this.getContent(task);
+        //public async Task<Guid> createTask(TaskFormViewModel task)
+        //{
+        //    task.TaskFormModel.activityid = Guid.NewGuid();
+        //    string path = "/tasks";
+        //    var content = await this.getContent(task);
 
-            CrmApiResponse result = await CrmHelper.PostData(path, content);
+        //    CrmApiResponse result = await CrmHelper.PostData(path, content);
 
-            if (result.IsSuccess)
-            {
-                return task.TaskFormModel.activityid;
-            }
-            else
-            {
-                var mess = result.ErrorResponse?.error?.message ?? "Đã xảy ra lỗi. Vui lòng thử lại.";
-                await App.Current.MainPage.DisplayAlert("", mess, "OK");
-                return new Guid();
-            }
-        }
-        public async Task<Boolean> updateTask(TaskFormViewModel task)
-        {
-            string path = "/tasks(" + task.TaskFormModel.activityid + ")";
-            var content = await this.getContent(task);
-            CrmApiResponse result = await CrmHelper.PatchData(path, content);
-            if (result.IsSuccess)
-            {
-                return true;
-            }
+        //    if (result.IsSuccess)
+        //    {
+        //        return task.TaskFormModel.activityid;
+        //    }
+        //    else
+        //    {
+        //        var mess = result.ErrorResponse?.error?.message ?? "Đã xảy ra lỗi. Vui lòng thử lại.";
+        //        await App.Current.MainPage.DisplayAlert("", mess, "OK");
+        //        return new Guid();
+        //    }
+        //}
+        //public async Task<Boolean> updateTask(TaskFormViewModel task)
+        //{
+        //    string path = "/tasks(" + task.TaskFormModel.activityid + ")";
+        //    var content = await this.getContent(task);
+        //    CrmApiResponse result = await CrmHelper.PatchData(path, content);
+        //    if (result.IsSuccess)
+        //    {
+        //        return true;
+        //    }
 
-            else
-            {
-                var mess = result.ErrorResponse?.error?.message ?? "Đã xảy ra lỗi. Vui lòng thử lại.";
-                await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", mess, "OK");
-                return false;
-            }
+        //    else
+        //    {
+        //        var mess = result.ErrorResponse?.error?.message ?? "Đã xảy ra lỗi. Vui lòng thử lại.";
+        //        await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", mess, "OK");
+        //        return false;
+        //    }
 
-        }
+        //}
 
         //private void UpdateTask_Clicked(object sender, EventArgs e)
         //{

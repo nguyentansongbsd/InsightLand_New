@@ -11,14 +11,12 @@
                 <Setter Property="FontSize" Value="15"/>
             </Style>
 
-            <ControlTemplate x:Key="displayTemplate">
-                <Label Text="{TemplateBinding DisplayString}" 
-                       TextColor="#333333" VerticalTextAlignment="Center" FontSize="15" Padding="10">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{TemplateBinding ToggleCommand}" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </ControlTemplate>
+            <Style TargetType="Label" x:Key="displayLabelStyle">
+                <Setter Property="TextColor" Value="#333333"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="FontSize" Value="15"/>
+            </Style>
 
             <ControlTemplate x:Key="footerTemplate">
                 <Grid ColumnDefinitions="*,*" HorizontalOptions="FillAndExpand">
@@ -35,7 +33,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
-        <telerikInput:RadDateTimePicker x:Name="radDate" DisplayTemplate="{StaticResource displayTemplate}" PlaceholderLabelStyle="{StaticResource placeholderLabelStyle}" StartDate="01/01/1950" EndDate="01/01/2099" DisplayStringFormat="h:mm tt - dd/MM/yyyy" BorderColor="#c9c9c9" BorderThickness="1" CornerRadius="5">
+        <telerikInput:RadDateTimePicker x:Name="radDate" DisplayLabelStyle="{StaticResource displayLabelStyle}" PlaceholderLabelStyle="{StaticResource placeholderLabelStyle}" StartDate="01/01/1950" EndDate="01/01/2099" BorderColor="#c9c9c9" BorderThickness="1" CornerRadius="5">
             <telerikInput:RadDateTimePicker.SelectorSettings>
                 <telerikInput:PickerPopupSelectorSettings FooterTemplate="{StaticResource footerTemplate}"/>
             </telerikInput:RadDateTimePicker.SelectorSettings>

@@ -3,73 +3,146 @@ using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
 {
     public class TaskFormViewModel : BaseViewModel
     {
-        public bool FocusTimePickerStart = false;
-        public bool FocusTimePickerEnd = false;
-        public bool FocusDateTimeStart = false;
-        public bool FocusDateTimeEnd = false;
+        public List<OptionSet> Leads { get; set; } = new List<OptionSet>();
+        public List<OptionSet> Contacts { get; set; } = new List<OptionSet>();
+        public List<OptionSet> Accounts { get; set; } = new List<OptionSet>();
 
         private TaskFormModel _taskFormModel;
         public TaskFormModel TaskFormModel { get => _taskFormModel; set { _taskFormModel = value; OnPropertyChanged(nameof(TaskFormModel)); } }
 
-        public LookUpConfig ContactLookUpConfig { get; set; }
-        public LookUpConfig AccountLookUpConfig { get; set; }
-        public LookUpConfig LeadLookUpConfig { get; set; }
-        
+        private List<List<OptionSet>> _allLookUp;
+        public List<List<OptionSet>> AllsLookUp { get=>_allLookUp; set { _allLookUp = value;OnPropertyChanged(nameof(AllsLookUp)); } }
+
+        private List<string> _tabs;
+        public List<string> Tabs { get=>_tabs; set { _tabs = value; OnPropertyChanged(nameof(Tabs)); } }
+
+        private OptionSet _customer;
+        public OptionSet Customer { get => _customer; set { _customer = value;OnPropertyChanged(nameof(Customer)); } }
+
+        private DateTime? _scheduledStart;
+        public DateTime? ScheduledStart { get => _scheduledStart; set { _scheduledStart = value; OnPropertyChanged(nameof(ScheduledStart)); } }
+
+        private DateTime? _scheduledEnd;
+        public DateTime? ScheduledEnd { get => _scheduledEnd; set { _scheduledEnd = value; OnPropertyChanged(nameof(ScheduledEnd)); } }
+
+        private bool _isEventAllDay;
+        public bool IsEventAllDay { get => _isEventAllDay; set { _isEventAllDay = value; OnPropertyChanged(nameof(IsEventAllDay)); } }
+
+        public Guid TaskId { get; set; }
+        public string customerTypeLead = "1";
+        public string customerTypeContact = "2";
+        public string customerTypeAccount = "3";
+
         public TaskFormViewModel()
         {
-            ContactLookUpConfig = new LookUpConfig()
-            {
-                FetchXml = @"<fetch version='1.0' count='15' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                  <entity name='contact'>
-                    <attribute name='contactid' alias='Id' />
-                    <attribute name='fullname' alias='Name' />
-                    <attribute name='createdon' alias='Detail' />
-                    <order attribute='fullname' descending='false' />
-                  </entity>
-                </fetch>",
-                EntityName = "contacts",
-                PropertyName = "Contact"
-            };
 
-            AccountLookUpConfig = new LookUpConfig()
-            {
-                FetchXml = @"<fetch version='1.0' count='15' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                  <entity name='account'>
-                    <attribute name='accountid' alias='Id' />
-                    <attribute name='name' alias='Name' />
-                    <attribute name='createdon' alias='Detail' />
-                    <order attribute='name' descending='false' />
-                  </entity>
-                </fetch>",
-                EntityName = "accounts",
-                PropertyName = "Account"
-            };
-
-            LeadLookUpConfig = new LookUpConfig()
-            {
-                FetchXml = @"<fetch version='1.0' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='lead'>
-                                <attribute name='fullname' alias='Name'/>
-                                <attribute name='createdon' alias='Detail'/>
-                                <attribute name='leadid' alias='Id'/>
-                                <order attribute='createdon' descending='true' />
-                              </entity>
-                            </fetch>",
-                EntityName = "leads",
-                PropertyName = "Lead"
-            };
         }
 
-        public async Task CreateTask()
+        public async Task LoadLeads()
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='lead'>
+                                <attribute name='lastname' alias='Label'/>
+                                <attribute name='leadid' alias='Val'/>
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
+            {
+                item.Title = customerTypeLead;
+                this.Leads.Add(item);
+            }
+            
+        }
+
+        public async Task LoadContact()
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='contact'>
+                                    <attribute name='contactid' alias='Val' />
+                                    <attribute name='fullname' alias='Label' />
+                                    <order attribute='fullname' descending='false' />
+                                    <filter type='and'>
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("contacts", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
+            {
+                item.Title = customerTypeContact;
+                this.Contacts.Add(item);
+            }
+        }
+
+        public async Task LoadAccount()
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='account'>
+                                    <attribute name='accountid' alias='Val' />
+                                    <attribute name='bsd_name' alias='Label' />
+                                    <order attribute='name' descending='false' />
+                                    <filter type='and'>
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
+            {
+                item.Title = customerTypeAccount;
+                Accounts.Add(item);
+            }
+        }
+
+        public async Task LoadTask()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='task'>
+                                    <attribute name='subject' />
+                                    <attribute name='scheduledend' />
+                                    <attribute name='createdby' />
+                                    <attribute name='activityid' />
+                                    <attribute name='scheduledstart' />
+                                    <attribute name='description' />
+                                    <order attribute='subject' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='activityid' operator='eq' uitype='task' value='{TaskId}' />
+                                    </filter>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer' alias='a_d4c7f132a91c4d16952d82eb7932504a'>
+                                      <attribute name='bsd_name' alias='account_name'/>
+                                      <attribute name='accountid' alias='account_id' />
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer' alias='a_323155a4a4a9409b81e038bc0c521b36'>
+                                      <attribute name='fullname' alias='contact_id'/>
+                                      <attribute name='contactid' alias='contact_name'/>
+                                    </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='a_1e67d7c87cd1eb11bacc000d3a80021e'>
+                                      <attribute name='lastname' alias='lead_name'/>
+                                      <attribute name='leadid' alias='lead_id' />
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskFormModel>>("tasks", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            this.TaskFormModel = result.value.FirstOrDefault();
+        }
+
+        public async Task<bool> CreateTask()
         {
             TaskFormModel.activityid = Guid.NewGuid();
             var content = await getContent();
@@ -78,13 +151,11 @@ namespace ConasiCRM.Portable.ViewModels
             
             if (result.IsSuccess)
             {
-                
+                return true;
             }
             else
             {
-                //var mess = result.ErrorResponse?.error?.message ?? "Đã xảy ra lỗi. Vui lòng thử lại.";
-                //await App.Current.MainPage.DisplayAlert("", mess, "OK");
-                //return new Guid();
+                return false;
             }
         }
 
@@ -94,23 +165,27 @@ namespace ConasiCRM.Portable.ViewModels
             data["activityid"] = TaskFormModel.activityid.ToString();
             data["subject"] = TaskFormModel.subject;
             data["description"] = TaskFormModel.description ?? "";
-            data["scheduledstart"] = TaskFormModel.scheduledstart.Value;
-            data["scheduledend"] = TaskFormModel.scheduledend.Value;
-            //if (dataTask.Customer.Type == 1)
-            //{
-            //    data["regardingobjectid_contact_task@odata.bind"] = "/contacts(" + dataTask.Customer.Id.ToString() + ")";
-            //}
-            //else if (dataTask.Customer.Type == 2)
-            //{
-            //    data["regardingobjectid_account_task@odata.bind"] = "/accounts(" + dataTask.Customer.Id.ToString() + ")";
-            //}
-            //else
-            //{
-            //    data["regardingobjectid_lead_task@odata.bind"] = "/leads(" + dataTask.Customer.Id.ToString() + ")";
-            //}
+            data["scheduledstart"] = ScheduledStart.Value.ToUniversalTime();
+            data["scheduledend"] = ScheduledEnd.Value.ToUniversalTime();
+
+            if (Customer != null && Customer.Title == "1")
+            {
+                data["regardingobjectid_lead_task@odata.bind"] = "/leads(" + Customer.Val + ")";
+                
+            }
+            else if (Customer != null && Customer.Title == "2")
+            {
+                data["regardingobjectid_contact_task@odata.bind"] = "/contacts(" + Customer.Val+ ")";
+                
+            }
+            else if(Customer != null && Customer.Title == "3")
+            {
+                data["regardingobjectid_account_task@odata.bind"] = "/accounts(" + Customer.Val+ ")";
+            }
+
             if (UserLogged.Id != Guid.Empty)
             {
-                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+                data["bsd_employee_Task@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
             }
             if (UserLogged.ManagerId != Guid.Empty)
             {

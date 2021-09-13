@@ -1,23 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
-             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              Title="{Binding Title}"
              BackgroundColor="White"
              x:Class="ConasiCRM.Portable.Views.TaskForm">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converter:DateFormatConverter x:Key="DateFormatConverter" />
-            <converter:DecimalToAreaConverter x:Key="DecimalToAreaConverter" />
-            <converter:DecimalToPercentConverter x:Key="DecimalToPercentConverter" />
-            <converter:ObjToBoolConverter x:Key="ObjToBool" />
-            <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
             <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,20">
@@ -26,31 +15,22 @@
                     <controls:MainEntry Text="{Binding TaskFormModel.subject}" Placeholder="Nhập chủ đề công việc" FontSize="15" />
 
                     <controls:FormLabel Text="Người liên quan"/>
-                    <controls:MyNewEntry Text="{Binding TaskFormModel.Customer.Name}" HasClearButton="{Binding TaskFormModel.Customer,Converter={StaticResource ObjToBool}}" ClearClicked="ClearLookup_Clicked"/>
+                    <controls:LookUpMultipleTabs x:Name="Lookup_NguoiLienQuan" Placeholder="Chọn người liên quan" ListListView="{Binding AllsLookUp}" ListTab="{Binding Tabs}" SelectedItem="{Binding Customer}" CenterModal="{x:Reference centerModal}" NameDisplay="Label" />
 
                     <controls:FormLabelRequired Text="Thời gian bắt đầu"/>
-                    <Grid ColumnDefinitions="Auto,Auto,*">
-                        <controls:TimePickerBorder Grid.Column="0" Time="{Binding TaskFormModel.timeStart}" Format="hh:mm tt" />
-                        <Label Grid.Column="1"  Text="-" Padding="5" TextColor="#444444" FontSize="15"/>
-                        <controls:DatePickerControl x:Name="dateTimeTGBatDau" Grid.Column="2" Date="{Binding TaskFormModel.scheduledstart}" Placeholder="Chọn thời gian bắt đầu"/>
-                        <!--<controls:MyNewDatePicker Grid.Column="0" IsEnabled="{Binding TaskFormModel.editable}" Focused="DatePicker_Focused" FontSize="16" NullableDate="{Binding TaskFormModel.scheduledstart}" x:Name="datePicker" DateSelected="DatePickerStart_DateSelected"/>
-                        <TimePicker Grid.Column="1" FontSize="16" IsEnabled="{Binding TaskFormModel.editable}" x:Name="timePickerStart" Time="{Binding TaskFormModel.timeStart}" PropertyChanged="TimePickerStart_PropertyChanged"/>-->
-                    </Grid>
+                    <controls:DatePickerControl x:Name="dateTimeTGBatDau" Date="{Binding ScheduledStart}" Placeholder="Chọn thời gian bắt đầu" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateStart_Selected"/>
 
                     <StackLayout Orientation="Horizontal" Spacing="15">
-                        <controls:FormLabel Text="Sự kiện cả ngày"/>
-                        <CheckBox/>
+                        <Label Text="Sự kiện cả ngày" TextColor="#444444" FontSize="15" VerticalTextAlignment="Center" >
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="EventAllDay_Tapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <CheckBox x:Name="checkBoxEventAllDay" IsChecked="{Binding IsEventAllDay}" CheckedChanged="CheckedBoxEventAllDay_Change"/>
                     </StackLayout>
                     
-
                     <controls:FormLabelRequired Text="Thời gian kết thúc"/>
-                    <Grid ColumnDefinitions="Auto,Auto,*">
-                        <controls:TimePickerBorder Grid.Column="0" Time="{Binding TaskFormModel.timeEnd}" Format="hh:mm tt" />
-                        <Label Grid.Column="1"  Text="-" Padding="5" TextColor="#444444" FontSize="15"/>
-                        <controls:DatePickerControl x:Name="dateTimeTGKetThuc" Grid.Column="2" Date="{Binding TaskFormModel.scheduledend}" Placeholder="Chọn thời gian kết thúc"/>
-                        <!--<controls:MyNewDatePicker Grid.Column="0" IsEnabled="{Binding TaskFormModel.editable}" FontSize="16" Focused="DatePickerEnd_Focused" NullableDate="{Binding TaskFormModel.scheduledend}" x:Name="datePickerEnd" DateSelected="DatePickerEnd_DateSelected"/>
-                        <TimePicker Grid.Column="1" FontSize="16" IsEnabled="{Binding TaskFormModel.editable}" x:Name="timePickerEnd" Time="{Binding TaskFormModel.timeEnd}" PropertyChanged="TimePickerEnd_PropertyChanged"/>-->
-                    </Grid>
+                    <controls:DatePickerControl x:Name="dateTimeTGKetThuc" Date="{Binding ScheduledEnd}" Placeholder="Chọn thời gian kết thúc" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateEnd_Selected"/>
 
                     <controls:FormLabel Text="Mô tả" />
                     <controls:MainEditor Text="{Binding TaskFormModel.description}"  HeightRequest="100" Placeholder="Nhập mô tả" FontSize="15"/>
@@ -59,38 +39,10 @@
             </ScrollView>
 
             <StackLayout AbsoluteLayout.LayoutBounds="0,1,1,60" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White">
-                <Button Text="Tạo công việc" Clicked="CreateTask_Clicked" TextColor="White" BackgroundColor="{StaticResource NavigationPrimary}" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="40" Margin="10" Padding="10,5"/>
+                <Button Text="Tạo công việc" Clicked="SaveTask_Clicked" TextColor="White" BackgroundColor="{StaticResource NavigationPrimary}" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="40" Margin="10" Padding="10,5"/>
             </StackLayout>
 
-            <!--<controls:ModalContentView IsVisible="{Binding ShowLookUpModal}">
-                <StackLayout BackgroundColor="#ffffff" Padding="10">
-                    <Grid ColumnDefinitions="*,*,*" BackgroundColor="#ffffff" ColumnSpacing="0">
-                        <Button Text="KH cá nhân" BackgroundColor="#eeeeee" Padding="5" Grid.Column="0" Grid.Row="0" x:Name="btnKHCN"  Clicked="BtnKHCN_Clicked"  VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand"/>
-                        <Button Text="KH doanh nghiệp" VerticalOptions="CenterAndExpand" Padding="5" BackgroundColor="#eeeeee" Margin="0" Grid.Column="1" Grid.Row="0" x:Name="btnKHDN" Clicked="BtnKHDN_Clicked"  HorizontalOptions="FillAndExpand"/>
-                        <Button Text="KH tiềm năng" VerticalOptions="CenterAndExpand" Padding="5" BackgroundColor="#eeeeee" Margin="0" Grid.Column="2" Grid.Row="0" x:Name="btnKHTN" Clicked="BtnKHTN_Clicked"  HorizontalOptions="FillAndExpand"/>
-                    </Grid>
-                    <Frame CornerRadius="0" Padding="0" BorderColor="#eeeeee" HeightRequest="40">
-                        <SearchBar x:Name="searchBar" BackgroundColor="{StaticResource SearchBarBG}" Text="" Placeholder="Keyword..." />
-                    </Frame>
-                    <ListView x:Name="lvLookUp" ItemTapped="LvLookUp_ItemTapped" ItemsSource="{Binding LookUpData}" HasUnevenRows="False" ItemAppearing="LvLookUp_ItemAppearing" CachingStrategy="RecycleElement">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout VerticalOptions="CenterAndExpand" Grid.Column="1">
-                                        <Label Text="{Binding Name}"  />
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.Footer>
-                            <ActivityIndicator IsRunning="{Binding LookUpLoading}" Color="{StaticResource IndicatorColor}" VerticalOptions="Center" HorizontalOptions="Center" />
-                        </ListView.Footer>
-                    </ListView>
-                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Orientation="Horizontal" Spacing="2">
-                        <Button Clicked="btnCloseLookUpModal" BackgroundColor="#eeeeee" TextColor="Black" Text="Đóng" HorizontalOptions="FillAndExpand"/>
-                    </StackLayout>
-                </StackLayout>
-            </controls:ModalContentView>-->
+            <controls:CenterModal x:Name="centerModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

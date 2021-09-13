@@ -189,7 +189,7 @@ namespace ConasiCRM.Portable.Views
             ContentActivity.IsVisible = false;
         }
 
-        private void Update_Clicked(object sender, EventArgs e)
+        private async void Update_Clicked(object sender, EventArgs e)
         {
             if (viewModel.PhoneCall.activityid != Guid.Empty)
             {
