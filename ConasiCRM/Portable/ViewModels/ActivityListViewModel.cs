@@ -31,6 +31,12 @@ namespace ConasiCRM.Portable.ViewModels
         private string _activityType;
         public string ActivityType { get => _activityType; set { _activityType = value; OnPropertyChanged(nameof(ActivityType)); } }
 
+        private DateTime? _scheduledStartTask;
+        public DateTime? ScheduledStartTask { get => _scheduledStartTask; set { _scheduledStartTask = value; OnPropertyChanged(nameof(ScheduledStartTask)); } }
+
+        private DateTime? _scheduledEndTask;
+        public DateTime? ScheduledEndTask { get => _scheduledEndTask; set { _scheduledEndTask = value; OnPropertyChanged(nameof(ScheduledEndTask)); } }
+        
         public string CodeCompleted = "completed";
 
         public string CodeCancel = "cancel";
@@ -59,7 +65,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='createdon' />
                                     <attribute name='actualdurationminutes' />
                                     <attribute name='description' />
-                                    <order attribute='modifiedon' descending='false' />
+                                    <order attribute='modifiedon' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='activitytypecode' operator='in'>
                                         <value>4210</value>
@@ -284,16 +290,11 @@ namespace ConasiCRM.Portable.ViewModels
                             </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskFormModel>>("tasks", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value.FirstOrDefault();
-            Task = data;
+            if (result == null || result.value == null) return;
+            Task = result.value.FirstOrDefault();
 
-            if (data.scheduledend != null && data.scheduledstart != null)
-            {
-                Task.scheduledend = data.scheduledend.Value.ToLocalTime();
-                Task.scheduledstart = data.scheduledstart.Value.ToLocalTime();
-            }
+            this.ScheduledStartTask = Task.scheduledstart.Value.ToLocalTime();
+            this.ScheduledEndTask = Task.scheduledend.Value.ToLocalTime();
 
             if (Task.contact_id != Guid.Empty)
             {
