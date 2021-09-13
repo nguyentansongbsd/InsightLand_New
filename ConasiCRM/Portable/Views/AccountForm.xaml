@@ -52,7 +52,7 @@
                     <controls:MainEntry Placeholder="Nhập số giấy phép kinh doanh" Text="{Binding singleAccount.bsd_registrationcode}" FontSize="15"/>
 
                     <controls:FormLabel Text="Ngày cấp" FontSize="15" Margin="0,10,0,0"/>
-                    <controls:DatePickerControl Date="{Binding singleAccount.bsd_issuedon}" Placeholder="Chọn ngày cấp"/>
+                    <controls:DatePickerControl x:Name="datePickerNgayCap" Date="{Binding singleAccount.bsd_issuedon}" Placeholder="Chọn ngày cấp" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
 
                     <controls:FormLabel Text="Nơi cấp" FontSize="15" Margin="0,10,0,0"/>
                     <controls:MainEntry Placeholder="Nhập nơi cấp" Text="{Binding singleAccount.bsd_placeofissue}" FontSize="15"/>

@@ -69,7 +69,7 @@ namespace ConasiCRM.Portable.ViewModels
         public string AddressLine2Contac { get => _addressLine2Contac; set { _addressLine2Contac = value; OnPropertyChanged(nameof(AddressLine2Contac)); } }
 
         private string _addressLine1Contac;
-        public string AddressLine1Contac { get => _addressLine1Contac; set { _addressLine1Contac = value; OnPropertyChanged(nameof(AddressLine1Contac)); } }
+        public string AddressLine1Contact { get => _addressLine1Contac; set { _addressLine1Contac = value; OnPropertyChanged(nameof(AddressLine1Contact)); } }
 
         private string _addressCompositePermanent;
         public string AddressCompositePermanent { get => _addressCompositePermanent; set { _addressCompositePermanent = value; OnPropertyChanged(nameof(AddressCompositePermanent)); } }
@@ -282,11 +282,18 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_placeofissuepassport"] = contact.bsd_placeofissuepassport;
             data["bsd_jobtitlevn"] = contact.bsd_jobtitlevn;
             data["telephone1"] = contact.telephone1;
+
             data["bsd_housenumberstreet"] = contact.bsd_housenumberstreet;
-            data["bsd_permanentaddress"] = contact.bsd_permanentaddress;
             data["bsd_contactaddress"] = contact.bsd_contactaddress;
-            data["bsd_permanentaddress1"] = contact.bsd_permanentaddress1;
+            data["bsd_diachi"] = contact.bsd_diachi;
             data["bsd_postalcode"] = contact.bsd_postalcode;
+            data["bsd_housenumber"] = contact.bsd_housenumberstreet;
+
+            data["bsd_permanentaddress1"] = contact.bsd_permanentaddress1;
+            data["bsd_diachithuongtru"] = contact.bsd_diachithuongtru;
+            data["bsd_permanenthousenumber"] = contact.bsd_permanentaddress;
+            data["bsd_permanentaddress"] = contact.bsd_permanentaddress;
+
             if (contact._parentcustomerid_value == null)
             {
                 await DeletLookup("parentcustomerid_account", contact.contactid);
@@ -409,6 +416,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='bsd_country'>
                                     <attribute name='bsd_countryname' alias='Name'/>
                                     <attribute name='bsd_countryid' alias='Id'/>
+                                    <attribute name='bsd_nameen' alias='Detail'/>
                                     <order attribute='bsd_countryname' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='bsd_countryname' operator='eq' value='" + CountryName + @"' />
@@ -459,6 +467,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='new_province'>
                                     <attribute name='bsd_provincename' alias='Name'/>
                                     <attribute name='new_provinceid' alias='Id'/>
+                                    <attribute name='bsd_nameen' alias='Detail'/>
                                     <order attribute='bsd_provincename' descending='false' />
                                     <filter type='and'>
                                         <condition attribute='bsd_country' operator='eq' value='" + CountryId + @"' />

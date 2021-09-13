@@ -25,6 +25,8 @@ namespace ConasiCRM.Portable.Views
         private async void Init(string id)
         {
             this.BindingContext = viewModel = new MandatorySecondaryFormViewModel();
+            datePickerNgayHieuLucTu.DefaultDisplay = DateTime.Now;
+            datePickerNgayHieuLucDen.DefaultDisplay = DateTime.Now;
             SetPreOpen();
             await viewModel.GetOneAccountById(id);
         }

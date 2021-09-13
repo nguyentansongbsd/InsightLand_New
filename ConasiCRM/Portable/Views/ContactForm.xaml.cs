@@ -28,6 +28,7 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.Id = Guid.Empty;
+            datePickerNgaySinh.DefaultDisplay = DateTime.Now;
             Init();
             Create();
         }
@@ -258,9 +259,9 @@ namespace ConasiCRM.Portable.Views
         private async void DiaChiLienLac_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            if (viewModel.AddressLine1Contac == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_housenumberstreet))
+            if (viewModel.AddressLine1Contact == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_housenumberstreet))
             {
-                viewModel.AddressLine1Contac = viewModel.singleContact.bsd_housenumberstreet;
+                viewModel.AddressLine1Contact = viewModel.singleContact.bsd_housenumberstreet;
             }
 
             if (viewModel.AddressPostalCodeContac == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_postalcode))
@@ -343,17 +344,17 @@ namespace ConasiCRM.Portable.Views
 
         private async void ConfirmContacAddress_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
+            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contact))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
                 return;
             }
 
             List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contact))
             {
-                viewModel.singleContact.bsd_housenumberstreet = viewModel.AddressLine1Contac;
-                address.Add(viewModel.AddressLine1Contac);
+                viewModel.singleContact.bsd_housenumberstreet = viewModel.AddressLine1Contact;
+                address.Add(viewModel.AddressLine1Contact);
             }
             else
             {
@@ -402,6 +403,31 @@ namespace ConasiCRM.Portable.Views
                 viewModel.singleContact._bsd_country_value = null;
             }
             viewModel.singleContact.bsd_contactaddress = viewModel.AddressCompositeContac = string.Join(", ", address);
+
+            //Address En
+            List<string> addressEn = new List<string>();
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contact))
+            {
+                addressEn.Add(viewModel.AddressLine1Contact);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityContac?.Detail))
+            {
+                addressEn.Add(viewModel.AddressCityContac.Detail);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvinceContac?.Detail))
+            {
+                addressEn.Add(viewModel.AddressStateProvinceContac.Detail);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
+            {
+                addressEn.Add(viewModel.AddressPostalCodeContac);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryContac?.Detail))
+            {
+                addressEn.Add(viewModel.AddressCountryContac.Detail);
+            }
+            viewModel.singleContact.bsd_diachi = string.Join(", ", addressEn);
+
             await centerModalContacAddress.Hide();
         }
 
@@ -473,6 +499,28 @@ namespace ConasiCRM.Portable.Views
                 viewModel.singleContact._bsd_permanentcountry_value = null;
             }
             viewModel.singleContact.bsd_permanentaddress1 = viewModel.AddressCompositePermanent = string.Join(", ", address);
+
+            //addres EN
+            List<string> addressPermanentEn = new List<string>();
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
+            {
+                addressPermanentEn.Add(viewModel.AddressLine1Permanent);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityPermanent?.Detail))
+            {
+                addressPermanentEn.Add(viewModel.AddressCityPermanent.Detail);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvincePermanent?.Detail))
+            {
+                addressPermanentEn.Add(viewModel.AddressStateProvincePermanent.Detail);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryPermanent?.Detail))
+            {
+                addressPermanentEn.Add(viewModel.AddressCountryPermanent.Detail);
+            }
+            
+            viewModel.singleContact.bsd_diachithuongtru = string.Join(", ", addressPermanentEn);
+
             await centerModalPermanentAddress.Hide();
         }
 

@@ -49,6 +49,7 @@ namespace ConasiCRM.Portable.Views
         {
             this.Title = "Tạo Mới Khách Hàng Doanh Nghiệp";
             btnSave.Text = "Tạo Mới";
+            datePickerNgayCap.DefaultDisplay = DateTime.Now;
             btnSave.Clicked += CreateContact_Clicked;
             viewModel.LoadBusinessTypeForLookup();
             viewModel.BusinessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == "100000000");
@@ -388,6 +389,31 @@ namespace ConasiCRM.Portable.Views
                 viewModel.singleAccount._bsd_country_value = null;
             }
             viewModel.singleAccount.bsd_address = viewModel.AddressCompositeContac = string.Join(", ", address);
+
+            //Address En
+            List<string> addressEn = new List<string>();
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
+            {
+                addressEn.Add(viewModel.AddressLine1Contac);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityContac?.Detail))
+            {
+                addressEn.Add(viewModel.AddressCityContac.Detail);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvinceContac?.Detail))
+            {
+                addressEn.Add(viewModel.AddressStateProvinceContac.Detail);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
+            {
+                addressEn.Add(viewModel.AddressPostalCodeContac);
+            }
+            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryContac?.Detail))
+            {
+                addressEn.Add(viewModel.AddressCountryContac.Detail);
+            }
+            viewModel.singleAccount.bsd_diachi = string.Join(", ", addressEn);
+
             await centerModalContacAddress.Hide();
         }
     }
