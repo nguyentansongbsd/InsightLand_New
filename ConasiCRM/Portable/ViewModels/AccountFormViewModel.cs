@@ -113,7 +113,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='statuscode' />
                                 <attribute name='ownerid' />
                                 <attribute name='createdon' />
-                                <attribute name='address1_composite' alias='bsd_address'/>
+                                <attribute name='bsd_address'/>
                                 <attribute name='bsd_nation' alias='_bsd_country_value' />
                                 <attribute name='bsd_province' alias='_bsd_province_value'/>
                                 <attribute name='bsd_district' alias='_bsd_district_value'/>
@@ -224,12 +224,13 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_placeofissue"] = singleAccount.bsd_placeofissue;
 
             data["bsd_vatregistrationnumber"] = singleAccount.bsd_vatregistrationnumber;
-            data["address1_composite"] = singleAccount.bsd_address;
 
             data["bsd_permanentaddress1"] = singleAccount.bsd_permanentaddress1;
 
             data["bsd_housenumberstreet"] = singleAccount.bsd_housenumberstreet;
-
+            data["bsd_street"] = singleAccount.bsd_housenumberstreet;
+            data["bsd_diachi"] = singleAccount.bsd_diachi;
+            data["bsd_address"] = singleAccount.bsd_address;
             data["bsd_postalcode"] = singleAccount.bsd_postalcode;
 
             if (singleAccount._primarycontactid_value == null)
@@ -329,6 +330,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='bsd_country'>
                                     <attribute name='bsd_countryname' alias='Name'/>
                                     <attribute name='bsd_countryid' alias='Id'/>
+                                    <attribute name='bsd_nameen' alias='Detail'/>
                                     <order attribute='bsd_countryname' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='bsd_countryname' operator='eq' value='" + CountryName + @"' />
@@ -379,6 +381,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='new_province'>
                                     <attribute name='bsd_provincename' alias='Name'/>
                                     <attribute name='new_provinceid' alias='Id'/>
+                                    <attribute name='bsd_nameen' alias='Detail'/>
                                     <order attribute='bsd_provincename' descending='false' />
                                     <filter type='and'>
                                         <condition attribute='bsd_country' operator='eq' value='" + CountryId + @"' />

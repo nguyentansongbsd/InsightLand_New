@@ -234,8 +234,8 @@ namespace ConasiCRM.Portable.ViewModels
             List<Unit> units = new List<Unit>();
             foreach (var item in unitsResult)
             {
-                // dem unit co nhung trang thai giu cho la: queuing, waiting,completed
-                item.NumQueses = result.value.Where(x => x.productid == item.productid && (x.queses_statuscode == "100000000" || x.queses_statuscode == "100000002" || x.queses_statuscode == "100000004")).ToList().Count();
+                // dem unit co nhung trang thai giu cho la: queuing, waiting
+                item.NumQueses = result.value.Where(x => x.productid == item.productid && (x.queses_statuscode == "100000000" || x.queses_statuscode == "100000002")).ToList().Count();
                 units.Add(item);
             }
 
@@ -279,7 +279,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_project' />
                         <attribute name='opportunityid' />
                         <attribute name='bsd_queuingexpired' />
-                        <order attribute='createdon' descending='true' />
+                        <order attribute='statuscode' descending='false' />
                         <link-entity name='product' from='productid' to='bsd_units' link-type='inner' alias='ad'>
                           <filter type='and'>
                             <condition attribute='productid' operator='eq' value='{unitId}'/>

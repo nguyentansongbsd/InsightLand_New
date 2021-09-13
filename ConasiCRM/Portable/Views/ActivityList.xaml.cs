@@ -18,6 +18,7 @@ namespace ConasiCRM.Portable.Views
     {
         public static bool? NeedToRefreshPhoneCall = null;
         public static bool? NeedToRefreshMeet = null;
+        public static bool? NeedToRefreshTask = null;
         public Action<bool> OnCompleted;
         public ActivityListViewModel viewModel;
         public ActivityList()
@@ -26,6 +27,7 @@ namespace ConasiCRM.Portable.Views
             BindingContext = viewModel = new ActivityListViewModel();
             NeedToRefreshPhoneCall = false;
             NeedToRefreshMeet = false;
+            NeedToRefreshTask = false;
             Init();
         }
         public async void Init()
@@ -66,6 +68,19 @@ namespace ConasiCRM.Portable.Views
                     await viewModel.loadFromToMeet(viewModel.Meet.activityid);
                 }
                 NeedToRefreshMeet = false;
+                LoadingHelper.Hide();
+            }
+
+            if (viewModel.Data != null && NeedToRefreshTask == true)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadOnRefreshCommandAsync();
+                if (ContentTask.IsVisible == true)
+                {
+                    await viewModel.loadTask(viewModel.Task.activityid);
+                }
+                
+                NeedToRefreshTask = false;
                 LoadingHelper.Hide();
             }
         }
@@ -349,6 +364,6 @@ namespace ConasiCRM.Portable.Views
                 }
             }
             LoadingHelper.Hide();
-        } 
+        }
     }
 }

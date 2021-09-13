@@ -14,8 +14,8 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("false","Residential"),
-                new OptionSet("true","Commercial"),
+                new OptionSet("false","Nhà ở"),
+                new OptionSet("true","Thương mại"),
             };
         }
     }

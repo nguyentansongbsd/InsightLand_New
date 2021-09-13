@@ -101,7 +101,7 @@
                     </controls:BsdListView.ItemTemplate>
                 </controls:BsdListView>
             </Grid>
-            
+
             <controls:ExtendedFrame AbsoluteLayout.LayoutBounds="0,1,1,59" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="#1399D5" Padding="0" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">
                 <Button Text="&#xf067;" Clicked="NewActivity_Clicked"  TextColor="White" FontSize="18" FontFamily="FontAwesomeSolid" WidthRequest="44" HeightRequest="44" CornerRadius="22" BackgroundColor="#1399D5"/>
             </controls:ExtendedFrame>
@@ -111,6 +111,9 @@
                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CloseContentActivity_Tapped"/>
                 </ContentView.GestureRecognizers>
                 <telerikPrimitives:RadBorder VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="White" Margin="15,30">
+                    <telerikPrimitives:RadBorder.GestureRecognizers>
+                        <TapGestureRecognizer/>
+                    </telerikPrimitives:RadBorder.GestureRecognizers>
                     <Grid Grid.Row="0" Margin="10,10,10,0" RowDefinitions="Auto,*,Auto">
                         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
                             <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding ActivityStatusCode.Background}">
@@ -176,12 +179,12 @@
 
                                     <controls:FormLabel Text="Thời gian bắt đầu" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="2"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="2" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding Task.scheduledstart,StringFormat='{0:h:mm tt - dd/MM/yyyy}'}" FontSize="14" TextColor="#444444" HorizontalOptions="Center" />
+                                        <Label Text="{Binding ScheduledStartTask,StringFormat='{0:h:mm tt - dd/MM/yyyy}'}" FontSize="14" TextColor="#444444" HorizontalOptions="Center" />
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Thời gian kết thúc" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="3"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="3" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding Task.scheduledend,StringFormat='{0:h:mm tt - dd/MM/yyyy}'}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding ScheduledEndTask,StringFormat='{0:h:mm tt - dd/MM/yyyy}'}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Sự kiện cả ngày" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="4"/>
@@ -236,7 +239,7 @@
                                 </Grid>
                             </Grid>
                         </ScrollView>
-                    
+
                         <Grid IsVisible="{Binding ShowGridButton}" Grid.Row="2" ColumnDefinitions="*,*" BackgroundColor="White" Padding="10,0,10,10">
                             <Button Text="Cập Nhật" Grid.Column="0" Clicked="Update_Clicked" TextColor="White" FontSize="16" FontAttributes="Bold" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" TextTransform="None" VerticalOptions="Center"/>
                             <Button Text="Hoàn Thành" Grid.Column="1" Clicked="Completed_Clicked" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" HeightRequest="40" BackgroundColor="White" CornerRadius="10" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" TextTransform="None" VerticalOptions="Center"/>

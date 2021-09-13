@@ -58,7 +58,7 @@
                                 <controls:LookUp x:Name="Lookup_LocalizationOptions" Placeholder="Chọn quốc tịch" ItemsSource="{Binding LocalizationOptions}" SelectedItem="{Binding singleLocalization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label"/>
 
                                 <controls:FormLabelRequired Text="Ngày sinh" Margin="0,10,0,0"/>
-                                <controls:DatePickerControl Date="{Binding singleContact.birthdate}" Placeholder="Chọn ngày sinh"/>
+                                <controls:DatePickerControl x:Name="datePickerNgaySinh" Date="{Binding singleContact.birthdate}" Placeholder="Chọn ngày sinh" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
 
                                 <controls:FormLabel Text="Email" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Placeholder="Nhập email" Text="{Binding singleContact.emailaddress1}" FontSize="15"/>
@@ -213,7 +213,7 @@
                             <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityContac}" ItemsSource="{Binding list_district_lookup}"/>
 
                             <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
-                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Contac}"/>
+                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Contact}"/>
                         </StackLayout>
                     </ScrollView>
                 </controls:CenterModal.Body>

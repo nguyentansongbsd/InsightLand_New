@@ -61,6 +61,7 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 await viewModel.LoadOneAccount(AccountId.ToString());
+                viewModel.singleAccount.bsd_address = await SetAddress();
                 if (viewModel.singleAccount.bsd_businesstypesys != null)
                 {
                     viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);

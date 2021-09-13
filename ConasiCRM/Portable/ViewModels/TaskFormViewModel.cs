@@ -139,7 +139,37 @@ namespace ConasiCRM.Portable.ViewModels
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskFormModel>>("tasks", fetchXml);
             if (result == null || result.value.Count == 0) return;
+
             this.TaskFormModel = result.value.FirstOrDefault();
+
+            //customer type = 1 -> lead.  customer type = 2 -> contact. customer type = 3 -> account
+            if (this.TaskFormModel.lead_id != Guid.Empty)
+            {
+                OptionSet customer = new OptionSet();
+                customer.Val = this.TaskFormModel.lead_id.ToString();
+                customer.Label = this.TaskFormModel.lead_name;
+                customer.Title = "1";
+                this.Customer = customer;
+            }
+            else if(this.TaskFormModel.contact_id != Guid.Empty)
+            {
+                OptionSet customer = new OptionSet();
+                customer.Val = this.TaskFormModel.contact_id.ToString();
+                customer.Label = this.TaskFormModel.contact_name;
+                customer.Title = "2";
+                this.Customer = customer;
+            }
+            else if (this.TaskFormModel.account_id != Guid.Empty)
+            {
+                OptionSet customer = new OptionSet();
+                customer.Val = this.TaskFormModel.account_id.ToString();
+                customer.Label = this.TaskFormModel.account_name;
+                customer.Title = "3";
+                this.Customer = customer;
+            }
+            
+            ScheduledStart = this.TaskFormModel.scheduledstart.Value.ToLocalTime();
+            ScheduledEnd = this.TaskFormModel.scheduledend.Value.ToLocalTime();
         }
 
         public async Task<bool> CreateTask()
@@ -149,6 +179,21 @@ namespace ConasiCRM.Portable.ViewModels
             string path = "/tasks";
             CrmApiResponse result = await CrmHelper.PostData(path, content);
             
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateTask()
+        {
+            string path = $"/tasks({TaskFormModel.activityid})";
+            var content = await getContent();
+            CrmApiResponse result = await CrmHelper.PatchData(path, content);
             if (result.IsSuccess)
             {
                 return true;
