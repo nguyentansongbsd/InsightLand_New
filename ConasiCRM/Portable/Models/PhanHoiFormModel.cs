@@ -1,11 +1,5 @@
 ﻿using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.Globalization;
-using System.Linq;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Models
 {
@@ -29,28 +23,6 @@ namespace ConasiCRM.Portable.Models
         public int _caseorigincode;
         public int caseorigincode { get { return _caseorigincode; } set { _caseorigincode = value; OnPropertyChanged(nameof(caseorigincode)); } }
 
-        public string caseorigincodevalue
-        {
-            get
-            {
-                switch (caseorigincode)
-                {
-                    case 1:
-                        return "Phone";
-                    case 2:
-                        return "Email";
-                    case 3:
-                        return "Web";
-                    case 2483:
-                        return "Facebook";
-                    case 3986:
-                        return "Twitter";
-                    default:
-                        return "";
-                }
-            }
-        }
-
         public string _description;
         public string description { get { return _description; } set { _description = value; OnPropertyChanged(nameof(description)); } }
 
@@ -60,44 +32,8 @@ namespace ConasiCRM.Portable.Models
         public DateTime _createdon;
         public DateTime createdon { get { return _createdon; } set { _createdon = value; OnPropertyChanged(nameof(createdon)); } }
 
-        public string createdon_format
-        {
-            get
-            {
-                return this.createdon.ToString("dd/MM/yyyy");
-            }
-        }
-
         public int _statuscode;
         public int statuscode { get { return _statuscode; } set { _statuscode = value; OnPropertyChanged(nameof(statuscode)); } }
-
-        public string statuscodevalue
-        {
-            get
-            {
-                switch (statuscode)
-                {
-                    case 1:
-                        return "In Progress";
-                    case 2:
-                        return "On Hold";
-                    case 3:
-                        return "Waiting for Details";
-                    case 4:
-                        return "Researching";
-                    case 5:
-                        return "Problem Solved";
-                    case 1000:
-                        return "Information Provided";
-                    case 6:
-                        return "Canceled";
-                    case 2000:
-                        return "Merged";
-                    default:
-                        return "";
-                }
-            }
-        }
 
         public string _customerid;
         public string customerid { get { return _customerid; } set { _customerid = value; OnPropertyChanged(nameof(customerid)); } }
