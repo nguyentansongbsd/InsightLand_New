@@ -266,7 +266,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             string[] options = new string[] { "Hoàn Thành", "Hủy" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Đóng", null, options);
             if (asw == "Hoàn Thành")
             {
                 if (viewModel.PhoneCall.activityid != Guid.Empty)

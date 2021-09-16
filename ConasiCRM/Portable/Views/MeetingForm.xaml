@@ -38,13 +38,13 @@
                     <controls:MainEntry Placeholder="Nhập chủ đề cuộc họp" Text="{Binding MeetingModel.subject}" FontSize="15"/>
 
                     <controls:FormLabelRequired Text="Người tham dự bắt buộc" Margin="0,10,0,0"/>
-                    <controls:LookUpMultipleOptions x:Name="Lookup_Required" Placeholder="Chọn người tham dự bắt buộc" ItemsSource="{Binding ItemsSourceOptional}" ListTab="{Binding Tabs}" ListListView="{Binding AllsLookUpRequired}" CenterModal="{x:Reference CenterModal}" SelectedIds="{Binding Required}" ShowClearButton="False" ShowCloseButton="False"/>
+                    <controls:LookUpMultipleOptions x:Name="Lookup_Required" Placeholder="Chọn người tham dự bắt buộc" ListTab="{Binding Tabs}" ListListView="{Binding AllsLookUpRequired}" CenterModal="{x:Reference CenterModal}" SelectedIds="{Binding Required}" ShowClearButton="False" ShowCloseButton="False"/>
 
                     <controls:FormLabel Text="Người tham dự không bắt buộc" Margin="0,10,0,0"/>
-                    <controls:LookUpMultipleOptions x:Name="Lookup_Optional" Placeholder="Chọn người tham dự không bắt buộc" ItemsSource="{Binding ItemsSourceOptional}" ListTab="{Binding Tabs}" ListListView="{Binding AllsLookUpOptional}" CenterModal="{x:Reference CenterModal}" SelectedIds="{Binding Optional}" ShowClearButton="False" ShowCloseButton="False"/>
+                    <controls:LookUpMultipleOptions x:Name="Lookup_Optional" Placeholder="Chọn người tham dự không bắt buộc" ListTab="{Binding Tabs}" ListListView="{Binding AllsLookUpOptional}" CenterModal="{x:Reference CenterModal}" SelectedIds="{Binding Optional}" ShowClearButton="False" ShowCloseButton="False"/>
 
                     <controls:FormLabel Text="Người liên quan" FontSize="15" Margin="0,10,0,0"/>
-                    <controls:LookUpMultipleTabs x:Name="Lookup_Customer" Placeholder="Chọn người liên quan" ListListView="{Binding AllsLookUpRequired}" ListTab="{Binding Tabs}" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding Customer}" NameDisplay="Label"/>
+                    <controls:LookUpMultipleTabs x:Name="Lookup_Customer" Placeholder="Chọn người liên quan" Tabs="{Binding TabsCustomer}" ListListView="{Binding AllsLookUpCustomer}" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding Customer}" NameDisplay="Label"/>
 
                     <controls:FormLabel Text="Địa điểm" FontSize="15" Margin="0,10,0,0"/>
                     <controls:MainEntry Placeholder="Nhập địa điểm" Text="{Binding MeetingModel.location}" FontSize="15"/>

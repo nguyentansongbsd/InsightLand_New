@@ -22,7 +22,8 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
 
-        public static readonly BindableProperty SelectedIdsProperty = BindableProperty.Create(nameof(SelectedIds), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
+        public static readonly BindableProperty SelectedIdsProperty = BindableProperty.Create(nameof(SelectedIds), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: SelectedIdsChange);
+
         public List<string> SelectedIds { get => (List<string>)GetValue(SelectedIdsProperty); set { SetValue(SelectedIdsProperty, value); } }
 
         public static readonly BindableProperty ShowClearButtonProperty = BindableProperty.Create(nameof(ShowClearButton), typeof(bool), typeof(MainEntry), true, BindingMode.TwoWay);
@@ -216,12 +217,7 @@ namespace ConasiCRM.Portable.Controls
 
             if (ListListView != null && ListListView.Count>0 && ListTab != null && ListTab.Count>0)
             {
-                //ItemsSource = new List<OptionSet>();
-                //for (int i = 0; i < ListListView.Count; i++)
-                //{
-                //    ItemsSource.AddRange(ListListView[i]);
-                //}
-
+                ItemSourceForTabs();
                 Grid tabs = SetUpTabs(ListTab);
                 gridMain = new Grid();
                 gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
@@ -479,6 +475,36 @@ namespace ConasiCRM.Portable.Controls
                     }
                 }
             }          
+        }
+
+        private void ItemSourceForTabs()
+        {
+            if (ItemsSource == null || ItemsSource.Count <= 0)
+            {
+                ItemsSource = new List<OptionSet>();
+                for (int i = 0; i < ListListView.Count; i++)
+                {
+                    ItemsSource.AddRange(ListListView[i]);
+                }
+            }
+        }
+
+        private static async void SelectedIdsChange(BindableObject bindable, object oldValue, object newValue)
+        {
+            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;
+            if (control.ItemsSource == null || control.ItemsSource.Count <= 0)
+            {
+                if (control.ListListView != null)
+                {
+                    await control.PreShow();
+                    control.ItemSourceForTabs();
+                }
+                else
+                {
+                    await control.PreShow();
+                }
+            }  
+            control.setData();
         }
     }
 }
