@@ -77,13 +77,8 @@ namespace ConasiCRM.Portable.Views
             Lookup_NguoiLienQuan.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                viewModel.Tabs = new List<string>() { "KH Tiềm Năng", "KH Cá Nhân", "KH Doanh Nghiệp" };
-                await Task.WhenAll(
-                    viewModel.LoadLeads(),
-                    viewModel.LoadContact(),
-                    viewModel.LoadAccount()
-                    );
-                viewModel.AllsLookUp = new List<List<OptionSet>>() { viewModel.Leads, viewModel.Contacts, viewModel.Accounts }; ;
+                viewModel.SetUpTabs();
+                viewModel.LoadAllLookUp();
                 LoadingHelper.Hide();
             };
         }
