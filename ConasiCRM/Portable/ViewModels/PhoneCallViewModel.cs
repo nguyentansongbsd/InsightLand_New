@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms.Extended;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -16,17 +15,11 @@ namespace ConasiCRM.Portable.ViewModels
     {
         public PhoneCellModel _phoneCellModel;
         public PhoneCellModel PhoneCellModel { get => _phoneCellModel; set { _phoneCellModel = value; OnPropertyChanged(nameof(PhoneCellModel)); } }
-
-        private List<OptionSet> _leadsLookUp;
-        public List<OptionSet> LeadsLookUp { get => _leadsLookUp; set { _leadsLookUp = value; OnPropertyChanged(nameof(LeadsLookUp)); } }
-
-        private List<OptionSet> _contactsLookUp;
-        public List<OptionSet> ContactsLookUp { get => _contactsLookUp; set { _contactsLookUp = value; OnPropertyChanged(nameof(ContactsLookUp)); } }
-
-        private List<OptionSet> _accountsLookUp;
-        public List<OptionSet> AccountsLookUp { get => _accountsLookUp; set { _accountsLookUp = value; OnPropertyChanged(nameof(AccountsLookUp)); } }
+        public List<OptionSet> LeadsLookUp { get; set; }
+        public List<OptionSet> ContactsLookUp { get; set; }
+        public List<OptionSet> AccountsLookUp { get; set; }
         public List<List<OptionSet>> AllsLookUp { get; set; }
-        public List<FloatButtonItem> ListTab { get; set; }
+        public List<string> Tabs { get; set; }
 
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
@@ -46,10 +39,6 @@ namespace ConasiCRM.Portable.ViewModels
         public bool _showButton;
         public bool ShowButton { get => _showButton; set { _showButton = value; OnPropertyChanged(nameof(ShowButton)); } }
 
-        public int PageLead = 1;
-        public int PageContact = 1;
-        public int PageAccount =1;
-
         public PhoneCallViewModel()
         {
             PhoneCellModel = new PhoneCellModel();
@@ -57,9 +46,12 @@ namespace ConasiCRM.Portable.ViewModels
             LeadsLookUp = new List<OptionSet>();
             AccountsLookUp = new List<OptionSet>();
             AllsLookUp = new List<List<OptionSet>>();
+            Tabs = new List<string>();
+            Tabs.Add("KH Tiềm Năng");
+            Tabs.Add("KH Cá Nhân");
+            Tabs.Add("KH Doanh Nghiệp");
             CallFrom = UserLogged.User;
             ShowButton = true;
-            ListTab = new List<FloatButtonItem>();
         }
 
         public async Task<Boolean> DeletLookup(string fieldName, Guid id)
@@ -348,7 +340,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadLeadsLookUp()
         {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageLead + @"' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
                                 <attribute name='lastname' alias='Label' />
                                 <attribute name='leadid' alias='Val' />
@@ -371,7 +363,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadContactsLookUp()
         {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageContact + @"' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Val' />
                     <attribute name='fullname' alias='Label' />
@@ -394,7 +386,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAccountsLookUp()
         {
-            string fetch = @"<fetch version='1.0' count='15' page='"+PageAccount+@"' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='account'>
                                 <attribute name='name' alias='Label'/>
                                 <attribute name='accountid' alias='Val'/>
@@ -415,8 +407,14 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public void LoadAllLookUp()
+        public async Task LoadAllLookUp()
         {
+            if (LeadsLookUp.Count <= 0 && ContactsLookUp.Count <= 0 && AccountsLookUp.Count <= 0)
+            {
+                await LoadLeadsLookUp();
+                await LoadContactsLookUp();
+                await LoadAccountsLookUp();
+            }
             if (AllsLookUp.Count <= 0)
             {              
                 AllsLookUp.Add(LeadsLookUp);
@@ -484,35 +482,6 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             var tmp = result.value.FirstOrDefault();
             PhoneCellModel.phonenumber = tmp.mobilephone;
-        }
-
-        public void SetUpTabs()
-        {
-            if (ListTab.Count<= 0)
-            {
-                ListTab.Add(new FloatButtonItem("KH Tiềm Năng", null, null, null, LoadLead));
-                ListTab.Add(new FloatButtonItem("KH Cá Nhân", null, null, null, LoadContact));
-                ListTab.Add(new FloatButtonItem("KH Doanh Nghiệp", null, null, null, LoadAccount));
-            }
-
-        }
-
-        private async void LoadLead(object sender, EventArgs e)
-        {
-            await LoadLeadsLookUp();
-            PageLead++;
-        }
-
-        private async void LoadContact(object sender, EventArgs e)
-        {
-            await LoadContactsLookUp();
-            PageContact++;
-        }
-
-        private async void LoadAccount(object sender, EventArgs e)
-        {
-            await LoadAccountsLookUp();
-            PageAccount++;
         }
     }
 }

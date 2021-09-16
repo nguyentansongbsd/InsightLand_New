@@ -14,7 +14,7 @@
                     <controls:LookUp x:Name="lookupCaseType" Placeholder="Chọn loại" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding CaseType}" ItemsSource="{Binding CaseTypes}"/>
 
                     <controls:FormLabelRequired Text="Tiêu đề"/>
-                    <controls:MainEntry Text="{Binding singlePhanHoi.title}" Placeholder="Nhập tiêu đề" TextColor="#333333"/>
+                    <controls:MainEntry Text="{Binding singlePhanHoi.title}" Placeholder="Nhập tiêu đề"/>
 
                     <controls:FormLabel Text="Chủ đề"/>
                     <controls:LookUp x:Name="lookupSubjects" Placeholder="Chọn chủ đề" BottomModal="{Reference lookupModal}" NameDisplay="Label" ItemsSource="{Binding Subjects}" SelectedItem="{Binding Subject}"/>
@@ -38,7 +38,7 @@
                     <controls:LookUpMultipleTabs x:Name="multiTabsDoiTuong" Placeholder="Chọn đối tượng" NameDisplay="Label" ListTab="{Binding TabsDoiTuong}" ListListView="{Binding AllItemSourceDoiTuong}" SelectedItem="{Binding DoiTuong}" CenterModal="{Reference centerModal}"/>-->
 
                     <controls:FormLabel Text="Nội dung"/>
-                    <controls:MainEditor Placeholder="Nhập nội dung" Text="{Binding singlePhanHoi.description}" HeightRequest="100" FontSize="15" TextColor="#333333"/>
+                    <controls:MainEditor Placeholder="Nhập nội dung" Text="{Binding singlePhanHoi.description}" HeightRequest="100" FontSize="15"/>
                 </StackLayout>
             </ScrollView>
 

@@ -8,7 +8,7 @@ namespace ConasiCRM.Portable.Controls
         public LookUpEntry()
         {
             TextColor = Color.Black;
-            this.FontSize = 16;
+            this.FontSize = 15;
             this.PlaceholderColor = Color.Gray;
             this.HeightRequest = 40;
             this.FontFamily = "Segoe";
