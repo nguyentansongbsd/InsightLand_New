@@ -11,7 +11,7 @@ namespace ConasiCRM.Portable.Controls
         public MainEntry()
         {
             TextColor = Color.Black;
-            this.FontSize = 15;
+            this.FontSize = 16;
             this.PlaceholderColor = Color.Gray;
             this.HeightRequest = 40;        
             this.FontFamily = "Segoe";
