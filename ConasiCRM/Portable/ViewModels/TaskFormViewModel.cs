@@ -25,7 +25,7 @@ namespace ConasiCRM.Portable.ViewModels
         private List<List<OptionSet>> _allLookUp;
         public List<List<OptionSet>> AllsLookUp { get=>_allLookUp; set { _allLookUp = value;OnPropertyChanged(nameof(AllsLookUp)); } }
 
-        public List<FloatButtonItem> Tabs { get; set; }
+        public List<string> Tabs { get; set; }
 
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value;OnPropertyChanged(nameof(Customer)); } }
@@ -44,22 +44,18 @@ namespace ConasiCRM.Portable.ViewModels
         public string customerTypeContact = "2";
         public string customerTypeAccount = "3";
 
-        public int PageLead = 1;
-        public int PageContact = 1;
-        public int PageAccount = 1;
-
         public TaskFormViewModel()
         {
             Leads = new List<OptionSet>();
             Contacts = new List<OptionSet>();
             Accounts = new List<OptionSet>();
-            Tabs = new List<FloatButtonItem>();
+            Tabs = new List<string>();
             AllsLookUp = new List<List<OptionSet>>();
         }
 
         public async Task LoadLeads()
         {
-            string fetchXml = @"<fetch version='1.0' count='15' page='" + PageLead + @"' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
                                 <attribute name='lastname' alias='Label'/>
                                 <attribute name='leadid' alias='Val'/>
@@ -81,7 +77,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadContact()
         {
-            string fetchXml = @"<fetch version='1.0' count='15' page='" + PageContact + @"' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='contact'>
                                     <attribute name='contactid' alias='Val' />
                                     <attribute name='fullname' alias='Label' />
@@ -102,7 +98,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAccount()
         {
-            string fetchXml = @"<fetch version='1.0' count='15' page='" + PageAccount + @"' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='account'>
                                     <attribute name='accountid' alias='Val' />
                                     <attribute name='bsd_name' alias='Label' />
@@ -252,8 +248,15 @@ namespace ConasiCRM.Portable.ViewModels
             return data;
         }
 
-        public void LoadAllLookUp()
+        public async Task LoadAllLookUp()
         {
+            if(Leads.Count <= 0 && Contacts.Count <= 0 && Accounts.Count <= 0)
+            {
+                await LoadContact();
+                await LoadContact();
+                await LoadAccount();
+            }    
+
             if (AllsLookUp.Count <= 0)
             {
                 AllsLookUp.Add(Leads);
@@ -266,28 +269,10 @@ namespace ConasiCRM.Portable.ViewModels
         {
             if (Tabs.Count <= 0)
             {
-                Tabs.Add(new FloatButtonItem("KH Tiềm Năng", null, null, null, LoadLeadLookUp));
-                Tabs.Add(new FloatButtonItem("KH Cá Nhân", null, null, null, LoadContactLookUp));
-                Tabs.Add(new FloatButtonItem("KH Doanh Nghiệp", null, null, null, LoadAccountLookUp));
+                Tabs.Add("KH Tiềm Năng");
+                Tabs.Add("KH Cá Nhân");
+                Tabs.Add("KH Doanh Nghiệp");
             }
-        }
-
-        private async void LoadLeadLookUp(object sender, EventArgs e)
-        {
-            await LoadLeads();
-            PageLead++;
-        }
-
-        private async void LoadContactLookUp(object sender, EventArgs e)
-        {
-            await LoadContact();
-            PageContact++;
-        }
-
-        private async void LoadAccountLookUp(object sender, EventArgs e)
-        {
-            await LoadAccount();
-            PageAccount++;
         }
     }
 }

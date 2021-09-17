@@ -39,7 +39,7 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
 
-        private LookUpView _lookUpView;
+        private List<LookUpView> _lookUpView;
         public CenterModal CenterModal { get; set; }
 
         public bool FocusSearchBarOnTap = false;
@@ -103,9 +103,9 @@ namespace ConasiCRM.Portable.Controls
 
             if (_lookUpView == null)
             {
-                _lookUpView = new LookUpView();
-                 _lookUpView.SetList(ListListView[0].Cast<object>().ToList(), NameDisplay);
-                _lookUpView.lookUpListView.ItemTapped += async (lookUpSender, lookUpTapEvent) =>
+                _lookUpView = new List<LookUpView>();
+                 _lookUpView[indexTab].SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
+                _lookUpView[indexTab].lookUpListView.ItemTapped += async (lookUpSender, lookUpTapEvent) =>
                 {
                     if (this.SelectedItem != lookUpTapEvent.Item)
                     {
@@ -115,7 +115,7 @@ namespace ConasiCRM.Portable.Controls
                     await CenterModal.Hide();
                 };
 
-                _lookUpView.lookUpListView.ItemAppearing += LookUpListView_ItemAppearing;
+                _lookUpView[indexTab].lookUpListView.ItemAppearing += LookUpListView_ItemAppearing;
                 if (Device.RuntimePlatform == Device.Android)
                 {
                     SetUpFooterLayout();
@@ -130,14 +130,14 @@ namespace ConasiCRM.Portable.Controls
                 Grid.SetRow(tabs, 0);
                 gridMain.Children.Add(tabs);
 
-                gridMain.Children.Add(_lookUpView);
-                Grid.SetRow(_lookUpView, 1);
+                gridMain.Children.Add(_lookUpView[indexTab]);
+                Grid.SetRow(_lookUpView[indexTab], 1);
                 indexTab = 0;
                 IndexTab(indexTab);
             }
             else
             {
-                _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
+                _lookUpView[indexTab].IsVisible = true;
             }
 
             CenterModal.Title = Placeholder;
@@ -146,7 +146,7 @@ namespace ConasiCRM.Portable.Controls
 
             if (FocusSearchBarOnTap)
             {
-                _lookUpView.FocusSearchBarOnTap();
+                _lookUpView[indexTab].FocusSearchBarOnTap();
             }
         }
 
@@ -162,9 +162,8 @@ namespace ConasiCRM.Portable.Controls
                     {
                          Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
                     });
-                    await Task.Delay(100);
                     stackFooter.IsVisible = false;
-                    _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
+                    _lookUpView[indexTab].IsVisible = true;
                 }
             }
         }
@@ -231,15 +230,15 @@ namespace ConasiCRM.Portable.Controls
                             {
                                 Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
                             });
-                            await Task.Delay(100);
                             LoadingHelper.Hide();
                         }
-                        _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
+                        _lookUpView[indexTab].IsVisible = true;
                     }
                     else
                     {
                         VisualStateManager.GoToState(ListRadBorderTab[i], "Normal");
                         VisualStateManager.GoToState(ListLabelTab[i], "Normal");
+                        _lookUpView[indexTab].IsVisible = false;
                     }
                 }
             }
@@ -261,7 +260,7 @@ namespace ConasiCRM.Portable.Controls
 
             stackFooter.Children.Add(activityIndicator);
 
-            _lookUpView.lookUpListView.Footer = stackFooter;
+            _lookUpView[indexTab].lookUpListView.Footer = stackFooter;
         }                
     }
 }

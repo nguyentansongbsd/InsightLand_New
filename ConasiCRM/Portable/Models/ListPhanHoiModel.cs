@@ -91,6 +91,26 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
+
+        public int casetypecode { get; set; }
+
+        public string casetypecodevalue
+        {
+            get
+            {
+                switch (casetypecode)
+                {
+                    case 1:
+                        return "Question";
+                    case 2:
+                        return "Problem";
+                    case 3:
+                        return "Request";                    
+                    default:
+                        return "";
+                }
+            }
+        }
     }
 }
 

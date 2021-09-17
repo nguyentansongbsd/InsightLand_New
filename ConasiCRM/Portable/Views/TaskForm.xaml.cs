@@ -78,7 +78,7 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 viewModel.SetUpTabs();
-                viewModel.LoadAllLookUp();
+                await viewModel.LoadAllLookUp();
                 LoadingHelper.Hide();
             };
         }
