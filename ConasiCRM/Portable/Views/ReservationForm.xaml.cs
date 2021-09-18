@@ -21,15 +21,26 @@ namespace ConasiCRM.Portable.Views
         private ReservationFormViewModel viewModel;
         private Guid ReservationId;
 
-        public ReservationForm()
+        public ReservationForm(Guid projectId)
         {
             InitializeComponent();
             Init();
+            viewModel.ProjectId = projectId;
         }
 
         public async void Init()
         {
             this.BindingContext = viewModel = new ReservationFormViewModel();
+            SetPreOpen();
+        }
+
+        private void SetPreOpen()
+        {
+            lookupPhuongThucThanhToan.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                await viewModel.LoadPaymentSchemes();
+                LoadingHelper.Hide();
+            };
         }
 
         private void ChinhSach_Tapped(object sender, EventArgs e)
@@ -95,54 +106,54 @@ namespace ConasiCRM.Portable.Views
 
 
 
-        public ReservationForm(Guid reservationID)
-        {
-            InitializeComponent();
-            this.BindingContext = viewModel = new ReservationFormViewModel();
-            viewModel.IsBusy = true;
-            this.ReservationId = reservationID;
-            viewModel.ModalLookUp = modalLookUp;
-            viewModel.InitializeModal();
-            //viewModel.AfterLookUpClose += AfterLookUpClose;
-            //Init();
+        //public ReservationForm(Guid reservationID)
+        //{
+        //    InitializeComponent();
+        //    this.BindingContext = viewModel = new ReservationFormViewModel();
+        //    viewModel.IsBusy = true;
+        //    this.ReservationId = reservationID;
+        //    viewModel.ModalLookUp = modalLookUp;
+        //    viewModel.InitializeModal();
+        //    //viewModel.AfterLookUpClose += AfterLookUpClose;
+        //    //Init();
 
-            #region LoadCoOwners
-            MessagingCenter.Subscribe<CoOwnerForm, bool>(this, "LoadCoOwners", async (s, arg) =>
-            {
-                viewModel.IsBusy = true;
-                viewModel.CoownerList.Clear();
-                await viewModel.LoadCoOwners(ReservationId);
-                viewModel.IsBusy = false;
-            });
-            #endregion
+        //    #region LoadCoOwners
+        //    MessagingCenter.Subscribe<CoOwnerForm, bool>(this, "LoadCoOwners", async (s, arg) =>
+        //    {
+        //        viewModel.IsBusy = true;
+        //        viewModel.CoownerList.Clear();
+        //        await viewModel.LoadCoOwners(ReservationId);
+        //        viewModel.IsBusy = false;
+        //    });
+        //    #endregion
 
-            #region LoadHandoverConditions
-            MessagingCenter.Subscribe<ReservationFormViewModel, bool>(this, "LoadHandoverConditions", async (s, arg) =>
-            {
-                viewModel.HandoverConditionList.Clear();
-                await viewModel.LoadhandoverConditions(ReservationId);
-                viewModel.IsBusy = false;
-            });
-            #endregion
+        //    #region LoadHandoverConditions
+        //    MessagingCenter.Subscribe<ReservationFormViewModel, bool>(this, "LoadHandoverConditions", async (s, arg) =>
+        //    {
+        //        viewModel.HandoverConditionList.Clear();
+        //        await viewModel.LoadhandoverConditions(ReservationId);
+        //        viewModel.IsBusy = false;
+        //    });
+        //    #endregion
 
-            #region LoadPromotions
-            MessagingCenter.Subscribe<ReservationFormViewModel, bool>(this, "LoadPromotions", async (s, arg) =>
-            {
-                viewModel.PromotionList.Clear();
-                await viewModel.LoadPromotions(ReservationId);
-                viewModel.IsBusy = false;
-            });
-            #endregion
+        //    #region LoadPromotions
+        //    MessagingCenter.Subscribe<ReservationFormViewModel, bool>(this, "LoadPromotions", async (s, arg) =>
+        //    {
+        //        viewModel.PromotionList.Clear();
+        //        await viewModel.LoadPromotions(ReservationId);
+        //        viewModel.IsBusy = false;
+        //    });
+        //    #endregion
 
-            #region LoadSpecialDiscounts
-            MessagingCenter.Subscribe<SpecialDiscountForm, bool>(this, "LoadSpecialDiscounts", async (s, arg) =>
-            {
-                viewModel.SpecialDiscountList.Clear();
-                await viewModel.LoadSpecialDiscounts(ReservationId);
-                viewModel.IsBusy = false;
-            });
-            #endregion
-        }
+        //    #region LoadSpecialDiscounts
+        //    MessagingCenter.Subscribe<SpecialDiscountForm, bool>(this, "LoadSpecialDiscounts", async (s, arg) =>
+        //    {
+        //        viewModel.SpecialDiscountList.Clear();
+        //        await viewModel.LoadSpecialDiscounts(ReservationId);
+        //        viewModel.IsBusy = false;
+        //    });
+        //    #endregion
+        //}
 
         //private async void Init()
         //{

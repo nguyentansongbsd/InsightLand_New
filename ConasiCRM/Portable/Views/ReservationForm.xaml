@@ -116,7 +116,7 @@
                     <ScrollView x:Name="contentChinhSach" Padding="0,0,0,60">
                         <StackLayout Padding="10">
                             <controls:FormLabelRequired Text="Phương thức thanh toán"/>
-                            <controls:LookUp x:Name="lookupPhuongThucThanhToan" Placeholder="Chọn phương thức thanh toán" BottomModal="{Reference lookUpModal}"/>
+                            <controls:LookUp x:Name="lookupPhuongThucThanhToan" Placeholder="Chọn phương thức thanh toán" BottomModal="{Reference lookUpModal}" NameDisplay="Label" SelectedItem="{Binding PaymentScheme}" ItemsSource="{Binding PaymentSchemes}" />
 
                             <controls:FormLabelRequired Text="Điều kiện bàn giao" Margin="0,10,0,0"/>
                             <controls:LookUp x:Name="lookupDieuKienBanGiao" Placeholder="Chọn điều kiện bàn giao" BottomModal="{Reference lookUpModal}"/>

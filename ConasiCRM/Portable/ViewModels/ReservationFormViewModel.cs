@@ -11,8 +11,23 @@ using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class ReservationFormViewModel : FormLookupViewModel
+    public class ReservationFormViewModel : BaseViewModel
     {
+        public Guid ProjectId { get; set; }
+
+        private List<OptionSet> _paymentSchemes;
+        public List<OptionSet> PaymentSchemes { get => _paymentSchemes; set { _paymentSchemes = value;OnPropertyChanged(nameof(PaymentSchemes)); } }
+
+        private OptionSet _paymentScheme;
+        public OptionSet PaymentScheme { get => _paymentScheme; set { _paymentScheme = value;OnPropertyChanged(nameof(PaymentScheme)); } }
+
+
+
+
+
+
+
+
         private ReservationFormModel _reservation;
         public ReservationFormModel Reservation
         {
@@ -29,19 +44,7 @@ namespace ConasiCRM.Portable.ViewModels
         public LookUpConfig PromotionConfig { get; set; }
         public LookUpConfig ContactLookUpConfig { get; set; }
         public LookUpConfig AccountLookUpConfig { get; set; }
-        private LookUp _paymentScheme;
-        public LookUp PaymentScheme
-        {
-            get => _paymentScheme;
-            set
-            {
-                if (value != _paymentScheme)
-                {
-                    _paymentScheme = value;
-                    OnPropertyChanged(nameof(PaymentScheme));
-                }
-            }
-        }
+        
 
         // khai báo để hứng dữ liệu khi chọn handover condition.
         private LookUp _bsd_packagesellings;
@@ -249,7 +252,36 @@ namespace ConasiCRM.Portable.ViewModels
             PromotionConfig.LookUpTitle = "Chọn khuyến mại";
             PromotionConfig.EntityName = "bsd_promotions";
             PromotionConfig.PropertyName = "bsd_promotion";
-        }       
+        }
+
+        // load phuong thuc thanh toan vs status code = confirm va theo du an
+        public async Task LoadPaymentSchemes()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_paymentscheme'>
+                                    <attribute name='bsd_name' alias='Label'/>
+                                    <attribute name='bsd_paymentschemeid' alias='Val' />
+                                    <order attribute='createdon' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='statuscode' operator='eq' value='100000000' />
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{ProjectId}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_paymentschemes", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            this.PaymentSchemes = result.value;
+        }
+
+
+
+
+
+
+
+
+
+
 
         public async void AddHandoverCondition()
         {

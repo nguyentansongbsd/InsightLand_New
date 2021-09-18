@@ -56,6 +56,7 @@ namespace ConasiCRM.Portable.Models
         public bool bsd_vippriority { get; set; }
 
         public Guid _bsd_employee_value { get; set; }
+        public Guid _bsd_projectcode_value { get; set; }
 
         public DateTime createdon { get; set; }
     }

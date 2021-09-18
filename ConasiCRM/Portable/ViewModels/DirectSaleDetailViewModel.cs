@@ -248,6 +248,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='product'>
                                     <attribute name='name' />
                                     <attribute name='statuscode' />
+                                    <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
                                     <attribute name='price' />
                                     <attribute name='productid' />
                                     <attribute name='bsd_view' />
