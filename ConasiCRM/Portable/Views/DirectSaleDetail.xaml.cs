@@ -331,10 +331,10 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void BangTinhGia_Clicked(object sender, EventArgs e)
+        private async void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-
+            await Navigation.PushAsync(new ReservationForm());
             LoadingHelper.Hide();
         }
 

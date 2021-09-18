@@ -150,6 +150,11 @@ namespace ConasiCRM.Portable.ViewModels
                 data["productid@odata.bind"] = "/products(" + Unit.Val + ")";
             }
 
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+
             if (UserLogged.ManagerId != Guid.Empty)
             {
                 data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";

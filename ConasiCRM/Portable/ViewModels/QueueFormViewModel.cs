@@ -37,13 +37,13 @@ namespace ConasiCRM.Portable.ViewModels
         public List<LookUp> DaiLyOptions { get => _daiLyOptions; set { _daiLyOptions = value; OnPropertyChanged(nameof(DaiLyOptions)); } }
 
         private LookUp _daiLyOption;
-        public LookUp DailyOption { get => _daiLyOption; set { _daiLyOption = value;OnPropertyChanged(nameof(DailyOption)); } }
+        public LookUp DailyOption { get => _daiLyOption; set { _daiLyOption = value; OnPropertyChanged(nameof(DailyOption)); } }
 
         public QueueFormViewModel()
         {
             QueueFormModel = new QueueFormModel();
             DaiLyOptions = new List<LookUp>();
-          
+
         }
 
         public async Task LoadFromProject(Guid ProjectId)
@@ -78,7 +78,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadFromUnit(Guid UnitId)
         {
-
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='product'>
                                     <attribute name='name' alias='bsd_units_name' />                                   
@@ -88,6 +87,13 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='productid' alias='bsd_units_id' />
                                     <attribute name='bsd_queuingfee' alias='bsd_units_queuingfee' />
                                     <attribute name='bsd_phaseslaunchid' />
+<attribute name='pricelevelid' alias='pricelist_id'/>
+<attribute name='bsd_blocknumber' alias='bsd_block_id'/>
+<attribute name='bsd_floor' alias='bsd_floor_id'/>
+<attribute name='price' alias='unit_price'/>
+<attribute name='defaultuomid' alias='_defaultuomid_value' />
+<attribute name='transactioncurrencyid' alias='_transactioncurrencyid_value'/>
+<attribute name='bsd_taxpercent'/>
                                     <order attribute='createdon' descending='true' />
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' link-type='outer' alias='aa'>
  	                                    <attribute name='bsd_projectid' alias='bsd_project_id' />
@@ -113,7 +119,7 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return;
             }
-            this.QueueFormModel = tmp;          
+            this.QueueFormModel = tmp;
             if (QueueFormModel.bsd_units_queuingfee > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_units_queuingfee;
             else if (QueueFormModel.bsd_bookingf > 0)
@@ -122,8 +128,8 @@ namespace ConasiCRM.Portable.ViewModels
         }
 
         public async Task<bool> SetQueueTime()
-        {                    
-                string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
                                 <attribute name='name' />
                                 <attribute name='customerid' />
@@ -154,37 +160,37 @@ namespace ConasiCRM.Portable.ViewModels
                                 </filter>
                               </entity>
                             </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-                if (result == null || result.value == null)
-                    return false;
-               var data = result.value;
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
+            if (result == null || result.value == null)
+                return false;
+            var data = result.value;
 
-                if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
-                {
-                    return false;
-                }
-                
-                if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
-                {
-                    QueueFormModel._queue_bsd_bookingtime = DateTime.Now;
-                    QueueFormModel.statuscode = 100000000;
-                }
-                else
-                {
-                    var queue = (QueueFormModel)data.OrderBy(x => x._queue_bsd_queuingexpired).LastOrDefault();
-                    QueueFormModel._queue_bsd_bookingtime = queue._queue_bsd_queuingexpired;
-                    QueueFormModel.statuscode = 100000002;
-                }
+            if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
+            {
+                return false;
+            }
 
-                if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
-                {
-                    QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
-                }
-                else
-                {
-                    QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
-                }
-                
+            if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
+            {
+                QueueFormModel._queue_bsd_bookingtime = DateTime.Now;
+                QueueFormModel.statuscode = 100000000;
+            }
+            else
+            {
+                var queue = (QueueFormModel)data.OrderBy(x => x._queue_bsd_queuingexpired).LastOrDefault();
+                QueueFormModel._queue_bsd_bookingtime = queue._queue_bsd_queuingexpired;
+                QueueFormModel.statuscode = 100000002;
+            }
+
+            if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
+            {
+                QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
+            }
+            else
+            {
+                QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
+            }
+
             return true;
         }
 
@@ -200,6 +206,8 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     UpdateStatusUnit();
                 }
+                QueueUnitModel queueUnit = await ContentQueueUnit();
+                await CreateQueueUnit(queueUnit);
                 return true;
             }
             else
@@ -207,6 +215,115 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             }
 
+        }
+
+        private async Task<QueueUnitModel> ContentQueueUnit()
+        {
+            QueueUnitModel queueUnit = new QueueUnitModel();
+            queueUnit.opportunityproductid = Guid.NewGuid();
+            queueUnit.bsd_status = true;
+            queueUnit.bsd_pricelist = this.QueueFormModel.pricelist_id.ToString();
+            queueUnit.bsd_booking = this.QueueFormModel.opportunityid.ToString();
+            queueUnit.bsd_project = this.QueueFormModel.bsd_project_id.ToString();
+            queueUnit.bsd_block = this.QueueFormModel.bsd_block_id.ToString();
+            queueUnit.bsd_units = this.QueueFormModel.bsd_units_id.ToString();
+            queueUnit.bsd_phaseslaunch = this.QueueFormModel.bsd_phaseslaunch_id.ToString();
+            queueUnit.bsd_floor = this.QueueFormModel.bsd_floor_id.ToString();
+            queueUnit.isproductoverridden = false;
+            queueUnit.productid = this.QueueFormModel.bsd_units_id.ToString();
+            queueUnit.ispriceoverridden = false;
+            queueUnit.priceperunit = this.QueueFormModel.unit_price;
+            queueUnit.uomid = this.QueueFormModel._defaultuomid_value;
+            queueUnit.baseamount = this.QueueFormModel.unit_price;
+            queueUnit.extendedamount = this.QueueFormModel.unit_price;
+            queueUnit.transactioncurrencyid = this.QueueFormModel._transactioncurrencyid_value;
+            queueUnit.tax = this.QueueFormModel.bsd_taxpercent;
+            queueUnit.createdby = UserLogged.ManagerId.ToString();
+            return queueUnit;
+        }
+
+        private async Task<bool> CreateQueueUnit(QueueUnitModel queueUnit)
+        {
+            string path = "/opportunityproducts";
+            var content = await GetContentQueueUnit(queueUnit);
+            CrmApiResponse result = await CrmHelper.PostData(path, content);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private async Task<object> GetContentQueueUnit(QueueUnitModel queueUnit)
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["opportunityproductid"] = queueUnit.opportunityproductid;
+            data["bsd_status"] = queueUnit.bsd_status;
+            data["isproductoverridden"] = queueUnit.isproductoverridden;
+            data["ispriceoverridden"] = queueUnit.ispriceoverridden;
+            data["priceperunit"] = queueUnit.priceperunit;
+            data["quantity"] = 1;
+
+            data["opportunityid@odata.bind"] = $"/opportunities({queueUnit.bsd_booking})";
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_pricelist))
+            {
+                data["bsd_PriceList@odata.bind"] = $"/pricelevels({queueUnit.bsd_pricelist})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_booking))
+            {
+                data["bsd_Booking@odata.bind"] = $"/opportunities({queueUnit.bsd_booking})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_project))
+            {
+                data["bsd_Project@odata.bind"] = $"/bsd_projects({queueUnit.bsd_project})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_block))
+            {
+                data["bsd_Block@odata.bind"] = $"/bsd_blocks({queueUnit.bsd_block})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_units))
+            {
+                data["bsd_Units@odata.bind"] = $"/products({queueUnit.bsd_units})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_phaseslaunch))
+            {
+                data["bsd_PhasesLaunch@odata.bind"] = $"/bsd_phaseslaunchs({queueUnit.bsd_phaseslaunch})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_floor))
+            {
+                data["bsd_Floor@odata.bind"] = $"/bsd_floors({queueUnit.bsd_floor})";
+            }
+            
+            if (!string.IsNullOrWhiteSpace(queueUnit.uomid))
+            {
+                data["uomid@odata.bind"] = $"/products({queueUnit.uomid})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.productid))
+            {
+                data["productid@odata.bind"] = $"/products({queueUnit.productid})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.transactioncurrencyid))
+            {
+                data["transactioncurrencyid@odata.bind"] = $"/transactioncurrencies({queueUnit.transactioncurrencyid})";
+            }
+
+            if (!string.IsNullOrWhiteSpace(queueUnit.createdby))
+            {
+                data["createdby@odata.bind"] = $"/systemusers({queueUnit.createdby})";
+            }
+
+            return data;
         }
 
         public async Task LoadContactsLookUp()
@@ -280,7 +397,6 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> getContent()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
-            CrmApiResponse clearLookupResponse = new CrmApiResponse();
             data["opportunityid"] = QueueFormModel.opportunityid;
 
             if (QueueFormModel.bsd_project_id == null || QueueFormModel.bsd_project_id == Guid.Empty)
@@ -339,7 +455,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             data["bsd_nameofstaffagent"] = QueueFormModel.bsd_nameofstaffagent;
-         
+
             if (UserLogged.Id != null)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
