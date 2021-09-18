@@ -177,6 +177,44 @@ namespace ConasiCRM.Portable.Models
         private string _name;
         public string name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(name)); } }
 
+        public string customername
+        {
+            get
+            {
+                if (this.case_nameaccount != null)
+                {
+                    return this.case_nameaccount;
+                }
+                else if (this.case_namecontact != null)
+                {
+                    return this.case_namecontact;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public int casetypecode { get; set; }
+
+        public string casetypecodevalue
+        {
+            get
+            {
+                switch (casetypecode)
+                {
+                    case 1:
+                        return "Question";
+                    case 2:
+                        return "Problem";
+                    case 3:
+                        return "Request";
+                    default:
+                        return "";
+                }
+            }
+        }
     }
 }
 

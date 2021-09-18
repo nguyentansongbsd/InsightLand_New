@@ -6,9 +6,6 @@
              xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters" 
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              x:Class="ConasiCRM.Portable.Views.ListPhanHoi">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Name="NewMenu" Order="Primary" Clicked="NewMenu_Clicked" Icon="plus.png" Text="New Case" Priority="1"/>
-    </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:PhanHoiStatusCodeConvert x:Key="StatucToColor"/>
@@ -53,6 +50,9 @@
                     </controls:BsdListView.ItemTemplate>
                 </controls:BsdListView>
             </Grid>
+            <controls:ExtendedFrame AbsoluteLayout.LayoutBounds="0,1,1,59" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="#1399D5" Padding="0" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">
+                <Button Text="&#xf067;" Clicked="NewCase_Clicked"  TextColor="White" FontSize="18" FontFamily="FontAwesomeSolid" WidthRequest="44" HeightRequest="44" CornerRadius="22" BackgroundColor="#1399D5"/>
+            </controls:ExtendedFrame>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

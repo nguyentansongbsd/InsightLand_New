@@ -24,10 +24,10 @@ namespace ConasiCRM.Portable.Controls
 
         public event EventHandler<LookUpChangeEvent> SelectedItemChange;
 
-        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSet>>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
-        public List<List<OptionSet>> ListListView { get => ( List<List<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
+        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<ObservableCollection<OptionSet>>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
+        public List<ObservableCollection<OptionSet>> ListListView { get => ( List<ObservableCollection<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }              
 
-        public static readonly BindableProperty TabsProperty = BindableProperty.Create(nameof(Tabs), typeof(List<FloatButtonItem>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay, null);
+        public static readonly BindableProperty TabsProperty = BindableProperty.Create(nameof(Tabs), typeof(List<FloatButtonItem>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public List<FloatButtonItem> Tabs { get => (List<FloatButtonItem>)GetValue(TabsProperty); set { SetValue(TabsProperty, value); } }
 
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
@@ -39,7 +39,7 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
 
-        private List<LookUpView> _lookUpView;
+        private LookUpView _lookUpView;
         public CenterModal CenterModal { get; set; }
 
         public bool FocusSearchBarOnTap = false;
@@ -103,9 +103,9 @@ namespace ConasiCRM.Portable.Controls
 
             if (_lookUpView == null)
             {
-                _lookUpView = new List<LookUpView>();
-                 _lookUpView[indexTab].SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
-                _lookUpView[indexTab].lookUpListView.ItemTapped += async (lookUpSender, lookUpTapEvent) =>
+                _lookUpView = new LookUpView();
+                 _lookUpView.SetList(ListListView[0].Cast<object>().ToList(), NameDisplay);
+                _lookUpView.lookUpListView.ItemTapped += async (lookUpSender, lookUpTapEvent) =>
                 {
                     if (this.SelectedItem != lookUpTapEvent.Item)
                     {
@@ -115,7 +115,7 @@ namespace ConasiCRM.Portable.Controls
                     await CenterModal.Hide();
                 };
 
-                _lookUpView[indexTab].lookUpListView.ItemAppearing += LookUpListView_ItemAppearing;
+                _lookUpView.lookUpListView.ItemAppearing += LookUpListView_ItemAppearing;
                 if (Device.RuntimePlatform == Device.Android)
                 {
                     SetUpFooterLayout();
@@ -130,14 +130,14 @@ namespace ConasiCRM.Portable.Controls
                 Grid.SetRow(tabs, 0);
                 gridMain.Children.Add(tabs);
 
-                gridMain.Children.Add(_lookUpView[indexTab]);
-                Grid.SetRow(_lookUpView[indexTab], 1);
+                gridMain.Children.Add(_lookUpView);
+                Grid.SetRow(_lookUpView, 1);
                 indexTab = 0;
                 IndexTab(indexTab);
             }
             else
             {
-                _lookUpView[indexTab].IsVisible = true;
+                _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
             }
 
             CenterModal.Title = Placeholder;
@@ -146,11 +146,11 @@ namespace ConasiCRM.Portable.Controls
 
             if (FocusSearchBarOnTap)
             {
-                _lookUpView[indexTab].FocusSearchBarOnTap();
+                _lookUpView.FocusSearchBarOnTap();
             }
         }
 
-        private async void LookUpListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        private void LookUpListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
             if(e.Item != null && e.Item != oldItem)
             {
@@ -158,12 +158,9 @@ namespace ConasiCRM.Portable.Controls
                 {
                     oldItem = e.Item as OptionSet;
                     stackFooter.IsVisible = true;
-                    await Task.Run(() =>
-                    {
-                         Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
-                    });
+                    Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
                     stackFooter.IsVisible = false;
-                    _lookUpView[indexTab].IsVisible = true;
+                    _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
                 }
             }
         }
@@ -213,7 +210,7 @@ namespace ConasiCRM.Portable.Controls
             IndexTab(indexTab);
         }
 
-        private async void IndexTab(int index)
+        private void IndexTab(int index)
         {
             if (ListRadBorderTab != null && ListRadBorderTab.Count > 0)
             {
@@ -223,22 +220,21 @@ namespace ConasiCRM.Portable.Controls
                     {
                         VisualStateManager.GoToState(ListRadBorderTab[i], "Selected");
                         VisualStateManager.GoToState(ListLabelTab[i], "Selected");
-                        if (ListListView != null && ListListView[indexTab] != null && ListListView[indexTab].Count <= 0)
+                        if (ListListView != null && ListListView.Count > 0 )
                         {
-                            LoadingHelper.Show();
-                            await Task.Run(() =>
+                            if (ListListView[indexTab] != null && ListListView[indexTab].Count <= 0)
                             {
+                                LoadingHelper.Show();
                                 Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
-                            });
-                            LoadingHelper.Hide();
+                                LoadingHelper.Hide();
+                            }
+                            _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
                         }
-                        _lookUpView[indexTab].IsVisible = true;
                     }
                     else
                     {
                         VisualStateManager.GoToState(ListRadBorderTab[i], "Normal");
                         VisualStateManager.GoToState(ListLabelTab[i], "Normal");
-                        _lookUpView[indexTab].IsVisible = false;
                     }
                 }
             }
@@ -260,7 +256,7 @@ namespace ConasiCRM.Portable.Controls
 
             stackFooter.Children.Add(activityIndicator);
 
-            _lookUpView[indexTab].lookUpListView.Footer = stackFooter;
-        }                
+            _lookUpView.lookUpListView.Footer = stackFooter;
+        }   
     }
 }

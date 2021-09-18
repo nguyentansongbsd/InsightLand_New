@@ -15,17 +15,22 @@ namespace ConasiCRM.Portable.ViewModels
     public class PhoneCallViewModel : FormViewModal
     {
         public PhoneCellModel _phoneCellModel;
-        public PhoneCellModel PhoneCellModel { get => _phoneCellModel; set { _phoneCellModel = value; OnPropertyChanged(nameof(PhoneCellModel)); } }
+        public PhoneCellModel PhoneCellModel { get => _phoneCellModel; set { _phoneCellModel = value;OnPropertyChanged(nameof(PhoneCellModel)); } }
 
-        private List<OptionSet> _leadsLookUp;
-        public List<OptionSet> LeadsLookUp { get => _leadsLookUp; set { _leadsLookUp = value; OnPropertyChanged(nameof(LeadsLookUp)); } }
+        private ObservableCollection<OptionSet> _leadsLookUp;
+        public ObservableCollection<OptionSet> LeadsLookUp {
+            get => _leadsLookUp; set { _leadsLookUp = value; OnPropertyChanged(nameof(LeadsLookUp)); } }
 
-        private List<OptionSet> _contactsLookUp;
-        public List<OptionSet> ContactsLookUp { get => _contactsLookUp; set { _contactsLookUp = value; OnPropertyChanged(nameof(ContactsLookUp)); } }
+        private ObservableCollection<OptionSet> _contactsLookUp;
+        public ObservableCollection<OptionSet> ContactsLookUp {
+            get => _contactsLookUp; set { _contactsLookUp = value; OnPropertyChanged(nameof(ContactsLookUp));} }
 
-        private List<OptionSet> _accountsLookUp;
-        public List<OptionSet> AccountsLookUp { get => _accountsLookUp; set { _accountsLookUp = value; OnPropertyChanged(nameof(AccountsLookUp)); } }
-        public List<List<OptionSet>> AllsLookUp { get; set; }
+        private ObservableCollection<OptionSet> _accountsLookUp;
+        public ObservableCollection<OptionSet> AccountsLookUp { 
+            get => _accountsLookUp; set { _accountsLookUp = value; OnPropertyChanged(nameof(AccountsLookUp));  } }
+
+        private List<ObservableCollection<OptionSet>> _allsLookU;
+        public List<ObservableCollection<OptionSet>> AllsLookUp { get => _allsLookU; set { _allsLookU = value; OnPropertyChanged(nameof(AllsLookUp)); } }
         public List<FloatButtonItem> ListTab { get; set; }
 
         private OptionSet _customer;
@@ -53,13 +58,13 @@ namespace ConasiCRM.Portable.ViewModels
         public PhoneCallViewModel()
         {
             PhoneCellModel = new PhoneCellModel();
-            ContactsLookUp = new List<OptionSet>();
-            LeadsLookUp = new List<OptionSet>();
-            AccountsLookUp = new List<OptionSet>();
-            AllsLookUp = new List<List<OptionSet>>();
+            ContactsLookUp = new ObservableCollection<OptionSet>();
+            LeadsLookUp = new ObservableCollection<OptionSet>();
+            AccountsLookUp = new ObservableCollection<OptionSet>();
+            AllsLookUp = new List<ObservableCollection<OptionSet>>();
             CallFrom = UserLogged.User;
             ShowButton = true;
-            ListTab = new List<FloatButtonItem>();
+            ListTab = new List<FloatButtonItem>();         
         }
 
         public async Task<Boolean> DeletLookup(string fieldName, Guid id)
@@ -493,8 +498,7 @@ namespace ConasiCRM.Portable.ViewModels
                 ListTab.Add(new FloatButtonItem("KH Tiềm Năng", null, null, null, LoadLead));
                 ListTab.Add(new FloatButtonItem("KH Cá Nhân", null, null, null, LoadContact));
                 ListTab.Add(new FloatButtonItem("KH Doanh Nghiệp", null, null, null, LoadAccount));
-            }
-
+            }         
         }
 
         private async void LoadLead(object sender, EventArgs e)
