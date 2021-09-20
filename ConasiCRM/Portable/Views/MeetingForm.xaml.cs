@@ -108,15 +108,7 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadAllLookUp();
                 viewModel.SetTabs();
                 LoadingHelper.Hide();
-            };
-
-            Lookup_Customer.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                viewModel.LoadAllLookUpCustomer();
-                viewModel.SetTabCustomer();
-                LoadingHelper.Hide();
-            };          
+            };       
         }
 
         private async void SaveData(Guid id)

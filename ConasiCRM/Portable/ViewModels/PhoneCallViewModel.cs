@@ -17,22 +17,6 @@ namespace ConasiCRM.Portable.ViewModels
         public PhoneCellModel _phoneCellModel;
         public PhoneCellModel PhoneCellModel { get => _phoneCellModel; set { _phoneCellModel = value;OnPropertyChanged(nameof(PhoneCellModel)); } }
 
-        private ObservableCollection<OptionSet> _leadsLookUp;
-        public ObservableCollection<OptionSet> LeadsLookUp {
-            get => _leadsLookUp; set { _leadsLookUp = value; OnPropertyChanged(nameof(LeadsLookUp)); } }
-
-        private ObservableCollection<OptionSet> _contactsLookUp;
-        public ObservableCollection<OptionSet> ContactsLookUp {
-            get => _contactsLookUp; set { _contactsLookUp = value; OnPropertyChanged(nameof(ContactsLookUp));} }
-
-        private ObservableCollection<OptionSet> _accountsLookUp;
-        public ObservableCollection<OptionSet> AccountsLookUp { 
-            get => _accountsLookUp; set { _accountsLookUp = value; OnPropertyChanged(nameof(AccountsLookUp));  } }
-
-        private List<ObservableCollection<OptionSet>> _allsLookU;
-        public List<ObservableCollection<OptionSet>> AllsLookUp { get => _allsLookU; set { _allsLookU = value; OnPropertyChanged(nameof(AllsLookUp)); } }
-        public List<FloatButtonItem> ListTab { get; set; }
-
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
 
@@ -58,13 +42,8 @@ namespace ConasiCRM.Portable.ViewModels
         public PhoneCallViewModel()
         {
             PhoneCellModel = new PhoneCellModel();
-            ContactsLookUp = new ObservableCollection<OptionSet>();
-            LeadsLookUp = new ObservableCollection<OptionSet>();
-            AccountsLookUp = new ObservableCollection<OptionSet>();
-            AllsLookUp = new List<ObservableCollection<OptionSet>>();
             CallFrom = UserLogged.User;
-            ShowButton = true;
-            ListTab = new List<FloatButtonItem>();         
+            ShowButton = true;  
         }
 
         public async Task<Boolean> DeletLookup(string fieldName, Guid id)
@@ -350,86 +329,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         }
 
-
-        public async Task LoadLeadsLookUp()
-        {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageLead + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='lead'>
-                                <attribute name='lastname' alias='Label' />
-                                <attribute name='leadid' alias='Val' />
-                                <order attribute='createdon' descending='true' />
-                                <filter type='and'>
-                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                item.Title = CodeLead;
-                LeadsLookUp.Add(item);
-            }
-        }
-
-        public async Task LoadContactsLookUp()
-        {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageContact + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                  <entity name='contact'>
-                    <attribute name='contactid' alias='Val' />
-                    <attribute name='fullname' alias='Label' />
-                    <order attribute='fullname' descending='false' />                   
-                    <filter type='and'>
-                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                    </filter>
-                  </entity>
-                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("contacts", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                item.Title = CodeContac;
-                ContactsLookUp.Add(item);
-            }
-        }
-
-        public async Task LoadAccountsLookUp()
-        {
-            string fetch = @"<fetch version='1.0' count='15' page='"+PageAccount+@"' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='account'>
-                                <attribute name='name' alias='Label'/>
-                                <attribute name='accountid' alias='Val'/>
-                                <order attribute='createdon' descending='true' />
-                                <filter type='and'>
-                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                item.Title = CodeAccount;
-                AccountsLookUp.Add(item);
-            }
-        }
-
-        public void LoadAllLookUp()
-        {
-            if (AllsLookUp.Count <= 0)
-            {              
-                AllsLookUp.Add(LeadsLookUp);
-                AllsLookUp.Add(ContactsLookUp);
-                AllsLookUp.Add(AccountsLookUp);
-            }
-        }      
-
         public async Task LoadOneAccount(string accountid)
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -489,34 +388,6 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             var tmp = result.value.FirstOrDefault();
             PhoneCellModel.phonenumber = tmp.mobilephone;
-        }
-
-        public void SetUpTabs()
-        {
-            if (ListTab.Count<= 0)
-            {
-                ListTab.Add(new FloatButtonItem("KH Tiềm Năng", null, null, null, LoadLead));
-                ListTab.Add(new FloatButtonItem("KH Cá Nhân", null, null, null, LoadContact));
-                ListTab.Add(new FloatButtonItem("KH Doanh Nghiệp", null, null, null, LoadAccount));
-            }         
-        }
-
-        private async void LoadLead(object sender, EventArgs e)
-        {
-            await LoadLeadsLookUp();
-            PageLead++;
-        }
-
-        private async void LoadContact(object sender, EventArgs e)
-        {
-            await LoadContactsLookUp();
-            PageContact++;
-        }
-
-        private async void LoadAccount(object sender, EventArgs e)
-        {
-            await LoadAccountsLookUp();
-            PageAccount++;
         }
     }
 }

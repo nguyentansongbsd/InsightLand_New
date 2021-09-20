@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections;
@@ -19,44 +20,43 @@ namespace ConasiCRM.Portable.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LookUpMultipleTabs : Grid
     {
-        public Func<Task> PreOpenAsync;
-        public Action PreOpen;
-
         public event EventHandler<LookUpChangeEvent> SelectedItemChange;
-
-        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<ObservableCollection<OptionSet>>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
-        public List<ObservableCollection<OptionSet>> ListListView { get => ( List<ObservableCollection<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }              
-
-        public static readonly BindableProperty TabsProperty = BindableProperty.Create(nameof(Tabs), typeof(List<FloatButtonItem>), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
-        public List<FloatButtonItem> Tabs { get => (List<FloatButtonItem>)GetValue(TabsProperty); set { SetValue(TabsProperty, value); } }
 
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public object SelectedItem { get => (object)GetValue(SelectedItemProperty); set { SetValue(SelectedItemProperty, value); } }
 
-        public static readonly BindableProperty NameDipslayProperty = BindableProperty.Create(nameof(SelectedItem), typeof(string), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay, propertyChanged: DisplayNameChang);
-        public string NameDisplay { get => (string)GetValue(NameDipslayProperty); set { SetValue(NameDipslayProperty, value); } }
-
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
+        public bool ShowLead { get; set; } = false;
+        public bool ShowContact { get; set; } = false;
+        public bool ShowAccount { get; set; } = false;
 
-        private LookUpView _lookUpView;
+        private RadBorder TabsLead;
+
+        private RadBorder TabsContact;
+
+        private RadBorder TabsAccount;
+
+        private ListViewMultiTabs ListLead;
+
+        private ListViewMultiTabs ListContact;
+
+        private ListViewMultiTabs ListAccount;
+
         public CenterModal CenterModal { get; set; }
 
-        public bool FocusSearchBarOnTap = false;
-
         private Grid gridMain;
-        public bool PreOpenOneTime { get; set; } = true;
-        private List<RadBorder> ListRadBorderTab { get; set; }
-        private List<Label> ListLabelTab { get; set; }
-        private int indexTab { get; set; }
 
-        private StackLayout stackFooter = new StackLayout();
-        private OptionSet oldItem { get; set; }
+        private Grid gridTabs;
+        public bool PreOpenOneTime { get; set; } = true;
+        private int numberTab { get; set; } = 0;
+
         public LookUpMultipleTabs()
         {
             InitializeComponent();
             this.Entry.BindingContext = this;
             this.Entry.SetBinding(EntryNoneBorder.PlaceholderProperty, "Placeholder");
+            this.Entry.SetBinding(EntryNoneBorder.TextProperty, "SelectedItem.Label");
             this.BtnClear.SetBinding(Button.IsVisibleProperty, new Binding("SelectedItem") { Source = this, Converter = new Converters.NullToHideConverter() });
         }
 
@@ -73,190 +73,291 @@ namespace ConasiCRM.Portable.Controls
         {
             await OpenModal();
         }
-
-        private static void DisplayNameChang(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (newValue == null) return;
-            LookUpMultipleTabs control = (LookUpMultipleTabs)bindable;
-            control.Entry.SetBinding(EntryNoneBorder.TextProperty, "SelectedItem." + newValue);
-        }
+     
         public async Task OpenModal()
         {
-            if (PreOpenAsync != null)
+            if (this.CenterModal == null) return;
+
+            if (ShowLead == false && ShowContact == false && ShowAccount == false) return;
+
+            if (gridTabs == null && gridMain == null)
             {
-                await PreOpenAsync();
-                if (PreOpenOneTime)
-                {
-                    PreOpenAsync = null;
-                }
-            }
-            if (PreOpen != null)
-            {
-                PreOpen.Invoke();
-                if (PreOpenOneTime)
-                {
-                    PreOpen = null;
-                }
-            }
-
-            if (this.ListListView == null || this.ListListView.Count == 0 || this.CenterModal == null || Tabs == null) return;
-
-            if (_lookUpView == null)
-            {
-                _lookUpView = new LookUpView();
-                 _lookUpView.SetList(ListListView[0].Cast<object>().ToList(), NameDisplay);
-                _lookUpView.lookUpListView.ItemTapped += async (lookUpSender, lookUpTapEvent) =>
-                {
-                    if (this.SelectedItem != lookUpTapEvent.Item)
-                    {
-                        this.SelectedItem = lookUpTapEvent.Item;
-                        SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
-                    }
-                    await CenterModal.Hide();
-                };
-
-                _lookUpView.lookUpListView.ItemAppearing += LookUpListView_ItemAppearing;
-                if (Device.RuntimePlatform == Device.Android)
-                {
-                    SetUpFooterLayout();
-                }
-
-
-                Grid tabs = SetUpTabs();
-                gridMain = new Grid();
-                gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                gridMain.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-
-                Grid.SetRow(tabs, 0);
-                gridMain.Children.Add(tabs);
-
-                gridMain.Children.Add(_lookUpView);
-                Grid.SetRow(_lookUpView, 1);
-                indexTab = 0;
-                IndexTab(indexTab);
-            }
-            else
-            {
-                _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
-            }
+                SetUpModal();
+            }    
 
             CenterModal.Title = Placeholder;
             CenterModal.Body = gridMain;
             await CenterModal.Show();
+        }    
 
-            if (FocusSearchBarOnTap)
-            {
-                _lookUpView.FocusSearchBarOnTap();
-            }
-        }
-
-        private void LookUpListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        private void SetUpModal()
         {
-            if(e.Item != null && e.Item != oldItem)
+            gridTabs = new Grid();
+            gridMain = new Grid();
+            gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            gridMain.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+
+            if (ShowLead == true)
             {
-                if(e.ItemIndex == ListListView[indexTab].Count-1)
+                TabsLead = CreateTabs("KH Tiềm Năng");
+                gridTabs.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                gridTabs.Children.Add(TabsLead);
+                Grid.SetColumn(TabsLead, numberTab);
+                Grid.SetRow(TabsLead, 0);
+                TapGestureRecognizer tap = new TapGestureRecognizer();
+                tap.Tapped += Lead_Tapped;
+                TabsLead.GestureRecognizers.Add(tap);
+
+                if (numberTab == 0)
                 {
-                    oldItem = e.Item as OptionSet;
-                    stackFooter.IsVisible = true;
-                    Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
-                    stackFooter.IsVisible = false;
-                    _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
+                    SetUpLead();
+                    gridMain.Children.Add(ListLead);
+                    Grid.SetColumn(ListLead, 0);
+                    Grid.SetRow(ListLead, 1);
+
+                    ListLead.IsVisible = true;
+                    var lb = TabsLead.Content as Label;
+                    VisualStateManager.GoToState(TabsLead, "Selected");
+                    VisualStateManager.GoToState(lb, "Selected");
                 }
+                numberTab++;
+
             }
-        }
-
-        public Grid SetUpTabs()
-        {
-            Grid grid = new Grid();
-            if (Tabs != null)
+            if (ShowContact == true)
             {
-                ListLabelTab = new List<Label>();
-                ListRadBorderTab = new List<RadBorder>();
-                grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                for (int i = 0; i < Tabs.Count; i++)
-                {
-                    RadBorder rd = new RadBorder();
-                    rd.Style = (Style)Application.Current.Resources["rabBorder_Tab"];
-                    Label lb = new Label();
-                    lb.Style = (Style)Application.Current.Resources["Lb_Tab"];
-                    lb.Text = Tabs[i].Text;
-                    rd.Content = lb;
-                    var tapGestureRecognizer = new TapGestureRecognizer();
-                    tapGestureRecognizer.Tapped += Tab_Tapped;
-                    lb.GestureRecognizers.Add(tapGestureRecognizer);
-                    ListLabelTab.Add(lb);
-                    ListRadBorderTab.Add(rd);
+                TabsContact = CreateTabs("KH Cá Nhân");
+                gridTabs.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                gridTabs.Children.Add(TabsContact);
+                Grid.SetColumn(TabsContact, numberTab);
+                Grid.SetRow(TabsContact, 0);
+                TapGestureRecognizer tap = new TapGestureRecognizer();
+                tap.Tapped += Contact_Tapped;
+                TabsContact.GestureRecognizers.Add(tap);
 
-                    grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                    grid.Children.Add(rd);
-                    Grid.SetColumn(rd, i);
-                    Grid.SetRow(rd, 0);
+                if (numberTab == 0)
+                {
+                    SetUpContact();
+                    gridMain.Children.Add(ListContact);
+                    Grid.SetColumn(ListContact, 0);
+                    Grid.SetRow(ListContact, 1);
+
+                    ListContact.IsVisible = true;
+                    var lb = TabsContact.Content as Label;
+                    VisualStateManager.GoToState(TabsContact, "Selected");
+                    VisualStateManager.GoToState(lb, "Selected");
                 }
-                BoxView boxView = new BoxView();
-                boxView.HeightRequest = 1;
-                boxView.BackgroundColor = Color.FromHex("F1F1F1");
-                boxView.VerticalOptions = LayoutOptions.EndAndExpand;
-                grid.Children.Add(boxView);
-                Grid.SetColumn(boxView, 0);
-                Grid.SetRow(boxView, 0);
-                Grid.SetColumnSpan(boxView, Tabs.Count);
+                numberTab++;
             }
-            return grid;
-        }
-        private void Tab_Tapped(object sender, EventArgs e)
-        {
-            var button = sender as Label;
-            indexTab = ListRadBorderTab.IndexOf(ListRadBorderTab.FirstOrDefault(x => x.Children.Last() == button));
-            IndexTab(indexTab);
+            if (ShowAccount == true)
+            {
+                TabsAccount = CreateTabs("KH Doanh Nghiệp");
+                gridTabs.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                gridTabs.Children.Add(TabsAccount);
+                Grid.SetColumn(TabsAccount, numberTab);
+                Grid.SetRow(TabsAccount, 0);
+                TapGestureRecognizer tap = new TapGestureRecognizer();
+                tap.Tapped += Account_Tapped;
+                TabsAccount.GestureRecognizers.Add(tap);
+
+                if (numberTab == 0)
+                {
+                    SetUpAccount();
+                    gridMain.Children.Add(ListAccount);
+                    Grid.SetColumn(ListAccount, 0);
+                    Grid.SetRow(ListAccount, 1);
+
+                    ListAccount.IsVisible = true;
+                    var lb = TabsAccount.Content as Label;
+                    VisualStateManager.GoToState(TabsAccount, "Selected");
+                    VisualStateManager.GoToState(lb, "Selected");
+                }
+                numberTab++;
+            }
+
+            BoxView boxView = new BoxView();
+            boxView.HeightRequest = 1;
+            boxView.BackgroundColor = Color.FromHex("F1F1F1");
+            boxView.VerticalOptions = LayoutOptions.EndAndExpand;
+            gridTabs.Children.Add(boxView);
+            Grid.SetColumn(boxView, 0);
+            Grid.SetRow(boxView, 0);
+            Grid.SetColumnSpan(boxView, numberTab);
+
+            if(numberTab > 1)
+            {
+                gridMain.Children.Add(gridTabs);
+                Grid.SetColumn(gridTabs, 0);
+                Grid.SetRow(gridTabs, 0);
+            }             
         }
 
-        private void IndexTab(int index)
+        private void Account_Tapped(object sender, EventArgs e)
         {
-            if (ListRadBorderTab != null && ListRadBorderTab.Count > 0)
+            Tab_Tapped(TabsAccount);
+            if(ListAccount == null)
             {
-                for (int i = 0; i < ListRadBorderTab.Count; i++)
+                SetUpAccount();
+                gridMain.Children.Add(ListAccount);
+                Grid.SetColumn(ListAccount, 0);
+                Grid.SetRow(ListAccount, 1);
+            }    
+
+            ListAccount.IsVisible = true;
+            if (ListLead != null)
+                ListLead.IsVisible = false;
+            if(ListContact != null)
+                ListContact.IsVisible = false;
+        }
+
+        private void Contact_Tapped(object sender, EventArgs e)
+        {
+            Tab_Tapped(TabsContact);
+            if(ListContact == null)
+            {
+                SetUpContact();
+                gridMain.Children.Add(ListContact);
+                Grid.SetColumn(ListContact, 0);
+                Grid.SetRow(ListContact, 1);
+            }    
+
+            ListContact.IsVisible = true;
+            if (ListLead != null)
+                ListLead.IsVisible = false;
+            if (ListAccount != null)
+                ListAccount.IsVisible = false;
+        }
+
+        private void Lead_Tapped(object sender, EventArgs e)
+        {
+            Tab_Tapped(TabsLead);
+            if(ListLead == null)
+            {
+                SetUpLead();
+                gridMain.Children.Add(ListLead);
+                Grid.SetColumn(ListLead, 0);
+                Grid.SetRow(ListLead, 1);
+            }    
+
+            ListLead.IsVisible = true;
+            if (ListContact != null)
+                ListContact.IsVisible = false;
+            if (ListAccount != null)
+                ListAccount.IsVisible = false;
+        }
+
+        public RadBorder CreateTabs(string NameTab)
+        {
+            RadBorder rd = new RadBorder();
+            rd.Style = (Style)Application.Current.Resources["rabBorder_Tab"];
+            Label lb = new Label();
+            lb.Style = (Style)Application.Current.Resources["Lb_Tab"];
+            lb.Text = NameTab;
+            rd.Content = lb;
+            return rd;
+        }
+      
+        private void Tab_Tapped(RadBorder radBorder)
+        {
+            if (radBorder != null && gridTabs != null)
+            {
+                for (int i = 0; i < gridTabs.Children.Count-1; i++)
                 {
-                    if (i == index)
+                    if(gridTabs.Children[i] == radBorder)
                     {
-                        VisualStateManager.GoToState(ListRadBorderTab[i], "Selected");
-                        VisualStateManager.GoToState(ListLabelTab[i], "Selected");
-                        if (ListListView != null && ListListView.Count > 0 )
-                        {
-                            if (ListListView[indexTab] != null && ListListView[indexTab].Count <= 0)
-                            {
-                                LoadingHelper.Show();
-                                Tabs[indexTab].OnClickeEvent?.Invoke(this, EventArgs.Empty);
-                                LoadingHelper.Hide();
-                            }
-                            _lookUpView.SetList(ListListView[indexTab].Cast<object>().ToList(), NameDisplay);
-                        }
+                        var rd = gridTabs.Children[i] as RadBorder;
+                        var lb = rd.Content as Label;
+                        VisualStateManager.GoToState(rd, "Selected");
+                        VisualStateManager.GoToState(lb, "Selected");
                     }
                     else
                     {
-                        VisualStateManager.GoToState(ListRadBorderTab[i], "Normal");
-                        VisualStateManager.GoToState(ListLabelTab[i], "Normal");
+                        var rd = gridTabs.Children[i] as RadBorder;
+                        var lb = rd.Content as Label;
+                        VisualStateManager.GoToState(rd, "Normal");
+                        VisualStateManager.GoToState(lb, "Normal");
                     }
                 }
             }
         }
 
-        public void SetUpFooterLayout()
+        private void SetUpContact()
         {
-            stackFooter.Padding = new Thickness(0, 0, 0, 64);
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                  <entity name='contact'>
+                    <attribute name='contactid' alias='Val' />
+                    <attribute name='fullname' alias='Label' />
+                    <order attribute='fullname' descending='false' />                   
+                    <filter type='and'>
+                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                    </filter>
+                  </entity>
+                </fetch>";
+            string entity = "contacts";
 
-            ActivityIndicator activityIndicator = new ActivityIndicator()
+            ListContact = new ListViewMultiTabs(fetch,entity);
+            ListContact.ItemTapped = async (item) =>
             {
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                WidthRequest = 30,
-                IsRunning = true,
-                Margin = new Thickness(0, 5, 0, 0),
-                Color = Color.FromHex("#333333")
+                if (item != null)
+                {
+                    item.Title = "2";
+                    SelectedItem = item;
+                    await CenterModal.Hide();
+                }
             };
+        }
 
-            stackFooter.Children.Add(activityIndicator);
+        private void SetUpLead()
+        {
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='lead'>
+                                <attribute name='lastname' alias='Label' />
+                                <attribute name='leadid' alias='Val' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
+                              </entity>
+                            </fetch>";
 
-            _lookUpView.lookUpListView.Footer = stackFooter;
-        }   
+            string entity = "leads";
+
+            ListLead = new ListViewMultiTabs(fetch, entity);
+            ListLead.ItemTapped = async (item) =>
+            {
+                if (item != null)
+                {
+                    item.Title = "1";
+                    SelectedItem = item;
+                    await CenterModal.Hide();
+                }
+            };
+        }
+
+        private void SetUpAccount()
+        {
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='account'>
+                                <attribute name='name' alias='Label'/>
+                                <attribute name='accountid' alias='Val'/>
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
+                              </entity>
+                            </fetch>";
+   
+            string entity = "accounts";
+
+            ListAccount = new ListViewMultiTabs(fetch, entity);
+            ListAccount.ItemTapped = async (item) =>
+            {
+                if (item != null)
+                {
+                    item.Title = "3";
+                    SelectedItem = item;
+                    await CenterModal.Hide();
+                }
+            };
+        }
     }
 }

@@ -46,14 +46,32 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
+        // phan hoi lien quan
+        private async Task LoadDataPhanHoiLienQuan(Guid Id)
+        {
+            if (viewModel.ListCase != null && viewModel.ListCase.Count <= 0)
+            {
+                await viewModel.LoadListCase(Id);
+            }
+        }
+
+        private async void ShowMoreCase_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageCase++;
+            await viewModel.LoadListCase(CaseId);
+            LoadingHelper.Hide();
+        }
+
         private void ThongTin_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(1);
         }
 
-        private void PhanHoiLienQuan_Tapped(object sender, EventArgs e)
+        private async void PhanHoiLienQuan_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(2);
+            await LoadDataPhanHoiLienQuan(CaseId);
         }
 
         private void Tab_Tapped(int tab)
@@ -82,6 +100,6 @@ namespace ConasiCRM.Portable.Views
                 VisualStateManager.GoToState(lbPhanHoiLienQuan, "Normal");
                 TabPhanHoiLienQuan.IsVisible = false;
             }
-        }
+        }     
     }
 }

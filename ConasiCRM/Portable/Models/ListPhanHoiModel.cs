@@ -111,6 +111,7 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
+        public Guid parentcaseid { get; set; }
     }
 }
 

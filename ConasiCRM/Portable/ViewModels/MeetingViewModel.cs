@@ -40,17 +40,7 @@ namespace ConasiCRM.Portable.ViewModels
         private List<List<OptionSet>> _allsLookUpOptional;
         public List<List<OptionSet>> AllsLookUpOptional { get => _allsLookUpOptional; set { _allsLookUpOptional = value; OnPropertyChanged(nameof(AllsLookUpOptional)); } }
 
-        private List<OptionSet> _leadsLookUpCustomer;
-        public List<OptionSet> LeadsLookUpCustomer { get => _leadsLookUpCustomer; set { _leadsLookUpCustomer = value; OnPropertyChanged(nameof(LeadsLookUpCustomer)); } }
-
-        private List<OptionSet> _contactsLookUpCustomer;
-        public List<OptionSet> ContactsLookUpCustomer { get => _contactsLookUpCustomer; set { _contactsLookUpCustomer = value; OnPropertyChanged(nameof(ContactsLookUpCustomer)); } }
-
-        private List<OptionSet> _accountsLookUpCustomer;
-        public List<OptionSet> AccountsLookUpCustomer { get => _accountsLookUpCustomer; set { _accountsLookUpCustomer = value; OnPropertyChanged(nameof(AccountsLookUpCustomer)); } }
-        public List<List<OptionSet>> AllsLookUpCustomer { get; set; }
         public List<string> Tabs { get; set; }
-        public List<FloatButtonItem> TabsCustomer { get; set; }
 
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
@@ -79,12 +69,7 @@ namespace ConasiCRM.Portable.ViewModels
             MeetingModel = new MeetingModel();
             AllsLookUpRequired = new List<List<OptionSet>>();
             AllsLookUpOptional = new List<List<OptionSet>>();
-            LeadsLookUpCustomer = new List<OptionSet>();
-            ContactsLookUpCustomer = new List<OptionSet>();
-            AccountsLookUpCustomer = new List<OptionSet>();
-            AllsLookUpCustomer = new List<List<OptionSet>>();
             Tabs = new List<string>();
-            TabsCustomer = new List<FloatButtonItem>();
             ShowButton = true;
         }
 
@@ -539,113 +524,6 @@ namespace ConasiCRM.Portable.ViewModels
                 Tabs.Add("KH Cá Nhân");
                 Tabs.Add("KH Doanh Nghiệp");
             }
-        }     
-
-        public void SetTabCustomer()
-        {
-            if (TabsCustomer.Count <= 0)
-            {
-                TabsCustomer.Add(new FloatButtonItem ("KH Tiềm Năng",null,null,null, LoadLead));
-                TabsCustomer.Add(new FloatButtonItem("KH Cá Nhân", null, null, null, LoadContact));
-                TabsCustomer.Add(new FloatButtonItem("KH Doanh Nghiệp", null, null, null, LoadAccount));
-            }
-        }
-
-        public void LoadAllLookUpCustomer()
-        {
-            if (AllsLookUpCustomer.Count <= 0)
-            {
-                AllsLookUpCustomer.Add(LeadsLookUpCustomer);
-                AllsLookUpCustomer.Add(ContactsLookUpCustomer);
-                AllsLookUpCustomer.Add(AccountsLookUpCustomer);
-            }
-        }
-
-        private async void LoadLead(object sender, EventArgs e)
-        {
-            await LoadLeadsForCustomer();
-            PageLead++;
-        }
-
-        private async void LoadContact(object sender, EventArgs e)
-        {
-            await LoadContactsForCustomer();
-            PageContact++;
-        }
-
-        private async void LoadAccount(object sender, EventArgs e)
-        {
-            await LoadAccountsForCustomer();
-            PageAccount++;
-        }
-
-        public async Task LoadLeadsForCustomer()
-        {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageLead + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='lead'>
-                                <attribute name='fullname' alias='Label' />
-                                <attribute name='leadid' alias='Val' />
-                                <order attribute='createdon' descending='true' />
-                                <filter type='and'>
-                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                item.Title = CodeLead;
-                LeadsLookUpCustomer.Add(item);
-            }
-        }
-
-        public async Task LoadContactsForCustomer()
-        {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageContact + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                  <entity name='contact'>
-                    <attribute name='contactid' alias='Val' />
-                    <attribute name='fullname' alias='Label' />
-                    <order attribute='fullname' descending='false' />                   
-                    <filter type='and'>
-                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                    </filter>
-                  </entity>
-                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("contacts", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                item.Title = CodeContac;
-                ContactsLookUpCustomer.Add(item);
-            }
-        }
-
-        public async Task LoadAccountsForCustomer()
-        {
-            string fetch = @"<fetch version='1.0' count='15' page='" + PageAccount + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='account'>
-                                <attribute name='name' alias='Label'/>
-                                <attribute name='accountid' alias='Val'/>
-                                <order attribute='createdon' descending='true' />
-                                <filter type='and'>
-                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetch);
-            if (result == null || result.value == null)
-                return;
-            var data = result.value;
-            foreach (var item in data)
-            {
-                item.Title = CodeAccount;
-                AccountsLookUpCustomer.Add(item);
-            }
-        }
+        }           
     }
 }

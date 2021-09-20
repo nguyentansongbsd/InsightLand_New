@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -42,6 +43,7 @@ namespace ConasiCRM.Portable.ViewModels
                                               <condition attribute='customeridname' operator='like' value='%25{Keyword}%25' />
                                               <condition attribute='productidname' operator='like' value='%25{Keyword}%25' />
                                           </filter>   
+                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>         
                                 </entity>
                             </fetch>";
