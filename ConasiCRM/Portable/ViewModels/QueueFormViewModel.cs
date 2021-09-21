@@ -141,7 +141,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='opportunityid' />
                                 <attribute name='bsd_queuingexpired' alias='_queue_bsd_queuingexpired' />
                                 <attribute name='bsd_bookingtime' alias='_queue_bsd_bookingtime' />
-                                <order attribute='createdon' descending='true' />   
+                                <order attribute='createdon' descending='true' />                               
                                 <link-entity name='contact' from='contactid' to='parentcontactid' visible='false' link-type='outer' alias='a_7eff24578704e911a98b000d3aa2e890'>
                                       <attribute name='contactid' alias='contact_id' />
                                       <attribute name='bsd_fullname' alias='contact_name' />
@@ -153,10 +153,6 @@ namespace ConasiCRM.Portable.ViewModels
                                 <filter type='and'>
                                     <condition attribute='bsd_queueforproject' operator='eq' value='0' />
                                     <condition attribute='bsd_units' operator='eq' uitype='product' value='{" + QueueFormModel.bsd_units_id + @"}' />
-                                    <condition attribute='statuscode' operator='in'>
-                                        <value>100000002</value>
-                                        <value>100000000</value>
-                                    </condition>
                                 </filter>
                               </entity>
                             </fetch>";

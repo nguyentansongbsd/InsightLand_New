@@ -14,7 +14,7 @@ namespace ConasiCRM.Portable.ViewModels
         public PhanHoiFormModel singlePhanHoi { get => _singlePhanHoi; set { _singlePhanHoi = value; OnPropertyChanged(nameof(singlePhanHoi)); } }
 
         private List<OptionSet> _caseTypes;
-        public List<OptionSet> CaseTypes { get => _caseTypes; set { _caseTypes = value;OnPropertyChanged(nameof(CaseTypes)); } }
+        public List<OptionSet> CaseTypes { get => _caseTypes; set { _caseTypes = value; OnPropertyChanged(nameof(CaseTypes)); } }
         private List<OptionSet> _subjects;
         public List<OptionSet> Subjects { get => _subjects; set { _subjects = value; OnPropertyChanged(nameof(Subjects)); } }
         private List<OptionSet> _caseLienQuans;
@@ -52,7 +52,7 @@ namespace ConasiCRM.Portable.ViewModels
         private List<List<OptionSet>> _allItemSourceCustomer;
         public List<List<OptionSet>> AllItemSourceCustomer { get => _allItemSourceCustomer; set { _allItemSourceCustomer = value; OnPropertyChanged(nameof(AllItemSourceCustomer)); } }
         private List<string> _tabsCustomer;
-        public List<string> TabsCustomer { get=>_tabsCustomer; set { _tabsCustomer = value;OnPropertyChanged(nameof(TabsCustomer)); } }
+        public List<string> TabsCustomer { get => _tabsCustomer; set { _tabsCustomer = value; OnPropertyChanged(nameof(TabsCustomer)); } }
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
 
@@ -115,7 +115,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             else
             {
-                data["subjectid@odata.bind"] = "/subjects(" + Subject.Val + ")"; 
+                data["subjectid@odata.bind"] = "/subjects(" + Subject.Val + ")";
             }
 
             if (CaseLienQuan == null)
@@ -132,7 +132,7 @@ namespace ConasiCRM.Portable.ViewModels
                 await DeletLookup("customerid_account", singlePhanHoi.incidentid);
                 await DeletLookup("customerid_contact", singlePhanHoi.incidentid);
             }
-            else if(Customer.Title == "2") // account
+            else if (Customer.Title == "2") // account
             {
                 data["customerid_account@odata.bind"] = "/accounts(" + Customer.Val + ")";
             }
@@ -361,7 +361,7 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var resutl = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("products", fetchXml);
-            if (resutl == null || resutl.value.Count == 0) return ;
+            if (resutl == null || resutl.value.Count == 0) return;
             this.Units = resutl.value;
         }
 

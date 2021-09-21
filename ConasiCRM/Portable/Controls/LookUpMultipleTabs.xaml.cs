@@ -1,4 +1,4 @@
-﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;

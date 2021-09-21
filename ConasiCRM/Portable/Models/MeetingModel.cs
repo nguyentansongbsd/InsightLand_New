@@ -158,7 +158,7 @@ namespace ConasiCRM.Portable.Models
         public string location { get => _location; set { _location = value; OnPropertyChanged(nameof(location)); } }
 
         private bool _isalldayevent;
-        public bool isalldayevent { get => _isalldayevent; set { _isalldayevent = value; OnPropertyChanged(nameof(isalldayevent)); } }
+        public bool isalldayevent { get => _isalldayevent; set { _isalldayevent = value; OnPropertyChanged(nameof(subject)); } }
 
         public int statecode { get; set; }
         public int statuscode { get; set; }
