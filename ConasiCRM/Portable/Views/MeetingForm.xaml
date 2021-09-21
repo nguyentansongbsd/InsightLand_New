@@ -44,7 +44,8 @@
                     <controls:LookUpMultipleOptions x:Name="Lookup_Optional" Placeholder="Chọn người tham dự không bắt buộc" ItemsSource="{Binding ItemsSourceOptional}" ListTab="{Binding Tabs}" ListListView="{Binding AllsLookUpOptional}" CenterModal="{x:Reference CenterModal}" SelectedIds="{Binding Optional}" ShowClearButton="False" ShowCloseButton="False"/>
 
                     <controls:FormLabel Text="Người liên quan" FontSize="15" Margin="0,10,0,0"/>
-                    <controls:LookUpMultipleTabs x:Name="Lookup_Customer" Placeholder="Chọn người liên quan" ListListView="{Binding AllsLookUpRequired}" ListTab="{Binding Tabs}" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding Customer}" NameDisplay="Label"/>
+
+                    <controls:LookUpMultipleTabs x:Name="Lookup_Customer" Placeholder="Chọn người liên quan" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding Customer}" ShowAccount="True" ShowContact="True" ShowLead="True"/>
 
                     <controls:FormLabel Text="Địa điểm" FontSize="15" Margin="0,10,0,0"/>
                     <controls:MainEntry Placeholder="Nhập địa điểm" Text="{Binding MeetingModel.location}" FontSize="15"/>
