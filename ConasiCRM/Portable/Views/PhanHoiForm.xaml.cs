@@ -1,10 +1,10 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,23 +14,11 @@ namespace ConasiCRM.Portable.Views
     public partial class PhanHoiForm : ContentPage
     {
         public Action<bool> CheckPhanHoi;
-        private Guid IncidentId;
         public PhanHoiFormViewModel viewModel;
-
-        public ICRMService<Account> accountService;
-        Label required_field = new Label()
-        {
-            HorizontalTextAlignment = TextAlignment.End,
-            VerticalOptions = LayoutOptions.Center,
-            TextColor = Color.FromHex("#fb0000"),
-            FontSize = 18,
-            Text = "*",
-        };
 
         public PhanHoiForm()
         {
             InitializeComponent();
-            IncidentId = Guid.Empty;
             Init();
         }
         public PhanHoiForm(Guid incidentid)
@@ -41,7 +29,7 @@ namespace ConasiCRM.Portable.Views
             InitUpdate();
         }
 
-        private async void CheckSinglePhanHoi()
+        public async void Init()
         {
             this.BindingContext = viewModel = new PhanHoiFormViewModel();
             viewModel.TabsDoiTuong = new List<string>() { "Giữ chỗ,", "Bảng Tính Giá", "Hợp đồng" };
@@ -84,7 +72,21 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.CaseOrigins = OriginData.Origins();
                 LoadingHelper.Hide();
-            };           
+            };
+
+            //multiTabsCustomer.PreOpenAsync = async () =>
+            //{
+            //    LoadingHelper.Show();
+            //    viewModel.TabsCustomer = new List<string>() { "KH Cá Nhân", "KH Doanh Nghiệp" };
+            //    viewModel.Contacts = new List<OptionSet>();
+            //    viewModel.Accounts = new List<OptionSet>();
+            //    await Task.WhenAll(
+            //        viewModel.LoadContacts(),
+            //        viewModel.LoadAccounts()
+            //        );
+            //    viewModel.AllItemSourceCustomer = new List<List<OptionSet>>() { viewModel.Contacts, viewModel.Accounts };
+            //    LoadingHelper.Hide();
+            //};
 
             lookupCaseLienQuan.PreOpenAsync = async () =>
             {
@@ -97,7 +99,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     await viewModel.LoadCaseLienQuan();
                 }
-                
+
                 LoadingHelper.Hide();
             };
 
@@ -141,7 +143,7 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.AllItemSourceDoiTuong.Clear();
             }
-            
+
             await Task.WhenAll(
                     viewModel.LoadQueues(),
                     viewModel.LoadQuotes(),
