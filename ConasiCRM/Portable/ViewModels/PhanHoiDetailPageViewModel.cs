@@ -12,6 +12,8 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class PhanHoiDetailPageViewModel : BaseViewModel
     {
+        public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; } = new ObservableCollection<FloatButtonItem>();
+
         private PhanHoiFormModel _case;
         public PhanHoiFormModel Case { get => _case; set { _case = value; OnPropertyChanged(nameof(Case)); } }
 
@@ -21,6 +23,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private bool _showMoreCase;
         public bool ShowMoreCase { get => _showMoreCase; set { _showMoreCase = value; OnPropertyChanged(nameof(ShowMoreCase)); } }
+
+        public bool _showButton;
+        public bool ShowButton { get => _showButton; set { _showButton = value; OnPropertyChanged(nameof(ShowButton)); } }
 
         public PhanHoiDetailPageViewModel()
         {

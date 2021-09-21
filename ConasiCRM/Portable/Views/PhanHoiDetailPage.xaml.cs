@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,12 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            await LoadDataThongTin(CaseId);           
+            await LoadDataThongTin(CaseId);
+
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy phản hồi", "FontAwesomeRegular", "\uf273", null, CancelCase));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Giải quyết phản hồi", "FontAwesomeRegular", "\uf274", null, CompletedCase));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null,Update));
+
             if (viewModel.Case.incidentid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
@@ -61,6 +67,33 @@ namespace ConasiCRM.Portable.Views
             viewModel.PageCase++;
             await viewModel.LoadListCase(CaseId);
             LoadingHelper.Hide();
+        }
+
+        private void Update(object sender, EventArgs e)
+        {
+        }
+
+        private async void CancelCase(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            string options = await DisplayActionSheet("Hủy phản hồi", "Không", "Có", "Xác nhận hủy phản hồi");
+            if (options == "Có")
+            {
+
+            }
+            else if (options == "Không")
+            {
+                LoadingHelper.Hide();
+            }
+        }
+
+        private void CompletedCase(object sender, EventArgs e)
+        {
+        }
+
+        private void BtnSave_Clicked(object sender, EventArgs e)
+        {
+
         }
 
         private void ThongTin_Tapped(object sender, EventArgs e)
@@ -100,6 +133,6 @@ namespace ConasiCRM.Portable.Views
                 VisualStateManager.GoToState(lbPhanHoiLienQuan, "Normal");
                 TabPhanHoiLienQuan.IsVisible = false;
             }
-        }     
+        }       
     }
 }

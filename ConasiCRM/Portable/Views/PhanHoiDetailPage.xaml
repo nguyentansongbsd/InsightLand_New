@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters" xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
-             x:Class="ConasiCRM.Portable.Views.PhanHoiDetailPage">
+             x:Class="ConasiCRM.Portable.Views.PhanHoiDetailPage"
+             x:Name="this"
+             Title="Chi Tiết Phản Hồi">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:PhanHoiStatusCodeConvert x:Key="StatucToColor"/>
@@ -110,6 +112,10 @@
                     </Grid>
                 </StackLayout>
             </ScrollView>
+            <controls:FloatingButtonGroup x:Name="floatingButtonGroup" ItemsSource="{Binding BindingContext.ButtonCommandList,Source={x:Reference this}}"/>
+            <Grid IsVisible="False" Padding="10,15,10,10" VerticalOptions="EndAndExpand" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">
+                <Button x:Name="BtnSave" Clicked="BtnSave_Clicked" IsVisible="{Binding ShowButton}" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" HeightRequest="35" Padding="10,5" FontSize="16" CornerRadius="5"/>
+            </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
