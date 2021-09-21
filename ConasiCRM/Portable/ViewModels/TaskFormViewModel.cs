@@ -10,22 +10,8 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class TaskFormViewModel : BaseViewModel
     {
-        private List<OptionSet> _leads;
-        public List<OptionSet> Leads { get => _leads; set { _leads = value; OnPropertyChanged(nameof(Leads)); } }
-
-        private List<OptionSet> _contacts;
-        public List<OptionSet> Contacts { get => _contacts; set { _contacts = value; OnPropertyChanged(nameof(Contacts)); } }
-
-        private List<OptionSet> _accounts;
-        public List<OptionSet> Accounts { get => _accounts; set { _accounts = value; OnPropertyChanged(nameof(Accounts)); } }
-
         private TaskFormModel _taskFormModel;
         public TaskFormModel TaskFormModel { get => _taskFormModel; set { _taskFormModel = value; OnPropertyChanged(nameof(TaskFormModel)); } }
-
-        private List<List<OptionSet>> _allLookUp;
-        public List<List<OptionSet>> AllsLookUp { get=>_allLookUp; set { _allLookUp = value;OnPropertyChanged(nameof(AllsLookUp)); } }
-
-        public List<FloatButtonItem> Tabs { get; set; }
 
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value;OnPropertyChanged(nameof(Customer)); } }
@@ -44,81 +30,8 @@ namespace ConasiCRM.Portable.ViewModels
         public string customerTypeContact = "2";
         public string customerTypeAccount = "3";
 
-        public int PageLead = 1;
-        public int PageContact = 1;
-        public int PageAccount = 1;
-
         public TaskFormViewModel()
         {
-            Leads = new List<OptionSet>();
-            Contacts = new List<OptionSet>();
-            Accounts = new List<OptionSet>();
-            Tabs = new List<FloatButtonItem>();
-            AllsLookUp = new List<List<OptionSet>>();
-        }
-
-        public async Task LoadLeads()
-        {
-            string fetchXml = @"<fetch version='1.0' count='15' page='" + PageLead + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='lead'>
-                                <attribute name='lastname' alias='Label'/>
-                                <attribute name='leadid' alias='Val'/>
-                                <order attribute='createdon' descending='true' />
-                                <filter type='and'>
-                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetchXml);
-            if (result == null || result.value.Count == 0) return;
-            foreach (var item in result.value)
-            {
-                item.Title = customerTypeLead;
-                this.Leads.Add(item);
-            }
-            
-        }
-
-        public async Task LoadContact()
-        {
-            string fetchXml = @"<fetch version='1.0' count='15' page='" + PageContact + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='contact'>
-                                    <attribute name='contactid' alias='Val' />
-                                    <attribute name='fullname' alias='Label' />
-                                    <order attribute='fullname' descending='false' />
-                                    <filter type='and'>
-                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("contacts", fetchXml);
-            if (result == null || result.value.Count == 0) return;
-            foreach (var item in result.value)
-            {
-                item.Title = customerTypeContact;
-                this.Contacts.Add(item);
-            }
-        }
-
-        public async Task LoadAccount()
-        {
-            string fetchXml = @"<fetch version='1.0' count='15' page='" + PageAccount + @"' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='account'>
-                                    <attribute name='accountid' alias='Val' />
-                                    <attribute name='bsd_name' alias='Label' />
-                                    <order attribute='name' descending='false' />
-                                    <filter type='and'>
-                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetchXml);
-            if (result == null || result.value.Count == 0) return;
-            foreach (var item in result.value)
-            {
-                item.Title = customerTypeAccount;
-                Accounts.Add(item);
-            }
         }
 
         public async Task LoadTask()
@@ -250,44 +163,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             return data;
-        }
-
-        public void LoadAllLookUp()
-        {
-            if (AllsLookUp.Count <= 0)
-            {
-                AllsLookUp.Add(Leads);
-                AllsLookUp.Add(Contacts);
-                AllsLookUp.Add(Accounts);
-            }
-        }
-
-        public void SetUpTabs()
-        {
-            if (Tabs.Count <= 0)
-            {
-                Tabs.Add(new FloatButtonItem("KH Tiềm Năng", null, null, null, LoadLeadLookUp));
-                Tabs.Add(new FloatButtonItem("KH Cá Nhân", null, null, null, LoadContactLookUp));
-                Tabs.Add(new FloatButtonItem("KH Doanh Nghiệp", null, null, null, LoadAccountLookUp));
-            }
-        }
-
-        private async void LoadLeadLookUp(object sender, EventArgs e)
-        {
-            await LoadLeads();
-            PageLead++;
-        }
-
-        private async void LoadContactLookUp(object sender, EventArgs e)
-        {
-            await LoadContact();
-            PageContact++;
-        }
-
-        private async void LoadAccountLookUp(object sender, EventArgs e)
-        {
-            await LoadAccount();
-            PageAccount++;
         }
     }
 }

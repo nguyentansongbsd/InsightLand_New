@@ -35,6 +35,34 @@ namespace ConasiCRM.Portable.Models
         public int _statuscode;
         public int statuscode { get { return _statuscode; } set { _statuscode = value; OnPropertyChanged(nameof(statuscode)); } }
 
+        public string statuscodevalue
+        {
+            get
+            {
+                switch (statuscode)
+                {
+                    case 1:
+                        return "In Progress";
+                    case 2:
+                        return "On Hold";
+                    case 3:
+                        return "Waiting for Details";
+                    case 4:
+                        return "Researching";
+                    case 5:
+                        return "Problem Solved";
+                    case 1000:
+                        return "Information Provided";
+                    case 6:
+                        return "Canceled";
+                    case 2000:
+                        return "Merged";
+                    default:
+                        return "";
+                }
+            }
+        }
+
         public string _customerid;
         public string customerid { get { return _customerid; } set { _customerid = value; OnPropertyChanged(nameof(customerid)); } }
 
@@ -113,6 +141,46 @@ namespace ConasiCRM.Portable.Models
         private string _name;
         public string name { get { return _name; } set { _name = value; OnPropertyChanged(nameof(name)); } }
 
+        public string customername
+        {
+            get
+            {
+                if (this.case_nameaccount != null)
+                {
+                    return this.case_nameaccount;
+                }
+                else if (this.case_namecontact != null)
+                {
+                    return this.case_namecontact;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public int casetypecode { get; set; }
+
+        public string casetypecodevalue
+        {
+            get
+            {
+                switch (casetypecode)
+                {
+                    case 1:
+                        return "Question";
+                    case 2:
+                        return "Problem";
+                    case 3:
+                        return "Request";
+                    default:
+                        return "";
+                }
+            }
+        }
+        public string parentcase_title { get; set; }
+        
     }
 }
 

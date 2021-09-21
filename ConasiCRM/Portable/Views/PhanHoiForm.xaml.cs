@@ -66,21 +66,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.CaseOrigins = OriginData.Origins();
                 LoadingHelper.Hide();
-            };
-
-            multiTabsCustomer.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                viewModel.TabsCustomer = new List<string>() { "KH Cá Nhân", "KH Doanh Nghiệp" };
-                viewModel.Contacts = new List<OptionSet>();
-                viewModel.Accounts = new List<OptionSet>();
-                await Task.WhenAll(
-                    viewModel.LoadContacts(),
-                    viewModel.LoadAccounts()
-                    );
-                viewModel.AllItemSourceCustomer = new List<List<OptionSet>>() { viewModel.Contacts, viewModel.Accounts };
-                LoadingHelper.Hide();
-            };
+            };           
 
             lookupProjects.PreOpenAsync = async () =>
             {

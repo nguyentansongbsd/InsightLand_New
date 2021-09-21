@@ -38,19 +38,17 @@ namespace ConasiCRM.Portable.Views
 
         }
 
-        public async void Init()
+        public void Init()
         {
             this.BindingContext = viewModel = new TaskFormViewModel();
         }
 
-        public async void InitAdd()
+        public void InitAdd()
         {
             viewModel.Title = "Tạo Công Việc";
             viewModel.TaskFormModel = new TaskFormModel();
             dateTimeTGBatDau.DefaultDisplay = DateTime.Now;
             dateTimeTGKetThuc.DefaultDisplay = DateTime.Now;
-
-            SetPreOpen();
         }
 
         public async void InitUpdate()
@@ -60,9 +58,6 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.Title = "Cập Nhật Công Việc";
                 btnSave.Text = "Cập nhật công việc";
-
-                SetPreOpen();
-
                 CheckTaskForm?.Invoke(true);
             }
             else
@@ -70,17 +65,6 @@ namespace ConasiCRM.Portable.Views
                 CheckTaskForm?.Invoke(false);
             }
             
-        }
-
-        private void SetPreOpen()
-        {
-            Lookup_NguoiLienQuan.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                viewModel.SetUpTabs();
-                viewModel.LoadAllLookUp();
-                LoadingHelper.Hide();
-            };
         }
 
         private void DateStart_Selected(object sender, EventArgs e)

@@ -26,7 +26,7 @@
                     <controls:LookUp x:Name="lookupCaseOrigin" Placeholder="Chọn nguồn" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding CaseOrigin}" ItemsSource="{Binding CaseOrigins}"/>
 
                     <controls:FormLabelRequired Text="Khách hàng"/>
-                    <controls:LookUpMultipleTabs x:Name="multiTabsCustomer" Placeholder="Chọn khách hàng" CenterModal="{Reference centerModal}" NameDisplay="Label" SelectedItem="{Binding Customer}" ListTab="{Binding TabsCustomer}" ListListView="{Binding AllItemSourceCustomer}" SelectedItemChange="CustomerItem_Changed"/>
+                    <controls:LookUpMultipleTabs x:Name="multiTabsCustomer" ShowAccount="True" ShowContact="True" Placeholder="Chọn khách hàng" CenterModal="{Reference centerModal}" SelectedItem="{Binding Customer}" SelectedItemChange="CustomerItem_Changed"/>
 
                     <controls:FormLabel Text="Dự án"/>
                     <controls:LookUp x:Name="lookupProjects" Placeholder="Chọn dự án" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding Project}" ItemsSource="{Binding Projects}" SelectedItemChange="ProjectItem_Changed"/>
