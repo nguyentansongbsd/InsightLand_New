@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms.Extended;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -60,17 +59,21 @@ namespace ConasiCRM.Portable.ViewModels
         public bool _showButton;
         public bool ShowButton { get => _showButton; set { _showButton = value; OnPropertyChanged(nameof(ShowButton)); } }
 
-        public int PageLead = 1;
-        public int PageContact = 1;
-        public int PageAccount = 1;
-
         public MeetingViewModel()
         {
             MeetingModel = new MeetingModel();
+            ContactsLookUpRequired = new List<OptionSet>();
+            LeadsLookUpRequired = new List<OptionSet>();
+            AccountsLookUpRequired = new List<OptionSet>();
             AllsLookUpRequired = new List<List<OptionSet>>();
+            ContactsLookUpOptional = new List<OptionSet>();
+            LeadsLookUpOptional = new List<OptionSet>();
+            AccountsLookUpOptional = new List<OptionSet>();
             AllsLookUpOptional = new List<List<OptionSet>>();
             Tabs = new List<string>();
             ShowButton = true;
+
+            ItemsSourceOptional = new List<OptionSet>();
         }
 
         public async Task loadDataMeet(Guid id)
@@ -415,8 +418,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadLeadsLookUp()
         {
-            LeadsLookUpRequired = new List<OptionSet>();
-            LeadsLookUpOptional = new List<OptionSet>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
                                 <attribute name='fullname' alias='Label' />
@@ -441,8 +442,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadContactsLookUp()
         {
-            ContactsLookUpRequired = new List<OptionSet>();
-            ContactsLookUpOptional = new List<OptionSet>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Val' />
@@ -467,8 +466,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAccountsLookUp()
         {
-            AccountsLookUpRequired = new List<OptionSet>();
-            AccountsLookUpOptional = new List<OptionSet>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='account'>
                                 <attribute name='name' alias='Label'/>
@@ -493,14 +490,12 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAllLookUp()
         {
-            if (LeadsLookUpRequired == null && ContactsLookUpRequired == null && AccountsLookUpRequired == null
-                && LeadsLookUpOptional == null && ContactsLookUpOptional == null && AccountsLookUpOptional == null)
+            if (LeadsLookUpRequired.Count <= 0 && ContactsLookUpRequired.Count <= 0 && AccountsLookUpRequired.Count <= 0 
+                || LeadsLookUpOptional.Count <= 0 && ContactsLookUpOptional.Count <= 0 && AccountsLookUpOptional.Count <= 0)
             {
-                await Task.WhenAll(
-                    LoadLeadsLookUp(),
-                    LoadContactsLookUp(),
-                    LoadAccountsLookUp()
-                );
+                await LoadLeadsLookUp();
+                await LoadContactsLookUp();
+                await LoadAccountsLookUp();
             }
             if (AllsLookUpRequired.Count <= 0)
             {
@@ -513,6 +508,9 @@ namespace ConasiCRM.Portable.ViewModels
                 AllsLookUpOptional.Add(LeadsLookUpOptional);
                 AllsLookUpOptional.Add(ContactsLookUpOptional);
                 AllsLookUpOptional.Add(AccountsLookUpOptional);
+                ItemsSourceOptional.AddRange(LeadsLookUpOptional);
+                ItemsSourceOptional.AddRange(ContactsLookUpOptional);
+                ItemsSourceOptional.AddRange(AccountsLookUpOptional);
             }
         }
 
@@ -524,6 +522,6 @@ namespace ConasiCRM.Portable.ViewModels
                 Tabs.Add("KH Cá Nhân");
                 Tabs.Add("KH Doanh Nghiệp");
             }
-        }           
+        }      
     }
 }

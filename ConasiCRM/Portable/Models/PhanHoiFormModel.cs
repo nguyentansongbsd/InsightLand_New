@@ -3,22 +3,25 @@ using System;
 
 namespace ConasiCRM.Portable.Models
 {
-    public class PhanHoiFormModel : BaseViewModel
+    public class PhanHoiFormModel
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public Guid incidentid { get; set; }
+        public string title { get; set; }
+        public string caseorigincode { get; set; }
+        public string casetypecode { get; set; }
+        public string description { get; set; }
 
-        public bool _Titlebutton;
-        public bool Titlebutton { get { return _Titlebutton; } set { _Titlebutton = value; OnPropertyChanged(nameof(Titlebutton)); } }
+        public string subjectId { get; set; }
+        public string subjectTitle { get; set; }
 
-        private Guid _incidentid;
-        public Guid incidentid { get { return _incidentid; } set { _incidentid = value; OnPropertyChanged(nameof(incidentid)); } }
+        public string parentCaseId { get; set; }
+        public string parentCaseTitle { get; set; }
 
-        public string _subjectid_value;
-        public string subjectid_value { get { return _subjectid_value; } set { _subjectid_value = value; OnPropertyChanged(nameof(subjectid_value)); } }
+        public string accountId { get; set; }
+        public string accountName { get; set; }
 
-        public string _subjecttitle;
-        public string subjecttitle { get { return _subjecttitle; } set { _subjecttitle = value; OnPropertyChanged(nameof(subjecttitle)); } }
+        public string contactId { get; set; }
+        public string contactName { get; set; }
 
         public int _caseorigincode;
         public int caseorigincode { get { return _caseorigincode; } set { _caseorigincode = value; OnPropertyChanged(nameof(caseorigincode)); } }
