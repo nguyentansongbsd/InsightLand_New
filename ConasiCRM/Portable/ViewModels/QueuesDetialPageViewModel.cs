@@ -51,7 +51,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='description' />
                                 <attribute name='bsd_nameofstaffagent' />
                                 <attribute name='bsd_project' />
-                                <attribute name='bsd_units' />
+                                <attribute name='bsd_units' alias='_bsd_units_value'/>
                                 <attribute name='bsd_phaselaunch' />
                                 <attribute name='bsd_salesagentcompany' />
                                 <order attribute='createdon' descending='true' />

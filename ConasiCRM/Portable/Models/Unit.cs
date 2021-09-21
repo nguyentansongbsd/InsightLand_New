@@ -57,6 +57,7 @@ namespace ConasiCRM.Portable.Models
 
         public Guid _bsd_employee_value { get; set; }
         public Guid _bsd_projectcode_value { get; set; }
+        public Guid _bsd_phaseslaunchid_value { get; set; }
 
         public DateTime createdon { get; set; }
     }

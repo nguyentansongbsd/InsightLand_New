@@ -334,7 +334,7 @@ namespace ConasiCRM.Portable.Views
         private async void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            await Navigation.PushAsync(new ReservationForm(viewModel.Unit._bsd_projectcode_value));
+            await Navigation.PushAsync(new ReservationForm(viewModel.Unit.productid));
             LoadingHelper.Hide();
         }
 

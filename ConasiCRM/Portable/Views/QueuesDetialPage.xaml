@@ -207,7 +207,7 @@
             </ScrollView>
             <Grid x:Name="gridButtons" IsVisible="{Binding ShowButtons}" AbsoluteLayout.LayoutBounds="0,1,1,50" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White" Padding="10,5">
                 <Button x:Name="btnHuyGiuCho" Text="Hủy giữ chỗ" Clicked="HuyGiuCho_Clicked" IsVisible="{Binding ShowBtnHuyGiuCho}" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" />
-                <Button x:Name="btnBangTinhGia" Text="Tạo Bảng tính giá" TextColor="White" IsVisible="{Binding ShowBtnBangTinhGia}" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10"/>
+                <Button x:Name="btnBangTinhGia" Text="Tạo Bảng tính giá" Clicked="CreateQuotation_Clicked" TextColor="White" IsVisible="{Binding ShowBtnBangTinhGia}" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10"/>
             </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>

@@ -11,6 +11,7 @@ using Xamarin.Forms.Xaml;
 using System.Reflection;
 using Telerik.XamarinForms.Primitives;
 using Telerik.XamarinForms.Input;
+using ConasiCRM.Portable.Helpers;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -21,16 +22,19 @@ namespace ConasiCRM.Portable.Views
         private ReservationFormViewModel viewModel;
         private Guid ReservationId;
 
-        public ReservationForm(Guid projectId)
+        public ReservationForm(Guid productId)
         {
             InitializeComponent();
+            this.BindingContext = viewModel = new ReservationFormViewModel();
+            bottomModalHandoverCondition.ModalContent.BindingContext = viewModel;
+            viewModel.ProductId = productId;
             Init();
-            viewModel.ProjectId = projectId;
         }
 
         public async void Init()
         {
-            this.BindingContext = viewModel = new ReservationFormViewModel();
+            await viewModel.LoadUnitInfor();
+
             SetPreOpen();
         }
 
@@ -39,6 +43,11 @@ namespace ConasiCRM.Portable.Views
             lookupPhuongThucThanhToan.PreOpenAsync = async () => {
                 LoadingHelper.Show();
                 await viewModel.LoadPaymentSchemes();
+                LoadingHelper.Hide();
+            };
+            lookupChieuKhau.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                await viewModel.LoadDiscountList();
                 LoadingHelper.Hide();
             };
         }
@@ -82,9 +91,61 @@ namespace ConasiCRM.Portable.Views
             contentChiTiet.IsVisible = true;
         }
 
+        private async void HandoverCondition_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.HandoverConditions == null)
+            {
+                await viewModel.LoadHandoverCondition();
+            }
+            await bottomModalHandoverCondition.Show();
+            LoadingHelper.Hide();
+        }
+
+        private async void ItemHandoverCondition_Tapped(object sender, ItemTappedEventArgs e)
+        {
+            HandoverConditionModel item = e.Item as HandoverConditionModel;
+            if (item.bsd_byunittype == false || (item._bsd_unittype_value == viewModel.UnitInfor._bsd_unittype_value))
+            {
+                viewModel.HandoverCondition = item;
+            }
+            else
+            {
+                ToastMessageHelper.ShortMessage("Không thể thêm điều kiện bàn giao");
+                return;
+            }
+            await bottomModalHandoverCondition.Hide();
+        }
+
+        private void SearchHandoverCondition_Pressed(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.HandoverConditions = viewModel.HandoverConditions.Where(x => x.bsd_name.ToLower().Contains(viewModel.KeywordHandoverCondition.ToLower())).ToList();
+            LoadingHelper.Hide();
+        }
+
+        private async void SearchHandoverCondition_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(viewModel.KeywordHandoverCondition))
+            {
+                LoadingHelper.Show();
+                viewModel.HandoverConditions.Clear();
+                await viewModel.LoadHandoverCondition();
+                LoadingHelper.Hide();
+            }
+        }
+
+        private async void DiscountListItem_Changed(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.DiscountChilds.Clear();
+            await viewModel.LoadDiscountChilds();
+            LoadingHelper.Hide();
+        }
+
         private void SaveQuote_Clicked(object sender, EventArgs e)
         {
-
+            
         }
 
 
