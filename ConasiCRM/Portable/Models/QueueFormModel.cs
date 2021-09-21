@@ -87,5 +87,10 @@ namespace ConasiCRM.Portable.Models
         public DateTime _queue_bsd_queuingexpired { get; set; }
         public DateTime _queue_bsd_bookingtime { get; set; }
         public int UnitStatusCode { get; set; }
+
+        public string bsd_bookingid { get; set; }
+        public string _defaultuomid_value { get; set; }
+        public string _transactioncurrencyid_value { get; set; }
+        public decimal bsd_taxpercent { get; set; }
     }
 }

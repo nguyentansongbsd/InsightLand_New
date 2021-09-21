@@ -20,7 +20,7 @@ namespace ConasiCRM.iOS.Renderers
                 {
                     UITextView textField = Control;
                     textField.BackgroundColor = UIColor.White;
-                    textField.ContentInset = new UIEdgeInsets(0, 5, 0, 5);
+                    textField.ContentInset = new UIEdgeInsets(0,5,0,5);
                     textField.Layer.CornerRadius = 5f;
                     textField.Layer.BorderColor = UIColor.FromRGB(201, 201, 201).CGColor;
                     textField.Layer.BorderWidth = 1f;

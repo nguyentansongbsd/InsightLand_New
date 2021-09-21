@@ -28,15 +28,15 @@ namespace ConasiCRM.Portable.Views
         {
             ReservationListModel val = e.Item as ReservationListModel;
             LoadingHelper.Show();
-            ReservationForm newPage = new ReservationForm(val.quoteid);
-            newPage.CheckReservation = async (CheckReservation) =>
-            {
-                if (CheckReservation == true)
-                {
-                    await Navigation.PushAsync(newPage);                 
-                }
-                LoadingHelper.Hide();
-            };
+            //ReservationForm newPage = new ReservationForm(val.quoteid);
+            //newPage.CheckReservation = async (CheckReservation) =>
+            //{
+            //    if (CheckReservation == true)
+            //    {
+            //        await Navigation.PushAsync(newPage);                 
+            //    }
+            //    LoadingHelper.Hide();
+            //};
         }
 
         private async void SearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)

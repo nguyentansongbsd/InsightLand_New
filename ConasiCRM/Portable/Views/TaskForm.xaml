@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
@@ -15,7 +15,7 @@
                     <controls:MainEntry Text="{Binding TaskFormModel.subject}" Placeholder="Nhập chủ đề công việc" FontSize="15" />
 
                     <controls:FormLabel Text="Người liên quan"/>
-                    <controls:LookUpMultipleTabs x:Name="Lookup_NguoiLienQuan" Placeholder="Chọn người liên quan" ListListView="{Binding AllsLookUp}" ListTab="{Binding Tabs}" SelectedItem="{Binding Customer}" CenterModal="{x:Reference centerModal}" NameDisplay="Label" />
+                    <controls:LookUpMultipleTabs x:Name="Lookup_NguoiLienQuan" Placeholder="Chọn người liên quan" ShowAccount="True" ShowContact="True" ShowLead="True" SelectedItem="{Binding Customer}" CenterModal="{x:Reference centerModal}"/>
 
                     <controls:FormLabelRequired Text="Thời gian bắt đầu"/>
                     <controls:DatePickerControl x:Name="dateTimeTGBatDau" Date="{Binding ScheduledStart}" Placeholder="Chọn thời gian bắt đầu" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateStart_Selected"/>

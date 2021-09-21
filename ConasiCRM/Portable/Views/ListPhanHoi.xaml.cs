@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -44,7 +45,7 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private async void NewMenu_Clicked(object sender, EventArgs e)
+        private async void NewCase_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             await Navigation.PushAsync(new PhanHoiForm());
@@ -53,17 +54,25 @@ namespace ConasiCRM.Portable.Views
 
         private void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            ListPhanHoiModel val = e.Item as ListPhanHoiModel;
-            LoadingHelper.Show();
-            PhanHoiForm newPage = new PhanHoiForm(val.incidentid);
-            newPage.CheckPhanHoi = async (CheckPhanHoi) =>
+            if (e.Item != null)
             {
-                if (CheckPhanHoi == true)
+                var item = e.Item as ListPhanHoiModel;
+                LoadingHelper.Show();
+                PhanHoiDetailPage newPage = new PhanHoiDetailPage(item.incidentid);
+                newPage.OnCompleted = async (OnCompleted) =>
                 {
-                    await Navigation.PushAsync(newPage);                  
-                }
-                LoadingHelper.Hide();
-            };
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin phản hồi");
+                    }
+                };
+            }
         }
 
         private async void SearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)

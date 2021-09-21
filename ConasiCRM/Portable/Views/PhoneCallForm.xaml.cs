@@ -1,4 +1,4 @@
-﻿using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
@@ -42,7 +42,6 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             BindingContext = viewModel = new PhoneCallViewModel();
-            SetPreOpen();
         }
 
         private void Create()
@@ -78,23 +77,6 @@ namespace ConasiCRM.Portable.Views
         {
             SaveData(this.PhoneCallId);
         }
-
-        public void SetPreOpen()
-        {
-            Lookup_CallTo.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadAllLookUp();
-                LoadingHelper.Hide();
-            };        
-
-            Lookup_Customer.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadAllLookUp();
-                LoadingHelper.Hide();
-            };
-        }       
 
         private async void SaveData(Guid id)
         {

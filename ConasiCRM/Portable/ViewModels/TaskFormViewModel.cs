@@ -10,18 +10,8 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class TaskFormViewModel : BaseViewModel
     {
-        public List<OptionSet> Leads { get; set; } = new List<OptionSet>();
-        public List<OptionSet> Contacts { get; set; } = new List<OptionSet>();
-        public List<OptionSet> Accounts { get; set; } = new List<OptionSet>();
-
         private TaskFormModel _taskFormModel;
         public TaskFormModel TaskFormModel { get => _taskFormModel; set { _taskFormModel = value; OnPropertyChanged(nameof(TaskFormModel)); } }
-
-        private List<List<OptionSet>> _allLookUp;
-        public List<List<OptionSet>> AllsLookUp { get=>_allLookUp; set { _allLookUp = value;OnPropertyChanged(nameof(AllsLookUp)); } }
-
-        private List<string> _tabs;
-        public List<string> Tabs { get=>_tabs; set { _tabs = value; OnPropertyChanged(nameof(Tabs)); } }
 
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value;OnPropertyChanged(nameof(Customer)); } }
@@ -42,71 +32,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public TaskFormViewModel()
         {
-
-        }
-
-        public async Task LoadLeads()
-        {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='lead'>
-                                <attribute name='lastname' alias='Label'/>
-                                <attribute name='leadid' alias='Val'/>
-                                <order attribute='createdon' descending='true' />
-                                <filter type='and'>
-                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetchXml);
-            if (result == null || result.value.Count == 0) return;
-            foreach (var item in result.value)
-            {
-                item.Title = customerTypeLead;
-                this.Leads.Add(item);
-            }
-            
-        }
-
-        public async Task LoadContact()
-        {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='contact'>
-                                    <attribute name='contactid' alias='Val' />
-                                    <attribute name='fullname' alias='Label' />
-                                    <order attribute='fullname' descending='false' />
-                                    <filter type='and'>
-                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("contacts", fetchXml);
-            if (result == null || result.value.Count == 0) return;
-            foreach (var item in result.value)
-            {
-                item.Title = customerTypeContact;
-                this.Contacts.Add(item);
-            }
-        }
-
-        public async Task LoadAccount()
-        {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='account'>
-                                    <attribute name='accountid' alias='Val' />
-                                    <attribute name='bsd_name' alias='Label' />
-                                    <order attribute='name' descending='false' />
-                                    <filter type='and'>
-                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetchXml);
-            if (result == null || result.value.Count == 0) return;
-            foreach (var item in result.value)
-            {
-                item.Title = customerTypeAccount;
-                Accounts.Add(item);
-            }
         }
 
         public async Task LoadTask()

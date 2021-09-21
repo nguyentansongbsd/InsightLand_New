@@ -1,4 +1,4 @@
-﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
@@ -39,8 +39,6 @@ namespace ConasiCRM.Portable.ViewModels
         private List<List<OptionSet>> _allsLookUpOptional;
         public List<List<OptionSet>> AllsLookUpOptional { get => _allsLookUpOptional; set { _allsLookUpOptional = value; OnPropertyChanged(nameof(AllsLookUpOptional)); } }
 
-        private List<OptionSet> _itemsSourceOptional;
-        public List<OptionSet> ItemsSourceOptional { get => _itemsSourceOptional; set { _itemsSourceOptional = value; OnPropertyChanged(nameof(ItemsSourceOptional)); } }
         public List<string> Tabs { get; set; }
 
         private OptionSet _customer;
@@ -72,7 +70,7 @@ namespace ConasiCRM.Portable.ViewModels
             LeadsLookUpOptional = new List<OptionSet>();
             AccountsLookUpOptional = new List<OptionSet>();
             AllsLookUpOptional = new List<List<OptionSet>>();
-            Tabs = new List<string>();           
+            Tabs = new List<string>();
             ShowButton = true;
 
             ItemsSourceOptional = new List<OptionSet>();
