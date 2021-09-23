@@ -22,7 +22,7 @@ namespace ConasiCRM.Droid.Renderers
                 if (Control != null)
                 {
                     Control.SetBackgroundResource(Resource.Drawable.bg_main_entry);
-                    Control.SetPadding(15, 25, 15, 25);
+                    Control.SetPadding(15, 20, 15, 20);
                 }
             }
         }

@@ -64,7 +64,6 @@ namespace ConasiCRM.Portable.Views
             {
                 CheckTaskForm?.Invoke(false);
             }
-            
         }
 
         private void DateStart_Selected(object sender, EventArgs e)

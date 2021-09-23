@@ -31,16 +31,14 @@ namespace ConasiCRM.Portable.Controls
             LoadingHelper.Hide();
         }
 
-        public void listView_ItemTapped(object sender, ItemTappedEventArgs e)
+        public void listView_ItemTapped(object sender, EventArgs e)
         {
+            var item = (OptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             if (searchBar.IsFocused)
             {
                 searchBar.Unfocus();
             }
-            if(e.Item != null)
-            {
-                ItemTapped?.Invoke(e.Item as OptionSet);
-            }    
+            ItemTapped?.Invoke(item);
         }
 
         private void SearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)

@@ -244,10 +244,11 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadUnitById(Guid unitId)
         {
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='product'>
                                     <attribute name='name' />
                                     <attribute name='statuscode' />
+                                    <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
                                     <attribute name='price' />
                                     <attribute name='productid' />
                                     <attribute name='bsd_view' />
@@ -255,6 +256,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_constructionarea' />
                                     <attribute name='bsd_floor' alias='floorid'/>
                                     <attribute name='bsd_blocknumber' alias='blockid'/>
+                                    <attribute name='bsd_phaseslaunchid' />
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{unitId}' />

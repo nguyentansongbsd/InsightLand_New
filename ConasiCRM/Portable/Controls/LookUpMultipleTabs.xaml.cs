@@ -1,18 +1,15 @@
-﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
-using Xamarin.Forms.Extended;
 using Xamarin.Forms.Xaml;
 
 namespace ConasiCRM.Portable.Controls
@@ -21,7 +18,6 @@ namespace ConasiCRM.Portable.Controls
     public partial class LookUpMultipleTabs : Grid
     {
         public event EventHandler<LookUpChangeEvent> SelectedItemChange;
-
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public object SelectedItem { get => (object)GetValue(SelectedItemProperty); set { SetValue(SelectedItemProperty, value); } }
 
@@ -50,7 +46,6 @@ namespace ConasiCRM.Portable.Controls
         private Grid gridTabs;
         public bool PreOpenOneTime { get; set; } = true;
         private int numberTab { get; set; } = 0;
-
         public LookUpMultipleTabs()
         {
             InitializeComponent();
@@ -182,7 +177,6 @@ namespace ConasiCRM.Portable.Controls
             Grid.SetColumn(boxView, 0);
             Grid.SetRow(boxView, 0);
             Grid.SetColumnSpan(boxView, numberTab);
-
             if(numberTab > 1)
             {
                 gridMain.Children.Add(gridTabs);
@@ -244,14 +238,15 @@ namespace ConasiCRM.Portable.Controls
             if (ListAccount != null)
                 ListAccount.IsVisible = false;
         }
-
         public RadBorder CreateTabs(string NameTab)
+
         {
             RadBorder rd = new RadBorder();
             rd.Style = (Style)Application.Current.Resources["rabBorder_Tab"];
             Label lb = new Label();
             lb.Style = (Style)Application.Current.Resources["Lb_Tab"];
             lb.Text = NameTab;
+            lb.LineBreakMode = LineBreakMode.TailTruncation;
             rd.Content = lb;
             return rd;
         }
@@ -279,7 +274,6 @@ namespace ConasiCRM.Portable.Controls
                 }
             }
         }
-
         private void SetUpContact()
         {
             string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>

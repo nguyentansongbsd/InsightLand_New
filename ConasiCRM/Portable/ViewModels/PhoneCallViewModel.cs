@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms.Extended;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -34,10 +33,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public bool _showButton;
         public bool ShowButton { get => _showButton; set { _showButton = value; OnPropertyChanged(nameof(ShowButton)); } }
-
-        public int PageLead = 1;
-        public int PageContact = 1;
-        public int PageAccount =1;
 
         public PhoneCallViewModel()
         {

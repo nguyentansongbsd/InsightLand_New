@@ -11,8 +11,37 @@ using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class ReservationFormViewModel : FormLookupViewModel
+    public class ReservationFormViewModel : BaseViewModel
     {
+        public Guid ProjectId { get; set; }
+        public Guid ProductId { get; set; }
+        public string KeywordHandoverCondition { get; set; }
+
+        public ObservableCollection<OptionSet> DiscountChilds { get; set; } = new ObservableCollection<OptionSet>();
+
+        private List<OptionSet> _paymentSchemes;
+        public List<OptionSet> PaymentSchemes { get => _paymentSchemes; set { _paymentSchemes = value;OnPropertyChanged(nameof(PaymentSchemes)); } }
+        private List<OptionSet> _discountLists;
+        public List<OptionSet> DiscountLists { get => _discountLists; set { _discountLists = value; OnPropertyChanged(nameof(DiscountLists)); } }
+        private List<HandoverConditionModel> _handoverConditions;
+        public List<HandoverConditionModel> HandoverConditions { get => _handoverConditions; set { _handoverConditions = value; OnPropertyChanged(nameof(HandoverConditions)); } }
+
+        private OptionSet _paymentScheme;
+        public OptionSet PaymentScheme { get => _paymentScheme; set { _paymentScheme = value; OnPropertyChanged(nameof(PaymentScheme)); } }
+        private OptionSet _discountList;
+        public OptionSet DiscountList { get => _discountList; set { _discountList = value; OnPropertyChanged(nameof(DiscountList)); } }
+        private HandoverConditionModel _handoverCondition;
+        public HandoverConditionModel HandoverCondition { get => _handoverCondition; set { _handoverCondition = value; OnPropertyChanged(nameof(HandoverCondition)); } }
+
+        private UnitInfoModel _unitInfor;
+        public UnitInfoModel UnitInfor { get => _unitInfor; set { _unitInfor = value;OnPropertyChanged(nameof(UnitInfoModel)); } }
+
+
+
+
+
+
+
         private ReservationFormModel _reservation;
         public ReservationFormModel Reservation
         {
@@ -29,19 +58,7 @@ namespace ConasiCRM.Portable.ViewModels
         public LookUpConfig PromotionConfig { get; set; }
         public LookUpConfig ContactLookUpConfig { get; set; }
         public LookUpConfig AccountLookUpConfig { get; set; }
-        private LookUp _paymentScheme;
-        public LookUp PaymentScheme
-        {
-            get => _paymentScheme;
-            set
-            {
-                if (value != _paymentScheme)
-                {
-                    _paymentScheme = value;
-                    OnPropertyChanged(nameof(PaymentScheme));
-                }
-            }
-        }
+        
 
         // khai báo để hứng dữ liệu khi chọn handover condition.
         private LookUp _bsd_packagesellings;
@@ -249,7 +266,125 @@ namespace ConasiCRM.Portable.ViewModels
             PromotionConfig.LookUpTitle = "Chọn khuyến mại";
             PromotionConfig.EntityName = "bsd_promotions";
             PromotionConfig.PropertyName = "bsd_promotion";
-        }       
+        }
+
+        public async Task LoadUnitInfor()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='product'>
+                                    <attribute name='name' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
+                                    <attribute name='price' />
+                                    <attribute name='productid' />
+                                    <attribute name='bsd_view' />
+                                    <attribute name='bsd_direction' />
+                                    <attribute name='bsd_constructionarea' />
+                                    <attribute name='bsd_floor' alias='floorid'/>
+                                    <attribute name='bsd_blocknumber' alias='blockid'/>
+                                    <attribute name='bsd_phaseslaunchid' alias='_bsd_phaseslaunchid_value'/>
+                                    <attribute name='bsd_unittype' alias='_bsd_unittype_value'/>
+                                    <order attribute='bsd_constructionarea' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='productid' operator='eq' uitype='product' value='{ProductId}' />
+                                    </filter>
+                                    <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
+                                      <attribute name='bsd_name'  alias='bsd_unittype_name'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<UnitInfoModel>>("products", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+            this.UnitInfor = result.value.FirstOrDefault();
+        }
+
+        // load phuong thuc thanh toan vs status code = confirm va theo du an
+        public async Task LoadPaymentSchemes()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_paymentscheme'>
+                                    <attribute name='bsd_name' alias='Label'/>
+                                    <attribute name='bsd_paymentschemeid' alias='Val' />
+                                    <order attribute='createdon' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='statuscode' operator='eq' value='100000000' />
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{this.UnitInfor._bsd_projectcode_value}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_paymentschemes", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            this.PaymentSchemes = result.value;
+        }
+
+        public async Task LoadHandoverCondition()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_packageselling'>
+                                    <attribute name='bsd_name' />
+                                    <attribute name='bsd_unittype' alias='_bsd_unittype_value'/>
+                                    <attribute name='bsd_byunittype' />
+                                    <attribute name='bsd_packagesellingid' />
+                                    <order attribute='bsd_name' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_phaseslaunch' operator='eq' uitype='bsd_phaseslaunch' value='{this.UnitInfor._bsd_phaseslaunchid_value}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HandoverConditionModel>>("bsd_packagesellings", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+            this.HandoverConditions = result.value;
+        }
+
+        public async Task LoadDiscountList()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_discounttype'>
+                                    <attribute name='bsd_name' alias='Label'/>
+                                    <attribute name='bsd_discounttypeid' alias='Val'/>
+                                    <order attribute='createdon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_phaseslaunch' operator='eq' uitype='bsd_phaseslaunch' value='{this.UnitInfor._bsd_phaseslaunchid_value}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_discounttypes", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+            this.DiscountLists = result.value;
+        }
+
+        public async Task LoadDiscountChilds()
+        {
+            if (DiscountList == null) return;
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_discount'>
+                                    <attribute name='bsd_discountid' alias='Val'/>
+                                    <attribute name='bsd_name' alias='Label'/>
+                                    <order attribute='bsd_name' descending='false' />
+                                    <link-entity name='bsd_bsd_discounttype_bsd_discount' from='bsd_discountid' to='bsd_discountid' visible='false' intersect='true'>
+                                      <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discounttypeid' alias='ab'>
+                                        <filter type='and'>
+                                          <condition attribute='bsd_discounttypeid' operator='eq' uitype='bsd_discounttype' value='" + this.DiscountList.Val + @"' />
+                                        </filter>
+                                      </link-entity>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_discounts", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            foreach (var item in result.value)
+            {
+                this.DiscountChilds.Add(item);
+            }
+        }
+
+
+
+
+
+
+
 
         public async void AddHandoverCondition()
         {

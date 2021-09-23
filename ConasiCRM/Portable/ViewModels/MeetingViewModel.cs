@@ -1,4 +1,4 @@
-﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
@@ -7,11 +7,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms.Extended;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class MeetingViewModel : FormViewModal
+    public class MeetingViewModel : BaseViewModel
     {
         private MeetingModel _meetingModel;
         public MeetingModel MeetingModel { get => _meetingModel; set { if (_meetingModel != value) { _meetingModel = value; OnPropertyChanged(nameof(MeetingModel)); } } }
@@ -488,7 +487,7 @@ namespace ConasiCRM.Portable.ViewModels
                 item.Title = CodeAccount;
                 AccountsLookUpRequired.Add(item);
                 AccountsLookUpOptional.Add(new OptionSet { Val = item.Val, Label = item.Label, Title = CodeAccount });
-            }  
+            }
         }
 
         public async Task LoadAllLookUp()
@@ -524,6 +523,6 @@ namespace ConasiCRM.Portable.ViewModels
                 Tabs.Add("KH Cá Nhân");
                 Tabs.Add("KH Doanh Nghiệp");
             }
-        }           
+        }
     }
 }

@@ -13,32 +13,32 @@
                     <controls:FormLabelRequired Text="Loại"/>
                     <controls:LookUp x:Name="lookupCaseType" Placeholder="Chọn loại" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding CaseType}" ItemsSource="{Binding CaseTypes}"/>
 
-                    <controls:FormLabelRequired Text="Tiêu đề"/>
-                    <controls:MainEntry Text="{Binding singlePhanHoi.title}" Placeholder="Nhập tiêu đề" TextColor="#333333"/>
+                    <controls:FormLabelRequired Text="Tiêu đề" Margin="0,10,0,0"/>
+                    <controls:MainEntry Text="{Binding singlePhanHoi.title}" Placeholder="Nhập tiêu đề"/>
 
-                    <controls:FormLabel Text="Chủ đề"/>
+                    <controls:FormLabel Text="Chủ đề" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="lookupSubjects" Placeholder="Chọn chủ đề" BottomModal="{Reference lookupModal}" NameDisplay="Label" ItemsSource="{Binding Subjects}" SelectedItem="{Binding Subject}"/>
 
-                    <controls:FormLabel Text="Phản hổi liên quan"/>
+                    <controls:FormLabel Text="Phản hổi liên quan" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="lookupCaseLienQuan" Placeholder="Chọn phản hổi liên quan" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding CaseLienQuan}" ItemsSource="{Binding CaseLienQuans}"/>
 
-                    <controls:FormLabel Text="Nguồn"/>
+                    <controls:FormLabel Text="Nguồn" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="lookupCaseOrigin" Placeholder="Chọn nguồn" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding CaseOrigin}" ItemsSource="{Binding CaseOrigins}"/>
 
-                    <controls:FormLabelRequired Text="Khách hàng"/>
-                    <controls:LookUpMultipleTabs x:Name="multiTabsCustomer" ShowAccount="True" ShowContact="True" Placeholder="Chọn khách hàng" CenterModal="{Reference centerModal}" SelectedItem="{Binding Customer}" SelectedItemChange="CustomerItem_Changed"/>
+                    <!--<controls:FormLabelRequired Text="Khách hàng" Margin="0,10,0,0"/>
+                    <controls:LookUpMultipleTabs x:Name="multiTabsCustomer" Placeholder="Chọn khách hàng" CenterModal="{Reference centerModal}" NameDisplay="Label" SelectedItem="{Binding Customer}" ListTab="{Binding TabsCustomer}" ListListView="{Binding AllItemSourceCustomer}" SelectedItemChange="CustomerItem_Changed"/>-->
 
-                    <controls:FormLabel Text="Dự án"/>
+                    <controls:FormLabel Text="Dự án" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="lookupProjects" Placeholder="Chọn dự án" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding Project}" ItemsSource="{Binding Projects}" SelectedItemChange="ProjectItem_Changed"/>
 
-                    <controls:FormLabel Text="Sản phẩm"/>
+                    <controls:FormLabel Text="Sản phẩm" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="lookupUnits" Placeholder="Chọn sản phẩm" BottomModal="{Reference lookupModal}" NameDisplay="Label" SelectedItem="{Binding Unit}" ItemsSource="{Binding Units}"/>
 
                     <!--<controls:FormLabel Text="Đối tượng"/>
                     <controls:LookUpMultipleTabs x:Name="multiTabsDoiTuong" Placeholder="Chọn đối tượng" NameDisplay="Label" ListTab="{Binding TabsDoiTuong}" ListListView="{Binding AllItemSourceDoiTuong}" SelectedItem="{Binding DoiTuong}" CenterModal="{Reference centerModal}"/>-->
 
-                    <controls:FormLabel Text="Nội dung"/>
-                    <controls:MainEditor Placeholder="Nhập nội dung" Text="{Binding singlePhanHoi.description}" HeightRequest="100" FontSize="15" TextColor="#333333"/>
+                    <controls:FormLabel Text="Nội dung" Margin="0,10,0,0"/>
+                    <controls:MainEditor Placeholder="Nhập nội dung" Text="{Binding singlePhanHoi.description}" HeightRequest="100" FontSize="15"/>
                 </StackLayout>
             </ScrollView>
 
@@ -50,4 +50,3 @@
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
-
