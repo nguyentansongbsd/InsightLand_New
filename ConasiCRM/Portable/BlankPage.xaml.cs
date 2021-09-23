@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
+using FFImageLoading.Forms;
 using FormsVideoLibrary;
 using Newtonsoft.Json;
 using Stormlion.PhotoBrowser;
@@ -21,13 +22,13 @@ namespace ConasiCRM.Portable
         public BlankPage()
         {
             InitializeComponent();
-            this.BindingContext = this;
-            //this.BindingContext = viewModel = new ViewModel();
-          //  media1.Source = MediaSource.FromUri("https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/Screen%20-%20CNS%20-%20Figma%202021-07-20%2016-28-24.mp4?alt=media&token=4a31d437-ffe2-4a98-8ac3-e39a6ce57fd3");
-          ////  media1.Source = MediaSource.FromUri("https://www.deviantart.com/sakimichan/art/Ahri-D-vafied-nsfw-optional-681732764");
-          //  image.Source = "https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg";
-          //  var a = media1.CurrentState;
-            
+            //this.BindingContext = this;
+            this.BindingContext = viewModel = new ViewModel();
+            //media1.Source = MediaSource.FromUri("https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/Screen%20-%20CNS%20-%20Figma%202021-07-20%2016-28-24.mp4?alt=media&token=4a31d437-ffe2-4a98-8ac3-e39a6ce57fd3");
+            //  media1.Source = MediaSource.FromUri("https://www.deviantart.com/sakimichan/art/Ahri-D-vafied-nsfw-optional-681732764");
+            //image.Source = "https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg";
+            //  var a = media1.CurrentState;
+
         }
 
         private async void Meida_Tapped(object sender, EventArgs e)
@@ -46,7 +47,7 @@ namespace ConasiCRM.Portable
 
         private void Image_Tapped(object sender, EventArgs e)
         {
-            Image image = (Image)sender;
+            CachedImage image = (CachedImage)sender;
             var a = (TapGestureRecognizer)image.GestureRecognizers[0];
             CollectionData item = a.CommandParameter as CollectionData;
             if (item != null)

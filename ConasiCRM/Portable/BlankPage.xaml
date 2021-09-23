@@ -36,13 +36,13 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <!--<CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>-->
+            <CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>
 
-            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Margin="0,100,0,0">
+            <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Margin="0,100,0,0">
                 
                 <controls:DatePickerControl Date="{Binding mydate}" Placeholder="song song"/>
                 <Button Text="test" Clicked="Button_Clicked_1"/>
-            </StackLayout>
+            </StackLayout>-->
             <!--<controls:DatePickerBorder Date="{Binding mydate}"  HorizontalOptions="Center" />-->
 
             <!--<Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>-->

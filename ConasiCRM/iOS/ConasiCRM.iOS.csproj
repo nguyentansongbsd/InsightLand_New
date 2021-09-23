@@ -126,6 +126,14 @@
     <BundleResource Include="Resources\Icon-Small%402x.png" />
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Resources\duan1.jpg" />
+    <BundleResource Include="Resources\duan2.jpg" />
+    <BundleResource Include="Resources\duan3.jpg" />
+    <BundleResource Include="Resources\duan4.jpg" />
+    <BundleResource Include="Resources\duan5.jpg" />
+    <BundleResource Include="Resources\duan6.jpg" />
+    <BundleResource Include="Resources\unit1.jpg" />
+    <BundleResource Include="Resources\unit2.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

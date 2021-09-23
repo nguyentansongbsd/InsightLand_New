@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +13,45 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class UnitInfoViewModel : BaseViewModel
     {
+        //public ObservableCollection<CollectionData> Data { get; set; }
+        //public List<Photo> Photos;
+        //public List<Photo> Media;
+        //public PhotoBrowser photoBrowser;
+
+        //private bool _onComplate;
+        //public bool OnComplate { get => _onComplate; set { _onComplate = value; OnPropertyChanged(nameof(OnComplate)); } }
+
+        //private ObservableCollection<CollectionData> GetCollectionData()
+        //{
+        //    var list = new List<CollectionData>
+        //    {
+        //        new CollectionData { MediaSource = "https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/videounit.mp4?alt=media&token=4c0219aa-b259-4d4d-94fc-767f1a65adab",ImageSource= null,Index = 1},
+        //        new CollectionData { MediaSource = null,ImageSource="unit1.jpg",Index = 1},
+        //        new CollectionData { MediaSource = null,ImageSource="unit2.jpg",Index = 2},
+        //    };
+        //    var data = new ObservableCollection<CollectionData>();
+        //    Photos = new List<Photo>();
+        //    Media = new List<Photo>();
+
+        //    foreach (var item in list)
+        //    {
+        //        if (item.ImageSource != null)
+        //        {
+        //            Photos.Add(new Photo { URL = item.ImageSource });
+        //            data.Add(item);
+        //        }
+        //        else
+        //        {
+        //            Media.Add(new Photo { URL = item.ImageSource });
+        //            data.Add(item);
+        //        }
+        //    }
+        //    return data;
+        //}
+
+
+
+
         public Guid UnitId { get; set; }
 
         public ObservableCollection<QueueFormModel> _list_danhsachdatcho;
@@ -54,6 +94,14 @@ namespace ConasiCRM.Portable.ViewModels
         public UnitInfoViewModel()
         {
             list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
+
+            //this.Data = new ObservableCollection<CollectionData>();
+            //this.Data = GetCollectionData();
+            //OnComplate = true;
+            //photoBrowser = new PhotoBrowser
+            //{
+            //    Photos = Photos,
+            //};
         }
 
         public async Task LoadUnit()

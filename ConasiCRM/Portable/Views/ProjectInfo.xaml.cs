@@ -2,7 +2,11 @@
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
+using FFImageLoading.Forms;
+using Stormlion.PhotoBrowser;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,7 +19,8 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshQueue = null;
         public ProjectInfoViewModel viewModel;
-        
+        //public List<Photo> GetPhotos = new List<Photo>();
+
         public ProjectInfo(Guid Id)
         {
             InitializeComponent();
@@ -27,6 +32,15 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
+            //GetPhotos.Add(new Photo() {URL= "duan1.jpg" });
+            //GetPhotos.Add(new Photo() { URL = "duan2.jpg" });
+            //GetPhotos.Add(new Photo() { URL = "duan3.jpg" });
+            //GetPhotos.Add(new Photo() { URL = "duan4.jpg" });
+            //GetPhotos.Add(new Photo() { URL = "duan5.jpg" });
+            //GetPhotos.Add(new Photo() { URL = "duan6.jpg" });
+
+            //carouseView.ItemsSource = GetPhotos;
+
             VisualStateManager.GoToState(radborderThongKe, "Active");
             VisualStateManager.GoToState(radborderThongTin, "InActive");
             VisualStateManager.GoToState(radborderGiuCho, "InActive");
@@ -182,5 +196,63 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
+
+        /// <summary>
+        /// ///
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private async void Meida_Tapped(object sender, EventArgs e)
+        //{
+        //    LoadingHelper.Show();
+        //    Grid mediaElement = (Grid)sender;
+        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
+        //    CollectionData item = a.CommandParameter as CollectionData;
+        //    if (item != null)
+        //    {
+        //        LoadingHelper.Show();
+        //        await Navigation.PushAsync(new ShowMedia(item.MediaSource));
+        //        LoadingHelper.Hide();
+        //    }
+        //}
+
+        private void Image_Tapped(object sender, EventArgs e)
+        {
+            CachedImage image = (CachedImage)sender;
+            //string url = (image.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
+            //var img = GetPhotos.Where(x => x.URL == url).SingleOrDefault();
+            //var index = GetPhotos.IndexOf(img);
+            //new PhotoBrowser
+            //{
+            //    Photos = GetPhotos,
+            //    EnableGrid = true,
+            //    StartIndex = index,
+            //}.Show();
+
+
+            //var a = (TapGestureRecognizer)image.GestureRecognizers[0];
+            //CollectionData item = a.CommandParameter as CollectionData;
+            //if (item != null)
+            //{
+            //    viewModel.photoBrowser.StartIndex = item.Index;
+            //    viewModel.photoBrowser.Show();
+            //}
+        }
+
+        //private void MediaElement_MediaOpened(object sender, EventArgs e)
+        //{
+        //    viewModel.OnComplate = false;
+        //}
+
+        //private void MediaElement_MediaFailed(object sender, EventArgs e)
+        //{
+        //    Grid mediaElement = (Grid)sender;
+        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
+        //    CollectionData item = a.CommandParameter as CollectionData;
+        //    if (item != null)
+        //    {
+        //        viewModel.Data.Remove(item);
+        //    }
+        //}
     }
 }

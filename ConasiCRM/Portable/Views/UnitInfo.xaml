@@ -4,6 +4,9 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+             xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              BackgroundColor="White"
@@ -70,11 +73,48 @@
             <converter:DecimalFormatConverter x:Key="DecimalFormatConverter" />
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
             <converter:InformationLabelConverter x:Key="InformationLabelConverter"/>
+
+            <!--<DataTemplate x:Key="Media">
+                <Grid>
+                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" MediaOpened="MediaElement_MediaOpened" MediaFailed="MediaElement_MediaFailed"/>
+                    <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Image Source="image_placeholder.png" Aspect="AspectFill" IsVisible="{Binding Path= BindingContext.OnComplate, Source={x:Reference carouselView}}"/>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Meida_Tapped" CommandParameter="{Binding .}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Image">
+                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png">
+                    <ffimageloading:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Image_Tapped" CommandParameter="{Binding .}"/>
+                    </ffimageloading:CachedImage.GestureRecognizers>
+                </ffimageloading:CachedImage>
+            </DataTemplate>
+            <helper:CollectionDataTemplateSelector x:Key="ItemTemplate" Media="{StaticResource Media}" Image="{StaticResource Image}"/>-->
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+
+                <!--<CarouselView x:Name="carouselView" HeightRequest="650" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}"/>-->
+                <!--<CarouselView x:Name="carouseView" HeightRequest="650">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <ffimageloading:CachedImage Aspect="AspectFill" Source="{Binding URL}" LoadingPlaceholder="image_placeholder.png" FadeAnimationEnabled="False" DownsampleWidth="350">
+                                <ffimageloading:CachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                                CommandParameter="{Binding URL}"
+                                                NumberOfTapsRequired="1"
+                                                Tapped="Image_Tapped" />
+                                </ffimageloading:CachedImage.GestureRecognizers>
+                            </ffimageloading:CachedImage>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>-->
+
+
                 <telerikPrimitives:RadBorder BorderColor="#808080" CornerRadius="10" BorderThickness="1" BackgroundColor="White" Margin="5">
                     <StackLayout Margin="15">
                         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto">

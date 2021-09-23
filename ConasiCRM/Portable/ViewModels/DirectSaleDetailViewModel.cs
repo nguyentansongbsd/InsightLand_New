@@ -281,7 +281,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_project' />
                         <attribute name='opportunityid' />
                         <attribute name='bsd_queuingexpired' />
-                        <order attribute='statuscode' descending='false' />
+                        <order attribute='statuscode' descending='true' />
                         <link-entity name='product' from='productid' to='bsd_units' link-type='inner' alias='ad'>
                           <filter type='and'>
                             <condition attribute='productid' operator='eq' value='{unitId}'/>
@@ -314,6 +314,12 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Name;
                 QueueList.Add(x);
+            }
+            if (QueueList.Any(x=>x.statuscode == 100000000))
+            {
+                var item = QueueList.SingleOrDefault(x => x.statuscode == 100000000);
+                QueueList.Remove(item);
+                QueueList.Insert(0, item);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +13,48 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class ProjectInfoViewModel : BaseViewModel
     {
+        //public ObservableCollection<CollectionData> Data { get; set; }
+        //public List<Photo> Photos;
+        //public List<Photo> Media;
+        //public PhotoBrowser photoBrowser;
+
+        //private bool _onComplate;
+        //public bool OnComplate { get => _onComplate; set { _onComplate = value; OnPropertyChanged(nameof(OnComplate)); } }
+
+        //private ObservableCollection<CollectionData> GetCollectionData()
+        //{
+        //    var list = new List<CollectionData>
+        //    {
+        //        new CollectionData { MediaSource = "https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/videoduan.mp4?alt=media&token=f1b9e0e7-0603-45a8-9261-2de7d6dcf545",ImageSource= null,Index = 1},
+        //        new CollectionData { MediaSource = null,ImageSource="https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/duan1.jpg?alt=media&token=78a2fc63-2009-4b25-b189-2613159a51bd",Index = 1},
+        //        new CollectionData { MediaSource = null,ImageSource="duan2.jpg",Index = 2},
+        //        new CollectionData { MediaSource = null,ImageSource="duan3.jpg",Index = 3},
+        //        new CollectionData { MediaSource = null,ImageSource="duan4.jpg",Index = 4},
+        //        new CollectionData { MediaSource = null,ImageSource="duan5.jpg",Index = 5},
+        //        new CollectionData { MediaSource = null,ImageSource="duan6.jpg",Index = 6},
+        //    };
+        //    var data = new ObservableCollection<CollectionData>();
+        //    Photos = new List<Photo>();
+        //    Media = new List<Photo>();
+
+        //    foreach (var item in list)
+        //    {
+        //        if (item.ImageSource != null)
+        //        {
+        //            Photos.Add(new Photo { URL = item.ImageSource });
+        //            data.Add(item);
+        //        }
+        //        else
+        //        {
+        //            Media.Add(new Photo { URL = item.ImageSource });
+        //            data.Add(item);
+        //        }
+        //    }
+        //    return data;
+        //}
+
+
+
         public Guid ProjectId { get; set; }
         public List<UnitChartModel> unitChartModels { get; set; }
         public ObservableCollection<UnitChartModel> UnitChart { get; set; } = new ObservableCollection<UnitChartModel>();
@@ -77,6 +120,14 @@ namespace ConasiCRM.Portable.ViewModels
         public ProjectInfoViewModel()
         {
             ListGiuCho = new ObservableCollection<QueueFormModel>();
+
+            //this.Data = new ObservableCollection<CollectionData>();
+            //this.Data = GetCollectionData();
+            //OnComplate = true;
+            //photoBrowser = new PhotoBrowser
+            //{
+            //    Photos = Photos,
+            //};
         }
 
         public async Task LoadData()
