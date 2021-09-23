@@ -9,6 +9,7 @@ namespace ConasiCRM.Portable.Models
     public class QueueListModel : BaseViewModel
     {
         public Guid opportunityid { get; set; }
+        public string name { get; set; }
         public Guid customer_id { get; set; }
         public Guid project_id { get; set; }
         public string project_name { get; set; }

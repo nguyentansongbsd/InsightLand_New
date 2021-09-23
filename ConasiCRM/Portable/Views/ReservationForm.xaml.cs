@@ -1,17 +1,12 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConasiCRM.Portable.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using System.Reflection;
-using Telerik.XamarinForms.Primitives;
-using Telerik.XamarinForms.Input;
 using ConasiCRM.Portable.Helpers;
+using System.Collections.Generic;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -19,7 +14,7 @@ namespace ConasiCRM.Portable.Views
     public partial class ReservationForm : ContentPage
     {
         public Action<bool> CheckReservation;
-        private ReservationFormViewModel viewModel;
+        public ReservationFormViewModel viewModel;
         private Guid ReservationId;
 
         public ReservationForm(Guid productId)
@@ -27,6 +22,8 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
             bottomModalHandoverCondition.ModalContent.BindingContext = viewModel;
+            centerModalPromotions.Body.BindingContext = viewModel;
+            centerModalCoOwner.Body.BindingContext = viewModel;
             viewModel.ProductId = productId;
             Init();
         }
@@ -34,12 +31,12 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await viewModel.LoadUnitInfor();
-
             SetPreOpen();
         }
 
         private void SetPreOpen()
         {
+            lookupPhuongThucThanhToan.HideClearButton();
             lookupPhuongThucThanhToan.PreOpenAsync = async () => {
                 LoadingHelper.Show();
                 await viewModel.LoadPaymentSchemes();
@@ -48,6 +45,12 @@ namespace ConasiCRM.Portable.Views
             lookupChieuKhau.PreOpenAsync = async () => {
                 LoadingHelper.Show();
                 await viewModel.LoadDiscountList();
+                LoadingHelper.Hide();
+            };
+
+            lookupQuanHe.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                viewModel.Relationships = RelationshipCoOwnerData.RelationshipData();
                 LoadingHelper.Hide();
             };
         }
@@ -91,6 +94,7 @@ namespace ConasiCRM.Portable.Views
             contentChiTiet.IsVisible = true;
         }
 
+        #region Handover Condition // Dieu kien ban giao
         private async void HandoverCondition_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -134,7 +138,9 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
+        #endregion
 
+        #region Discount list // Chiet Khau
         private async void DiscountListItem_Changed(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -142,6 +148,205 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadDiscountChilds();
             LoadingHelper.Hide();
         }
+
+        private void DiscountChildItem_Tapped(object sender, EventArgs e)
+        {
+            var item = (DiscountChildOptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            item.Selected = !item.Selected;
+        }
+        #endregion
+
+        #region Promotion // Khuyen mai
+        private async void Promotion_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.Promotions.Count == 0)
+            {
+                await viewModel.LoadPromotions();
+            }
+            else
+            {
+                foreach (var itemPromotion in viewModel.Promotions)
+                {
+                    if (viewModel.SelectedPromotionIds.Count != 0 && viewModel.SelectedPromotionIds.Any(x => x == itemPromotion.Val))
+                    {
+                        itemPromotion.Selected = true;
+                    }
+                    else
+                    {
+                        itemPromotion.Selected = false;
+                    }
+                }
+            }
+            await centerModalPromotions.Show();
+            LoadingHelper.Hide();
+        }
+
+        private void PromotionItem_Tapped(object sender, EventArgs e)
+        {
+            var itemPromotion = (OptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            itemPromotion.Selected = !itemPromotion.Selected;
+        }
+
+        private async void SaveSelectedPromotion_CLicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PromotionsSelected.Clear();
+            viewModel.SelectedPromotionIds.Clear();
+            foreach (var itemPromotion in viewModel.Promotions)
+            {
+                if (itemPromotion.Selected)
+                {
+                    viewModel.PromotionsSelected.Add(itemPromotion);
+                    viewModel.SelectedPromotionIds.Add(itemPromotion.Val);
+                }
+            }
+            await centerModalPromotions.Hide();
+            LoadingHelper.Hide();
+        }
+
+        private void UnSelect_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = (OptionSet)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            viewModel.PromotionsSelected.Remove(item);
+            viewModel.SelectedPromotionIds.Remove(item.Val);
+            LoadingHelper.Hide();
+        }
+
+        private void SearchPromotion_Pressed(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var data = viewModel.Promotions.Where(x => x.Label.ToLower().Contains(viewModel.KeywordPromotion.ToLower())).ToList();
+            viewModel.Promotions.Clear();
+            foreach (var item in data)
+            {
+                viewModel.Promotions.Add(item);
+            }
+            LoadingHelper.Hide();
+        }
+
+        private async void SearchPromotion_TexChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(viewModel.KeywordPromotion))
+            {
+                LoadingHelper.Show();
+                viewModel.Promotions.Clear();
+                await viewModel.LoadPromotions();
+                LoadingHelper.Hide();
+            }
+        }
+        #endregion
+
+        #region Co Owner // Dong so huu
+        private async void CoOwner_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.CoOwner = new CoOwnerFormModel();
+            viewModel.TitleCoOwner = null;
+            viewModel.CustomerCoOwner = null;
+            viewModel.Relationship = null;
+            await centerModalCoOwner.Show();
+            LoadingHelper.Hide();
+        }
+
+        private void UnSelectCoOwner_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = (CoOwnerFormModel)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            viewModel.CoOwnerList.Remove(item);
+            LoadingHelper.Hide();
+        }
+
+        private async void UpdateCoOwner_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = (CoOwnerFormModel)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            viewModel.CoOwner = new CoOwnerFormModel();
+            viewModel.TitleCoOwner = null;
+            viewModel.CustomerCoOwner = null;
+            viewModel.Relationship = null;
+            viewModel.CoOwner = item;
+            if (viewModel.CoOwner.contact_id != Guid.Empty)
+            {
+                viewModel.CustomerCoOwner = new OptionSet(viewModel.CoOwner.contact_id.ToString(),viewModel.CoOwner.contact_name);
+            }
+
+            if (viewModel.CoOwner.account_id != Guid.Empty)
+            {
+                viewModel.CustomerCoOwner = new OptionSet(viewModel.CoOwner.account_id.ToString(), viewModel.CoOwner.account_name);
+            }
+
+            viewModel.TitleCoOwner = viewModel.CoOwner.bsd_name;
+            viewModel.Relationship = new OptionSet(viewModel.CoOwner.bsd_relationshipId.ToString(), viewModel.CoOwner.bsd_relationship);
+            await centerModalCoOwner.Show();
+            LoadingHelper.Hide();
+        }
+
+        private async void SaveCoOwner_CLicked(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(viewModel.TitleCoOwner))
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
+                return;
+            }
+
+            if (viewModel.CustomerCoOwner == null)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng");
+                return;
+            }
+
+            if (viewModel.Relationship == null)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn quan hệ");
+                return;
+            }
+
+            if (viewModel.CustomerCoOwner.Title == "2")
+            {
+                viewModel.CoOwner.contact_id = Guid.Parse(viewModel.CustomerCoOwner.Val);
+                viewModel.CoOwner.contact_name = viewModel.CustomerCoOwner.Label;
+            }
+
+            if (viewModel.CustomerCoOwner.Title == "3")
+            {
+                viewModel.CoOwner.account_id = Guid.Parse(viewModel.CustomerCoOwner.Val);
+                viewModel.CoOwner.account_name = viewModel.CustomerCoOwner.Label;
+            }
+            viewModel.CoOwner.bsd_name = viewModel.TitleCoOwner;
+            viewModel.CoOwner.bsd_relationshipId  = viewModel.Relationship.Val;
+            viewModel.CoOwner.bsd_relationship = viewModel.Relationship.Label;
+
+            if (viewModel.CoOwner.bsd_coownerid == Guid.Empty)
+            {
+                viewModel.CoOwner.bsd_coownerid = Guid.NewGuid();
+                viewModel.CoOwnerList.Add(viewModel.CoOwner);
+            }
+            else
+            {
+                List<CoOwnerFormModel> coOwnerList = new List<CoOwnerFormModel>();
+                foreach (var item in viewModel.CoOwnerList)
+                {
+                    if (viewModel.CoOwner.bsd_coownerid == item.bsd_coownerid)
+                    {
+                        item.bsd_name = viewModel.CoOwner.bsd_name;
+                        item.contact_id = viewModel.CoOwner.contact_id;
+                        item.contact_name = viewModel.CoOwner.contact_name;
+                        item.account_id = viewModel.CoOwner.account_id;
+                        item.account_name = viewModel.CoOwner.account_name;
+                        item.bsd_relationshipId = viewModel.CoOwner.bsd_relationshipId;
+                        item.bsd_relationship = viewModel.CoOwner.bsd_relationship;
+                    }
+                    coOwnerList.Add(item);
+                }
+                viewModel.CoOwnerList.Clear();
+                coOwnerList.ForEach(x => viewModel.CoOwnerList.Add(x));
+            }
+            await centerModalCoOwner.Hide();
+        }
+        #endregion
+
 
         private void SaveQuote_Clicked(object sender, EventArgs e)
         {
