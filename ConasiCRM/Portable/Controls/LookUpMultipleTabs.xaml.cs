@@ -246,6 +246,7 @@ namespace ConasiCRM.Portable.Controls
             Label lb = new Label();
             lb.Style = (Style)Application.Current.Resources["Lb_Tab"];
             lb.Text = NameTab;
+            lb.LineBreakMode = LineBreakMode.TailTruncation;
             rd.Content = lb;
             return rd;
         }

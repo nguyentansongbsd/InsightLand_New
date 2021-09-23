@@ -27,6 +27,8 @@ namespace ConasiCRM.Portable.Models
         public string unitName { get; set; }
 
         public DateTime createdon { get; set; }
+        public int statuscode { get; set; }
+        public int statecode { get; set; }
     }
 }
 

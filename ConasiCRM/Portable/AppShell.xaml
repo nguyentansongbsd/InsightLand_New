@@ -127,7 +127,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate views:PhanHoiDetailPage}">
+        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate views:BangTinhGiaDetailPage}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>

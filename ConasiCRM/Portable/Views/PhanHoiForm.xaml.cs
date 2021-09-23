@@ -203,6 +203,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.UpdateCase();
                 if (isSuccess)
                 {
+                    if (PhanHoiDetailPage.NeedToRefresh.HasValue) PhanHoiDetailPage.NeedToRefresh = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Cập nhật phản hồi thành công");
                     LoadingHelper.Hide();
