@@ -276,22 +276,16 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='opportunity'>
-                        <attribute name='name' alias='unit_name'/>
+                        <attribute name='name'/>
                         <attribute name='statuscode' />
                         <attribute name='bsd_project' />
                         <attribute name='opportunityid' />
                         <attribute name='bsd_queuingexpired' />
                         <order attribute='statuscode' descending='true' />
-                        <link-entity name='product' from='productid' to='bsd_units' link-type='inner' alias='ad'>
-                          <filter type='and'>
-                            <condition attribute='productid' operator='eq' value='{unitId}'/>
-                          </filter>
-                        </link-entity>
-                        <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                           <filter type='and'>
-                              <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
-                           </filter>
-                        </link-entity>
+                        <filter type='and'>
+                          <condition attribute='bsd_units' operator='eq' value='{unitId}'/>
+                          <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                        </filter>
                         <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='fullname'  alias='contact_name'/>
                         </link-entity>

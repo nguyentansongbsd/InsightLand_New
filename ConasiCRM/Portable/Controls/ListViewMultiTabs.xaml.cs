@@ -55,7 +55,7 @@ namespace ConasiCRM.Portable.Controls
             }
             else
             {
-                listView.ItemsSource = viewModel.Data.Where(x => x.Label == text);
+                listView.ItemsSource = viewModel.Data.Where(x => x.Label.ToLower().Contains(text.ToLower()));
             }
         }
     }

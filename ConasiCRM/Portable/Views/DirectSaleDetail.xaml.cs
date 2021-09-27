@@ -331,11 +331,22 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private async void BangTinhGia_Clicked(object sender, EventArgs e)
+        private void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            await Navigation.PushAsync(new ReservationForm(viewModel.Unit.productid));
-            LoadingHelper.Hide();
+            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid);
+            reservationForm.CheckReservation = async (isSuccess) => {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(reservationForm);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
         }
 
         private void GiuChoItem_Tapped(object sender, EventArgs e)

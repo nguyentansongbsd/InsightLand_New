@@ -130,7 +130,7 @@
                         </Grid>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="{Binding ProjectType.Label}" FontSize="15" TextColor="#444444"/>
-                            <Label Text="{Binding PropertyUsageType.Label,StringFormat=' - {0}'}" FontSize="15" TextColor="#444444"/>
+                            <Label Text="{Binding PropertyUsageType.Label,StringFormat='- {0}'}" FontSize="15" TextColor="#444444"/>
                         </StackLayout>
                         <Label FontSize="15" TextColor="#444444">
                             <Label.FormattedText>
