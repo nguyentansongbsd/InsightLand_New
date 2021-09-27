@@ -350,7 +350,7 @@
                                                                     <FormattedString>
                                                                         <Span Text="Thời gian hết hạn: "/>
                                                                         <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
-                                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
+                                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:HH:mm}'}"/>
                                                                     </FormattedString>
                                                                 </Label.FormattedText>
                                                             </Label>
