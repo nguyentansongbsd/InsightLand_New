@@ -1,12 +1,13 @@
 ﻿using System;
 namespace ConasiCRM.Portable.Models
 {
-    public class HandoverConditionModel
+    public class HandoverConditionModel :OptionSet
     {
-        public Guid bsd_packagesellingid { get; set; }
-        public string bsd_name { get; set; }
         public Guid _bsd_unittype_value { get; set; }
         public bool bsd_byunittype { get; set; }
-
+        public string bsd_method { get; set; }
+        public decimal bsd_priceperm2 { get; set; }
+        public decimal bsd_amount { get; set; }
+        public decimal bsd_percent { get; set; }
     }
 }

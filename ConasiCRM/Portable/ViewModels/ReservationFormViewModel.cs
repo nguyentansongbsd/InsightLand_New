@@ -8,6 +8,7 @@ using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using System.Linq;
 using System.Threading.Tasks;
+using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -19,12 +20,21 @@ namespace ConasiCRM.Portable.ViewModels
         public string KeywordPromotion { get; set; }
         public List<string> SelectedPromotionIds { get; set; }
 
+        private string _titleQuote;
+        public string TitleQuote { get => _titleQuote; set { _titleQuote = value; OnPropertyChanged(nameof(TitleQuote)); } }
+        private string _staffAgentQuote;
+        public string StaffAgentQuote { get => _staffAgentQuote; set { _staffAgentQuote = value; OnPropertyChanged(nameof(StaffAgentQuote)); } }
+        private string _descriptionQuote;
+        public string DescriptionQuote { get => _descriptionQuote; set { _descriptionQuote = value; OnPropertyChanged(nameof(DescriptionQuote)); } }
+        private string _waiverManaFee;
+        public string WaiverManaFee { get => _waiverManaFee; set { _waiverManaFee = value; OnPropertyChanged(nameof(WaiverManaFee)); } }
+
         public ObservableCollection<DiscountChildOptionSet> DiscountChilds { get; set; } = new ObservableCollection<DiscountChildOptionSet>();
         public ObservableCollection<OptionSet> PromotionsSelected { get; set; } = new ObservableCollection<OptionSet>();
         public ObservableCollection<OptionSet> Promotions { get; set; } = new ObservableCollection<OptionSet>();
-        
+
         private List<OptionSet> _paymentSchemes;
-        public List<OptionSet> PaymentSchemes { get => _paymentSchemes; set { _paymentSchemes = value;OnPropertyChanged(nameof(PaymentSchemes)); } }
+        public List<OptionSet> PaymentSchemes { get => _paymentSchemes; set { _paymentSchemes = value; OnPropertyChanged(nameof(PaymentSchemes)); } }
         private List<OptionSet> _discountLists;
         public List<OptionSet> DiscountLists { get => _discountLists; set { _discountLists = value; OnPropertyChanged(nameof(DiscountLists)); } }
         private List<HandoverConditionModel> _handoverConditions;
@@ -38,22 +48,28 @@ namespace ConasiCRM.Portable.ViewModels
         public HandoverConditionModel HandoverCondition { get => _handoverCondition; set { _handoverCondition = value; OnPropertyChanged(nameof(HandoverCondition)); } }
 
         private QuoteUnitInforModel _unitInfor;
-        public QuoteUnitInforModel UnitInfor { get => _unitInfor; set { _unitInfor = value;OnPropertyChanged(nameof(UnitInfor)); } }
+        public QuoteUnitInforModel UnitInfor { get => _unitInfor; set { _unitInfor = value; OnPropertyChanged(nameof(UnitInfor)); } }
 
         private StatusCodeModel _statusUnit;
-        public StatusCodeModel StatusUnit { get => _statusUnit; set { _statusUnit = value;OnPropertyChanged(nameof(StatusUnit)); } }
+        public StatusCodeModel StatusUnit { get => _statusUnit; set { _statusUnit = value; OnPropertyChanged(nameof(StatusUnit)); } }
+
+        private OptionSet _priceListPhasesLaunch;
+        public OptionSet PriceListPhasesLaunch { get => _priceListPhasesLaunch; set { _priceListPhasesLaunch = value; OnPropertyChanged(nameof(PriceListPhasesLaunch)); } }
+
+        private OptionSet _priceListApply;
+        public OptionSet PriceListApply { get => _priceListApply; set { _priceListApply = value; OnPropertyChanged(nameof(PriceListApply)); } }
 
         #region CoOwner
         public ObservableCollection<CoOwnerFormModel> CoOwnerList { get; set; } = new ObservableCollection<CoOwnerFormModel>();
 
         private CoOwnerFormModel _coOwner;
-        public CoOwnerFormModel CoOwner { get => _coOwner; set { _coOwner = value;OnPropertyChanged(nameof(CoOwner)); } }
+        public CoOwnerFormModel CoOwner { get => _coOwner; set { _coOwner = value; OnPropertyChanged(nameof(CoOwner)); } }
 
         private string _titleCoOwner;
-        public string TitleCoOwner { get => _titleCoOwner; set { _titleCoOwner = value;OnPropertyChanged(nameof(TitleCoOwner)); } }
+        public string TitleCoOwner { get => _titleCoOwner; set { _titleCoOwner = value; OnPropertyChanged(nameof(TitleCoOwner)); } }
 
         private List<OptionSet> _relationships;
-        public List<OptionSet> Relationships { get => _relationships; set { _relationships = value;OnPropertyChanged(nameof(Relationships)); } }
+        public List<OptionSet> Relationships { get => _relationships; set { _relationships = value; OnPropertyChanged(nameof(Relationships)); } }
 
         private OptionSet _relationship;
         public OptionSet Relationship { get => _relationship; set { _relationship = value; OnPropertyChanged(nameof(Relationship)); } }
@@ -62,7 +78,133 @@ namespace ConasiCRM.Portable.ViewModels
         public OptionSet CustomerCoOwner { get => _customerCoOwner; set { _customerCoOwner = value; OnPropertyChanged(nameof(CustomerCoOwner)); } }
         #endregion
 
+        #region Thong tin ban hang
+        private List<OptionSet> _queues;
+        public List<OptionSet> Queues { get => _queues; set { _queues = value; OnPropertyChanged(nameof(Queues)); } }
 
+        private OptionSet _queue;
+        public OptionSet Queue { get => _queue; set { _queue = value; OnPropertyChanged(nameof(Queue)); } }
+
+        private OptionSet _buyer;
+        public OptionSet Buyer { get => _buyer; set { _buyer = value; OnPropertyChanged(nameof(Buyer)); } }
+        #endregion
+
+        #region Chi tiet
+        private List<OptionSet> _contractTypes;
+        public List<OptionSet> ContractTypes { get => _contractTypes; set { _contractTypes = value; OnPropertyChanged(nameof(ContractTypes)); } }
+
+        private OptionSet _contractType;
+        public OptionSet ContractType { get => _contractType; set { _contractType = value; OnPropertyChanged(nameof(ContractType)); } }
+        #endregion
+
+        #region Thong tin bao gia
+        private List<OptionSet> _salesAgents;
+        public List<OptionSet> SalesAgents { get => _salesAgents; set { _salesAgents = value; OnPropertyChanged(nameof(SalesAgents)); } }
+
+        private OptionSet _salesAgent;
+        public OptionSet SalesAgent { get => _salesAgent; set { _salesAgent = value; OnPropertyChanged(nameof(SalesAgent)); } }
+        #endregion
+
+        #region Thong tin Gia
+        private decimal _totalDiscount = 0;
+        public decimal TotalDiscount { get => _totalDiscount; set { _totalDiscount = value; OnPropertyChanged(nameof(TotalDiscount)); SetNetSellingPrice(); } }
+
+        private decimal _totalHandoverCondition = 0;
+        public decimal TotalHandoverCondition { get => _totalHandoverCondition; set { _totalHandoverCondition = value; OnPropertyChanged(nameof(TotalHandoverCondition)); SetNetSellingPrice(); } }
+
+        private decimal _netSellingPrice = 0;
+        public decimal NetSellingPrice { get => _netSellingPrice; set { _netSellingPrice = value; OnPropertyChanged(nameof(NetSellingPrice)); SetTotalVatTax(); SetMaintenanceFee(); } }
+
+        private decimal _landValueDeduction = 0;
+        public decimal LandValueDeduction { get => _landValueDeduction; set { _landValueDeduction = value; OnPropertyChanged(nameof(LandValueDeduction)); } }
+
+        private decimal _totalVATTax = 0;
+        public decimal TotalVATTax { get => _totalVATTax; set { _totalVATTax = value; OnPropertyChanged(nameof(TotalVATTax)); } }
+
+        private decimal _maintenanceFee = 0;
+        public decimal MaintenanceFee { get => _maintenanceFee; set { _maintenanceFee = value; OnPropertyChanged(nameof(MaintenanceFee)); } }
+
+        private decimal _totalAmount = 0;
+        public decimal TotalAmount { get => _totalAmount; set { _totalAmount = value; OnPropertyChanged(nameof(TotalAmount)); } }
+        #endregion
+
+        #region Tinh toan gia tien o bang chi tiet
+        //Tinh (-)Chiet khau
+        public void SetTotalDiscount()
+        {
+            this.TotalDiscount = 0;
+            foreach (var item in this.DiscountChilds)
+            {
+                if (item.Selected == true && item.new_type == "100000000") // percent
+                {
+                    this.TotalDiscount += (item.bsd_percentage * this.UnitInfor.price) / 100;
+                }
+                if (item.Selected == true && item.new_type == "100000001") // amount
+                {
+                    this.TotalDiscount += item.bsd_amount;
+                }
+            }
+
+            //var a = Math.Round(viewModel.TotalDiscount, 0); lam tron so thap phan
+        }
+
+        public void SetTotalHandoverCondition()
+        {
+            if (this.HandoverCondition.bsd_method == "100000000")// Price per sqm
+            {
+                this.TotalHandoverCondition = this.HandoverCondition.bsd_priceperm2 * this.UnitInfor.bsd_netsaleablearea;
+            }
+            else if (this.HandoverCondition.bsd_method == "100000001") //Amount
+            {
+                this.TotalHandoverCondition = this.HandoverCondition.bsd_amount;
+            }
+            else //Percent (%)
+            {
+                this.TotalHandoverCondition = (this.HandoverCondition.bsd_percent * this.UnitInfor.price) / 100;
+            }
+        }
+
+        public void SetNetSellingPrice()
+        {
+            // Gia ban truoc thue = Gia ban san pham - Tong chiet khau + Tong dieu kien ban gia
+            if (this.HandoverCondition == null) return;
+            this.NetSellingPrice = 0;
+            this.NetSellingPrice = UnitInfor.price - this.TotalDiscount + this.TotalHandoverCondition;
+            SetTotalAmount();
+        }
+
+        public void SetLandValueDeduction()
+        {
+            // Tổng giá trị QSDĐ = = Land value of unit (sqm) * Net Usable Area
+            this.LandValueDeduction = UnitInfor.bsd_landvalueofunit * UnitInfor.bsd_netsaleablearea;
+            SetTotalAmount();
+        }
+
+        public void SetTotalVatTax()
+        {
+            //Tổng tiền thuế VAT = ((Gia ban truoc thue - Tổng giá trị QSDĐ) * Ma so thue)
+            this.TotalVATTax = 0;
+            this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * UnitInfor.bsd_taxpercent) / 100;
+            SetTotalAmount();
+        }
+
+        public void SetMaintenanceFee()
+        {
+            //Phí bảo trì = (Gia ban truoc thue * Maintenance fee% )/100
+            this.MaintenanceFee = 0;
+            this.MaintenanceFee = (this.NetSellingPrice * UnitInfor.bsd_maintenancefeespercent) / 100;
+            SetTotalAmount();
+        }
+
+        public void SetTotalAmount()
+        {
+            this.TotalAmount = 0;
+            if (this.NetSellingPrice > 0 && this.LandValueDeduction > 0 && this.TotalVATTax > 0 && this.MaintenanceFee > 0)
+            {
+                this.TotalAmount = this.NetSellingPrice - this.LandValueDeduction + this.TotalVATTax + this.MaintenanceFee;
+            }
+        }
+        #endregion
 
 
 
@@ -82,7 +224,7 @@ namespace ConasiCRM.Portable.ViewModels
         //public LookUpConfig PromotionConfig { get; set; }
         //public LookUpConfig ContactLookUpConfig { get; set; }
         //public LookUpConfig AccountLookUpConfig { get; set; }
-        
+
 
         //// khai báo để hứng dữ liệu khi chọn handover condition.
         //private LookUp _bsd_packagesellings;
@@ -311,32 +453,29 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_taxpercent' />
                                     <attribute name='bsd_queuingfee' />
                                     <attribute name='bsd_depositamount' />
-
                                     <attribute name='price' />
-                                    <attribute name='productid' />
-                                    <attribute name='bsd_view' />
-                                    <attribute name='bsd_direction' />
-                                    <attribute name='bsd_floor' alias='floorid'/>
-                                    <attribute name='bsd_blocknumber' alias='blockid'/>
-                                    
+                                    <attribute name='bsd_landvalueofunit' />
+                                    <attribute name='bsd_maintenancefeespercent' />
+                                    <attribute name='bsd_numberofmonthspaidmf' />
+                                    <attribute name='bsd_managementamountmonth' />
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{ProductId}' />
                                     </filter>
-                                    <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
-                                      <attribute name='bsd_name'  alias='bsd_unittype_name'/>
-                                    </link-entity>
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' visible='false' link-type='outer' alias='a_9a5e44d019dbeb11bacb002248168cad'>
                                       <attribute name='bsd_name' alias='project_name'/>
                                     </link-entity>
                                     <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' visible='false' link-type='outer' alias='a_645347ca19dbeb11bacb002248168cad'>
-                                      <attribute name='bsd_name' alias='phaseslaunch_name'/>
+                                        <attribute name='bsd_name' alias='phaseslaunch_name'/>
+                                        <link-entity name='pricelevel' from='pricelevelid' to='bsd_pricelistid' visible='false' link-type='outer' alias='a_f07b3be219dbeb11bacb002248168cad'>
+                                          <attribute name='name' alias='pricelist_name_phaseslaunch'/>
+                                          <attribute name='pricelevelid' alias='pricelist_id_phaseslaunch'/>
+                                        </link-entity>
                                     </link-entity>
                                     <link-entity name='pricelevel' from='pricelevelid' to='pricelevelid' visible='false' link-type='outer' alias='a_af3c62ff7dd1eb11bacc000d3a80021e'>
-                                      <attribute name='name' alias='pricelist_name'/>
+                                      <attribute name='name' alias='pricelist_name_unit'/>
+                                      <attribute name='pricelevelid' alias='pricelist_id_unit'/>
                                     </link-entity>
-
-
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuoteUnitInforModel>>("products", fetchXml);
@@ -344,6 +483,18 @@ namespace ConasiCRM.Portable.ViewModels
 
             this.UnitInfor = result.value.FirstOrDefault();
             this.StatusUnit = StatusCodeUnit.GetStatusCodeById(UnitInfor.statuscode);
+
+            if (UnitInfor._bsd_phaseslaunchid_value != Guid.Empty)
+            {
+                this.PriceListPhasesLaunch = new OptionSet(UnitInfor.pricelist_id_phaseslaunch.ToString(), UnitInfor.pricelist_name_phaseslaunch);
+            }
+            else
+            {
+                this.PriceListPhasesLaunch = new OptionSet(UnitInfor.pricelist_id_unit.ToString(), UnitInfor.pricelist_name_unit);
+            }
+
+            this.PriceListApply = this.PriceListPhasesLaunch;
+            SetLandValueDeduction();
         }
 
         // load phuong thuc thanh toan vs status code = confirm va theo du an
@@ -370,10 +521,14 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_packageselling'>
-                                    <attribute name='bsd_name' />
+                                    <attribute name='bsd_name' alias='Label'/>
                                     <attribute name='bsd_unittype' alias='_bsd_unittype_value'/>
                                     <attribute name='bsd_byunittype' />
-                                    <attribute name='bsd_packagesellingid' />
+                                    <attribute name='bsd_packagesellingid' alias='Val'/>
+                                    <attribute name='bsd_method' />
+                                    <attribute name='bsd_priceperm2' />
+                                    <attribute name='bsd_amount' />
+                                    <attribute name='bsd_percent' />
                                     <order attribute='bsd_name' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='bsd_phaseslaunch' operator='eq' uitype='bsd_phaseslaunch' value='{this.UnitInfor._bsd_phaseslaunchid_value}' />
@@ -463,7 +618,44 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
+        // Load Giu cho
+        public async Task LoadQueues()
+        {
+            string fectchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='opportunity'>
+                                    <attribute name='name' alias='Label'/>
+                                    <attribute name='opportunityid' alias='Val'/>
+                                    <order attribute='createdon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("opportunities", fectchXml);
+            if (result == null || result.value.Any() == false) return;
+            this.Queues = result.value;
+        }
 
+        // Load danh sach dai ly/ san giao dich
+        public async Task LoadSalesAgents()
+        {
+            //Load account co field bsd_businesstypesys la sales agent(100000002)
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='account'>
+                                    <attribute name='name' alias='Label'/>
+                                    <attribute name='accountid' alias='Val' />
+                                    <order attribute='createdon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_businesstypesys' operator='contain-values'>
+                                        <value>100000002</value>
+                                      </condition>
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+            this.SalesAgents = result.value;
+        }
 
 
 
@@ -525,234 +717,5 @@ namespace ConasiCRM.Portable.ViewModels
         //        IsBusy = false;
         //    }
         //}
-
-        //#region Dieu Kien Ban Giao
-        //public async Task LoadhandoverConditions(Guid ReservationId)
-        //{
-        //    string fetch = $@"<fetch version='1.0' count = '3' page = '{PageDieuKienBanGiao}' output-format='xml-platform' mapping='logical' distinct='false'>
-        //      <entity name='bsd_packageselling'>
-        //        <attribute name='bsd_name' />
-        //        <attribute name='createdon' />
-        //        <attribute name='bsd_type' />
-        //        <attribute name='bsd_priceperm2' />
-        //        <attribute name='bsd_amount' />
-        //        <attribute name='bsd_percent' />
-        //        <attribute name='bsd_method' />
-        //        <attribute name='bsd_packagesellingid' />
-        //        <order attribute='createdon' descending='true' />
-        //        <link-entity name='bsd_quote_bsd_packageselling' from='bsd_packagesellingid' to='bsd_packagesellingid' visible='false' intersect='true'>
-        //        <link-entity name='quote' from='quoteid' to='quoteid' alias='ab'>
-        //             <filter type='and'>
-        //                  <condition attribute='quoteid' operator='eq' uitype='quote' value='{ReservationId}' />
-        //             </filter>
-        //        </link-entity>
-        //    </link-entity>
-        //      </entity>
-        //    </fetch>";
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationHandoverCondition>>("bsd_packagesellings", fetch);
-
-        //    if (result != null)
-        //    {
-        //        var data = result.value;
-
-        //        if (data.Count <= 3)
-        //        {
-        //            ShowMoreDieuKienBanGiao = false;
-        //        }
-        //        else
-        //        {
-        //             ShowMoreDieuKienBanGiao = true;
-        //        }
-
-        //        foreach (var x in result.value)
-        //        {
-        //            HandoverConditionList.Add(x);
-        //        }
-        //    }
-        //}
-        //#endregion
-
-        //#region Khuyen Mai
-        //public async Task LoadPromotions(Guid ReservationId)
-        //{
-        //    string xml = $@"<fetch version='1.0' count = '3' page = '{PageKhuyenMai}' output-format='xml-platform' mapping='logical' distinct='true'>
-        //      <entity name='bsd_promotion'>
-        //        <attribute name='bsd_name' />
-        //        <attribute name='createdon' />
-        //        <attribute name='bsd_values' />
-        //        <attribute name='statuscode' />
-        //        <attribute name='bsd_startdate' />
-        //        <attribute name='ownerid' />
-        //        <attribute name='bsd_enddate' />
-        //        <attribute name='bsd_description' />
-        //        <attribute name='bsd_promotionid' />
-        //        <order attribute='createdon' descending='true' />
-        //        <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaselaunch' link-type='inner' alias='a_c72b74f6fa82e61180f23863bb367d40'>
-        //              <attribute name='bsd_name' alias='phaseslaunch_name' />
-        //              <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='inner' alias='ad'>
-        //                   <attribute name='bsd_name' alias='project_name' />                        
-        //                </link-entity>
-        //        </link-entity>
-        //        <link-entity name='bsd_quote_bsd_promotion' from='bsd_promotionid' to='bsd_promotionid' visible='false' intersect='true'>
-        //              <link-entity name='quote' from='quoteid' to='quoteid' alias='ae'>
-        //                     <filter type='and'>
-        //                            <condition attribute='quoteid' operator='eq' uiname='A,20.10' uitype='quote' value='{ReservationId}' />
-        //                      </filter>
-        //              </link-entity>
-        //        </link-entity>
-        //      </entity>
-        //    </fetch>";
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationPromotionModel>>("bsd_promotions", xml);
-        //    if (result != null)
-        //    {
-        //        var data = result.value;
-
-        //        if (data.Count < 3)
-        //        {
-        //            ShowMoreKhuyenMai = false;
-        //        }
-        //        else
-        //        {
-        //            ShowMoreKhuyenMai = true;
-        //        }
-
-        //        foreach (var x in result.value)
-        //        {
-        //            PromotionList.Add(x);
-        //        }
-        //    }          
-        //}
-
-        //#endregion
-
-        //#region Chiet Khau Dac Biet
-        //public async Task LoadSpecialDiscounts(Guid ReservationId)
-        //{
-        //    var xml = $@"<fetch version='1.0' count = '3' page = '{PageChietKhauDacBiet}' output-format='xml-platform' mapping='logical' distinct='false'>
-        //      <entity name='bsd_discountspecial'>
-        //        <attribute name='bsd_discountspecialid' />
-        //        <attribute name='bsd_name' />
-        //        <attribute name='createdon' />
-        //        <attribute name='bsd_reasons' />
-        //        <attribute name='statuscode' />
-        //        <attribute name='bsd_percentdiscount' />
-        //        <attribute name='bsd_amountdiscount' />
-        //        <order attribute='bsd_name' descending='false' />
-        //        <filter type='and'>
-        //          <condition attribute='bsd_quote' operator='eq' uiname='A,20.10' uitype='quote' value='{ReservationId}' />
-        //        </filter>
-        //        <link-entity name='systemuser' from='systemuserid' to='createdby' visible='false' link-type='outer' alias='a_769c3b2db214e911a97f000d3aa04914'>
-        //          <attribute name='fullname' alias='createdby_name' />
-        //        </link-entity>
-        //      </entity>
-        //    </fetch>";
-
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationSpecialDiscountListModel>>("bsd_discountspecials", xml);
-        //    if (result != null)
-        //    {
-        //        var data = result.value;
-
-        //        if (data.Count <= 3)
-        //        {
-        //            ShowMoreChietKhauDacBiet = false;
-        //        }
-        //        else
-        //        {
-        //            ShowMoreChietKhauDacBiet = true;
-        //        }
-
-        //        foreach (var x in result.value)
-        //        {
-        //            SpecialDiscountList.Add(x);
-        //        }
-        //    }          
-        //}
-
-        //#endregion
-
-        //#region Nguoi Dong So Huu
-        //public async Task LoadCoOwners(Guid ReservationId)
-        //{
-        //    string xml = $@"<fetch version='1.0' count = '3' page = '{PageNguoiDongSoHuu}' output-format='xml-platform' mapping='logical' distinct='false'>
-        //      <entity name='bsd_coowner'>
-        //        <attribute name='bsd_coownerid' />
-        //        <attribute name='bsd_name' />
-        //        <attribute name='bsd_relationship' />
-        //        <attribute name='createdon' />
-        //        <order attribute='bsd_name' descending='false' />
-        //        <link-entity name='account' from='accountid' to='bsd_customer' visible='false' link-type='outer' alias='a_1324f6d5b214e911a97f000d3aa04914'>
-        //          <attribute name='bsd_name' alias='account_name' />
-        //        </link-entity>
-        //        <link-entity name='contact' from='contactid' to='bsd_customer' visible='false' link-type='outer' alias='a_6b0d05eeb214e911a97f000d3aa04914'>
-        //          <attribute name='bsd_fullname' alias='contact_name' />
-        //        </link-entity>
-        //         <filter type='and'>
-        //              <condition attribute='bsd_reservation' operator='eq' uitype='quote' value='{ReservationId}' />
-        //          </filter>
-        //      </entity>
-        //    </fetch>";
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationCoowner>>("bsd_coowners", xml);
-        //    if (result != null)
-        //    {
-        //        var data = result.value;
-
-        //        if (data.Count <= 3)
-        //        {
-        //            ShowMoreNguoiDongSoHuu = false;
-        //        }
-        //        else
-        //        {
-        //            ShowMoreNguoiDongSoHuu = true;
-        //        }
-
-        //        foreach (var x in result.value)
-        //        {
-        //            CoownerList.Add(x);
-        //        }
-        //    }           
-        //}
-
-        //#endregion
-
-        //#region Lich Thanh Toan
-        //public async Task LoadInstallments(Guid ReservationId)
-        //{
-        //    string xml = $@"<fetch version='1.0' count = '3' page = '{PageLichThanhToan}' output-format='xml-platform' mapping='logical' distinct='false'>
-        //      <entity name='bsd_paymentschemedetail'>
-        //        <attribute name='bsd_paymentschemedetailid' />
-        //        <attribute name='bsd_ordernumber' />
-        //        <attribute name='bsd_name' />
-        //        <attribute name='bsd_duedate' />
-        //        <attribute name='statuscode' />
-        //        <attribute name='bsd_amountofthisphase' />
-        //        <attribute name='bsd_amountwaspaid' />
-        //        <attribute name='bsd_depositamount' />
-        //        <attribute name='bsd_waiveramount' />
-        //        <order attribute='bsd_ordernumber' descending='false' />
-        //        <filter type='and'>
-        //          <condition attribute='bsd_reservation' operator='eq' uitype='quote' value='{ReservationId}' />
-        //        </filter>
-        //      </entity>
-        //    </fetch>";
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationInstallmentModel>>("bsd_paymentschemedetails", xml);
-        //    if (result != null)
-        //    {
-        //        var data = result.value.OrderBy(x => x.bsd_ordernumber).ToList();
-        //        if (data.Count < 3)
-        //        {
-        //            ShowMoreLichThanhToan = false;
-        //        }
-        //        else
-        //        {
-        //            ShowMoreLichThanhToan = true;
-        //        }
-        //        foreach (var x in result.value)
-        //        {
-        //            InstallmentList.Add(x);
-        //        }               
-        //    }         
-        //}
-
-        //#endregion
     }
 }

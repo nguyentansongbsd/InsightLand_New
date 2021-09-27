@@ -188,11 +188,23 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Huỷ giữ chỗ thất bại");
             }
         }
-        private async void CreateQuotation_Clicked(object sender, EventArgs e)
+        private void CreateQuotation_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            await Navigation.PushAsync(new ReservationForm(viewModel.Queue._bsd_units_value));
-            LoadingHelper.Hide();
+            OptionSet Queue = new OptionSet(viewModel.Queue.opportunityid,viewModel.Queue.name);
+            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue);
+            reservationForm.CheckReservation = async (isSuccess) => {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(reservationForm);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
         }
     }
 }
