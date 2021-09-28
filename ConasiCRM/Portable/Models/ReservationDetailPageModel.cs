@@ -22,8 +22,19 @@ namespace ConasiCRM.Portable.Models
 
         // chính sách
         public Guid bsd_discounttypeid { get; set; } // id discount
-        public string discountlist_name { get; set; } // name discount 
+
+        private string _discountlist_name;// name discount 
+        public string discountlist_name { get => _discountlist_name; set { _discountlist_name = value; OnPropertyChanged(nameof(discountlist_name)); } }
         public string bsd_discounts { get; set; } // id discounts 
+
+        public Guid handovercondition_id; // id điều kiện bàn giao
+
+        private string _handovercondition_name; // tên điều kiện bàn giao
+        public string handovercondition_name { get => _handovercondition_name; set { _handovercondition_name = value; OnPropertyChanged(nameof(handovercondition_name)); } }
+        public Guid paymentscheme_id { get; set; } // id phương thức thanh toán
+
+        private string _paymentscheme_name; // tên phương thức thanh toán
+        public string paymentscheme_name { get => _paymentscheme_name; set { _paymentscheme_name = value; OnPropertyChanged(nameof(paymentscheme_name)); } }
 
         // thông tin bán hàng
         public Guid queue_id { get; set; } // id đặt chỗ

@@ -27,6 +27,7 @@ namespace ConasiCRM.Portable.ViewModels
         public int NumberInstallment { get => _numberInstallment; set { _numberInstallment = value; OnPropertyChanged(nameof(NumberInstallment)); } }
 
         public List<OptionSet> ListDiscount { get; set; }
+        public List<OptionSet> ListSpecialDiscount { get; set; }
         public List<OptionSet> ListPromotion { get; set; }
         public BangTinhGiaDetailPageViewModel()
         {
@@ -36,6 +37,7 @@ namespace ConasiCRM.Portable.ViewModels
             Customer = new OptionSet();
             ListDiscount = new List<OptionSet>();
             ListPromotion = new List<OptionSet>();
+            ListSpecialDiscount = new List<OptionSet>();
         }
 
         #region Chinh Sach
@@ -87,9 +89,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_signingexpired' />
                                     <attribute name='bsd_rfsigneddate' />
                                     <attribute name='bsd_reservationuploadeddate' />
-<attribute name='bsd_handoverconditionsams' />
-<attribute name='bsd_discounts'/>
-<attribute name='bsd_discountlist' alias='bsd_discounttypeid' />
+                                    <attribute name='bsd_discountlist' alias='bsd_discounttypeid'/>
+                                    <attribute name='bsd_discounts'/>
                                     <order attribute='createdon' descending='true' />
                                     <link-entity name='account' from='accountid' to='customerid' link-type='outer' alias='aa'>
       	                                <attribute name='bsd_name' alias='purchaser_account_name'/>
@@ -136,19 +137,43 @@ namespace ConasiCRM.Portable.ViewModels
 	                                </filter>
                                   </entity>
                                 </fetch>";
-            // join với contact + account de lấy name.
-            // join với product để lấy unit name, unit status có sẵn trên quote.
-            // join với queue để lấy mã phiếu đặt chô
-            // joi project, dot mo ban, bang gia, lich thanh toan
-            // join voi bsd_taxcode de lay phan tram thue.
-            // join voi discount list dể lấy tên chiết khấu và mã, dugnf để lấy danh sách discounts..
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationDetailPageModel>>("quotes", fetchXml);
             if (result == null || result.value.Count == 0)
             {
                 return;
             }
+
             Reservation = result.value.SingleOrDefault();
+
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='quote'>
+                                    <attribute name='name' />
+                                    <attribute name='bsd_discounts'/>
+                                    <attribute name='quoteid' />
+                                    <order attribute='createdon' descending='true' />
+                                    <link-entity name='bsd_paymentscheme' from='bsd_paymentschemeid' to='bsd_paymentscheme' link-type='outer' alias='apo'>
+                                        <attribute name='bsd_name' alias='paymentscheme_name'/>
+                                        <attribute name='bsd_paymentschemeid' alias='paymentscheme_id'/>
+                                    </link-entity>
+                                    <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discountlist' link-type='outer' alias='ae'>
+                                        <attribute name='bsd_name' alias='discountlist_name' />
+                                    </link-entity>
+                                    <filter type='and'>
+	                                    <condition attribute='quoteid' operator='eq' uitype='quote' value='" + ReservationId + @"' />
+	                                </filter>
+                                  </entity>
+                                </fetch>";
+
+            var result2 = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationDetailPageModel>>("quotes", fetch);
+            if (result2 != null && result2.value.Count > 0)
+            {
+                var data = result2.value.SingleOrDefault();
+                Reservation.paymentscheme_id = data.paymentscheme_id;
+                Reservation.paymentscheme_name = data.paymentscheme_name;
+                Reservation.discountlist_name = data.discountlist_name;
+            }
+           
             if(!string.IsNullOrEmpty(Reservation.purchaser_account_name))
             {
                 Customer.Val = Reservation.purchaser_accountid.ToString();
@@ -160,7 +185,59 @@ namespace ConasiCRM.Portable.ViewModels
                 Customer.Label = Reservation.purchaser_contact_name;
             }
 
+            await LoadHandoverCondition(ReservationId);
             await LoadPromotions(ReservationId);
+            await LoadSpecialDiscount(ReservationId);
+        }
+
+
+
+        public async Task LoadHandoverCondition(Guid ReservationId)
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                    <entity name='bsd_packageselling'>
+                                        <attribute name='bsd_name' alias='handovercondition_name' />
+                                        <attribute name='bsd_packagesellingid' alias='handovercondition_id' />
+                                        <order attribute='bsd_name' descending='true' />
+                                        <link-entity name='bsd_quote_bsd_packageselling' from='bsd_packagesellingid' to='bsd_packagesellingid' visible='false' intersect='true'>
+                                            <link-entity name='quote' from='quoteid' to='quoteid' alias='ab'>
+                                                <filter type='and'>
+                                                    <condition attribute='quoteid' operator='eq' uitype='quote' value='" + ReservationId + @"' />
+                                                </filter>
+                                            </link-entity>
+                                        </link-entity>
+                                    </entity>
+                                </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationDetailPageModel>>("bsd_packagesellings", fetchXml);
+            if (result == null || result.value.Count == 0)
+            {
+                return;
+            }
+            Reservation.handovercondition_id = result.value.FirstOrDefault().handovercondition_id;
+            Reservation.handovercondition_name = result.value.FirstOrDefault().handovercondition_name;
+        }
+
+        public async Task LoadSpecialDiscount(Guid ReservationId)
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                    <entity name='bsd_discountspecial'>
+                                        <attribute name='bsd_discountspecialid' alias='Val'/>
+                                        <attribute name='bsd_name'  alias='Label'/>
+                                        <attribute name='createdon' />
+                                        <order attribute='bsd_name' descending='false' />
+                                        <filter type='and'>
+                                            <condition attribute='bsd_quote' operator='eq' uitype='quote' value='" + ReservationId + @"' />
+                                        </filter>
+                                    </entity>
+                                </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_discountspecials", fetchXml);
+            if (result == null || result.value.Count == 0)
+            {
+                return;
+            }
+            ListSpecialDiscount = result.value;
         }
 
         public async Task LoadPromotions(Guid ReservationId)
@@ -213,8 +290,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
             ListDiscount = result.value;
         }
-
-
 
         public async Task LoadCoOwners(Guid ReservationId)
         {

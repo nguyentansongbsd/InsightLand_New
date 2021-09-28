@@ -32,16 +32,18 @@
         <converters:ReservationContractTypeConverter x:Key="ContractTypeConverter"/>
         <converters:ReservationBoolToStringConverter x:Key="BoolToStringConverter"/>
         <converters:ReservationReservationFormConverter x:Key="ReservationFormConverter" />
+        <converters:ReservationStatusCodeConverter x:Key="StatusCodeConverter"/>
+        <converters:ReservationStatusCodeConverterColor x:Key="ReservationStatusCodeConverterColor"/>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,30">
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <StackLayout Padding="15,10" Spacing="10">
                             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
-                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="Aqua">
-                                    <Label Grid.Column="0" Text="{Binding Reservation.statuscode}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding Reservation.statuscode,Converter={StaticResource ReservationStatusCodeConverterColor}}">
+                                    <Label Grid.Column="0" Text="{Binding Reservation.statuscode,Converter={StaticResource StatusCodeConverter}}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                 </telerikPrimitives:RadBorder>
                                 <Label Grid.Column="1" Text="{Binding Reservation.name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                             </Grid>
@@ -102,25 +104,27 @@
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Phương thức thanh toán" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="AAAA" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Phương thức thanh toán" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.paymentscheme_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Điều kiện bàn giao" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.handovercondition_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Chiết khấu" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.discountlist_name}" Grid.Row="0" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <StackLayout x:Name="stackLayoutDiscount" IsVisible="false" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="25,0,25,10">
+                                                <FlexLayout x:Name="flexLayoutDiscount" Wrap="Wrap" Direction="Column" JustifyContent="End" HorizontalOptions="EndAndExpand" />
+                                            </StackLayout>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,Auto" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Điều kiện bàn giao" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <StackLayout x:Name="stackLayoutPromotions" IsVisible="false" Grid.Column="2" HorizontalOptions="End" Orientation="Vertical" Padding="0,10,25,10"/>
+                                            <controls:FormLabel Text="Chiết khấu đặc biệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <StackLayout x:Name="stackLayoutSpecialDiscount" IsVisible="false" Grid.Column="2" HorizontalOptions="End" Orientation="Vertical" Padding="0,10,25,10" Spacing="10"/>
                                         </Grid>
-                                        <Grid RowDefinitions="*,*" ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Chiết khấu" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_discountlist}" Grid.Row="0" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                            <StackLayout x:Name="stackLayoutDiscount" IsVisible="false" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="End" Orientation="Horizontal" Padding="25,10"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Chiết khấu đặc biệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="AAAA" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Khuyến mại" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <StackLayout x:Name="stackLayoutPromotions" IsVisible="false" Grid.Column="2" HorizontalOptions="End" Orientation="Vertical" Padding="0,10,25,10"/>
+                                        <Grid ColumnDefinitions="Auto,Auto" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Khuyến mại" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <StackLayout x:Name="stackLayoutPromotions" IsVisible="false" Grid.Column="2" HorizontalOptions="End" Orientation="Vertical" Padding="0,10,25,10" Spacing="10"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -141,7 +145,9 @@
                                             </BindableLayout.EmptyViewTemplate>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Label Text="{Binding customer}" Padding="25,10" FontAttributes="Bold" TextColor="#1399D5" FontSize="15"/>
+                                                    <telerikPrimitives:RadBorder BorderColor="#f3f3f3" BorderThickness="0,0,0,1">
+                                                        <Label Text="{Binding customer}" Padding="25,10" FontAttributes="Bold" TextColor="#1399D5" FontSize="15"/>
+                                                    </telerikPrimitives:RadBorder>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </StackLayout>
@@ -160,10 +166,10 @@
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                        <!--<Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Bảng tính giá" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
                                             <controls:FormLabelValue Text="AAAA" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
+                                        </Grid>-->
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Giữ chỗ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.queue_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
@@ -212,7 +218,11 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Dự án" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.project_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.project_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End">
+                                                <controls:FormLabelValue.GestureRecognizers>
+                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Project_Tapped"/>
+                                                </controls:FormLabelValue.GestureRecognizers>
+                                            </controls:FormLabelValue>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Đợt mở bán" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
@@ -232,11 +242,11 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Phí giữ chỗ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_bookingfee, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_bookingfee, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Phí đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_depositfee, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_depositfee, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Loại hợp đồng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
@@ -244,7 +254,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Tổng tiền thanh toán" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_totalamountpaid, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_totalamountpaid, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -267,7 +277,11 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Đại lý/Sàn giao dịch" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.salescompany_account_name}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.salescompany_account_name}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End">
+                                                <controls:FormLabelValue.GestureRecognizers>
+                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="SalesCompany_Tapped"/>
+                                                </controls:FormLabelValue.GestureRecognizers>
+                                            </controls:FormLabelValue>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Nhân viên Đại lý/Sàn" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
@@ -347,35 +361,35 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Giá gốc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_detailamount, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_detailamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( - ) Chiết khấu" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_discount, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_discount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( + ) ĐKBG" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_packagesellingamount, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_packagesellingamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Giá bán trước thuế" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_totalamountlessfreight, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_totalamountlessfreight, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( - ) Giá trị QSDĐ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_landvaluededuction, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_landvaluededuction, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( + ) Thuế" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.totaltax, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.totaltax, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="( + ) Phí bảo trì" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_freightamount, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_freightamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Tổng tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.totalamount, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.totalamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -394,7 +408,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Phí quản lý" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_managementfee, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_managementfee, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Miễn giảm (tháng)" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
@@ -421,7 +435,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding Reservation.bsd_salesdepartmentreceiveddeposit}">
                                             <controls:FormLabel Text="Số tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_depositfeereceived, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_depositfeereceived, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -488,15 +502,15 @@
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Text="Tiền đợt:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_amountofthisphase, StringFormat='{0:#,0}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                            <Label Text="{Binding bsd_amountofthisphase, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding bsd_depositamount_format,Converter={StaticResource NullToHideConverter}}" >
                                                             <Label Text="Tiền đặt cọc:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_depositamount, StringFormat='{0:#,0}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                            <Label Text="{Binding bsd_depositamount, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Text="Đã thanh toán:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_amountwaspaid, StringFormat='{0:#,0}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                            <Label Text="{Binding bsd_amountwaspaid, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                         </Grid>
                                                     </StackLayout>
                                                 </telerikPrimitives:RadBorder>

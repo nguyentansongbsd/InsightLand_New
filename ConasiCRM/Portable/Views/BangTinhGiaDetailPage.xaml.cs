@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -48,6 +49,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 await viewModel.LoadReservation(id);
                 SutUpPromotions();
+                SutUpSpecialDiscount();
                 SetUpDiscount(viewModel.Reservation.bsd_discounts);
                 LoadingHelper.Hide();
             }
@@ -161,7 +163,7 @@ namespace ConasiCRM.Portable.Views
                         OptionSet item = viewModel.ListDiscount.Single(x => x.Val == id);
                         if(item != null && !string.IsNullOrEmpty(item.Val))
                         {
-                            stackLayoutDiscount.Children.Add(SetUpItemList(item.Label));
+                            flexLayoutDiscount.Children.Add(SetUpItemBorder(item.Label));
                         }
                     }
                 }
@@ -181,7 +183,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     if(!string.IsNullOrEmpty(item.Label))
                     {
-                        stackLayoutPromotions.Children.Add(SetUpItemList(item.Label));
+                        stackLayoutPromotions.Children.Add(SetUpItem(item.Label));
                     }    
                 }    
             }    
@@ -189,9 +191,28 @@ namespace ConasiCRM.Portable.Views
             {
                 stackLayoutPromotions.IsVisible = false;
             }    
-        }    
+        }
 
-        private RadBorder SetUpItemList(string content)
+        private void SutUpSpecialDiscount()
+        {
+            if (viewModel.ListSpecialDiscount != null && viewModel.ListSpecialDiscount.Count > 0)
+            {
+                stackLayoutSpecialDiscount.IsVisible = true;
+                foreach (var item in viewModel.ListSpecialDiscount)
+                {
+                    if (!string.IsNullOrEmpty(item.Label))
+                    {
+                        stackLayoutSpecialDiscount.Children.Add(SetUpItem(item.Label));
+                    }
+                }
+            }
+            else
+            {
+                stackLayoutSpecialDiscount.IsVisible = false;
+            }
+        }
+
+        private RadBorder SetUpItemBorder(string content)
         {
             RadBorder rd = new RadBorder();
             rd.Padding = 5;
@@ -207,6 +228,64 @@ namespace ConasiCRM.Portable.Views
             lb.FontAttributes = FontAttributes.Bold;
             rd.Content = lb;
             return rd;
+        }
+
+        private Grid SetUpItem(string content)
+        {
+            Grid grid = new Grid();
+            Label lb = new Label();
+            lb.Text = content;
+            lb.FontSize = 15;
+            lb.TextColor = Color.FromHex("1399D5");
+            lb.VerticalOptions = LayoutOptions.Center;
+            lb.HorizontalOptions = LayoutOptions.End;
+            lb.FontAttributes = FontAttributes.Bold;
+            grid.Children.Add(lb);
+            return grid;
+        }
+
+        private void Project_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.Reservation.project_id != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                ProjectInfo projectInfo = new ProjectInfo(viewModel.Reservation.project_id);
+                projectInfo.OnCompleted = async (IsSuccess) =>
+                {
+                    if (IsSuccess == true)
+                    {
+                        await Navigation.PushAsync(projectInfo);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin dự án");
+                    }
+                };
+            }
+        }
+
+        private void SalesCompany_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.Reservation.salescompany_accountid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                AccountDetailPage newPage = new AccountDetailPage(viewModel.Reservation.salescompany_accountid);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin đại lý/sàn giao dịch");
+                    }
+                };
+            }
         }
     }
 }
