@@ -17,6 +17,13 @@ namespace ConasiCRM.Portable.Models
         public string purchaser_contact_name { get; set; } // ten khach hang contact
         public string bsd_reservationno { get; set; } // đặt cọc trang đầu
         public string quotenumber { get; set; } // bảng tính giá trang đầu
+        public Guid unit_id { get; set; } // id unit trang đầu
+        public string unit_name { get; set; } // tên unit trang đầu
+
+        // chính sách
+        public Guid bsd_discounttypeid { get; set; } // id discount
+        public string discountlist_name { get; set; } // name discount 
+        public string bsd_discounts { get; set; } // id discounts 
 
         // thông tin bán hàng
         public Guid queue_id { get; set; } // id đặt chỗ
@@ -27,7 +34,7 @@ namespace ConasiCRM.Portable.Models
         public int bsd_unitstatus { get; set; } // tình trạng sản phẩm
         public decimal bsd_constructionarea { get; set; } // diện tích xây dựng
         public decimal bsd_netusablearea { get; set; } // diện tích sử dụng
-        public decimal unit_bsd_actualarea { get; set; } // diện tích thực
+        public decimal bsd_actualarea { get; set; } // diện tích thực
 
         // thông tin chi tiết
         public Guid project_id { get; set; } // id dự án
