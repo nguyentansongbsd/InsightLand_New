@@ -20,6 +20,9 @@ namespace ConasiCRM.Portable.ViewModels
         public string KeywordPromotion { get; set; }
         public List<string> SelectedPromotionIds { get; set; }
 
+        private QuoteModel _quote;
+        public QuoteModel Quote { get => _quote; set { _quote = value; OnPropertyChanged(nameof(Quote)); } }
+
         private string _titleQuote;
         public string TitleQuote { get => _titleQuote; set { _titleQuote = value; OnPropertyChanged(nameof(TitleQuote)); } }
         private string _staffAgentQuote;
@@ -95,6 +98,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private OptionSet _contractType;
         public OptionSet ContractType { get => _contractType; set { _contractType = value; OnPropertyChanged(nameof(ContractType)); } }
+
+        private TaxCodeModel _taxCode;
+        public TaxCodeModel TaxCode { get => _taxCode; set { _taxCode = value; OnPropertyChanged(nameof(TaxCode)); } }
         #endregion
 
         #region Thong tin bao gia
@@ -184,7 +190,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             //Tổng tiền thuế VAT = ((Gia ban truoc thue - Tổng giá trị QSDĐ) * Ma so thue)
             this.TotalVATTax = 0;
-            this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * UnitInfor.bsd_taxpercent) / 100;
+            this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * this.TaxCode.bsd_value) / 100;
             SetTotalAmount();
         }
 
@@ -206,235 +212,10 @@ namespace ConasiCRM.Portable.ViewModels
         }
         #endregion
 
-
-
-        //private ReservationFormModel _reservation;
-        //public ReservationFormModel Reservation
-        //{
-        //    get => _reservation;
-        //    set
-        //    {
-        //        _reservation = value;
-        //        OnPropertyChanged(nameof(Reservation));
-        //    }
-        //}
-
-        //public LookUpConfig PaymentschemeConfig { get; set; }
-        //public LookUpConfig HandoverConditionConfig { get; set; }
-        //public LookUpConfig PromotionConfig { get; set; }
-        //public LookUpConfig ContactLookUpConfig { get; set; }
-        //public LookUpConfig AccountLookUpConfig { get; set; }
-
-
-        //// khai báo để hứng dữ liệu khi chọn handover condition.
-        //private LookUp _bsd_packagesellings;
-        //public LookUp bsd_packagesellings
-        //{
-        //    get => _bsd_packagesellings;
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            IsBusy = true;
-        //            _bsd_packagesellings = value;
-        //            AddHandoverCondition();
-        //        }
-        //        else
-        //        {
-        //            _bsd_packagesellings = value;
-        //        }
-
-        //    }
-        //}
-
-        //// khai báo để hứng dữ liệu khi chọn Promotion.
-        //private LookUp _bsd_promotion;
-        //public LookUp bsd_promotion
-        //{
-        //    get => _bsd_promotion;
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            IsBusy = true;
-        //            _bsd_promotion = value;
-        //            AddPromotion();
-        //        }
-        //        else
-        //        {
-        //            _bsd_promotion = value;
-        //        }
-
-        //    }
-        //}
-
-        //// contact && account
-        //public LookUp Contact
-        //{
-        //    set
-        //    {
-
-        //        if (value != null)
-        //        {
-        //            Customer = new CustomerLookUp()
-        //            {
-        //                Id = value.Id,
-        //                Name = value.Name,
-        //                Type = 1
-        //            };
-        //        }
-        //    }
-        //}
-        //public LookUp Account
-        //{
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            Customer = new CustomerLookUp()
-        //            {
-        //                Id = value.Id,
-        //                Name = value.Name,
-        //                Type = 2
-        //            };
-
-        //        }
-
-        //    }
-        //}
-        //private CustomerLookUp _customer;
-        //public CustomerLookUp Customer
-        //{
-        //    get => _customer;
-        //    set
-        //    {
-        //        if (_customer != value)
-        //        {
-        //            _customer = value;
-        //            OnPropertyChanged(nameof(Customer));
-        //        }
-        //    }
-        //}
-
-        //public bool DaTaoLichThanhToan { get; set; }
-
-        //// end
-        //// danh sacsh discount cua thong ctin chiet khau
-        //public ObservableCollection<ReservationDiscountOptionSet> Discounts { get; set; }
-        //public ObservableCollection<ReservationDiscountOptionSet> InternelDiscounts { get; set; }
-        //public ObservableCollection<ReservationDiscountOptionSet> WholesaleDiscounts { get; set; }
-
-        //public ObservableCollection<ReservationInstallmentModel> InstallmentList { get; set; }
-        //public ObservableCollection<ReservationCoowner> CoownerList { get; set; }
-        //public ObservableCollection<ReservationHandoverCondition> HandoverConditionList { get; set; }
-        //public ObservableCollection<ReservationPromotionModel> PromotionList { get; set; }
-        //public ObservableCollection<ReservationSpecialDiscountListModel> SpecialDiscountList { get; set; }
-
-        //private bool _showMoreDieuKienBanGiao;
-        //public bool ShowMoreDieuKienBanGiao { get => _showMoreDieuKienBanGiao; set { _showMoreDieuKienBanGiao = value; OnPropertyChanged(nameof(ShowMoreDieuKienBanGiao)); } }
-
-        //public int PageDieuKienBanGiao { get; set; } = 1;
-
-        //private bool _showMoreKhuyenMai;
-        //public bool ShowMoreKhuyenMai { get => _showMoreKhuyenMai; set { _showMoreKhuyenMai = value; OnPropertyChanged(nameof(ShowMoreKhuyenMai)); } }
-
-        //public int PageKhuyenMai { get; set; } = 1;
-
-        //private bool _showMoreChietKhauDacBiet;
-        //public bool ShowMoreChietKhauDacBiet { get => _showMoreChietKhauDacBiet; set { _showMoreChietKhauDacBiet = value; OnPropertyChanged(nameof(ShowMoreChietKhauDacBiet)); } }
-
-        //public int PageChietKhauDacBiet { get; set; } = 1;
-
-        //private bool _showMoreNguoiDongSoHuu;
-        //public bool ShowMoreNguoiDongSoHuu { get => _showMoreNguoiDongSoHuu; set { _showMoreNguoiDongSoHuu = value; OnPropertyChanged(nameof(ShowMoreNguoiDongSoHuu)); } }
-
-        //public int PageNguoiDongSoHuu { get; set; } = 1;
-
-        //private bool _showMoreLichThanhToan;
-        //public bool ShowMoreLichThanhToan { get => _showMoreLichThanhToan; set { _showMoreLichThanhToan = value; OnPropertyChanged(nameof(ShowMoreLichThanhToan)); } }
-
-        //public int PageLichThanhToan { get; set; } = 1;
-
         public ReservationFormViewModel()
         {
             SelectedPromotionIds = new List<string>();
-
-
-            //InstallmentList = new ObservableCollection<ReservationInstallmentModel>();
-            //CoownerList = new ObservableCollection<ReservationCoowner>();
-            //HandoverConditionList = new ObservableCollection<ReservationHandoverCondition>();
-            //PromotionList = new ObservableCollection<ReservationPromotionModel>();
-            //SpecialDiscountList = new ObservableCollection<ReservationSpecialDiscountListModel>();
-
-            //Discounts = new ObservableCollection<ReservationDiscountOptionSet>();
-            //InternelDiscounts = new ObservableCollection<ReservationDiscountOptionSet>();
-            //WholesaleDiscounts = new ObservableCollection<ReservationDiscountOptionSet>();
-
-            //#region contact va account lookup cònig
-            //ContactLookUpConfig = new LookUpConfig()
-            //{
-            //    FetchXml = @"<fetch version='1.0' count='30' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-            //      <entity name='contact'>
-            //        <attribute name='contactid' alias='Id' />
-            //        <attribute name='bsd_fullname' alias='Name' />
-            //        <attribute name='createdon' alias='Detail' />
-            //        <order attribute='bsd_fullname' descending='false' />
-            //        <filter type='or'>
-            //              <condition attribute='bsd_fullname' operator='like' value='%{1}%' />
-            //         </filter>
-            //      </entity>
-            //    </fetch>",
-            //    EntityName = "contacts",
-            //    PropertyName = "Contact",
-            //    LookUpTitle = "Chọn khách hàng"
-            //};
-
-            //AccountLookUpConfig = new LookUpConfig()
-            //{
-            //    FetchXml = @"<fetch version='1.0' count='30' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-            //      <entity name='account'>
-            //        <attribute name='accountid' alias='Id' />
-            //        <attribute name='bsd_name' alias='Name' />
-            //        <attribute name='createdon' alias='Detail' />
-            //        <order attribute='bsd_name' descending='false' />
-            //         <filter type='or'>
-            //              <condition attribute='bsd_name' operator='like' value='%{1}%' />
-            //         </filter>
-            //      </entity>
-            //    </fetch>",
-            //    EntityName = "accounts",
-            //    PropertyName = "Account",
-            //    LookUpTitle = "Chọn khách hàng"
-            //};
-            //#endregion
-
-            //PaymentschemeConfig = new LookUpConfig();
-            //PaymentschemeConfig.LookUpTitle = "Chọn lịch thanh toán";
-            //PaymentschemeConfig.EntityName = "bsd_paymentschemes";
-            //PaymentschemeConfig.PropertyName = "PaymentScheme";
-            //PaymentschemeConfig.FetchXml = @"<fetch count='20' page='{0}' version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-            //  <entity name='bsd_paymentscheme'>
-            //    <attribute name='bsd_name' alias='Name' />
-            //    <attribute name='createdon' alias='Detail' /> 
-            //    <attribute name='bsd_paymentschemeid' alias='Id' />
-            //    <order attribute='bsd_name' descending='false' />
-            //    <filter type='and'>
-            //          <condition attribute='bsd_name' operator='like' value='%{1}%' />
-            //     </filter>
-            //  </entity>
-            //</fetch>";
-
-            //// handover condition
-            //HandoverConditionConfig = new LookUpConfig();
-            //HandoverConditionConfig.LookUpTitle = "Chọn điều kiện bàn giao";
-            //HandoverConditionConfig.EntityName = "bsd_packagesellings";
-            //HandoverConditionConfig.PropertyName = "bsd_packagesellings";
-
-            //// promotion
-            //PromotionConfig = new LookUpConfig();
-            //PromotionConfig.LookUpTitle = "Chọn khuyến mại";
-            //PromotionConfig.EntityName = "bsd_promotions";
-            //PromotionConfig.PropertyName = "bsd_promotion";
+            this.Quote = new QuoteModel();
         }
 
         // Load thong tin san pham
@@ -458,12 +239,14 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_maintenancefeespercent' />
                                     <attribute name='bsd_numberofmonthspaidmf' />
                                     <attribute name='bsd_managementamountmonth' />
+                                    <attribute name='productid' />
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{ProductId}' />
                                     </filter>
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' visible='false' link-type='outer' alias='a_9a5e44d019dbeb11bacb002248168cad'>
                                       <attribute name='bsd_name' alias='project_name'/>
+                                      <attribute name='bsd_projectid'/>
                                     </link-entity>
                                     <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' visible='false' link-type='outer' alias='a_645347ca19dbeb11bacb002248168cad'>
                                         <attribute name='bsd_name' alias='phaseslaunch_name'/>
@@ -495,6 +278,22 @@ namespace ConasiCRM.Portable.ViewModels
 
             this.PriceListApply = this.PriceListPhasesLaunch;
             SetLandValueDeduction();
+        }
+
+        // Load tax code
+        public async Task LoadTaxCode()
+        {
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_taxcode'>
+                                    <attribute name='bsd_taxcodeid'/>
+                                    <attribute name='bsd_value'/>
+                                    <order attribute='bsd_name' descending='false' />
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaxCodeModel>>("bsd_taxcodes", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            this.TaxCode = result.value.SingleOrDefault();
         }
 
         // load phuong thuc thanh toan vs status code = confirm va theo du an
@@ -657,65 +456,204 @@ namespace ConasiCRM.Portable.ViewModels
             this.SalesAgents = result.value;
         }
 
+        public async Task<bool> AddPromotion()
+        {
+            if (this.SelectedPromotionIds.Count == 0) return false;
+            string path = $"/quotes({this.Quote.quoteid})/bsd_quote_bsd_promotion/$ref";
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            CrmApiResponse apiResponse = new CrmApiResponse();
+            foreach (var item in this.SelectedPromotionIds)
+            {
+                data["@odata.id"] = $"{OrgConfig.ApiUrl}/bsd_promotions({item})";
+                apiResponse= await CrmHelper.PostData(path, data);
+            }
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddHandoverCondition()
+        {
+            string path = $"/quotes({this.Quote.quoteid})/bsd_quote_bsd_packageselling/$ref";
+
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            data["@odata.id"] = $"{OrgConfig.ApiUrl}/bsd_packagesellings({this.HandoverCondition.Val})";
+            CrmApiResponse result = await CrmHelper.PostData(path, data);
+
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddCoOwer()
+        {
+            if (this.CoOwnerList == null || this.CoOwnerList.Count == 0) return false;
+            string path = "/bsd_coowners";
+            CrmApiResponse apiResponse = new CrmApiResponse();
+            foreach (var item in this.CoOwnerList)
+            {
+                var content = await GetContentCoOwer(item);
+                apiResponse = await CrmHelper.PostData(path, content);
+            }
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private async Task<object> GetContentCoOwer(CoOwnerFormModel coOwner)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["bsd_coownerid"] = coOwner.bsd_coownerid;
+            data["bsd_name"] = coOwner.bsd_name;
+            data["bsd_relationship"] = coOwner.bsd_relationshipId;
+            data["bsd_reservation@odata.bind"] = $"quotes({this.Quote.quoteid})";
+
+            if (this.CustomerCoOwner.Title == "2")
+            {
+                data["bsd_customer_contact@odata.bind"] = $"/contacts({coOwner.contact_id})";
+                await CrmHelper.SetNullLookupField("bsd_coowners", coOwner.bsd_coownerid, "bsd_customer_contact");
+            }
+            else
+            {
+                data["bsd_customer_account@odata.bind"] = $"/accounts({coOwner.account_id})";
+                await CrmHelper.SetNullLookupField("bsd_coowners", coOwner.bsd_coownerid, "bsd_customer_account");
+            }
+            return data;
+        }
+
+        public async Task<bool> CreateQuote()
+        {
+            string path = "/quotes";
+            Quote.quoteid = Guid.NewGuid();
+            var content = await GetContent();
+            CrmApiResponse response = await CrmHelper.PostData(path, content);
+            if (response.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<object> GetContent()
+        {
+            List<string> discounts = new List<string>();
+            foreach (var item in this.DiscountChilds)
+            {
+                if (item.Selected == true)
+                {
+                    discounts.Add(item.Val);
+                }
+            }
+
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["quoteid"] = this.Quote.quoteid;
+            data["name"] = this.TitleQuote;
+            data["bsd_discounts"] = string.Join(",", discounts);
+
+            data["bsd_unitstatus"] = this.UnitInfor.statuscode;
+            data["bsd_constructionarea"] = this.UnitInfor.bsd_constructionarea;
+            data["bsd_netusablearea"] = this.UnitInfor.bsd_netsaleablearea;
+            data["bsd_actualarea"] = this.UnitInfor.bsd_actualarea;
+            data["bsd_depositfee"] = this.UnitInfor.bsd_queuingfee;
+            data["bsd_bookingfee"] = this.UnitInfor.bsd_depositamount;
+            data["bsd_contracttypedescripton"] = this.ContractType.Val;
+            data["bsd_nameofstaffagent"] = this.StaffAgentQuote;
+            data["bsd_referral"] = this.DescriptionQuote;
+
+            data["bsd_detailamount"] = this.UnitInfor.price;
+            data["bsd_discount"] = Math.Round(this.TotalDiscount,3);
+            data["bsd_packagesellingamount"] = Math.Round(this.TotalHandoverCondition, 3);
+            data["bsd_totalamountlessfreight"] = Math.Round(this.NetSellingPrice, 3);
+            data["bsd_landvaluededuction"] = Math.Round(this.LandValueDeduction, 3);
+            data["totaltax"] = Math.Round(this.TotalVATTax, 3);
+            data["bsd_freightamount"] = Math.Round(this.MaintenanceFee, 3);
+            data["totalamount"] = Math.Round(this.TotalAmount, 3);
+
+            data["bsd_numberofmonthspaidmf"] = this.UnitInfor.bsd_numberofmonthspaidmf;
+            data["bsd_managementfee"] = this.UnitInfor.bsd_managementamountmonth;
+            data["bsd_waivermanafeemonth"] = this.WaiverManaFee;
+
+            data["bsd_paymentscheme@odata.bind"] = $"/bsd_paymentschemes({this.PaymentScheme.Val})";
+            data["bsd_unitno@odata.bind"] = $"/products({this.UnitInfor.productid})";
+            data["bsd_projectid@odata.bind"] = $"/bsd_projects({this.UnitInfor._bsd_projectcode_value})";
+            data["bsd_salessgentcompany@odata.bind"] = $"/accounts({this.SalesAgent.Val})";
+            data["bsd_taxcode@odata.bind"] = $"/bsd_taxcodes({this.TaxCode.bsd_taxcodeid})";
+
+            if (this.UnitInfor._bsd_phaseslaunchid_value != Guid.Empty)
+            {
+                data["bsd_phaseslaunchid@odata.bind"] = $"/bsd_phaseslaunchs({this.UnitInfor._bsd_phaseslaunchid_value})";
+            }
+
+            if (this.UnitInfor.pricelist_id_phaseslaunch != Guid.Empty)
+            {
+                data["bsd_pricelistphaselaunch@odata.bind"] = $"/pricelevels({this.UnitInfor.pricelist_id_phaseslaunch})";
+            }
+
+            if (this.UnitInfor.pricelist_id_unit != Guid.Empty)
+            {
+                data["pricelevelid@odata.bind"] = $"/pricelevels({this.UnitInfor.pricelist_id_unit})";
+            }
+
+            if (this.DiscountList != null)
+            {
+                data["bsd_discountlist@odata.bind"] = $"/bsd_discounttypes({this.DiscountList.Val})";
+            }
+            else
+            {
+                await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "bsd_discountlist");
+            }
+
+            if (this.Queue != null)
+            {
+                data["opportunityid@odata.bind"] = $"/opportunities({this.Queue.Val})";
+            }
+            else
+            {
+                await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "opportunityid");
+            }
+
+            if (this.Buyer.Title == "2")
+            {
+                data["customerid_contact@odata.bind"] = $"/contacts({this.Buyer.Val})";
+                await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "customerid_account");
+            }
+            else
+            {
+                data["customerid_account@odata.bind"] = $"/accounts({this.Buyer.Val})";
+                await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "customerid_contact");
+            }
+
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            }
 
 
+            return data;
+        }
 
-
-
-        //public async void AddHandoverCondition()
-        //{
-        //    var isExist = this.HandoverConditionList.Any(x => x.bsd_packagesellingid == bsd_packagesellings.Id);
-        //    if (isExist)
-        //    {
-        //        await App.Current.MainPage.DisplayAlert("Thông báo", bsd_packagesellings.Name + " đã tồn tại.", "Đóng");
-        //        IsBusy = false; // tren ham set da set thanh true, o day phai set lai thanh false.
-        //        return;
-        //    }
-
-        //    string path = $"/quotes({Reservation.quoteid})/bsd_quote_bsd_packageselling/$ref";
-
-        //    IDictionary<string, string> data = new Dictionary<string, string>();
-        //    data["@odata.id"] = $"{OrgConfig.ApiUrl}/bsd_packagesellings({bsd_packagesellings.Id})";
-        //    CrmApiResponse result = await CrmHelper.PostData(path, data);
-
-        //    if (result.IsSuccess)
-        //    {
-        //        MessagingCenter.Send<ReservationFormViewModel, bool>(this, "LoadHandoverConditions", true);
-        //        // ben day chay qua ben kia roi ko can is busy = false nua.
-        //    }
-        //    else
-        //    {
-        //        await App.Current.MainPage.DisplayAlert("Thông báo", result.GetErrorMessage(), "Đóng");
-        //        IsBusy = false;
-        //    }
-        //}
-
-        //private async void AddPromotion()
-        //{
-        //    var isExist = this.PromotionList.Any(x => x.bsd_promotionid == bsd_promotion.Id);
-        //    if (isExist)
-        //    {
-        //        await App.Current.MainPage.DisplayAlert("Thông báo", bsd_promotion.Name + " đã tồn tại.", "Đóng");
-        //        IsBusy = false; // tren ham set da set thanh true, o day phai set lai thanh false.
-        //        return;
-        //    }
-
-        //    string path = $"/quotes({Reservation.quoteid})/bsd_quote_bsd_promotion/$ref";
-
-        //    IDictionary<string, string> data = new Dictionary<string, string>();
-        //    data["@odata.id"] = $"{OrgConfig.ApiUrl}/bsd_promotions({bsd_promotion.Id})";
-        //    CrmApiResponse result = await CrmHelper.PostData(path, data);
-
-        //    if (result.IsSuccess)
-        //    {
-        //        MessagingCenter.Send<ReservationFormViewModel, bool>(this, "LoadPromotions", true);
-        //        // ben day chay qua ben kia roi ko can is busy = false nua.
-        //    }
-        //    else
-        //    {
-        //        await App.Current.MainPage.DisplayAlert("Thông báo", result.GetErrorMessage(), "Đóng");
-        //        IsBusy = false;
-        //    }
-        //}
     }
 }
