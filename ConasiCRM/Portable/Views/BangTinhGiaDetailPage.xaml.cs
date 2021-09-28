@@ -1,11 +1,12 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -46,6 +47,8 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 await viewModel.LoadReservation(id);
+                SutUpPromotions();
+                SetUpDiscount(viewModel.Reservation.bsd_discounts);
                 LoadingHelper.Hide();
             }
         }
@@ -140,6 +143,70 @@ namespace ConasiCRM.Portable.Views
                 VisualStateManager.GoToState(lbLich, "Normal");
                 TabLich.IsVisible = false;
             }
+        }
+
+        private async void SetUpDiscount(string ids)
+        {
+            if (!string.IsNullOrEmpty(ids))
+            {
+                stackLayoutDiscount.IsVisible = true;
+                if (viewModel.Reservation.bsd_discounttypeid != Guid.Empty)
+                {
+                    await viewModel.LoadDiscounts(viewModel.Reservation.bsd_discounttypeid);
+
+                    var list_id = ids.Split(',');
+
+                    foreach (var id in list_id)
+                    {
+                        OptionSet item = viewModel.ListDiscount.Single(x => x.Val == id);
+                        if(item != null && !string.IsNullOrEmpty(item.Val))
+                        {
+                            stackLayoutDiscount.Children.Add(SetUpItemList(item.Label));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                stackLayoutDiscount.IsVisible = false;
+            }    
+        }
+
+        private void SutUpPromotions()
+        {
+            if(viewModel.ListPromotion != null && viewModel.ListPromotion.Count>0)
+            {
+                stackLayoutPromotions.IsVisible = true;
+                foreach(var item in viewModel.ListPromotion)
+                {
+                    if(!string.IsNullOrEmpty(item.Label))
+                    {
+                        stackLayoutPromotions.Children.Add(SetUpItemList(item.Label));
+                    }    
+                }    
+            }    
+            else
+            {
+                stackLayoutPromotions.IsVisible = false;
+            }    
+        }    
+
+        private RadBorder SetUpItemList(string content)
+        {
+            RadBorder rd = new RadBorder();
+            rd.Padding = 5;
+            rd.BorderColor = Color.FromHex("f1f1f1");
+            rd.BorderThickness = 1;
+            rd.CornerRadius = 5;
+            Label lb = new Label();
+            lb.Text = content;
+            lb.FontSize = 15;
+            lb.TextColor = Color.FromHex("1399D5");
+            lb.VerticalOptions = LayoutOptions.Center;
+            lb.HorizontalOptions = LayoutOptions.Center;
+            lb.FontAttributes = FontAttributes.Bold;
+            rd.Content = lb;
+            return rd;
         }
     }
 }
