@@ -91,8 +91,18 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = e.Item as ProjectList;
             viewModel.Project = item;
-            await viewModel.LoadPhasesLanch();
+            await Task.WhenAll(
+                viewModel.LoadPhasesLanch(),
+                viewModel.LoadBlocks()
+                ) ;
             await bottomModalProject.Hide();
+            LoadingHelper.Hide();
+        }
+
+        private async void PhaseLaunchItem_SelectedChange(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadBlocks();
             LoadingHelper.Hide();
         }
 
@@ -111,7 +121,7 @@ namespace ConasiCRM.Portable.Views
 
                 DirectSaleSearchModel filter = new DirectSaleSearchModel(viewModel.Project.bsd_projectid, viewModel.PhasesLaunch?.Val, viewModel.IsEvent,viewModel.UnitCode, directions, unitStatus,viewModel.NetArea?.Id,viewModel.Price?.Id);
 
-                DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter);
+                DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter,viewModel.Blocks);
                 directSaleDetail.OnCompleted = async (Success) =>
                 {
                     if (Success == 0)

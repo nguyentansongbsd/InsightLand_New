@@ -18,7 +18,7 @@
                 <Setter Property="IndicatorColor" Value="#808080"/>
                 <Setter Property="BackgroundColor" Value="#F2F2F2"/>
                 <Setter Property="BorderColor" Value="Transparent"/>
-                <Setter Property="Padding" Value="10"/>
+                <Setter Property="Padding" Value="5,10"/>
                 <Setter Property="IndicatorFontFamily" Value="FontAwesomeSolid"/>
             </Style>
             <Style x:Key="TitleFormStyle" TargetType="Label">
@@ -275,17 +275,17 @@
 
                                         <controls:FormLabel Text="Diện tích xây dựng" Margin="0,10,0,0"/>
                                         <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding UnitInfor.bsd_constructionarea,StringFormat='{0:#,0.##}'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
+                                            <Label Text="{Binding UnitInfor.bsd_constructionarea,StringFormat='{0:#,0.##} m2'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
                                         </telerikPrimitives:RadBorder>
 
                                         <controls:FormLabel Text="Diện tích sử dụng" Margin="0,10,0,0"/>
                                         <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding UnitInfor.bsd_netsaleablearea,StringFormat='{0:#,0.##}'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
+                                            <Label Text="{Binding UnitInfor.bsd_netsaleablearea,StringFormat='{0:#,0.##} m2'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
                                         </telerikPrimitives:RadBorder>
 
-                                        <controls:FormLabel Text="Diện tích thực" Margin="0,10,0,0"/>
+                                        <controls:FormLabel Text="Diện tích thực tế" Margin="0,10,0,0"/>
                                         <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding UnitInfor.bsd_actualarea,StringFormat='{0:#,0.##}'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
+                                            <Label Text="{Binding UnitInfor.bsd_actualarea,StringFormat='{0:#,0.##} m2'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
                                         </telerikPrimitives:RadBorder>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -374,46 +374,46 @@
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Padding="10">
-                                        <controls:FormLabel Text="Giá gốc"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding UnitInfor.price,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                    <StackLayout BackgroundColor="#eeeeee" Spacing="1">
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="Giá bán gốc" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding UnitInfor.price,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="(-) Chiếu khấu" Margin="0,10,0,0"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding TotalDiscount,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="(-) Chiếu khấu" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding TotalDiscount,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="(+) Tổng tiền ĐKBG" Margin="0,10,0,0"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding TotalHandoverCondition,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="(+) Tổng tiền ĐKBG" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding TotalHandoverCondition,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="Giá bán trước thuế" Margin="0,10,0,0"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding NetSellingPrice,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="Giá bán trước thuế" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding NetSellingPrice,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="(-) Tổng giá trị QSDĐ" Margin="0,10,0,0"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding LandValueDeduction,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="(-) Tổng giá trị QSDĐ" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding LandValueDeduction,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="(+) Tổng tiền thuế VAT" Margin="0,10,0,0"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding TotalVATTax,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="(+) Tổng tiền thuế VAT" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding TotalVATTax,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="(+) Phí bảo trì" Margin="0,10,0,0"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding MaintenanceFee,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="(+) Phí bảo trì" FontSize="15" TextColor="#333333"/>
+                                            <Label Text="{Binding MaintenanceFee,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
 
-                                        <controls:FormLabel Text="Tổng tiền" Margin="0,10,0,0" TextColor="Black" FontAttributes="Bold"/>
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
-                                            <Label Text="{Binding TotalAmount,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
-                                        </telerikPrimitives:RadBorder>
+                                        <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
+                                            <Label Text="Tổng tiền" FontSize="15" FontAttributes="Bold" TextColor="#333333"/>
+                                            <Label Text="{Binding TotalAmount,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="Red" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                        </StackLayout>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
