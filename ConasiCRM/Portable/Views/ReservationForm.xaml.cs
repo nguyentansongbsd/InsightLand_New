@@ -16,7 +16,6 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> CheckReservation;
         public ReservationFormViewModel viewModel;
-        private Guid ReservationId;
 
         public ReservationForm(Guid productId , OptionSet queue = null)
         {
@@ -452,7 +451,8 @@ namespace ConasiCRM.Portable.Views
                     await Task.WhenAll(
                         viewModel.AddCoOwer(),
                         viewModel.AddPromotion(),
-                        viewModel.AddHandoverCondition()
+                        viewModel.AddHandoverCondition(),
+                        viewModel.CreateQuoteProduct()
                         );
 
                     await Navigation.PopAsync();

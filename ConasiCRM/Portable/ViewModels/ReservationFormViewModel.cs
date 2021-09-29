@@ -240,6 +240,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_numberofmonthspaidmf' />
                                     <attribute name='bsd_managementamountmonth' />
                                     <attribute name='productid' />
+                                    <attribute name='defaultuomid' alias='_defaultuomid_value'/>
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{ProductId}' />
@@ -343,16 +344,19 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadDiscountList()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='bsd_discounttype'>
-                                    <attribute name='bsd_name' alias='Label'/>
-                                    <attribute name='bsd_discounttypeid' alias='Val'/>
+                                  <entity name='bsd_phaseslaunch'>
+                                    <attribute name='bsd_phaseslaunchid' />
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_phaseslaunch' operator='eq' uitype='bsd_phaseslaunch' value='{this.UnitInfor._bsd_phaseslaunchid_value}' />
+                                      <condition attribute='bsd_phaseslaunchid' operator='eq' value='{this.UnitInfor._bsd_phaseslaunchid_value}'/>
                                     </filter>
+                                    <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discountlist' visible='false' link-type='outer' alias='a_d55241be19dbeb11bacb002248168cad'>
+                                        <attribute name='bsd_name' alias='Label'/>
+                                        <attribute name='bsd_discounttypeid' alias='Val'/>
+                                    </link-entity>
                                   </entity>
                                 </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_discounttypes", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_phaseslaunchs", fetchXml);
             if (result == null || result.value.Any() == false) return;
             this.DiscountLists = result.value;
         }
@@ -465,7 +469,7 @@ namespace ConasiCRM.Portable.ViewModels
             foreach (var item in this.SelectedPromotionIds)
             {
                 data["@odata.id"] = $"{OrgConfig.ApiUrl}/bsd_promotions({item})";
-                apiResponse= await CrmHelper.PostData(path, data);
+                apiResponse = await CrmHelper.PostData(path, data);
             }
             if (apiResponse.IsSuccess)
             {
@@ -580,13 +584,13 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_referral"] = this.DescriptionQuote;
 
             data["bsd_detailamount"] = this.UnitInfor.price;
-            data["bsd_discount"] = Math.Round(this.TotalDiscount,3);
-            data["bsd_packagesellingamount"] = Math.Round(this.TotalHandoverCondition, 3);
-            data["bsd_totalamountlessfreight"] = Math.Round(this.NetSellingPrice, 3);
-            data["bsd_landvaluededuction"] = Math.Round(this.LandValueDeduction, 3);
-            data["totaltax"] = Math.Round(this.TotalVATTax, 3);
-            data["bsd_freightamount"] = Math.Round(this.MaintenanceFee, 3);
-            data["totalamount"] = Math.Round(this.TotalAmount, 3);
+            data["bsd_discount"] = this.TotalDiscount;
+            data["bsd_packagesellingamount"] = this.TotalHandoverCondition;
+            data["bsd_totalamountlessfreight"] = this.NetSellingPrice;
+            data["bsd_landvaluededuction"] = this.LandValueDeduction;
+            data["totaltax"] = this.TotalVATTax;
+            data["bsd_freightamount"] = this.MaintenanceFee;
+            data["totalamount_base"] = this.TotalAmount;
 
             data["bsd_numberofmonthspaidmf"] = this.UnitInfor.bsd_numberofmonthspaidmf;
             data["bsd_managementfee"] = this.UnitInfor.bsd_managementamountmonth;
@@ -651,7 +655,45 @@ namespace ConasiCRM.Portable.ViewModels
                 data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
 
+            return data;
+        }
 
+        public async Task<bool> CreateQuoteProduct()
+        {
+            string path = "/quotedetails";
+            var content = await GetContentQuoteProduct();
+            CrmApiResponse apiResponse = await CrmHelper.PostData(path, content);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<object> GetContentQuoteProduct()
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["quotedetailid"] = Guid.NewGuid();
+            data["isproductoverridden"] = false;
+            data["ispriceoverridden"] = false;
+            data["priceperunit"] = this.UnitInfor.price;
+            data["quantity"] = 1;
+            data["quotedetailname"] = this.TitleQuote;
+            data["tax"] = this.TotalVATTax;
+            data["manualdiscountamount"] = this.TotalDiscount;
+            data["extendedamount"] = this.UnitInfor.price + this.TotalVATTax - this.TotalDiscount;
+            
+            data["quoteid@odata.bind"] = $"/quotes({this.Quote.quoteid})";
+            data["uomid@odata.bind"] = $"/products({this.UnitInfor._defaultuomid_value})";
+            data["productid@odata.bind"] = $"/products({this.UnitInfor.productid})";
+
+            //if (UserLogged.ManagerId != Guid.Empty)
+            //{
+            //    data["OwnerId@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            //}
             return data;
         }
 
