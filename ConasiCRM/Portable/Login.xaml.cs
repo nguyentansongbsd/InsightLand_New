@@ -17,10 +17,10 @@ namespace ConasiCRM.Portable
     public partial class Login : ContentPage
     {
         private string _userName;
-        public string UserName { get => _userName ; set { _userName = value;OnPropertyChanged(nameof(UserName)); } }
+        public string UserName { get => _userName; set { _userName = value; OnPropertyChanged(nameof(UserName)); } }
         private string _password;
-        public string Password { get=>_password; set { _password = value;OnPropertyChanged(nameof(Password)); } }
-        private bool _eyePass =false;
+        public string Password { get => _password; set { _password = value; OnPropertyChanged(nameof(Password)); } }
+        private bool _eyePass = false;
         public bool EyePass { get => _eyePass; set { _eyePass = value; OnPropertyChanged(nameof(EyePass)); } }
         private bool _issShowPass = true;
         public bool IsShowPass { get => _issShowPass; set { _issShowPass = value; OnPropertyChanged(nameof(IsShowPass)); } }
@@ -31,7 +31,7 @@ namespace ConasiCRM.Portable
             InitializeComponent();
             this.BindingContext = this;
 
-            if (UserLogged.IsLogged)
+            if (UserLogged.IsLogged && UserLogged.IsSaveInforUser)
             {
                 checkboxRememberAcc.IsChecked = true;
                 UserName = UserLogged.User;
@@ -69,8 +69,9 @@ namespace ConasiCRM.Portable
             {
                 Grid.SetRow(lblUserName, 0);
                 Grid.SetRow(entryUserName, 0);
-                Grid.SetRowSpan(entryUserName, 2);
-                entryUserName.Placeholder = "Tên đăng nhập";
+                Grid.SetRowSpan(entryUserName, 2);             
+                
+                entryUserName.Placeholder = "Tên đăng nhập";               
             }
         }
 
@@ -103,7 +104,7 @@ namespace ConasiCRM.Portable
                 {
                     lblEyePass.Margin = new Thickness(0, 0, 0, -10);
                 }
-                
+
                 EyePass = false;
                 entryPassword.Placeholder = "Mật khẩu";
             }
@@ -127,6 +128,14 @@ namespace ConasiCRM.Portable
         private void ShowHidePass_Tapped(object sender, EventArgs e)
         {
             IsShowPass = !IsShowPass;
+            if(IsShowPass)
+            {
+                lblEyePass.Text = "\uf070";
+            }
+            else
+            {
+                lblEyePass.Text = "\uf06e";
+            }    
         }
 
         private async void Button_Clicked(object sender, EventArgs e)
@@ -144,28 +153,14 @@ namespace ConasiCRM.Portable
             try
             {
                 LoadingHelper.Show();
-                var client = BsdHttpClient.Instance();
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/common/oauth2/token");//OrgConfig.LinkLogin
-                var formContent = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("resource", OrgConfig.Resource),
-                        //new KeyValuePair<string, string>("client_id", OrgConfig.ClientId),
-                        //new KeyValuePair<string, string>("client_secret", OrgConfig.ClientSecret),
-                        //new KeyValuePair<string, string>("grant_type", "client_credentials")
-                        new KeyValuePair<string, string>("client_id", "2ad88395-b77d-4561-9441-d0e40824f9bc"),
-                        new KeyValuePair<string, string>("username", OrgConfig.UserName),
-                        new KeyValuePair<string, string>("password", OrgConfig.Password),
-                        new KeyValuePair<string, string>("grant_type", "password"),
-                        
-                    });
-                request.Content = formContent;
-                var response = await client.SendAsync(request);
+                var response = await LoginHelper.Login();
                 if (response.IsSuccessStatusCode)
                 {
                     var body = await response.Content.ReadAsStringAsync();
                     GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
                     App.Current.Properties["Token"] = tokenData.access_token;
-                    
+                    App.Current.Properties["RefreshToken"] = tokenData.refresh_token;
+
                     EmployeeModel employeeModel = await LoginUser();
                     if (employeeModel != null)
                     {
@@ -183,25 +178,27 @@ namespace ConasiCRM.Portable
                             return;
                         }
 
+                        ImeiNum = await DependencyService.Get<INumImeiService>().GetImei();
+
                         if (string.IsNullOrWhiteSpace(employeeModel.bsd_imeinumber))
                         {
-                            ImeiNum = await DependencyService.Get<INumImeiService>().GetImei();
-                            await UpdateImei(employeeModel.bsd_employeeid);
+                            await UpdateImei(employeeModel.bsd_employeeid.ToString()) ;
                         }
+                        //else if (employeeModel.bsd_imeinumber != ImeiNum)
+                        //{
+                        //    LoadingHelper.Hide();
+                        //    ToastMessageHelper.ShortMessage("Tài khoản không thể đăng nhập trên thiết bị này");
+                        //    return;
+                        //}
 
-                        if (checkboxRememberAcc.IsChecked)
-                        {
-                            UserLogged.User = employeeModel.bsd_name;
-                            UserLogged.Password = employeeModel.bsd_password;
-                            UserLogged.IsLogged = true;
-                        }
-                        else
-                        {
-                            UserLogged.User = string.Empty;
-                            UserLogged.Password = string.Empty;
-                            UserLogged.IsLogged = false;
-                        }
-
+                        UserLogged.Id = employeeModel.bsd_employeeid;
+                        UserLogged.User = employeeModel.bsd_name;
+                        UserLogged.Password = employeeModel.bsd_password;
+                        UserLogged.ManagerId = employeeModel.manager_id;
+                        UserLogged.ManagerName = employeeModel.manager_name;
+                        UserLogged.IsSaveInforUser = checkboxRememberAcc.IsChecked;
+                        UserLogged.IsLogged = true;
+                        
                         App.Current.MainPage = new AppShell();
                         await Task.Delay(1);
                         LoadingHelper.Hide();
@@ -229,10 +226,15 @@ namespace ConasiCRM.Portable
                     <attribute name='createdon' />
                     <attribute name='bsd_password' />
                     <attribute name='bsd_imeinumber' />
+                    <attribute name='bsd_manager' />
                     <order attribute='bsd_name' descending='false' />
                     <filter type='and'>
                       <condition attribute='bsd_name' operator='eq' value='{UserName}' />
                     </filter>
+                    <link-entity name='systemuser' from='systemuserid' to='bsd_manager' visible='false' link-type='outer' alias='a_548d21d0fee9eb11bacb002248163181'>
+                      <attribute name='fullname' alias='manager_name'/>
+                      <attribute name='systemuserid' alias='manager_id' />
+                    </link-entity>
                   </entity>
                 </fetch>";
 
@@ -246,7 +248,7 @@ namespace ConasiCRM.Portable
                 return result.value.FirstOrDefault();
             }
         }
-        
+
         public async Task UpdateImei(string employeeId)
         {
             string path = $"/bsd_employees({employeeId})";
@@ -256,7 +258,7 @@ namespace ConasiCRM.Portable
             {
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Không cập nhật được thông tin Imei");
-                return ;
+                return;
             }
         }
 

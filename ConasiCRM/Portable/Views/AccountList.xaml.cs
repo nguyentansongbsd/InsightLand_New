@@ -61,9 +61,9 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = e.Item as AccountListModel;
             AccountForm newPage = new AccountForm(item.accountid);
-            newPage.CheckSingleAccount = async (CheckSingleAccount) =>
+            newPage.OnCompleted = async (OnCompleted) =>
             {
-                if (CheckSingleAccount == true)
+                if (OnCompleted == true)
                 {
                     await Navigation.PushAsync(newPage);                 
                 }

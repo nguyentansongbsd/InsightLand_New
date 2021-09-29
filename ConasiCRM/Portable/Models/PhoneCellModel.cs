@@ -8,15 +8,18 @@ namespace ConasiCRM.Portable.Models
     public class PhoneCellModel : BaseViewModel
     {
         public Guid activityid { get; set; }
-        public string subject { get; set; }
-        public string description { get; set; }
+        private string _subject;
+        public string subject { get => _subject; set { _subject = value; OnPropertyChanged(nameof(subject)); } }
+
+        private string _description;
+        public string description { get => _description; set { _description = value; OnPropertyChanged(nameof(description)); } }
         public DateTime? _scheduledstart;
         public DateTime? scheduledstart
         {
-            get => this._scheduledstart;
+            get => _scheduledstart;
             set
             {
-                if (_scheduledstart != value)
+                if (value.HasValue)
                 {
                     _scheduledstart = value;
                     OnPropertyChanged(nameof(scheduledstart));
@@ -39,10 +42,10 @@ namespace ConasiCRM.Portable.Models
         public DateTime? _scheduledend;
         public DateTime? scheduledend
         {
-            get => this._scheduledend;
+            get => _scheduledend;
             set
             {
-                if (_scheduledend != value)
+                if (value.HasValue)
                 {
                     _scheduledend = value;
                     OnPropertyChanged(nameof(scheduledend));
@@ -72,11 +75,8 @@ namespace ConasiCRM.Portable.Models
             get => _durationValue;
             set
             {
-                if (_durationValue != value)
-                {
-                    _durationValue = value;
-                    OnPropertyChanged(nameof(durationValue));
-                }
+                _durationValue = value;
+                OnPropertyChanged(nameof(durationValue));
             }
         }
         public Guid account_id { get; set; }
@@ -193,10 +193,15 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
-        public string phonenumber { get; set; }
+        private string _phonenumber;
+        public string phonenumber { get => _phonenumber; set { _phonenumber = value; OnPropertyChanged(nameof(phonenumber)); } }
         public bool directioncode { get; set; }
 
         // call from
+        private string _call_from;
+        public string call_from { get => _call_from; set { _call_from = value; OnPropertyChanged(nameof(call_from)); } }
 
+        private string _call_to;
+        public string call_to { get => _call_to; set { _call_to = value; OnPropertyChanged(nameof(call_to)); } }
     }
 }

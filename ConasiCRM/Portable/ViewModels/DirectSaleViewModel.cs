@@ -1,70 +1,74 @@
-﻿using ConasiCRM.Portable.Controls;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Telerik.XamarinForms.Primitives;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class DirectSaleViewModel : FormLookupViewModel
+    public class DirectSaleViewModel : BaseViewModel
     {
+        public ObservableCollection<ProjectList> Projects { get; set; } = new ObservableCollection<ProjectList>();
+        public ObservableCollection<OptionSet> PhasesLaunchs { get; set; } = new ObservableCollection<OptionSet>();
+        
+        private List<OptionSet> _viewOptions;
+        public List<OptionSet> ViewOptions { get => _viewOptions; set { _viewOptions = value;OnPropertyChanged(nameof(ViewOptions)); } }
 
-        public ObservableCollection<OptionSet> DirectionOptions { get; set; }
-        public ObservableCollection<OptionSet> ViewOptions { get; set; }
-        public ObservableCollection<OptionSet> UnitStatusOptions { get; set; }
+        private List<Block> _blocks;
+        public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
 
-        private ObservableCollection<string> _selectedDirections;
+        private List<OptionSet> _directionOptions;
+        public List<OptionSet> DirectionOptions { get=>_directionOptions; set { _directionOptions = value;OnPropertyChanged(nameof(DirectionOptions)); } }
 
-        public ObservableCollection<string> SelectedDirections { get => _selectedDirections; set { _selectedDirections = value; OnPropertyChanged(nameof(SelectedDirections)); } }
-        public ObservableCollection<string> SelectedViews { get; set; }
-        public ObservableCollection<string> SelectedUnitStatus { get; set; }
+        private List<string> _selectedDirections;
+        public List<string> SelectedDirections { get => _selectedDirections; set { _selectedDirections = value; OnPropertyChanged(nameof(SelectedDirections)); } }
+
+        private List<OptionSet> _unitStatusOptions;
+        public List<OptionSet> UnitStatusOptions { get=>_unitStatusOptions; set { _unitStatusOptions = value;OnPropertyChanged(nameof(UnitStatusOptions)); } }
+
+        private List<string> _selectedUnitStatus;
+        public List<string> SelectedUnitStatus { get => _selectedUnitStatus; set { _selectedUnitStatus = value; OnPropertyChanged(nameof(SelectedUnitStatus)); } }
+
+        private OptionSet _phasesLaunch;
+        public OptionSet PhasesLaunch { get => _phasesLaunch; set { _phasesLaunch = value; OnPropertyChanged(nameof(PhasesLaunch)); } }
+
+        private List<NetAreaDirectSaleModel> _netAreas;
+        public List<NetAreaDirectSaleModel> NetAreas { get=>_netAreas; set { _netAreas = value; OnPropertyChanged(nameof(NetAreas)); } }
+
+        private NetAreaDirectSaleModel _netArea;
+        public NetAreaDirectSaleModel NetArea { get => _netArea; set { _netArea = value; OnPropertyChanged(nameof(NetArea)); } }
+
+        private List<PriceDirectSaleModel> _prices;
+        public List<PriceDirectSaleModel> Prices { get => _prices; set { _prices = value; OnPropertyChanged(nameof(Prices)); } }
+
+        private PriceDirectSaleModel _price;
+        public PriceDirectSaleModel Price { get => _price; set { _price = value; OnPropertyChanged(nameof(Price)); } }
 
         private string _unitCode;
-        public string UnitCode { get =>_unitCode; set { _unitCode = value;OnPropertyChanged(nameof(UnitCode)); } }
+        public string UnitCode { get => _unitCode; set { _unitCode = value; OnPropertyChanged(nameof(UnitCode)); } }
 
-        private decimal? _minNetArea;
-        public decimal? minNetArea { get =>_minNetArea; set { _minNetArea = value; OnPropertyChanged(nameof(minNetArea)); } }
-
-        private decimal? _maxNetArea;
-        public decimal? maxNetArea { get => _maxNetArea; set { _maxNetArea = value; OnPropertyChanged(nameof(maxNetArea)); } }
-
-        private decimal? _minPrice;
-        public decimal? minPrice { get => _minPrice; set { _minPrice = value;OnPropertyChanged(nameof(minPrice)); } }
-
-        private decimal? _maxPrice;
-        public decimal? maxPrice { get => _maxPrice; set { _maxPrice = value; OnPropertyChanged(nameof(maxPrice)); } }
-
-        private ConasiCRM.Portable.Models.LookUp _project;
-        public Models.LookUp Project
+        private ProjectList _project;
+        public ProjectList Project
         {
             get => _project;
             set
             {
                 if (_project != value)
                 {
-                    this.PhasesLanch = null;
-                    this._project = value;
+                    PhasesLaunch = null;
+                    PhasesLaunchs.Clear();
+                    _project = value;
                     OnPropertyChanged(nameof(Project));
+                    
                 }
             }
         }
 
-        private bool _isEvent;
-        public bool IsEvent
+        private bool? _isEvent =false;
+        public bool? IsEvent
         {
-            get
-            {
-                return _isEvent;
-            }
+            get => _isEvent;
             set
             {
                 if (_isEvent != value)
@@ -75,110 +79,81 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        private bool _isCollapse;
-        public bool IsCollapse
-        {
-            get
-            {
-                return _isCollapse;
-            }
-            set
-            {
-                if (_isCollapse != value)
-                {
-                    this._isCollapse = value;
-                    OnPropertyChanged(nameof(IsCollapse));
-                }
-            }
-        }
-
-        private Models.LookUp _phasesLanch;
-        public Models.LookUp PhasesLanch
-        {
-            get
-            {
-                return _phasesLanch;
-            }
-            set
-            {
-                if (_phasesLanch != value)
-                {
-                    this._phasesLanch = value;
-                    OnPropertyChanged(nameof(PhasesLanch));
-                }
-            }
-        }
-
-        public LookUpConfig ProjectConfig { get; set; }
-
-        public LookUpConfig PhasesLanchConfig { get; set; }
-
         public DirectSaleViewModel()
         {
-            SelectedViews = new ObservableCollection<string>();
-            SelectedDirections = new ObservableCollection<string>();
-            SelectedUnitStatus = new ObservableCollection<string>();
+        }
 
-            this.IsBusy = true;
-            DirectionOptions = new ObservableCollection<OptionSet>()
-            {
-                new OptionSet("100000000", "Đông"),
-                new OptionSet("100000001", "Tây"),
-                new OptionSet("100000002", "Nam"),
-                new OptionSet("100000003", "Bắc"),
-                new OptionSet("100000004", "Tây Bắc"),
-                new OptionSet("100000005", "Đông Bắc"),
-                new OptionSet("100000006", "Tây Nam"),
-                new OptionSet("100000007", "Đông Nam"),
-                new OptionSet("100000008", "Apartment"),
-                new OptionSet("100000009", "Condotel"),
-            };
-            ViewOptions = new ObservableCollection<OptionSet>()
-            {
-                new OptionSet("100000000","Sông/biển/hồ"),
-                new OptionSet("100000001","Núi"),
-                new OptionSet("100000004","Thành phố"),
-                new OptionSet("100000005","Hồ bơi"),
-                new OptionSet("100000002","Đông"),
-                new OptionSet("100000003","Tây"),
-                new OptionSet("100000006","Biển"),
-            };
-            UnitStatusOptions = new ObservableCollection<OptionSet>()
-            {
-                new OptionSet("1","Preparing"),
-                new OptionSet("100000000","Available"),
-                new OptionSet("100000004","Queuing"),
-                new OptionSet("100000001","1st Installment"),
-                new OptionSet("100000005","Collected"),
-                new OptionSet("100000003","Deposited"),
-                new OptionSet("100000006","Reserve"),
-                new OptionSet("100000002","Sold"),
-            };
+        public async Task LoadProject()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                <entity name='bsd_project'>
+                                    <attribute name='bsd_projectid'/>
+                                    <attribute name='bsd_projectcode'/>
+                                    <attribute name='bsd_name'/>
+                                    <attribute name='createdon' />
+                                    <order attribute='bsd_name' descending='false' />
+                                  </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectList>>("bsd_projects", fetchXml);
+            if (result == null || result.value.Any() == false) return;
 
-            ProjectConfig = new LookUpConfig()
+             var data = result.value;
+            foreach (var item in data)
             {
-                FetchXml = @"<fetch version='1.0' count='10' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                    <entity name='bsd_project'>
-                        <attribute name='bsd_projectid' alias='Id' />
-                        <attribute name='bsd_name' alias='Name' />
-                        <attribute name='createdon' />
-                        <order attribute='bsd_name' descending='false' />
+                Projects.Add(item);
+            }
+        }
+
+        public async Task LoadPhasesLanch()
+        {
+            if (Project == null) return;
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                        <entity name='bsd_phaseslaunch'>
+                        <attribute name='bsd_name' alias='Label' />
+                        <attribute name='bsd_phaseslaunchid' alias='Val' />
+                        <order attribute='createdon' descending='true' />
                         <filter type='and'>
-                          <condition attribute='bsd_name' operator='like' value='%{1}%' />
+                          <condition attribute='statecode' operator='eq' value='0' />
+                          <condition attribute='statuscode' operator='eq' value='100000000' />
+                          <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + Project.bsd_projectid + @"' />
                         </filter>
                       </entity>
-                </fetch>",
-                EntityName = "bsd_projects",
-                PropertyName = "Project",
-                LookUpTitle = "Chọn dự án"
-            };
+                    </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_phaseslaunchs", fetchXml);
+            if (result == null || result.value.Any() == false) return;
 
-            PhasesLanchConfig = new LookUpConfig()
+            var data = result.value;
+            foreach (var item in data)
             {
-                EntityName = "bsd_phaseslaunchs",
-                PropertyName = "PhasesLanch",
-                LookUpTitle = "Chọn đợt mở bán"
-            };
+                PhasesLaunchs.Add(item);
+            }
+        }
+
+        public async Task LoadBlocks()
+        {
+            string conditionPhaselaunch = string.Empty;
+            conditionPhaselaunch = this.PhasesLaunch != null ? $@"<link-entity name='product' from='bsd_blocknumber' to='bsd_blockid' link-type='inner' alias='al'>
+                                      <filter type='and'>
+                                        <condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='{this.PhasesLaunch.Val}' />
+                                      </filter>
+                                    </link-entity>" : "";
+
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+                                  <entity name='bsd_block'>
+                                    <attribute name='bsd_name' />
+                                    <attribute name='bsd_blockid' />
+                                    <order attribute='bsd_name' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_project' operator='eq' uiname='THẢO ĐIỀN GREEN' uitype='bsd_project' value='{this.Project.bsd_projectid}' />
+                                    </filter>
+                                    {conditionPhaselaunch}
+                                  </entity>
+                                </fetch>";
+
+            var block_result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Block>>("bsd_blocks", fetchXml);
+            if (block_result == null || block_result.value.Count == 0) return;
+
+            this.Blocks = block_result.value;
         }
     }
 }

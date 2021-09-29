@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
+
 namespace ConasiCRM.Portable.Models
 {
-    public class HoatDongListModel
+    public class HoatDongListModel : BaseViewModel
     {
         public Guid activityid { get; set; }
         public string subject { get; set; }
@@ -97,12 +99,12 @@ namespace ConasiCRM.Portable.Models
         public DateTime scheduledstart { get; set; }
         public string scheduledstart_format
         {
-            get => StringHelper.DateFormat(this.scheduledstart);
+            get => StringHelper.DateFormat(this.scheduledstart.ToLocalTime());
         }
         public DateTime scheduledend { get; set; }
         public string scheduledend_format
         {
-            get => StringHelper.DateFormat(this.scheduledend);
+            get => StringHelper.DateFormat(this.scheduledend.ToLocalTime());
         }
         public DateTime createdon { get; set; }
         public string createdon_format

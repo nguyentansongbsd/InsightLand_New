@@ -4,11 +4,11 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Converters
 {
-    public class NullToHideConverter :IValueConverter
+    public class NullToHideConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-             if (value == null)
+            if (value == null)
             {
                 return false;
             }

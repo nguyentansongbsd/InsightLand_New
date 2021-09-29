@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -30,8 +31,34 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _campaign;
         public OptionSet Campaign { get => _campaign; set { _campaign = value; OnPropertyChanged(nameof(Campaign)); } }
 
-        private string _addressComposite;
-        public string AddressComposite { get => _addressComposite; set { _addressComposite = value; OnPropertyChanged(nameof(AddressComposite)); } }
+        private OptionSet _rating;
+        public OptionSet Rating { get => _rating; set { _rating = value; OnPropertyChanged(nameof(Rating)); } }
+
+        private List<OptionSet> _ratings;
+        public List<OptionSet> Ratings { get => _ratings; set { _ratings = value; OnPropertyChanged(nameof(Ratings)); } }
+
+        private bool _isShowbtnClearAddress;
+        public bool IsShowbtnClearAddress { get => _isShowbtnClearAddress; set { _isShowbtnClearAddress = value; OnPropertyChanged(nameof(IsShowbtnClearAddress)); } }
+
+        //IsShowbtnClearAddress
+        private string _addressComposite; 
+        public string AddressComposite
+        {
+            get => _addressComposite;
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(_addressComposite))
+                {
+                    IsShowbtnClearAddress = true;
+                }
+                else
+                {
+                    IsShowbtnClearAddress = false;
+                }
+                _addressComposite = value;
+                OnPropertyChanged(nameof(AddressComposite));
+            }
+        }
 
         private LookUp _addressCountry;
         public LookUp AddressCountry
@@ -65,15 +92,8 @@ namespace ConasiCRM.Portable.ViewModels
         private LookUp _addressCity;
         public LookUp AddressCity { get => _addressCity; set { _addressCity = value; OnPropertyChanged(nameof(AddressCity)); } }
 
-        private string _addressLine3;
-        public string AddressLine3 { get => _addressLine3; set { _addressLine3 = value; OnPropertyChanged(nameof(AddressLine3)); } }
-
-        private string _addressLine2;
-        public string AddressLine2 { get => _addressLine2; set { _addressLine2 = value; OnPropertyChanged(nameof(AddressLine2)); } }
-
         private string _addressLine1;
         public string AddressLine1 { get => _addressLine1; set { _addressLine1 = value; OnPropertyChanged(nameof(AddressLine1)); } }
-
 
         public ObservableCollection<LookUp> list_country_lookup { get; set; } = new ObservableCollection<LookUp>();
         public ObservableCollection<LookUp> list_province_lookup { get; set; } = new ObservableCollection<LookUp>();
@@ -93,7 +113,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                           <entity name='lead'>
-                            <attribute name='fullname' />
+                            <attribute name='lastname' />
                             <attribute name='companyname' />
                             <attribute name='subject' alias='bsd_topic_label'/>
                             <attribute name='statuscode' />
@@ -116,6 +136,7 @@ namespace ConasiCRM.Portable.ViewModels
                             <attribute name='emailaddress1' />
                             <attribute name='createdon' />
                             <attribute name='leadid' />
+                            <attribute name='leadqualitycode' />
                             <order attribute='createdon' descending='true' />
                             <filter type='and'>
                                 <condition attribute='leadid' operator='eq' value='{" + LeadId + @"}' />
@@ -126,6 +147,9 @@ namespace ConasiCRM.Portable.ViewModels
                             <link-entity name='campaign' from='campaignid' to='campaignid' visible='false' link-type='outer'>
                                 <attribute name='name'  alias='campaignid_label'/>
                             </link-entity>
+                            <filter type='and'>
+                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
                           </entity>
                         </fetch>";
 
@@ -133,8 +157,7 @@ namespace ConasiCRM.Portable.ViewModels
             var tmp = result.value.FirstOrDefault();
             if (result == null || tmp == null)
             {
-                await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-                await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
+                return;
             }
 
             this.singleLead = tmp;
@@ -155,6 +178,8 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
+
+
         }
 
         public async Task<CrmApiResponse> createLead()
@@ -177,8 +202,7 @@ namespace ConasiCRM.Portable.ViewModels
             IDictionary<string, object> data = new Dictionary<string, object>();
             data["leadid"] = singleLead.leadid;
             data["subject"] = singleLead.bsd_topic_label;
-            data["fullname"] = singleLead.fullname;
-            data["firstname"] = singleLead.fullname;
+            data["lastname"] = singleLead.lastname;
             data["mobilephone"] = singleLead.mobilephone;
             data["telephone1"] = singleLead.telephone1;
             data["jobtitle"] = singleLead.jobtitle;
@@ -193,11 +217,18 @@ namespace ConasiCRM.Portable.ViewModels
             data["address1_country"] = singleLead.address1_country;
             data["description"] = singleLead.description;
             data["industrycode"] = singleLead.industrycode;
-            //if (!string.IsNullOrWhiteSpace(singleLead.revenue))
-            //{
-            data["revenue"] = singleLead.revenue; //decimal.Parse(singleLead.revenue);
-            //}
-            data["numberofemployees"] = singleLead.numberofemployees;
+            data["revenue"] = singleLead?.revenue;
+            data["leadqualitycode"] = Rating.Val;
+
+            if (!string.IsNullOrWhiteSpace(singleLead.numberofemployees))
+            {
+                data["numberofemployees"] = int.Parse(singleLead.numberofemployees);
+            }
+            else
+            {
+                data["numberofemployees"] = null;
+            }
+
             data["sic"] = singleLead.sic;
             data["donotsendmm"] = singleLead.donotsendmm.ToString();
             data["lastusedincampaign"] = singleLead.lastusedincampaign.HasValue ? (DateTime.Parse(singleLead.lastusedincampaign.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;
@@ -218,6 +249,14 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 data["campaignid@odata.bind"] = "/campaigns(" + singleLead._campaignid_value + ")"; /////Lookup Field
+            }
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
             return data;
         }
@@ -333,7 +372,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_countryname' alias='Name'/>
                                     <attribute name='bsd_countryid' alias='Id'/>
                                     <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_countryname' descending='false' />
+                                    <order attribute='bsd_priority' descending='false' />
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
@@ -378,7 +417,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_provincename' alias='Name'/>
                                     <attribute name='new_provinceid' alias='Id'/>
                                     <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_provincename' descending='false' />
+                                    <order attribute='bsd_priority' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='bsd_country' operator='eq' value='" + AddressCountry.Id + @"' />
                                     </filter>
@@ -436,7 +475,7 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_districts", fetch);
-            if (result == null || result.value.Count ==0)return;
+            if (result == null || result.value.Count == 0) return;
 
             foreach (var x in result.value)
             {

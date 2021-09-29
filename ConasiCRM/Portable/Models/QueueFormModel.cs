@@ -7,8 +7,11 @@ namespace ConasiCRM.Portable.Models
 {
     public class QueueFormModel : BaseViewModel
     {
+        public Guid opportunityid { get; set; }
         public string bsd_queuenumber { get; set; }
         public string name { get; set; }
+        public decimal budgetamount { get; set; }
+        public string description { get; set; }
 
         /// <summary>
         /// Su dung contact_id + contact_name khi lay du lieu cua queue ve tu form update.
@@ -21,21 +24,32 @@ namespace ConasiCRM.Portable.Models
         public Guid account_id { get; set; }
         public string account_name { get; set; }
 
+        private string _customer_name;
+        public string customer_name { get => _customer_name; set { _customer_name = value; OnPropertyChanged(nameof(customer_name)); } }
+
         public Guid bsd_customerreferral_account_id { get; set; }
         public string bsd_customerreferral_name { get; set; }
         public Guid bsd_salesagentcompany_account_id { get; set; }
         public string bsd_salesagentcompany_name { get; set; }
+        public string bsd_nameofstaffagent { get; set; }
+
         public Guid bsd_collaborator_contact_id { get; set; }
         public string bsd_collaborator_name { get; set; }
 
         public int statuscode { get; set; } // chi su dung trong form update.
 
-        public DateTime createdon { get; set; } // Thời gian đặt chỗ 
+        public DateTime _createdon;
+        public DateTime createdon { get => _createdon.AddHours(7); set { _createdon = value; OnPropertyChanged(nameof(createdon)); } } // Thời gian đặt chỗ 
 
-        public DateTime bsd_queuingexpired { get; set; } // Thời gian hết hạn
+        public DateTime _bsd_queuingexpired;
+        public DateTime bsd_queuingexpired { get => _bsd_queuingexpired.AddHours(7); set { _bsd_queuingexpired = value; OnPropertyChanged(nameof(bsd_queuingexpired)); } } // Thời gian đặt chỗ  // Thời gian hết hạn
+
+        public DateTime _bsd_bookingtime;
+        public DateTime bsd_bookingtime { get => _bsd_bookingtime.AddHours(7); set { _bsd_bookingtime = value; OnPropertyChanged(nameof(bsd_bookingtime)); } } // Thời gian bat dau
 
         public Guid bsd_project_id { get; set; }
         public string bsd_project_name { get; set; } // dự án
+        public decimal bsd_bookingf { get; set; }
 
         public Guid bsd_phaseslaunch_id { get; set; }
         public string bsd_phaseslaunch_name { get; set; }
@@ -48,7 +62,9 @@ namespace ConasiCRM.Portable.Models
         public string bsd_floor_name { get; set; }
 
         public Guid bsd_units_id { get; set; }
-        public string bsd_units_name { get; set; }
+        public string _bsd_units_name;
+        public string bsd_units_name { get => _bsd_units_name; set { _bsd_units_name = value; OnPropertyChanged(nameof(bsd_units_name)); } }
+        public decimal bsd_units_queuingfee { get; set; }
 
         public Guid pricelist_id { get; set; }
         public string pricelist_name { get; set; }
@@ -59,10 +75,22 @@ namespace ConasiCRM.Portable.Models
 
         public bool bsd_collectedqueuingfee { get; set; } // Đã nhận tiền
 
-        public decimal bsd_queuingfee { get; set; } // phí đặt chỗ
+        private decimal _bsd_queuingfee;
+        public decimal bsd_queuingfee { get => _bsd_queuingfee; set { _bsd_queuingfee = value; OnPropertyChanged(nameof(bsd_queuingfee)); } } // phí đặt chỗ
 
         public decimal landvalue { get; set; } // giá trị đất
 
         public decimal unit_price { get; set; } // Giá bán , tên gốc price => đổi lại tránh trùng khi trong form update khi lấy thông tin về.
+        public int bsd_longtime { get; set; }
+        public int bsd_shorttime { get; set; }
+        public DateTime _queue_createdon { get; set; }
+        public DateTime _queue_bsd_queuingexpired { get; set; }
+        public DateTime _queue_bsd_bookingtime { get; set; }
+        public int UnitStatusCode { get; set; }
+
+        public string bsd_bookingid { get; set; }
+        public string _defaultuomid_value { get; set; }
+        public string _transactioncurrencyid_value { get; set; }
+        public decimal bsd_taxpercent { get; set; }
     }
 }

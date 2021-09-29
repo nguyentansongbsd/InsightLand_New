@@ -366,5 +366,11 @@ namespace ConasiCRM.Portable.Models
 
         private ImageSource _bsd_matsaucmnd_source;
         public ImageSource bsd_matsaucmnd_source { get => _bsd_matsaucmnd_source; set { _bsd_matsaucmnd_source = value;  OnPropertyChanged(nameof(bsd_matsaucmnd_source)); } }
+
+        private string _bsd_postalcode;
+        public string bsd_postalcode { get { return _bsd_postalcode; } set { _bsd_postalcode = value; OnPropertyChanged(nameof(bsd_postalcode)); } }
+
+        public Guid employee_id { get; set; }
+
     }
 }

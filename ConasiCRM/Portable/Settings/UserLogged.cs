@@ -9,6 +9,12 @@ namespace ConasiCRM.Portable.Settings
     {
         private static ISettings AppSettings => CrossSettings.Current;
 
+        public static Guid Id
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Id), Guid.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(Id), value);
+        }
+
         public static string Password
         {
             get => AppSettings.GetValueOrDefault(nameof(Password), string.Empty);
@@ -23,6 +29,24 @@ namespace ConasiCRM.Portable.Settings
         {
             get => AppSettings.GetValueOrDefault(nameof(IsLogged), false);
             set => AppSettings.AddOrUpdateValue(nameof(IsLogged), value);
+        }
+
+        public static Guid ManagerId
+        {
+            get => AppSettings.GetValueOrDefault(nameof(ManagerId), Guid.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(ManagerId), value);
+        }
+
+        public static string ManagerName
+        {
+            get => AppSettings.GetValueOrDefault(nameof(ManagerName), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(ManagerName), value);
+        }
+
+        public static bool IsSaveInforUser
+        {
+            get => AppSettings.GetValueOrDefault(nameof(IsSaveInforUser), false);
+            set => AppSettings.AddOrUpdateValue(nameof(IsSaveInforUser), value);
         }
     }
 }

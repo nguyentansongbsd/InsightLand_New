@@ -1,14 +1,15 @@
 ﻿using ConasiCRM.Portable.Helper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
+using ConasiCRM.Portable.Helpers;
+using FFImageLoading.Forms;
+using System.Collections.Generic;
+using Stormlion.PhotoBrowser;
+using System.Linq;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -16,63 +17,67 @@ namespace ConasiCRM.Portable.Views
     public partial class UnitInfo : ContentPage
     {
         public Action<bool> OnCompleted;
+        public static bool? NeedToRefreshQueue = null;
         private UnitInfoViewModel viewModel;
-        private Guid Id;
+        //public List<Photo> GetPhotos = new List<Photo>();
+
         public UnitInfo(Guid id)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new UnitInfoViewModel();
-            this.Id = id;
-            Load();
+            NeedToRefreshQueue = false;
+            viewModel.UnitId = id;
+            Init();
         }
-        public async void Load()
+        public async void Init()
         {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-              <entity name='product'>
-                <attribute name='productid' />
-                <attribute name='bsd_units' />
-                <attribute name='name' />
-                <attribute name='productnumber' />
-                <attribute name='bsd_queuingfee' />
-                <attribute name='bsd_depositamount' />
-                <attribute name='bsd_vippriority' />
-                <attribute name='statuscode' />
-                <attribute name='bsd_areavariance' />
-                <attribute name='bsd_constructionarea' />
-                <attribute name='bsd_netsaleablearea' />
-                <attribute name='price' />
-                <attribute name='bsd_landvalueofunit' />
-                <attribute name='bsd_landvalue' />
-                <attribute name='bsd_maintenancefeespercent' />
-                <attribute name='bsd_maintenancefees' />
-                <attribute name='bsd_taxpercent' />
-                <attribute name='bsd_vat' />
-                <attribute name='bsd_totalprice' />
-                <attribute name='bsd_estimatehandoverdate' />
-                <attribute name='bsd_numberofmonthspaidmf' />
-                <attribute name='bsd_managementamountmonth' />
-                <attribute name='bsd_handovercondition' />
-                <filter type='and'>
-                  <condition attribute='productid' operator='eq' uitype='product' value='" + Id.ToString() + @"' />
-                </filter>
-                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' visible='false' link-type='outer' alias='a_a77d98e66ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name' alias='bsd_project_name' />
-                </link-entity>
-                <link-entity name='bsd_floor' from='bsd_floorid' to='bsd_floor' visible='false' link-type='outer' alias='a_4d73a1e06ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name' alias='bsd_floor_name' />
-                </link-entity>
-                <link-entity name='bsd_block' from='bsd_blockid' to='bsd_blocknumber' visible='false' link-type='outer' alias='a_290ca3da6ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name' alias='bsd_block_name' />
-                </link-entity>
-                <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
-                  <attribute name='bsd_name'  alias='bsd_unittype_name'/>
-                </link-entity>
-              </entity>
-            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<UnitInfoModel>>("products", fetchXml);
-            if (result.value.Count != 0)
+            //GetPhotos.Add(new Photo() { URL = "unit1.jpg" });
+            //GetPhotos.Add(new Photo() { URL = "unit2.jpg" });
+
+            //carouseView.ItemsSource = GetPhotos;
+
+            await Task.WhenAll(
+                viewModel.LoadUnit(),
+                viewModel.CheckShowBtnBangTinhGia()
+                );
+            
+            if (viewModel.UnitInfo != null)
             {
-                viewModel.UnitInfo = result.value.FirstOrDefault();
+                VisualStateManager.GoToState(radborderThongTin, "Active");
+                VisualStateManager.GoToState(radborderGiaoDich, "InActive");
+                VisualStateManager.GoToState(lblThongTin, "Active");
+                VisualStateManager.GoToState(lblGiaoDich, "InActive");
+
+                viewModel.StatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.UnitInfo.statuscode.ToString());
+                if (!string.IsNullOrWhiteSpace(viewModel.UnitInfo.bsd_direction))
+                {
+                    viewModel.Direction = DirectionData.GetDiretionById(viewModel.UnitInfo.bsd_direction);
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.UnitInfo.bsd_view))
+                {
+                    viewModel.View = ViewData.GetViewById(viewModel.UnitInfo.bsd_view);
+                }
+
+                if (viewModel.UnitInfo.statuscode == 1 || viewModel.UnitInfo.statuscode == 100000000 || viewModel.UnitInfo.statuscode == 100000004)
+                {
+                    btnGiuCho.IsVisible = viewModel.UnitInfo.bsd_vippriority ? false : true;
+                    if (viewModel.UnitInfo.statuscode != 1 && viewModel.IsShowBtnBangTinhGia == true)
+                    {
+                        viewModel.IsShowBtnBangTinhGia = true;
+                    }
+                    else
+                    {
+                        viewModel.IsShowBtnBangTinhGia = false;
+                    }
+                }
+                else
+                {
+                    btnGiuCho.IsVisible = false;
+                    viewModel.IsShowBtnBangTinhGia = false;
+                }
+                SetButton();
+
                 OnCompleted?.Invoke(true);
             }
             else
@@ -81,14 +86,216 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            Navigation.PushAsync(new UnitImageGallery("Units", Id.ToString(), viewModel.UnitInfo.name, "Hình Ảnh Căn Hộ"));
+            base.OnAppearing();
+            if(NeedToRefreshQueue == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.list_danhsachdatcho.Clear();
+                await viewModel.LoadQueuesForContactForm();
+                NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }    
         }
 
-        private void Button_Clicked_Video(object sender, EventArgs e)
+        public void SetButton()
         {
-            Navigation.PushAsync(new UnitVideoGallery("Units",Id.ToString(),viewModel.UnitInfo.name,"Phim Căn Hộ"));
+            if (btnGiuCho.IsVisible ==false && viewModel.IsShowBtnBangTinhGia ==false)
+            {
+                gridButton.IsVisible = false;
+            }
+            else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == true)
+            {
+                gridButton.IsVisible = true;
+                Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumn(btnBangTinhGia, 1);
+            }
+            else if (btnGiuCho.IsVisible == true && viewModel.IsShowBtnBangTinhGia == false)
+            {
+                gridButton.IsVisible = true;
+                Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumnSpan(btnGiuCho, 2);
+                Grid.SetColumn(btnBangTinhGia, 0);
+            }
+            else if (btnGiuCho.IsVisible == false && viewModel.IsShowBtnBangTinhGia == true)
+            {
+                gridButton.IsVisible = true;
+                Grid.SetColumn(btnGiuCho, 0);
+                Grid.SetColumn(btnBangTinhGia, 0);
+                Grid.SetColumnSpan(btnBangTinhGia, 2);
+            }
         }
+
+        private void ThongTin_Tapped(object sender, EventArgs e)
+        {
+            VisualStateManager.GoToState(radborderThongTin, "Active");
+            VisualStateManager.GoToState(radborderGiaoDich, "InActive");
+            VisualStateManager.GoToState(lblThongTin, "Active");
+            VisualStateManager.GoToState(lblGiaoDich, "InActive");
+            stackThongTinCanHo.IsVisible = true;
+            stackGiaoDich.IsVisible = false;
+        }
+
+        private async void GiaoDich_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radborderThongTin, "InActive");
+            VisualStateManager.GoToState(radborderGiaoDich, "Active");
+            VisualStateManager.GoToState(lblThongTin, "InActive");
+            VisualStateManager.GoToState(lblGiaoDich, "Active");
+            stackThongTinCanHo.IsVisible = false;
+            stackGiaoDich.IsVisible = true;
+
+            if (viewModel.IsLoaded == false)
+            {
+                await Task.WhenAll(
+                    viewModel.LoadQueuesForContactForm(),
+                    viewModel.LoadReservationForContactForm(),
+                    viewModel.LoadOptoinEntryForContactForm()
+                );
+            }
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreDanhSachDatCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachDatCho++;
+            await viewModel.LoadQueuesForContactForm();
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreDanhSachDatCoc_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachDatCoc++;
+            await viewModel.LoadReservationForContactForm();
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreDanhSachHopDong_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDanhSachHopDong++;
+            await viewModel.LoadOptoinEntryForContactForm();
+            LoadingHelper.Hide();
+        }
+
+        private void GiuCho_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            QueueForm queue = new QueueForm(viewModel.UnitId, true);
+            queue.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queue);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
+            LoadingHelper.Hide();
+        }
+
+        private void BangTinhGia_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            ToastMessageHelper.ShortMessage("chua co page");
+            LoadingHelper.Hide();
+        }
+
+        private void GiuChoItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
+            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+                if (IsSuccess)
+                {
+                    await Navigation.PushAsync(queuesDetialPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        //private void Button_Clicked(object sender, EventArgs e)
+        //{
+        //    Navigation.PushAsync(new UnitImageGallery("Units", Id.ToString(), viewModel.UnitInfo.name, "Hình Ảnh Căn Hộ"));
+        //}
+
+        //private void Button_Clicked_Video(object sender, EventArgs e)
+        //{
+        //    Navigation.PushAsync(new UnitVideoGallery("Units",Id.ToString(),viewModel.UnitInfo.name,"Phim Căn Hộ"));
+        //}
+
+
+
+
+        /// <summary>
+        /// ///
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private async void Meida_Tapped(object sender, EventArgs e)
+        //{
+        //    LoadingHelper.Show();
+        //    Grid mediaElement = (Grid)sender;
+        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
+        //    CollectionData item = a.CommandParameter as CollectionData;
+        //    if (item != null)
+        //    {
+        //        LoadingHelper.Show();
+        //        await Navigation.PushAsync(new ShowMedia(item.MediaSource));
+        //        LoadingHelper.Hide();
+        //    }
+        //}
+
+        private void Image_Tapped(object sender, EventArgs e)
+        {
+            CachedImage image = (CachedImage)sender;
+
+            string url = (image.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
+            //var img = GetPhotos.Where(x => x.URL == url).SingleOrDefault();
+            //var index = GetPhotos.IndexOf(img);
+            //new PhotoBrowser
+            //{
+            //    Photos = GetPhotos,
+            //    EnableGrid = true,
+            //    StartIndex = index,
+            //}.Show();
+            //var a = (TapGestureRecognizer)image.GestureRecognizers[0];
+            //CollectionData item = a.CommandParameter as CollectionData;
+            //if (item != null)
+            //{
+            //    viewModel.photoBrowser.StartIndex = item.Index;
+            //    viewModel.photoBrowser.Show();
+            //}
+        }
+
+        //private void MediaElement_MediaOpened(object sender, EventArgs e)
+        //{
+        //    viewModel.OnComplate = false;
+        //}
+
+        //private void MediaElement_MediaFailed(object sender, EventArgs e)
+        //{
+        //    Grid mediaElement = (Grid)sender;
+        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
+        //    CollectionData item = a.CommandParameter as CollectionData;
+        //    if (item != null)
+        //    {
+        //        viewModel.Data.Remove(item);
+        //    }
+        //}
     }
 }

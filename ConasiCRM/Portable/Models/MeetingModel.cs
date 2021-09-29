@@ -8,8 +8,12 @@ namespace ConasiCRM.Portable.Models
     public class MeetingModel : BaseViewModel
     {
         public Guid activityid { get; set; }
-        public string subject { get; set; }
-        public string description { get; set; }
+
+        private string _subject;
+        public string subject { get => _subject; set { _subject = value; OnPropertyChanged(nameof(subject)); } }
+
+        private string _description;
+        public string description { get => _description; set { _description = value; OnPropertyChanged(nameof(description)); } }
         public DateTime? _scheduledstart;
         public DateTime? scheduledstart
         {
@@ -150,23 +154,12 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
-        public string location { get; set; }
+        private string _location;
+        public string location { get => _location; set { _location = value; OnPropertyChanged(nameof(location)); } }
+
         private bool _isalldayevent;
-        public bool isalldayevent
-        {
-            get => _isalldayevent;
-            set
-            {
-                if(_isalldayevent != value)
-                {
-                    _isalldayevent = value;
-                    if(value == false)
-                    {
-                        
-                    }
-                }
-            }
-        }
+        public bool isalldayevent { get => _isalldayevent; set { _isalldayevent = value; OnPropertyChanged(nameof(subject)); } }
+
         public int statecode { get; set; }
         public int statuscode { get; set; }
         public DateTime createdon { get; set; }
@@ -184,5 +177,11 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
+
+        private string _required;
+        public string required { get => _required; set { _required = value; OnPropertyChanged(nameof(required)); } }
+
+        private string _optional;
+        public string optional { get => _optional; set { _optional = value; OnPropertyChanged(nameof(optional)); } }
     }
 }

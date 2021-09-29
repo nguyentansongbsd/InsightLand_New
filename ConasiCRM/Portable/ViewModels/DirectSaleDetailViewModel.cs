@@ -1,32 +1,38 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
-using ConasiCRM.Portable.Services;
+using ConasiCRM.Portable.Settings;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Telerik.XamarinForms.DataControls.TreeView.Commands;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class DirectSaleDetailViewModel : ListViewBaseViewModel2<Unit>
+    public class DirectSaleDetailViewModel : BaseViewModel
     {
         public string Keyword { get; set; }
-        public Guid ProjectId { get; set; }
-        public Guid PhasesLanchId { get; set; }
-        public bool IsEvent { get; set; }
-        public string UnitCode { get; set; }
-        public ObservableCollection<string> Directions { get; set; }
-        public ObservableCollection<string> Views { get; set; }
-        public ObservableCollection<string> UnitStatuses { get; set; }
-        public decimal? minNetArea { get; set; }
-        public decimal? maxNetArea { get; set; }
-        public decimal? minPrice { get; set; }
-        public decimal? maxPrice { get; set; }
+
+        private List<Block> _blocks;
+        public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
+
+        private Block _block;
+        public Block Block { get => _block; set { _block = value; OnPropertyChanged(nameof(Block)); } }
+
+        private Unit _unit;
+        public Unit Unit { get => _unit; set { _unit = value; OnPropertyChanged(nameof(Unit)); } }
+
+        //public ObservableCollection<Floor> Floors { get; set; } = new ObservableCollection<Floor>();
+
+        private ObservableCollection<QueueListModel> _queueList;
+        public ObservableCollection<QueueListModel> QueueList { get => _queueList; set { _queueList = value; OnPropertyChanged(nameof(QueueList)); } }
+
+        private DirectSaleSearchModel _filter;
+        public DirectSaleSearchModel Filter { get => _filter; set { _filter = value; OnPropertyChanged(nameof(Filter)); } }
+
+        private List<DirectSaleModel> _directSaleResult;
+        public List<DirectSaleModel> DirectSaleResult { get => _directSaleResult; set { _directSaleResult = value; OnPropertyChanged(nameof(DirectSaleResult)); } }
 
         private OptionSet _statusReason;
         public OptionSet StatusReason { get => _statusReason; set { _statusReason = value; OnPropertyChanged(nameof(StatusReason)); } }
@@ -34,243 +40,356 @@ namespace ConasiCRM.Portable.ViewModels
         private List<OptionSet> _statusReasons;
         public List<OptionSet> StatusReasons { get => _statusReasons; set { _statusReasons = value; OnPropertyChanged(nameof(StatusReasons)); } }
 
-        private OptionSet _block;
-        public OptionSet Block { get => _block; set { _block = value; OnPropertyChanged(nameof(Block)); } }
+        private StatusCodeModel _unitStatusCode;
+        public StatusCodeModel UnitStatusCode { get => _unitStatusCode; set { _unitStatusCode = value; OnPropertyChanged(nameof(UnitStatusCode)); } }
 
-        private List<OptionSet> _blocks;
-        public List<OptionSet> Blocks { get=> _blocks; set { _blocks = value;OnPropertyChanged(nameof(Blocks)); } }
+        private OptionSet _unitDirection;
+        public OptionSet UnitDirection { get => _unitDirection; set { _unitDirection = value; OnPropertyChanged(nameof(UnitDirection)); } }
 
-        private OptionSet _floor;
-        public OptionSet Floor { get => _floor; set { _floor = value; OnPropertyChanged(nameof(Floor)); } }
+        private OptionSet _unitView;
+        public OptionSet UnitView { get => _unitView; set { _unitView = value; OnPropertyChanged(nameof(UnitView)); } }
 
-        private List<OptionSet> _floors;
-        public List<OptionSet> Floors { get => _floors; set { _floors = value; OnPropertyChanged(nameof(Floors)); } }
-        public ObservableCollection<QueueListModel_DirectSale> QueueList { get; set; }
+        private string _numChuanBiInBlock;
+        public string NumChuanBiInBlock { get => _numChuanBiInBlock; set { _numChuanBiInBlock = value; OnPropertyChanged(nameof(NumChuanBiInBlock)); } }
 
-        public string fetchXml { get; set; }
+        private string _numSanSangInBlock;
+        public string NumSanSangInBlock { get => _numSanSangInBlock; set { _numSanSangInBlock = value; OnPropertyChanged(nameof(NumSanSangInBlock)); } }
 
-        public DirectSaleDetailViewModel(DirectSaleSearchModel model)
+        private string _numGiuChoInBlock;
+        public string NumGiuChoInBlock { get => _numGiuChoInBlock; set { _numGiuChoInBlock = value; OnPropertyChanged(nameof(NumGiuChoInBlock)); } }
+
+        private string _numDatCocInBlock;
+        public string NumDatCocInBlock { get => _numDatCocInBlock; set { _numDatCocInBlock = value; OnPropertyChanged(nameof(NumDatCocInBlock)); } }
+
+        private string _numDongYChuyenCoInBlock;
+        public string NumDongYChuyenCoInBlock { get => _numDongYChuyenCoInBlock; set { _numDongYChuyenCoInBlock = value; OnPropertyChanged(nameof(NumDongYChuyenCoInBlock)); } }
+
+        private string _numDaDuTienCocInBlock;
+        public string NumDaDuTienCocInBlock { get => _numDaDuTienCocInBlock; set { _numDaDuTienCocInBlock = value; OnPropertyChanged(nameof(NumDaDuTienCocInBlock)); } }
+
+        private string _numThanhToanDot1InBlock;
+        public string NumThanhToanDot1InBlock { get => _numThanhToanDot1InBlock; set { _numThanhToanDot1InBlock = value; OnPropertyChanged(nameof(NumThanhToanDot1InBlock)); } }
+
+        private string _numDaBanInBlock;
+        public string NumDaBanInBlock { get => _numDaBanInBlock; set { _numDaBanInBlock = value; OnPropertyChanged(nameof(NumDaBanInBlock)); } }
+
+        private bool _showMoreDanhSachDatCho;
+        public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
+
+        private bool _isShowBtnBangTinhGia;
+        public bool IsShowBtnBangTinhGia { get => _isShowBtnBangTinhGia; set { _isShowBtnBangTinhGia = value; OnPropertyChanged(nameof(IsShowBtnBangTinhGia)); } }
+
+        public Guid blockId;
+        public int PageDanhSachDatCho = 1;
+
+        public DirectSaleDetailViewModel(DirectSaleSearchModel filter)
         {
-            IsBusy = true;
-            this.ProjectId = model.ProjectId;
-            this.PhasesLanchId = model.PhasesLanchId;
-            this.IsEvent = model.IsEvent;
-            this.UnitCode = model.UnitCode;
-            this.Directions = model.Directions;
-            this.Views = model.Views;
-            this.UnitStatuses = model.UnitStatuses;
-            this.minNetArea = model.minNetArea;
-            this.maxNetArea = model.maxNetArea;
-            this.minPrice = model.minPrice;
-            this.maxPrice = model.maxPrice;
-            QueueList = new ObservableCollection<QueueListModel_DirectSale>();
-            ResetXml();
-
-            PreLoadData = new Command(() =>
-            {
-                FetchXml = string.Format(fetchXml, Page);
-                EntityName = "products";
-            });
-
+            Filter = filter;
+            QueueList = new ObservableCollection<QueueListModel>();
         }
 
-        public void ResetXml()
+        public async Task LoadTotalDirectSale()
         {
-            string Keyword_Conditon = string.IsNullOrWhiteSpace(Keyword) ? "" : "<condition attribute='name' operator='like' value='%" + Keyword + @"%' />";
+            string json = JsonConvert.SerializeObject(Filter);
+            var input = new
+            {
+                input = json
+            };
+            string body = JsonConvert.SerializeObject(input);
+            CrmApiResponse result = await CrmHelper.PostData("/bsd_Action_DirectSale_GetTotalQty", body);
+            if (result.IsSuccess == false && result.Content == null) return;
+
+            string content = result.Content;
+            ResponseAction responseActions = JsonConvert.DeserializeObject<ResponseAction>(content);
+            DirectSaleResult = JsonConvert.DeserializeObject<List<DirectSaleModel>>(responseActions.output);
+        }
+
+        public async Task LoadUnitByFloor(Guid floorId)
+        {
             string StatusReason_Condition = StatusReason == null ? "" : "<condition attribute='statuscode' operator='eq' value='" + StatusReason.Val + @"' />";
-            string PhasesLaunch_Condition = (PhasesLanchId != Guid.Empty)
-                ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + this.PhasesLanchId + @"' />"
+            string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(Filter.Phase))
+                ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + Filter.Phase + @"' />"
                 : "";
+            string isEvent = (Filter.Event.HasValue && Filter.Event.Value) ? @"<link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='as'>
+                                          <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='at'>
+                                            <filter type='and'>
+                                              <condition attribute='bsd_eventid' operator='not-null' />
+                                            </filter>
+                                          </link-entity>
+                                        </link-entity>" : "";
 
-            string IsEvent_Condition = IsEvent ? @"<condition entityname='af' attribute='bsd_eventid' operator='not-null'/>" : "";
-
-            string UnitCode_Condition = !string.IsNullOrEmpty(UnitCode) ? "<condition attribute='name' operator='like' value='%" + UnitCode + "%' />" : "";
+            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='name' operator='eq' value='" + Filter.Unit + "' />" : "";
 
             string Direction_Condition = string.Empty;
-            if (Directions.Count != 0)
+            if (!string.IsNullOrWhiteSpace(Filter.Direction))
             {
-                string tmp = string.Empty;
-                foreach (var i in Directions)
+                var Directions = Filter.Direction.Split(',').ToList();
+                if (Directions != null && Directions.Count != 0)
                 {
-                    tmp += "<value>" + i + "</value>";
+                    string tmp = string.Empty;
+                    foreach (var i in Directions)
+                    {
+                        tmp += "<value>" + i + "</value>";
+                    }
+                    Direction_Condition = @"<condition attribute='bsd_direction' operator='in'>" + tmp + "</condition>";
                 }
-                Direction_Condition = @"<condition attribute='bsd_direction' operator='in'>" + tmp + "</condition>";
             }
-
-            string View_Condition = string.Empty;
-            if (Views.Count != 0)
-            {
-                string tmp = string.Empty;
-                foreach (var i in Views)
-                {
-                    tmp += "<value>" + i + "</value>";
-                }
-                View_Condition = @"<condition attribute='bsd_view' operator='in'>" + tmp + "</condition>";
-            }
-
 
             string UnitStatus_Condition = string.Empty;
-            if (UnitStatuses.Count != 0)
+            if (!string.IsNullOrWhiteSpace(Filter.stsUnit))
             {
-                string tmp = string.Empty;
-                foreach (var i in UnitStatuses)
+                var UnitStatuses = Filter.stsUnit.Split(',').ToList();
+                if (UnitStatuses != null && UnitStatuses.Count != 0)
                 {
-                    tmp += "<value>" + i + "</value>";
+                    string tmp = string.Empty;
+                    foreach (var i in UnitStatuses)
+                    {
+                        tmp += "<value>" + i + "</value>";
+                    }
+                    UnitStatus_Condition = @"<condition attribute='statuscode' operator='in'>" + tmp + "</condition>";
                 }
-                UnitStatus_Condition = @"<condition attribute='statuscode' operator='in'>" + tmp + "</condition>";
+            }
+            string maxNetArea_Condition = string.Empty;
+            string minNetArea_Condition = string.Empty;
+            if (!string.IsNullOrWhiteSpace(Filter.Area))
+            {
+                var area = NetAreaDirectSaleData.GetNetAreaById(Filter.Area);
+                if (area.From != null && area.To == null)
+                {
+                    maxNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='le' value='{area.From}' />";
+                }
+                else if (area.From == null && area.To != null)
+                {
+                    minNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{area.To}' />";
+                }
+                else if(area.From != null && area.To != null)
+                {
+                    minNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{area.From}' />" ;
+                    maxNetArea_Condition = $"<condition attribute='bsd_netsaleablearea' operator='le' value='{area.To}' />";
+                }
+                else
+                {
+                    minNetArea_Condition = null;
+                    maxNetArea_Condition = null;
+                }
+            }
+            
+            string minPrice_Condition = string.Empty;
+            string maxPrice_Condition = string.Empty;
+            if (!string.IsNullOrWhiteSpace(Filter.Price))
+            {
+                var price = PriceDirectSaleData.GetPriceById(Filter.Price);
+                if (price.From != null && price.To == null)
+                {
+                    maxPrice_Condition = $"<condition attribute='price' operator='le' value='{price.From}' />";
+                }
+                else if (price.From == null && price.To != null)
+                {
+                    minPrice_Condition = $"<condition attribute='price' operator='ge' value='{price.To}' />";
+                }
+                else if (price.From != null && price.To != null)
+                {
+                    minPrice_Condition = $"<condition attribute='price' operator='ge' value='{price.From}' />";
+                    maxPrice_Condition = $"<condition attribute='price' operator='le' value='{price.To}' />";
+                }
+                else
+                {
+                    minPrice_Condition = null;
+                    maxPrice_Condition = null;
+                }
             }
 
-            string minNetArea_Condition = minNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='ge' value='{minNetArea.Value}' />" : null;
-            string maxNetArea_Condition = maxNetArea.HasValue ? $"<condition attribute='bsd_netsaleablearea' operator='le' value='{maxNetArea.Value}' />" : "";
-
-            string minPrice_Condition = minPrice.HasValue ? $"<condition attribute='price' operator='ge' value='{minPrice.Value}' />" : "";
-            string maxPrice_Condition = maxPrice.HasValue ? $"<condition attribute='price' operator='le' value='{maxPrice.Value}' />" : "";
-
-            string Block_Condition = Block != null ? $"<condition attribute='bsd_blockid' operator='eq' value='{Block.Val}'/>" : "";
-            string Floor_Condition = Floor != null ? $"<condition attribute='bsd_floorid' operator='eq' value='{Floor.Val}'/>" : "";
-
-            fetchXml = @"<fetch version='1.0' count='15' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='product'>
                                 <attribute name='productid' />
                                 <attribute name='name' />
                                 <attribute name='statuscode' />
-                                <attribute name='bsd_totalprice' />
                                 <attribute name='price' />
-                                <attribute name='bsd_netsaleablearea' />
-                                <order attribute='bsd_blocknumber' descending='false' />
+                                <order attribute='name' descending='false' />
                                 <filter type='and'>
-                                    <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
-                                    " + Keyword_Conditon + @"
-                                    " + StatusReason_Condition + @"
-                                    " + PhasesLaunch_Condition + @"
-                                    " + IsEvent_Condition + @"
-                                    " + UnitCode_Condition + @"
-                                    " + Direction_Condition + @"
-                                    " + View_Condition + @"
-                                    " + UnitStatus_Condition + @"
-                                    " + minNetArea_Condition + @"
-                                    " + maxNetArea_Condition + @"
-                                    " + minPrice_Condition + @"
-                                    " + maxPrice_Condition + @"
+                                    <condition attribute='statuscode' operator='ne' value='0' />
+                                    <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='{Filter.Project}'/>
+                                    <condition attribute='bsd_floor' operator='eq' uitype='bsd_floor' value='{floorId}' />
+                                    '{PhasesLaunch_Condition}'
+                                    '{UnitCode_Condition}'
+                                    '{StatusReason_Condition}'
+                                    '{UnitStatus_Condition}'
+                                    '{Direction_Condition}'
+                                    '{minNetArea_Condition}'
+                                    '{maxNetArea_Condition}'
+                                    '{minPrice_Condition}'
+                                    '{maxPrice_Condition}'
                                 </filter>
-                                <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='outer' alias='ae'>
-                                  <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='outer' alias='af'>
-                                      <attribute name='bsd_eventid' alias='event_id' />                                       
-                                   </link-entity>
+                                <link-entity name='opportunity' from='bsd_units' to='productid' link-type='outer' alias='ag' >
+                                    <attribute name='statuscode' alias='queses_statuscode'/>
                                 </link-entity>
-                                <link-entity name='bsd_floor' from='bsd_floorid' to='bsd_floor' link-type='inner' alias='ad'>
-                                  <attribute name='bsd_floorid' alias='floorid' />
-                                  <attribute name='bsd_name' alias='floor_name' />
-                                  <filter type='and'>
-                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"' />
-                                    "+ Floor_Condition + @"
-                                  </filter>
-                                </link-entity>
-                                <link-entity name='bsd_block' from='bsd_blockid' to='bsd_blocknumber' link-type='inner' alias='ab'>
-                                  <attribute name='bsd_blockid' alias='blockid' />
-                                  <attribute name='bsd_name' alias='block_name' />
-                                  <filter type='and'>
-                                    <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"' />
-                                    "+ Block_Condition + @"
-                                  </filter>
-                                </link-entity>
+                                '{isEvent}'
                               </entity>
                             </fetch>";
-        }
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Unit>>("products", fetchXml);
+            if (result == null || result.value.Any() == false) return;
 
-        public async Task LoadStatusReason()
-        {
-            IsBusy = true;
-            this.StatusReasons = new List<OptionSet>()
+            List<Unit> unitsResult = result.value.GroupBy(x => new
             {
-                new OptionSet("-1","Tất cả"),
-                new OptionSet("1","Preparing"),
-                new OptionSet("100000000","Available"),
-                new OptionSet("100000007","Booking"),
-                new OptionSet("100000004","Queuing"),
-                new OptionSet("100000006","Reserve"),
-                new OptionSet("100000005","Collected"),
-                new OptionSet("100000003","Deposited"),
-                new OptionSet("100000001","1st Installment"),
-                new OptionSet("100000009","Singed D.A"),
-                new OptionSet("100000008","Qualified"),
-                new OptionSet("100000002","Sold"),
-            };
-            IsBusy = false;
-        }
+                productid = x.productid
+            }).Select(y => y.First()).ToList();
 
-        public async Task LoadBlocks()
-        {
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='bsd_block'>
-                                <attribute name='bsd_name' />
-                                <attribute name='bsd_project' />
-                                <attribute name='bsd_blockid' />
-                                <order attribute='bsd_name' descending='false' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='aa'>
-                                  <filter type='and'>
-                                    <condition attribute='bsd_projectid' operator='like' value='{this.ProjectId}' />
-                                  </filter>
-                                </link-entity>
-                              </entity>
-                            </fetch>";
-
-
-            var block_result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Block>>("bsd_blocks", fetchXml);
-            if (block_result == null || block_result.value.Count == 0)
+            List<Unit> units = new List<Unit>();
+            foreach (var item in unitsResult)
             {
-                await Application.Current.MainPage.DisplayAlert("", "Lỗi. Vui lòng thử lại", "Đóng");
-                return;
+                // dem unit co nhung trang thai giu cho la: queuing, waiting
+                item.NumQueses = result.value.Where(x => x.productid == item.productid && (x.queses_statuscode == "100000000" || x.queses_statuscode == "100000002")).ToList().Count();
+                units.Add(item);
             }
-            else
-            {
-                this.Blocks = new List<OptionSet>();
-                this.Blocks.Add(new OptionSet() { Val = "-1", Label = "Tất cả" });
-                var data = block_result.value;
-                foreach (var item in data)
-                {
-                    this.Blocks.Add(new OptionSet(item.bsd_blockid.ToString(), item.bsd_name));
-                }
-            }
+
+            this.Block.Floors.SingleOrDefault(x => x.bsd_floorid == floorId).Units.AddRange(units);
         }
 
-        public async Task LoadFloors()
+        public async Task LoadUnitById(Guid unitId)
         {
-            string filter_byblock = Block != null ? $@"<link-entity name='bsd_block' from='bsd_blockid' to='bsd_block' link-type='inner' alias='a_69e6a386df72e911a83a000d3a80e651'>
-                                  <filter type='and'>
-                                    <condition attribute='bsd_blockid' operator='eq' value='{Block.Val}'/>
-                                  </filter>
-                                </link-entity>" : "";
+             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='product'>
+                                    <attribute name='name' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
+                                    <attribute name='price' />
+                                    <attribute name='productid' />
+                                    <attribute name='bsd_view' />
+                                    <attribute name='bsd_direction' />
+                                    <attribute name='bsd_constructionarea' />
+                                    <attribute name='bsd_floor' alias='floorid'/>
+                                    <attribute name='bsd_blocknumber' alias='blockid'/>
+                                    <attribute name='bsd_phaseslaunchid' />
+                                    <order attribute='bsd_constructionarea' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='productid' operator='eq' uitype='product' value='{unitId}' />
+                                    </filter>
+                                    <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
+                                      <attribute name='bsd_name'  alias='bsd_unittype_name'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Unit>>("products", fetchXml);
+            if (result == null || result.value.Any() == false) return;
 
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                      <entity name='bsd_floor'>
-                        <attribute name='bsd_name' />
-                        <attribute name='bsd_floorid' />
-                        <order attribute='createdon' descending='false' />
-                        <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
-                          <filter type='and'>
-                            <condition attribute='bsd_projectid' operator='eq' value='{this.ProjectId}'/>
-                          </filter>
+            Unit = result.value.FirstOrDefault();
+        }
+
+        public async Task LoadQueues(Guid unitId)
+        {
+            string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
+                      <entity name='opportunity'>
+                        <attribute name='name'/>
+                        <attribute name='statuscode' />
+                        <attribute name='bsd_project' />
+                        <attribute name='opportunityid' />
+                        <attribute name='bsd_queuingexpired' />
+                        <order attribute='statuscode' descending='true' />
+                        <filter type='and'>
+                          <condition attribute='bsd_units' operator='eq' value='{unitId}'/>
+                          <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                        </filter>
+                        <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
+                           <attribute name='fullname'  alias='contact_name'/>
                         </link-entity>
-                        {filter_byblock}
+                        <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
+                           <attribute name='name'  alias='account_name'/>
+                        </link-entity>
                       </entity>
                     </fetch>";
-            var floor_result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Floor>>("bsd_floors", fetchXml);
-            if (floor_result == null || floor_result.value.Count == 0)
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueListModel>>("opportunities", fetch);
+            if (result == null)
             {
-                await Application.Current.MainPage.DisplayAlert("", "Lỗi. Vui lòng thử lại", "Đóng");
                 return;
             }
-            else
+
+            var data = result.value;
+            ShowMoreDanhSachDatCho = data.Count < 5 ? false : true;
+
+            foreach (var x in data)
             {
-                this.Floors = new List<OptionSet>();
-                this.Floors.Add(new OptionSet() { Val = "-1", Label = "Tất cả" });
-                var data = floor_result.value;
-                foreach (var item in data)
+                x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Name;
+                QueueList.Add(x);
+            }
+            if (QueueList.Any(x=>x.statuscode == 100000000))
+            {
+                var item = QueueList.SingleOrDefault(x => x.statuscode == 100000000);
+                QueueList.Remove(item);
+                QueueList.Insert(0, item);
+            }
+        }
+
+        public async Task CheckShowBtnBangTinhGia(Guid unitId)
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+                              <entity name='bsd_phaseslaunch'>
+                                <attribute name='bsd_phaseslaunchid' />
+                                <order attribute='createdon' descending='true' />
+                                <link-entity name='product' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='inner' alias='al'>
+                                  <filter type='and'>
+                                    <condition attribute='productid' operator='eq' value='{unitId}' />
+                                  </filter>
+                                </link-entity>
+                                <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='an' >
+                                   <attribute name='bsd_startdate' alias='startdate_event' />
+                                   <attribute name='bsd_enddate' alias='enddate_event'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLanchModel>>("bsd_phaseslaunchs", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            var data = result.value;
+            foreach (var item in data)
+            {
+                if (item.startdate_event < DateTime.Now && item.enddate_event > DateTime.Now)
                 {
-                    this.Floors.Add(new OptionSet(item.bsd_floorid.ToString(), item.bsd_name));
+                    IsShowBtnBangTinhGia = true;
+                    return;
+                }
+                else
+                {
+                    IsShowBtnBangTinhGia = false;
                 }
             }
         }
+
+        public void ResetDirectSale(DirectSaleModel directSaleModel)
+        {
+            this.Block = new Block();
+            this.Block.bsd_blockid = blockId = Guid.Parse(directSaleModel.ID);
+            var arrStatus = directSaleModel.stringQty.Split(',');
+            this.Block.NumChuanBiInBlock = arrStatus[0];
+            this.Block.NumSanSangInBlock = arrStatus[1];
+            this.Block.NumGiuChoInBlock = arrStatus[2];
+            this.Block.NumDatCocInBlock = arrStatus[3];
+            this.Block.NumDongYChuyenCoInBlock = arrStatus[4];
+            this.Block.NumDaDuTienCocInBlock = arrStatus[5];
+            this.Block.NumThanhToanDot1InBlock = arrStatus[6];
+            this.Block.NumDaBanInBlock = arrStatus[7];
+
+            foreach (var item in directSaleModel.listFloor)
+            {
+                Floor floor = new Floor();
+                floor.bsd_floorid = Guid.Parse(item.ID);
+                floor.bsd_name = item.name;
+                var arrStatusInFloor = item.stringQty.Split(',');
+                floor.NumChuanBiInFloor = arrStatusInFloor[0];
+                floor.NumSanSangInFloor = arrStatusInFloor[1];
+                floor.NumGiuChoInFloor = arrStatusInFloor[2];
+                floor.NumDatCocInFloor = arrStatusInFloor[3];
+                floor.NumDongYChuyenCoInFloor = arrStatusInFloor[4];
+                floor.NumDaDuTienCocInFloor = arrStatusInFloor[5];
+                floor.NumThanhToanDot1InFloor = arrStatusInFloor[6];
+                floor.NumDaBanInFloor = arrStatusInFloor[7];
+                this.Block.Floors.Add(floor);
+            };
+        }
+
+    }
+    public class ResponseAction
+    {
+        public string output { get; set; }
     }
 }

@@ -2,11 +2,6 @@
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,7 +11,7 @@ namespace ConasiCRM.Portable.Views
     public partial class AccountsContentView : ContentView
     {
         public Action<bool> OnCompleted;
-        AccountContentViewViewModel viewModel;
+        public AccountContentViewViewModel viewModel;
         public AccountsContentView()
         {
             InitializeComponent();
@@ -40,10 +35,10 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             var item = e.Item as AccountListModel;
-            AccountForm newPage = new AccountForm(item.accountid);
-            newPage.CheckSingleAccount = async (CheckSingleAccount) =>
+            AccountDetailPage newPage = new AccountDetailPage(item.accountid);
+            newPage.OnCompleted = async (OnCompleted) =>
             {
-                if (CheckSingleAccount == true)
+                if (OnCompleted == true)
                 {
                     await Navigation.PushAsync(newPage);
                     LoadingHelper.Hide();

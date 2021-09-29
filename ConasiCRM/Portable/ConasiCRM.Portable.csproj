@@ -10,17 +10,20 @@
         <DebugType>pdbonly</DebugType>
     </PropertyGroup>
     <ItemGroup>
+    <PackageReference Include="PhotoBrowser.Forms" Version="0.1.4" />
     <PackageReference Include="Telerik.UI.for.Xamarin" Version="2020.1.218.1" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
         <PackageReference Include="Rg.Plugins.Popup" Version="1.1.5.188" />
         <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
         <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
+        <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
         <PackageReference Include="SkiaSharp" Version="2.80.3" />
         <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
         <PackageReference Include="Xamarin.Forms.Contacts" Version="1.0.5" />
         <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
         <PackageReference Include="Xamarin.Forms.Extended.InfiniteScrolling" Version="1.0.0-preview2" />
+        <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
     </ItemGroup>
     <ItemGroup>
         <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
@@ -40,9 +43,24 @@
       <EmbeddedResource Include="Fonts\FontAwesome5BrandsRegular.otf" />
       <EmbeddedResource Include="Fonts\FontAwesome5Regular.otf" />
       <EmbeddedResource Include="Fonts\FontAwesome5Solid.otf" />
+      <EmbeddedResource Include="Fonts\Anton-Regular.ttf" />
+      <EmbeddedResource Include="Fonts\Kanit-Bold.ttf" />
+      <EmbeddedResource Include="Fonts\Kanit-Medium.ttf" />
+      <EmbeddedResource Include="Fonts\Kanit-SemiBold.ttf" />
+      <EmbeddedResource Include="Fonts\SegoeUIBold.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Black.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Bold.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Medium.ttf" />
+      <EmbeddedResource Include="Fonts\Roboto-Regular.ttf" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Update="AppShell.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Controls\ListViewMultiTabs.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Controls\LookUpMultipleTabs.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Login.xaml">
@@ -51,7 +69,13 @@
       <EmbeddedResource Update="MasterDetailPage1Master.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="ShowMedia.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\AccountContentView.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Views\AccountDetailPage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\AccountForm.xaml">
@@ -59,6 +83,12 @@
       </EmbeddedResource>
       <EmbeddedResource Update="Views\AccountList.xaml">
         <Generator>MSBuild:Compile</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Views\ActivityList.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Views\BangTinhGiaDetailPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\ContactDetailPage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -99,8 +129,14 @@
       <EmbeddedResource Update="Views\LookUpView.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\MandatorySecondaryForm.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\PageNotFound.xaml">
         <Generator>MSBuild:Compile</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Views\PhanHoiDetailPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\ProjectInfo.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -120,9 +156,6 @@
       <EmbeddedResource Update="Views\ReservationList.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Views\Test.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
       <EmbeddedResource Update="Views\UnitImageGallery.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
@@ -134,8 +167,19 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Settings\" />
       <Folder Include="Fonts\" />
       <Folder Include="IServices\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Xamarin.CommunityToolkit" />
+      <None Remove="Fonts\Anton-Regular.ttf" />
+      <None Remove="Fonts\Kanit-Bold.ttf" />
+      <None Remove="Fonts\Kanit-Medium.ttf" />
+      <None Remove="Fonts\Kanit-SemiBold.ttf" />
+      <None Remove="Fonts\SegoeUIBold.ttf" />
+      <None Remove="Fonts\Roboto-Black.ttf" />
+      <None Remove="Fonts\Roboto-Bold.ttf" />
+      <None Remove="Fonts\Roboto-Medium.ttf" />
+      <None Remove="Fonts\Roboto-Regular.ttf" />
     </ItemGroup>
 </Project>

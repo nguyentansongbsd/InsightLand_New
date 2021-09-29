@@ -36,6 +36,9 @@ namespace ConasiCRM.Portable.Models
             }
         }
 
+        private bool _isConvertToLead;
+        public bool IsConvertToLead { get => _isConvertToLead; set { _isConvertToLead = value; OnPropertyChanged(nameof(IsConvertToLead)); } }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)

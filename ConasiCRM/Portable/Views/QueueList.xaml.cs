@@ -44,19 +44,21 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void listView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             QueueListModel val = e.Item as QueueListModel;
             LoadingHelper.Show();
-            QueueForm newPage = new QueueForm(val.opportunityid);
-            newPage.CheckQueueInfo = async (CheckQueueInfo) =>
-            {
-                if (CheckQueueInfo == true)
-                {
-                    await Navigation.PushAsync(newPage);                 
-                }
-                LoadingHelper.Hide();
-            };
+            //QueueForm newPage = new QueueForm(val.opportunityid);
+            //newPage.CheckQueueInfo = async (CheckQueueInfo) =>
+            //{
+            //    if (CheckQueueInfo == true)
+            //    {
+            //        await Navigation.PushAsync(newPage);                 
+            //    }
+            //    LoadingHelper.Hide();
+            //};
+            await Navigation.PushAsync(new QueuesDetialPage(val.opportunityid));
+            LoadingHelper.Hide();
         }
 
         private async void SearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)

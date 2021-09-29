@@ -3,139 +3,211 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
-             xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
-             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             BackgroundColor="White"
-             Title="{Binding Title}"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true"
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"                    
              x:Class="ConasiCRM.Portable.Views.QueueForm">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <!--header-->
             <Style x:Key="ExpanderHeaderStyle" TargetType="telerikPrimitives:ExpanderHeader">
                 <Setter Property="IndicatorText" Value="&#xf105;"/>
                 <Setter Property="IndicatorLocation" Value="End"/>
                 <Setter Property="IndicatorFontSize" Value="18"/>
-                <Setter Property="IndicatorColor" Value="#000000"/>
-                <Setter Property="BackgroundColor" Value="#F3F3F3"/>
-                <Setter Property="BorderColor" Value="#666666"/>
+                <Setter Property="IndicatorColor" Value="#939393"/>
+                <Setter Property="BackgroundColor" Value="#F1F1F1"/>
+                <Setter Property="BorderColor" Value="#F1F1F1"/>
                 <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Padding" Value="17,8"/>
                 <Setter Property="IndicatorFontFamily" Value="FontAwesomeSolid"/>
+            </Style>
+            <Style x:Key="ExpanderHeadingText" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="TextColor" Value="#444444"/>
             </Style>
             <converter:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
             <converter:DecimalFormatConverter x:Key="DecimalFormatConverter" />
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
             <converter:QueueStatusConverter x:Key="QueueStatusConverter" />
+            <!--centermodal-->
+            <Style x:Key="rabBorder_Tab" TargetType="telerikPrimitives:RadBorder">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BorderColor" Value="#939393"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BorderColor" Value="#2196F3"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <Style x:Key="Lb_Tab" TargetType="Label">
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="0,10"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="#939393"/>
+                                    <Setter Property="FontAttributes" Value="None"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="#2196F3"/>
+                                    <Setter Property="FontAttributes" Value="Bold"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Margin="0,0,0,0" AbsoluteLayout.LayoutFlags="All">
-                <StackLayout Padding="0,0,0,10">
-                    <StackLayout>
-                        <Label Text="Thông Tin Đặt Chỗ" TextColor="Black" FontSize="18" BackgroundColor="#F3F3F3" Padding="12"/>
-                        <Grid Padding="10" RowSpacing="15" ColumnDefinitions="4*,6*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                            <controls:FormLabelRequired x:Name="QueueNumberLabel" Text="Mã đặt chỗ" Grid.Column="0" Grid.Row="0"  VerticalOptions="Start"/>
-                            <controls:FormLabelValue x:Name="QueueNumberValue" Text="{Binding QueueFormModel.bsd_queuenumber}" Grid.Row="0" Grid.Column="1" HeightRequest="30" VerticalOptions="Start"/>
-
-                            <controls:FormLabel Text="Tiêu đề" Grid.Row="1" Grid.Column="0" VerticalOptions="Start"/>
-                            <controls:FormLabelValue Text="{Binding QueueFormModel.name}" Grid.Column="1" Grid.Row="1" VerticalOptions="Start"/>
-
-                            <controls:FormLabelRequired Text="Khách hàng" Grid.Column="0" Grid.Row="2" VerticalOptions="Center"/>
-                            <controls:BsdLookUp Placeholder="Chọn khách hàng" Grid.Column="1" Grid.Row="2" SelectedItem="{Binding Customer}" OpenClicked="BsdLookUp_OpenClicked"/>
-
-                            <controls:FormLabel Text="Đại lý/Sàn giao dịch" Grid.Column="0" Grid.Row="3" VerticalOptions="Center"/>
-                            <controls:LookUp x:Name="lookUpDaiLy" Grid.Column="1" Grid.Row="3" Placeholder="Chọn đại lý" ItemsSource="{Binding DaiLyOptions}" SelectedItem="{Binding DailyOption}" NameDisplay="name" BottomModal="{x:Reference LookUpModal}" SelectedItemChange="lookUpDaiLy_SelectedItemChange"/>
-
-                            <controls:FormLabel Text="Cộng tác viên" Grid.Column="0" Grid.Row="4" VerticalOptions="Center"/>
-                            <controls:LookUp x:Name="lookUpCollaborator" Grid.Column="1" Grid.Row="4" Placeholder="Chọn cộng tác viên" ItemsSource="{Binding CollaboratorOptions}" SelectedItem="{Binding CollaboratorOption}" NameDisplay="bsd_fullname" BottomModal="{x:Reference LookUpModal}" SelectedItemChange="lookUpCollaborator_SelectedItemChange"/>
-
-                            <controls:FormLabel Text="Khách hàng giới thiệu" Grid.Column="0" Grid.Row="5" VerticalOptions="Center"/>
-                            <controls:LookUp x:Name="lookUpCustomerReferral" Grid.Column="1" Grid.Row="5" Placeholder="Chọn khách hàng" ItemsSource="{Binding CustomerReferralOptions}" SelectedItem="{Binding CustomerReferralOption}" NameDisplay="Name" BottomModal="{x:Reference LookUpModal}" />
-
-                            <controls:FormLabelRequired Text="Trạng thái" Grid.Column="0" Grid.Row="6" VerticalOptions="Center"/>
-                            <controls:FormLabelValue Text="{Binding QueueFormModel.statuscode,Converter={StaticResource QueueStatusConverter}}" Grid.Row="6"/>
-
-                            <controls:FormLabel Text="Giữ chỗ dự án" Grid.Column="0" Grid.Row="7" VerticalOptions="Start"/>
-                            <CheckBox x:Name="checkBoxGiuCho" Grid.Column="1" Grid.Row="7" VerticalOptions="Start"/>
-                        </Grid>
-                    </StackLayout>
-                    <telerikPrimitives:RadExpander AutomationId="masterCardExpander">
+            <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,10,0,60">
+                <StackLayout>
+                    <telerikPrimitives:RadExpander IsExpanded="True">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thời gian đặt chỗ"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông tin sản phẩm"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
-                            <Grid Padding="10" RowSpacing="15" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <StackLayout BackgroundColor="White" Padding="10">
+                                <controls:FormLabelRequired Text="Dự án"/>
+                                <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
+                                    <Label Text="{Binding QueueFormModel.bsd_project_name}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
+                                </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabel Text="Thời gian đặt chỗ" Grid.Row="0" />
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.createdon,Converter={StaticResource DateTimeFormatConverter}}" Grid.Row="0"/>
+                                <controls:FormLabel Text="Đợt mở bán" FontSize="15" Margin="0,10,0,0"/>
+                                <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
+                                    <Label Text="{Binding QueueFormModel.bsd_phaseslaunch_name}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
+                                </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabel Text="Thời gian đặt chỗ thực tế" Grid.Row="1"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_queuingexpired,Converter={StaticResource DateTimeFormatConverter}}" Grid.Row="1" />
+                                <controls:FormLabel Text="Sản phẩm" FontSize="15" Margin="0,10,0,0"/>
+                                <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
+                                    <Label Text="{Binding QueueFormModel.bsd_units_name}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
+                                </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabel Text="Thời gian hết hạn" Grid.Row="2"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_queuingexpired,Converter={StaticResource DateTimeFormatConverter}}" Grid.Row="2" TextColor="Red"/>
-                            </Grid>
+                                <controls:FormLabel Text="Phí giữ chỗ" FontSize="15" Margin="0,10,0,0"/>
+                                <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
+                                    <Label Text="{Binding QueueFormModel.bsd_queuingfee, StringFormat='{0:#,0}'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
+                                </telerikPrimitives:RadBorder>
+
+                            </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>
-                    <telerikPrimitives:RadExpander AutomationId="masterCardExpander">
+                    <telerikPrimitives:RadExpander IsExpanded="True">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông tin căn hộ"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông tin giữ chỗ"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
-                            <Grid Padding="10" RowSpacing="15" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
-                                <controls:FormLabelRequired Text="Dự án" Grid.Column="0" Grid.Row="0" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_project_name}" Grid.Row="0" VerticalOptions="StartAndExpand"/>
+                            <StackLayout BackgroundColor="White" Padding="10">
+                                <controls:FormLabelRequired Text="Tiêu đề"/>
+                                <controls:MainEntry x:Name="topic" Placeholder="Nhập tiêu đề của giữ chỗ" Text="{Binding QueueFormModel.name}" FontSize="15" />
 
-                                <controls:FormLabel Text="Đợt mở bán" Grid.Row="1" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_phaseslaunch_name}" Grid.Row="1" VerticalOptions="StartAndExpand"/>
+                                <controls:FormLabelRequired Text="Khách hàng tiềm năng" Margin="0,10,0,0"/>
+                                <Grid>
+                                    <controls:MainEntry Text="{Binding QueueFormModel.customer_name}" Placeholder="Chọn khách hàng tiềm năng" FontSize="15"/>
+                                    <StackLayout>
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="KhachHangTiemNang_Tapped"/>
+                                        </StackLayout.GestureRecognizers>
+                                    </StackLayout>
+                                </Grid>
 
-                                <controls:FormLabel Text="Bảng giá" Grid.Row="2" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.pricelist_name}" Grid.Row="2" VerticalOptions="StartAndExpand"/>
+                                <controls:FormLabel Text="Ngân sách" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập ngân sách" Text="{Binding singleContact.budgetamount}" FontSize="15"/>
 
-                                <controls:FormLabel Text="Tòa nhà/Khu" Grid.Row="3" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_block_name}" Grid.Row="3" VerticalOptions="StartAndExpand"/>
+                                <controls:FormLabel Text="Mô tả" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập mô tả" Text="{Binding QueueFormModel.description}" FontSize="15" />
 
-                                <controls:FormLabel Text="Tầng" Grid.Row="4" VerticalOptions="StartAndExpand" />
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_floor_name}" Grid.Row="4" VerticalOptions="StartAndExpand"/>
+                                <controls:FormLabelRequired Text="Đại lý bán hàng" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="lookUpDaiLy" Grid.Column="1" Grid.Row="3" Placeholder="Chọn đại lý" ItemsSource="{Binding DaiLyOptions}" SelectedItem="{Binding DailyOption}" NameDisplay="Name" BottomModal="{x:Reference LookUpModal}" />
 
-                                <controls:FormLabel Text="Căn hộ" Grid.Row="5" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_units_name}" Grid.Row="5" VerticalOptions="StartAndExpand"/>
-
-                                <controls:FormLabel Text="Diện tích xây dựng" Grid.Row="6" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.constructionarea,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="6" VerticalOptions="StartAndExpand"/>
-
-                                <controls:FormLabel Text="Diện tích sử dụng" Grid.Row="7" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.netsaleablearea,Converter={StaticResource DecimalFormatConverter}}" Grid.Row="7" VerticalOptions="StartAndExpand" />
-
-                                <controls:FormLabel Text="Phí đặt chỗ" Grid.Row="8" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.bsd_queuingfee,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="8" VerticalOptions="StartAndExpand"/>
-
-                                <controls:FormLabel Text="Đã nhận tiền" Grid.Row="9" x:Name="cb_bsd_collectedqueuingfeeLabel" IsVisible="False" VerticalOptions="StartAndExpand"/>
-                                <telerikPrimitives:RadCheckBox CheckedColor="#333333" x:Name="cb_bsd_collectedqueuingfee" IsEnabled="False" IsVisible="False" IsChecked="{Binding QueueFormModel.bsd_collectedqueuingfee,Mode=TwoWay}" Grid.Column="1" Grid.Row="9" VerticalOptions="StartAndExpand"/>
-
-                                <controls:FormLabel Text="Tổng giá trị đất" Grid.Row="10" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.landvalue,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="10" VerticalOptions="StartAndExpand"/>
-
-                                <controls:FormLabel Text="Giá bán" Grid.Row="11" VerticalOptions="StartAndExpand"/>
-                                <controls:FormLabelValue Text="{Binding QueueFormModel.unit_price,Converter={StaticResource DecimalToVndConverter}}" Grid.Row="11" VerticalOptions="StartAndExpand"/>
-                            </Grid>
+                                <controls:FormLabel Text="Nhân viên đại lý" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="Nhập nhân viên đại lý" Text="{Binding QueueFormModel.bsd_nameofstaffagent}" FontSize="15" />
+                            </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>
                 </StackLayout>
             </ScrollView>
-                <Grid x:Name="gridBtnGroup" IsVisible="false" AbsoluteLayout.LayoutBounds="0,1,1,50" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="#F3F3F3" VerticalOptions="EndAndExpand">
-                    <telerikInput:RadButton x:Name="btnDatCho" Text="Đặt chỗ" IsVisible="False" Clicked="Queue_Clicked" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" TextTransform="None" HeightRequest="40" Padding="10,5" FontSize="15" BorderColor="#1399D5" BorderWidth="1" CornerRadius="5" Margin="10,5"/>
-                    <telerikInput:RadButton x:Name="btnHuyDatCho" Clicked="CancleQueue_Clicked" IsVisible="False" Text="Hủy đặt chỗ" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" TextTransform="None" HeightRequest="40" Padding="10,5" FontSize="15" BorderColor="#1399D5" BorderWidth="1" CornerRadius="5" Margin="10,5"/>
-                    <telerikInput:RadButton x:Name="btnDatCoc" Clicked="BtnDatCoc_Clicked" IsVisible="False" Text="Đặt cọc" BackgroundColor="#1399D5" TextColor="White" FontAttributes="Bold" TextTransform="None" HeightRequest="40" Padding="10,5" FontSize="15" BorderColor="#1399D5" BorderWidth="1" CornerRadius="5" Margin="10,5"/>
-                </Grid>
+            <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White" VerticalOptions="EndAndExpand">
+                <Button x:Name="btnSave" Margin="10,5,10,10" Padding="10,5" HeightRequest="40" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="16" BackgroundColor="#2196F3" BorderWidth="1" BorderColor="#2196F3" />
             </Grid>
+            <controls:CenterModal x:Name="centerModalKHTN" Title="Chọn khách hàng tiềm năng">
+                <controls:CenterModal.Body>
+                    <Grid RowDefinitions="Auto,*" Padding="0,0,0,10">
+                        <Grid ColumnDefinitions="*,*" Grid.Row="0" ColumnSpacing="0">
+                            <telerikPrimitives:RadBorder x:Name="radBorderContact" Grid.Column="0" Style="{StaticResource rabBorder_Tab}">
+                                <telerikPrimitives:RadBorder.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Contact_Tapped"/>
+                                </telerikPrimitives:RadBorder.GestureRecognizers>
+                                <Label x:Name="lbContact" Text="KH Cá Nhân" Style="{StaticResource Lb_Tab}"/>
+                            </telerikPrimitives:RadBorder>
+                            <telerikPrimitives:RadBorder x:Name="radBorderAccount" Grid.Column="1" Style="{StaticResource rabBorder_Tab}">
+                                <telerikPrimitives:RadBorder.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Account_Tapped"/>
+                                </telerikPrimitives:RadBorder.GestureRecognizers>
+                                <Label x:Name="lbAccount" Text="KH Doanh Nghiệp" Style="{StaticResource Lb_Tab}"/>
+                            </telerikPrimitives:RadBorder>
+                        </Grid>
+                        <ListView x:Name="LookUpContact" Grid.Row="1" ItemsSource="{Binding ContactsLookUp}" HasUnevenRows="True" SelectionMode="None" SeparatorVisibility="None" Margin="0,10,0,0" BackgroundColor="White">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Padding="0" BackgroundColor="#eeeeee">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="LookUpContact_ItemTapped" CommandParameter="{Binding}"/>
+                                            </StackLayout.GestureRecognizers>
+                                            <Label Text="{Binding Name}" TextColor="#444444" FontSize="15" BackgroundColor="White" Padding="10" Margin="0,0.5"/>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <ListView x:Name="LookUpAccount" Grid.Row="1" ItemsSource="{Binding AccountsLookUp}" IsVisible="false" HasUnevenRows="True" SelectionMode="None" SeparatorVisibility="None" Margin="0,10,0,0" BackgroundColor="White">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Padding="0" BackgroundColor="#eeeeee">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="LookUpAccount_ItemTapped" CommandParameter="{Binding}"/>
+                                            </StackLayout.GestureRecognizers>
+                                            <Label Text="{Binding Name}" TextColor="#444444" FontSize="15" BackgroundColor="White" Padding="10" Margin="0,0.5"/>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </controls:CenterModal.Body>
+                <controls:CenterModal.Footer>
+                    <Grid ColumnDefinitions="*,*" BackgroundColor="White" Padding="10">
+                        <Button Grid.Column="0" Text="Thêm KH cá nhân" Clicked="AddContact_Tapped" BackgroundColor="#1399D5" FontAttributes="Bold" HeightRequest="40" TextColor="White" FontSize="15" CornerRadius="10" Padding="5,0"/>
+                        <Button Grid.Column="1" Text="Thêm KH doanh nghiệp" Clicked="AddAccount_Tapped" BackgroundColor="#1399D5" FontAttributes="Bold" HeightRequest="40" TextColor="White" FontSize="15" CornerRadius="10" Padding="5,0"/>
+                    </Grid>
+                </controls:CenterModal.Footer>
+            </controls:CenterModal>
             <controls:BottomModal x:Name="LookUpModal"/>
-            <controls:ModalContentView x:Name="modalLookUp" />
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

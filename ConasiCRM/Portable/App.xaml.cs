@@ -1,3 +1,4 @@
+using ConasiCRM.Portable.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

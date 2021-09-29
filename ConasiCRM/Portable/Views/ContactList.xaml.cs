@@ -58,7 +58,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = e.Item as ContactListModel;
             ContactForm newPage = new ContactForm(item.contactid);
-            newPage.CheckSingleContact = async (CheckSingleContact) =>
+            newPage.OnCompleted = async (CheckSingleContact) =>
             {
                 if (CheckSingleContact == true)
                 {

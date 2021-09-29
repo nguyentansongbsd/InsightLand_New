@@ -2,43 +2,39 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace ConasiCRM.Portable.Models
 {
     public class DirectSaleSearchModel
     {
-        public Guid ProjectId { get; set; }
-        public Guid PhasesLanchId { get; set; }
-        public bool IsEvent { get; set; }
-        public bool IsCollapse { get; set; }
-        public string View { get; set; }
-        public string UnitCode { get; set; }
-        public ObservableCollection<string> Directions { get; set; }
-        public ObservableCollection<string> Views { get; set; }
-        public ObservableCollection<string> UnitStatuses { get; set; }
-        public decimal? minNetArea { get; set; }
-        public decimal? maxNetArea { get; set; }
-        public decimal? minPrice { get; set; }
-        public decimal? maxPrice { get; set; }
-
-        public DirectSaleSearchModel(Guid projectId, Guid phasesLanchId, 
-            bool isEvent,bool isCollapse, string view,string UnitCode, ObservableCollection<string> Directions,
-            ObservableCollection<string> Views, ObservableCollection<string> UnitStatuses, 
-            decimal? minNetArea, decimal? maxNetArea, decimal? minPrice, decimal? maxPrice)
+        public string Project { get; set; }
+        [JsonProperty("Block", NullValueHandling = NullValueHandling.Ignore)]
+        public string Block { get; set; }
+        [JsonProperty("Phase", NullValueHandling = NullValueHandling.Ignore)]
+        public string Phase { get; set; }
+        [JsonProperty("Event", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Event { get; set; }
+        [JsonProperty("Unit", NullValueHandling = NullValueHandling.Ignore)]
+        public string Unit { get; set; }
+        [JsonProperty("Direction", NullValueHandling = NullValueHandling.Ignore)]
+        public string Direction { get; set; }
+        [JsonProperty("stsUnit", NullValueHandling = NullValueHandling.Ignore)]
+        public string stsUnit { get; set; }
+        [JsonProperty("Area", NullValueHandling = NullValueHandling.Ignore)]
+        public string Area { get; set; }
+        [JsonProperty("Price", NullValueHandling = NullValueHandling.Ignore)]
+        public string Price { get; set; }
+        public DirectSaleSearchModel(string projectId, string phasesLanchId = null, bool? isEvent = null, string unitCode = null, string directions = null, string unitStatuses = null, string netArea = null, string price = null)
         {
-            ProjectId = projectId;
-            PhasesLanchId = phasesLanchId;
-            IsEvent = isEvent;
-            IsCollapse = isCollapse;
-            View = view;
-            this.UnitCode = UnitCode;
-            this.Directions = Directions;
-            this.Views = Views;
-            this.UnitStatuses = UnitStatuses;
-            this.minNetArea = minNetArea;
-            this.maxNetArea = maxNetArea;
-            this.minPrice = minPrice;
-            this.maxPrice = maxPrice;
+            Project = projectId;
+            Phase = phasesLanchId;
+            Event = isEvent;
+            Unit = unitCode;
+            Direction = directions;
+            stsUnit = unitStatuses;
+            Area = netArea;
+            Price = price;
         }
     }
 }

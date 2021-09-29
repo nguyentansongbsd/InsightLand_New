@@ -9,7 +9,6 @@
                 <controls:SearchBarFrame Grid.Row="0" Margin="10,5">
                     <controls:SearchBar Text="{Binding Keyword}" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
                 </controls:SearchBarFrame>
-                
                 <controls:BsdListView x:Name="listView" Grid.Row="1" ItemsSource="{Binding Data}" ItemTapped="listView_ItemTapped">
                     <controls:BsdListView.ItemTemplate>
                         <DataTemplate>
@@ -22,7 +21,7 @@
                                     </Grid>
                                     <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="Auto,*">
                                         <Label Grid.Column="0" Text="Địa chỉ: " FontSize="15" TextColor="#444444"/>
-                                        <Label Grid.Column="1" Text="{Binding bsd_diachithuongtru}" FontSize="15" TextColor="#444444" LineBreakMode="TailTruncation"/>
+                                        <Label Grid.Column="1" Text="{Binding bsd_contactaddress}" FontSize="15" TextColor="#444444" LineBreakMode="TailTruncation"/>
                                     </Grid>
                                 </Grid>
                             </ViewCell>

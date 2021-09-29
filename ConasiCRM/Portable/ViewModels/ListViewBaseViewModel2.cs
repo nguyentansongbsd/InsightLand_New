@@ -125,7 +125,7 @@ namespace ConasiCRM.Portable.ViewModels
             var items = new List<TEntity>();
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TEntity>>(EntityName, FetchXml);
-            
+
             if (result != null)
             {
                 var list = (List<TEntity>)result.value;

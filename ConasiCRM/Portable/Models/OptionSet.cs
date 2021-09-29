@@ -7,47 +7,13 @@ namespace ConasiCRM.Portable.Models
 {
     public class OptionSet : BaseViewModel
     {
-        private string _val;
-        public string Val
-        {
-            get { return _val; }
-            set
-            {
-                if (_val != value)
-                {
-                    _val = value;
-                    OnPropertyChanged(nameof(Val));
-                }
-            }
-        }
-        private string _label;
-        public string Label
-        {
-            get => _label;
-            set
-            {
-                if (_label != value)
-                {
-                    _label = value;
-                    OnPropertyChanged(nameof(Label));
-                }
-            }
-        }
+        public string Val { get; set; }
+
+        public string _label;
+        public string Label { get => _label; set { _label = value; OnPropertyChanged(nameof(Label)); } }
 
         private bool _selected;
-        public bool Selected
-        {
-            get => _selected;
-            set
-            {
-                if (_selected != value)
-                {
-                    _selected = value;
-                    OnPropertyChanged(nameof(Selected));
-                }
-            }
-        }
-
+        public bool Selected { get=>_selected; set { _selected = value;OnPropertyChanged(nameof(Selected)); } }
         public bool IsMultiple { get; set; }
 
         public OptionSet()

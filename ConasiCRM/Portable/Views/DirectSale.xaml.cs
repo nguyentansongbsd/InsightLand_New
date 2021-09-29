@@ -1,7 +1,10 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,258 +14,159 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DirectSale : ContentPage
     {
-        private DirectSaleViewModel viewModel;
+        public DirectSaleViewModel viewModel;
         public DirectSale()
         {
-            InitializeComponent();
-            BindingContext = viewModel = new DirectSaleViewModel();
-            viewModel.IsCollapse = true;
             LoadingHelper.Show();
-            viewModel.ModalLookUp = modalLookUp;
-            viewModel.InitializeModal();
+            InitializeComponent();
+            this.BindingContext = viewModel = new DirectSaleViewModel();
+            Init();
             LoadingHelper.Hide();
         }
 
-        private async void SearchClicked(object sender, EventArgs e)
+        public async void Init()
+        {
+            lookupNetArea.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                viewModel.NetAreas = NetAreaDirectSaleData.NetAreaData();
+                LoadingHelper.Hide();
+            };
+            lookupPrice.PreOpenAsync = async () => {
+                LoadingHelper.Show();
+                viewModel.Prices = PriceDirectSaleData.PriceData();
+                LoadingHelper.Hide();
+            };
+            lookupMultipleDirection.PreShow = async () => {
+                LoadingHelper.Show();
+                viewModel.DirectionOptions = DirectionData.Directions();
+                LoadingHelper.Hide();
+            };
+            lookupMultipleUnitStatus.PreShow= async () => {
+                LoadingHelper.Show();
+                var unitStatus = StatusCodeUnit.StatusCodes();
+                viewModel.UnitStatusOptions = new List<OptionSet>();
+                foreach (var item in unitStatus)
+                {
+                    viewModel.UnitStatusOptions.Add(new OptionSet(item.Id, item.Name));
+                }
+                LoadingHelper.Hide();
+            };
+            
+        }
+
+        private async void LoadProject_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            if (viewModel.Project == null || viewModel.Project.Id == Guid.Empty)
+            if (viewModel.Projects.Count == 0)
             {
-                await DisplayAlert("Thông báo", "Vui lòng chọn Dự án", "Đóng");
+                await viewModel.LoadProject();
+                listviewProject.ItemsSource = viewModel.Projects;
+            }
+            
+            await bottomModalProject.Show();
+            LoadingHelper.Hide();
+        }
+
+        private void SearchBar_SearchButtonPressed(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            listviewProject.ItemsSource = viewModel.Projects.Where(x=>x.bsd_name.ToLower().Contains(searchProject.Text.Trim().ToLower()) || x.bsd_projectcode.ToLower().Contains(searchProject.Text.Trim().ToLower()));
+            LoadingHelper.Hide();
+        }
+
+        private async void SearchBar_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(searchProject.Text))
+            {
+                LoadingHelper.Show();
+                viewModel.Projects.Clear();
+                await viewModel.LoadProject();
+                listviewProject.ItemsSource = viewModel.Projects;
+                LoadingHelper.Hide();
+            }
+        }
+
+        private async void ProjectItem_Tapped(object sender, ItemTappedEventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = e.Item as ProjectList;
+            viewModel.Project = item;
+            await Task.WhenAll(
+                viewModel.LoadPhasesLanch(),
+                viewModel.LoadBlocks()
+                ) ;
+            await bottomModalProject.Hide();
+            LoadingHelper.Hide();
+        }
+
+        private async void PhaseLaunchItem_SelectedChange(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadBlocks();
+            LoadingHelper.Hide();
+        }
+
+        private void SearchClicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.Project == null)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
                 LoadingHelper.Hide();
             }
             else
             {
-                var model = new DirectSaleSearchModel(viewModel.Project.Id, viewModel.PhasesLanch?.Id ?? Guid.Empty,
-                    viewModel.IsEvent,
-                    viewModel.IsCollapse, "",
-                    viewModel.UnitCode,
-                    viewModel.SelectedDirections,
-                    viewModel.SelectedViews,
-                    viewModel.SelectedUnitStatus,
-                    viewModel.minNetArea, viewModel.maxNetArea,
-                    viewModel.minPrice, viewModel.maxPrice);              
-                DirectSaleDetail directSaleDetail = new DirectSaleDetail(model);
-                directSaleDetail.OnComplete = async (IsSuccess) =>
+                string directions = (viewModel.SelectedDirections != null && viewModel.SelectedDirections.Count != 0) ? string.Join(",", viewModel.SelectedDirections) : null;
+                string unitStatus = (viewModel.SelectedUnitStatus != null && viewModel.SelectedUnitStatus.Count != 0) ? string.Join(",", viewModel.SelectedUnitStatus) : null;
+
+                DirectSaleSearchModel filter = new DirectSaleSearchModel(viewModel.Project.bsd_projectid, viewModel.PhasesLaunch?.Val, viewModel.IsEvent,viewModel.UnitCode, directions, unitStatus,viewModel.NetArea?.Id,viewModel.Price?.Id);
+
+                DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter,viewModel.Blocks);
+                directSaleDetail.OnCompleted = async (Success) =>
                 {
-                    if (IsSuccess)
+                    if (Success == 0)
                     {
                         await Navigation.PushAsync(directSaleDetail);
                         LoadingHelper.Hide();
                     }
-                    else
+                    else if (Success == 1)
                     {
                         LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy thông tin", "Đồng ý");
+                        ToastMessageHelper.LongMessage("Không có sản phẩm");
+                    }
+                    else if (Success == 2)
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.LongMessage("Không có sản phẩm");
                     }
                 };
             }
         }
 
-        private async void ShowInfo(object sender, EventArgs e)
-        {
-            if (viewModel.Project != null)
-            {
-                LoadingHelper.Show();
-                ProjectInfo projectInfo = new ProjectInfo(viewModel.Project.Id);
-                projectInfo.OnCompleted = async (IsSuccess) =>
-                {
-                    if (IsSuccess == true)
-                    {
-                        await Navigation.PushAsync(projectInfo);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        await DisplayAlert("", "Không tìm thấy thông tin.", "Đóng");
-                        LoadingHelper.Hide();
-                    }
-                };                              
-            }
-        }
-
-        private void VideoList_Clicked(object sender, EventArgs e)
-        {
-            if (viewModel.Project != null)
-            {
-                LoadingHelper.Show();
-                UnitVideoGallery unitVideoGallery = new UnitVideoGallery("Project", viewModel.Project.Id.ToString(), viewModel.Project.Name, "Video dự án");
-                unitVideoGallery.OnCompleted = async (IsSuccess) =>
-               {
-                   if (IsSuccess)
-                   {
-                       await Navigation.PushAsync(unitVideoGallery);
-                       LoadingHelper.Hide();
-                   }
-                   else
-                   {
-                       await DisplayAlert("", "Không có video để hiển thị.", "Đóng");
-                       LoadingHelper.Hide();
-                   }
-               };
-
-            }
-        }
-
-        private void ImageList_Clicked(object sender, EventArgs e)
-        {
-            if (viewModel.Project != null)
-            {
-                LoadingHelper.Show();
-                UnitImageGallery unitImageGallery = new UnitImageGallery("Project", viewModel.Project.Id.ToString(), viewModel.Project.Name, "Hình ảnh dự án");
-                unitImageGallery.OnCompleted = async (IsSuccess) =>
-                {
-                    if (IsSuccess)
-                    {
-                        await Navigation.PushAsync(unitImageGallery);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        await DisplayAlert("", "Không có image để hiển thị.", "Đóng");
-                        LoadingHelper.Hide();
-                    }
-                };
-
-            }
-        }
-
-        private void Project_Focused(object sender, EventArgs e)
+        private void ShowInfo(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            viewModel.CurrentLookUpConfig = viewModel.ProjectConfig;
-            viewModel.ProcessLookup(nameof(viewModel.ProjectConfig));
-        }
-
-        public async void EntryPhasesLaunch_Focused(object sender, EventArgs e)
-        {
-            viewModel.CurrentLookUpConfig = viewModel.PhasesLanchConfig;
             if (viewModel.Project == null)
             {
-                // viewModel.ShowLookUpModal = true; ;
-                await DisplayAlert("Thông báo", "Vui lòng chọn Dự án", "Đóng");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
+                LoadingHelper.Hide();
+                return;
             }
-            else
-            {
-                LoadingHelper.Show();
-                viewModel.CurrentLookUpConfig.FetchXml = @"<fetch version='1.0' count='20' page='{0}' output-format='xml-platform' mapping='logical' distinct='false'>
-                        <entity name='bsd_phaseslaunch'>
-                        <attribute name='bsd_name' alias='Name' />
-                        <attribute name='createdon' />
-                        <attribute name='statuscode' />
-                        <attribute name='bsd_projectid' />
-                        <attribute name='bsd_phaseslaunchid' alias='Id' />
-                        <order attribute='createdon' descending='true' />
-                        <filter type='and'>
-                          <condition attribute='statecode' operator='eq' value='0' />
-                          <condition attribute='statuscode' operator='eq' value='100000000' />
-                          <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + viewModel.Project.Id.ToString() + @"' />
-                          <filter type='or'>
-                              <condition attribute='bsd_name' operator='like' value='%{1}%' />
-                        </filter>
-                        </filter>
-                      </entity>
-                    </fetch>";
-                viewModel.ProcessLookup(nameof(viewModel.PhasesLanchConfig), true);
-            }
-        }
 
-        private async void Refresh_CLicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            // await Navigation.PushAsync(new MasterDetailPage1());
-            viewModel.Project = null;
-            viewModel.PhasesLanch = null;
-            viewModel.IsEvent = false;
-            viewModel.UnitCode = null;
-            viewModel.SelectedViews.Clear();
-            multipleSelectView.Clear();
-            viewModel.SelectedDirections.Clear();
-            multipleSelectDirection.Clear();
-            viewModel.SelectedUnitStatus.Clear();
-            multipleSelectUnitStatus.Clear();
-            viewModel.minNetArea = null;
-            minNetArea.Text = string.Empty;          
-            viewModel.maxNetArea = null;
-            maxNetArea.Text = string.Empty;         
-            viewModel.minPrice = null;          
-            minPrice.Text = string.Empty;
-            viewModel.maxPrice = null;          
-            maxPrice.Text = string.Empty;
-            // viewModel.IsCollapse = false;
-            LoadingHelper.Hide();
-        }
-        private int CompareInt(string a, string b)
-        {
-            if (a != string.Empty && b != string.Empty)
+            ProjectInfo projectInfo = new ProjectInfo(Guid.Parse(viewModel.Project.bsd_projectid));
+            projectInfo.OnCompleted = async (IsSuccess) =>
             {
-                if (Int32.TryParse(a, out int value1) && Int32.TryParse(b, out int value2))
+                if (IsSuccess == true)
                 {
-                    if (value1 > value2)
-                        return 1;
-                    if (value2 == value1)
-                        return 0;
-                    if (value1 < value2)
-                        return -1;
+                    await Navigation.PushAsync(projectInfo);
+                    LoadingHelper.Hide();
                 }
-                if (!Int32.TryParse(a, out int i) || !Int32.TryParse(b, out int j))
+                else
                 {
-                    if (!Int32.TryParse(a, out int c))
-                        return -1;
-                    if (!Int32.TryParse(b, out int d))
-                        return 1;
-                    return 0;
+                    await DisplayAlert("", "Không tìm thấy thông tin.", "Đóng");
+                    LoadingHelper.Hide();
                 }
-            }
-            return 0;
-        }
-
-        private void MinPrice_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.minPrice.ToString(), viewModel.maxPrice.ToString()) == 1)
-                {
-                    DisplayAlert("Thông Báo", "Giá trị không hợp lệ. Vui lòng thử lại!", "Đồng ý");
-                    //  viewModel.minPrice = viewModel.maxPrice;
-                }
-            }
-        }
-
-        private void MaxPrice_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.maxPrice.ToString(), viewModel.minPrice.ToString()) == -1)
-                {
-                    DisplayAlert("Thông Báo", "Giá trị không hợp lệ. Vui lòng thử lại!", "Đồng ý");
-                    //  viewModel.maxPrice = viewModel.minPrice;
-                }
-            }
-        }
-
-        private void MinNetArea_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.minNetArea.ToString(), viewModel.maxNetArea.ToString()) == 1)
-                {
-                    DisplayAlert("Thông Báo", "Giá trị không hợp lệ. Vui lòng thử lại!", "Đồng ý");
-                    // viewModel.minNetArea = viewModel.maxNetArea;
-                }
-            }
-        }
-
-        private void MaxNetArea_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (e.IsFocused == false)
-            {
-                if (CompareInt(viewModel.maxNetArea.ToString(), viewModel.minNetArea.ToString()) == -1)
-                {
-                    DisplayAlert("Thông Báo", "Giá trị không hợp lệ. Vui lòng thử lại!", "Đồng ý");
-                    // viewModel.maxNetArea = viewModel.minNetArea;
-                }
-            }
+            };
         }
     }
 }

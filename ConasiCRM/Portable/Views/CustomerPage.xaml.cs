@@ -8,6 +8,9 @@ namespace ConasiCRM.Portable.Views
 {
     public partial class CustomerPage : ContentPage
     {
+        public static bool? NeedToRefreshLead = null;
+        public static bool? NeedToRefreshContact = null;
+        public static bool? NeedToRefreshAccount = null;
         private LeadsContentView LeadsContentView;
         private ContactsContentview ContactsContentview;
         private AccountsContentView AccountsContentView;
@@ -16,6 +19,9 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             InitializeComponent();
+            NeedToRefreshLead = false;
+            NeedToRefreshContact = false;
+            NeedToRefreshAccount = false;
             Init();
         }
         public async void Init()
@@ -32,17 +38,37 @@ namespace ConasiCRM.Portable.Views
             }
             LeadsContentView.OnCompleted = async (IsSuccess) =>
             {
-                if (IsSuccess)
-                {
-                    CustomerContentView.Children.Add(LeadsContentView);
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    CustomerContentView.Children.Add(DataNull);
-                    LoadingHelper.Hide();
-                }
+                CustomerContentView.Children.Add(LeadsContentView);
+                LoadingHelper.Hide();
             };
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (LeadsContentView != null && NeedToRefreshLead == true)
+            {
+                LoadingHelper.Show();
+                await LeadsContentView.viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshLead = false;
+                LoadingHelper.Hide();
+            }
+
+            if (ContactsContentview != null && NeedToRefreshContact == true)
+            {
+                LoadingHelper.Show();
+                await ContactsContentview.viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshContact = false;
+                LoadingHelper.Hide();
+            }
+
+            if (AccountsContentView != null && NeedToRefreshAccount == true)
+            {
+                LoadingHelper.Show();
+                await AccountsContentView.viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshAccount = false;
+                LoadingHelper.Hide();
+            }
         }
 
         private void Lead_Tapped(object sender, EventArgs e)
@@ -79,16 +105,8 @@ namespace ConasiCRM.Portable.Views
             }
             AccountsContentView.OnCompleted = (IsSuccess) =>
             {
-                if (IsSuccess)
-                {
-                    CustomerContentView.Children.Add(AccountsContentView);
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    CustomerContentView.Children.Add(DataNull);
-                    LoadingHelper.Hide();
-                }
+                CustomerContentView.Children.Add(AccountsContentView);
+                LoadingHelper.Hide();
             };
             LeadsContentView.IsVisible = false;
             AccountsContentView.IsVisible = true;
@@ -113,16 +131,8 @@ namespace ConasiCRM.Portable.Views
             }
             ContactsContentview.OnCompleted = (IsSuccess) =>
             {
-                if (IsSuccess)
-                {
-                    CustomerContentView.Children.Add(ContactsContentview); ;
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    CustomerContentView.Children.Add(DataNull);
-                    LoadingHelper.Hide();
-                }
+                CustomerContentView.Children.Add(ContactsContentview);
+                LoadingHelper.Hide();
             };
             LeadsContentView.IsVisible = false;
             ContactsContentview.IsVisible = true;
@@ -136,7 +146,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             string[] options = new string[] { "Khách hàng tiềm năng", "Khách hàng cá nhân", "Khách hàng doanh nghiệp" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Huỹ", null, options);
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Huỷ", null, options);
             if (asw == "Khách hàng tiềm năng")
             {
                 await Navigation.PushAsync(new LeadForm());
@@ -149,7 +159,6 @@ namespace ConasiCRM.Portable.Views
             {
                 await Navigation.PushAsync(new AccountForm());
             }
-
             LoadingHelper.Hide();
         }
     }

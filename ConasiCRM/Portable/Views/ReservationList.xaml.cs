@@ -28,12 +28,12 @@ namespace ConasiCRM.Portable.Views
         {
             ReservationListModel val = e.Item as ReservationListModel;
             LoadingHelper.Show();
-            ReservationForm newPage = new ReservationForm(val.quoteid);
-            newPage.CheckReservation = async (CheckReservation) =>
+            BangTinhGiaDetailPage newPage = new BangTinhGiaDetailPage(val.quoteid);
+            newPage.OnCompleted = async (OnCompleted) =>
             {
-                if (CheckReservation == true)
+                if (OnCompleted == true)
                 {
-                    await Navigation.PushAsync(newPage);                 
+                    await Navigation.PushAsync(newPage);
                 }
                 LoadingHelper.Hide();
             };
