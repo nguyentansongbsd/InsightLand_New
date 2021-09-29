@@ -13,22 +13,26 @@ namespace ConasiCRM.Portable.ViewModels
     {
         private ReservationDetailPageModel _reservation;
         public ReservationDetailPageModel Reservation { get => _reservation; set { _reservation = value; OnPropertyChanged(nameof(Reservation)); } }
+        public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; }
 
         public OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
         public ObservableCollection<ReservationCoownerModel> CoownerList { get; set; }
-
-        private bool _showMoreNguoiDongSoHuu;
-        public bool ShowMoreNguoiDongSoHuu { get => _showMoreNguoiDongSoHuu; set { _showMoreNguoiDongSoHuu = value; OnPropertyChanged(nameof(ShowMoreNguoiDongSoHuu)); } }
-        public int PageNguoiDongSoHuu { get; set; } = 1;
         public ObservableCollection<ReservationInstallmentDetailPageModel> InstallmentList { get; set; }
 
         private int _numberInstallment;
         public int NumberInstallment { get => _numberInstallment; set { _numberInstallment = value; OnPropertyChanged(nameof(NumberInstallment)); } }
 
+        private bool _showInstallmentList;
+        public bool ShowInstallmentList { get => _showInstallmentList; set { _showInstallmentList = value; OnPropertyChanged(nameof(ShowInstallmentList)); } }
+
         public List<OptionSet> ListDiscount { get; set; }
         public List<OptionSet> ListSpecialDiscount { get; set; }
         public List<OptionSet> ListPromotion { get; set; }
+
+        public string UpdateQuote = "1";
+        public string UpdateQuotation = "2";
+        public string UpdateReservation = "3";
         public BangTinhGiaDetailPageViewModel()
         {
             CoownerList = new ObservableCollection<ReservationCoownerModel>();
@@ -38,6 +42,7 @@ namespace ConasiCRM.Portable.ViewModels
             ListDiscount = new List<OptionSet>();
             ListPromotion = new List<OptionSet>();
             ListSpecialDiscount = new List<OptionSet>();
+            ButtonCommandList = new ObservableCollection<FloatButtonItem>();
         }
 
         #region Chinh Sach
@@ -190,8 +195,6 @@ namespace ConasiCRM.Portable.ViewModels
             await LoadSpecialDiscount(ReservationId);
         }
 
-
-
         public async Task LoadHandoverCondition(Guid ReservationId)
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -293,7 +296,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadCoOwners(Guid ReservationId)
         {
-            string xml = $@"<fetch version='1.0' count = '3' page = '{PageNguoiDongSoHuu}' output-format='xml-platform' mapping='logical' distinct='false'>
+            string xml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
               <entity name='bsd_coowner'>
                 <attribute name='bsd_coownerid' />
                 <attribute name='bsd_name' />
@@ -313,16 +316,6 @@ namespace ConasiCRM.Portable.ViewModels
             if (result != null)
             {
                 var data = result.value;
-
-                if (data.Count <= 3)
-                {
-                    ShowMoreNguoiDongSoHuu = false;
-                }
-                else
-                {
-                    ShowMoreNguoiDongSoHuu = true;
-                }
-
                 foreach (var x in result.value)
                 {
                     if (!string.IsNullOrEmpty(x.account_name))
@@ -367,7 +360,68 @@ namespace ConasiCRM.Portable.ViewModels
                 InstallmentList.Add(x);
             }
             NumberInstallment = InstallmentList.Count();
+            if(NumberInstallment>0)
+            {
+                ShowInstallmentList = true;
+            }    
+            else
+            {
+                ShowInstallmentList = false;
+            }    
         }
         #endregion
+
+        public async Task<bool> UpdateQuotes(string option)
+        {
+            string path = $"/quotes({Reservation.quoteid})";
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            if (option == UpdateQuote)
+            {
+                data["statecode"] = Reservation.statecode;
+                data["statuscode"] = Reservation.statuscode;
+            }
+            if (option == UpdateQuotation)
+            {
+                data["statecode"] = Reservation.statecode;
+                data["statuscode"] = Reservation.statuscode;
+                data["bsd_quotationsigneddate"] = Reservation.bsd_quotationsigneddate;
+            }
+            if (option == UpdateReservation)
+            {
+                data["bsd_reservationformstatus"] = Reservation.bsd_reservationformstatus;
+                data["bsd_rfsigneddate"] = Reservation.bsd_rfsigneddate;
+            }
+
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdatePaymentScheme()
+        {
+            if (Reservation.paymentscheme_id != Guid.Empty)
+            {
+                CrmApiResponse update = await CrmHelper.PostData($"/quotes({Reservation.quoteid})/Microsoft.Dynamics.CRM.bsd_Action_Resv_Gene_PMS");
+                if (update.IsSuccess)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }    
+        }
     }
 }

@@ -19,25 +19,44 @@ namespace ConasiCRM.Portable.Views
         private BangTinhGiaDetailPageViewModel viewModel;
         public Action<bool> OnCompleted;
         private Guid ReservationId;
+        public static bool? NeedToRefresh = null;
 
         public BangTinhGiaDetailPage(Guid id)
         {
             InitializeComponent();
             ReservationId = id;
             BindingContext = viewModel = new BangTinhGiaDetailPageViewModel();
+            NeedToRefresh = false;
             LoadingHelper.Show();
             Tab_Tapped(1);
             Init();
         }
+
         public async void Init()
         {
             await LoadDataChinhSach(ReservationId);
             await viewModel.LoadCoOwners(ReservationId);
+            SetUpButtonGroup();
+
             if (viewModel.Reservation.quoteid != Guid.Empty)
                 OnCompleted?.Invoke(true);
             else
                 OnCompleted?.Invoke(false);
             LoadingHelper.Hide();
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (NeedToRefresh == true)
+            {
+                LoadingHelper.Show();
+                await LoadDataChinhSach(ReservationId);
+                await viewModel.LoadCoOwners(ReservationId);
+                SetUpButtonGroup();
+                LoadingHelper.Hide();
+                NeedToRefresh = false;
+            }
         }
 
         //tab chinh sach
@@ -64,15 +83,7 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadInstallmentList(id);
                 LoadingHelper.Hide();
             }
-        }
-
-        private async void ShowMoreNguoiDongSoHuu_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            viewModel.PageNguoiDongSoHuu++;
-            await viewModel.LoadCoOwners(ReservationId);
-            LoadingHelper.Hide();
-        }
+        }      
 
         private void ChinhSach_Tapped(object sender, EventArgs e)
         {
@@ -151,7 +162,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (!string.IsNullOrEmpty(ids))
             {
-                stackLayoutDiscount.IsVisible = true;
+                scrolltDiscount.IsVisible = true;
                 if (viewModel.Reservation.bsd_discounttypeid != Guid.Empty)
                 {
                     await viewModel.LoadDiscounts(viewModel.Reservation.bsd_discounttypeid);
@@ -163,14 +174,14 @@ namespace ConasiCRM.Portable.Views
                         OptionSet item = viewModel.ListDiscount.Single(x => x.Val == id);
                         if(item != null && !string.IsNullOrEmpty(item.Val))
                         {
-                            flexLayoutDiscount.Children.Add(SetUpItemBorder(item.Label));
+                            stackLayoutDiscount.Children.Add(SetUpItemBorder(item.Label));
                         }
                     }
                 }
             }
             else
             {
-                stackLayoutDiscount.IsVisible = false;
+                scrolltDiscount.IsVisible = false;
             }    
         }
 
@@ -209,6 +220,115 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 stackLayoutSpecialDiscount.IsVisible = false;
+            }
+        }
+
+        private void SetUpButtonGroup()
+        {
+            if (viewModel.Reservation.statuscode == 100000007)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Bảng Tính Giá", "FontAwesomeRegular", "\uf273", null, CancelQuotes));
+            }
+            if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate != null && viewModel.Reservation.bsd_quotationsigneddate == null)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Tạo Lịch Thanh Toán", "FontAwesomeRegular", "\uf274", null, CreatePaymentScheme));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, CompletedQuotationAsync));
+            }
+            if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_rfsigneddate == null)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Phiếu Đặt Cọc", "FontAwesomeRegular", "\uf274", null, CompletedReservation));
+            }
+            if (viewModel.ButtonCommandList.Count > 0)
+            {
+                floatingButtonGroup.IsVisible = true;
+            }
+            else
+            {
+                floatingButtonGroup.IsVisible = false;
+            }
+        }
+
+        private async void CreatePaymentScheme(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (await viewModel.UpdatePaymentScheme())
+            {
+                LoadingHelper.Hide();
+                ToastMessageHelper.ShortMessage("Tạo lịch thanh toán thành công");
+            }
+            else
+            {
+                LoadingHelper.Hide();
+                ToastMessageHelper.ShortMessage("Tạo lịch thanh toán thất bại. Vui lòng thử lại");
+            }
+        }
+
+        private async void CompletedReservation(object sender, EventArgs e)
+        {
+             LoadingHelper.Show();
+            if (viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                viewModel.Reservation.bsd_reservationformstatus = 100000002;
+                viewModel.Reservation.bsd_rfsigneddate = DateTime.Now;
+                if (await viewModel.UpdateQuotes(viewModel.UpdateReservation))
+                {
+                    OnAppearing();
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Phiếu đặt cọc đã được ký");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Ký phiếu đặt cọc thất bại. Vui lòng thử lại");
+                }
+            }
+        }
+
+        private async void CompletedQuotationAsync(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                viewModel.Reservation.statecode = 0;
+                viewModel.Reservation.statuscode = 100000000;
+                viewModel.Reservation.bsd_quotationsigneddate = DateTime.Now;
+                if (await viewModel.UpdateQuotes(viewModel.UpdateQuotation))
+                {
+                    OnAppearing();
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Bảng tính giá đã được ký");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Ký bảng tính giá thất bại. Vui lòng thử lại");
+                }
+            }
+        }
+
+        private async void CancelQuotes(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            string options = await DisplayActionSheet("Hủy Bảng Tính Giá", "Không", "Có", "Xác nhận hủy bảng tính giá");
+            if (options == "Có")
+            {
+                viewModel.Reservation.statecode = 3;
+                viewModel.Reservation.statuscode = 6;
+                if (await viewModel.UpdateQuotes(viewModel.UpdateQuote))
+                {
+                    OnAppearing();
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Đã hủy bảng tính giá");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Hủy bảng tính giá thất bại. Vui lòng thử lại");
+                }
+            }
+            else if (options == "Không")
+            {
+                LoadingHelper.Hide();
             }
         }
 

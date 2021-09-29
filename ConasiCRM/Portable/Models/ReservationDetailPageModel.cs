@@ -8,8 +8,12 @@ namespace ConasiCRM.Portable.Models
     public class ReservationDetailPageModel : BaseViewModel
     {
         public Guid quoteid { get; set; }
-        public int statuscode { get; set; }
-        public int statecode { get; set; }
+
+        private int _statuscode;
+        public int statuscode { get => _statuscode; set { _statuscode = value; OnPropertyChanged(nameof(statuscode)); } }
+
+        private int _statecode;
+        public int statecode { get => _statecode; set { _statecode = value; OnPropertyChanged(nameof(statecode)); } }
         public string name { get; set; }
         public Guid purchaser_accountid { get; set; }  // id khach hang account
         public string purchaser_account_name { get; set; } // ten khach hang account
@@ -64,24 +68,192 @@ namespace ConasiCRM.Portable.Models
         public decimal bsd_totalamountpaid { get; set; } // tổng tiền thanh toán 
 
         // thông tin báo giá
-        public DateTime bsd_reservationtime { get; set; } // thời gian đặt cọc
-        public DateTime bsd_deposittime { get; set; } // ngày đặt cọc
+        public DateTime? _bsd_reservationtime; // thời gian đặt cọc
+        public DateTime? bsd_reservationtime
+        {
+            get
+            {
+                if (_bsd_reservationtime.HasValue)
+                    return _bsd_reservationtime.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_reservationtime = value;
+                    OnPropertyChanged(nameof(bsd_reservationtime));
+                }
+            }
+        }
+
+        public DateTime? _bsd_deposittime; // ngày đặt cọc
+        public DateTime? bsd_deposittime
+        {
+            get
+            {
+                if (_bsd_deposittime.HasValue)
+                    return _bsd_deposittime.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_deposittime = value;
+                    OnPropertyChanged(nameof(bsd_deposittime));
+                }
+            }
+        }
         public Guid salescompany_accountid { get; set; }  // id đại lý/ sàn
         public string salescompany_account_name { get; set; } // tên đại lý/ sàn 
         public string bsd_nameofstaffagent { get; set; } // nhân viên đại lý/ sàn
         public string bsd_referral { get; set; } // giới thiệu
 
         // thông tin bảng tính giá
-        public DateTime bsd_quotationprinteddate { get; set; } // ngày in
-        public DateTime bsd_expireddateofsigningqf { get; set; } // ngày hết hạn ký
-        public DateTime bsd_quotationsigneddate { get; set; } // ngày ký
+        public DateTime? _bsd_quotationprinteddate; // ngày in
+        public DateTime? bsd_quotationprinteddate
+        {
+            get
+            {
+                if (_bsd_quotationprinteddate.HasValue)
+                    return _bsd_quotationprinteddate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_quotationprinteddate = value;
+                    OnPropertyChanged(nameof(bsd_quotationprinteddate));
+                }
+            }
+        }
+
+        public DateTime? _bsd_expireddateofsigningqf; // ngày hết hạn ký
+        public DateTime? bsd_expireddateofsigningqf
+        {
+            get
+            {
+                if (_bsd_expireddateofsigningqf.HasValue)
+                    return _bsd_expireddateofsigningqf.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_expireddateofsigningqf = value;
+                    OnPropertyChanged(nameof(bsd_expireddateofsigningqf));
+                }
+            }
+        }
+
+        public DateTime? _bsd_quotationsigneddate; // ngày ký
+        public DateTime? bsd_quotationsigneddate
+        {
+            get
+            {
+                if (_bsd_quotationsigneddate.HasValue)
+                    return _bsd_quotationsigneddate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_quotationsigneddate = value;
+                    OnPropertyChanged(nameof(bsd_quotationsigneddate));
+                }
+            }
+        }
 
         // thông tin đặt cọc
         public int bsd_reservationformstatus { get; set; } // trạng thái pđc
-        public DateTime bsd_reservationprinteddate { get; set; } // ngày in
-        public DateTime bsd_signingexpired { get; set; } // ngày hết hạn ký
-        public DateTime bsd_rfsigneddate { get; set; } // ngày ký
-        public DateTime bsd_reservationuploadeddate { get; set; } // ngày tải lên pđc
+
+        public DateTime? _bsd_reservationprinteddate; // ngày in
+        public DateTime? bsd_reservationprinteddate
+        {
+            get
+            {
+                if (_bsd_reservationprinteddate.HasValue)
+                    return _bsd_reservationprinteddate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_reservationprinteddate = value;
+                    OnPropertyChanged(nameof(bsd_reservationprinteddate));
+                }
+            }
+        }
+        public DateTime? _bsd_signingexpired; // ngày hết hạn ký
+        public DateTime? bsd_signingexpired
+        {
+            get
+            {
+                if (_bsd_signingexpired.HasValue)
+                    return _bsd_signingexpired.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_signingexpired = value;
+                    OnPropertyChanged(nameof(bsd_signingexpired));
+                }
+            }
+        }
+
+        public DateTime? _bsd_rfsigneddate; // ngày ký
+        public DateTime? bsd_rfsigneddate
+        {
+            get
+            {
+                if (_bsd_rfsigneddate.HasValue)
+                    return _bsd_rfsigneddate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_rfsigneddate = value;
+                    OnPropertyChanged(nameof(bsd_rfsigneddate));
+                }
+            }
+        }
+
+        public DateTime? _bsd_reservationuploadeddate; // ngày tải lên pđc
+        public DateTime? bsd_reservationuploadeddate
+        {
+            get
+            {
+                if (_bsd_reservationuploadeddate.HasValue)
+                    return _bsd_reservationuploadeddate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_reservationuploadeddate = value;
+                    OnPropertyChanged(nameof(bsd_reservationuploadeddate));
+                }
+            }
+        }
 
         // thông tin giá
         public decimal bsd_detailamount { get; set; } // giá gốc
@@ -100,14 +272,69 @@ namespace ConasiCRM.Portable.Models
 
         // đã nhận tiền đặt cọc 
         public bool bsd_salesdepartmentreceiveddeposit { get; set; }  // nhận tiền đặt cọc 
-        public DateTime bsd_receiptdate { get; set; } // ngày
+
+        public DateTime? _bsd_receiptdate; // ngày
+        public DateTime? bsd_receiptdate
+        {
+            get
+            {
+                if (_bsd_receiptdate.HasValue)
+                    return _bsd_receiptdate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_receiptdate = value;
+                    OnPropertyChanged(nameof(bsd_receiptdate));
+                }
+            }
+        }
         public decimal bsd_depositfeereceived { get; set; } // số tiền
 
         // thông tin từ chối
-        public DateTime bsd_rejectdate { get; set; } // ngày
+        public DateTime? _bsd_rejectdate; // ngày
+        public DateTime? bsd_rejectdate
+        {
+            get
+            {
+                if (_bsd_rejectdate.HasValue)
+                    return _bsd_rejectdate.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_rejectdate = value;
+                    OnPropertyChanged(nameof(bsd_rejectdate));
+                }
+            }
+        }
         public string bsd_rejectreason { get; set; } // lý do
 
         // báo cáo bán hàng
-        public DateTime bsd_calculatedforsalesreport { get; set; } // ngày
+        public DateTime? _bsd_calculatedforsalesreport; // ngày
+        public DateTime? bsd_calculatedforsalesreport
+        {
+            get
+            {
+                if (_bsd_calculatedforsalesreport.HasValue)
+                    return _bsd_calculatedforsalesreport.Value.AddHours(7);
+                else
+                    return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _bsd_calculatedforsalesreport = value;
+                    OnPropertyChanged(nameof(bsd_calculatedforsalesreport));
+                }
+            }
+        }         
     }
 }
