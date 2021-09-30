@@ -225,13 +225,14 @@ namespace ConasiCRM.Portable.Views
 
         private void SetUpButtonGroup()
         {
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Cập Nhật Bảng Tính Giá", "FontAwesomeRegular", "\uf044", null, EditQuotes));
             if (viewModel.Reservation.statuscode == 100000007)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Bảng Tính Giá", "FontAwesomeRegular", "\uf273", null, CancelQuotes));
             }
             if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate != null && viewModel.Reservation.bsd_quotationsigneddate == null)
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Tạo Lịch Thanh Toán", "FontAwesomeRegular", "\uf274", null, CreatePaymentScheme));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Tạo Lịch Thanh Toán", "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, CompletedQuotationAsync));
             }
             if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_rfsigneddate == null)
@@ -246,6 +247,10 @@ namespace ConasiCRM.Portable.Views
             {
                 floatingButtonGroup.IsVisible = false;
             }
+        }
+
+        private void EditQuotes(object sender, EventArgs e)
+        {          
         }
 
         private async void CreatePaymentScheme(object sender, EventArgs e)
