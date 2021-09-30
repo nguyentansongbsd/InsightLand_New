@@ -47,6 +47,9 @@ namespace ConasiCRM.Portable.Models
 
         private string _bsd_developeraccount;
         public string bsd_developeraccount { get { return _bsd_developeraccount; } set { _bsd_developeraccount = value; OnPropertyChanged(nameof(bsd_developeraccount)); } }
+
+        private string _bsd_developeraccount_name;
+        public string bsd_developeraccount_name { get { return _bsd_developeraccount_name; } set { _bsd_developeraccount_name = value; OnPropertyChanged(nameof(bsd_developeraccount_name)); } }
         public string bsd_contact_name { get; set; }
         public string bsd_contacmobilephone { get; set; }
         public string bsd_contactaddress { get; set; }        

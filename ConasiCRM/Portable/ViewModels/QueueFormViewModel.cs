@@ -87,13 +87,13 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='productid' alias='bsd_units_id' />
                                     <attribute name='bsd_queuingfee' alias='bsd_units_queuingfee' />
                                     <attribute name='bsd_phaseslaunchid' />
-<attribute name='pricelevelid' alias='pricelist_id'/>
-<attribute name='bsd_blocknumber' alias='bsd_block_id'/>
-<attribute name='bsd_floor' alias='bsd_floor_id'/>
-<attribute name='price' alias='unit_price'/>
-<attribute name='defaultuomid' alias='_defaultuomid_value' />
-<attribute name='transactioncurrencyid' alias='_transactioncurrencyid_value'/>
-<attribute name='bsd_taxpercent'/>
+                                    <attribute name='pricelevelid' alias='pricelist_id'/>
+                                    <attribute name='bsd_blocknumber' alias='bsd_block_id'/>
+                                    <attribute name='bsd_floor' alias='bsd_floor_id'/>
+                                    <attribute name='price' alias='unit_price'/>
+                                    <attribute name='defaultuomid' alias='_defaultuomid_value' />
+                                    <attribute name='transactioncurrencyid' alias='_transactioncurrencyid_value'/>
+                                    <attribute name='bsd_taxpercent'/>
                                     <order attribute='createdon' descending='true' />
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' link-type='outer' alias='aa'>
  	                                    <attribute name='bsd_projectid' alias='bsd_project_id' />
@@ -153,6 +153,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 <filter type='and'>
                                     <condition attribute='bsd_queueforproject' operator='eq' value='0' />
                                     <condition attribute='bsd_units' operator='eq' uitype='product' value='{" + QueueFormModel.bsd_units_id + @"}' />
+                                    <condition attribute='statuscode' operator='in'>
+                                        <value>100000000</value>
+                                        <value>100000002</value>
+                                    </condition>
                                 </filter>
                               </entity>
                             </fetch>";

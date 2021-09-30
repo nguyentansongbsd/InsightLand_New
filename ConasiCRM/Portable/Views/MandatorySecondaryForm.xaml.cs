@@ -58,7 +58,7 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả (EN)");
                 return;
             }
-            if(viewModel.Contact.Id==null)
+            if(viewModel.Contact == null || viewModel.Contact.Id==null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn người ủy quyền");
                 return;

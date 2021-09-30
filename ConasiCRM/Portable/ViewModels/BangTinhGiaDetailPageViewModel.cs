@@ -32,7 +32,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         public string UpdateQuote = "1";
         public string UpdateQuotation = "2";
-        public string UpdateReservation = "3";
+        public string ConfirmReservation = "3";
+        public string UpdateReservation = "4";
         public BangTinhGiaDetailPageViewModel()
         {
             CoownerList = new ObservableCollection<ReservationCoownerModel>();
@@ -385,12 +386,16 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["statecode"] = Reservation.statecode;
                 data["statuscode"] = Reservation.statuscode;
-                data["bsd_quotationsigneddate"] = Reservation.bsd_quotationsigneddate;
+                data["bsd_quotationsigneddate"] = Reservation.bsd_quotationsigneddate.Value.ToUniversalTime(); ;
+            }
+            if (option == ConfirmReservation)
+            {
+                data["bsd_reservationuploadeddate"] = Reservation.bsd_reservationuploadeddate.Value.ToUniversalTime(); ;
             }
             if (option == UpdateReservation)
             {
                 data["bsd_reservationformstatus"] = Reservation.bsd_reservationformstatus;
-                data["bsd_rfsigneddate"] = Reservation.bsd_rfsigneddate;
+                data["bsd_rfsigneddate"] = Reservation.bsd_rfsigneddate.Value.ToUniversalTime(); ;
             }
 
             CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
@@ -408,8 +413,9 @@ namespace ConasiCRM.Portable.ViewModels
         {
             if (Reservation.paymentscheme_id != Guid.Empty)
             {
-                CrmApiResponse update = await CrmHelper.PostData($"/quotes({Reservation.quoteid})/Microsoft.Dynamics.CRM.bsd_Action_Resv_Gene_PMS");
-                if (update.IsSuccess)
+                IDictionary<string, object> data = new Dictionary<string, object>();
+                CrmApiResponse updateResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})/Microsoft.Dynamics.CRM.bsd_Action_Resv_Gene_PMS", data);
+                if (updateResponse.IsSuccess)
                 {
                     return true;
                 }
@@ -421,7 +427,7 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 return false;
-            }    
+            }
         }
     }
 }

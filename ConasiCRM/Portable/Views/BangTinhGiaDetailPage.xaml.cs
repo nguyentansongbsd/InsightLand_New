@@ -53,6 +53,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 await LoadDataChinhSach(ReservationId);
                 await viewModel.LoadCoOwners(ReservationId);
+                viewModel.ButtonCommandList.Clear();
                 SetUpButtonGroup();
                 LoadingHelper.Hide();
                 NeedToRefresh = false;
@@ -225,17 +226,27 @@ namespace ConasiCRM.Portable.Views
 
         private void SetUpButtonGroup()
         {
-            viewModel.ButtonCommandList.Add(new FloatButtonItem("Cập Nhật Bảng Tính Giá", "FontAwesomeRegular", "\uf044", null, EditQuotes));
             if (viewModel.Reservation.statuscode == 100000007)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Bảng Tính Giá", "FontAwesomeRegular", "\uf273", null, CancelQuotes));
             }
-            if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate != null && viewModel.Reservation.bsd_quotationsigneddate == null)
+            if (viewModel.Reservation.statuscode == 100000007)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Cập Nhật Bảng Tính Giá", "FontAwesomeRegular", "\uf044", null, EditQuotes));
+            }
+            if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate == null && viewModel.Reservation.bsd_quotationsigneddate == null)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Tạo Lịch Thanh Toán", "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, CompletedQuotationAsync));
             }
-            if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_rfsigneddate == null)
+            if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate != null && viewModel.Reservation.bsd_quotationsigneddate == null)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, CompletedQuotation));
+            }
+            if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_reservationuploadeddate == null && viewModel.Reservation.bsd_rfsigneddate == null)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Xác Nhận Tải PĐC", "FontAwesomeRegular", "\uf15c", null, ConfirmReservation));
+            }
+            if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_reservationuploadeddate != null && viewModel.Reservation.bsd_rfsigneddate == null)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Phiếu Đặt Cọc", "FontAwesomeRegular", "\uf274", null, CompletedReservation));
             }
@@ -249,6 +260,27 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
+        private async void ConfirmReservation(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                viewModel.Reservation.bsd_reservationuploadeddate = DateTime.Now;
+                if (await viewModel.UpdateQuotes(viewModel.ConfirmReservation))
+                {
+                    NeedToRefresh = true;
+                    OnAppearing();
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Đã xác nhận tải phiếu đặt cọc");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Xác nhận tải phiếu đặt cọc thất bại. Vui lòng thử lại");
+                }
+            }
+        }
+
         private void EditQuotes(object sender, EventArgs e)
         {          
         }
@@ -258,6 +290,8 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             if (await viewModel.UpdatePaymentScheme())
             {
+                NeedToRefresh = true;
+                OnAppearing();
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Tạo lịch thanh toán thành công");
             }
@@ -277,6 +311,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.Reservation.bsd_rfsigneddate = DateTime.Now;
                 if (await viewModel.UpdateQuotes(viewModel.UpdateReservation))
                 {
+                    NeedToRefresh = true;
                     OnAppearing();
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Phiếu đặt cọc đã được ký");
@@ -289,7 +324,7 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private async void CompletedQuotationAsync(object sender, EventArgs e)
+        private async void CompletedQuotation(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             if (viewModel.Reservation.quoteid != Guid.Empty)
@@ -299,6 +334,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.Reservation.bsd_quotationsigneddate = DateTime.Now;
                 if (await viewModel.UpdateQuotes(viewModel.UpdateQuotation))
                 {
+                    NeedToRefresh = true;
                     OnAppearing();
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Bảng tính giá đã được ký");
@@ -321,6 +357,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.Reservation.statuscode = 6;
                 if (await viewModel.UpdateQuotes(viewModel.UpdateQuote))
                 {
+                    NeedToRefresh = true;
                     OnAppearing();
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Đã hủy bảng tính giá");
