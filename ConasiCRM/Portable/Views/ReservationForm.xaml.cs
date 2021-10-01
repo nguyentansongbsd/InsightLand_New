@@ -45,7 +45,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     lookupGiuCho.IsEnabled = false;
                 }
-                //await viewModel.LoadTaxCode(); khong can load taxcode. vi dang dung so mac dinh (10%)
+                await viewModel.LoadTaxCode();
                 SetPreOpen();
                 CheckReservation?.Invoke(true);
             }
