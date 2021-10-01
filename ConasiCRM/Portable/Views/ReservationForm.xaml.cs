@@ -21,6 +21,8 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
+            centerModalPromotions.Body.BindingContext = viewModel;
+            centerModalCoOwner.Body.BindingContext = viewModel;
             viewModel.QuoteId = quoteId;
             InitUpdate();
         }
@@ -45,7 +47,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     lookupGiuCho.IsEnabled = false;
                 }
-                //await viewModel.LoadTaxCode(); khong can load taxcode. vi dang dung so mac dinh (10%)
+                await viewModel.LoadTaxCode();
                 SetPreOpen();
                 CheckReservation?.Invoke(true);
             }
@@ -62,6 +64,10 @@ namespace ConasiCRM.Portable.Views
             {
                 SetPreOpen();
                 await viewModel.LoadDiscountChilds();
+                await viewModel.LoadHandoverCondition();
+                await viewModel.LoadPromotionsSelected();
+                await viewModel.LoadPromotions();
+                await viewModel.LoadCoOwners();
                 if (!string.IsNullOrWhiteSpace(viewModel.Quote.bsd_discounts))
                 {
                     List<string> arrDiscounts = viewModel.Quote.bsd_discounts.Split(',').ToList();
@@ -96,7 +102,7 @@ namespace ConasiCRM.Portable.Views
 
             lookupDieuKienBanGiao.PreOpenAsync = async () => {
                 LoadingHelper.Show();
-                await viewModel.LoadHandoverCondition();
+                await viewModel.LoadHandoverConditions();
                 LoadingHelper.Hide();
             };
 
@@ -457,12 +463,8 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn loại hợp đồng");
                 return;
             }
-            if (viewModel.ContractType == null)
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại hợp đồng");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(viewModel.TitleQuote))
+            
+            if (string.IsNullOrWhiteSpace(viewModel.Quote.name))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả");
                 return;
@@ -472,13 +474,14 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn Đại lý/Sàn giao dịch");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(viewModel.WaiverManaFee))
+            if (string.IsNullOrWhiteSpace(viewModel.Quote.bsd_waivermanafeemonth))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng điền số tháng miễn giảm phí quản lý");
                 return;
             }
 
             LoadingHelper.Show();
+
             if (viewModel.Quote.quoteid == Guid.Empty)
             {
                 bool isSuccess = await viewModel.CreateQuote();
@@ -499,6 +502,20 @@ namespace ConasiCRM.Portable.Views
                 {
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Tạo bảng tính giá thất bại");
+                }
+            }
+            else
+            {
+                bool isSuccess = await viewModel.UpdateQuote();
+                if (isSuccess)
+                {
+                    ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thành công");
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thất bại");
                 }
             }
         }
