@@ -14,6 +14,7 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class ReservationFormViewModel : BaseViewModel
     {
+        public Guid QuoteId { get; set; }
         public Guid ProjectId { get; set; }
         public Guid ProductId { get; set; }
         public string KeywordHandoverCondition { get; set; }
@@ -188,9 +189,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         public void SetTotalVatTax()
         {
-            //Tổng tiền thuế VAT = ((Gia ban truoc thue - Tổng giá trị QSDĐ) * Ma so thue)
+            //Tổng tiền thuế VAT = ((Gia ban truoc thue - Tổng giá trị QSDĐ) * Ma so thue) // ma so thue fix cung la 10%
             this.TotalVATTax = 0;
-            this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * this.TaxCode.bsd_value) / 100;
+            this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * 10) / 100;
             SetTotalAmount();
         }
 
@@ -216,6 +217,58 @@ namespace ConasiCRM.Portable.ViewModels
         {
             SelectedPromotionIds = new List<string>();
             this.Quote = new QuoteModel();
+        }
+
+        //Load thong tin Quote
+        public async Task LoadQuote()
+        {
+
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='quote'>
+                                    <attribute name='name' />
+<attribute name='bsd_discounts' />
+
+                                    <attribute name='customerid' />
+                                    <attribute name='statecode' />
+                                    <attribute name='totalamount' />
+                                    <attribute name='createdon' />
+                                    <attribute name='bsd_unitno' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='bsd_reservationno' />
+                                    <attribute name='bsd_projectid' />
+                                    <attribute name='bsd_quotationnumber' />
+                                    <attribute name='bsd_quotecodesams' />
+                                    <attribute name='bsd_phaseslaunchid' />
+                                    <attribute name='bsd_paymentscheme' />
+                                    <attribute name='quoteid' />
+                                    <order attribute='createdon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='quoteid' operator='eq' uitype='quote' value='{this.QuoteId}' />
+                                    </filter>
+                                    <link-entity name='bsd_paymentscheme' from='bsd_paymentschemeid' to='bsd_paymentscheme' visible='false' link-type='outer' alias='a_134b4ac419dbeb11bacb002248168cad'>
+                                        <attribute name='bsd_name' alias='paymentscheme_name'/>
+                                        <attribute name='bsd_paymentschemeid' alias='paymentscheme_id'/>
+                                    </link-entity>
+                                    <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discountlist' visible='false' link-type='outer' alias='a_de5241be19dbeb11bacb002248168cad'>
+                                        <attribute name='bsd_name' alias='discountlist_name'/>
+                                        <attribute name='bsd_discounttypeid' alias='discountlist_id'/>
+                                    </link-entity>
+                                    <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='a_d52436e819dbeb11bacb002248168cad'>
+                                        <attribute name='productid' alias='unit_id'/>
+                                        <attribute name='name' alias='unit_name'/>
+                                        <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
+                                        <attribute name='bsd_phaseslaunchid' alias='_bsd_phaseslaunchid_value'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuoteModel>>("quotes", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            this.Quote = result.value.SingleOrDefault();
+
+            this.PaymentScheme = new OptionSet(this.Quote.paymentscheme_id.ToString(), this.Quote.paymentscheme_name);
+            this.DiscountList = this.Quote.discountlist_id != Guid.Empty ? new OptionSet(this.Quote.discountlist_id.ToString(), this.Quote.discountlist_name) : null;
+
         }
 
         // Load thong tin san pham
@@ -300,6 +353,7 @@ namespace ConasiCRM.Portable.ViewModels
         // load phuong thuc thanh toan vs status code = confirm va theo du an
         public async Task LoadPaymentSchemes()
         {
+            Guid unitId = this.QuoteId != Guid.Empty ? this.Quote._bsd_projectcode_value : this.UnitInfor._bsd_projectcode_value;
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_paymentscheme'>
                                     <attribute name='bsd_name' alias='Label'/>
@@ -307,7 +361,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <order attribute='createdon' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='statuscode' operator='eq' value='100000000' />
-                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{this.UnitInfor._bsd_projectcode_value}' />
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{unitId}' />
                                     </filter>
                                   </entity>
                                 </fetch>";
@@ -343,12 +397,13 @@ namespace ConasiCRM.Portable.ViewModels
         // Load Chieu khau
         public async Task LoadDiscountList()
         {
+            Guid phasesLaunchId = this.QuoteId != Guid.Empty ? this.Quote._bsd_phaseslaunchid_value : this.UnitInfor._bsd_phaseslaunchid_value;
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_phaseslaunch'>
                                     <attribute name='bsd_phaseslaunchid' />
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_phaseslaunchid' operator='eq' value='{this.UnitInfor._bsd_phaseslaunchid_value}'/>
+                                      <condition attribute='bsd_phaseslaunchid' operator='eq' value='{phasesLaunchId}'/>
                                     </filter>
                                     <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discountlist' visible='false' link-type='outer' alias='a_d55241be19dbeb11bacb002248168cad'>
                                         <attribute name='bsd_name' alias='Label'/>
