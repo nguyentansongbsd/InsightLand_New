@@ -60,6 +60,8 @@ namespace ConasiCRM.Portable.ViewModels
         private MandatorySecondaryModel _mandatorySecondary;
         public MandatorySecondaryModel MandatorySecondary { get => _mandatorySecondary; set { _mandatorySecondary = value; OnPropertyChanged(nameof(MandatorySecondary)); } }
 
+        private bool _isLoadMore;
+        public bool isLoadMore { get => _isLoadMore; set { _isLoadMore = value; OnPropertyChanged(nameof(isLoadMore)); } }
         public AccountDetailPageViewModel()
         {
             BusinessTypeOptions = new ObservableCollection<OptionSet>();
@@ -74,6 +76,7 @@ namespace ConasiCRM.Portable.ViewModels
             list_thongtincase = new ObservableCollection<ListCaseAcc>();
             list_MandatorySecondary = new ObservableCollection<MandatorySecondaryModel>();
             MandatorySecondary = new MandatorySecondaryModel();
+            isLoadMore = false;
         }
 
         //tab thong tin
@@ -440,7 +443,7 @@ namespace ConasiCRM.Portable.ViewModels
         // tab nguoi uy quyyen
         public async Task Load_List_Mandatory_Secondary(string accountid)
         {
-            string fetchxml = $@"<fetch version='1.0' count='3' page='{PageMandatory}' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchxml = $@"<fetch version='1.0' count='10' page='{PageMandatory}' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_mandatorysecondary'>
                                     <attribute name='bsd_mandatorysecondaryid' />
                                     <attribute name='bsd_name' />
@@ -463,9 +466,9 @@ namespace ConasiCRM.Portable.ViewModels
                                         <attribute name='mobilephone' alias='bsd_contacmobilephone'/>
                                         <attribute name='bsd_contactaddress' alias='bsd_contactaddress'/>
                                     </link-entity>         
- <link-entity name='account' from='accountid' to='bsd_developeraccount' link-type='inner' alias='aa'>
-     <attribute name='bsd_name' alias='bsd_developeraccount_name' />
-    </link-entity>
+                                    <link-entity name='account' from='accountid' to='bsd_developeraccount' link-type='inner' alias='aa'>
+                                        <attribute name='bsd_name' alias='bsd_developeraccount_name' />
+                                    </link-entity>
                                     <filter type='and'>
                                       <condition attribute='bsd_developeraccount' operator='eq' value='{accountid}' />
                                     </filter>                                  
@@ -477,7 +480,6 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             }
             var data = result.value;
-            ShowMoreMandatory = data.Count < 3 ? false : true;
 
             if (data.Any())
             {
@@ -488,7 +490,7 @@ namespace ConasiCRM.Portable.ViewModels
                     else
                         x.is_employee = false;
 
-                    if (x.statuscode == "100000000")
+                    if (x.statuscode == 100000000)
                     {
                         x.statuscode_title = "Applying";                                            
                         list_MandatorySecondary.Insert(0,x);
@@ -500,7 +502,6 @@ namespace ConasiCRM.Portable.ViewModels
                     }
                 }
             }
-
         }
 
         public async Task<bool> DeleteMandatory_Secondary(MandatorySecondaryModel Mandatory)
