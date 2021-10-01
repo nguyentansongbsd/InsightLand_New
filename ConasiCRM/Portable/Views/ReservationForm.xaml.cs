@@ -17,7 +17,15 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> CheckReservation;
         public ReservationFormViewModel viewModel;
 
-        public ReservationForm(Guid productId , OptionSet queue = null)
+        public ReservationForm(Guid quoteId)
+        {
+            InitializeComponent();
+            this.BindingContext = viewModel = new ReservationFormViewModel();
+            viewModel.QuoteId = quoteId;
+            InitUpdate();
+        }
+
+        public ReservationForm(Guid productId , OptionSet queue)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
@@ -37,7 +45,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     lookupGiuCho.IsEnabled = false;
                 }
-                await viewModel.LoadTaxCode();
+                //await viewModel.LoadTaxCode(); khong can load taxcode. vi dang dung so mac dinh (10%)
                 SetPreOpen();
                 CheckReservation?.Invoke(true);
             }
@@ -45,7 +53,35 @@ namespace ConasiCRM.Portable.Views
             {
                 CheckReservation?.Invoke(false);
             }
-            
+        }
+
+        public async void InitUpdate()
+        {
+            await viewModel.LoadQuote();
+            if (viewModel.Quote != null)
+            {
+                SetPreOpen();
+                await viewModel.LoadDiscountChilds();
+                if (!string.IsNullOrWhiteSpace(viewModel.Quote.bsd_discounts))
+                {
+                    List<string> arrDiscounts = viewModel.Quote.bsd_discounts.Split(',').ToList();
+                    for (int i = 0; i < viewModel.DiscountChilds.Count; i++)
+                    {
+                        for (int j = 0; j < arrDiscounts.Count; j++)
+                        {
+                            if (viewModel.DiscountChilds[i].Val == arrDiscounts[j])
+                            {
+                                viewModel.DiscountChilds[i].Selected = true;
+                            }
+                        }
+                    }
+                }
+                this.CheckReservation?.Invoke(true);
+            }
+            else
+            {
+                this.CheckReservation?.Invoke(false);
+            }
         }
 
         private void SetPreOpen()
