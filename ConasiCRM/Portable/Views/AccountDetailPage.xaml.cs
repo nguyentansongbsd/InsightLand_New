@@ -408,5 +408,20 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
+
+        private void CloseContentMandatorySecondary_Tapped(object sender, EventArgs e)
+        {
+            ContentMandatorySecondary.IsVisible = false;
+        }
+
+        private void ListMandatorySecondary_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            Grid grid = (Grid)sender;
+            var item = (TapGestureRecognizer)grid.GestureRecognizers[0];
+            viewModel.MandatorySecondary = item.CommandParameter as MandatorySecondaryModel;
+            ContentMandatorySecondary.IsVisible = true;
+            LoadingHelper.Hide();
+        }
     }
 }

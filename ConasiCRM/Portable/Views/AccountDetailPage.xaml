@@ -471,6 +471,9 @@
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ListMandatorySecondary_Tapped" CommandParameter="{Binding .}"/>
+                                            </Grid.GestureRecognizers>
                                             <Label Text="{Binding bsd_contact_name}" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
                                             <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.ColumnSpan="2">
                                                 <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
@@ -499,6 +502,64 @@
                 </StackLayout>
             </ScrollView>
             <controls:FloatingButtonGroup x:Name="floatingButtonGroup" ItemsSource="{Binding BindingContext.ButtonCommandList,Source={x:Reference this}}"/>
+
+            <ContentView x:Name="ContentMandatorySecondary" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#90000000">
+                <ContentView.GestureRecognizers>
+                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CloseContentMandatorySecondary_Tapped"/>
+                </ContentView.GestureRecognizers>
+                <telerikPrimitives:RadBorder VerticalOptions="FillAndExpand" CornerRadius="10" BackgroundColor="White" Margin="15,30">
+                    <telerikPrimitives:RadBorder.GestureRecognizers>
+                        <TapGestureRecognizer/>
+                    </telerikPrimitives:RadBorder.GestureRecognizers>
+                    <ScrollView>
+                        <StackLayout>
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto" Padding="10,10,10,5">
+                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="Wheat">
+                                    <Label Grid.Column="0" Text="{Binding MandatorySecondary.statuscode_title}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                </telerikPrimitives:RadBorder>
+                                <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Text="&#xf057;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="20" Padding="5" TextColor="#666666">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CloseContentMandatorySecondary_Tapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Grid>
+                            <Label Text="{Binding MandatorySecondary.bsd_contact_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center" Padding="15,0"/>
+                            <Grid ColumnDefinitions="Auto,*" Padding="15,5,15,15">
+                                <Label Grid.Column="0" Text="Tên công ty:" FontSize="15" TextColor="#444444"/>
+                                <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_developeraccount_name}" TextColor="#444444" FontSize="15"/>
+                            </Grid>
+                            <Label Text="Thông Tin Chi Tiết" TextColor="#333333" FontSize="15"  BackgroundColor="#80F2F2F2" Padding="15,10" FontAttributes="Bold" />
+                            <StackLayout Spacing="1" Background="#f1f1f1">
+                                <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                    <Label Grid.Column="0" Text="Ngày bắt đầu hiệu lực:" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                    <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_effectivedateto,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#444444" FontSize="15" Padding="25,10" HorizontalOptions="End"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                    <Label Grid.Column="0" Text="Ngày hết hiệu lực:" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                    <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_effectivedatefrom,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#444444" FontSize="15" Padding="25,10" HorizontalOptions="End"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                    <Label Grid.Column="0" Text="Chức vụ (VN):" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                    <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_jobtitlevn}" TextColor="#444444" FontSize="15" Padding="25,10" HorizontalOptions="End"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                    <Label Grid.Column="0" Text="Chức vụ (EN):" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                    <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_jobtitleen}" TextColor="#444444" FontSize="15" Padding="25,10" HorizontalOptions="End"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                    <Label Grid.Column="0" Text="Mô tả (VN):" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                    <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_descriptionsvn}" TextColor="#444444" FontSize="15" Padding="25,10" HorizontalOptions="End"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                    <Label Grid.Column="0" Text="Mô tả (EN):" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                    <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_descriptionsen}" TextColor="#444444" FontSize="15" Padding="25,10" HorizontalOptions="End"/>
+                                </Grid>
+                            </StackLayout>
+                        </StackLayout>
+                    </ScrollView>
+                </telerikPrimitives:RadBorder>
+            </ContentView>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

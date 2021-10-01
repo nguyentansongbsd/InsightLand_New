@@ -153,6 +153,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 <filter type='and'>
                                     <condition attribute='bsd_queueforproject' operator='eq' value='0' />
                                     <condition attribute='bsd_units' operator='eq' uitype='product' value='{" + QueueFormModel.bsd_units_id + @"}' />
+                                    <condition attribute='statuscode' operator='in'>
+                                        <value>100000000</value>
+                                        <value>100000002</value>
+                                    </condition>
                                 </filter>
                               </entity>
                             </fetch>";

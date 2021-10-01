@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -56,6 +57,9 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showMoreMandatory;
         public bool ShowMoreMandatory { get => _showMoreMandatory; set { _showMoreMandatory = value; OnPropertyChanged(nameof(ShowMoreMandatory)); } }
 
+        private MandatorySecondaryModel _mandatorySecondary;
+        public MandatorySecondaryModel MandatorySecondary { get => _mandatorySecondary; set { _mandatorySecondary = value; OnPropertyChanged(nameof(MandatorySecondary)); } }
+
         public AccountDetailPageViewModel()
         {
             BusinessTypeOptions = new ObservableCollection<OptionSet>();
@@ -69,6 +73,7 @@ namespace ConasiCRM.Portable.ViewModels
             list_thongtincontract = new ObservableCollection<ListContractAcc>();
             list_thongtincase = new ObservableCollection<ListCaseAcc>();
             list_MandatorySecondary = new ObservableCollection<MandatorySecondaryModel>();
+            MandatorySecondary = new MandatorySecondaryModel();
         }
 
         //tab thong tin
@@ -446,6 +451,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_jobtitleen' />
                                     <attribute name='bsd_effectivedateto' />
                                     <attribute name='bsd_effectivedatefrom' />
+                                    <attribute name='bsd_descriptionsen' />
+                                    <attribute name='bsd_descriptionsvn' />
                                     <attribute name='bsd_developeraccount' />
                                     <attribute name='bsd_contact' />
                                     <attribute name='bsd_employee' alias='bsd_employeeid' />
@@ -455,7 +462,10 @@ namespace ConasiCRM.Portable.ViewModels
                                         <attribute name='bsd_fullname' alias='bsd_contact_name'/>
                                         <attribute name='mobilephone' alias='bsd_contacmobilephone'/>
                                         <attribute name='bsd_contactaddress' alias='bsd_contactaddress'/>
-                                    </link-entity>                                  
+                                    </link-entity>         
+ <link-entity name='account' from='accountid' to='bsd_developeraccount' link-type='inner' alias='aa'>
+     <attribute name='bsd_name' alias='bsd_developeraccount_name' />
+    </link-entity>
                                     <filter type='and'>
                                       <condition attribute='bsd_developeraccount' operator='eq' value='{accountid}' />
                                     </filter>                                  
