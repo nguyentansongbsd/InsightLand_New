@@ -21,11 +21,13 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
+            centerModalPromotions.Body.BindingContext = viewModel;
+            centerModalCoOwner.Body.BindingContext = viewModel;
             viewModel.QuoteId = quoteId;
             InitUpdate();
         }
 
-        public ReservationForm(Guid productId , OptionSet queue)
+        public ReservationForm(Guid productId, OptionSet queue)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
@@ -45,7 +47,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     lookupGiuCho.IsEnabled = false;
                 }
-                //await viewModel.LoadTaxCode(); khong can load taxcode. vi dang dung so mac dinh (10%)
+                await viewModel.LoadTaxCode();
                 SetPreOpen();
                 CheckReservation?.Invoke(true);
             }
@@ -62,6 +64,10 @@ namespace ConasiCRM.Portable.Views
             {
                 SetPreOpen();
                 await viewModel.LoadDiscountChilds();
+                await viewModel.LoadHandoverCondition();
+                await viewModel.LoadPromotionsSelected();
+                await viewModel.LoadPromotions();
+                await viewModel.LoadCoOwners();
                 if (!string.IsNullOrWhiteSpace(viewModel.Quote.bsd_discounts))
                 {
                     List<string> arrDiscounts = viewModel.Quote.bsd_discounts.Split(',').ToList();
@@ -94,9 +100,10 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             };
 
-            lookupDieuKienBanGiao.PreOpenAsync = async () => {
+            lookupDieuKienBanGiao.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
-                await viewModel.LoadHandoverCondition();
+                await viewModel.LoadHandoverConditions();
                 LoadingHelper.Hide();
             };
 
@@ -108,7 +115,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     await viewModel.LoadDiscountList();
                 }
-                
+
                 if (viewModel.DiscountLists == null) // dot mo ban khong co chieu khau
                 {
                     ToastMessageHelper.ShortMessage("Không có chiết khấu");
@@ -316,10 +323,27 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void UnSelectCoOwner_Clicked(object sender, EventArgs e)
+        private async void UnSelectCoOwner_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             var item = (CoOwnerFormModel)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+
+            if (viewModel.QuoteId != Guid.Empty)
+            {
+                var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa người đồng sở hữu này không ?", "Đồng ý", "Hủy");
+                if (conform == false) return;
+                var deleteResponse = await CrmHelper.DeleteRecord($"/bsd_coowners({item.bsd_coownerid})");
+                if (deleteResponse.IsSuccess)
+                {
+                    ToastMessageHelper.ShortMessage("Xóa người đồng sở hữu thành công");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Xóa người đồng sở hữu thất bại");
+                    return;
+                }
+            }
             viewModel.CoOwnerList.Remove(item);
             LoadingHelper.Hide();
         }
@@ -335,12 +359,12 @@ namespace ConasiCRM.Portable.Views
             viewModel.CoOwner = item;
             if (viewModel.CoOwner.contact_id != Guid.Empty)
             {
-                viewModel.CustomerCoOwner = new OptionSet(viewModel.CoOwner.contact_id.ToString(), viewModel.CoOwner.contact_name);
+                viewModel.CustomerCoOwner = new OptionSet(viewModel.CoOwner.contact_id.ToString(), viewModel.CoOwner.contact_name) { Title = "2" };
             }
 
             if (viewModel.CoOwner.account_id != Guid.Empty)
             {
-                viewModel.CustomerCoOwner = new OptionSet(viewModel.CoOwner.account_id.ToString(), viewModel.CoOwner.account_name);
+                viewModel.CustomerCoOwner = new OptionSet(viewModel.CoOwner.account_id.ToString(), viewModel.CoOwner.account_name) { Title = "3" };
             }
 
             viewModel.TitleCoOwner = viewModel.CoOwner.bsd_name;
@@ -369,6 +393,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
+            LoadingHelper.Show();
             if (viewModel.CustomerCoOwner.Title == "2")
             {
                 viewModel.CoOwner.contact_id = Guid.Parse(viewModel.CustomerCoOwner.Val);
@@ -387,29 +412,67 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.CoOwner.bsd_coownerid == Guid.Empty)
             {
                 viewModel.CoOwner.bsd_coownerid = Guid.NewGuid();
+
+                if (viewModel.QuoteId != Guid.Empty)
+                {
+                    bool IsSuccess = await viewModel.AddCoOwer();
+                    if (IsSuccess)
+                    {
+                        await centerModalCoOwner.Hide();
+                        ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thành công");
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thất bại");
+                    }
+                }
                 viewModel.CoOwnerList.Add(viewModel.CoOwner);
+                LoadingHelper.Hide();
             }
             else
             {
-                List<CoOwnerFormModel> coOwnerList = new List<CoOwnerFormModel>();
-                foreach (var item in viewModel.CoOwnerList)
+                if (viewModel.QuoteId == Guid.Empty)
                 {
-                    if (viewModel.CoOwner.bsd_coownerid == item.bsd_coownerid)
+                    List<CoOwnerFormModel> coOwnerList = new List<CoOwnerFormModel>();
+                    foreach (var item in viewModel.CoOwnerList)
                     {
-                        item.bsd_name = viewModel.CoOwner.bsd_name;
-                        item.contact_id = viewModel.CoOwner.contact_id;
-                        item.contact_name = viewModel.CoOwner.contact_name;
-                        item.account_id = viewModel.CoOwner.account_id;
-                        item.account_name = viewModel.CoOwner.account_name;
-                        item.bsd_relationshipId = viewModel.CoOwner.bsd_relationshipId;
-                        item.bsd_relationship = viewModel.CoOwner.bsd_relationship;
+                        if (viewModel.CoOwner.bsd_coownerid == item.bsd_coownerid)
+                        {
+                            item.bsd_name = viewModel.CoOwner.bsd_name;
+                            item.contact_id = viewModel.CoOwner.contact_id;
+                            item.contact_name = viewModel.CoOwner.contact_name;
+                            item.account_id = viewModel.CoOwner.account_id;
+                            item.account_name = viewModel.CoOwner.account_name;
+                            item.bsd_relationshipId = viewModel.CoOwner.bsd_relationshipId;
+                            item.bsd_relationship = viewModel.CoOwner.bsd_relationship;
+                        }
+                        coOwnerList.Add(item);
                     }
-                    coOwnerList.Add(item);
+                    viewModel.CoOwnerList.Clear();
+                    coOwnerList.ForEach(x => viewModel.CoOwnerList.Add(x));
+                    await centerModalCoOwner.Hide();
+                    LoadingHelper.Hide();
                 }
-                viewModel.CoOwnerList.Clear();
-                coOwnerList.ForEach(x => viewModel.CoOwnerList.Add(x));
+                else
+                {
+                    bool IsSuccess = await viewModel.UpdateCoOwner();
+                    if (IsSuccess)
+                    {
+                        viewModel.CoOwnerList.Clear();
+                        await viewModel.LoadCoOwners();
+                        await centerModalCoOwner.Hide();
+                        ToastMessageHelper.ShortMessage("Cập nhật đồng sở hữu thành công");
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Cập nhật đồng sở hữu thất bại");
+                    }
+                }
             }
-            await centerModalCoOwner.Hide();
         }
         #endregion
 
@@ -457,12 +520,8 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn loại hợp đồng");
                 return;
             }
-            if (viewModel.ContractType == null)
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại hợp đồng");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(viewModel.TitleQuote))
+
+            if (string.IsNullOrWhiteSpace(viewModel.Quote.name))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả");
                 return;
@@ -472,13 +531,14 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng chọn Đại lý/Sàn giao dịch");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(viewModel.WaiverManaFee))
+            if (string.IsNullOrWhiteSpace(viewModel.Quote.bsd_waivermanafeemonth))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng điền số tháng miễn giảm phí quản lý");
                 return;
             }
 
             LoadingHelper.Show();
+
             if (viewModel.Quote.quoteid == Guid.Empty)
             {
                 bool isSuccess = await viewModel.CreateQuote();
@@ -499,6 +559,21 @@ namespace ConasiCRM.Portable.Views
                 {
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Tạo bảng tính giá thất bại");
+                }
+            }
+            else
+            {
+                bool isSuccess = await viewModel.UpdateQuote();
+                if (isSuccess)
+                {
+                    await Navigation.PopAsync();
+                    ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thành công");
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thất bại");
                 }
             }
         }

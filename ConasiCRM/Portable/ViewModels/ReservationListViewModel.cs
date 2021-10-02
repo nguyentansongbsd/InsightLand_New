@@ -47,7 +47,7 @@ namespace ConasiCRM.Portable.ViewModels
                       <attribute name='bsd_name'  alias='paymentscheme_name' />
                     </link-entity>
                 <filter type='and'>
-                   <condition attribute='customeridname' operator='like' value='%{Keyword}%' />
+                   <condition attribute='name' operator='like' value='%{Keyword}%' />
                 </filter>
               </entity>
             </fetch>";
