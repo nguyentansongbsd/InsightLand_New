@@ -100,6 +100,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             };
 
+            lookupDieuKienBanGiao.HideClearButton();
             lookupDieuKienBanGiao.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
@@ -190,7 +191,7 @@ namespace ConasiCRM.Portable.Views
         }
 
         #region Handover Condition // Dieu kien ban giao
-        private void HandoverCondition_SelectedItemChange(object sender, EventArgs e)
+        private async void HandoverCondition_SelectedItemChange(object sender, EventArgs e)
         {
             if (viewModel.HandoverCondition == null)
             {
@@ -201,13 +202,38 @@ namespace ConasiCRM.Portable.Views
                 viewModel.TotalAmount = 0;
                 return;
             }
-            if (viewModel.HandoverCondition.bsd_byunittype == true && (viewModel.HandoverCondition._bsd_unittype_value != viewModel.UnitInfor._bsd_unittype_value))
+            if (viewModel.HandoverCondition.bsd_byunittype == true && (viewModel.HandoverCondition._bsd_unittype_value != viewModel.UnitType))
             {
                 ToastMessageHelper.ShortMessage("Không thể thêm điều kiện bàn giao");
-                viewModel.HandoverCondition = null;
+                viewModel.HandoverCondition = viewModel.HandoverCondition_Update;
                 return;
             }
+
+            LoadingHelper.Show();
+            if (viewModel.HandoverCondition_Update != null && (viewModel.HandoverCondition_Update?.Val != viewModel.HandoverCondition.Val))
+            {
+                var response = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_packageselling({viewModel.HandoverCondition_Update.Val})/$ref");
+                if (response.IsSuccess)
+                {
+                    bool isSuccess = await viewModel.AddHandoverCondition();
+                    if (isSuccess)
+                    {
+                        viewModel.HandoverCondition_Update = viewModel.HandoverCondition;
+                        ToastMessageHelper.ShortMessage("Thêm điều kiện bàn giao thành công");
+                    }
+                    else
+                    {
+                        ToastMessageHelper.ShortMessage("Thêm điều kiện bàn giao thất bại");
+                    }
+                }
+                else
+                {
+                    viewModel.HandoverCondition = viewModel.HandoverCondition_Update;
+                }
+            }
+
             viewModel.SetTotalHandoverCondition();
+            LoadingHelper.Hide();
         }
         #endregion
 
@@ -255,10 +281,40 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void PromotionItem_Tapped(object sender, EventArgs e)
+        private async void PromotionItem_Tapped(object sender, EventArgs e)
         {
+            LoadingHelper.Show();
             var itemPromotion = (OptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            itemPromotion.Selected = !itemPromotion.Selected;
+            
+            if (viewModel.QuoteId == Guid.Empty)
+            {
+                itemPromotion.Selected = !itemPromotion.Selected;
+                LoadingHelper.Hide();
+                return;
+            }
+
+            if (itemPromotion.Selected == false)
+            {
+                viewModel.SelectedPromotionIds.Clear();
+                viewModel.SelectedPromotionIds.Add(itemPromotion.Val);
+                bool IsSuccess = await viewModel.AddPromotion(viewModel.SelectedPromotionIds);
+                if (IsSuccess)
+                {
+                    itemPromotion.Selected = !itemPromotion.Selected;
+                    ToastMessageHelper.ShortMessage("Thêm khuyến mãi thành công");
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage("Thêm khuyến mãi thất bại");
+                }
+            }
+            else
+            {
+                DelectedPromotion(itemPromotion);
+                itemPromotion.Selected = !itemPromotion.Selected;
+            }
+
+            LoadingHelper.Hide();
         }
 
         private async void SaveSelectedPromotion_CLicked(object sender, EventArgs e)
@@ -266,6 +322,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             viewModel.PromotionsSelected.Clear();
             viewModel.SelectedPromotionIds.Clear();
+
             foreach (var itemPromotion in viewModel.Promotions)
             {
                 if (itemPromotion.Selected)
@@ -278,13 +335,37 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void UnSelect_Clicked(object sender, EventArgs e)
+        private async void UnSelect_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             var item = (OptionSet)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            viewModel.PromotionsSelected.Remove(item);
-            viewModel.SelectedPromotionIds.Remove(item.Val);
+            if (viewModel.QuoteId != Guid.Empty)
+            {
+                DelectedPromotion(item);
+            }
+            else
+            {
+                viewModel.PromotionsSelected.Remove(item);
+                viewModel.SelectedPromotionIds.Remove(item.Val);
+            }
             LoadingHelper.Hide();
+        }
+
+        private async void DelectedPromotion(OptionSet item )
+        {
+            var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa khuyến mãi không ?", "Đồng ý", "Hủy");
+            if (conform == false) return;
+            var deleteResponse = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_promotion({item.Val})/$ref");
+            if (deleteResponse.IsSuccess)
+            {
+                viewModel.PromotionsSelected.Remove(item);
+                viewModel.SelectedPromotionIds.Remove(item.Val);
+                ToastMessageHelper.ShortMessage("Xóa khuyến mãi thành công");
+            }
+            else
+            {
+                ToastMessageHelper.ShortMessage("Xóa khuyến mãi thất bại");
+            }
         }
 
         private void SearchPromotion_Pressed(object sender, EventArgs e)
@@ -335,6 +416,7 @@ namespace ConasiCRM.Portable.Views
                 var deleteResponse = await CrmHelper.DeleteRecord($"/bsd_coowners({item.bsd_coownerid})");
                 if (deleteResponse.IsSuccess)
                 {
+                    viewModel.CoOwnerList.Remove(item);
                     ToastMessageHelper.ShortMessage("Xóa người đồng sở hữu thành công");
                 }
                 else
@@ -344,7 +426,10 @@ namespace ConasiCRM.Portable.Views
                     return;
                 }
             }
-            viewModel.CoOwnerList.Remove(item);
+            else
+            {
+                viewModel.CoOwnerList.Remove(item);
+            }
             LoadingHelper.Hide();
         }
 
@@ -418,7 +503,6 @@ namespace ConasiCRM.Portable.Views
                     bool IsSuccess = await viewModel.AddCoOwer();
                     if (IsSuccess)
                     {
-                        await centerModalCoOwner.Hide();
                         ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thành công");
                         LoadingHelper.Hide();
                     }
@@ -428,6 +512,7 @@ namespace ConasiCRM.Portable.Views
                         ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thất bại");
                     }
                 }
+                await centerModalCoOwner.Hide();
                 viewModel.CoOwnerList.Add(viewModel.CoOwner);
                 LoadingHelper.Hide();
             }
@@ -546,7 +631,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     await Task.WhenAll(
                         viewModel.AddCoOwer(),
-                        viewModel.AddPromotion(),
+                        viewModel.AddPromotion(viewModel.SelectedPromotionIds),
                         viewModel.AddHandoverCondition(),
                         viewModel.CreateQuoteProduct()
                         );
