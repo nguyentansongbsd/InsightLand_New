@@ -284,7 +284,7 @@ namespace ConasiCRM.Portable.Views
         private void EditQuotes(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ReservationForm reservation = new ReservationForm(new Guid("1AE3B00B-404F-4382-BB6F-56739D9BE0CF"));
+            ReservationForm reservation = new ReservationForm(this.ReservationId);
             reservation.CheckReservation = async (isSuccess) => {
                 if (isSuccess)
                 {

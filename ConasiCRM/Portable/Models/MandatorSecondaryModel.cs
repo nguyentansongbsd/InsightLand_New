@@ -24,7 +24,7 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
-        public string statuscode { get; set; }
+        public int statuscode { get; set; }
         public string ownerid { get; set; }
 
         public string _bsd_jobtitlevn;
