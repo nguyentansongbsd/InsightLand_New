@@ -102,6 +102,9 @@
       <EmbeddedResource Update="Views\Dashboard.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\DatCocList.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\DirectSale - Copy.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>

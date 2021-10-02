@@ -76,6 +76,11 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
+        <ShellContent Title="Đặt cọc" ContentTemplate="{DataTemplate views:DatCocList}" >
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
+            </ShellContent.Icon>
+        </ShellContent>
         <ShellContent Title="Sự kiện" ContentTemplate="{DataTemplate views:EventList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf274;" Size="18"/>
