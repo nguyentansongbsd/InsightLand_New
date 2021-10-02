@@ -5,6 +5,7 @@ using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -299,6 +300,7 @@ namespace ConasiCRM.Portable.Views
         {
             Tab_Tapped(3);
             await LoadDataNguoiUyQuyen(AccountId.ToString());
+            SetHeightListView();
         }
 
         private void Tab_Tapped(int tab)
@@ -422,6 +424,46 @@ namespace ConasiCRM.Portable.Views
             viewModel.MandatorySecondary = item.CommandParameter as MandatorySecondaryModel;
             ContentMandatorySecondary.IsVisible = true;
             LoadingHelper.Hide();
+        }
+
+        private async void ListMoreMandatory_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        {
+            if(e.Item != null)
+            {
+                var item = e.Item as MandatorySecondaryModel;
+                if (viewModel.list_MandatorySecondary.IndexOf(item) == viewModel.list_MandatorySecondary.Count()-1)
+                {
+                    viewModel.isLoadMore = true;
+                    viewModel.PageMandatory++;
+                    await viewModel.Load_List_Mandatory_Secondary(this.AccountId.ToString());
+                    viewModel.isLoadMore = false;
+                    SetHeightListView();
+                }    
+            }    
+        }
+
+        private void SetHeightListView()
+        {
+            double height_item = (viewModel.list_MandatorySecondary.Count()*110)+50;
+            double height_mb = ((DeviceDisplay.MainDisplayInfo.Height/ DeviceDisplay.MainDisplayInfo.Density)*2/3) +50;
+            if (height_item > height_mb) 
+            {
+                ListMandatory.HeightRequest = height_mb;
+            }
+            else
+            {
+                ListMandatory.HeightRequest = height_item;
+            }    
+            if(viewModel.list_MandatorySecondary.Count() == 0)
+            {
+                lb_ListMandatory.IsVisible = true;
+                ListMandatory.IsVisible = false;
+            }   
+            else
+            {
+                lb_ListMandatory.IsVisible = false;
+                ListMandatory.IsVisible = true;
+            }    
         }
     }
 }
