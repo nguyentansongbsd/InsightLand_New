@@ -435,6 +435,8 @@ namespace ConasiCRM.Portable.ViewModels
             this.Quote.bsd_numberofmonthspaidmf = UnitInfor.bsd_numberofmonthspaidmf;
             this.Quote.bsd_managementfee = UnitInfor.bsd_managementamountmonth;
             this.Quote.bsd_unitstatus = UnitInfor.statuscode;
+            this.Quote.pricelist_phaselaunch_id = Guid.Parse(PriceListPhasesLaunch.Val);
+            this.Quote.pricelist_apply_id = Guid.Parse(PriceListApply.Val);
 
 
             this.UnitPrice = this.UnitInfor.price;
@@ -751,11 +753,20 @@ namespace ConasiCRM.Portable.ViewModels
             if (this.CoOwnerList == null || this.CoOwnerList.Count == 0) return false;
             string path = "/bsd_coowners";
             CrmApiResponse apiResponse = new CrmApiResponse();
-            foreach (var item in this.CoOwnerList)
+            if (this.QuoteId != Guid.Empty)
             {
-                var content = await GetContentCoOwer(item);
+                var content = await GetContentCoOwer(this.CoOwner);
                 apiResponse = await CrmHelper.PostData(path, content);
             }
+            else
+            {
+                foreach (var item in this.CoOwnerList)
+                {
+                    var content = await GetContentCoOwer(item);
+                    apiResponse = await CrmHelper.PostData(path, content);
+                }
+            }
+            
             if (apiResponse.IsSuccess)
             {
                 return true;
@@ -764,7 +775,23 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
+        }
 
+        public async Task<bool> UpdateCoOwner()
+        {
+            if (this.CoOwnerList == null || this.CoOwnerList.Count == 0) return false;
+            string path = $"/bsd_coowners({this.CoOwnerList[0].bsd_coownerid})";
+            CrmApiResponse apiResponse = new CrmApiResponse();
+            var content = await GetContentCoOwer(this.CoOwner);
+            apiResponse = await CrmHelper.PatchData(path, content);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private async Task<object> GetContentCoOwer(CoOwnerFormModel coOwner)
@@ -851,8 +878,6 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_totalamountlessfreight"] = this.NetSellingPrice;
             data["bsd_landvaluededuction"] = this.LandValueDeduction;
             data["bsd_freightamount"] = this.MaintenanceFee;
-            data["totaltax"] = this.TotalVATTax;
-            data["totalamount_base"] = this.TotalAmount;
 
             data["bsd_numberofmonthspaidmf"] = this.Quote.bsd_numberofmonthspaidmf;//this.UnitInfor.bsd_numberofmonthspaidmf;
             data["bsd_managementfee"] = this.Quote.bsd_managementfee; //this.UnitInfor.bsd_managementamountmonth;
