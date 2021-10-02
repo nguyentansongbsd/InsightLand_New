@@ -75,6 +75,7 @@ namespace ConasiCRM.Portable.Models
         public decimal bsd_maintenancefeespercent { get; set; }
         public Guid _bsd_projectcode_value { get; set; }
         public Guid _bsd_phaseslaunchid_value { get; set; }
+        public Guid _bsd_unittype_value { get; set; }
 
         public Guid project_id { get; set; }
 

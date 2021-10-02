@@ -50,6 +50,7 @@ namespace ConasiCRM.Portable.ViewModels
         public OptionSet DiscountList { get => _discountList; set { _discountList = value; OnPropertyChanged(nameof(DiscountList)); } }
         private HandoverConditionModel _handoverCondition;
         public HandoverConditionModel HandoverCondition { get => _handoverCondition; set { _handoverCondition = value; OnPropertyChanged(nameof(HandoverCondition)); } }
+        public HandoverConditionModel HandoverCondition_Update { get; set; }
 
         private QuoteUnitInforModel _unitInfor;
         public QuoteUnitInforModel UnitInfor { get => _unitInfor; set { _unitInfor = value; OnPropertyChanged(nameof(UnitInfor)); } }
@@ -140,6 +141,7 @@ namespace ConasiCRM.Portable.ViewModels
         private decimal UnitLandValue { get; set; }
         private decimal UnitMaintenanceFee { get; set; }
         private Guid PhasesLaunchId { get; set; }
+        public Guid UnitType { get; set; }
 
         #region Tinh toan gia tien o bang chi tiet
         //Tinh (-)Chiet khau
@@ -278,6 +280,7 @@ namespace ConasiCRM.Portable.ViewModels
                                         <attribute name='price' alias='unit_price'/>
                                         <attribute name='bsd_landvalueofunit' />
                                         <attribute name='bsd_maintenancefeespercent' />
+                                        <attribute name='bsd_unittype' alias='_bsd_unittype_value'/>
                                         <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
                                         <attribute name='bsd_phaseslaunchid' alias='_bsd_phaseslaunchid_value'/>
                                         <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' visible='false' link-type='outer' alias='a_9a5e44d019dbeb11bacb002248168cad'>
@@ -348,6 +351,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.UnitLandValue = this.Quote.bsd_landvalueofunit;
             this.UnitMaintenanceFee = this.Quote.bsd_maintenancefeespercent;
             this.PhasesLaunchId = this.Quote._bsd_phaseslaunchid_value;
+            this.UnitType = this.Quote._bsd_unittype_value;
 
             this.TotalDiscount = this.Quote.bsd_discount;
             this.TotalHandoverCondition = this.Quote.bsd_packagesellingamount;
@@ -437,7 +441,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.Quote.bsd_unitstatus = UnitInfor.statuscode;
             this.Quote.pricelist_phaselaunch_id = Guid.Parse(PriceListPhasesLaunch.Val);
             this.Quote.pricelist_apply_id = Guid.Parse(PriceListApply.Val);
-
+            this.UnitType = UnitInfor._bsd_unittype_value;
 
             this.UnitPrice = this.UnitInfor.price;
             this.UnitNetSaleAbleArea = this.UnitInfor.bsd_netsaleablearea;
@@ -534,7 +538,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HandoverConditionModel>>("bsd_packagesellings", fetchXml);
             if (result == null || result.value.Count == 0) return;
-            this.HandoverCondition = result.value.SingleOrDefault();
+            this.HandoverCondition = this.HandoverCondition_Update = result.value.SingleOrDefault();
         }
 
 
@@ -709,13 +713,13 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task<bool> AddPromotion()
+        public async Task<bool> AddPromotion(List<string> Ids)
         {
-            if (this.SelectedPromotionIds.Count == 0) return false;
+            if (Ids.Count == 0) return false;
             string path = $"/quotes({this.Quote.quoteid})/bsd_quote_bsd_promotion/$ref";
             IDictionary<string, string> data = new Dictionary<string, string>();
             CrmApiResponse apiResponse = new CrmApiResponse();
-            foreach (var item in this.SelectedPromotionIds)
+            foreach (var item in Ids)
             {
                 data["@odata.id"] = $"{OrgConfig.ApiUrl}/bsd_promotions({item})";
                 apiResponse = await CrmHelper.PostData(path, data);
