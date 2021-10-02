@@ -3,6 +3,7 @@ using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -105,30 +106,34 @@ namespace ConasiCRM.Portable.Views
             }            
         }
 
-        private void Create_Clicked(object sender, EventArgs e)
+        private async void Create_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            SaveData(null);
+            btnSave.Text = "Đang Tạo Giữ Chỗ...";
+            await SaveData(null);
         }
 
-        private async void SaveData(string id)
+        private async Task SaveData(string id)
         {
             if (string.IsNullOrWhiteSpace(viewModel.QueueFormModel.name))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề của giữ chỗ");
                 LoadingHelper.Hide();
+                btnSave.Text = "Tạo Giữ Chỗ";
                 return;
             }
             if (viewModel.Customer == null || viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng tiềm năng");
                 LoadingHelper.Hide();
+                btnSave.Text = "Tạo Giữ Chỗ";
                 return;
             }
             if (viewModel.DailyOption == null || viewModel.DailyOption.Id == null || viewModel.DailyOption.Id == Guid.Empty)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn đại lý bán hàng");
                 LoadingHelper.Hide();
+                btnSave.Text = "Tạo Giữ Chỗ";
                 return;
             }
             if (from)
@@ -137,6 +142,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     ToastMessageHelper.ShortMessage("Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này");
                     LoadingHelper.Hide();
+                    btnSave.Text = "Tạo Giữ Chỗ";
                     return;
                 }
             }
@@ -144,9 +150,9 @@ namespace ConasiCRM.Portable.Views
             {
                 ToastMessageHelper.ShortMessage("Khách hàng tiềm năng phải khác Đại lý bán hàng");
                 LoadingHelper.Hide();
+                btnSave.Text = "Tạo Giữ Chỗ";
                 return;
             }
-
             var created = await viewModel.createQueue();
             if (created)
             {
@@ -160,6 +166,7 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 LoadingHelper.Hide();
+                btnSave.Text = "Tạo Giữ Chỗ";
                 ToastMessageHelper.ShortMessage("Tạo giữ chỗ thất bại");
             }
         }

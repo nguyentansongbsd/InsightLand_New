@@ -39,7 +39,7 @@ namespace ConasiCRM.Portable.Converters
                     case 100000003:
                         return "#FF3399";
                     case 100000000:
-                        return "#FFFF33";
+                        return "#FFCC66";
                     case 7:
                         return "#990033";
                     case 100000004:
@@ -47,12 +47,12 @@ namespace ConasiCRM.Portable.Converters
                     case 100000001:
                         return "#FF9933";
                     case 4:
-                        return "#f5f5f5";
+                        return "#60111111";
                     default:
-                        return "#f5f5f5";
+                        return "#60111111";
                 }
             }
-            return "#f5f5f5";
+            return "#60111111";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
