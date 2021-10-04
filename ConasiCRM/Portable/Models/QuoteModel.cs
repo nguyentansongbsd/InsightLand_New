@@ -72,7 +72,7 @@ namespace ConasiCRM.Portable.Models
         private decimal _unit_price;
         public decimal unit_price { get=> _unit_price; set { _unit_price = value;OnPropertyChanged(nameof(unit_price)); } }
         public decimal bsd_landvalueofunit { get; set; }
-        public decimal bsd_maintenancefeespercent { get; set; }
+        public decimal maintenancefreespercent { get; set; }
         public Guid _bsd_projectcode_value { get; set; }
         public Guid _bsd_phaseslaunchid_value { get; set; }
         public Guid _bsd_unittype_value { get; set; }
