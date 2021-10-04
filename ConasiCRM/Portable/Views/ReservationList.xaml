@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            Title="Đặt cọc"
+            Title="Bảng tính giá"
              xmlns:telerikDataGrid="clr-namespace:Telerik.XamarinForms.DataGrid;assembly=Telerik.XamarinForms.DataGrid"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
              xmlns:reservationConverter="clr-namespace:ConasiCRM.Portable.Converters.Reservation"

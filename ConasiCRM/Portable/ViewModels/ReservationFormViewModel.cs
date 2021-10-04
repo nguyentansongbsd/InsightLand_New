@@ -63,7 +63,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         private OptionSet _priceListApply;
         public OptionSet PriceListApply { get => _priceListApply; set { _priceListApply = value; OnPropertyChanged(nameof(PriceListApply)); } }
-
+        
         #region CoOwner
         public ObservableCollection<CoOwnerFormModel> CoOwnerList { get; set; } = new ObservableCollection<CoOwnerFormModel>();
 
@@ -115,13 +115,13 @@ namespace ConasiCRM.Portable.ViewModels
 
         #region Thong tin Gia
         private decimal _totalDiscount = 0;
-        public decimal TotalDiscount { get => _totalDiscount; set { _totalDiscount = value; OnPropertyChanged(nameof(TotalDiscount)); SetNetSellingPrice(); } }
+        public decimal TotalDiscount { get => _totalDiscount; set { _totalDiscount = value; OnPropertyChanged(nameof(TotalDiscount)); } }
 
         private decimal _totalHandoverCondition = 0;
-        public decimal TotalHandoverCondition { get => _totalHandoverCondition; set { _totalHandoverCondition = value; OnPropertyChanged(nameof(TotalHandoverCondition)); SetNetSellingPrice(); } }
+        public decimal TotalHandoverCondition { get => _totalHandoverCondition; set { _totalHandoverCondition = value; OnPropertyChanged(nameof(TotalHandoverCondition)); } }
 
         private decimal _netSellingPrice = 0;
-        public decimal NetSellingPrice { get => _netSellingPrice; set { _netSellingPrice = value; OnPropertyChanged(nameof(NetSellingPrice)); SetTotalVatTax(); SetMaintenanceFee(); } }
+        public decimal NetSellingPrice { get => _netSellingPrice; set { _netSellingPrice = value; OnPropertyChanged(nameof(NetSellingPrice));  } }
 
         private decimal _landValueDeduction = 0;
         public decimal LandValueDeduction { get => _landValueDeduction; set { _landValueDeduction = value; OnPropertyChanged(nameof(LandValueDeduction)); } }
@@ -136,6 +136,7 @@ namespace ConasiCRM.Portable.ViewModels
         public decimal TotalAmount { get => _totalAmount; set { _totalAmount = value; OnPropertyChanged(nameof(TotalAmount)); } }
         #endregion
 
+        public OptionSet QuoteDetail { get; set; }
         private decimal UnitPrice { get; set; }
         private decimal UnitNetSaleAbleArea { get; set; }
         private decimal UnitLandValue { get; set; }
@@ -143,9 +144,11 @@ namespace ConasiCRM.Portable.ViewModels
         private Guid PhasesLaunchId { get; set; }
         public Guid UnitType { get; set; }
 
+        public bool IsHadLichThanhToan { get; set; }
+
         #region Tinh toan gia tien o bang chi tiet
         //Tinh (-)Chiet khau
-        public void SetTotalDiscount()
+        public async Task SetTotalDiscount()
         {
             this.TotalDiscount = 0;
             foreach (var item in this.DiscountChilds)
@@ -161,7 +164,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public void SetTotalHandoverCondition()
+        public async Task SetTotalHandoverCondition()
         {
             if (this.HandoverCondition.bsd_method == "100000000")// Price per sqm
             {
@@ -177,39 +180,34 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public void SetNetSellingPrice()
+        public async Task SetNetSellingPrice()
         {
             // Gia ban truoc thue = Gia ban san pham - Tong chiet khau + Tong dieu kien ban gia
-            if (this.HandoverCondition == null) return;
             this.NetSellingPrice = 0;
             this.NetSellingPrice = UnitPrice - this.TotalDiscount + this.TotalHandoverCondition;
-            SetTotalAmount();
         }
 
-        public void SetLandValueDeduction()
+        public async Task SetLandValueDeduction()
         {
             // Tổng giá trị QSDĐ = = Land value of unit (sqm) * Net Usable Area
             this.LandValueDeduction = UnitLandValue * UnitNetSaleAbleArea;
-            SetTotalAmount();
         }
 
-        public void SetTotalVatTax()
+        public async Task SetTotalVatTax()
         {
             //Tổng tiền thuế VAT = ((Gia ban truoc thue - Tổng giá trị QSDĐ) * Ma so thue) // ma so thue fix cung la 10%
             this.TotalVATTax = 0;
             this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * 10) / 100;
-            SetTotalAmount();
         }
 
-        public void SetMaintenanceFee()
+        public async Task SetMaintenanceFee()
         {
             //Phí bảo trì = (Gia ban truoc thue * Maintenance fee% )/100
             this.MaintenanceFee = 0;
             this.MaintenanceFee = (this.NetSellingPrice * UnitMaintenanceFee) / 100;
-            SetTotalAmount();
         }
 
-        public void SetTotalAmount()
+        public async Task SetTotalAmount()
         {
             this.TotalAmount = 0;
             this.TotalAmount = this.NetSellingPrice + this.TotalVATTax + this.MaintenanceFee;
@@ -220,6 +218,23 @@ namespace ConasiCRM.Portable.ViewModels
         {
             SelectedPromotionIds = new List<string>();
             this.Quote = new QuoteModel();
+        }
+
+        public async Task CheckTaoLichThanhToan()
+        {
+            string fetchXml = $@"<fetch>
+                                  <entity name='quote'>
+                                    <filter>
+                                      <condition attribute='quoteid' operator='eq' value='{this.QuoteId}'/>
+                                    </filter>
+                                    <link-entity name='bsd_paymentschemedetail' from='bsd_reservation' to='quoteid'>
+                                      <attribute name='bsd_name' alias='Val'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("quotes", fetchXml);
+            if (result == null) return;
+            this.IsHadLichThanhToan = result.value.Count != 0 ? true: false;
         }
 
         //Load thong tin Quote
@@ -279,7 +294,7 @@ namespace ConasiCRM.Portable.ViewModels
                                         <attribute name='name' alias='unit_name'/>
                                         <attribute name='price' alias='unit_price'/>
                                         <attribute name='bsd_landvalueofunit' />
-                                        <attribute name='bsd_maintenancefeespercent' />
+                                        <attribute name='bsd_maintenancefeespercent' alias='maintenancefreespercent'/>
                                         <attribute name='bsd_unittype' alias='_bsd_unittype_value'/>
                                         <attribute name='bsd_projectcode' alias='_bsd_projectcode_value'/>
                                         <attribute name='bsd_phaseslaunchid' alias='_bsd_phaseslaunchid_value'/>
@@ -332,7 +347,8 @@ namespace ConasiCRM.Portable.ViewModels
             this.Quote.saleagentcompany_name = data.saleagentcompany_name;
 
             this.Buyer = this.Quote.contact_id != Guid.Empty ? new OptionSet(this.Quote.contact_id.ToString(), this.Quote.contact_name) { Title = "2" } : new OptionSet(this.Quote.account_id.ToString(), this.Quote.account_name) { Title = "3" };
-            this.Queue = new OptionSet(this.Quote.queue_id.ToString(), this.Quote.queue_name);
+
+            this.Queue = this.Quote.queue_id != Guid.Empty ? new OptionSet(this.Quote.queue_id.ToString(), this.Quote.queue_name) : null;
 
             this.ContractType = ContractTypeData.GetContractTypeById(this.Quote.bsd_contracttypedescripton);
 
@@ -349,7 +365,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.UnitPrice = this.Quote.unit_price;
             this.UnitNetSaleAbleArea = this.Quote.bsd_netusablearea;
             this.UnitLandValue = this.Quote.bsd_landvalueofunit;
-            this.UnitMaintenanceFee = this.Quote.bsd_maintenancefeespercent;
+            this.UnitMaintenanceFee = this.Quote.maintenancefreespercent;
             this.PhasesLaunchId = this.Quote._bsd_phaseslaunchid_value;
             this.UnitType = this.Quote._bsd_unittype_value;
 
@@ -361,7 +377,6 @@ namespace ConasiCRM.Portable.ViewModels
             this.MaintenanceFee = this.Quote.bsd_freightamount;
             this.TotalAmount = this.Quote.totalamount;
 
-            //SetLandValueDeduction();
         }
 
         // Load thong tin san pham
@@ -981,10 +996,6 @@ namespace ConasiCRM.Portable.ViewModels
             data["uomid@odata.bind"] = $"/products({this.UnitInfor._defaultuomid_value})";
             data["productid@odata.bind"] = $"/products({this.UnitInfor.productid})";
 
-            //if (UserLogged.ManagerId != Guid.Empty)
-            //{
-            //    data["OwnerId@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
-            //}
             return data;
         }
 

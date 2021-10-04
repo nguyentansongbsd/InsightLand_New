@@ -71,7 +71,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf02d;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Đặt cọc" ContentTemplate="{DataTemplate views:ReservationList}" >
+        <ShellContent Title="Bảng tính giá" ContentTemplate="{DataTemplate views:ReservationList}" >
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
             </ShellContent.Icon>

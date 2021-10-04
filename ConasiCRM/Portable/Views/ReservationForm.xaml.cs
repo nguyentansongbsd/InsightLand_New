@@ -16,6 +16,9 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> CheckReservation;
         public ReservationFormViewModel viewModel;
+        private bool isSetTotal;
+        private List<string> newSelectedPromotionIds;
+        private List<string> needDeletedPromotionIds;
 
         public ReservationForm(Guid quoteId)
         {
@@ -62,12 +65,27 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadQuote();
             if (viewModel.Quote != null)
             {
+                this.Title = "CẬP NHẬT BẢNG TÍNH GIÁ";
+                buttonSave.Text = "CẬP NHẬT BẢNG TÍNH GIÁ";
+                newSelectedPromotionIds = new List<string>();
+                needDeletedPromotionIds = new List<string>();
                 SetPreOpen();
-                await viewModel.LoadDiscountChilds();
-                await viewModel.LoadHandoverCondition();
-                await viewModel.LoadPromotionsSelected();
-                await viewModel.LoadPromotions();
-                await viewModel.LoadCoOwners();
+                this.isSetTotal = true;// set = true de khong nhay vao ham SetTotal
+                await Task.WhenAll(
+                    viewModel.LoadDiscountChilds(),
+                    viewModel.LoadHandoverCondition(),
+                    viewModel.LoadPromotionsSelected(),
+                    viewModel.LoadPromotions(),
+                    viewModel.LoadCoOwners(),
+                    viewModel.CheckTaoLichThanhToan()
+                    ) ;
+                
+                if (viewModel.IsHadLichThanhToan == true)
+                {
+                    lookupDieuKienBanGiao.IsEnabled = true;
+                    lookupPhuongThucThanhToan.IsEnabled = true;
+                    lookupChieuKhau.IsEnabled = true;
+                }
                 if (!string.IsNullOrWhiteSpace(viewModel.Quote.bsd_discounts))
                 {
                     List<string> arrDiscounts = viewModel.Quote.bsd_discounts.Split(',').ToList();
@@ -177,7 +195,7 @@ namespace ConasiCRM.Portable.Views
             contentChiTiet.IsVisible = false;
         }
 
-        private void ChiTiet_Tapped(object sender, EventArgs e)
+        private async void ChiTiet_Tapped(object sender, EventArgs e)
         {
             VisualStateManager.GoToState(radBorderChinhSach, "InActive");
             VisualStateManager.GoToState(radBorderTongHop, "InActive");
@@ -188,11 +206,17 @@ namespace ConasiCRM.Portable.Views
             contentChinhSach.IsVisible = false;
             contentTongHop.IsVisible = false;
             contentChiTiet.IsVisible = true;
+            await SetTotal();
         }
 
         #region Handover Condition // Dieu kien ban giao
         private async void HandoverCondition_SelectedItemChange(object sender, EventArgs e)
         {
+            if (viewModel.IsHadLichThanhToan == true)
+            {
+                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                return;
+            }
             if (viewModel.HandoverCondition == null)
             {
                 viewModel.TotalHandoverCondition = 0;
@@ -205,35 +229,11 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.HandoverCondition.bsd_byunittype == true && (viewModel.HandoverCondition._bsd_unittype_value != viewModel.UnitType))
             {
                 ToastMessageHelper.ShortMessage("Không thể thêm điều kiện bàn giao");
-                viewModel.HandoverCondition = viewModel.HandoverCondition_Update;
                 return;
             }
 
-            LoadingHelper.Show();
-            if (viewModel.HandoverCondition_Update != null && (viewModel.HandoverCondition_Update?.Val != viewModel.HandoverCondition.Val))
-            {
-                var response = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_packageselling({viewModel.HandoverCondition_Update.Val})/$ref");
-                if (response.IsSuccess)
-                {
-                    bool isSuccess = await viewModel.AddHandoverCondition();
-                    if (isSuccess)
-                    {
-                        viewModel.HandoverCondition_Update = viewModel.HandoverCondition;
-                        ToastMessageHelper.ShortMessage("Thêm điều kiện bàn giao thành công");
-                    }
-                    else
-                    {
-                        ToastMessageHelper.ShortMessage("Thêm điều kiện bàn giao thất bại");
-                    }
-                }
-                else
-                {
-                    viewModel.HandoverCondition = viewModel.HandoverCondition_Update;
-                }
-            }
-
-            viewModel.SetTotalHandoverCondition();
-            LoadingHelper.Hide();
+            await viewModel.SetTotalHandoverCondition();
+            isSetTotal = false;
         }
         #endregion
 
@@ -247,18 +247,31 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void DiscountChildItem_Tapped(object sender, EventArgs e)
+        private async void DiscountChildItem_Tapped(object sender, EventArgs e)
         {
+            if (viewModel.IsHadLichThanhToan == true)
+            {
+                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                return;
+            }
             var item = (DiscountChildOptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             item.Selected = !item.Selected;
-            viewModel.SetTotalDiscount();
+            await viewModel.SetTotalDiscount();
+            isSetTotal = false;
         }
         #endregion
 
         #region Promotion // Khuyen mai
         private async void Promotion_Tapped(object sender, EventArgs e)
         {
+            if (viewModel.IsHadLichThanhToan == true)
+            {
+                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                return;
+            }
             LoadingHelper.Show();
+            this.needDeletedPromotionIds.Clear();
+            this.newSelectedPromotionIds.Clear();
             if (viewModel.Promotions.Count == 0)
             {
                 await viewModel.LoadPromotions();
@@ -293,27 +306,30 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (itemPromotion.Selected == false)
+            if (itemPromotion.Selected == true)
             {
-                viewModel.SelectedPromotionIds.Clear();
-                viewModel.SelectedPromotionIds.Add(itemPromotion.Val);
-                bool IsSuccess = await viewModel.AddPromotion(viewModel.SelectedPromotionIds);
-                if (IsSuccess)
+                //xoa promotion
+                foreach (var item in viewModel.SelectedPromotionIds)
                 {
-                    itemPromotion.Selected = !itemPromotion.Selected;
-                    ToastMessageHelper.ShortMessage("Thêm khuyến mãi thành công");
+                    if (itemPromotion.Val == item)
+                    {
+                        needDeletedPromotionIds.Add(itemPromotion.Val);
+                    }
                 }
-                else
-                {
-                    ToastMessageHelper.ShortMessage("Thêm khuyến mãi thất bại");
-                }
+                itemPromotion.Selected = !itemPromotion.Selected;
             }
             else
             {
-                DelectedPromotion(itemPromotion);
+                // them promotion
+                foreach (var item in viewModel.SelectedPromotionIds)
+                {
+                    if (itemPromotion.Val != item)
+                    {
+                        this.newSelectedPromotionIds.Add(itemPromotion.Val);
+                    }
+                }
                 itemPromotion.Selected = !itemPromotion.Selected;
             }
-
             LoadingHelper.Hide();
         }
 
@@ -331,17 +347,43 @@ namespace ConasiCRM.Portable.Views
                     viewModel.SelectedPromotionIds.Add(itemPromotion.Val);
                 }
             }
+            if (viewModel.QuoteId != Guid.Empty)
+            {
+                if (this.needDeletedPromotionIds.Count !=0)
+                {
+                    await DeletedPromotions();
+                }
+
+                if (this.newSelectedPromotionIds.Count != 0)
+                {
+                    bool IsSuccess = await viewModel.AddPromotion(this.newSelectedPromotionIds);
+                    if (IsSuccess)
+                    {
+                        this.newSelectedPromotionIds.Clear();
+                        ToastMessageHelper.ShortMessage("Thêm khuyến mãi thành công");
+                    }
+                    else
+                    {
+                        ToastMessageHelper.ShortMessage("Thêm khuyến mãi thất bại");
+                    }
+                }
+            }
             await centerModalPromotions.Hide();
             LoadingHelper.Hide();
         }
 
         private async void UnSelect_Clicked(object sender, EventArgs e)
         {
+            if (viewModel.IsHadLichThanhToan == true)
+            {
+                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                return;
+            }
             LoadingHelper.Show();
             var item = (OptionSet)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             if (viewModel.QuoteId != Guid.Empty)
             {
-                DelectedPromotion(item);
+                DeletedPromotion(item);
             }
             else
             {
@@ -351,7 +393,20 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private async void DelectedPromotion(OptionSet item )
+        private async Task DeletedPromotions()
+        {
+            foreach (var item in needDeletedPromotionIds)
+            {
+                var deleteResponse = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_promotion({item})/$ref");
+                if (deleteResponse.IsSuccess)
+                {
+                    viewModel.PromotionsSelected.Remove(viewModel.PromotionsSelected.SingleOrDefault(x=>x.Val == item));
+                    viewModel.SelectedPromotionIds.Remove(item);
+                }
+            }
+        }
+
+        private async void DeletedPromotion(OptionSet item )
         {
             var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa khuyến mãi không ?", "Đồng ý", "Hủy");
             if (conform == false) return;
@@ -436,6 +491,7 @@ namespace ConasiCRM.Portable.Views
         private async void UpdateCoOwner_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
+            centerModalCoOwner.Title = "Cập nhật đồng sở hữu";
             var item = (CoOwnerFormModel)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             viewModel.CoOwner = new CoOwnerFormModel();
             viewModel.TitleCoOwner = null;
@@ -498,6 +554,7 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.CoOwner.bsd_coownerid = Guid.NewGuid();
 
+                viewModel.CoOwnerList.Add(viewModel.CoOwner);
                 if (viewModel.QuoteId != Guid.Empty)
                 {
                     bool IsSuccess = await viewModel.AddCoOwer();
@@ -513,7 +570,6 @@ namespace ConasiCRM.Portable.Views
                     }
                 }
                 await centerModalCoOwner.Hide();
-                viewModel.CoOwnerList.Add(viewModel.CoOwner);
                 LoadingHelper.Hide();
             }
             else
@@ -583,6 +639,18 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
+        private async Task SetTotal()
+        {
+            if (this.isSetTotal==false)
+            {
+                await viewModel.SetNetSellingPrice();
+                await viewModel.SetTotalVatTax();
+                await viewModel.SetMaintenanceFee();
+                await viewModel.SetTotalAmount();
+                isSetTotal = true;
+            }
+        }
+
         private async void SaveQuote_Clicked(object sender, EventArgs e)
         {
             if (viewModel.PaymentScheme == null)
@@ -626,6 +694,7 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.Quote.quoteid == Guid.Empty)
             {
+                await SetTotal();
                 bool isSuccess = await viewModel.CreateQuote();
                 if (isSuccess)
                 {
@@ -636,6 +705,7 @@ namespace ConasiCRM.Portable.Views
                         viewModel.CreateQuoteProduct()
                         );
 
+                    if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Tạo bảng tính giá thành công");
                     LoadingHelper.Hide();
@@ -648,9 +718,36 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
+                await SetTotal();
+                if (viewModel.HandoverCondition_Update != null && (viewModel.HandoverCondition_Update?.Val != viewModel.HandoverCondition.Val))
+                {
+                    var response = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_packageselling({viewModel.HandoverCondition_Update.Val})/$ref");
+                    if (response.IsSuccess)
+                    {
+                        bool isSuccess_Update = await viewModel.AddHandoverCondition();
+                        if (isSuccess_Update)
+                        {
+                            viewModel.HandoverCondition_Update = viewModel.HandoverCondition;
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Cập nhật điều kiện bàn giao thất bại");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        viewModel.HandoverCondition = viewModel.HandoverCondition_Update;
+                    }
+                }
+
+
                 bool isSuccess = await viewModel.UpdateQuote();
                 if (isSuccess)
                 {
+                    if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
+                    if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thành công");
                     LoadingHelper.Hide();

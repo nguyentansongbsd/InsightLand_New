@@ -10,7 +10,7 @@ namespace ConasiCRM.Portable.ViewModels
     {
         public string Keyword { get; set; }
         public ReservationListViewModel()
-        {            
+        {
             PreLoadData = new Command(() =>
             {
                 EntityName = "quotes";
@@ -28,6 +28,13 @@ namespace ConasiCRM.Portable.ViewModels
                 <attribute name='bsd_quotationnumber' />
                 <attribute name='quoteid' />
                 <order attribute='createdon' descending='true' />
+                <filter type='and'>
+                  <condition attribute='statuscode' operator='in'>
+                    <value>100000007</value>
+                    <value>6</value>
+                  </condition>
+                  <condition attribute='bsd_quotationsigneddate' operator='null' />
+                </filter>
                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
                   <attribute name='bsd_name' alias='bsd_projectid_name' />
                 </link-entity>
