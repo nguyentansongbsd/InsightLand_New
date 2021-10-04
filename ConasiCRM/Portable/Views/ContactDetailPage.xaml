@@ -227,20 +227,14 @@
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" BackgroundColor="White" Grid.Row="0" Padding="10,0,10,10">
+                                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" BackgroundColor="White" Grid.Row="0">
                                             <controls:FormLabel Text="Hình chụp CMND" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="0" Grid.Row="1" IsVisible="{Binding singleContact.bsd_mattruoccmnd_sources, Converter={StaticResource NullToBool}}">
-                                                <Image Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFill"/>
-                                                <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDFront_Tapped"/>
-                                                </telerikPrimitives:RadBorder.GestureRecognizers>
-                                            </telerikPrimitives:RadBorder>
-                                            <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="1" Grid.Row="1" IsVisible="{Binding singleContact.bsd_matsaucmnd_source, Converter={StaticResource NullToBool}}">
-                                                <Image Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFill"/>
-                                                <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDBehind_Tapped"/>
-                                                </telerikPrimitives:RadBorder.GestureRecognizers>
-                                            </telerikPrimitives:RadBorder>
+                                            <Grid Grid.Column="0" Grid.Row="1" IsVisible="{Binding singleContact.bsd_mattruoccmnd_sources, Converter={StaticResource NullToBool}}">
+                                                <Image Source="{Binding singleContact.bsd_mattruoccmnd_source}" />
+                                            </Grid>
+                                            <Grid  Grid.Column="1" Grid.Row="1" IsVisible="{Binding singleContact.bsd_matsaucmnd_source, Converter={StaticResource NullToBool}}">
+                                                <Image Source="{Binding singleContact.bsd_matsaucmnd_source}"/>
+                                            </Grid>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="1">
                                             <controls:FormLabel Text="Số CMND" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
@@ -542,19 +536,17 @@
             <controls:ExtendedFrame x:Name="frameEdit" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#1399D5" Padding="0" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">
                 <Button Text="&#xf044;" Clicked="EditContact_Clicked"  TextColor="White" FontSize="20" FontFamily="FontAwesomeRegular" WidthRequest="44" HeightRequest="44" CornerRadius="22" BackgroundColor="#1399D5" VerticalOptions="Center" Padding="5,0,0,2"/>
             </controls:ExtendedFrame>
-            <Grid x:Name="LookUpImage" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">
+            <Grid x:Name="LookUpImagePhongThuy" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">
                 <controls:PinchToZoomContainer>
                     <controls:PinchToZoomContainer.Content>
-                        <Image x:Name="ImageDetail"/>
+                        <Image Source="{Binding PhongThuy.image}"/>
                     </controls:PinchToZoomContainer.Content>
                 </controls:PinchToZoomContainer>
-                <telerikPrimitives:RadBorder VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="White" Margin="0,10,10,0" BorderColor="#444444" BorderThickness="1" HeightRequest="25" WidthRequest="25" CornerRadius="13">
-                    <Label FontFamily="FontAwesomeSolid" Text="&#xf00d;" TextColor="#444444" FontSize="Small" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Close_LookUpImage_Tapped" NumberOfTapsRequired="1"/>
-                        </Label.GestureRecognizers>
-                    </Label>
-                </telerikPrimitives:RadBorder>
+                <Label FontFamily="FontAwesomeRegular" Text="&#xf410;" TextColor="#444444" FontSize="Large" VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="White" Margin="0,10,10,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_LookUpImagePhongThuy_Tapped" NumberOfTapsRequired="1"/>
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>

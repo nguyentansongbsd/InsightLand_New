@@ -1,16 +1,11 @@
-﻿using ConasiCRM.Portable.Config;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -124,9 +119,9 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<OptionSet> GenderOptions { get; set; }
         public ObservableCollection<OptionSet> LocalizationOptions { get; set; }
 
-        private string IMAGE_CMND_FOLDER = "Contact_CMND";
-        private string frontImage_name;
-        private string behindImage_name;
+        //private string IMAGE_CMND_FOLDER = "Contact_CMND";
+        //string frontImage_name;
+        //string behindImage_name;
 
         private string checkCMND;
 
@@ -217,6 +212,9 @@ namespace ConasiCRM.Portable.ViewModels
 
             var tmp = result.value.FirstOrDefault();
             this.singleContact = tmp;
+
+            //frontImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
+            //behindImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
 
             checkCMND = tmp.bsd_identitycardnumber;
         }
@@ -543,88 +541,84 @@ namespace ConasiCRM.Portable.ViewModels
         }
 
 
-        public async Task GetImageCMND()
-        {
-            frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
+        // chua su dung duoc
+        //public async Task GetImageCMND()
+        //{
+        //    string token = (await CrmHelper.getSharePointToken()).access_token;
+        //    var client = BsdHttpClient.Instance();
+        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            string token = (await CrmHelper.getSharePointToken()).access_token;
-            var client = BsdHttpClient.Instance();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+        //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
+        //    var front_result = await client.SendAsync(front_request);
+        //    if (front_result.IsSuccessStatusCode)
+        //    {
+        //        singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
+        //    }
 
-            var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
-            var front_result = await client.SendAsync(front_request);
-            if (front_result.IsSuccessStatusCode)
-            {
-                singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
-            }
+        //    var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+        //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
+        //    var behind_result = await client.SendAsync(behind_request);
+        //    if (behind_result.IsSuccessStatusCode)
+        //    {
+        //        singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
+        //    }
+        //    //var front_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER +  "/" + frontImage_name + "&access_token=" + token));
+        //    //if(front_result != null)
+        //    //{
+        //    //    using (var memoryStream1 = new MemoryStream())
+        //    //    {
+        //    //        front_result.GetStream().CopyTo(memoryStream);
+        //    //        file.Dispose();
+        //    //        return memoryStream.ToArray();
+        //    //    }
+        //    //}
 
-            var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
-            var behind_result = await client.SendAsync(behind_request);
-            if (behind_result.IsSuccessStatusCode)
-            {
-                singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
-            }
-        }
+        //    //var behind_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token));
+        //}
 
-        public async Task<bool> UpLoadCMNDFront()
-        {
-            frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
+        //public async Task uploadImageCMND()
+        //{
+        //    string token = (await CrmHelper.getSharePointToken()).access_token;
 
-            string token = (await CrmHelper.getSharePointToken()).access_token;
+        //    using (var client = new HttpClient())
+        //    {
+        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //        if (singleContact.bsd_mattruoccmnd_base64 != null)
+        //        {
+        //            byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
 
-                if (singleContact.bsd_mattruoccmnd_base64 != null)
-                {
-                    byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
+        //            using (var response = client.PostAsync
+        //            (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + frontImage_name + "',overwrite=true)")
+        //            , new StreamContent(new MemoryStream(arrByteFront))).Result)
+        //            {
+        //                if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt trước CMND thất bại", "OK"); }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')"));
+        //        }
 
-                    using (var response = client.PostAsync
-                    (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + frontImage_name + "',overwrite=true)")
-                    , new StreamContent(new MemoryStream(arrByteFront))).Result)
-                    {
-                        return response.IsSuccessStatusCode;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        //        if (singleContact.bsd_matsaucmnd_base64 != null)
+        //        {
+        //            byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
 
-        public async Task<bool> UpLoadCMNDBehind()
-        {
-            behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
-
-            string token = (await CrmHelper.getSharePointToken()).access_token;
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                if (singleContact.bsd_matsaucmnd_base64 != null)
-                {
-                    byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
-
-                    using (var response = client.PostAsync(
-                    new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + behindImage_name + "',overwrite=true)")
-                    , new StreamContent(new MemoryStream(arrByteBehind))).Result)
-                    {
-                        return response.IsSuccessStatusCode;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        //            using (var response = client.PostAsync
+        //            (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + behindImage_name + "',overwrite=true)")
+        //            , new StreamContent(new MemoryStream(arrByteBehind))).Result)
+        //            {
+        //                if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt sau CMND thất bại", "OK"); }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')"));
+        //        }
+        //    }
+        //}
 
         public async Task<bool> CheckCMND(string identitycardnumber, string contactid)
         {

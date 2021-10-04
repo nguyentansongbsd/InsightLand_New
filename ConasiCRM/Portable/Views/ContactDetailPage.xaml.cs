@@ -76,7 +76,6 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 await viewModel.loadOneContact(Id);
-                await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
                 { 
                    viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode); 
@@ -91,18 +90,6 @@ namespace ConasiCRM.Portable.Views
                 }
                 LoadingHelper.Hide();
             }
-        }
-
-        private void CMNDFront_Tapped(object sender, EventArgs e)
-        {
-            LookUpImage.IsVisible = true;
-            ImageDetail.Source = viewModel.singleContact.bsd_mattruoccmnd_source;
-        }
-
-        private void CMNDBehind_Tapped(object sender, EventArgs e)
-        {
-            LookUpImage.IsVisible = true;
-            ImageDetail.Source = viewModel.singleContact.bsd_matsaucmnd_source;
         }
 
         #region Tab giao dich
@@ -179,23 +166,22 @@ namespace ConasiCRM.Portable.Views
         }
         private void ShowImage_Tapped(object sender, EventArgs e)
         {
-            LookUpImage.IsVisible = true;
-            ImageDetail.Source = viewModel.PhongThuy.image;
+            LookUpImagePhongThuy.IsVisible = true;
         }
 
         protected override bool OnBackButtonPressed()
         {
-            if (LookUpImage.IsVisible)
+            if (LookUpImagePhongThuy.IsVisible)
             {
-                LookUpImage.IsVisible = false;
+                LookUpImagePhongThuy.IsVisible = false;
                 return true;
             }
             return base.OnBackButtonPressed();
         }
 
-        private void Close_LookUpImage_Tapped(object sender, EventArgs e)
+        private void Close_LookUpImagePhongThuy_Tapped(object sender, EventArgs e)
         {
-            LookUpImage.IsVisible = false;
+            LookUpImagePhongThuy.IsVisible = false;
         }
 
         #endregion

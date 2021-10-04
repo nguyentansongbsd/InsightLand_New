@@ -50,11 +50,7 @@ namespace ConasiCRM.Portable.ViewModels
         private PhongThuyModel _PhongThuy;
         public PhongThuyModel PhongThuy { get => _PhongThuy; set { _PhongThuy = value; OnPropertyChanged(nameof(PhongThuy)); } }
         public ObservableCollection<HuongPhongThuy> list_HuongTot { set; get; }
-        public ObservableCollection<HuongPhongThuy> list_HuongXau { set; get; }
-
-        private string IMAGE_CMND_FOLDER = "Contact_CMND";
-        private string frontImage_name;
-        private string behindImage_name;
+        public ObservableCollection<HuongPhongThuy> list_HuongXau { set; get; }       
 
         public ContactDetailPageViewModel()
         {
@@ -90,37 +86,7 @@ namespace ConasiCRM.Portable.ViewModels
             var tmp = result.value.FirstOrDefault();
             this.singleContact = tmp;
         }
-
-        public async Task GetImageCMND()
-        {
-            if (this.singleContact.contactid != Guid.Empty)
-            {
-                frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-                behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
-
-                string token = (await CrmHelper.getSharePointToken()).access_token;
-                var client = BsdHttpClient.Instance();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                                + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
-                var front_result = await client.SendAsync(front_request);
-                if (front_result.IsSuccessStatusCode)
-                {
-                    singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
-                }
-
-                var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                                + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
-                var behind_result = await client.SendAsync(behind_request);
-                if (behind_result.IsSuccessStatusCode)
-                {
-                    singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
-                }
-            }
-        }
-
+      
         // giao dich
 
         //DANH SACH DAT CHO
