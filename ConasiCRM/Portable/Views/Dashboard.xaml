@@ -1,30 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             BackgroundColor="White"
-             Title="Điều hướng"
-             Padding="20"
+             Title="Trang chủ"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              x:Class="ConasiCRM.Portable.Views.Dashboard">
     <ContentPage.Content>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="3*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <AbsoluteLayout>
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+                <StackLayout Spacing="0">
 
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="KH Cá nhân" Grid.Column="0" Grid.Row="0" />
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="KH Doanh nghiệp" Grid.Column="1" Grid.Row="0" />
-            
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="KH Tiềm năng" Grid.Column="0" Grid.Row="1" />
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="Bán hàng" Grid.Column="1" Grid.Row="1" />
-            
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="Đặt chỗ" Grid.Column="0" Grid.Row="2" />
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="Đặt cọc" Grid.Column="1" Grid.Row="2" />
-        </Grid>
+
+                    <StackLayout Orientation="Horizontal" Padding="14,8">
+                        <Label Text="CÔNG VIỆC HÔM NAY" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold"/>
+                        <Label  TextColor="{StaticResource NavigationPrimary}" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ShowMore_Tapped"/>
+                            </Label.GestureRecognizers>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Xem thêm  " FontSize="15"/>
+                                    <Span Text="&#xf054;" FontSize="13" FontFamily="FontAwesomeSolid"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout x:Name="stTaskList" Padding="14" Spacing="8">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <controls:ExtendedFrame Padding="12,16" BackgroundColor="White">
+                                    <StackLayout Spacing="8">
+                                        <Label Text="{Binding subject}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource NavigationPrimary}"/>
+                                        <Label FontSize="15" TextColor="#333333">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Khách hàng: " />
+                                                    <Span Text="{Binding customer}"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label FontSize="15" TextColor="#333333">
+                                            <Label.Text>
+                                                <MultiBinding StringFormat="Thời gian: {0:h:mm tt} - {1:h:mm tt}">
+                                                    <Binding Path="scheduledstart" />
+                                                    <Binding Path="scheduledend" />
+                                                </MultiBinding>
+                                            </Label.Text>
+                                        </Label>
+                                    </StackLayout>
+                                </controls:ExtendedFrame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
