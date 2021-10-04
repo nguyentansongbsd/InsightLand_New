@@ -84,7 +84,8 @@ namespace ConasiCRM.Portable.Views
 
             if (contactId != null)
             {
-                await viewModel.LoadOneContact(contactId);                
+                await viewModel.LoadOneContact(contactId);
+                await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
                 {
                     viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode);
@@ -177,6 +178,32 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (QueueForm.NeedToRefreshContactList.HasValue) QueueForm.NeedToRefreshContactList = true;
+
+                    if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
+                    {
+                        var createCMNDFront = await viewModel.UpLoadCMNDFront();
+                        if (createCMNDFront)
+                        {
+                            ToastMessageHelper.ShortMessage("Tải hình ảnh CMND mặt trước thành công");
+                        }
+                        else
+                        {
+                            ToastMessageHelper.ShortMessage("Tải hình ảnh CMND mặt trước thất bại. Vui lòng thử lại !");
+                        }
+                    }
+                    if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
+                    {
+                        var createCMNDBehind = await viewModel.UpLoadCMNDBehind();
+                        if (createCMNDBehind)
+                        {
+                            ToastMessageHelper.ShortMessage("Tải hình ảnh CMND mặt sau thành công");
+                        }
+                        else
+                        {
+                            ToastMessageHelper.ShortMessage("Tải hình ảnh CMND mặt sau thất bại. Vui lòng thử lại !");
+                        }
+                    }
+
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
                     LoadingHelper.Hide();
@@ -197,6 +224,32 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (ContactDetailPage.NeedToRefresh.HasValue) ContactDetailPage.NeedToRefresh = true;
+
+                    if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
+                    {
+                        var createCMNDFront = await viewModel.UpLoadCMNDFront();
+                        if (createCMNDFront)
+                        {
+                            ToastMessageHelper.ShortMessage("Cập nhật hình ảnh CMND mặt trước thành công");
+                        }
+                        else
+                        {
+                            ToastMessageHelper.ShortMessage("Cập nhật hình ảnh CMND mặt trước thất bại. Vui lòng thử lại !");
+                        }
+                    }
+
+                    if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
+                    {
+                        var createCMNDBehind = await viewModel.UpLoadCMNDBehind();
+                        if (createCMNDBehind)
+                        {
+                            ToastMessageHelper.ShortMessage("Cập nhật hình ảnh CMND mặt sau thành công");
+                        }
+                        else
+                        {
+                            ToastMessageHelper.ShortMessage("Cập nhật hình ảnh CMND mặt sau thất bại. Vui lòng thử lại !");
+                        }
+                    }
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
                 }
