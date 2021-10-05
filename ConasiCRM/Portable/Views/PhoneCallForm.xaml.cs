@@ -42,6 +42,8 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             BindingContext = viewModel = new PhoneCallViewModel();
+            DatePickerStart.DefaultDisplay = DateTime.Now;
+            DatePickerEnd.DefaultDisplay = DateTime.Now;
         }
 
         private void Create()

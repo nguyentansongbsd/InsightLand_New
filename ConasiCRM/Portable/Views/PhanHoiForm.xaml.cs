@@ -74,20 +74,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             };
 
-            //multiTabsCustomer.PreOpenAsync = async () =>
-            //{
-            //    LoadingHelper.Show();
-            //    viewModel.TabsCustomer = new List<string>() { "KH Cá Nhân", "KH Doanh Nghiệp" };
-            //    viewModel.Contacts = new List<OptionSet>();
-            //    viewModel.Accounts = new List<OptionSet>();
-            //    await Task.WhenAll(
-            //        viewModel.LoadContacts(),
-            //        viewModel.LoadAccounts()
-            //        );
-            //    viewModel.AllItemSourceCustomer = new List<List<OptionSet>>() { viewModel.Contacts, viewModel.Accounts };
-            //    LoadingHelper.Hide();
-            //};
-
             lookupCaseLienQuan.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
@@ -188,6 +174,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.CreateCase();
                 if (isSuccess)
                 {
+                    if (ListPhanHoi.NeedToRefresh.HasValue) ListPhanHoi.NeedToRefresh = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Tạo phản hồi thành công");
                     LoadingHelper.Hide();
