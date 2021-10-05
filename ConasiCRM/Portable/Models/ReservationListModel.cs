@@ -14,9 +14,7 @@ namespace ConasiCRM.Portable.Models
         public string totalamount_format { get => StringHelper.DecimalToCurrencyText(totalamount); }
 
         public Guid bsd_project_id { get; set; }
-        public string bsd_projectid_name { get; set; }
-
-        public string quotenumber { get; set; }
+        public string bsd_project_name { get; set; }
 
         public Guid bsd_unitno_id { get; set; }
         public string bsd_unitno_name { get; set; }
@@ -40,11 +38,7 @@ namespace ConasiCRM.Portable.Models
             }
         }
 
-        public string phaseslaunch_name { get; set; }
-
-        public string paymentscheme_name { get; set; } // lich thanh toan
-
         public int statuscode { get; set; }
-        public string statuscode_format { get => Converters.Reservation.Statuscode.Format(statuscode); }
+        public string statuscode_format { get => QuoteStatusCodeData.GetQuoteStatusCodeById(statuscode.ToString()).Name; }
     }
 }

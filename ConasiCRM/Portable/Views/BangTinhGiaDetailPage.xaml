@@ -43,8 +43,8 @@
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <StackLayout Padding="15,10" Spacing="10">
                             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
-                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding Reservation.statuscode,Converter={StaticResource ReservationStatusCodeConverterColor}}">
-                                    <Label Grid.Column="0" Text="{Binding Reservation.statuscode,Converter={StaticResource StatusCodeConverter}}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding QuoteStatus.Background}">
+                                    <Label Grid.Column="0" Text="{Binding QuoteStatus.Name}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                 </telerikPrimitives:RadBorder>
                                 <Label Grid.Column="1" Text="{Binding Reservation.name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                             </Grid>

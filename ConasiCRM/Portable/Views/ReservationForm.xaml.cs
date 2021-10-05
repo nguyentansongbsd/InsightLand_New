@@ -67,8 +67,7 @@ namespace ConasiCRM.Portable.Views
             {
                 this.Title = "CẬP NHẬT BẢNG TÍNH GIÁ";
                 buttonSave.Text = "CẬP NHẬT BẢNG TÍNH GIÁ";
-                newSelectedPromotionIds = new List<string>();
-                needDeletedPromotionIds = new List<string>();
+                
                 SetPreOpen();
                 this.isSetTotal = true;// set = true de khong nhay vao ham SetTotal
                 await Task.WhenAll(
@@ -241,8 +240,18 @@ namespace ConasiCRM.Portable.Views
         private async void DiscountListItem_Changed(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            viewModel.DiscountChilds.Clear();
-            await viewModel.LoadDiscountChilds();
+
+            if (viewModel.DiscountList == null)
+            {
+                viewModel.DiscountChilds.Clear();
+                isSetTotal = false;
+            }
+            if (viewModel.DiscountChilds.Count== 0)
+            {
+                viewModel.DiscountChilds.Clear();
+                await viewModel.LoadDiscountChilds();
+            }
+            
             viewModel.TotalDiscount = 0;
             LoadingHelper.Hide();
         }
@@ -270,8 +279,8 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
             LoadingHelper.Show();
-            this.needDeletedPromotionIds.Clear();
-            this.newSelectedPromotionIds.Clear();
+            this.needDeletedPromotionIds = new List<string>();
+            this.newSelectedPromotionIds = new List<string>();
             if (viewModel.Promotions.Count == 0)
             {
                 await viewModel.LoadPromotions();
@@ -410,17 +419,21 @@ namespace ConasiCRM.Portable.Views
         {
             var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa khuyến mãi không ?", "Đồng ý", "Hủy");
             if (conform == false) return;
+            LoadingHelper.Show();
             var deleteResponse = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_promotion({item.Val})/$ref");
             if (deleteResponse.IsSuccess)
             {
                 viewModel.PromotionsSelected.Remove(item);
                 viewModel.SelectedPromotionIds.Remove(item.Val);
                 ToastMessageHelper.ShortMessage("Xóa khuyến mãi thành công");
+                LoadingHelper.Hide();
             }
             else
             {
+                LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Xóa khuyến mãi thất bại");
             }
+            LoadingHelper.Hide();
         }
 
         private void SearchPromotion_Pressed(object sender, EventArgs e)

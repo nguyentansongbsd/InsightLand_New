@@ -26,6 +26,9 @@
                         </Label>
                     </StackLayout>
                     <StackLayout x:Name="stTaskList" Padding="14" Spacing="8">
+                        <BindableLayout.EmptyView>
+                            <Label Text="Hôm nay không có công việc" FontSize="16" TextColor="Gray" HorizontalOptions="Center"/>
+                        </BindableLayout.EmptyView>
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <controls:ExtendedFrame Padding="12,16" BackgroundColor="White">

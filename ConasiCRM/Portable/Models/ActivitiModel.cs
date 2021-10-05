@@ -1,7 +1,7 @@
 ﻿using System;
 namespace ConasiCRM.Portable.Models
 {
-    public class TaskModel
+    public class ActivitiModel
     {
         public Guid activityid { get; set; }
         public string subject { get; set; }

@@ -10,7 +10,7 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class DashboardViewModel :BaseViewModel
     {
-        public ObservableCollection<TaskModel> Tasks = new ObservableCollection<TaskModel>();
+        public ObservableCollection<ActivitiModel> Tasks = new ObservableCollection<ActivitiModel>();
 
         public DashboardViewModel()
         {
@@ -40,7 +40,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                   </entity>
                                 </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskModel>>("tasks", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ActivitiModel>>("tasks", fetchXml);
             if (result == null || result.value.Count == 0) return;
 
             foreach (var item in result.value)
