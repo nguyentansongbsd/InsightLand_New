@@ -23,9 +23,13 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new DashboardViewModel();
-            await viewModel.LoadTasks();
+            await Task.WhenAll(
+                 viewModel.LoadTasks(),
+                 viewModel.LoadMettings(),
+                 viewModel.LoadPhoneCalls()
+                ) ;
 
-            BindableLayout.SetItemsSource(stTaskList, viewModel.Tasks);
+            BindableLayout.SetItemsSource(stTaskList, viewModel.Activities.Take(5));
 
             LoadingHelper.Hide();
         }
