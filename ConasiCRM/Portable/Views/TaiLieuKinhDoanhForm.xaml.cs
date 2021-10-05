@@ -16,8 +16,7 @@ using Telerik.XamarinForms.DataGrid;
 using ConasiCRM.Portable.Controls.BsdGrid;
 using System.IO;
 using ConasiCRM.Portable.Controls;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
+using Xamarin.Essentials;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -91,7 +90,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void DownloadFileButton_Cliked(object sender, System.EventArgs e)
         {
-            if (await PermissionHelper.CheckPermissions(permissionType.Storage) == permissionStatus.Granted)
+            if (await Permissions.CheckStatusAsync<Permissions.StorageRead>() == PermissionStatus.Granted && await Permissions.CheckStatusAsync<Permissions.StorageWrite>() == PermissionStatus.Granted)
             {
                 viewModel.IsBusy = true;
                 var item = (SalesLiteratureItemListModel)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;

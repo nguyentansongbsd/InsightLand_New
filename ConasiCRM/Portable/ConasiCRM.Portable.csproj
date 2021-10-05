@@ -13,7 +13,7 @@
     <PackageReference Include="PhotoBrowser.Forms" Version="0.1.4" />
     <PackageReference Include="Telerik.UI.for.Xamarin" Version="2020.1.218.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
+        <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
         <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
@@ -170,7 +170,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Fonts\" />
-      <Folder Include="IServices\" />
     </ItemGroup>
     <ItemGroup>
       <None Remove="Xamarin.CommunityToolkit" />

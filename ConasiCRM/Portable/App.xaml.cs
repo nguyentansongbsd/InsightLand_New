@@ -12,6 +12,7 @@ namespace ConasiCRM.Portable
         public App()
         {
             InitializeComponent();
+            Plugin.Media.CrossMedia.Current.Initialize();
             MainPage = new Login();
         }
 

@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
+
 using System.Linq;
 using Telerik.XamarinForms.Primitives;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.Helpers;
 using System.Collections.ObjectModel;
+using Xamarin.Essentials;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -42,7 +42,7 @@ namespace ConasiCRM.Portable.Views
 
         public async Task LoadContacts()
         {
-            if(await PermissionHelper.CheckPermissions(permissionType.Contacts) != permissionStatus.Granted)
+            if(await PermissionHelper.RequestCameraPermission() != PermissionStatus.Granted)
             {
                 await Navigation.PopAsync();
                 return;
