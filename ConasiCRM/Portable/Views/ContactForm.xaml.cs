@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
 using System.Text.RegularExpressions;
 using ConasiCRM.Portable.Helpers;
 
@@ -84,7 +82,8 @@ namespace ConasiCRM.Portable.Views
 
             if (contactId != null)
             {
-                await viewModel.LoadOneContact(contactId);                
+                await viewModel.LoadOneContact(contactId);
+                await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
                 {
                     viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode);
@@ -177,6 +176,16 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (QueueForm.NeedToRefreshContactList.HasValue) QueueForm.NeedToRefreshContactList = true;
+
+                    if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
+                    {
+                        await viewModel.UpLoadCMNDFront();
+                    }
+                    if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
+                    {
+                        await viewModel.UpLoadCMNDBehind();
+                    }
+
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
                     LoadingHelper.Hide();
@@ -197,6 +206,17 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (ContactDetailPage.NeedToRefresh.HasValue) ContactDetailPage.NeedToRefresh = true;
+
+                    if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
+                    {
+                        await viewModel.UpLoadCMNDFront();
+                      
+                    }
+
+                    if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
+                    {
+                       await viewModel.UpLoadCMNDBehind();
+                    }
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
                 }
@@ -567,23 +587,15 @@ namespace ConasiCRM.Portable.Views
             switch (item.Label)
             {
                 case "Chụp ảnh":
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                    {
-                        await DisplayAlert("No Camera", ":( No camera available.", "OK");
-                        return;
-                    }
-                    if ((await PermissionHelper.CheckPermissions(permissionType.Camera)) == permissionStatus.Granted
-                        && await PermissionHelper.CheckPermissions(permissionType.Storage) == permissionStatus.Granted)
-                    {
+                    
+                    PermissionStatus cameraStatus = await PermissionHelper.RequestCameraPermission();
+                    if (cameraStatus == PermissionStatus.Granted)
+                    { 
                         var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
                         {
-                            Directory = "Inland",
-                            SaveToAlbum = true,
-                            //CompressionQuality = 75,
-                            CustomPhotoSize = 50,
-                            PhotoSize = PhotoSize.MaxWidthHeight,
-                            MaxWidthHeight = 2000,
-                            DefaultCamera = CameraDevice.Front
+                            SaveToAlbum = false,
+                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.MaxWidthHeight,
+                            MaxWidthHeight = 600,
                         });
 
                         if (file == null)
@@ -603,23 +615,14 @@ namespace ConasiCRM.Portable.Views
 
                     break;
                 case "Chọn ảnh từ thư viện":
-                    if (!CrossMedia.Current.IsPickPhotoSupported)
+                    PermissionStatus storageStatus = await PermissionHelper.RequestCameraPermission();
+                    if (storageStatus == PermissionStatus.Granted)
                     {
-                        await DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
-                        return;
-                    }
-                    if (await PermissionHelper.CheckPermissions(permissionType.Storage) == permissionStatus.Granted)
-                    {
-                        var file2 = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
-                        {
-                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                            //CompressionQuality = 50,
-                        });
-
-
+                        var file2 = await MediaPicker.PickPhotoAsync();
                         if (file2 == null)
                             return;
-                        Stream result = file2.GetStream();
+
+                        Stream result = await file2.OpenReadAsync();
                         if (result != null)
                         {
                             using (var memoryStream = new MemoryStream())
