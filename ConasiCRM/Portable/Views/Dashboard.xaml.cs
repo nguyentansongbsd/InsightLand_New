@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,11 +24,17 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new DashboardViewModel();
+
             await Task.WhenAll(
                  viewModel.LoadTasks(),
                  viewModel.LoadMettings(),
-                 viewModel.LoadPhoneCalls()
+                 viewModel.LoadPhoneCalls(),
+                 viewModel.LoadQueueFourMonths(),
+                 viewModel.LoadQuoteFourMonths(),
+                 viewModel.LoadOptionEntryFourMonths(),
+                 viewModel.LoadUnitFourMonths()
                 ) ;
+
 
             BindableLayout.SetItemsSource(stTaskList, viewModel.Activities.Take(5));
 

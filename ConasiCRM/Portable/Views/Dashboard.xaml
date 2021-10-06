@@ -3,13 +3,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Trang chủ"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              x:Class="ConasiCRM.Portable.Views.Dashboard">
     <ContentPage.Content>
         <AbsoluteLayout>
             <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
                 <StackLayout Spacing="0">
+                    <Label  FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,8">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="GIAO DỊCH -"/>
+                                <Span Text="{Binding dateBefor,StringFormat=' {0:MM/yyyy}'}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
+                    <Grid ColumnDefinitions="*,*,*,*" Margin="14,6" ColumnSpacing="8">
+                        <controls:ExtendedFrame Grid.Column="0" Padding="0">
+                            <StackLayout Margin="6,18" VerticalOptions="Center" >
+                                <Label Text="{Binding numQueue}" FontSize="18" FontAttributes="Bold" TextColor="#2196F3" HorizontalTextAlignment="Center"/>
+                                <Label Text="Giữ chỗ" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                        </controls:ExtendedFrame>
+                        <controls:ExtendedFrame Grid.Column="1" Padding="0">
+                            <StackLayout Margin="6,18" VerticalOptions="Center" >
+                                <Label Text="{Binding numQuote}" FontSize="18" FontAttributes="Bold" TextColor="#FA7803" HorizontalTextAlignment="Center"/>
+                                <Label Text="Đặt cọc" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                        </controls:ExtendedFrame>
+                        <controls:ExtendedFrame Grid.Column="2" Padding="0">
+                            <StackLayout Margin="2,18" VerticalOptions="Center" >
+                                <Label Text="{Binding numOptionEntry}" FontSize="18" FontAttributes="Bold" TextColor="#0DB302" HorizontalTextAlignment="Center"/>
+                                <Label Text="Hợp đồng" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                        </controls:ExtendedFrame>
+                        <controls:ExtendedFrame Grid.Column="3" Padding="0">
+                            <StackLayout Margin="6,18" VerticalOptions="Center" >
+                                <Label Text="{Binding numUnit}" FontSize="18" FontAttributes="Bold" TextColor="#D42A16" HorizontalTextAlignment="Center"/>
+                                <Label Text="Đã bán" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                        </controls:ExtendedFrame>
+                    </Grid>
+
+                    <controls:ExtendedFrame Padding="8" Margin="14,6">
+                        <telerikChart:RadCartesianChart  HeightRequest="250">
+                            <telerikChart:RadCartesianChart.HorizontalAxis>
+                                <telerikChart:CategoricalAxis LineColor="#A9A9A9" MajorTickThickness="2" PlotMode="BetweenTicks" LabelFitMode="MultiLine" ShowLabels="True" MajorTickBackgroundColor="#A9A9A9" />
+                            </telerikChart:RadCartesianChart.HorizontalAxis>
+                            <telerikChart:RadCartesianChart.VerticalAxis>
+                                <telerikChart:NumericalAxis Minimum="0" Maximum="100" MajorStep="20" LineColor="#A9A9A9" />
+                            </telerikChart:RadCartesianChart.VerticalAxis>
+                            <telerikChart:RadCartesianChart.Grid>
+                                <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>
+                            </telerikChart:RadCartesianChart.Grid>
+
+                            <telerikChart:RadCartesianChart.Series>
+                                <telerikChart:LineSeries Stroke="#2196F3" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthQueue}" />
+                                <telerikChart:LineSeries Stroke="#FA7803" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthQuote}" />
+                                <telerikChart:LineSeries Stroke="#0DB302" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthOptionEntry}" />
+                                <telerikChart:LineSeries Stroke="#D42A16" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthUnit}" />
+                            </telerikChart:RadCartesianChart.Series>
+                        </telerikChart:RadCartesianChart>
+                    </controls:ExtendedFrame>
 
                     <StackLayout Orientation="Horizontal" Padding="14,8">
                         <Label Text="CÔNG VIỆC HÔM NAY" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold"/>
