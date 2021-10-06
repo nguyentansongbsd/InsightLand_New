@@ -44,6 +44,7 @@ namespace ConasiCRM.Portable.Views
             lookupMultipleUnitStatus.PreShow= async () => {
                 LoadingHelper.Show();
                 var unitStatus = StatusCodeUnit.StatusCodes();
+                unitStatus.RemoveAt(0);
                 viewModel.UnitStatusOptions = new List<OptionSet>();
                 foreach (var item in unitStatus)
                 {

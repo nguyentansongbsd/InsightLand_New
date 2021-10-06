@@ -65,7 +65,7 @@
         </ShellContent>
     </FlyoutItem>
 
-    <ShellContent x:Name="BanHang" Title="Bán hàng" ContentTemplate="{DataTemplate views:DirectSale}">
+    <ShellContent x:Name="BanHang" Title="Giỏ hàng" ContentTemplate="{DataTemplate views:DirectSale}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07a;" Size="18"/>
         </ShellContent.Icon>

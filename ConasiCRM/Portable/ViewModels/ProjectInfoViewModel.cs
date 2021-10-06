@@ -56,8 +56,8 @@ namespace ConasiCRM.Portable.ViewModels
 
 
         public Guid ProjectId { get; set; }
-        public List<UnitChartModel> unitChartModels { get; set; }
-        public ObservableCollection<UnitChartModel> UnitChart { get; set; } = new ObservableCollection<UnitChartModel>();
+        public List<ChartModel> unitChartModels { get; set; }
+        public ObservableCollection<ChartModel> UnitChart { get; set; } = new ObservableCollection<ChartModel>();
 
         private ObservableCollection<QueueFormModel> _listGiuCho;
         public ObservableCollection<QueueFormModel> ListGiuCho { get => _listGiuCho; set { _listGiuCho = value; OnPropertyChanged(nameof(ListGiuCho)); } }
@@ -274,16 +274,16 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
 
-            unitChartModels = new List<UnitChartModel>()
+            unitChartModels = new List<ChartModel>()
             {
-                    new UnitChartModel {Category ="Giữ chỗ",Value=GiuCho},
-                    new UnitChartModel { Category = "Đặt cọc", Value = DatCoc },
-                    new UnitChartModel {Category ="Đồng ý chuyển cọc",Value=DongYChuyenCoc },
-                    new UnitChartModel { Category = "Đã đủ tiền cọc", Value = DaDuTienCoc },
-                    new UnitChartModel {Category ="Thanh toán đợt 1",Value=ThanhToanDot1},
-                    new UnitChartModel { Category = "Đã bán", Value =  DaBan},
-                    new UnitChartModel {Category ="Chuẩn bị", Value=ChuanBi},
-                    new UnitChartModel { Category = "Sẵn sàng", Value = SanSang }
+                    new ChartModel {Category ="Giữ chỗ",Value=GiuCho},
+                    new ChartModel { Category = "Đặt cọc", Value = DatCoc },
+                    new ChartModel {Category ="Đồng ý chuyển cọc",Value=DongYChuyenCoc },
+                    new ChartModel { Category = "Đã đủ tiền cọc", Value = DaDuTienCoc },
+                    new ChartModel {Category ="Thanh toán đợt 1",Value=ThanhToanDot1},
+                    new ChartModel { Category = "Đã bán", Value =  DaBan},
+                    new ChartModel {Category ="Chuẩn bị", Value=ChuanBi},
+                    new ChartModel { Category = "Sẵn sàng", Value = SanSang }
             };
             foreach (var item in unitChartModels)
             {
