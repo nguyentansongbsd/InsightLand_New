@@ -49,10 +49,6 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _unit;
         public OptionSet Unit { get => _unit; set { _unit = value; OnPropertyChanged(nameof(Unit)); } }
 
-        private List<List<OptionSet>> _allItemSourceCustomer;
-        public List<List<OptionSet>> AllItemSourceCustomer { get => _allItemSourceCustomer; set { _allItemSourceCustomer = value; OnPropertyChanged(nameof(AllItemSourceCustomer)); } }
-        private List<string> _tabsCustomer;
-        public List<string> TabsCustomer { get => _tabsCustomer; set { _tabsCustomer = value; OnPropertyChanged(nameof(TabsCustomer)); } }
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
 
@@ -132,11 +128,11 @@ namespace ConasiCRM.Portable.ViewModels
                 await DeletLookup("customerid_account", singlePhanHoi.incidentid);
                 await DeletLookup("customerid_contact", singlePhanHoi.incidentid);
             }
-            else if (Customer.Title == "2") // account
+            else if (Customer.Title == "3") // account
             {
                 data["customerid_account@odata.bind"] = "/accounts(" + Customer.Val + ")";
             }
-            else if (Customer.Title == "1") // contact
+            else if (Customer.Title == "2") // contact
             {
                 data["customerid_contact@odata.bind"] = "/contacts(" + Customer.Val + ")";
             }

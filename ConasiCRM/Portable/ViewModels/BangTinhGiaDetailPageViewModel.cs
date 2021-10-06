@@ -26,10 +26,13 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showInstallmentList;
         public bool ShowInstallmentList { get => _showInstallmentList; set { _showInstallmentList = value; OnPropertyChanged(nameof(ShowInstallmentList)); } }
 
+        private StatusCodeModel _quoteStatus;
+        public StatusCodeModel QuoteStatus { get=> _quoteStatus; set { _quoteStatus = value;OnPropertyChanged(nameof(QuoteStatus)); } }
+
         public List<OptionSet> ListDiscount { get; set; }
         public List<OptionSet> ListSpecialDiscount { get; set; }
         public List<OptionSet> ListPromotion { get; set; }
-
+        
         public string UpdateQuote = "1";
         public string UpdateQuotation = "2";
         public string ConfirmReservation = "3";
@@ -190,7 +193,8 @@ namespace ConasiCRM.Portable.ViewModels
                 Customer.Val = Reservation.purchaser_contactid.ToString();
                 Customer.Label = Reservation.purchaser_contact_name;
             }
-
+            
+            this.QuoteStatus = QuoteStatusCodeData.GetQuoteStatusCodeById(this.Reservation.statuscode.ToString());
             await LoadHandoverCondition(ReservationId);
             await LoadPromotions(ReservationId);
             await LoadSpecialDiscount(ReservationId);

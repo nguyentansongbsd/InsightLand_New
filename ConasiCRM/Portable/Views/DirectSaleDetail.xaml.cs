@@ -26,10 +26,11 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
         }
 
-        public DirectSaleDetail(DirectSaleSearchModel filter)
+        public DirectSaleDetail(DirectSaleSearchModel filter,List<Block> blocks)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new DirectSaleDetailViewModel(filter);
+            viewModel.Blocks = blocks;
             NeedToRefreshDirectSale = false;
             Init();
         }
@@ -59,12 +60,14 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
+            viewModel.Filter.Block = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
             await viewModel.LoadTotalDirectSale();
             if (viewModel.DirectSaleResult.Count != 0)
             {
-                SetBlocks();
+                //SetBlocks();
                 var firstBlock = viewModel.DirectSaleResult.FirstOrDefault();
                 viewModel.ResetDirectSale(firstBlock);
+                SaveLoadedBlock();
             }
             else
             {
@@ -72,12 +75,12 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
             
-            if (viewModel.Floors.Count != 0)
+            if (viewModel.Block.Floors.Count != 0)
             {
                 currentBlock = viewModel.Blocks.FindIndex(x => x.bsd_blockid == viewModel.blockId);
                 SetActiveBlock();
 
-                var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
+                var floorId = viewModel.Block.Floors.FirstOrDefault().bsd_floorid;
                 await viewModel.LoadUnitByFloor(floorId);
                 SetContentFloor();
 
@@ -86,6 +89,26 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 OnCompleted?.Invoke(1);
+            }
+        }
+
+        private void SaveLoadedBlock()
+        {
+            foreach (var item in viewModel.Blocks)
+            {
+                if (item.bsd_blockid == viewModel.Block.bsd_blockid)
+                {
+                    item.bsd_blockid = viewModel.Block.bsd_blockid;
+                    item.NumChuanBiInBlock = viewModel.Block.NumChuanBiInBlock;
+                    item.NumDaBanInBlock = viewModel.Block.NumDaBanInBlock;
+                    item.NumDaDuTienCocInBlock = viewModel.Block.NumDaDuTienCocInBlock;
+                    item.NumDatCocInBlock = viewModel.Block.NumDatCocInBlock;
+                    item.NumDongYChuyenCoInBlock = viewModel.Block.NumDongYChuyenCoInBlock;
+                    item.NumGiuChoInBlock = viewModel.Block.NumGiuChoInBlock;
+                    item.NumSanSangInBlock = viewModel.Block.NumSanSangInBlock;
+                    item.NumThanhToanDot1InBlock = viewModel.Block.NumThanhToanDot1InBlock;
+                    item.Floors = viewModel.Block.Floors;
+                }
             }
         }
 
@@ -105,8 +128,8 @@ namespace ConasiCRM.Portable.Views
         private void SetContentFloor(int index = 0)
         {
             var content = ((stackFloors.Children[index] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
-            BindableLayout.SetItemsSource(content, viewModel.Floors[index].Units);
-            content.IsVisible = true;
+            BindableLayout.SetItemsSource(content, viewModel.Block.Floors[index].Units);
+            content.IsVisible = !content.IsVisible;
         }
 
         private async void ItemFloor_Tapped(object sender, EventArgs e)
@@ -115,14 +138,18 @@ namespace ConasiCRM.Portable.Views
             var item = sender as RadBorder;
             int CurrentFloor = stackFloors.Children.IndexOf(item);
             FlexLayout units = ((stackFloors.Children[CurrentFloor] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
-            if (viewModel.Floors[CurrentFloor].Units.Count == 0)
+            if (viewModel.Block.Floors[CurrentFloor].Units.Count == 0)
             {
                 var floorId = (Guid)(item.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
                 await viewModel.LoadUnitByFloor(floorId);
-                BindableLayout.SetItemsSource(units, viewModel.Floors[CurrentFloor].Units);
+                BindableLayout.SetItemsSource(units, viewModel.Block.Floors[CurrentFloor].Units);
+                SaveLoadedBlock();
+                units.IsVisible = !units.IsVisible;
             }
-            
-            units.IsVisible = !units.IsVisible ;
+            else
+            {
+                SetContentFloor(CurrentFloor);
+            }
             LoadingHelper.Hide();
         }
 
@@ -138,27 +165,29 @@ namespace ConasiCRM.Portable.Views
 
             var item = (Block)(blockChoosed.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             viewModel.blockId = item.bsd_blockid;
-            viewModel.Floors.Clear();
-            viewModel.NumChuanBiInBlock = "0";
-            viewModel.NumSanSangInBlock = "0";
-            viewModel.NumGiuChoInBlock = "0";
-            viewModel.NumDatCocInBlock = "0";
-            viewModel.NumDongYChuyenCoInBlock = "0";
-            viewModel.NumDaDuTienCocInBlock = "0";
-            viewModel.NumThanhToanDot1InBlock = "0";
-            viewModel.NumDaBanInBlock = "0";
 
-            var block = viewModel.DirectSaleResult.SingleOrDefault(x => x.ID == viewModel.blockId.ToString());
-            if (block != null)
+            if (item.Floors.Count == 0)
             {
-                viewModel.ResetDirectSale(block);
-                
-                var floorId = viewModel.Floors.FirstOrDefault().bsd_floorid;
-                await viewModel.LoadUnitByFloor(floorId);
+                viewModel.Filter.Block = item.bsd_blockid.ToString();
+                await viewModel.LoadTotalDirectSale();
+                DirectSaleModel block = viewModel.DirectSaleResult.FirstOrDefault();
+                if (block != null)
+                {
+                    viewModel.ResetDirectSale(block);
 
-                var content = ((stackFloors.Children[0] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
-                BindableLayout.SetItemsSource(content, viewModel.Floors[0].Units);
-                content.IsVisible = true;
+                    var floorId = viewModel.Block.Floors.FirstOrDefault().bsd_floorid;
+                    await viewModel.LoadUnitByFloor(floorId);
+                    SaveLoadedBlock();
+
+                    var content = ((stackFloors.Children[0] as RadBorder).Content as StackLayout).Children[3] as FlexLayout;
+                    BindableLayout.SetItemsSource(content, viewModel.Block.Floors[0].Units);
+                    content.IsVisible = true;
+                }
+            }
+            else
+            {
+                viewModel.Block = item;
+                SetContentFloor();
             }
             
             LoadingHelper.Hide();
@@ -288,14 +317,14 @@ namespace ConasiCRM.Portable.Views
             //Load lai thong tin directsale khi giu cho, huy giu cho thanh cong
             if (RefreshDirectSale==true)
             {
-                viewModel.Floors.Clear();
-
+                //viewModel.Floors.Clear();
+                viewModel.Filter.Block = viewModel.blockId.ToString();
                 await viewModel.LoadTotalDirectSale();
                 var currentBlock = viewModel.DirectSaleResult.SingleOrDefault(x => x.ID == viewModel.Unit.blockid.ToString());
                 viewModel.ResetDirectSale(currentBlock);
                 await viewModel.LoadUnitByFloor(viewModel.Unit.floorid);
 
-                int indexFloor = viewModel.Floors.IndexOf(viewModel.Floors.SingleOrDefault(x => x.bsd_floorid == viewModel.Unit.floorid));
+                int indexFloor = viewModel.Block.Floors.IndexOf(viewModel.Block.Floors.SingleOrDefault(x => x.bsd_floorid == viewModel.Unit.floorid));
                 SetContentFloor(indexFloor);
                 RefreshDirectSale = false;
             }
@@ -334,7 +363,7 @@ namespace ConasiCRM.Portable.Views
         private void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid);
+            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid,null);
             reservationForm.CheckReservation = async (isSuccess) => {
                 if (isSuccess)
                 {

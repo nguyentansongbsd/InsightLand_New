@@ -35,6 +35,8 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             BindingContext = viewModel = new MeetingViewModel();
+            DatePickerStart.DefaultDisplay = DateTime.Now;
+            DatePickerEnd.DefaultDisplay = DateTime.Now;
             SetPreOpen();
         }
 

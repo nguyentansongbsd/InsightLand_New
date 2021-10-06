@@ -7,24 +7,12 @@ using System.Text;
 
 namespace ConasiCRM.Portable.Models
 {
-    public class Floor : BaseViewModel
+    public class Floor 
     {
         public Guid bsd_floorid { get; set; }
         public string bsd_name { get; set; }
         
-        public int UnitCount { get; set; }
-
         public List<Unit> Units { get; set; } = new List<Unit>();
-
-        public new string Title
-        {
-            get
-            {
-                return $"{this.bsd_name} ({CountUnit.Total})";
-            }
-        }
-
-        public CountUnit CountUnit { get; set; } = new CountUnit();
 
         public string NumChuanBiInFloor { get; set; }
         public string NumSanSangInFloor { get; set; }

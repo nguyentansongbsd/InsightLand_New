@@ -21,7 +21,9 @@ namespace ConasiCRM.Portable
         {
             InitializeComponent();
             this.BindingContext = viewModel = new AppShellViewModel();
-            appShell.CurrentItem = BanHang;
-        }        
+            //appShell.CurrentItem = BanHang;
+        }
+
+
     }       
 }
