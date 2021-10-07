@@ -26,11 +26,11 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
         }
 
-        public DirectSaleDetail(DirectSaleSearchModel filter,List<Block> blocks)
+        public DirectSaleDetail(DirectSaleSearchModel filter) //,List<Block> blocks
         {
             InitializeComponent();
             this.BindingContext = viewModel = new DirectSaleDetailViewModel(filter);
-            viewModel.Blocks = blocks;
+            //viewModel.Blocks = blocks;
             NeedToRefreshDirectSale = false;
             Init();
         }
@@ -60,11 +60,11 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            viewModel.Filter.Block = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
+            //viewModel.Filter.Block = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
             await viewModel.LoadTotalDirectSale();
             if (viewModel.DirectSaleResult.Count != 0)
             {
-                //SetBlocks();
+                SetBlocks();
                 var firstBlock = viewModel.DirectSaleResult.FirstOrDefault();
                 viewModel.ResetDirectSale(firstBlock);
                 SaveLoadedBlock();

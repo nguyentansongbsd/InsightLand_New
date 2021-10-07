@@ -153,9 +153,9 @@ namespace ConasiCRM.Portable.ViewModels
             UnitInfo = result.value.FirstOrDefault();
         }
 
-        public async Task LoadQueuesForContactForm()
+        public async Task LoadQueues()
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachDatCho}' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='opportunity'>
                         <attribute name='name' />
                         <attribute name='customerid' />
@@ -163,46 +163,39 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_queuingexpired' />
                         <attribute name='opportunityid' />
                         <order attribute='createdon' descending='true' />
-                        <link-entity name='product' from='productid' to='bsd_units' link-type='inner' alias='ad'>
-                          <filter type='and'>
-                            <condition attribute='productid' operator='eq' value='{UnitInfo.productid}'/>
-                          </filter>
-                        </link-entity>
-                        <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                           <filter type='and'>
-                              <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
-                           </filter>
-                        </link-entity>
+                        <filter type='and'>
+                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                          <condition attribute='bsd_units' operator='eq' value='{UnitInfo.productid}' />
+                        </filter>
                         <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                           <attribute name='fullname'  alias='contact_name'/>
+                           <attribute name='fullname' alias='contact_name'/>
                         </link-entity>
                         <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='name'  alias='account_name'/>
                         </link-entity>
-                        <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
-                           <attribute name='bsd_name'  alias='project_name'/>
+                        <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' alias='a_805e44d019dbeb11bacb002248168cad'>
+                          <attribute name='bsd_name' alias='bsd_project_name'/>
                         </link-entity>
                       </entity>
                     </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-            if (result == null)
-            {
-                return;
-            }
+            if (result == null || result.value.Count ==0) return;
+
             IsLoaded = true;
             var data = result.value;
-            ShowMoreDanhSachDatCho = data.Count < 3 ? false : true;
+            ShowMoreDanhSachDatCho = data.Count < 5 ? false : true;
 
-            foreach (var x in data)
+            foreach (var item in data)
             {
-                list_danhsachdatcho.Add(x);
+                item.customer_name = !string.IsNullOrWhiteSpace(item.contact_name) ? item.contact_name : item.account_name;
+                list_danhsachdatcho.Add(item);
             }
         }
 
-        public async Task LoadReservationForContactForm()
+        public async Task LoadReservation()
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCoc}' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachDatCoc}' output-format='xml-platform' mapping='logical' distinct='false'>
                           <entity name='quote'>
                             <attribute name='quoteid' />
                             <attribute name='bsd_projectid' />
@@ -213,16 +206,10 @@ namespace ConasiCRM.Portable.ViewModels
                             <attribute name='totalamount' />
                             <attribute name='createdon' />
                             <order attribute='createdon' descending='true' />
-                            <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='a_d52436e819dbeb11bacb002248168cad'>
-                              <filter type='and'>
-                                    <condition attribute='productid' operator='eq' value='{UnitInfo.productid}'/>
-                                 </filter>
-                            </link-entity>
-                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                <filter type='and'>
-                                    <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
-                                </filter>
-                            </link-entity>
+                            <filter type='and'>
+                              <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                              <condition attribute='bsd_unitno' operator='eq' value='{UnitInfo.productid}'/>
+                            </filter>
                             <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                                 <attribute name='fullname'  alias='customerid_label_contact'/>
                             </link-entity>
@@ -245,7 +232,7 @@ namespace ConasiCRM.Portable.ViewModels
             if (result == null) return;
             IsLoaded = true;
             var data = result.value;
-            ShowMoreDanhSachDatCoc = data.Count < 3 ? false : true;
+            ShowMoreDanhSachDatCoc = data.Count < 5 ? false : true;
 
             foreach (var x in data)
             {
@@ -253,7 +240,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task LoadOptoinEntryForContactForm()
+        public async Task LoadOptoinEntry()
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachHopDong}' output-format='xml-platform' mapping='logical' distinct='false'>
                           <entity name='salesorder'>
@@ -264,16 +251,10 @@ namespace ConasiCRM.Portable.ViewModels
                             <attribute name='bsd_signingexpired' />
                             <attribute name='createdon' />
                             <order attribute='bsd_signingexpired' descending='true' />
-                            <link-entity name='product' from='productid' to='bsd_unitnumber' visible='false' link-type='outer' alias='a_e42436e819dbeb11bacb002248168cad'>
-                                 <filter type='and'>
-                                    <condition attribute='productid' operator='eq' value='{UnitInfo.productid}'/>
-                                 </filter>
-                            </link-entity>
-                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                <filter type='and'>
-                                    <condition attribute='bsd_employeeid' operator='eq' value='{UserLogged.Id}'/>
-                                </filter>
-                            </link-entity>
+                            <filter type='and'>
+                              <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                              <condition attribute='bsd_unitnumber' operator='eq' value='{UnitInfo.productid}'/>
+                            </filter>
                             <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                                 <attribute name='fullname'  alias='customerid_label_contact'/>
                             </link-entity>
@@ -296,7 +277,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             IsLoaded = true;
             var data = result.value;
-            ShowMoreDanhSachHopDong = data.Count < 3 ? false : true;
+            ShowMoreDanhSachHopDong = data.Count < 5 ? false : true;
 
             foreach (var x in data)
             {

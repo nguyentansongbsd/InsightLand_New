@@ -32,7 +32,8 @@ namespace ConasiCRM.Portable.Views
                  viewModel.LoadQueueFourMonths(),
                  viewModel.LoadQuoteFourMonths(),
                  viewModel.LoadOptionEntryFourMonths(),
-                 viewModel.LoadUnitFourMonths()
+                 viewModel.LoadUnitFourMonths(),
+                 viewModel.LoadLeads()
                 ) ;
 
 

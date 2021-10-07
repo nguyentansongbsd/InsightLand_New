@@ -106,7 +106,7 @@
                                         <telerikPrimitives:RadBorder.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Block_Tapped" CommandParameter="{Binding}" />
                                         </telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <Label Text="{Binding bsd_name,StringFormat='Toà {0}'}" Style="{StaticResource lblBlocks}" TextColor="#B3B3B3" FontSize="15"/><!--,StringFormat='Toà {0}'-->
+                                        <Label Text="{Binding bsd_name}" Style="{StaticResource lblBlocks}" TextColor="#B3B3B3" FontSize="15"/><!--,StringFormat='Toà {0}'-->
                                     </telerikPrimitives:RadBorder>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -153,6 +153,7 @@
                                         <BoxView HeightRequest="1" BackgroundColor="LightGray" Margin="0,16" IsVisible="{Binding Source={x:Reference flexContentUnits},Path=IsVisible}"/>
                                          
                                         <FlexLayout x:Name="flexContentUnits" IsVisible="false" Padding="8,0" Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
+                                            <FlexLayout.GestureRecognizers><TapGestureRecognizer/></FlexLayout.GestureRecognizers>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding statuscode, Converter={StaticResource BackgroundUnitConverter}}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
