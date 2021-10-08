@@ -18,6 +18,8 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<ChartModel> DataMonthOptionEntry { get; set; } = new ObservableCollection<ChartModel>();
         public ObservableCollection<ChartModel> DataMonthUnit { get; set; } = new ObservableCollection<ChartModel>();
 
+        public ObservableCollection<ChartModel> LeadsChart { get; set; } = new ObservableCollection<ChartModel>();
+
         private int _numQueue;
         public int numQueue { get => _numQueue; set { _numQueue = value;OnPropertyChanged(nameof(numQueue)); } }
         private int _numQuote;
@@ -26,6 +28,13 @@ namespace ConasiCRM.Portable.ViewModels
         public int numOptionEntry { get => _numOptionEntry; set { _numOptionEntry = value; OnPropertyChanged(nameof(numOptionEntry)); } }
         private int _numUnit;
         public int numUnit { get => _numUnit; set { _numUnit = value; OnPropertyChanged(nameof(numUnit)); } }
+
+        private int _numKHMoi;
+        public int numKHMoi { get => _numKHMoi; set { _numKHMoi = value;OnPropertyChanged(nameof(numKHMoi)); } }
+        private int _numKHDaChuyenDoi;
+        public int numKHDaChuyenDoi { get => _numKHDaChuyenDoi; set { _numKHDaChuyenDoi = value; OnPropertyChanged(nameof(numKHDaChuyenDoi)); } }
+        private int _numKHKhongChuyenDoi;
+        public int numKHKhongChuyenDoi { get => _numKHKhongChuyenDoi; set { _numKHKhongChuyenDoi = value; OnPropertyChanged(nameof(numKHKhongChuyenDoi)); } }
 
         private DateTime _dateBefor;
         public DateTime dateBefor { get=>_dateBefor; set { _dateBefor = value; OnPropertyChanged(nameof(dateBefor)); } }
@@ -196,6 +205,40 @@ namespace ConasiCRM.Portable.ViewModels
             this.DataMonthUnit.Add(chartSecondMonth);
             this.DataMonthUnit.Add(chartThirdMonth);
             this.DataMonthUnit.Add(chartFourthMonth);
+        }
+
+        public async Task LoadLeads()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='lead'>
+                                    <attribute name='statuscode' alias='Label'/>
+                                    <attribute name='leadid' alias='Val' />
+                                    <order attribute='createdon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='statuscode' operator='in'>
+                                        <value>1</value>
+                                        <value>3</value>
+                                        <value>4</value>
+                                      </condition>
+                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+
+            numKHMoi = result.value.Where(x => x.Label == "1").Count();
+            ChartModel chartKHMoi = new ChartModel() { Category = "Khách hàng mới", Value = numKHMoi };
+
+            numKHDaChuyenDoi = result.value.Where(x => x.Label == "2").Count();
+            ChartModel chartKHDaChuyenDoi = new ChartModel() { Category = "Đã chuyển đổi", Value = numKHDaChuyenDoi };
+
+            numKHKhongChuyenDoi = result.value.Where(x => x.Label == "3").Count();
+            ChartModel chartKHKhongChuyenDoi = new ChartModel() { Category = "Không chuyển đổi", Value = numKHKhongChuyenDoi };
+
+            this.LeadsChart.Add(chartKHMoi);
+            this.LeadsChart.Add(chartKHDaChuyenDoi);
+            this.LeadsChart.Add(chartKHKhongChuyenDoi);
         }
 
         public async Task LoadTasks()

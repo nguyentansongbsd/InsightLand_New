@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public TaskFormModel _task;
         public TaskFormModel Task { get => _task; set { _task = value; OnPropertyChanged(nameof(Task)); } }
-        
+
         public MeetingModel _meet;
         public MeetingModel Meet { get => _meet; set { _meet = value; OnPropertyChanged(nameof(Meet)); } }
 
@@ -36,10 +37,12 @@ namespace ConasiCRM.Portable.ViewModels
 
         private DateTime? _scheduledEndTask;
         public DateTime? ScheduledEndTask { get => _scheduledEndTask; set { _scheduledEndTask = value; OnPropertyChanged(nameof(ScheduledEndTask)); } }
-        
+
         public string CodeCompleted = "completed";
 
         public string CodeCancel = "cancel";
+
+        public string entity { get; set; }
 
         public ActivityListViewModel()
         {
@@ -47,35 +50,20 @@ namespace ConasiCRM.Portable.ViewModels
             Task = new TaskFormModel();
             Meet = new MeetingModel();
             PreLoadData = new Command(() =>
-         {
-             EntityName = "activitypointers";
-             FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='true'>
-                                  <entity name='activitypointer'>
+            {
+                FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                  <entity name='{entity}'>
                                     <attribute name='activitytypecode' />
                                     <attribute name='subject' />
                                     <attribute name='statecode' />
-                                    <attribute name='prioritycode' />
-                                    <attribute name='modifiedon' />
                                     <attribute name='activityid' />
-                                    <attribute name='instancetypecode' />
-                                    <attribute name='community' />
-                                    <attribute name='regardingobjectid' />
                                     <attribute name='scheduledstart' />
                                     <attribute name='scheduledend' />
-                                    <attribute name='createdon' />
-                                    <attribute name='actualdurationminutes' />
-                                    <attribute name='description' />
                                     <order attribute='modifiedon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='activitytypecode' operator='in'>
-                                        <value>4210</value>
-                                        <value>4201</value>
-                                        <value>4212</value>
-                                      </condition>
+                                      <condition attribute='subject' operator='like' value='%25{Keyword}%25' />
+                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
-                                    <filter type='and'>
-                                        <condition attribute='subject' operator='like' value='%{Keyword}%' />
-                                     </filter>
                                     <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
                                         <attribute name='bsd_name' alias='accounts_bsd_name'/>
                                     </link-entity>
@@ -87,7 +75,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                   </entity>
                                 </fetch>";
-         });
+            });
         }
 
         public async Task loadPhoneCall(Guid id)
@@ -144,7 +132,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (PhoneCall.contact_id != Guid.Empty)
             {
-                PhoneCall.Customer = new CustomerLookUp 
+                PhoneCall.Customer = new CustomerLookUp
                 {
                     Name = PhoneCall.contact_name
                 };
@@ -231,16 +219,16 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> UpdateStatusPhoneCall(string update)
         {
-            if(update == CodeCompleted)
+            if (update == CodeCompleted)
             {
                 PhoneCall.statecode = 1;
                 PhoneCall.statuscode = 2;
-            }   
-            else if( update == CodeCancel)
+            }
+            else if (update == CodeCancel)
             {
                 PhoneCall.statecode = 2;
                 PhoneCall.statuscode = 3;
-            }    
+            }
 
             IDictionary<string, object> data = new Dictionary<string, object>();
             data["statecode"] = PhoneCall.statecode;
@@ -328,11 +316,11 @@ namespace ConasiCRM.Portable.ViewModels
         {
             if (update == CodeCompleted)
             {
-                Task.statecode = 1;              
+                Task.statecode = 1;
             }
             else if (update == CodeCancel)
             {
-                Task.statecode = 2;               
+                Task.statecode = 2;
             }
 
             IDictionary<string, object> data = new Dictionary<string, object>();
@@ -509,11 +497,11 @@ namespace ConasiCRM.Portable.ViewModels
         {
             if (update == CodeCompleted)
             {
-                Meet.statecode = 1;              
+                Meet.statecode = 1;
             }
             else if (update == CodeCancel)
             {
-                Meet.statecode = 2;             
+                Meet.statecode = 2;
             }
 
             IDictionary<string, object> data = new Dictionary<string, object>();

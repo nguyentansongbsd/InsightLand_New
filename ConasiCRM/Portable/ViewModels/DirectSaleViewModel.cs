@@ -144,7 +144,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_blockid' />
                                     <order attribute='bsd_name' descending='false' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_project' operator='eq' uiname='THẢO ĐIỀN GREEN' uitype='bsd_project' value='{this.Project.bsd_projectid}' />
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{this.Project.bsd_projectid}' />
                                     </filter>
                                     {conditionPhaselaunch}
                                   </entity>
