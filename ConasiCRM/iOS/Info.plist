@@ -29,7 +29,7 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
-	<string>SplashScreen</string>
+	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>ConasiCRM.iOS</string>
 	<key>NSCameraUsageDescription</key>
@@ -42,9 +42,7 @@
 	<string>Calendar Permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photos Permission</string>
-	<key>XSLaunchImageAssets</key>
-	<string>Assets.xcassets/LaunchImage.launchimage</string>
 	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<string>Assets.xcassets/AppIcon-1.appiconset</string>
 </dict>
 </plist>
