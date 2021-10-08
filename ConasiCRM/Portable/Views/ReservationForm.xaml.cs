@@ -228,6 +228,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.HandoverCondition.bsd_byunittype == true && (viewModel.HandoverCondition._bsd_unittype_value != viewModel.UnitType))
             {
                 ToastMessageHelper.ShortMessage("Không thể thêm điều kiện bàn giao");
+                viewModel.HandoverCondition = null;
                 return;
             }
 

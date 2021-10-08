@@ -427,7 +427,7 @@
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Padding="10">
-                                        <controls:FormLabel Text="Số tháng đống phí"/>
+                                        <controls:FormLabel Text="Số tháng đóng phí"/>
                                         <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#F2F2F2" HeightRequest="40">
                                             <Label Text="{Binding Quote.bsd_numberofmonthspaidmf}" FontSize="15" TextColor="#666666" Margin="10,0" VerticalOptions="Center"/>
                                         </telerikPrimitives:RadBorder>
