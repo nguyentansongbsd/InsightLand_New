@@ -8,7 +8,7 @@
              x:Class="ConasiCRM.Portable.Views.Dashboard">
     <ContentPage.Content>
         <AbsoluteLayout>
-            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,20">
                 <StackLayout Spacing="0">
                     <Label  FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8">
                         <Label.FormattedText>
@@ -69,7 +69,7 @@
 
                     <Label Text="KHÁCH HÀNG TIỀM NĂNG" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8"/>
                     <controls:ExtendedFrame Padding="0" Margin="14,6">
-                        <Grid ColumnDefinitions="*,*" Padding="8">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="200" Padding="8">
                             <telerikChart:RadPieChart Grid.Column="0">
                                 <telerikChart:RadPieChart.Series>
                                     <telerikChart:DonutSeries InnerRadiusFactor="0.7" ValueBinding="Value" ItemsSource="{Binding LeadsChart}" />
@@ -84,17 +84,17 @@
                                     </telerikChart:ChartPalette>
                                 </telerikChart:RadPieChart.Palette>
                             </telerikChart:RadPieChart>
-                            <StackLayout Grid.Column="1" Spacing="28" Margin="0,24">
-                                <StackLayout Orientation="Horizontal" Spacing="8" Padding="0,4" BackgroundColor="Red">
-                                    <Label Text="{Binding numKHMoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#2C95F6" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                    <Label Text="Khách hàng mới chuyển đổi" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                            <StackLayout Grid.Column="1" Spacing="28" VerticalOptions="Center">
+                                <StackLayout Orientation="Horizontal" Spacing="8" Padding="0,4">
+                                    <Label Text="{Binding numKHMoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#2C95F6" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                    <Label Text="Khách hàng mới" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="8" >
                                     <Label Text="{Binding numKHDaChuyenDoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#F6E22D" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                                    <Label Text="Đã chuyển đổi chuyển đổi" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                                    <Label Text="Đã chuyển đổi" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" Spacing="8">
-                                    <Label Text="{Binding numKHKhongChuyenDoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#932CF6" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                    <Label Text="{Binding numKHKhongChuyenDoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#932CF6" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                                     <Label Text="Không chuyển đổi" FontSize="15" TextColor="#333333" VerticalTextAlignment="Center"/>
                                 </StackLayout>
                             </StackLayout>
