@@ -9,6 +9,8 @@ namespace ConasiCRM.Portable.Models
     public class DirectSaleSearchModel
     {
         public string Project { get; set; }
+        [JsonProperty("Block", NullValueHandling = NullValueHandling.Ignore)]
+        public string Block { get; set; }
         [JsonProperty("Phase", NullValueHandling = NullValueHandling.Ignore)]
         public string Phase { get; set; }
         [JsonProperty("Event", NullValueHandling = NullValueHandling.Ignore)]

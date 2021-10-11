@@ -1,7 +1,7 @@
 ﻿using System;
 namespace ConasiCRM.Portable.Models
 {
-    public class UnitChartModel
+    public class ChartModel
     {
         public object Category { get; set; }
 

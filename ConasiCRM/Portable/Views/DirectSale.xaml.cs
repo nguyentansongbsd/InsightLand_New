@@ -44,6 +44,7 @@ namespace ConasiCRM.Portable.Views
             lookupMultipleUnitStatus.PreShow= async () => {
                 LoadingHelper.Show();
                 var unitStatus = StatusCodeUnit.StatusCodes();
+                unitStatus.RemoveAt(0);
                 viewModel.UnitStatusOptions = new List<OptionSet>();
                 foreach (var item in unitStatus)
                 {
@@ -91,9 +92,19 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var item = e.Item as ProjectList;
             viewModel.Project = item;
-            await viewModel.LoadPhasesLanch();
+            await Task.WhenAll(
+                viewModel.LoadPhasesLanch()
+                //viewModel.LoadBlocks()
+                ) ;
             await bottomModalProject.Hide();
             LoadingHelper.Hide();
+        }
+
+        private async void PhaseLaunchItem_SelectedChange(object sender,EventArgs e)
+        {
+            //LoadingHelper.Show();
+            //await viewModel.LoadBlocks();
+            //LoadingHelper.Hide();
         }
 
         private void SearchClicked(object sender, EventArgs e)
@@ -111,7 +122,7 @@ namespace ConasiCRM.Portable.Views
 
                 DirectSaleSearchModel filter = new DirectSaleSearchModel(viewModel.Project.bsd_projectid, viewModel.PhasesLaunch?.Val, viewModel.IsEvent,viewModel.UnitCode, directions, unitStatus,viewModel.NetArea?.Id,viewModel.Price?.Id);
 
-                DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter);
+                DirectSaleDetail directSaleDetail = new DirectSaleDetail(filter);//,viewModel.Blocks
                 directSaleDetail.OnCompleted = async (Success) =>
                 {
                     if (Success == 0)

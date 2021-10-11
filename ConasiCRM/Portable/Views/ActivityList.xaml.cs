@@ -21,6 +21,7 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshTask = null;
         public Action<bool> OnCompleted;
         public ActivityListViewModel viewModel;
+
         public ActivityList()
         {
             InitializeComponent();
@@ -30,11 +31,20 @@ namespace ConasiCRM.Portable.Views
             NeedToRefreshTask = false;
             Init();
         }
+
         public async void Init()
         {
+            viewModel.EntityName = "tasks";
+            viewModel.entity = "task";
             await viewModel.LoadData();
             if (viewModel.Data.Count > 0)
             {
+                VisualStateManager.GoToState(radBorderTask, "Active");
+                VisualStateManager.GoToState(radBorderMeeting, "InActive");
+                VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+                VisualStateManager.GoToState(lblTask, "Active");
+                VisualStateManager.GoToState(lblMeeting, "InActive");
+                VisualStateManager.GoToState(lblPhoneCall, "InActive");
                 OnCompleted?.Invoke(true);
             }
             else
@@ -49,6 +59,8 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.Data != null && NeedToRefreshPhoneCall == true)
             {
                 LoadingHelper.Show();
+                viewModel.EntityName = "phonecalls";
+                viewModel.entity = "phonecall";
                 await viewModel.LoadOnRefreshCommandAsync();
                 if (viewModel.PhoneCall.activityid != Guid.Empty)
                 {
@@ -61,6 +73,8 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.Data != null && NeedToRefreshMeet == true)
             {
                 LoadingHelper.Show();
+                viewModel.EntityName = "appointments";
+                viewModel.entity = "appointment";
                 await viewModel.LoadOnRefreshCommandAsync();
                 if (viewModel.Meet.activityid != Guid.Empty)
                 {
@@ -74,6 +88,8 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.Data != null && NeedToRefreshTask == true)
             {
                 LoadingHelper.Show();
+                viewModel.EntityName = "tasks";
+                viewModel.entity = "task";
                 await viewModel.LoadOnRefreshCommandAsync();
                 if (ContentTask.IsVisible == true)
                 {
@@ -84,6 +100,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
+
         private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item != null)
@@ -363,6 +380,66 @@ namespace ConasiCRM.Portable.Views
                     }
                 }
             }
+            LoadingHelper.Hide();
+        }
+
+        private async void Task_Tapped(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radBorderTask, "Active");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "Active");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
+
+            if (viewModel.entity != "task")
+            {
+                viewModel.EntityName = "tasks";
+                viewModel.entity = "task";
+                await viewModel.LoadOnRefreshCommandAsync();
+            }
+            
+            LoadingHelper.Hide();
+        }
+
+        private async void Meeting_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radBorderTask, "InActive");
+            VisualStateManager.GoToState(radBorderMeeting, "Active");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "InActive");
+            VisualStateManager.GoToState(lblMeeting, "Active");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
+
+            if (viewModel.entity != "appointment")
+            {
+                viewModel.EntityName = "appointments";
+                viewModel.entity = "appointment";
+                await viewModel.LoadOnRefreshCommandAsync();
+            }
+            
+            LoadingHelper.Hide();
+        }
+
+        private async void PhoneCall_Tapped(object sender,EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radBorderTask, "InActive");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "Active");
+            VisualStateManager.GoToState(lblTask, "InActive");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "Active");
+
+            if (viewModel.entity != "phonecall")
+            {
+                viewModel.EntityName = "phonecalls";
+                viewModel.entity = "phonecall";
+                await viewModel.LoadOnRefreshCommandAsync();
+            }
+
             LoadingHelper.Hide();
         }
     }

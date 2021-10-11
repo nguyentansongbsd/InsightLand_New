@@ -30,5 +30,7 @@ namespace ConasiCRM.Portable.Models
         public decimal bsd_maintenancefeespercent { get; set; }
         public int bsd_numberofmonthspaidmf { get; set; }
         public decimal bsd_managementamountmonth { get; set; }
+
+        public Guid _defaultuomid_value { get; set; }
     }
 }

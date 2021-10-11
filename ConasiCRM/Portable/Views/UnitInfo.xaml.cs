@@ -94,7 +94,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.PageDanhSachDatCho = 1;
                 viewModel.list_danhsachdatcho.Clear();
-                await viewModel.LoadQueuesForContactForm();
+                await viewModel.LoadQueues();
                 NeedToRefreshQueue = false;
                 LoadingHelper.Hide();
             }    
@@ -151,9 +151,9 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.IsLoaded == false)
             {
                 await Task.WhenAll(
-                    viewModel.LoadQueuesForContactForm(),
-                    viewModel.LoadReservationForContactForm(),
-                    viewModel.LoadOptoinEntryForContactForm()
+                    viewModel.LoadQueues(),
+                    viewModel.LoadReservation(),
+                    viewModel.LoadOptoinEntry()
                 );
             }
             LoadingHelper.Hide();
@@ -163,7 +163,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachDatCho++;
-            await viewModel.LoadQueuesForContactForm();
+            await viewModel.LoadQueues();
             LoadingHelper.Hide();
         }
 
@@ -171,7 +171,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachDatCoc++;
-            await viewModel.LoadReservationForContactForm();
+            await viewModel.LoadReservation();
             LoadingHelper.Hide();
         }
 
@@ -179,7 +179,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachHopDong++;
-            await viewModel.LoadOptoinEntryForContactForm();
+            await viewModel.LoadOptoinEntry();
             LoadingHelper.Hide();
         }
 

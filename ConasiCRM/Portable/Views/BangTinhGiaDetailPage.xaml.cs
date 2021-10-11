@@ -27,22 +27,24 @@ namespace ConasiCRM.Portable.Views
             ReservationId = id;
             BindingContext = viewModel = new BangTinhGiaDetailPageViewModel();
             NeedToRefresh = false;
-            LoadingHelper.Show();
             Tab_Tapped(1);
             Init();
         }
 
         public async void Init()
         {
-            await LoadDataChinhSach(ReservationId);
-            await viewModel.LoadCoOwners(ReservationId);
-            SetUpButtonGroup();
+            await Task.WhenAll(
+                LoadDataChinhSach(ReservationId),
+                viewModel.LoadCoOwners(ReservationId)
+                );
 
+            SetUpButtonGroup();
             if (viewModel.Reservation.quoteid != Guid.Empty)
+            {
                 OnCompleted?.Invoke(true);
+            }
             else
                 OnCompleted?.Invoke(false);
-            LoadingHelper.Hide();
         }
 
         protected async override void OnAppearing()
@@ -51,12 +53,18 @@ namespace ConasiCRM.Portable.Views
             if (NeedToRefresh == true)
             {
                 LoadingHelper.Show();
-                await LoadDataChinhSach(ReservationId);
-                await viewModel.LoadCoOwners(ReservationId);
+
+                viewModel.CoownerList.Clear();
+
+                await Task.WhenAll(
+                    LoadDataChinhSach(ReservationId),
+                    viewModel.LoadCoOwners(ReservationId)
+                );
                 viewModel.ButtonCommandList.Clear();
                 SetUpButtonGroup();
-                LoadingHelper.Hide();
                 NeedToRefresh = false;
+
+                LoadingHelper.Hide();
             }
         }
 
@@ -64,27 +72,25 @@ namespace ConasiCRM.Portable.Views
 
         private async Task LoadDataChinhSach(Guid id)
         {
-            if(id != Guid.Empty)
+            if (id != Guid.Empty)
             {
-                LoadingHelper.Show();
                 await viewModel.LoadReservation(id);
                 SutUpPromotions();
                 SutUpSpecialDiscount();
                 SetUpDiscount(viewModel.Reservation.bsd_discounts);
-                LoadingHelper.Hide();
             }
         }
 
         // tab lich
         private async void LoadInstallmentList(Guid id)
         {
-            if (id != Guid.Empty &&viewModel.InstallmentList != null && viewModel.InstallmentList.Count == 0)
+            if (id != Guid.Empty && viewModel.InstallmentList != null && viewModel.InstallmentList.Count == 0)
             {
                 LoadingHelper.Show();
                 await viewModel.LoadInstallmentList(id);
                 LoadingHelper.Hide();
             }
-        }      
+        }
 
         private void ChinhSach_Tapped(object sender, EventArgs e)
         {
@@ -173,7 +179,7 @@ namespace ConasiCRM.Portable.Views
                     foreach (var id in list_id)
                     {
                         OptionSet item = viewModel.ListDiscount.Single(x => x.Val == id);
-                        if(item != null && !string.IsNullOrEmpty(item.Val))
+                        if (item != null && !string.IsNullOrEmpty(item.Val))
                         {
                             stackLayoutDiscount.Children.Add(SetUpItemBorder(item.Label));
                         }
@@ -183,26 +189,26 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 scrolltDiscount.IsVisible = false;
-            }    
+            }
         }
 
         private void SutUpPromotions()
         {
-            if(viewModel.ListPromotion != null && viewModel.ListPromotion.Count>0)
+            if (viewModel.ListPromotion != null && viewModel.ListPromotion.Count > 0)
             {
                 stackLayoutPromotions.IsVisible = true;
-                foreach(var item in viewModel.ListPromotion)
+                foreach (var item in viewModel.ListPromotion)
                 {
-                    if(!string.IsNullOrEmpty(item.Label))
+                    if (!string.IsNullOrEmpty(item.Label))
                     {
                         stackLayoutPromotions.Children.Add(SetUpItem(item.Label));
-                    }    
-                }    
-            }    
+                    }
+                }
+            }
             else
             {
                 stackLayoutPromotions.IsVisible = false;
-            }    
+            }
         }
 
         private void SutUpSpecialDiscount()
@@ -282,7 +288,22 @@ namespace ConasiCRM.Portable.Views
         }
 
         private void EditQuotes(object sender, EventArgs e)
-        {          
+        {
+            LoadingHelper.Show();
+            ReservationForm reservation = new ReservationForm(this.ReservationId);
+            reservation.CheckReservation = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(reservation);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không có thông tin bảng tính giá");
+                }
+            };
         }
 
         private async void CreatePaymentScheme(object sender, EventArgs e)
@@ -304,7 +325,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void CompletedReservation(object sender, EventArgs e)
         {
-             LoadingHelper.Show();
+            LoadingHelper.Show();
             if (viewModel.Reservation.quoteid != Guid.Empty)
             {
                 viewModel.Reservation.bsd_reservationformstatus = 100000002;

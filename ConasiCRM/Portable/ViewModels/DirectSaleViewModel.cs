@@ -131,14 +131,22 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadBlocks()
         {
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string conditionPhaselaunch = string.Empty;
+            conditionPhaselaunch = this.PhasesLaunch != null ? $@"<link-entity name='product' from='bsd_blocknumber' to='bsd_blockid' link-type='inner' alias='al'>
+                                      <filter type='and'>
+                                        <condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='{this.PhasesLaunch.Val}' />
+                                      </filter>
+                                    </link-entity>" : "";
+
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
                                   <entity name='bsd_block'>
                                     <attribute name='bsd_name' />
                                     <attribute name='bsd_blockid' />
                                     <order attribute='bsd_name' descending='false' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{Project.bsd_projectid}' />
+                                      <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{this.Project.bsd_projectid}' />
                                     </filter>
+                                    {conditionPhaselaunch}
                                   </entity>
                                 </fetch>";
 
