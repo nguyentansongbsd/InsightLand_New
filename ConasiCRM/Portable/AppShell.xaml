@@ -137,6 +137,11 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
+        <ShellContent Title="Danh sách hợp đồng" ContentTemplate="{DataTemplate views:ContractList}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
+            </ShellContent.Icon>
+        </ShellContent>
         <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate app:BlankPage}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
