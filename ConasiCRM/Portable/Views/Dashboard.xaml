@@ -123,7 +123,7 @@
                             <DataTemplate>
                                 <controls:ExtendedFrame Padding="12,16" BackgroundColor="White">
                                     <controls:ExtendedFrame.GestureRecognizers>
-                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ActivitiItem_Tapped"/>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ActivitiItem_Tapped" CommandParameter="{Binding activitytypecode}"/>
                                     </controls:ExtendedFrame.GestureRecognizers>
                                     <StackLayout Spacing="8">
                                         <Label Text="{Binding subject}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource NavigationPrimary}"/>

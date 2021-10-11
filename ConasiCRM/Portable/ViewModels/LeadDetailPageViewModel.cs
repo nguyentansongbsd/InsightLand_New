@@ -46,6 +46,9 @@ namespace ConasiCRM.Portable.ViewModels
         private LookUp Province = new LookUp();
         private LookUp District = new LookUp();
 
+        public int LeadStatusCode { get; set; }
+        public int LeadStateCode { get; set; }
+
         public LeadDetailPageViewModel()
         {
             singleGender = new OptionSet();
@@ -131,6 +134,29 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
+        }
+
+        public async Task<bool> UpdateStatusCodeLead()
+        {
+            string path = "/leads(" + this.singleLead.leadid + ")";
+            var content = await GetContentUpdateStatusCode();
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, content);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private async Task<object> GetContentUpdateStatusCode()
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data["statuscode"] = this.LeadStatusCode.ToString();
+            data["statecode"] = this.LeadStateCode.ToString();
+            return data;
         }
 
         public async Task CreateContact()

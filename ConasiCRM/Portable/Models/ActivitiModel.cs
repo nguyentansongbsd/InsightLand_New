@@ -5,6 +5,7 @@ namespace ConasiCRM.Portable.Models
     {
         public Guid activityid { get; set; }
         public string subject { get; set; }
+        public string activitytypecode { get; set; }
 
         public string customer { get; set; }
         public Guid contact_id { get; set; }
