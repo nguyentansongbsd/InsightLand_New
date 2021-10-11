@@ -143,7 +143,7 @@ namespace ConasiCRM.Portable.Views
         }
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleLead.mobilephone.Trim(); // thêm sdt ở đây
+            string phone = viewModel.singleLead.mobilephone.Replace(" ", ""); // thêm sdt ở đây
             if (phone != string.Empty)
             {              
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
@@ -165,7 +165,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleLead.mobilephone.Trim(); // thêm sdt ở đây
+            string phone = viewModel.singleLead.mobilephone.Replace(" ",""); // thêm sdt ở đây
             if (phone != string.Empty)
             {              
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
