@@ -215,11 +215,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='leadid' alias='Val' />
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='statuscode' operator='in'>
-                                        <value>1</value>
-                                        <value>3</value>
-                                        <value>4</value>
-                                      </condition>
+                                      <condition attribute='statuscode' operator='ne' value='2'/>
                                       <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
                                   </entity>
@@ -230,10 +226,10 @@ namespace ConasiCRM.Portable.ViewModels
             numKHMoi = result.value.Where(x => x.Label == "1").Count();
             ChartModel chartKHMoi = new ChartModel() { Category = "Khách hàng mới", Value = numKHMoi };
 
-            numKHDaChuyenDoi = result.value.Where(x => x.Label == "2").Count();
+            numKHDaChuyenDoi = result.value.Where(x => x.Label == "3").Count();
             ChartModel chartKHDaChuyenDoi = new ChartModel() { Category = "Đã chuyển đổi", Value = numKHDaChuyenDoi };
 
-            numKHKhongChuyenDoi = result.value.Where(x => x.Label == "3").Count();
+            numKHKhongChuyenDoi = result.value.Where(x => x.Label == "4" || x.Label == "5" || x.Label == "6" || x.Label == "7").Count();
             ChartModel chartKHKhongChuyenDoi = new ChartModel() { Category = "Không chuyển đổi", Value = numKHKhongChuyenDoi };
 
             this.LeadsChart.Add(chartKHMoi);
@@ -249,6 +245,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
                                     <attribute name='scheduledend' />
+                                    <attribute name='activitytypecode' />
                                     <attribute name='createdon' />
                                     <order attribute='modifiedon' descending='false' />
                                     <filter type='and'>
@@ -293,6 +290,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
                                     <attribute name='scheduledend' />
+                                    <attribute name='activitytypecode' />   
                                     <attribute name='createdon' />
                                     <order attribute='modifiedon' descending='false' />
                                     <filter type='and'>
@@ -337,6 +335,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
                                     <attribute name='scheduledend' />
+                                    <attribute name='activitytypecode' />
                                     <attribute name='createdon' />
                                     <order attribute='modifiedon' descending='false' />
                                     <filter type='and'>

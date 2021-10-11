@@ -48,5 +48,10 @@ namespace ConasiCRM.Portable.Views
             await Shell.Current.GoToAsync("//HoatDong");
             LoadingHelper.Hide();
         }
+
+        private void ActivitiItem_Tapped(object sender,EventArgs e)
+        {
+
+        }
     }
 }

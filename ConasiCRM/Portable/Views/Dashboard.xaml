@@ -122,6 +122,9 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <controls:ExtendedFrame Padding="12,16" BackgroundColor="White">
+                                    <controls:ExtendedFrame.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ActivitiItem_Tapped"/>
+                                    </controls:ExtendedFrame.GestureRecognizers>
                                     <StackLayout Spacing="8">
                                         <Label Text="{Binding subject}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource NavigationPrimary}"/>
                                         <Label FontSize="15" TextColor="#333333">
