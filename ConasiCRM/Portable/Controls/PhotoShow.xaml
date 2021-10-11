@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms" 
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             x:Class="ConasiCRM.Portable.Controls.PhotoShow"
+             BackgroundColor="Transparent"
+             x:Name="root">
+    <AbsoluteLayout>
+        <CarouselView x:Name="carousel" ItemsSource="{Binding ItemsSource}" BackgroundColor="#333333" Loop="False">
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <controls:PinchZoomImage OnZoom="PinchZoomImage_OnZoom" OutZoom="PinchZoomImage_OutZoom">
+                            <controls:PinchZoomImage.Content>
+                                <ffimageloading:CachedImage Source="{Binding ImageSoure}" Aspect="AspectFill"/>
+                            </controls:PinchZoomImage.Content>
+                        </controls:PinchZoomImage>
+                    </Grid>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+    </AbsoluteLayout>
+</ContentPage>

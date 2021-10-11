@@ -1,10 +1,15 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using Conasi.Portable.Views;
+using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
+using Stormlion.PhotoBrowser;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -95,14 +100,30 @@ namespace ConasiCRM.Portable.Views
 
         private void CMNDFront_Tapped(object sender, EventArgs e)
         {
-            LookUpImage.IsVisible = true;
-            ImageDetail.Source = viewModel.singleContact.bsd_mattruoccmnd_source;
+            ObservableCollection<PhotoCMND> images = new ObservableCollection<PhotoCMND>();
+            images.Add(
+                new PhotoCMND
+                {
+                    Label = "",
+                    ImageSoure = viewModel.singleContact.bsd_mattruoccmnd_source
+                }
+                );
+            PhotoShow photo = new PhotoShow(images, 0);
+            photo.Show(this);
         }
 
         private void CMNDBehind_Tapped(object sender, EventArgs e)
         {
-            LookUpImage.IsVisible = true;
-            ImageDetail.Source = viewModel.singleContact.bsd_matsaucmnd_source;
+            ObservableCollection<PhotoCMND> images = new ObservableCollection<PhotoCMND>();
+            images.Add(
+                new PhotoCMND
+                {
+                    Label = "",
+                    ImageSoure = viewModel.singleContact.bsd_matsaucmnd_source
+                }
+                );
+            PhotoShow photo = new PhotoShow(images, 0);
+            photo.Show(this);
         }
 
         #region Tab giao dich

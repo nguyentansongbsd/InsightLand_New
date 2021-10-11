@@ -5,12 +5,16 @@ using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using Xamarin.Forms;
+using ConasiCRM.Portable.IServices;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -56,6 +60,7 @@ namespace ConasiCRM.Portable.ViewModels
         private string frontImage_name;
         private string behindImage_name;
 
+        public string imagetest;
         public ContactDetailPageViewModel()
         {
             singleContact = new ContactFormModel();            
@@ -100,11 +105,14 @@ namespace ConasiCRM.Portable.ViewModels
 
                 string token = (await CrmHelper.getSharePointToken()).access_token;
                 var client = BsdHttpClient.Instance();
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
                                 + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
+                imagetest = OrgConfig.SharePointResource
+                                + "/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name;
                 var front_result = await client.SendAsync(front_request);
                 if (front_result.IsSuccessStatusCode)
                 {

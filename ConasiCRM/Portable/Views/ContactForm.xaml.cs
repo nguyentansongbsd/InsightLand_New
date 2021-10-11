@@ -615,7 +615,8 @@ namespace ConasiCRM.Portable.Views
 
                     break;
                 case "Chọn ảnh từ thư viện":
-                    PermissionStatus storageStatus = await PermissionHelper.RequestCameraPermission();
+
+                    PermissionStatus storageStatus = await PermissionHelper.RequestPhotosPermission();
                     if (storageStatus == PermissionStatus.Granted)
                     {
                         var file2 = await MediaPicker.PickPhotoAsync();

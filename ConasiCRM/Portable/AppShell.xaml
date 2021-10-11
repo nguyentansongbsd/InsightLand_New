@@ -4,6 +4,8 @@
        xmlns:d="http://xamarin.com/schemas/2014/forms/design"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
        xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
+       xmlns:app="clr-namespace:ConasiCRM.Portable"
+        xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
        xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
        ios:Page.UseSafeArea="true"
        Shell.BackgroundColor="{StaticResource NavigationPrimary}"
@@ -135,7 +137,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate views:BangTinhGiaDetailPage}">
+        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate app:BlankPage}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
             </ShellContent.Icon>
