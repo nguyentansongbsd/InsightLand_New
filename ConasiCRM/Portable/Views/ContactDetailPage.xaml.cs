@@ -202,7 +202,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {           
-            string phone = viewModel.singleContact.mobilephone.Trim();
+            string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
             if (phone != string.Empty)
             {
                 LoadingHelper.Show();
@@ -228,7 +228,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
         {          
-            string phone = viewModel.singleContact.mobilephone.Trim();
+            string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
             if (phone != string.Empty)
             {
                 LoadingHelper.Show();
