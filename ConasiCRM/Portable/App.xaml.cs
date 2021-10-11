@@ -1,4 +1,5 @@
 using ConasiCRM.Portable.Views;
+using System.Net.Http;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -9,6 +10,7 @@ namespace ConasiCRM.Portable
     {
         public static int ScreenHeight { get; set; }
         public static int ScreenWidth { get; set; }
+
         public App()
         {
             InitializeComponent();

@@ -102,11 +102,11 @@ namespace ConasiCRM.Portable.Helper
             {
                 if (Device.iOS == Device.RuntimePlatform)
                 {
-                    photoStatus = await RequestPermission<Permissions.Photos>("Language.thu_vien", "Language.sundihome_can_quyen_truy_cap_vao_thu_vien_anh_dai_dien", firstPermission);
+                    photoStatus = await RequestPermission<Permissions.Photos>("Thư Viện", "Insight Land cần quyền truy cập vào thư viện", firstPermission);
                 }
                 else
                 {
-                    photoStatus = await RequestPermission<Permissions.StorageRead>("Language.thu_vien", "Language.sundihome_can_quyen_truy_cap_vao_thu_vien_anh_dai_dien", firstPermission);
+                    photoStatus = await RequestPermission<Permissions.StorageRead>("Thư Viện", "Insight Land cần quyền truy cập vào thư viện", firstPermission);
                 }
             }
             return photoStatus;
@@ -124,7 +124,7 @@ namespace ConasiCRM.Portable.Helper
             PermissionStatus firstPermission = cameraStatus; // chi su dung tren ios. 
             if (cameraStatus != PermissionStatus.Granted)
             {
-                cameraStatus = await PermissionHelper.RequestPermission<Camera>("Language.quyen_truy_cap_may_anh", "Language.sundihome_can_quyen_truy_cap_vao_may_anh_anh_dai_dien", firstPermission);
+                cameraStatus = await PermissionHelper.RequestPermission<Camera>("Quyền truy cập máy ảnh", "Insight Land cần quyền truy cập vào máy ảnh", firstPermission);
             }
 
             if (Device.RuntimePlatform == Device.Android)
@@ -135,7 +135,7 @@ namespace ConasiCRM.Portable.Helper
 
                     if (cameraStatus != PermissionStatus.Granted)
                     {
-                        cameraStatus = await RequestPermission<Permissions.StorageRead>("Language.thu_vien", "Language.sundihome_can_quyen_truy_cap_vao_thu_vien_anh_dai_dien", firstPermission);
+                        cameraStatus = await RequestPermission<Permissions.StorageRead>("Thư Viện", "Insight Land cần quyền truy cập vào thư viện", firstPermission);
                     }
                 }
             }

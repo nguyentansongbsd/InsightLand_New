@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
-             xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters"
+             xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="ConasiCRM.Portable.Views.ContactDetailPage"
              Title="THÔNG TIN KHÁCH HÀNG">
     <ContentPage.Resources>
@@ -230,16 +230,18 @@
                                         <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" BackgroundColor="White" Grid.Row="0" Padding="10,0,10,10">
                                             <controls:FormLabel Text="Hình chụp CMND" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="0" Grid.Row="1" IsVisible="{Binding singleContact.bsd_mattruoccmnd_sources, Converter={StaticResource NullToBool}}">
-                                                <Image Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFill"/>
-                                                <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDFront_Tapped"/>
-                                                </telerikPrimitives:RadBorder.GestureRecognizers>
+                                                <ffimageloading:CachedImage Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFit" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
+                                                    <ffimageloading:CachedImage.GestureRecognizers>
+                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDFront_Tapped"/>
+                                                    </ffimageloading:CachedImage.GestureRecognizers>
+                                                </ffimageloading:CachedImage>
                                             </telerikPrimitives:RadBorder>
                                             <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="1" Grid.Row="1" IsVisible="{Binding singleContact.bsd_matsaucmnd_source, Converter={StaticResource NullToBool}}">
-                                                <Image Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFill"/>
-                                                <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDBehind_Tapped"/>
-                                                </telerikPrimitives:RadBorder.GestureRecognizers>
+                                                <ffimageloading:CachedImage Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFit" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
+                                                    <ffimageloading:CachedImage.GestureRecognizers>
+                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDBehind_Tapped"/>
+                                                    </ffimageloading:CachedImage.GestureRecognizers>
+                                                </ffimageloading:CachedImage>
                                             </telerikPrimitives:RadBorder>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="1">
@@ -543,11 +545,11 @@
                 <Button Text="&#xf044;" Clicked="EditContact_Clicked"  TextColor="White" FontSize="20" FontFamily="FontAwesomeRegular" WidthRequest="44" HeightRequest="44" CornerRadius="22" BackgroundColor="#1399D5" VerticalOptions="Center" Padding="5,0,0,2"/>
             </controls:ExtendedFrame>
             <Grid x:Name="LookUpImage" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">
-                <controls:PinchToZoomContainer>
-                    <controls:PinchToZoomContainer.Content>
+                <controls:PinchZoomImage>
+                    <controls:PinchZoomImage.Content>
                         <Image x:Name="ImageDetail"/>
-                    </controls:PinchToZoomContainer.Content>
-                </controls:PinchToZoomContainer>
+                    </controls:PinchZoomImage.Content>
+                </controls:PinchZoomImage>
                 <telerikPrimitives:RadBorder VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="White" Margin="0,10,10,0" BorderColor="#444444" BorderThickness="1" HeightRequest="25" WidthRequest="25" CornerRadius="13">
                     <Label FontFamily="FontAwesomeSolid" Text="&#xf00d;" TextColor="#444444" FontSize="Small" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="White">
                         <Label.GestureRecognizers>
