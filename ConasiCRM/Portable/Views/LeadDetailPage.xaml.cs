@@ -62,12 +62,12 @@ namespace ConasiCRM.Portable.Views
             }
             else if (viewModel.singleLead.statuscode == "4" || viewModel.singleLead.statuscode == "5" || viewModel.singleLead.statuscode == "6"|| viewModel.singleLead.statuscode == "7")
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Reactivate Lead", "FontAwesomeSolid", "\uf12e", null, ReactivateLead));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Reactivate Lead", "FontAwesomeSolid", "\uf1b8", null, ReactivateLead));
             }
             else
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chuyển đổi khách hàng", "FontAwesomeSolid", "\uf12e", null, LeadQualify));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Disqualify", "FontAwesomeSolid", "\uf12e", null, LeadDisQualify));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chuyển đổi khách hàng", "FontAwesomeSolid", "\uf542", null, LeadQualify));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Disqualify", "FontAwesomeSolid", "\uf05e", null, LeadDisQualify));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
             }
         }
@@ -197,9 +197,24 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void ReactivateLead(object sender, EventArgs e)
+        private async void ReactivateLead(object sender, EventArgs e)
         {
-
+            LoadingHelper.Show();
+            viewModel.LeadStateCode = 0;
+            viewModel.LeadStatusCode = 1;
+            bool isSuccess = await viewModel.UpdateStatusCodeLead();
+            if (isSuccess)
+            {
+                await viewModel.LoadOneLead(Id.ToString());
+                viewModel.ButtonCommandList.Clear();
+                SetButtonFloatingButton();
+                ToastMessageHelper.ShortMessage("Thành công");
+            }
+            else
+            {
+                ToastMessageHelper.ShortMessage("Thất bại");
+            }
+            LoadingHelper.Hide();
         }
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
