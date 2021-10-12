@@ -4,11 +4,11 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
              xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters"
-             x:Class="ConasiCRM.Portable.Views.ContractList">
+             x:Class="ConasiCRM.Portable.Views.ContractList"
+             Title="Danh Sách Hợp Đồng">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converter:DateFormatConverter x:Key="DateFormatConverter" />
-            <converter:DecimalFormatConverter x:Key="DecimalFormatConverter" />
+            <converter:ContractStatusCodeConverterColor x:Key="ContractStatusCodeConverterColor" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -23,26 +23,26 @@
                             <ViewCell>
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="0" Grid.Column="0">
-                                        <telerikPrimitives:RadBorder CornerRadius="5" VerticalOptions="StartAndExpand">
-                                            <Label Grid.Column="0" Text="AAAAAAAAA" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode,Converter={StaticResource ContractStatusCodeConverterColor}}" VerticalOptions="StartAndExpand">
+                                            <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                         </telerikPrimitives:RadBorder>
-                                        <Label Grid.Column="1" Text="AAAAAA" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                        <Label Grid.Column="1" Text="{Binding ordernumber}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                         <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="AAAAA" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding customer_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
                                         <Label Text="Dự án:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="AAAAAA" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding project_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
                                         <Label Text="Sản phẩm:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="AAAAAAA" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding unit_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="4">
                                         <Label Text="Tổng tiền:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="AAAAA" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding totalamount}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                 </Grid>
                             </ViewCell>

@@ -14,11 +14,11 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ContractList : ContentPage
     {
-        public ActivityListViewModel viewModel;
+        public ContractListViewModel viewModel;
         public ContractList()
         {
             InitializeComponent(); 
-            BindingContext = viewModel = new ActivityListViewModel();
+            BindingContext = viewModel = new ContractListViewModel();
             LoadingHelper.Show();
             Init();
         }
