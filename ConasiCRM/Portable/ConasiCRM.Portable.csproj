@@ -102,6 +102,9 @@
       <EmbeddedResource Update="Views\ContactList.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\ContractDetailPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\Dashboard.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>

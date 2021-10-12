@@ -1,4 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -41,6 +43,28 @@ namespace ConasiCRM.Portable.Views
             {
                 SearchBar_SearchButtonPressed(null, EventArgs.Empty);
             }
+        }
+
+        private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            LoadingHelper.Show();
+            ContractModel item = e.Item as ContractModel;
+            ContractDetailPage contractDetailPage = new ContractDetailPage(item.salesorderid);
+            await Navigation.PushAsync(contractDetailPage);
+            //contractDetailPage.OnCompleted = async (OnCompleted) =>
+            //{
+            //    if (OnCompleted == true)
+            //    {
+            //        await Navigation.PushAsync(contractDetailPage);
+            //        LoadingHelper.Hide();
+            //    }
+            //    else
+            //    {
+            //        LoadingHelper.Hide();
+            //        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin hợp đồng");
+            //    }
+
+            //};
         }
     }
 }

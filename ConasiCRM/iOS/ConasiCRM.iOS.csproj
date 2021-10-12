@@ -254,31 +254,81 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_58-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_60-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_40-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_87.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_80-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_120.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_120-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_20-1.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_40.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_58.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_40-2.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_80.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_180.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_29.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_76.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_152.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_167.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_1024.png" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default.png" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default%402x.png" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default-568h%402x.png" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default-Portrait.png" />
-    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default-Portrait%402x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_58-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_60-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_40-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_87.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_80-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_120-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_20-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_40.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_58.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_40-2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_80.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_180.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_29.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_76.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_152.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_167.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-1.appiconset\LogoInsightLand_1024.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default-568h%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default-Portrait.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\LaunchImage-1.launchimage\Default-Portrait%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

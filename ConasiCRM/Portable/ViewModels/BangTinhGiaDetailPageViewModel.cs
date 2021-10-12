@@ -135,7 +135,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                     <link-entity name='opportunity' from='opportunityid' to='opportunityid' link-type='outer' alias='al'>
                                         <attribute name='name' alias='queue_name' />
-                                        <attribute name='opportunityid' alias='queue_id' />
+                                        <attribute name='opportunityid' alias='queue_id' /> 
                                     </link-entity>
                                     <link-entity name='product' from='productid' to='bsd_unitno' link-type='outer' alias='ap'>
                                         <attribute name='name' alias='unit_name' />
