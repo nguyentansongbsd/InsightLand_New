@@ -10,7 +10,17 @@
         <AbsoluteLayout>
             <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,20">
                 <StackLayout Spacing="0">
-                    <Label  FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8">
+                    <Label FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="HOA HỒNG -"/>
+                                <Span Text="{Binding dateBefor,StringFormat=' {0:MM/yyyy}'}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+
+                    <Label FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="GIAO DỊCH -"/>
