@@ -29,9 +29,10 @@ namespace ConasiCRM.Portable.ViewModels
         private StatusCodeModel _quoteStatus;
         public StatusCodeModel QuoteStatus { get=> _quoteStatus; set { _quoteStatus = value;OnPropertyChanged(nameof(QuoteStatus)); } }
 
-        public List<OptionSet> ListDiscount { get; set; }
+        public ObservableCollection<OptionSet> ListDiscount { get; set; } = new ObservableCollection<OptionSet>();
+        public ObservableCollection<OptionSet> ListPromotion { get; set; } = new ObservableCollection<OptionSet>();
         public List<OptionSet> ListSpecialDiscount { get; set; }
-        public List<OptionSet> ListPromotion { get; set; }
+        
         
         public string UpdateQuote = "1";
         public string UpdateQuotation = "2";
@@ -43,8 +44,6 @@ namespace ConasiCRM.Portable.ViewModels
             InstallmentList = new ObservableCollection<ReservationInstallmentDetailPageModel>();
             Reservation = new ReservationDetailPageModel();
             Customer = new OptionSet();
-            ListDiscount = new List<OptionSet>();
-            ListPromotion = new List<OptionSet>();
             ListSpecialDiscount = new List<OptionSet>();
             ButtonCommandList = new ObservableCollection<FloatButtonItem>();
         }
@@ -266,37 +265,43 @@ namespace ConasiCRM.Portable.ViewModels
                                 </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_promotions", fetchXml);
-            if (result == null || result.value.Count == 0)
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
             {
-                return;
+                this.ListPromotion.Add(item);
             }
-            ListPromotion = result.value;
         }
 
-        public async Task LoadDiscounts(Guid DiscountListId)
+        public async Task LoadDiscounts()
         {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+            if (string.IsNullOrWhiteSpace(this.Reservation.bsd_discounts)) return;
+            string[] arrDiscounts = new string[] { };
+            string conditionValue = string.Empty;
+            arrDiscounts = this.Reservation.bsd_discounts.Split(',');
+            for (int i = 0; i < arrDiscounts.Count(); i++)
+            {
+                conditionValue += $"<value uitype='bsd_discount'>{arrDiscounts[i]}</value>";
+            }
+
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
                                 <entity name='bsd_discount'>
                                     <attribute name='bsd_discountid' alias='Val'/>
                                     <attribute name='bsd_name' alias='Label'/>
-                                    <attribute name='createdon' />
                                     <order attribute='bsd_name' descending='false' />
-                                       <link-entity name='bsd_bsd_discounttype_bsd_discount' from='bsd_discountid' to='bsd_discountid' visible='false' intersect='true'>
-                                      <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discounttypeid' alias='ab'>
-                                        <filter type='and'>
-                                          <condition attribute='bsd_discounttypeid' operator='eq' uitype='bsd_discounttype' value='" + DiscountListId + @"' />
-                                        </filter>
-                                      </link-entity>
-                                    </link-entity>
+                                    <filter type='and'>
+                                      <condition attribute='bsd_discountid' operator='in'>
+                                        {conditionValue}
+                                      </condition>
+                                    </filter>
                                 </entity>
                             </fetch>";
             
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_discounts", fetchXml);
-            if (result == null || result.value.Count == 0)
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
             {
-                return;
+                this.ListDiscount.Add(item);
             }
-            ListDiscount = result.value;
         }
 
         public async Task LoadCoOwners(Guid ReservationId)
