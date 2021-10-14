@@ -5,7 +5,13 @@
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:convertes ="clr-namespace:ConasiCRM.Portable.Converters"
              x:Class="ConasiCRM.Portable.Views.Dashboard">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <convertes:CurrencyFormatConverter x:Key="CurrencyFormat"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
             <RefreshView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
@@ -22,13 +28,13 @@
                         <Grid ColumnDefinitions="*,*" Margin="14,6">
                             <controls:ExtendedFrame Grid.Column="0" Padding="4,16" VerticalOptions="Center">
                                 <StackLayout Spacing="12">
-                                    <Label Text="{Binding TotalCommissionAMonth}" FontSize="18" TextColor="#7C0617" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{Binding TotalCommissionAMonth,Converter={StaticResource CurrencyFormat}}" FontSize="18" TextColor="#7C0617" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
                                     <Label Text="Tổng tiền" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
                                 </StackLayout>
                             </controls:ExtendedFrame>
                             <controls:ExtendedFrame Grid.Column="1" Padding="4,16" VerticalOptions="Center">
                                 <StackLayout Spacing="12">
-                                    <Label Text="{Binding TotalPaidCommissionAMonth}" FontSize="18" TextColor="#017914" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{Binding TotalPaidCommissionAMonth,Converter={StaticResource CurrencyFormat}}" FontSize="18" TextColor="#017914" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
                                     <Label Text="Đã nhận" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
                                 </StackLayout>
                             </controls:ExtendedFrame>

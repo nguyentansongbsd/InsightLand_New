@@ -29,7 +29,7 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new DashboardViewModel();
-
+           
             await Task.WhenAll(
                  viewModel.LoadTasks(),
                  viewModel.LoadMettings(),
@@ -42,7 +42,6 @@ namespace ConasiCRM.Portable.Views
                  viewModel.LoadCommissionTransactions()
                 ) ;
             var activities = new ObservableCollection<ActivitiModel>(viewModel.Activities.Take(5));
-            //viewModel.Activities.Clear();
             viewModel.Activities = activities;
             LoadingHelper.Hide();
         }

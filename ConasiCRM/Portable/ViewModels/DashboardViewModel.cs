@@ -102,13 +102,22 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadCommissionTransactions()
         {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_commissiontransaction'>
                                     <attribute name='bsd_commissiontransactionid' alias='Id'/>
                                     <attribute name='createdon' alias='Date'/>
                                     <attribute name='bsd_totalcommission' alias='CommissionTotal'/>
                                     <attribute name='statuscode' alias='CommissionStatus'/>
                                     <order attribute='createdon' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                      <condition attribute='statuscode' operator='in'>
+                                        <value>100000007</value>
+                                        <value>100000006</value>
+                                        <value>100000004</value>
+                                        <value>100000005</value>
+                                      </condition>
+                                    </filter>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("bsd_commissiontransactions", fetchXml);
@@ -116,11 +125,11 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var item in result.value)
             {
-                this.TotalCommissionAMonth += item.CommissionTotal;
-                if (item.CommissionStatus == "100000005")
-                {
-                    this.TotalPaidCommissionAMonth += item.CommissionTotal;
-                }
+                //this.TotalCommissionAMonth += item.CommissionTotal;
+                //if (item.CommissionStatus == "100000007")
+                //{
+                //    this.TotalPaidCommissionAMonth += item.CommissionTotal;
+                //}
             }
 
             var countCommissionFr = result.value.Where(x => x.Date.Month == firstMonth.Month).Count();
@@ -378,7 +387,10 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='activitytypecode' />   
                                     <attribute name='createdon' />
                                     <order attribute='modifiedon' descending='false' />
-                                    
+                                    <filter type='and'>
+                                      <condition attribute='scheduledstart' operator='today' />
+                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                    </filter>
                                     <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer' alias='a_48f82b1a8ad844bd90d915e7b3c4f263'>
                                         <attribute name='fullname' alias='contact_name'/>
                                         <attribute name='contactid' alias='contact_id'/>
@@ -475,8 +487,7 @@ namespace ConasiCRM.Portable.ViewModels
                  this.LoadLeads(),
                  this.LoadCommissionTransactions()
                 );
-            var activities= (ObservableCollection<ActivitiModel>)this.Activities.Take(5);
-            this.Activities.Clear();
+            var activities = new ObservableCollection<ActivitiModel>(this.Activities.Take(5));
             this.Activities = activities;
         }
 
