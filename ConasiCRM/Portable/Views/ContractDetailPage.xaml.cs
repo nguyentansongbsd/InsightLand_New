@@ -1,11 +1,12 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -49,6 +50,20 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
+        //tab chính sách
+        private async void LoadChinhSach()
+        {
+            if (viewModel.Contract.handovercondition_id == Guid.Empty)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadHandoverCondition(this.ContractId);
+                SetUpDiscount(viewModel.Contract.bsd_discounts);
+                SutUpPromotions();
+                SutUpSpecialDiscount();
+                LoadingHelper.Hide();
+            }
+        }
+
         private void TongHop_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(1);
@@ -62,6 +77,7 @@ namespace ConasiCRM.Portable.Views
         private void ChinhSach_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(3);
+            LoadChinhSach();
         }
 
         private void Lich_Tapped(object sender, EventArgs e)
@@ -125,6 +141,110 @@ namespace ConasiCRM.Portable.Views
         private void SalesCompany_Tapped(object sender, EventArgs e)
         {
 
+        }
+
+        private async void SetUpDiscount(string ids)
+        {
+            if (!string.IsNullOrEmpty(ids))
+            {
+                scrolltDiscount.IsVisible = true;
+                if (viewModel.Contract.discountlist_id != Guid.Empty)
+                {
+                    await viewModel.LoadDiscounts();
+
+                    var list_id = ids.Split(',');
+
+                    foreach (var id in list_id)
+                    {
+                        OptionSet item = viewModel.ListDiscount.Single(x => x.Val == id);
+                        if (item != null && !string.IsNullOrEmpty(item.Val))
+                        {
+                            stackLayoutDiscount.Children.Add(SetUpItemBorder(item.Label));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                scrolltDiscount.IsVisible = false;
+            }
+        }
+        private async void SutUpSpecialDiscount()
+        {
+            if (viewModel.Contract.salesorderid != Guid.Empty)
+            {
+                await viewModel.LoadSpecialDiscount(this.ContractId);
+                if (viewModel.ListSpecialDiscount != null && viewModel.ListSpecialDiscount.Count > 0)
+                {
+                    stackLayoutSpecialDiscount.IsVisible = true;
+                    foreach (var item in viewModel.ListSpecialDiscount)
+                    {
+                        if (!string.IsNullOrEmpty(item.Label))
+                        {
+                            stackLayoutSpecialDiscount.Children.Add(SetUpItem(item.Label));
+                        }
+                    }
+                }
+                else
+                {
+                    stackLayoutSpecialDiscount.IsVisible = false;
+                }
+            }
+        }
+
+        private async void SutUpPromotions()
+        {
+            if (viewModel.Contract.salesorderid != Guid.Empty)
+            {
+                await viewModel.LoadPromotions(this.ContractId);
+                if (viewModel.ListPromotion != null && viewModel.ListPromotion.Count > 0)
+                {
+                    stackLayoutPromotions.IsVisible = true;
+                    foreach (var item in viewModel.ListPromotion)
+                    {
+                        if (!string.IsNullOrEmpty(item.Label))
+                        {
+                            stackLayoutPromotions.Children.Add(SetUpItem(item.Label));
+                        }
+                    }
+                }
+                else
+                {
+                    stackLayoutPromotions.IsVisible = false;
+                }
+            }
+        }
+
+        private RadBorder SetUpItemBorder(string content)
+        {
+            RadBorder rd = new RadBorder();
+            rd.Padding = 5;
+            rd.BorderColor = Color.FromHex("f1f1f1");
+            rd.BorderThickness = 1;
+            rd.CornerRadius = 5;
+            Label lb = new Label();
+            lb.Text = content;
+            lb.FontSize = 15;
+            lb.TextColor = Color.FromHex("1399D5");
+            lb.VerticalOptions = LayoutOptions.Center;
+            lb.HorizontalOptions = LayoutOptions.Center;
+            lb.FontAttributes = FontAttributes.Bold;
+            rd.Content = lb;
+            return rd;
+        }
+
+        private Grid SetUpItem(string content)
+        {
+            Grid grid = new Grid();
+            Label lb = new Label();
+            lb.Text = content;
+            lb.FontSize = 15;
+            lb.TextColor = Color.FromHex("1399D5");
+            lb.VerticalOptions = LayoutOptions.Center;
+            lb.HorizontalOptions = LayoutOptions.End;
+            lb.FontAttributes = FontAttributes.Bold;
+            grid.Children.Add(lb);
+            return grid;
         }
     }
 }

@@ -26,6 +26,7 @@ namespace ConasiCRM.Portable.Models
                 new StatusCodeModel("2","Pending","#FF8F4F"),
                 new StatusCodeModel("100000002","Signed Contract","#FF8F4F"),
                 new StatusCodeModel("100000006","Terminated","#c4c4c4"),
+                new StatusCodeModel("0","","#bfbfbf"),
             };
         }
 
