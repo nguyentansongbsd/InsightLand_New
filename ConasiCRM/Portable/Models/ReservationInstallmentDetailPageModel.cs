@@ -10,6 +10,8 @@ namespace ConasiCRM.Portable.Models
         public string bsd_name { get; set; }
         public DateTime bsd_duedate { get; set; } // ngày đến hạn
         public int statuscode { get; set; } // tình trạng.
+        public string statuscode_format { get => InstallmentsStatusCodeData.GetInstallmentsStatusCodeById(statuscode.ToString()).Name; }
+        public string statuscode_color { get => InstallmentsStatusCodeData.GetInstallmentsStatusCodeById(statuscode.ToString()).Background; }
         public decimal bsd_amountofthisphase { get; set; } // số tiền đợi thnah toán.
         public decimal bsd_amountwaspaid { get; set; } // số tiền đã thanh toán
         public decimal bsd_depositamount { get; set; } // số tiền đặt cọc

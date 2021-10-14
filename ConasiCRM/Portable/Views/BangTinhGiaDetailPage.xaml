@@ -26,12 +26,7 @@
             <Setter Property="VerticalTextAlignment" Value="Center" />
             <Setter Property="TextColor" Value="#444444"/>
         </Style>
-        <converters:InstallmentsStatusCodeConverter x:Key="StatusCodeToString"/>
-        <converters:InstallmentsStatusCodeConverterColor x:Key="StatusCodeToColor"/>
-        <converters:ReservationUnitStatusCodeConverter x:Key="UnitStatusCodeConverter"/>
         <converters:NullToHideConverter x:Key="NullToHideConverter" />
-        <converters:ReservationContractTypeConverter x:Key="ContractTypeConverter"/>
-        <converters:ReservationBoolToStringConverter x:Key="BoolToStringConverter"/>
         <converters:ReservationReservationFormConverter x:Key="ReservationFormConverter" />
         <converters:ReservationStatusCodeConverter x:Key="StatusCodeConverter"/>
         <converters:ReservationStatusCodeConverterColor x:Key="ReservationStatusCodeConverterColor"/>
@@ -188,7 +183,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Danh sách theo dõi" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_followuplist,Converter={StaticResource BoolToStringConverter}}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_followuplist_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -203,7 +198,7 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Tình trạng sản phẩm" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_unitstatus,Converter={StaticResource UnitStatusCodeConverter}}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_unitstatus_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Diện tích xây dựng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
@@ -262,7 +257,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Loại hợp đồng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_contracttypedescripton,Converter={StaticResource ContractTypeConverter} }" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_contracttypedescripton_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Tổng tiền thanh toán" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
@@ -439,7 +434,7 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Nhận tiền đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_salesdepartmentreceiveddeposit,Converter={StaticResource BoolToStringConverter}}" FontSize="15" TextColor="#444444" Grid.Column="1" HorizontalOptions="End" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_salesdepartmentreceiveddeposit_format}" FontSize="15" TextColor="#444444" Grid.Column="1" HorizontalOptions="End" Padding="25,10"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding Reservation.bsd_salesdepartmentreceiveddeposit}">
                                             <controls:FormLabel Text="Ngày" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
@@ -507,8 +502,8 @@
                                             <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Grid.Column="1" Margin="20,10,0,10">
                                                 <StackLayout Padding="10">
                                                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
-                                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode,Converter={StaticResource StatusCodeToColor}}">
-                                                            <Label Text="{Binding statuscode,Converter={StaticResource StatusCodeToString}}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}">
+                                                            <Label Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                                         </telerikPrimitives:RadBorder>
                                                         <Label Grid.Column="1" Text="{Binding bsd_name}" TextColor="#1C78C2" FontSize="15" FontAttributes="Bold" VerticalOptions="Center"/>
                                                     </Grid>
@@ -534,44 +529,6 @@
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>
-                            <!--<ListView x:Name="listView" ItemsSource="{Binding InstallmentList}" HasUnevenRows="True" BackgroundColor="White" SelectionMode="None" >
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ViewCell>
-                                            <Grid ColumnDefinitions="Auto,*" Padding="20,0" BackgroundColor="White">
-                                                <BoxView WidthRequest="1" HorizontalOptions="CenterAndExpand" Grid.Column="0" BackgroundColor="Gray"/>
-                                                <Label Text="&#xf111;"  TextColor="#1399D5" FontSize="10" FontFamily="FontAwesomeSolid" Grid.Column="0" VerticalOptions="CenterAndExpand"/>
-                                                <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Grid.Column="1" Margin="20,10,0,10">
-                                                    <StackLayout Padding="10">
-                                                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
-                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode,Converter={StaticResource StatusCodeToColor}}">
-                                                                <Label Text="{Binding statuscode,Converter={StaticResource StatusCodeToString}}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
-                                                            </telerikPrimitives:RadBorder>
-                                                            <Label Grid.Column="1" Text="{Binding bsd_name}" TextColor="#1C78C2" FontSize="15" FontAttributes="Bold" VerticalOptions="Center"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*">
-                                                            <Label Text="Ngày hết hạn:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_duedate,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*">
-                                                            <Label Text="Tiền đợt:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_amountofthisphase, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding bsd_depositamount_format,Converter={StaticResource NullToHideConverter}}" >
-                                                            <Label Text="Tiền đặt cọc:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_depositamount, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
-                                                        </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*">
-                                                            <Label Text="Đã thanh toán:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_amountwaspaid, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
-                                                        </Grid>
-                                                    </StackLayout>
-                                                </telerikPrimitives:RadBorder>
-                                            </Grid>
-                                        </ViewCell>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>-->
                         </StackLayout>
                     </Grid>
                 </StackLayout>

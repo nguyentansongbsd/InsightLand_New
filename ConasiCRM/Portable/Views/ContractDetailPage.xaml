@@ -127,7 +127,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Tên nhân viên" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_followuplist}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.nameofstaffagent}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Giới thiệu" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
@@ -201,7 +201,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Thay đổi ĐĐKTSP" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_allowchangeunitsspec}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_allowchangeunitsspec_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="ĐĐKTSP" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
@@ -213,15 +213,15 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Bàn giao dự kiến (HĐ)" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_allowchangeunitsspec}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_estimatehandoverdatecontract,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Danh sách theo dõi" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_allowchangeunitsspec}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_followuplist_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Thư thanh tý" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_allowchangeunitsspec}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Thư thanh lý" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_terminationletter_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -229,34 +229,22 @@
                             <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Báo Giá"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Duyệt In Đặc Biệt"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Thời gian đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_reservationtime,StringFormat='{0:HH:mm - dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Duyệt in đặc biệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_specialcontractprintingapproval_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Ngày đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_deposittime,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Ngày duyệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_approvaldateforspecialcontract,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Đại lý/Sàn giao dịch" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.salescompany_account_name}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End">
-                                                <controls:FormLabelValue.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="SalesCompany_Tapped"/>
-                                                </controls:FormLabelValue.GestureRecognizers>
-                                            </controls:FormLabelValue>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Nhân viên Đại lý/Sàn" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_nameofstaffagent}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Giới thiệu" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_referral}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Người duyệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_approverforspecialcontract_name}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -264,22 +252,22 @@
                             <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Bảng Tính Giá"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="TTĐC/VBTT"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
+                                            <controls:FormLabel Text="Ngày TTĐC/VBTT" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_dadate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Ngày in" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_quotationprinteddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Hết hạn ký" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_expireddateofsigningqf,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_agreementdate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Ngày ký" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_quotationsigneddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_signeddadate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -287,30 +275,46 @@
                             <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Đặt Cọc"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Hợp Đồng"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Tình trạng PĐC" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_reservationformstatus}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Số hợp đồng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_contractnumber}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Ngày in" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_reservationprinteddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Loại hợp đồng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_contracttype_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Hết hạn ký" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_signingexpired,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Mô tả loại HĐ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_contracttypedescription_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Cập nhật hợp đồng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_updatecontractdate_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Ngày SPA" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_contractdate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Ngày in HĐ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_contractprinteddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                            <controls:FormLabel Text="Ngày hết hạn" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_signingexpired,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Ngày ký" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_rfsigneddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_signedcontractdate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Ngày tải PĐC" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_reservationuploadeddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabel Text="Ngày tải lên HĐ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_bsd_uploadeddate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -328,35 +332,35 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Giá gốc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_detailamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_detailamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( - ) Chiết khấu" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_discount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_discount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( + ) ĐKBG" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_packagesellingamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_packagesellingamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Giá bán trước thuế" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_totalamountlessfreight, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_totalamountlessfreight, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( - ) Giá trị QSDĐ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_landvaluededuction, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_landvaluededuction, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="( + ) Thuế" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.totaltax, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.totaltax, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="( + ) Phí bảo trì" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_freightamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_freightamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Tổng tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.totalamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_totalamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -371,80 +375,23 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Số tháng đóng phí" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_numberofmonthspaidmf}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_numberofmonthspaidmf}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Phí quản lý" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_managementfee, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_managementfee, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Miễn giảm (tháng)" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_waivermanafeemonth}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đã Nhận Tiền Đặt Cọc"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Nhận tiền đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_salesdepartmentreceiveddeposit}" FontSize="15" TextColor="#444444" Grid.Column="1" HorizontalOptions="End" Padding="25,10"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding Reservation.bsd_salesdepartmentreceiveddeposit}">
-                                            <controls:FormLabel Text="Ngày" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_receiptdate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding Reservation.bsd_salesdepartmentreceiveddeposit}">
-                                            <controls:FormLabel Text="Số tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_depositfeereceived, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Từ Chối"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Ngày" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_rejectdate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Lý do" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_rejectreason}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Báo Cáo Bán Hàng"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Đã tính" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_calculatedforsalesreport,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.bsd_waivermanafeemonth}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
                         </StackLayout>
                         <!--tab chính sách-->
-                        <Grid x:Name="TabChinhSach" IsVisible="true" Margin="0,5,0,0" RowDefinitions="Auto,Auto" BackgroundColor="#F1F1F1">
-                            <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent" Grid.Row="0">
+                        <Grid x:Name="TabChinhSach" IsVisible="true" Margin="0,5,0,0" BackgroundColor="#F1F1F1">
+                            <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                         <Label Style="{StaticResource ExpanderHeadingText}" Text="Chính Sách"/>
@@ -454,15 +401,15 @@
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Điều kiện bàn giao" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.handovercondition_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.handovercondition_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <controls:FormLabel Text="Phương thức thanh toán" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.paymentscheme_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.paymentscheme_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Chiết khấu" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.discountlist_name}" Grid.Row="0" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Contract.discountlist_name}" Grid.Row="0" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
                                             <ScrollView x:Name="scrolltDiscount" Orientation="Horizontal" HorizontalScrollBarVisibility="Always" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="25,0,25,10">
                                                 <StackLayout x:Name="stackLayoutDiscount" HorizontalOptions="End" Orientation="Horizontal"/>
                                             </ScrollView>
@@ -475,29 +422,6 @@
                                             <controls:FormLabel Text="Khuyến mại" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
                                             <StackLayout x:Name="stackLayoutPromotions" IsVisible="false" Grid.Column="2" HorizontalOptions="End" Orientation="Vertical" Padding="0,10,25,10" Spacing="10"/>
                                         </Grid>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent" Grid.Row="1">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Người Đồng Sở Hữu"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout BindableLayout.ItemsSource="{Binding CoownerList}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="White" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <telerikPrimitives:RadBorder BorderColor="#f3f3f3" BorderThickness="0,0,0,1">
-                                                    <Label Text="{Binding customer}" Padding="25,10" FontAttributes="Bold" TextColor="#1399D5" FontSize="15"/>
-                                                </telerikPrimitives:RadBorder>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
@@ -522,8 +446,8 @@
                                             <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Grid.Column="1" Margin="20,10,0,10">
                                                 <StackLayout Padding="10">
                                                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
-                                                        <telerikPrimitives:RadBorder CornerRadius="5">
-                                                            <Label Text="{Binding statuscode}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}">
+                                                            <Label Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                                         </telerikPrimitives:RadBorder>
                                                         <Label Grid.Column="1" Text="{Binding bsd_name}" TextColor="#1C78C2" FontSize="15" FontAttributes="Bold" VerticalOptions="Center"/>
                                                     </Grid>

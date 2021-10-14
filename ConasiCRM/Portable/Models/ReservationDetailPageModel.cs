@@ -44,9 +44,10 @@ namespace ConasiCRM.Portable.Models
         public Guid queue_id { get; set; } // id đặt chỗ
         public string queue_name { get; set; } // tên đặt chỗ
         public bool bsd_followuplist { get; set; } // danh sách theo dõi
-
+        public string bsd_followuplist_format { get { return BoolToStringData.GetStringByBool(bsd_followuplist); } }
         // thông tin sản phẩm
         public int bsd_unitstatus { get; set; } // tình trạng sản phẩm
+        public string bsd_unitstatus_format { get => StatusCodeUnit.GetStatusCodeById(bsd_unitstatus.ToString()).Name; }
         public decimal bsd_constructionarea { get; set; } // diện tích xây dựng
         public decimal bsd_netusablearea { get; set; } // diện tích sử dụng
         public decimal bsd_actualarea { get; set; } // diện tích thực
@@ -64,7 +65,18 @@ namespace ConasiCRM.Portable.Models
         public string taxcode_name { get; set; } // tên thuế
         public decimal bsd_bookingfee { get; set; } // phí giữ chỗ
         public decimal bsd_depositfee { get; set; } // phí đặt cọc 
-        public int bsd_contracttypedescripton { get; set; } // loại hợp đồng
+        public int bsd_contracttypedescripton { get; set; } // loại hợp đồng 
+        public string bsd_contracttypedescripton_format
+        {
+            get
+            {
+                var type = ContractTypeData.GetContractTypeById(bsd_contracttypedescripton.ToString());
+                if (type != null)
+                    return type.Label;
+                else
+                    return "";
+            }
+        }
         public decimal bsd_totalamountpaid { get; set; } // tổng tiền thanh toán 
 
         // thông tin báo giá
@@ -272,6 +284,7 @@ namespace ConasiCRM.Portable.Models
 
         // đã nhận tiền đặt cọc 
         public bool bsd_salesdepartmentreceiveddeposit { get; set; }  // nhận tiền đặt cọc 
+        public string bsd_salesdepartmentreceiveddeposit_format { get { return BoolToStringData.GetStringByBool(bsd_salesdepartmentreceiveddeposit); } }
 
         public DateTime? _bsd_receiptdate; // ngày
         public DateTime? bsd_receiptdate
