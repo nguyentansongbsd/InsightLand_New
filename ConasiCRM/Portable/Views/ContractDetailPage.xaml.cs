@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -140,7 +141,24 @@ namespace ConasiCRM.Portable.Views
 
         private void SalesCompany_Tapped(object sender, EventArgs e)
         {
-
+            if (viewModel.Contract.salesagentcompany_id != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                AccountDetailPage newPage = new AccountDetailPage(viewModel.Contract.salesagentcompany_id);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin đại lý/sàn giao dịch");
+                    }
+                };
+            }
         }
 
         private async void SetUpDiscount(string ids)

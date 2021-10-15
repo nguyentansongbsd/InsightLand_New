@@ -3,6 +3,7 @@ using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using FFImageLoading.Forms;
+using FormsVideoLibrary;
 using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;
@@ -197,62 +198,30 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        /// <summary>
-        /// ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //private async void Meida_Tapped(object sender, EventArgs e)
-        //{
-        //    LoadingHelper.Show();
-        //    Grid mediaElement = (Grid)sender;
-        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-        //    CollectionData item = a.CommandParameter as CollectionData;
-        //    if (item != null)
-        //    {
-        //        LoadingHelper.Show();
-        //        await Navigation.PushAsync(new ShowMedia(item.MediaSource));
-        //        LoadingHelper.Hide();
-        //    }
-        //}
+        private async void Meida_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            Grid mediaElement = (Grid)sender;
+            var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
+            CollectionData item = a.CommandParameter as CollectionData;
+            if (item != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new ShowMedia(item.MediaSource));
+                LoadingHelper.Hide();
+            }
+        }
 
         private void Image_Tapped(object sender, EventArgs e)
         {
             CachedImage image = (CachedImage)sender;
-            //string url = (image.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
-            //var img = GetPhotos.Where(x => x.URL == url).SingleOrDefault();
-            //var index = GetPhotos.IndexOf(img);
-            //new PhotoBrowser
-            //{
-            //    Photos = GetPhotos,
-            //    EnableGrid = true,
-            //    StartIndex = index,
-            //}.Show();
-
-
-            //var a = (TapGestureRecognizer)image.GestureRecognizers[0];
-            //CollectionData item = a.CommandParameter as CollectionData;
-            //if (item != null)
-            //{
-            //    viewModel.photoBrowser.StartIndex = item.Index;
-            //    viewModel.photoBrowser.Show();
-            //}
+            var a = (TapGestureRecognizer)image.GestureRecognizers[0];
+            CollectionData item = a.CommandParameter as CollectionData;
+            if (item != null)
+            {
+                viewModel.photoBrowser.StartIndex = item.Index;
+                viewModel.photoBrowser.Show();
+            }
         }
-
-        //private void MediaElement_MediaOpened(object sender, EventArgs e)
-        //{
-        //    viewModel.OnComplate = false;
-        //}
-
-        //private void MediaElement_MediaFailed(object sender, EventArgs e)
-        //{
-        //    Grid mediaElement = (Grid)sender;
-        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-        //    CollectionData item = a.CommandParameter as CollectionData;
-        //    if (item != null)
-        //    {
-        //        viewModel.Data.Remove(item);
-        //    }
-        //}
     }
 }
