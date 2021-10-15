@@ -45,7 +45,7 @@
                                     <telerikChart:CategoricalAxis LabelFitMode="MultiLine" PlotMode="BetweenTicks" ShowLabels="True" MajorTickThickness="1" MajorTickBackgroundColor="#A9A9A9"/>
                                 </telerikChart:RadCartesianChart.HorizontalAxis>
                                 <telerikChart:RadCartesianChart.VerticalAxis>
-                                    <telerikChart:NumericalAxis Minimum="0" Maximum="100" MajorStep="20" LineColor="#A9A9A9"/>
+                                    <telerikChart:NumericalAxis Minimum="0" Maximum="999" MajorStep="200" LabelFormat="#,0 tr" LineColor="#A9A9A9"/>
                                 </telerikChart:RadCartesianChart.VerticalAxis>
                                 <telerikChart:RadCartesianChart.Grid>
                                     <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>
@@ -259,11 +259,11 @@
                                 </Grid>
 
                                 <Grid x:Name="ContentTask" IsVisible="false" RowSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" ColumnDefinitions="Auto,*" >
-                                    <Label Text="{Binding Task.subject}" FontSize="16" FontAttributes="Bold" TextColor="#03ACF5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
+                                    <Label Text="{Binding TaskDetail.subject}" FontSize="16" FontAttributes="Bold" TextColor="#03ACF5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
 
                                     <controls:FormLabel Text="Người liên quan" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="1"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="1" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding Task.Customer.Name}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding TaskDetail.Customer.Name}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Thời gian bắt đầu" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="2"/>
@@ -276,9 +276,9 @@
                                         <Label Text="{Binding ScheduledEndTask,StringFormat='{0:h:mm tt - dd/MM/yyyy}'}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
                                     </telerikPrimitives:RadBorder>
 
-                                    <controls:FormLabel Text="Mô tả:" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="5"/>
+                                    <controls:FormLabel Text="Mô tả:" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="4"/>
                                     <telerikPrimitives:RadBorder Grid.Column="0" Grid.Row="6" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Grid.ColumnSpan="2">
-                                        <Label Text="{Binding Task.description}" Grid.Column="1" FontSize="14" TextColor="#444444"/>
+                                        <Label Text="{Binding TaskDetail.description}" Grid.Column="1" FontSize="14" TextColor="#444444"/>
                                     </telerikPrimitives:RadBorder>
                                 </Grid>
 

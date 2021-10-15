@@ -81,7 +81,7 @@ namespace ConasiCRM.Portable.ViewModels
         public ICommand RefreshCommand => new Command(async () =>
         {
             IsRefreshing = true;
-            await RefreshDashboard(); 
+            await RefreshDashboard();
             IsRefreshing = false;
         });
 
@@ -111,6 +111,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <order attribute='createdon' descending='false' />
                                     <filter type='and'>
                                       <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                      <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
+                                      <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
                                       <condition attribute='statuscode' operator='in'>
                                         <value>100000007</value>
                                         <value>100000006</value>
@@ -123,31 +125,54 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("bsd_commissiontransactions", fetchXml);
             if (result == null) return;
 
-            foreach (var item in result.value)
+            decimal countTotalCommissionFr = 0;
+            decimal countTotalCommissionSe = 0;
+            decimal countTotalCommissionTh = 0;
+            decimal countTotalCommissionFo = 0;
+
+            foreach (var item in result.value.Where(x => x.Date.Month == firstMonth.Month))
             {
-                //this.TotalCommissionAMonth += item.CommissionTotal;
-                //if (item.CommissionStatus == "100000007")
-                //{
-                //    this.TotalPaidCommissionAMonth += item.CommissionTotal;
-                //}
+                countTotalCommissionFr += item.CommissionTotal;
+            }
+            foreach (var item in result.value.Where(x => x.Date.Month == secondMonth.Month))
+            {
+                countTotalCommissionSe += item.CommissionTotal;
+            }
+            foreach (var item in result.value.Where(x => x.Date.Month == thirdMonth.Month))
+            {
+                countTotalCommissionTh += item.CommissionTotal;
+            }
+            foreach (var item in result.value.Where(x => x.Date.Month == fourthMonth.Month))
+            {
+                countTotalCommissionFo = this.TotalCommissionAMonth += item.CommissionTotal;
+                if (item.CommissionStatus == "100000007")
+                {
+                    this.TotalPaidCommissionAMonth += item.CommissionTotal;
+                }
             }
 
-            var countCommissionFr = result.value.Where(x => x.Date.Month == firstMonth.Month).Count();
-            ChartModel chartFirstMonth = new ChartModel() { Category = firstMonth.ToString("MM/yyyy"), Value = countCommissionFr };
-
-            var countCommissionSe = result.value.Where(x => x.Date.Month == secondMonth.Month).Count();
-            ChartModel chartSecondMonth = new ChartModel() { Category = secondMonth.ToString("MM/yyyy"), Value = countCommissionSe };
-
-            var countCommissionTh = result.value.Where(x => x.Date.Month == thirdMonth.Month).Count();
-            ChartModel chartThirdMonth = new ChartModel() { Category = thirdMonth.ToString("MM/yyyy"), Value = countCommissionTh };
-
-            var countCommissionFo = result.value.Where(x => x.Date.Month == fourthMonth.Month).Count();
-            ChartModel chartFourthMonth = new ChartModel() { Category = fourthMonth.ToString("MM/yyyy"), Value = countCommissionFo };
+            ChartModel chartFirstMonth = new ChartModel() { Category = firstMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalCommissionFr) };
+            ChartModel chartSecondMonth = new ChartModel() { Category = secondMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalCommissionSe) };
+            ChartModel chartThirdMonth = new ChartModel() { Category = thirdMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalCommissionTh) };
+            ChartModel chartFourthMonth = new ChartModel() { Category = fourthMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalCommissionFo) };
 
             this.CommissionTransactionChart.Add(chartFirstMonth);
             this.CommissionTransactionChart.Add(chartSecondMonth);
             this.CommissionTransactionChart.Add(chartThirdMonth);
             this.CommissionTransactionChart.Add(chartFourthMonth);
+        }
+
+        private async Task<double> TotalAMonth(decimal total)
+        {
+            if (total > 0)
+            {
+                var _currency = total.ToString().Substring(0, total.ToString().Length - 6);
+                return double.Parse(_currency);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public async Task LoadQueueFourMonths()
@@ -209,7 +234,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("quotes", fetchXml);
-            if (result == null ) return;
+            if (result == null) return;
 
             var countQuoteFr = result.value.Where(x => x.Date.Month == firstMonth.Month).Count();
             ChartModel chartFirstMonth = new ChartModel() { Category = firstMonth.ToString("MM/yyyy"), Value = countQuoteFr };
@@ -347,12 +372,16 @@ namespace ConasiCRM.Portable.ViewModels
                                       <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
                                     </filter>
                                     <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer' alias='a_48f82b1a8ad844bd90d915e7b3c4f263'>
-                                        <attribute name='fullname' alias='contact_name'/>
-                                        <attribute name='contactid' alias='contact_id'/>
+                                          <attribute name='fullname' alias='contact_name'/>
+                                          <attribute name='contactid' alias='contact_id'/>
                                     </link-entity>
                                     <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer' alias='a_9cdbdceab5ee4a8db875050d455757bd'>
                                           <attribute name='accountid' alias='account_id'/>
                                           <attribute name='name' alias='account_name'/>
+                                    </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='a_0a67d7c87cd1eb11bacc000d3a80021e'>
+                                          <attribute name='leadid' alias='lead_id'/>
+                                          <attribute name='lastname' alias='lead_name'/>
                                     </link-entity>
                                   </entity>
                                 </fetch>";
@@ -370,6 +399,10 @@ namespace ConasiCRM.Portable.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.account_name))
                 {
                     item.customer = item.account_name;
+                }
+                if (!string.IsNullOrWhiteSpace(item.lead_name))
+                {
+                    item.customer = item.lead_name;
                 }
 
                 this.Activities.Add(item);
@@ -399,6 +432,10 @@ namespace ConasiCRM.Portable.ViewModels
                                           <attribute name='accountid' alias='account_id'/>
                                           <attribute name='name' alias='account_name'/>
                                     </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='a_0a67d7c87cd1eb11bacc000d3a80021e'>
+                                          <attribute name='leadid' alias='lead_id'/>
+                                          <attribute name='lastname' alias='lead_name'/>
+                                    </link-entity>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ActivitiModel>>("appointments", fetchXml);
@@ -415,6 +452,10 @@ namespace ConasiCRM.Portable.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.account_name))
                 {
                     item.customer = item.account_name;
+                }
+                if (!string.IsNullOrWhiteSpace(item.lead_name))
+                {
+                    item.customer = item.lead_name;
                 }
 
                 this.Activities.Add(item);
@@ -444,6 +485,10 @@ namespace ConasiCRM.Portable.ViewModels
                                           <attribute name='accountid' alias='account_id'/>
                                           <attribute name='name' alias='account_name'/>
                                     </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='a_0a67d7c87cd1eb11bacc000d3a80021e'>
+                                          <attribute name='leadid' alias='lead_id'/>
+                                          <attribute name='lastname' alias='lead_name'/>
+                                    </link-entity>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ActivitiModel>>("phonecalls", fetchXml);
@@ -460,6 +505,10 @@ namespace ConasiCRM.Portable.ViewModels
                 if (!string.IsNullOrWhiteSpace(item.account_name))
                 {
                     item.customer = item.account_name;
+                }
+                if (!string.IsNullOrWhiteSpace(item.lead_name))
+                {
+                    item.customer = item.lead_name;
                 }
 
                 this.Activities.Add(item);
