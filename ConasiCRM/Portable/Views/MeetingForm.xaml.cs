@@ -76,8 +76,8 @@ namespace ConasiCRM.Portable.Views
                         optionalIds.Add(item.partyID.ToString());
                     }
                 }
-                viewModel.Optional = optionalIds;
                 viewModel.Required = requiredIds;
+                viewModel.Optional = optionalIds;
             }
 
             if (viewModel.MeetingModel.activityid != Guid.Empty)

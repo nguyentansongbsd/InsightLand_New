@@ -216,12 +216,7 @@ namespace ConasiCRM.Portable.Controls
 
             if (ListListView != null && ListListView.Count>0 && ListTab != null && ListTab.Count>0)
             {
-                //ItemsSource = new List<OptionSet>();
-                //for (int i = 0; i < ListListView.Count; i++)
-                //{
-                //    ItemsSource.AddRange(ListListView[i]);
-                //}
-
+                ItemSourceForTabs();
                 Grid tabs = SetUpTabs(ListTab);
                 gridMain = new Grid();
                 gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
@@ -330,8 +325,27 @@ namespace ConasiCRM.Portable.Controls
             OnDelete?.Invoke(this, EventArgs.Empty);
         }
 
-        public void setData()
+        public async void setData()
         {
+            if(ItemsSource == null)
+            {
+                if (ListListView != null && ListListView.Count > 0 && ListTab != null && ListTab.Count > 0)
+                {
+                    ItemSourceForTabs();
+                }   
+                else
+                {
+                    if (PreShow != null)
+                    {
+                        await PreShow();
+                        if (PreOpenOneTime)
+                        {
+                            PreShow = null;
+                        }
+                    }
+                }    
+            }    
+
             if (this.SelectedIds != null && this.SelectedIds.Any() && ItemsSource != null)
             {
                 var selectedInSource = ItemsSource.Where(x => SelectedIds.Any(s => s == x.Val)).ToList();
@@ -383,8 +397,20 @@ namespace ConasiCRM.Portable.Controls
 
         private static void ItemSourceChange(BindableObject bindable, object oldValue, object value)
         {
-            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;         
+            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;
             control.setData();            
+        }
+      
+        private void ItemSourceForTabs()
+        {
+            if (ItemsSource == null || ItemsSource.Count <= 0)
+            {
+                ItemsSource = new List<OptionSet>();
+                for (int i = 0; i < ListListView.Count; i++)
+                {
+                    ItemsSource.AddRange(ListListView[i]);
+                }
+            }
         }
 
         public async void SetUpModal()

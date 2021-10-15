@@ -71,7 +71,7 @@
             <converter:NullToHideConverter x:Key="nullToHideConverter"/>
             <DataTemplate x:Key="Media">
                 <Grid>
-                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent"/>
+                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" />
                     <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Meida_Tapped" CommandParameter="{Binding .}"/>
