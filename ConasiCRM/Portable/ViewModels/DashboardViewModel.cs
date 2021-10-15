@@ -536,8 +536,6 @@ namespace ConasiCRM.Portable.ViewModels
                  this.LoadLeads(),
                  this.LoadCommissionTransactions()
                 );
-            var activities = new ObservableCollection<ActivitiModel>(this.Activities.Take(5));
-            this.Activities = activities;
         }
 
         public async Task loadPhoneCall(Guid id)

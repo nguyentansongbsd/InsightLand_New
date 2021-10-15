@@ -262,15 +262,16 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadCaseLienQuan(string notContantIncidentId = null)
         {
             string codition = string.Empty;
-            codition = !string.IsNullOrWhiteSpace(notContantIncidentId) ? $@"<filter type='and'>
-                                                                              <condition attribute='incidentid' operator='ne' uitype='incident' value='{notContantIncidentId}' />
-                                                                            </filter>" : null;
+            codition = !string.IsNullOrWhiteSpace(notContantIncidentId) ? $@"<condition attribute='incidentid' operator='ne' uitype='incident' value='{notContantIncidentId}' />" : null;
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='incident'>
                                     <attribute name='title' alias ='Label'/>
                                     <attribute name='incidentid' alias= 'Val'/>
                                     <order attribute='createdon' descending='false' />
-                                    {codition}
+                                    <filter type='and'>
+                                       {codition}
+                                       <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}' />
+                                    </filter>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("incidents", fetchXml);

@@ -117,6 +117,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.createPhoneCall())
                 {
+                    if (Dashboard.NeedToRefreshPhoneCall.HasValue) Dashboard.NeedToRefreshPhoneCall = true;
                     if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;                   
                     ToastMessageHelper.ShortMessage("Đã thêm cuộc gọi");                   
                     await Navigation.PopAsync();
@@ -132,6 +133,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.UpdatePhoneCall(id))
                 {
+                    if (Dashboard.NeedToRefreshPhoneCall.HasValue) Dashboard.NeedToRefreshPhoneCall = true;
                     if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;
                     ToastMessageHelper.ShortMessage("Cập nhật thành công");
                     await Navigation.PopAsync();

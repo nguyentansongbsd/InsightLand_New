@@ -20,18 +20,18 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshPhoneCall = null;
         public static bool? NeedToRefreshMeet = null;
         public static bool? NeedToRefreshTask = null;
-        public static bool? NeedToRefresh = null;
         public DashboardViewModel viewModel;
+
         public Dashboard()
         {
             InitializeComponent();
             LoadingHelper.Show();
-            NeedToRefresh = false;
             NeedToRefreshPhoneCall = false;
             NeedToRefreshMeet = false;
             NeedToRefreshTask = false;
             Init();
         }
+
         public async void Init()
         {
             this.BindingContext = viewModel = new DashboardViewModel();
@@ -47,19 +47,52 @@ namespace ConasiCRM.Portable.Views
                  viewModel.LoadLeads(),
                  viewModel.LoadCommissionTransactions()
                 ) ;
-            var activities = new ObservableCollection<ActivitiModel>(viewModel.Activities.Take(5));
-            viewModel.Activities = activities;
             LoadingHelper.Hide();
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            if (NeedToRefresh ==true)
+            if (NeedToRefreshMeet == true && viewModel.Meet.activityid != Guid.Empty)
             {
                 LoadingHelper.Show();
-                await viewModel.RefreshDashboard();
-                NeedToRefresh = false;
+                await Task.WhenAll(
+                    viewModel.loadFromToMeet(viewModel.Meet.activityid),
+                    viewModel.loadMeet(viewModel.Meet.activityid)
+                    );
+                LoadingHelper.Hide();
+            }
+
+            if (NeedToRefreshPhoneCall == true && viewModel.PhoneCall.activityid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                await Task.WhenAll(
+                    viewModel.loadPhoneCall(viewModel.PhoneCall.activityid),
+                    viewModel.loadFromTo(viewModel.PhoneCall.activityid)
+                    );
+                LoadingHelper.Hide();
+            }
+
+            if (NeedToRefreshTask == true && viewModel.TaskDetail.activityid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                await viewModel.loadTask(viewModel.TaskDetail.activityid);
+                LoadingHelper.Hide();
+            }
+
+            if (NeedToRefreshTask == true || NeedToRefreshPhoneCall == true || NeedToRefreshMeet == true)
+            {
+                LoadingHelper.Show();
+                viewModel.Activities.Clear();
+                await Task.WhenAll(
+                    viewModel.LoadMettings(),
+                    viewModel.LoadTasks(),
+                    viewModel.LoadPhoneCalls()
+                    );
+
+                NeedToRefreshPhoneCall = false;
+                NeedToRefreshTask = false;
+                NeedToRefreshMeet = false;
                 LoadingHelper.Hide();
             }
         }
