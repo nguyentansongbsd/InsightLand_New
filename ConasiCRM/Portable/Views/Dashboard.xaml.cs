@@ -17,6 +17,9 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Dashboard : ContentPage
     {
+        public static bool? NeedToRefreshPhoneCall = null;
+        public static bool? NeedToRefreshMeet = null;
+        public static bool? NeedToRefreshTask = null;
         public static bool? NeedToRefresh = null;
         public DashboardViewModel viewModel;
         public Dashboard()
@@ -24,6 +27,9 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             LoadingHelper.Show();
             NeedToRefresh = false;
+            NeedToRefreshPhoneCall = false;
+            NeedToRefreshMeet = false;
+            NeedToRefreshTask = false;
             Init();
         }
         public async void Init()
@@ -53,6 +59,7 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 await viewModel.RefreshDashboard();
+                NeedToRefresh = false;
                 LoadingHelper.Hide();
             }
         }
