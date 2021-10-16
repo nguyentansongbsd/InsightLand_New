@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using ConasiCRM.Portable.Settings;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    class AppShellViewModel
+    class AppShellViewModel :BaseViewModel
     {
         public ICommand LogoutCommand { get; }
-        public ICommand Develop { get; }
+
+        private string _userName;
+        public string UserName { get => _userName; set { _userName = value;OnPropertyChanged(nameof(UserName)); } }
+
+        private string _contactName;
+        public string ContactName { get => _contactName; set { _contactName = value; OnPropertyChanged(nameof(ContactName)); } }
 
         public AppShellViewModel()
         {
             LogoutCommand = new Command(Logout);
-            Develop = new Command(Developing);
+            UserName = UserLogged.User;
+            ContactName = UserLogged.ContactName;
         }
 
         private async void Logout()
         {
             await Shell.Current.Navigation.PushModalAsync(new Login(),false);          
-        }
-
-        private async void Developing()
-        {
-            await Shell.Current.DisplayAlert("Thông báo", "Chức năng đang được phát triển", "Đóng");
         }
     }
 }

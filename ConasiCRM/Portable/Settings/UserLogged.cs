@@ -31,6 +31,18 @@ namespace ConasiCRM.Portable.Settings
             set => AppSettings.AddOrUpdateValue(nameof(IsLogged), value);
         }
 
+        public static Guid ContactId
+        {
+            get => AppSettings.GetValueOrDefault(nameof(ContactId), Guid.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(ContactId), value);
+        }
+
+        public static string ContactName
+        {
+            get => AppSettings.GetValueOrDefault(nameof(ContactName), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(ContactName), value);
+        }
+
         public static Guid ManagerId
         {
             get => AppSettings.GetValueOrDefault(nameof(ManagerId), Guid.Empty);
