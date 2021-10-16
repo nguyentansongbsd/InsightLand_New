@@ -1,11 +1,16 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Config;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using FormsVideoLibrary;
+using Newtonsoft.Json;
 using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,48 +18,21 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class ProjectInfoViewModel : BaseViewModel
     {
-        //public ObservableCollection<CollectionData> Data { get; set; }
-        //public List<Photo> Photos;
-        //public List<Photo> Media;
-        //public PhotoBrowser photoBrowser;
+        private ObservableCollection<CollectionData> _collections;
+        public ObservableCollection<CollectionData> Collections { get => _collections; set { _collections = value; OnPropertyChanged(nameof(Collections)); } }
 
-        //private bool _onComplate;
-        //public bool OnComplate { get => _onComplate; set { _onComplate = value; OnPropertyChanged(nameof(OnComplate)); } }
+        public List<Photo> Photos;
+        public List<Photo> Medias;
+        public PhotoBrowser photoBrowser;
 
-        //private ObservableCollection<CollectionData> GetCollectionData()
-        //{
-        //    var list = new List<CollectionData>
-        //    {
-        //        new CollectionData { MediaSource = "https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/videoduan.mp4?alt=media&token=f1b9e0e7-0603-45a8-9261-2de7d6dcf545",ImageSource= null,Index = 1},
-        //        new CollectionData { MediaSource = null,ImageSource="https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/duan1.jpg?alt=media&token=78a2fc63-2009-4b25-b189-2613159a51bd",Index = 1},
-        //        new CollectionData { MediaSource = null,ImageSource="duan2.jpg",Index = 2},
-        //        new CollectionData { MediaSource = null,ImageSource="duan3.jpg",Index = 3},
-        //        new CollectionData { MediaSource = null,ImageSource="duan4.jpg",Index = 4},
-        //        new CollectionData { MediaSource = null,ImageSource="duan5.jpg",Index = 5},
-        //        new CollectionData { MediaSource = null,ImageSource="duan6.jpg",Index = 6},
-        //    };
-        //    var data = new ObservableCollection<CollectionData>();
-        //    Photos = new List<Photo>();
-        //    Media = new List<Photo>();
+        private bool _showCollections;
+        public bool ShowCollections { get => _showCollections; set { _showCollections = value; OnPropertyChanged(nameof(ShowCollections)); } }
 
-        //    foreach (var item in list)
-        //    {
-        //        if (item.ImageSource != null)
-        //        {
-        //            Photos.Add(new Photo { URL = item.ImageSource });
-        //            data.Add(item);
-        //        }
-        //        else
-        //        {
-        //            Media.Add(new Photo { URL = item.ImageSource });
-        //            data.Add(item);
-        //        }
-        //    }
-        //    return data;
-        //}
+        private int _totalMedia;
+        public int TotalMedia { get => _totalMedia; set { _totalMedia = value; OnPropertyChanged(nameof(TotalMedia)); } }
 
-
-
+        private int _totalPhoto;
+        public int TotalPhoto { get => _totalPhoto; set { _totalPhoto = value; OnPropertyChanged(nameof(TotalPhoto)); } }
         public Guid ProjectId { get; set; }
         public List<ChartModel> unitChartModels { get; set; }
         public ObservableCollection<ChartModel> UnitChart { get; set; } = new ObservableCollection<ChartModel>();
@@ -120,14 +98,13 @@ namespace ConasiCRM.Portable.ViewModels
         public ProjectInfoViewModel()
         {
             ListGiuCho = new ObservableCollection<QueueFormModel>();
-
-            //this.Data = new ObservableCollection<CollectionData>();
-            //this.Data = GetCollectionData();
-            //OnComplate = true;
-            //photoBrowser = new PhotoBrowser
-            //{
-            //    Photos = Photos,
-            //};
+            Photos = new List<Photo>();
+            Medias = new List<Photo>();
+            this.Collections = new ObservableCollection<CollectionData>();
+            photoBrowser = new PhotoBrowser
+            {
+                Photos = Photos,
+            };
         }
 
         public async Task LoadData()
@@ -163,7 +140,7 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectInfoModel>>("bsd_projects", FetchXml);
             if (result == null || result.value.Any() == false) return;
             Project = result.value.FirstOrDefault();
-
+            await LoadAllCollection();
         }
 
         public async Task CheckEvent()
@@ -402,6 +379,58 @@ namespace ConasiCRM.Portable.ViewModels
                 }
 
                 ListGiuCho.Add(queue);
+            }
+        }
+
+        public async Task LoadAllCollection()
+        {
+            if (ProjectId != null && Project != null && !string.IsNullOrWhiteSpace(Project.bsd_name))
+            {
+                var Folder = Project.bsd_name.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
+                var Category = "Project";
+                var category_value = "bsd_project";
+
+                GetTokenResponse getTokenResponse = await CrmHelper.getSharePointToken();
+                var client = BsdHttpClient.Instance();
+                string fileListUrl = $"{OrgConfig.SharePointResource}/sites/" + OrgConfig.SharePointSiteName + "/_api/web/Lists/GetByTitle('" + Category + "')/RootFolder/Folders('" + Folder + "')/Files";
+                var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", getTokenResponse.access_token);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    TotalMedia = 0;
+                    TotalPhoto = 0;
+                    var body = await response.Content.ReadAsStringAsync();
+                    SharePointFieldResult sharePointFieldResult = JsonConvert.DeserializeObject<SharePointFieldResult>(body);
+                    var list = sharePointFieldResult.value;
+                    foreach (var item in list)
+                    {
+                        if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
+                        {
+                            TotalMedia++;
+                            var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            Medias.Add(new Photo { URL = soucre });
+                            Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = null, Index = TotalMedia });
+                        }
+                        else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
+                        {
+                            TotalPhoto++;
+                            var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            Photos.Add(new Photo { URL = soucre });
+                            Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });
+                        }
+                    }
+                }
+                if (Collections != null && Collections.Count > 0)
+                {
+                    ShowCollections = true;
+                }
+                else
+                {
+                    ShowCollections = false;
+                }
             }
         }
     }

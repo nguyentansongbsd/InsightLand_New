@@ -7,8 +7,8 @@
     xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     ios:Page.UseSafeArea="true"
     xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
-    xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters"
-    x:Name="rootPage"
+    xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Name="rootPage"
     x:Class="ConasiCRM.Portable.Views.ContactForm">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -111,7 +111,7 @@
                                         </telerikPrimitives:RadBorder.GestureRecognizers>
                                         <Grid>
                                             <Label Text="Mặt trước CMND" FontSize="15" TextColor="#444444" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                            <Image Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFill" IsVisible="{Binding singleContact.bsd_mattruoccmnd, Converter={StaticResource NullToHideConverter}}"/>
+                                            <ffimageloading:CachedImage Source="{Binding singleContact.bsd_mattruoccmnd_source}" Aspect="AspectFill" IsVisible="{Binding singleContact.bsd_mattruoccmnd, Converter={StaticResource NullToHideConverter}}"/>
                                         </Grid>
                                     </telerikPrimitives:RadBorder>
                                     <telerikPrimitives:RadBorder x:Name="MatSauCMND" BorderThickness="1" BorderColor="#f1f1f1f1" CornerRadius="5" Grid.Column="1">
@@ -120,7 +120,7 @@
                                         </telerikPrimitives:RadBorder.GestureRecognizers>
                                         <Grid>
                                             <Label Text="Mặt sau CMND" FontSize="15" TextColor="#444444" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                            <Image Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFill" IsVisible="{Binding singleContact.bsd_matsaucmnd, Converter={StaticResource NullToHideConverter}}"/>
+                                            <ffimageloading:CachedImage Source="{Binding singleContact.bsd_matsaucmnd_source}" Aspect="AspectFill" IsVisible="{Binding singleContact.bsd_matsaucmnd, Converter={StaticResource NullToHideConverter}}"/>
                                         </Grid>
                                     </telerikPrimitives:RadBorder>
                                 </Grid>

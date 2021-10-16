@@ -25,6 +25,7 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshQueues = null;
         private ContactDetailPageViewModel viewModel;
         private Guid Id;
+        private PhotoBrowser photoBrowser;
         public ContactDetailPage(Guid contactId)
         {
             InitializeComponent();
@@ -100,30 +101,30 @@ namespace ConasiCRM.Portable.Views
 
         private void CMNDFront_Tapped(object sender, EventArgs e)
         {
-            ObservableCollection<PhotoCMND> images = new ObservableCollection<PhotoCMND>();
-            images.Add(
-                new PhotoCMND
+            photoBrowser = new PhotoBrowser
+            {
+                Photos = new List<Photo>
                 {
-                    Label = "",
-                    ImageSoure = viewModel.singleContact.bsd_mattruoccmnd_source
+                    new Photo{
+                        URL = viewModel.frontImage
+                    }
                 }
-                );
-            PhotoShow photo = new PhotoShow(images, 0);
-            photo.Show(this);
+            };
+            photoBrowser.Show();
         }
 
         private void CMNDBehind_Tapped(object sender, EventArgs e)
         {
-            ObservableCollection<PhotoCMND> images = new ObservableCollection<PhotoCMND>();
-            images.Add(
-                new PhotoCMND
+            photoBrowser = new PhotoBrowser
+            {
+                Photos = new List<Photo>
                 {
-                    Label = "",
-                    ImageSoure = viewModel.singleContact.bsd_matsaucmnd_source
+                    new Photo{
+                        URL = viewModel.behindImage
+                    }
                 }
-                );
-            PhotoShow photo = new PhotoShow(images, 0);
-            photo.Show(this);
+            };
+            photoBrowser.Show();
         }
 
         #region Tab giao dich

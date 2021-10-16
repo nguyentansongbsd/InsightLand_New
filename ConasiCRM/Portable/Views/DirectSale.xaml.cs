@@ -168,6 +168,6 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                 }
             };
-        }
+        }       
     }
 }
