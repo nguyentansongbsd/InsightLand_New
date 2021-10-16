@@ -409,17 +409,17 @@ namespace ConasiCRM.Portable.ViewModels
                     {
                         if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
                         {
-                            TotalMedia++;
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             Medias.Add(new Photo { URL = soucre });
                             Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = null, Index = TotalMedia });
+                            TotalMedia++;
                         }
                         else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
                         {
-                            TotalPhoto++;
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             Photos.Add(new Photo { URL = soucre });
                             Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });
+                            TotalPhoto++;
                         }
                     }
                 }
