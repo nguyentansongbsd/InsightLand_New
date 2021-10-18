@@ -4,8 +4,8 @@
        xmlns:d="http://xamarin.com/schemas/2014/forms/design"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
        xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
-       xmlns:app="clr-namespace:ConasiCRM.Portable"
-        xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+       
+       xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
        xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
        ios:Page.UseSafeArea="true"
        Shell.BackgroundColor="{StaticResource NavigationPrimary}"
@@ -30,7 +30,8 @@
             </Grid>
         </DataTemplate>
     </Shell.MenuItemTemplate>
-
+    <!--xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+       xmlns:ffimageTransformat="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"-->
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid ColumnDefinitions="20,*" Padding="16,8,16,8" ColumnSpacing="16" >
@@ -42,8 +43,23 @@
 
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <StackLayout BackgroundColor="White">
-                <Image Source="insightland_logo" Margin="20,30" HeightRequest="100"/>
+            <StackLayout BackgroundColor="White" >
+                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="4" HorizontalOptions="Start" Margin="18,34,18,18">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UserInfor_Tapped"/>
+                    </Grid.GestureRecognizers>
+                    <!--<controls:ExtendedFrame Grid.Column="0" Grid.RowSpan="3" Padding="4" CornerRadius="34"  HorizontalOptions="Center">
+                        <ffimageloading:CachedImage Source="user.png" HeightRequest="60" WidthRequest="60" DownsampleWidth="500">
+                            <ffimageloading:CachedImage.Transformations>
+                                <ffimageTransformat:CircleTransformation/>
+                            </ffimageloading:CachedImage.Transformations>
+                        </ffimageloading:CachedImage>
+                    </controls:ExtendedFrame>-->
+                    <Label Grid.Column="1" Grid.Row="0" Text="{Binding ContactName}" TextColor="{StaticResource NavigationPrimary}" FontSize="18" FontAttributes="Bold" Margin="0,6,0,0"/>
+                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding UserName}" FontSize="16" TextColor="#555555" />
+                    <Label Grid.Column="1" Grid.Row="2" Text="Nhấn để chỉnh sửa >>" FontSize="12" TextColor="#B3B3B3" />
+                </Grid>
+
                 <BoxView HeightRequest="1" BackgroundColor="LightGray"/>
             </StackLayout>
         </DataTemplate>
@@ -142,28 +158,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="BlankPage" ContentTemplate="{DataTemplate app:BlankPage}">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
-            </ShellContent.Icon>
-        </ShellContent>
     </FlyoutItem>
-
-    <!--<MenuItem Text="Thông báo" Command="{Binding Develop}">
-        <MenuItem.IconImageSource>
-            <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf0f3;" Size="17"/>
-        </MenuItem.IconImageSource>
-    </MenuItem>
-    <MenuItem Text="Dashboard" Command="{Binding Develop}">
-        <MenuItem.IconImageSource>
-            <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf11c;" Size="17"/>
-        </MenuItem.IconImageSource>
-    </MenuItem>
-    <MenuItem Text="Báo cáo" Command="{Binding Develop}">
-        <MenuItem.IconImageSource>
-            <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf080;" Size="17"/>
-        </MenuItem.IconImageSource>
-    </MenuItem>-->
 
     <MenuItem Text="Đăng xuất" Command="{Binding LogoutCommand}" >
         <MenuItem.IconImageSource>

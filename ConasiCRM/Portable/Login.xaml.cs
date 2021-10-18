@@ -194,6 +194,8 @@ namespace ConasiCRM.Portable
                         UserLogged.Id = employeeModel.bsd_employeeid;
                         UserLogged.User = employeeModel.bsd_name;
                         UserLogged.Password = employeeModel.bsd_password;
+                        UserLogged.ContactId = employeeModel.contact_id;
+                        UserLogged.ContactName = employeeModel.contact_name;
                         UserLogged.ManagerId = employeeModel.manager_id;
                         UserLogged.ManagerName = employeeModel.manager_name;
                         UserLogged.IsSaveInforUser = checkboxRememberAcc.IsChecked;
@@ -234,6 +236,10 @@ namespace ConasiCRM.Portable
                     <link-entity name='systemuser' from='systemuserid' to='bsd_manager' visible='false' link-type='outer' alias='a_548d21d0fee9eb11bacb002248163181'>
                       <attribute name='fullname' alias='manager_name'/>
                       <attribute name='systemuserid' alias='manager_id' />
+                    </link-entity>
+                    <link-entity name='contact' from='contactid' to='bsd_contact' visible='false' link-type='outer' alias='a_5b790f4631f4eb1194ef000d3a801090'>
+                      <attribute name='contactid' alias='contact_id'/>
+                      <attribute name='bsd_fullname' alias='contact_name'/>
                     </link-entity>
                   </entity>
                 </fetch>";

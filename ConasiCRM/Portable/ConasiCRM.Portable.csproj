@@ -190,4 +190,9 @@
       <None Remove="Fonts\Roboto-Medium.ttf" />
       <None Remove="Fonts\Roboto-Regular.ttf" />
     </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Xamarin.iOS">
+        <HintPath>..\..\..\..\..\..\..\..\Library\Frameworks\Xamarin.iOS.framework\Versions\14.14.2.5\lib\mono\Xamarin.iOS\Xamarin.iOS.dll</HintPath>
+      </Reference>
+    </ItemGroup>
 </Project>
