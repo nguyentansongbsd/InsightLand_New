@@ -10,7 +10,7 @@
              xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
              xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" xmlns:video="clr-namespace:FormsVideoLibrary"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              BackgroundColor="White"
              Title="Thông tin dự án"
@@ -71,7 +71,7 @@
             <converter:NullToHideConverter x:Key="nullToHideConverter"/>
             <DataTemplate x:Key="Media">
                 <Grid>
-                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" />
+                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent"/>
                     <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Meida_Tapped" CommandParameter="{Binding .}"/>
