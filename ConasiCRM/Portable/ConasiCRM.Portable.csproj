@@ -24,7 +24,6 @@
         <PackageReference Include="Xamarin.Forms.Extended.InfiniteScrolling" Version="1.0.0-preview2" />
         <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
         <PackageReference Include="Xamarin.Forms.PinchZoomImage" Version="1.1.0" />
-        <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
     </ItemGroup>
     <ItemGroup>
         <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
