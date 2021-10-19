@@ -4,7 +4,8 @@
        xmlns:d="http://xamarin.com/schemas/2014/forms/design"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
        xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
-       
+       xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+       xmlns:ffimageTranformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
        xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
        xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
        ios:Page.UseSafeArea="true"
@@ -30,8 +31,7 @@
             </Grid>
         </DataTemplate>
     </Shell.MenuItemTemplate>
-    <!--xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-       xmlns:ffimageTransformat="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"-->
+
     <Shell.ItemTemplate>
         <DataTemplate>
             <Grid ColumnDefinitions="20,*" Padding="16,8,16,8" ColumnSpacing="16" >
@@ -44,17 +44,17 @@
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <StackLayout BackgroundColor="White" >
-                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="4" HorizontalOptions="Start" Margin="18,34,18,18">
+                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="0" HorizontalOptions="Start" Margin="18,34,18,18">
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UserInfor_Tapped"/>
                     </Grid.GestureRecognizers>
-                    <!--<controls:ExtendedFrame Grid.Column="0" Grid.RowSpan="3" Padding="4" CornerRadius="34"  HorizontalOptions="Center">
+                    <controls:ExtendedFrame Grid.Column="0" Grid.RowSpan="3" Padding="4" CornerRadius="34"  HorizontalOptions="Center">
                         <ffimageloading:CachedImage Source="user.png" HeightRequest="60" WidthRequest="60" DownsampleWidth="500">
                             <ffimageloading:CachedImage.Transformations>
-                                <ffimageTransformat:CircleTransformation/>
+                                <ffimageTranformations:CircleTransformation/>
                             </ffimageloading:CachedImage.Transformations>
                         </ffimageloading:CachedImage>
-                    </controls:ExtendedFrame>-->
+                    </controls:ExtendedFrame>
                     <Label Grid.Column="1" Grid.Row="0" Text="{Binding ContactName}" TextColor="{StaticResource NavigationPrimary}" FontSize="18" FontAttributes="Bold" Margin="0,6,0,0"/>
                     <Label Grid.Column="1" Grid.Row="1" Text="{Binding UserName}" FontSize="16" TextColor="#555555" />
                     <Label Grid.Column="1" Grid.Row="2" Text="Nhấn để chỉnh sửa >>" FontSize="12" TextColor="#B3B3B3" />
@@ -103,7 +103,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Sự kiện" ContentTemplate="{DataTemplate views:EventList}">
+    <!--<ShellContent Title="Sự kiện" ContentTemplate="{DataTemplate views:EventList}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf274;" Size="18"/>
         </ShellContent.Icon>
@@ -112,7 +112,7 @@
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf155;" Size="18"/>
         </ShellContent.Icon>
-    </ShellContent>
+    </ShellContent>-->
     <ShellContent Title="Tài liệu kinh doanh" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07c;" Size="18"/>

@@ -200,8 +200,8 @@ namespace ConasiCRM.Portable
                         UserLogged.ManagerName = employeeModel.manager_name;
                         UserLogged.IsSaveInforUser = checkboxRememberAcc.IsChecked;
                         UserLogged.IsLogged = true;
-                        
-                        App.Current.MainPage = new AppShell();
+
+                        Application.Current.MainPage = new AppShell();
                         await Task.Delay(1);
                         LoadingHelper.Hide();
                     }

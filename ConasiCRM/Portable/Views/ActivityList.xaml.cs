@@ -36,15 +36,16 @@ namespace ConasiCRM.Portable.Views
         {
             viewModel.EntityName = "tasks";
             viewModel.entity = "task";
+            VisualStateManager.GoToState(radBorderTask, "Active");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "Active");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
+
             await viewModel.LoadData();
             if (viewModel.Data.Count > 0)
             {
-                VisualStateManager.GoToState(radBorderTask, "Active");
-                VisualStateManager.GoToState(radBorderMeeting, "InActive");
-                VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
-                VisualStateManager.GoToState(lblTask, "Active");
-                VisualStateManager.GoToState(lblMeeting, "InActive");
-                VisualStateManager.GoToState(lblPhoneCall, "InActive");
                 OnCompleted?.Invoke(true);
             }
             else

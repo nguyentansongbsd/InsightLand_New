@@ -104,6 +104,7 @@
     <Compile Include="Renderers\MyNewEntryRenderer.cs" />
     <Compile Include="Renderers\MainSearchBarRenderer.cs" />
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
+    <Compile Include="Renderers\testRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
