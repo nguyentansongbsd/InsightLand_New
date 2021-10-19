@@ -39,9 +39,9 @@ namespace ConasiCRM.Portable
             CollectionData item = a.CommandParameter as CollectionData;
             if (item != null)
             {
-                LoadingHelper.Show();
-                await Navigation.PushAsync(new ShowMedia(item.MediaSource));
-                LoadingHelper.Hide();              
+                //LoadingHelper.Show();
+                //await Navigation.PushAsync(new ShowMedia(item.MediaSource));
+                //LoadingHelper.Hide();              
             }
         }
 

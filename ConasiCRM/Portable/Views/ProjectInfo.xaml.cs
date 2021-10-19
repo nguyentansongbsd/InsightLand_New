@@ -4,6 +4,7 @@ using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using FFImageLoading.Forms;
 using FormsVideoLibrary;
+using MediaManager;
 using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshQueue = null;
         public ProjectInfoViewModel viewModel;
-        //public List<Photo> GetPhotos = new List<Photo>();
 
         public ProjectInfo(Guid Id)
         {
@@ -33,15 +33,6 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            //GetPhotos.Add(new Photo() {URL= "duan1.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan2.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan3.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan4.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan5.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan6.jpg" });
-
-            //carouseView.ItemsSource = GetPhotos;
-
             VisualStateManager.GoToState(radborderThongKe, "Active");
             VisualStateManager.GoToState(radborderThongTin, "InActive");
             VisualStateManager.GoToState(radborderGiuCho, "InActive");
@@ -85,7 +76,8 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadGiuCho();
                 NeedToRefreshQueue = false;
                 LoadingHelper.Hide();
-            }    
+            }
+            await CrossMediaManager.Current.Stop();
         }
 
         private async void ThongKe_Tapped(object sender, EventArgs e)
@@ -206,10 +198,10 @@ namespace ConasiCRM.Portable.Views
             CollectionData item = a.CommandParameter as CollectionData;
             if (item != null)
             {
-                LoadingHelper.Show();
                 await Navigation.PushAsync(new ShowMedia(item.MediaSource));
                 LoadingHelper.Hide();
             }
+            LoadingHelper.Hide();
         }
 
         private void Image_Tapped(object sender, EventArgs e)

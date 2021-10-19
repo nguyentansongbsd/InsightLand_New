@@ -3,6 +3,8 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using FormsVideoLibrary;
+using MediaManager;
+using MediaManager.Forms;
 using Newtonsoft.Json;
 using Stormlion.PhotoBrowser;
 using System;
@@ -13,6 +15,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -22,7 +25,6 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<CollectionData> Collections { get => _collections; set { _collections = value; OnPropertyChanged(nameof(Collections)); } }
 
         public List<Photo> Photos;
-        public List<Photo> Medias;
         public PhotoBrowser photoBrowser;
 
         private bool _showCollections;
@@ -99,7 +101,6 @@ namespace ConasiCRM.Portable.ViewModels
         {
             ListGiuCho = new ObservableCollection<QueueFormModel>();
             Photos = new List<Photo>();
-            Medias = new List<Photo>();
             this.Collections = new ObservableCollection<CollectionData>();
             photoBrowser = new PhotoBrowser
             {
@@ -410,8 +411,10 @@ namespace ConasiCRM.Portable.ViewModels
                         if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
-                            Medias.Add(new Photo { URL = soucre });
-                            Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = null, Index = TotalMedia });
+                            var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
+                            var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
+                            ImageSource imageSource = image.ToImageSource();
+                            Collections.Add(new CollectionData { MediaSource = soucre,PosterMediaSource= imageSource, ImageSource = null, Index = TotalMedia });
                             TotalMedia++;
                         }
                         else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
