@@ -254,12 +254,9 @@
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="3" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
                                         <Label Text="{Binding ScheduledEndTask,StringFormat='{0:h:mm tt - dd/MM/yyyy}'}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
                                     </telerikPrimitives:RadBorder>
-
-                                    <controls:FormLabel Text="Sự kiện cả ngày" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="4"/>
-                                    <controls:MyNewCheckBox CheckedColor="{StaticResource NavigationPrimary}" HorizontalOptions="End" Grid.Column="1" Grid.Row="4"/>
-
-                                    <controls:FormLabel Text="Mô tả:" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="5"/>
-                                    <telerikPrimitives:RadBorder Grid.Column="0" Grid.Row="6" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Grid.ColumnSpan="2">
+                                    
+                                    <controls:FormLabel Text="Mô tả:" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="4"/>
+                                    <telerikPrimitives:RadBorder Grid.Column="0" Grid.Row="5" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Grid.ColumnSpan="2">
                                         <Label Text="{Binding Task.description}" Grid.Column="1" FontSize="14" TextColor="#444444"/>
                                     </telerikPrimitives:RadBorder>
                                 </Grid>

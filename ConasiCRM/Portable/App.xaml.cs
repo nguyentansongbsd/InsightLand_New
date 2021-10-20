@@ -1,3 +1,4 @@
+using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Views;
 using MediaManager;
 using System.Net.Http;
@@ -18,6 +19,7 @@ namespace ConasiCRM.Portable
             CrossMediaManager.Current.Init();
             MainPage = new Login();
         }
+
 
         protected override void OnStart()
         {

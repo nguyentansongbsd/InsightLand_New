@@ -14,8 +14,6 @@ namespace ConasiCRM.Portable.Helper
                 return false;
             string strRegex = "^0+[^1246]+\\d{8}";
             Regex re = new Regex(strRegex);
-            if (phone.Length != 10)
-                return false;
             if (re.IsMatch(phone))
                 return true;
             else

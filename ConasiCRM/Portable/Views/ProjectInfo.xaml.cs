@@ -209,11 +209,29 @@ namespace ConasiCRM.Portable.Views
             CachedImage image = (CachedImage)sender;
             var a = (TapGestureRecognizer)image.GestureRecognizers[0];
             CollectionData item = a.CommandParameter as CollectionData;
-            if (item != null)
+
+            var img = viewModel.Photos.SingleOrDefault(x => x.URL == item.ImageSource);
+            var index = viewModel.Photos.IndexOf(img);
+
+            new PhotoBrowser()
             {
-                viewModel.photoBrowser.StartIndex = item.Index;
-                viewModel.photoBrowser.Show();
-            }
+                Photos = viewModel.Photos,
+                StartIndex = index,
+                EnableGrid = true
+            }.Show();
+
+
+            //Xamarin.Essentials.Browser.OpenAsync(item.ImageSource);
+
+
+            //CollectionData collection = new CollectionData();
+            //collection.ImageSource = jrURL.ToString();
+            //collection.Index = item.Index;
+            //if (collection != null)
+            //{
+            //    viewModel.photoBrowser.StartIndex = collection.Index;
+            //    viewModel.photoBrowser.Show();
+            //}
         }
     }
 }

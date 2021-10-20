@@ -1,13 +1,9 @@
-﻿using ConasiCRM.Portable.Settings;
-﻿using ConasiCRM.Portable.Helper;
+﻿using System;
+using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using ConasiCRM.Portable.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,14 +12,26 @@ namespace ConasiCRM.Portable
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppShell : Shell
     {     
-        private AppShellViewModel viewModel;     
+        private AppShellViewModel viewModel;
         public AppShell()
         {
             InitializeComponent();
             this.BindingContext = viewModel = new AppShellViewModel();
-            //appShell.CurrentItem = BanHang;
         }
 
-
+        private async void UserInfor_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (UserLogged.ContactId == Guid.Empty)
+            {
+                ToastMessageHelper.ShortMessage("Chưa có contact, không thể chỉnh sửa thông tin");
+                LoadingHelper.Hide();
+                return;
+            }
+            
+            await Shell.Current.Navigation.PushAsync(new UserInfoPage());
+            this.FlyoutIsPresented = false;
+            LoadingHelper.Hide();
+        }
     }       
 }

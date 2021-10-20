@@ -3,6 +3,7 @@ using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -32,15 +33,7 @@ namespace ConasiCRM.Portable.Views
         {
             await LoadDataThongTin(Id.ToString());
 
-            if (viewModel.singleLead.statecode == "1") // qualified
-            {
-                floatingButtonGroup.IsVisible = false;
-            }
-            else
-            {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chuyển đổi khách hàng", "FontAwesomeSolid", "\uf12e", null, LeadQualify));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
-            }
+            SetButtonFloatingButton();
 
             if (viewModel.singleLead.leadid != Guid.Empty)
                 OnCompleted?.Invoke(true);
@@ -59,6 +52,24 @@ namespace ConasiCRM.Portable.Views
                 NeedToRefreshLeadDetail = false;
             }
             base.OnAppearing();
+        }
+
+        private void SetButtonFloatingButton()
+        {
+            if (viewModel.singleLead.statuscode == "3") // qualified
+            {
+                floatingButtonGroup.IsVisible = false;
+            }
+            else if (viewModel.singleLead.statuscode == "4" || viewModel.singleLead.statuscode == "5" || viewModel.singleLead.statuscode == "6"|| viewModel.singleLead.statuscode == "7")
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Reactivate Lead", "FontAwesomeSolid", "\uf1b8", null, ReactivateLead));
+            }
+            else
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chuyển đổi khách hàng", "FontAwesomeSolid", "\uf542", null, LeadQualify));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Disqualify", "FontAwesomeSolid", "\uf05e", null, LeadDisQualify));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
+            }
         }
 
         private async void Update(object sender, EventArgs e)
@@ -141,9 +152,74 @@ namespace ConasiCRM.Portable.Views
             }
 
         }
+
+        private async void LeadDisQualify(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            string[] options = new string[] { "Lost", "Cannot Contact", "No Longer Interested", "Canceled" };
+            
+            string aws = await DisplayActionSheet("Tuỳ chọn", "Huỷ", null, options);
+
+            if (aws == "Lost")
+            {
+                viewModel.LeadStatusCode = 4;
+            }
+            else if (aws == "Cannot Contact")
+            {
+                viewModel.LeadStatusCode = 5;
+            }
+            else if (aws == "No Longer Interested")
+            {
+                viewModel.LeadStatusCode = 6;
+            }
+            else if (aws == "Canceled")
+            {
+                viewModel.LeadStatusCode = 7;
+            }
+
+            if (viewModel.LeadStatusCode != 0)
+            {
+                viewModel.LeadStateCode = 2;
+                bool isSuccess = await viewModel.UpdateStatusCodeLead();
+                if (isSuccess)
+                {
+                    await viewModel.LoadOneLead(Id.ToString());
+                    viewModel.ButtonCommandList.Clear();
+                    SetButtonFloatingButton();
+                    ToastMessageHelper.ShortMessage("Thành công");
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage("Thất bại");
+                }
+            }
+            
+            LoadingHelper.Hide();
+        }
+
+        private async void ReactivateLead(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.LeadStateCode = 0;
+            viewModel.LeadStatusCode = 1;
+            bool isSuccess = await viewModel.UpdateStatusCodeLead();
+            if (isSuccess)
+            {
+                await viewModel.LoadOneLead(Id.ToString());
+                viewModel.ButtonCommandList.Clear();
+                SetButtonFloatingButton();
+                ToastMessageHelper.ShortMessage("Thành công");
+            }
+            else
+            {
+                ToastMessageHelper.ShortMessage("Thất bại");
+            }
+            LoadingHelper.Hide();
+        }
+
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleLead.mobilephone.Trim(); // thêm sdt ở đây
+            string phone = viewModel.singleLead.mobilephone.Replace(" ", ""); // thêm sdt ở đây
             if (phone != string.Empty)
             {              
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
@@ -165,7 +241,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleLead.mobilephone.Trim(); // thêm sdt ở đây
+            string phone = viewModel.singleLead.mobilephone.Replace(" ",""); // thêm sdt ở đây
             if (phone != string.Empty)
             {              
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
@@ -202,6 +278,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.LoadPhongThuy();
             }
         }
+
         private void ShowImage_Tapped(object sender, EventArgs e)
         {
             LookUpImagePhongThuy.IsVisible = true;
