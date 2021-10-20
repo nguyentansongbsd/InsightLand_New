@@ -32,19 +32,6 @@ namespace ConasiCRM.Portable
             await Shell.Current.Navigation.PushAsync(new UserInfoPage());
             this.FlyoutIsPresented = false;
             LoadingHelper.Hide();
-            //userInfo.IsCompleted = async (isSuccess) => {
-            //    if (isSuccess)
-            //    {
-            //        await Shell.Current.Navigation.PushAsync(userInfo);
-            //        LoadingHelper.Hide();
-            //    }
-            //    else
-            //    {
-            //        LoadingHelper.Hide();
-            //        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin user");
-            //    }
-            //};
-
         }
     }       
 }
