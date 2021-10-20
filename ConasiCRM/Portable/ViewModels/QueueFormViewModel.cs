@@ -434,11 +434,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 if (Customer.Detail == "1")
                 {
-                    data["customerid_account@odata.bind"] = "/accounts(" + Customer.Id + ")";
+                    data["customerid_account@odata.bind"] = $"/accounts({Customer.Id})";
+                    await DeletLookup("customerid_contact", QueueFormModel.opportunityid);
                 }
                 else
                 {
-                    data["customerid_contact@odata.bind"] = "/contacts(" + Customer.Id + ")";
+                    data["customerid_contact@odata.bind"] = $"/contacts({Customer.Id})";
+                    await DeletLookup("customerid_account", QueueFormModel.opportunityid);
                 }
             }
 
@@ -473,6 +475,8 @@ namespace ConasiCRM.Portable.ViewModels
             }
             else
             {
+                     data["statecode"] = 0;
+                data["statuscode"] = 1;
                 data["bsd_queueforproject"] = true;
             }
             data["createdon"] = QueueFormModel._queue_createdon;
