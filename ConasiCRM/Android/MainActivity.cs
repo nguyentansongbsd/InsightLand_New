@@ -11,6 +11,7 @@ using System.IO;
 using ConasiCRM.Droid;
 using Xamarin.Forms;
 using ConasiCRM.Portable.IServices;
+using MediaManager;
 
 namespace ConasiCRM.Android
 {
@@ -19,12 +20,13 @@ namespace ConasiCRM.Android
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;          
+            TabLayoutResource = ConasiCRM.Droid.Resource.Layout.Tabbar;
+            ToolbarResource = ConasiCRM.Droid.Resource.Layout.Toolbar;          
 
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Stormlion.PhotoBrowser.Droid.Platform.Init(this);
+            CrossMediaManager.Current.Init(this);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             LoadApplication(new Portable.App());

@@ -4,6 +4,7 @@ using System.Linq;
 using ConasiCRM.Portable.IServices;
 using FFImageLoading.Forms.Platform;
 using Foundation;
+using MediaManager;
 using UIKit;
 using Xamarin.Forms;
 
@@ -28,6 +29,7 @@ namespace ConasiCRM.iOS
 
             global::Xamarin.Forms.Forms.Init();
             Stormlion.PhotoBrowser.iOS.Platform.Init();
+            CrossMediaManager.Current.Init();
             CachedImageRenderer.Init();
             LoadApplication(new Portable.App());
             DependencyService.Get<ILoadingService>().Initilize();

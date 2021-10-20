@@ -1,5 +1,6 @@
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Views;
+using MediaManager;
 using System.Net.Http;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,7 +16,7 @@ namespace ConasiCRM.Portable
         public App()
         {
             InitializeComponent();
-            Plugin.Media.CrossMedia.Current.Initialize();
+            CrossMediaManager.Current.Init();
             MainPage = new Login();
         }
 

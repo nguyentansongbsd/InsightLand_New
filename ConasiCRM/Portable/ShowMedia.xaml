@@ -2,13 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Video"
-             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
-             x:Class="ConasiCRM.Portable.ShowMedia">
+             xmlns:mm="clr-namespace:MediaManager.Forms;assembly=MediaManager.Forms"
+             x:Class="ConasiCRM.Portable.ShowMedia"
+             BackgroundColor="#444444">
     <ContentPage.Content>
         <AbsoluteLayout>
-            <Grid AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-                <xct:MediaElement x:Name="mediaShow" AutoPlay="True" Aspect="AspectFill" HeightRequest="250" ShowsPlaybackControls="True" MediaOpened="mediaShow_MediaOpened" VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
-            </Grid>
+            <mm:VideoView x:Name="videoView" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" HorizontalOptions="FillAndExpand" VideoAspect="AspectFill" AutoPlay="True" />
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

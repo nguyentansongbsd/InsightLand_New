@@ -10,6 +10,8 @@ using FFImageLoading.Forms;
 using System.Collections.Generic;
 using Stormlion.PhotoBrowser;
 using System.Linq;
+using MediaManager;
+using MediaManager.Forms;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -19,7 +21,6 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshQueue = null;
         private UnitInfoViewModel viewModel;
-        //public List<Photo> GetPhotos = new List<Photo>();
 
         public UnitInfo(Guid id)
         {
@@ -72,7 +73,6 @@ namespace ConasiCRM.Portable.Views
                     viewModel.IsShowBtnBangTinhGia = false;
                 }
                 SetButton();
-
                 OnCompleted?.Invoke(true);
             }
             else
@@ -92,7 +92,8 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadQueues();
                 NeedToRefreshQueue = false;
                 LoadingHelper.Hide();
-            }    
+            }
+            await CrossMediaManager.Current.Stop();
         }
 
         public void SetButton()
@@ -244,7 +245,9 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 await Navigation.PushAsync(new ShowMedia(item.MediaSource));
                 LoadingHelper.Hide();
+
             }
+            LoadingHelper.Hide();
         }
 
         private void Image_Tapped(object sender, EventArgs e)

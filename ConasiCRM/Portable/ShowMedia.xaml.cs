@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using MediaManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +14,20 @@ namespace ConasiCRM.Portable
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShowMedia : ContentPage
     {
-        public ShowMedia( string MediaSource)
+        public ShowMedia(string MediaSource)
         {
             InitializeComponent();
-            if(mediaShow!=null)
+            if(videoView != null)
             {
                 LoadingHelper.Show();
-                mediaShow.Source = MediaSource;
-            }    
-        }
-
-        private void mediaShow_MediaOpened(object sender, EventArgs e)
-        {
+                videoView.Source = MediaSource;
+                LoadingHelper.Hide();
+            }  
+            else
+            {
+                 Navigation.PopAsync();
+            }
             LoadingHelper.Hide();
-        }
+        }      
     }
 }

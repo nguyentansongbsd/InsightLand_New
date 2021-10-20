@@ -11,6 +11,7 @@
     </PropertyGroup>
     <ItemGroup>
     <PackageReference Include="PhotoBrowser.Forms" Version="0.1.4" />
+    <PackageReference Include="Plugin.MediaManager.Forms" Version="1.0.9" />
     <PackageReference Include="Telerik.UI.for.Xamarin" Version="2020.1.218.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
