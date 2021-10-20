@@ -10,5 +10,5 @@
                                           Tapped="OpenLookUp_Tapped" />
         </StackLayout.GestureRecognizers>
     </StackLayout>
-    <Button x:Name="BtnClear" Style="{StaticResource ClearButtonStyle}" FontFamily="FontAwesomeSolid" Padding="0" Clicked="Clear_Clicked" />
+    <Button x:Name="BtnClear" Style="{StaticResource ClearButtonStyle}" FontFamily="FontAwesomeRegular" Padding="0" Clicked="Clear_Clicked" />
 </Grid>

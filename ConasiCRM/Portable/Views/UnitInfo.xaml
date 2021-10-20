@@ -375,6 +375,9 @@
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="15,10" Margin="0,1">
+                                                        <Grid.GestureRecognizers>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChiTietDatCoc_Tapped" CommandParameter="{Binding quoteid}"/>
+                                                        </Grid.GestureRecognizers>
                                                         <Label Grid.Row="0" Grid.Column="0" LineBreakMode="TailTruncation">
                                                             <Label.FormattedText>
                                                                 <FormattedString>

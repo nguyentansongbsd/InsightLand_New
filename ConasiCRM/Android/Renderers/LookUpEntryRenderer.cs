@@ -27,7 +27,7 @@ namespace ConasiCRM.Droid.Renderers
             {
                 FormsEditText editText = Control;
                 editText.SetBackgroundResource(Resource.Drawable.bg_main_entry);
-                editText.SetPadding(20, 0, 15, 0);
+                editText.SetPadding(20, 0, 60, 0);
                 //editText.SetFocusable(views.ViewFocusability.NotFocusable);
                 editText.FocusableInTouchMode = false;
                 editText.SetCursorVisible(false);

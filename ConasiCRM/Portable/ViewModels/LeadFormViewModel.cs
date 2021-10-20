@@ -31,6 +31,18 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _campaign;
         public OptionSet Campaign { get => _campaign; set { _campaign = value; OnPropertyChanged(nameof(Campaign)); } }
 
+        private OptionSet _gender;
+        public OptionSet Gender { get => _gender; set { _gender = value; OnPropertyChanged(nameof(Gender)); } }
+
+        private List<OptionSet> _genders;
+        public List<OptionSet> Genders { get => _genders; set { _genders = value; OnPropertyChanged(nameof(Genders)); } }
+
+        private OptionSet _leadSource;
+        public OptionSet LeadSource { get => _leadSource; set { _leadSource = value;OnPropertyChanged(nameof(LeadSource)); } }
+
+        private List<OptionSet> _leadSources;
+        public List<OptionSet> LeadSources { get => _leadSources; set { _leadSources = value; OnPropertyChanged(nameof(LeadSources)); } }
+
         private OptionSet _rating;
         public OptionSet Rating { get => _rating; set { _rating = value; OnPropertyChanged(nameof(Rating)); } }
 
@@ -106,6 +118,7 @@ namespace ConasiCRM.Portable.ViewModels
         public LeadFormViewModel()
         {
             singleLead = new LeadFormModel();
+            this.Genders = new List<OptionSet>() { new OptionSet("1","Nam"), new OptionSet("2", "Nữ") };
             this.loadIndustrycode();
         }
 
@@ -137,6 +150,9 @@ namespace ConasiCRM.Portable.ViewModels
                             <attribute name='createdon' />
                             <attribute name='leadid' />
                             <attribute name='leadqualitycode' />
+                            <attribute name='new_gender' />
+                            <attribute name='new_birthday' />
+                            <attribute name='leadsourcecode' />
                             <order attribute='createdon' descending='true' />
                             <filter type='and'>
                                 <condition attribute='leadid' operator='eq' value='{" + LeadId + @"}' />
@@ -219,6 +235,9 @@ namespace ConasiCRM.Portable.ViewModels
             data["industrycode"] = singleLead.industrycode;
             data["revenue"] = singleLead?.revenue;
             data["leadqualitycode"] = Rating.Val;
+            data["new_gender"] = this.Gender?.Val;
+            data["new_birthday"] = singleLead.new_birthday;
+            data["leadsourcecode"] = this.LeadSource?.Val;
 
             if (!string.IsNullOrWhiteSpace(singleLead.numberofemployees))
             {
