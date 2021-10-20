@@ -82,6 +82,7 @@
     <Compile Include="Renderers\MainSearchBarRenderer.cs" />
     <Compile Include="Renderers\ExtendedFrameRenderer.cs" />
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
+    <Compile Include="Services\UrlEnCodeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon-60%402x.png" />

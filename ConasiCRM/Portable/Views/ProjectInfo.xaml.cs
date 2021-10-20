@@ -4,7 +4,6 @@ using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using FFImageLoading.Forms;
 using FormsVideoLibrary;
-using Foundation;
 using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;

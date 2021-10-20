@@ -118,7 +118,7 @@ namespace ConasiCRM.Portable.ViewModels
                                           </link-entity>
                                         </link-entity>" : "";
 
-            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='name' operator='eq' value='" + Filter.Unit + "' />" : "";
+            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='name' operator='like' value='%25" + Filter.Unit + "%25' />" : "";
 
             string Direction_Condition = string.Empty;
             if (!string.IsNullOrWhiteSpace(Filter.Direction))

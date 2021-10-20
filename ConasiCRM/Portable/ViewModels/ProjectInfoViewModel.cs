@@ -1,9 +1,9 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using FormsVideoLibrary;
-using Foundation;
 using Newtonsoft.Json;
 using Stormlion.PhotoBrowser;
 using System;
@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
@@ -421,8 +422,7 @@ namespace ConasiCRM.Portable.ViewModels
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             if (Device.RuntimePlatform == Device.iOS)
                             {
-                                var jrURL = new NSUrl(new System.Uri(soucre).AbsoluteUri);
-                                soucre = jrURL.AbsoluteString;
+                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
                             }
                             Photos.Add(new Photo { URL = soucre });
                             Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });

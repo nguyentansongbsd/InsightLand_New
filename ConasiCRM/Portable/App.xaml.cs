@@ -1,3 +1,4 @@
+using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Views;
 using System.Net.Http;
 using Xamarin.Forms;
@@ -17,6 +18,7 @@ namespace ConasiCRM.Portable
             Plugin.Media.CrossMedia.Current.Initialize();
             MainPage = new Login();
         }
+
 
         protected override void OnStart()
         {
