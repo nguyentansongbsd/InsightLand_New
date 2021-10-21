@@ -146,6 +146,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.createMeeting())
                 {
+                    if (Dashboard.NeedToRefreshMeet.HasValue) Dashboard.NeedToRefreshMeet = true;
                     if (ActivityList.NeedToRefreshMeet.HasValue) ActivityList.NeedToRefreshMeet = true;
                     ToastMessageHelper.ShortMessage("Đã thêm cuộc họp");
                     await Navigation.PopAsync();
@@ -161,6 +162,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.UpdateMeeting(id))
                 {
+                    if (Dashboard.NeedToRefreshMeet.HasValue) Dashboard.NeedToRefreshMeet = true;
                     if (ActivityList.NeedToRefreshMeet.HasValue) ActivityList.NeedToRefreshMeet = true;
                     ToastMessageHelper.ShortMessage("Cập nhật thành công");
                     await Navigation.PopAsync();

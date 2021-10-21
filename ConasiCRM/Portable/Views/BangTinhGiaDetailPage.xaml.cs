@@ -55,6 +55,8 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
 
                 viewModel.CoownerList.Clear();
+                viewModel.ListDiscount.Clear();
+                viewModel.ListPromotion.Clear();
 
                 await Task.WhenAll(
                     LoadDataChinhSach(ReservationId),
@@ -74,10 +76,11 @@ namespace ConasiCRM.Portable.Views
         {
             if (id != Guid.Empty)
             {
-                await viewModel.LoadReservation(id);
-                SutUpPromotions();
+                await Task.WhenAll(
+                    viewModel.LoadReservation(id)
+                    );
+                await viewModel.LoadDiscounts();
                 SutUpSpecialDiscount();
-                SetUpDiscount(viewModel.Reservation.bsd_discounts);
             }
         }
 
@@ -162,52 +165,6 @@ namespace ConasiCRM.Portable.Views
                 VisualStateManager.GoToState(radBorderLich, "Normal");
                 VisualStateManager.GoToState(lbLich, "Normal");
                 TabLich.IsVisible = false;
-            }
-        }
-
-        private async void SetUpDiscount(string ids)
-        {
-            if (!string.IsNullOrEmpty(ids))
-            {
-                scrolltDiscount.IsVisible = true;
-                if (viewModel.Reservation.bsd_discounttypeid != Guid.Empty)
-                {
-                    await viewModel.LoadDiscounts(viewModel.Reservation.bsd_discounttypeid);
-
-                    var list_id = ids.Split(',');
-
-                    foreach (var id in list_id)
-                    {
-                        OptionSet item = viewModel.ListDiscount.Single(x => x.Val == id);
-                        if (item != null && !string.IsNullOrEmpty(item.Val))
-                        {
-                            stackLayoutDiscount.Children.Add(SetUpItemBorder(item.Label));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                scrolltDiscount.IsVisible = false;
-            }
-        }
-
-        private void SutUpPromotions()
-        {
-            if (viewModel.ListPromotion != null && viewModel.ListPromotion.Count > 0)
-            {
-                stackLayoutPromotions.IsVisible = true;
-                foreach (var item in viewModel.ListPromotion)
-                {
-                    if (!string.IsNullOrEmpty(item.Label))
-                    {
-                        stackLayoutPromotions.Children.Add(SetUpItem(item.Label));
-                    }
-                }
-            }
-            else
-            {
-                stackLayoutPromotions.IsVisible = false;
             }
         }
 
@@ -393,24 +350,6 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Hide();
             }
-        }
-
-        private RadBorder SetUpItemBorder(string content)
-        {
-            RadBorder rd = new RadBorder();
-            rd.Padding = 5;
-            rd.BorderColor = Color.FromHex("f1f1f1");
-            rd.BorderThickness = 1;
-            rd.CornerRadius = 5;
-            Label lb = new Label();
-            lb.Text = content;
-            lb.FontSize = 15;
-            lb.TextColor = Color.FromHex("1399D5");
-            lb.VerticalOptions = LayoutOptions.Center;
-            lb.HorizontalOptions = LayoutOptions.Center;
-            lb.FontAttributes = FontAttributes.Bold;
-            rd.Content = lb;
-            return rd;
         }
 
         private Grid SetUpItem(string content)

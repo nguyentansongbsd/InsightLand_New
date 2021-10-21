@@ -140,6 +140,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.CreateTask();
                 if (isSuccess)
                 {
+                    if (Dashboard.NeedToRefreshTask.HasValue) Dashboard.NeedToRefreshTask = true;
                     if (ActivityList.NeedToRefreshTask.HasValue) ActivityList.NeedToRefreshTask = true;
                     ToastMessageHelper.ShortMessage("Tạo công việc thành công");
                     await Navigation.PopAsync();
@@ -156,6 +157,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.UpdateTask();
                 if (isSuccess)
                 {
+                    if (Dashboard.NeedToRefreshTask.HasValue) Dashboard.NeedToRefreshTask = true;
                     if (ActivityList.NeedToRefreshTask.HasValue) ActivityList.NeedToRefreshTask = true;
                     ToastMessageHelper.ShortMessage("Cập nhật công việc thành công");
                     await Navigation.PopAsync();

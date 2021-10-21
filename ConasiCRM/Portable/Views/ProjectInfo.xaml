@@ -79,7 +79,7 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="Image">
-                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
+                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="650">
                     <ffimageloading:CachedImage.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Image_Tapped" CommandParameter="{Binding .}"/>
                     </ffimageloading:CachedImage.GestureRecognizers>

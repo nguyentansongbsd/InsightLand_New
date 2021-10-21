@@ -36,32 +36,33 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadTask()
         {
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='task'>
-                                    <attribute name='subject' />
-                                    <attribute name='scheduledend' />
-                                    <attribute name='createdby' />
-                                    <attribute name='activityid' />
-                                    <attribute name='scheduledstart' />
-                                    <attribute name='description' />
-                                    <order attribute='subject' descending='false' />
-                                    <filter type='and'>
-                                      <condition attribute='activityid' operator='eq' uitype='task' value='{TaskId}' />
-                                    </filter>
-                                    <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer' alias='a_d4c7f132a91c4d16952d82eb7932504a'>
-                                      <attribute name='bsd_name' alias='account_name'/>
-                                      <attribute name='accountid' alias='account_id' />
-                                    </link-entity>
-                                    <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer' alias='a_323155a4a4a9409b81e038bc0c521b36'>
-                                      <attribute name='fullname' alias='contact_id'/>
-                                      <attribute name='contactid' alias='contact_name'/>
-                                    </link-entity>
-                                    <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='a_1e67d7c87cd1eb11bacc000d3a80021e'>
-                                      <attribute name='lastname' alias='lead_name'/>
-                                      <attribute name='leadid' alias='lead_id' />
-                                    </link-entity>
-                                  </entity>
-                                </fetch>";
+            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='task'>
+                                <attribute name='subject' />
+                                <attribute name='statecode' />
+                                <attribute name='scheduledend' />
+                                <attribute name='activityid' />
+                                <attribute name='statuscode' />
+                                <attribute name='scheduledstart' />
+                                <attribute name='description' />
+                                <order attribute='subject' descending='false' />
+                                <filter type='and' >
+                                    <condition attribute='activityid' operator='eq' value='" + TaskId + @"' />
+                                </filter>
+                                <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ah'>
+    	                            <attribute name='accountid' alias='account_id' />                  
+    	                            <attribute name='bsd_name' alias='account_name'/>
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='ai'>
+	                                <attribute name='contactid' alias='contact_id' />                  
+                                    <attribute name='fullname' alias='contact_name'/>
+                                </link-entity>
+                                <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='aj'>
+	                                <attribute name='leadid' alias='lead_id'/>                  
+                                    <attribute name='lastname' alias='lead_name'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskFormModel>>("tasks", fetchXml);
             if (result == null || result.value.Count == 0) return;
 

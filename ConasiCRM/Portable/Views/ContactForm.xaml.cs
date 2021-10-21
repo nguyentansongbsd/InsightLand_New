@@ -146,7 +146,17 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Email đã được sử dụng");
                     return;
                 }
-            }          
+            }
+            if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_contactaddress))
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn địa chỉ liên lạc");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_permanentaddress1))
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn địa chỉ thường trú");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập số CMND");

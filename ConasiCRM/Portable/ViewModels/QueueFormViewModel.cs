@@ -206,6 +206,10 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     UpdateStatusUnit();
                 }
+                else
+                {
+                    await SetStatusQueueProject(QueueFormModel.opportunityid);
+                } 
                 QueueUnitModel queueUnit = await ContentQueueUnit();
                 await CreateQueueUnit(queueUnit);
                 return true;
@@ -475,7 +479,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             else
             {
-                     data["statecode"] = 0;
+                data["statecode"] = 0;
                 data["statuscode"] = 1;
                 data["bsd_queueforproject"] = true;
             }
@@ -520,6 +524,64 @@ namespace ConasiCRM.Portable.ViewModels
             data["statecode"] = 0;
             data["statuscode"] = 100000004;
             return data;
+        }
+
+        private async Task<bool> SetStatusQueueProject(Guid queue_id)
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                      <entity name='opportunity'>
+                                        <attribute name='bsd_queuenumber' />
+                                        <attribute name='bsd_queuingexpired' />
+                                        <order attribute='bsd_queuingexpired' descending='true' />
+                                        <filter type='and'>
+                                          <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
+                                          <condition attribute='statuscode' operator='in'>
+                                            <value>100000000</value>
+                                            <value>100000002</value>
+                                          </condition>
+                                          <condition attribute='opportunityid' operator='ne' value='{queue_id}' />
+                                        </filter>
+                                      </entity>
+                                    </fetch>"; ;
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
+            if (result == null)
+                return false;
+            var data = result.value;
+
+            if (data.ToList().Count > 0)
+            {
+              return await updateStatusQueueProject(false);
+            }
+            else
+            {
+                return await updateStatusQueueProject(true);
+            }
+        }
+
+        public async Task<Boolean> updateStatusQueueProject(bool isQueue)
+        {
+            string path = "/opportunities(" + QueueFormModel.opportunityid + ")";
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            if(isQueue)
+            {
+                data["statecode"] = 0;
+                data["statuscode"] = 100000000;
+            }
+            else
+            {
+                data["statecode"] = 0;
+                data["statuscode"] = 100000002;
+            }
+            CrmApiResponse result = await CrmHelper.PatchData(path, data);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

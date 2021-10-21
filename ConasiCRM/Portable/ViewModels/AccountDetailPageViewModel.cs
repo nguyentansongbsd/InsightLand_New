@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class AccountDetailPageViewModel : FormViewModal
+    public class AccountDetailPageViewModel : BaseViewModel
     {
         public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; } = new ObservableCollection<FloatButtonItem>();
         public ObservableCollection<OptionSet> BusinessTypeOptions { get; set; }
@@ -489,17 +489,13 @@ namespace ConasiCRM.Portable.ViewModels
                         x.is_employee = true;
                     else
                         x.is_employee = false;
-
-                    if (x.statuscode == 100000000)
-                    {
-                        x.statuscode_title = "Applying";                                            
-                        list_MandatorySecondary.Insert(0,x);
-                    }    
-                    else
-                    {
-                        x.statuscode_title = "Cancel";
-                        list_MandatorySecondary.Add(x);
-                    }
+                    list_MandatorySecondary.Add(x);
+                }
+                if (list_MandatorySecondary.Any(x => x.statuscode == 100000000))
+                {
+                    var item = list_MandatorySecondary.SingleOrDefault(x => x.statuscode == 100000000);
+                    list_MandatorySecondary.Remove(item);
+                    list_MandatorySecondary.Insert(0, item);
                 }
             }
         }

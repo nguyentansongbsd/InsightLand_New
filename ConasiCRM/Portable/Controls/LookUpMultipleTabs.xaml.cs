@@ -46,6 +46,12 @@ namespace ConasiCRM.Portable.Controls
         private Grid gridTabs;
         public bool PreOpenOneTime { get; set; } = true;
         private int numberTab { get; set; } = 0;
+
+        public static string CodeAccount = "3";
+
+        public static string CodeContac = "2";
+
+        public static string CodeLead = "1";
         public LookUpMultipleTabs()
         {
             InitializeComponent();
@@ -293,7 +299,7 @@ namespace ConasiCRM.Portable.Controls
             {
                 if (item != null)
                 {
-                    item.Title = "2";
+                    item.Title = CodeContac;
                     SelectedItem = item;
                     await CenterModal.Hide();
                 }
@@ -320,7 +326,7 @@ namespace ConasiCRM.Portable.Controls
             {
                 if (item != null)
                 {
-                    item.Title = "1";
+                    item.Title = CodeLead;
                     SelectedItem = item;
                     await CenterModal.Hide();
                 }
@@ -347,7 +353,7 @@ namespace ConasiCRM.Portable.Controls
             {
                 if (item != null)
                 {
-                    item.Title = "3";
+                    item.Title = CodeAccount;
                     SelectedItem = item;
                     await CenterModal.Hide();
                 }

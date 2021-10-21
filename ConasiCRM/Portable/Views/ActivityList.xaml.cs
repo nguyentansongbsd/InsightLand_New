@@ -36,15 +36,16 @@ namespace ConasiCRM.Portable.Views
         {
             viewModel.EntityName = "tasks";
             viewModel.entity = "task";
+            VisualStateManager.GoToState(radBorderTask, "Active");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "Active");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
+
             await viewModel.LoadData();
             if (viewModel.Data.Count > 0)
             {
-                VisualStateManager.GoToState(radBorderTask, "Active");
-                VisualStateManager.GoToState(radBorderMeeting, "InActive");
-                VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
-                VisualStateManager.GoToState(lblTask, "Active");
-                VisualStateManager.GoToState(lblMeeting, "InActive");
-                VisualStateManager.GoToState(lblPhoneCall, "InActive");
                 OnCompleted?.Invoke(true);
             }
             else
@@ -283,7 +284,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             string[] options = new string[] { "Hoàn Thành", "Hủy" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Đóng", null, options);
             if (asw == "Hoàn Thành")
             {
                 if (viewModel.PhoneCall.activityid != Guid.Empty)

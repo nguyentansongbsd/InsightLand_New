@@ -107,6 +107,7 @@
     <Compile Include="Renderers\MyNewEntryRenderer.cs" />
     <Compile Include="Renderers\MainSearchBarRenderer.cs" />
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
+    <Compile Include="Renderers\testRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -444,6 +445,10 @@
       </SubType>
       <Generator>
       </Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\user.png">
+      <SubType></SubType>
+      <Generator></Generator>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
