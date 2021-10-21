@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
@@ -26,6 +28,12 @@ namespace ConasiCRM.Portable.Views
         {
             await viewModel.LoadQueue();
             SetButtons();
+
+            VisualStateManager.GoToState(radBorderThongTin, "Active");
+            VisualStateManager.GoToState(radBorderGiaoDich, "InActive");
+            VisualStateManager.GoToState(lbThongTin, "Active");
+            VisualStateManager.GoToState(lbGiaoDich, "InActive");
+
             if (viewModel.Queue != null)
             {
                 OnCompleted?.Invoke(true);
@@ -188,14 +196,16 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Huỷ giữ chỗ thất bại");
             }
         }
+
         private void CreateQuotation_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            OptionSet Queue = new OptionSet(viewModel.Queue.opportunityid,viewModel.Queue.name);
+            OptionSet Queue = new OptionSet(viewModel.Queue.opportunityid, viewModel.Queue.name);
             OptionSet SaleAgentCompany = new OptionSet(viewModel.Queue._bsd_salesagentcompany_value.ToString(), viewModel.Queue.salesagentcompany_name);
             string NameOfStaffAgent = viewModel.Queue.bsd_nameofstaffagent;
-            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue,SaleAgentCompany,NameOfStaffAgent);
-            reservationForm.CheckReservation = async (isSuccess) => {
+            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue, SaleAgentCompany, NameOfStaffAgent);
+            reservationForm.CheckReservation = async (isSuccess) =>
+            {
                 if (isSuccess)
                 {
                     await Navigation.PushAsync(reservationForm);
@@ -208,5 +218,102 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
+
+        private void ThongTin_Tapped(object sender, EventArgs e)
+        {
+            VisualStateManager.GoToState(radBorderThongTin, "Active");
+            VisualStateManager.GoToState(radBorderGiaoDich, "InActive");
+            VisualStateManager.GoToState(lbThongTin, "Active");
+            VisualStateManager.GoToState(lbGiaoDich, "InActive");
+            stThongTin.IsVisible = true;
+            stGiaoDich.IsVisible = false;
+        }
+
+        private async void GiaoDich_Tapped(object sender, EventArgs e)
+        {
+            VisualStateManager.GoToState(radBorderThongTin, "InActive");
+            VisualStateManager.GoToState(radBorderGiaoDich, "Active");
+            VisualStateManager.GoToState(lbThongTin, "InActive");
+            VisualStateManager.GoToState(lbGiaoDich, "Active");
+            stThongTin.IsVisible = false;
+            stGiaoDich.IsVisible = true;
+            LoadingHelper.Show();
+            if (viewModel.BangTinhGiaList == null && viewModel.DatCocList == null && viewModel.HopDongList == null)
+            {
+                viewModel.BangTinhGiaList = new ObservableCollection<ReservationListModel>();
+                viewModel.DatCocList = new ObservableCollection<ReservationListModel>();
+                viewModel.HopDongList = new ObservableCollection<ContractModel>();
+                await Task.WhenAll(
+                    viewModel.LoadDanhSachBangTinhGia(),
+                    viewModel.LoadDanhSachDatCoc(),
+                    viewModel.LoadDanhSachHopDong()
+                    ); 
+            }
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreBangTinhGia_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageBangTinhGia++;
+            await viewModel.LoadDanhSachBangTinhGia();
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreDatCoc_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageDatCoc++;
+            await viewModel.LoadDanhSachDatCoc();
+            LoadingHelper.Hide();
+        }
+
+        private async void ShowMoreHopDong_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageHopDong++;
+            await viewModel.LoadDanhSachHopDong();
+            LoadingHelper.Hide();
+        }
+
+        private void ItemReservation_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) => {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
     }
 }

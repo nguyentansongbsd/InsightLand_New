@@ -12,6 +12,7 @@ using Stormlion.PhotoBrowser;
 using System.Linq;
 using MediaManager;
 using MediaManager.Forms;
+using System.Collections.ObjectModel;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -146,9 +147,11 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.IsLoaded == false)
             {
+                viewModel.BangTinhGiaList = new ObservableCollection<ReservationListModel>();
                 await Task.WhenAll(
                     viewModel.LoadQueues(),
-                    viewModel.LoadReservation(),
+                    viewModel.LoadDanhSachDatCoc(),
+                    viewModel.LoadDanhSachBangTinhGia(),
                     viewModel.LoadOptoinEntry()
                 );
             }
@@ -167,7 +170,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachDatCoc++;
-            await viewModel.LoadReservation();
+            await viewModel.LoadDanhSachDatCoc();
             LoadingHelper.Hide();
         }
 
@@ -238,13 +241,41 @@ namespace ConasiCRM.Portable.Views
         private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            var itemId = ((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
-            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(Guid.Parse(itemId));
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
             bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
             {
                 if (isSuccess)
                 {
                     await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        private async void ShowMoreBangTinhGia_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageBangTinhGia++;
+            await viewModel.LoadDanhSachBangTinhGia();
+            LoadingHelper.Hide();
+        }
+
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
                     LoadingHelper.Hide();
                 }
                 else
