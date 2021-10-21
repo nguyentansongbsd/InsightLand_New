@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
@@ -237,22 +238,16 @@ namespace ConasiCRM.Portable.Views
             stThongTin.IsVisible = false;
             stGiaoDich.IsVisible = true;
             LoadingHelper.Show();
-            if (viewModel.BangTinhGiaList == null)
+            if (viewModel.BangTinhGiaList == null && viewModel.DatCocList == null && viewModel.HopDongList == null)
             {
                 viewModel.BangTinhGiaList = new ObservableCollection<ReservationListModel>();
-                await viewModel.LoadDanhSachBangTinhGia();
-            }
-
-            if (viewModel.DatCocList == null)
-            {
                 viewModel.DatCocList = new ObservableCollection<ReservationListModel>();
-                await viewModel.LoadDanhSachDatCoc();
-            }
-
-            if (viewModel.HopDongList == null)
-            {
                 viewModel.HopDongList = new ObservableCollection<ContractModel>();
-                await viewModel.LoadDanhSachHopDong();
+                await Task.WhenAll(
+                    viewModel.LoadDanhSachBangTinhGia(),
+                    viewModel.LoadDanhSachDatCoc(),
+                    viewModel.LoadDanhSachHopDong()
+                    ); 
             }
             LoadingHelper.Hide();
         }
