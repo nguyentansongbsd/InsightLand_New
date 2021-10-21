@@ -201,8 +201,19 @@ namespace ConasiCRM.Portable.Views
         private void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ToastMessageHelper.ShortMessage("chua co page");
-            LoadingHelper.Hide();
+            ReservationForm reservationForm = new ReservationForm(Guid.Parse(viewModel.UnitInfo.productid), null, null, null);
+            reservationForm.CheckReservation = async (isSuccess) => {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(reservationForm);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                }
+            };
         }
 
         private void GiuChoItem_Tapped(object sender, EventArgs e)
@@ -224,15 +235,25 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        //private void Button_Clicked(object sender, EventArgs e)
-        //{
-        //    Navigation.PushAsync(new UnitImageGallery("Units", Id.ToString(), viewModel.UnitInfo.name, "Hình Ảnh Căn Hộ"));
-        //}
-
-        //private void Button_Clicked_Video(object sender, EventArgs e)
-        //{
-        //    Navigation.PushAsync(new UnitVideoGallery("Units",Id.ToString(),viewModel.UnitInfo.name,"Phim Căn Hộ"));
-        //}
+        private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = ((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(Guid.Parse(itemId));
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
 
         private async void Meida_Tapped(object sender, EventArgs e)
         {

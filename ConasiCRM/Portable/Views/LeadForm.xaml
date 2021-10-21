@@ -54,8 +54,14 @@
                                 <controls:FormLabel Text="Email"/>
                                 <controls:MainEntry x:Name="emailaddress1_text" Keyboard="Email" Text="{Binding singleLead.emailaddress1}" FontSize="15"  Placeholder="Nhập Email" Margin="0,0,0,5"/>
 
-                                <!--<controls:MyNewEntry Text="{Binding AddressVn}" HasClearButton="false"  Grid.Column="1" Grid.Row="9" OnClicked="DiaChiVN_Clicked"/>-->
+                                <controls:FormLabel Text="Giới tính"/>
+                                <controls:LookUp x:Name="lookUpGioiTinh" Placeholder="Chọn giới tính" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"/>
 
+                                <controls:FormLabel Text="Ngày sinh"/>
+                                <controls:DatePickerControl x:Name="datePickerNgaySinh" Date="{Binding singleLead.new_birthday}" Placeholder="Chọn ngày sinh" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
+
+                                <controls:FormLabel Text="Lead source"/>
+                                <controls:LookUp x:Name="lookUpLeadSource" Placeholder="Chọn Lead source" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding LeadSource}" ItemsSource="{Binding LeadSources}"/>
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>

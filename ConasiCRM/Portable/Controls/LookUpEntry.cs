@@ -11,7 +11,6 @@ namespace ConasiCRM.Portable.Controls
             this.FontSize = 15;
             this.PlaceholderColor = Color.Gray;
             this.HeightRequest = 40;
-            this.FontFamily = "Segoe";
         }
     }
 }

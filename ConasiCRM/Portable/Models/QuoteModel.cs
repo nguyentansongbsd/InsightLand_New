@@ -33,7 +33,8 @@ namespace ConasiCRM.Portable.Models
         private decimal _bsd_bookingfee;
         public decimal bsd_bookingfee { get=> _bsd_bookingfee; set { _bsd_bookingfee = value;OnPropertyChanged(nameof(bsd_bookingfee)); } }
 
-        public string bsd_nameofstaffagent { get; set; }
+        private string _bsd_nameofstaffagent;
+        public string bsd_nameofstaffagent { get=>_bsd_nameofstaffagent; set { _bsd_nameofstaffagent = value;OnPropertyChanged(nameof(bsd_nameofstaffagent)); } }
         public string bsd_referral { get; set; }
 
         private decimal _bsd_detailamount;

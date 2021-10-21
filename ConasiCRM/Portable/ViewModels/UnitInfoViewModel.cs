@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using MediaManager;
@@ -330,6 +331,10 @@ namespace ConasiCRM.Portable.ViewModels
                         if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                            }
                             var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
                             var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
                             ImageSource imageSource = image.ToImageSource();
@@ -340,6 +345,10 @@ namespace ConasiCRM.Portable.ViewModels
                         else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                            }
                             Photos.Add(new Photo { URL = soucre });
                             Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });
                             TotalPhoto++;

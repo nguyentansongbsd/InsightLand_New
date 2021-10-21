@@ -377,42 +377,42 @@
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="Giá bán gốc" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding Quote.bsd_detailamount,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding Quote.bsd_detailamount,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="(-) Chiếu khấu" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding TotalDiscount,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding TotalDiscount,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="(+) Tổng tiền ĐKBG" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding TotalHandoverCondition,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding TotalHandoverCondition,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="Giá bán trước thuế" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding NetSellingPrice,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding NetSellingPrice,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="(-) Tổng giá trị QSDĐ" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding LandValueDeduction,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding LandValueDeduction,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="(+) Tổng tiền thuế VAT" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding TotalVATTax,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding TotalVATTax,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="(+) Phí bảo trì" FontSize="15" TextColor="#333333"/>
-                                            <Label Text="{Binding MaintenanceFee,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding MaintenanceFee,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="#333333" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
 
                                         <StackLayout Orientation="Horizontal" Padding="10,15" BackgroundColor="White" VerticalOptions="Center">
                                             <Label Text="Tổng tiền" FontSize="15" FontAttributes="Bold" TextColor="#333333"/>
-                                            <Label Text="{Binding TotalAmount,StringFormat='{0:#,0.##} đ'}" FontSize="15" TextColor="Red" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                            <Label Text="{Binding TotalAmount,StringFormat='{0:#,0} đ'}" FontSize="15" TextColor="Red" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
                                         </StackLayout>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>

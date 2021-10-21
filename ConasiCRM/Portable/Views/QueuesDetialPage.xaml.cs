@@ -192,7 +192,9 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             OptionSet Queue = new OptionSet(viewModel.Queue.opportunityid,viewModel.Queue.name);
-            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue);
+            OptionSet SaleAgentCompany = new OptionSet(viewModel.Queue._bsd_salesagentcompany_value.ToString(), viewModel.Queue.salesagentcompany_name);
+            string NameOfStaffAgent = viewModel.Queue.bsd_nameofstaffagent;
+            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue,SaleAgentCompany,NameOfStaffAgent);
             reservationForm.CheckReservation = async (isSuccess) => {
                 if (isSuccess)
                 {

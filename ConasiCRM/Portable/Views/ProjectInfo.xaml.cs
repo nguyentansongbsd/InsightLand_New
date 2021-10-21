@@ -219,19 +219,6 @@ namespace ConasiCRM.Portable.Views
                 StartIndex = index,
                 EnableGrid = true
             }.Show();
-
-
-            //Xamarin.Essentials.Browser.OpenAsync(item.ImageSource);
-
-
-            //CollectionData collection = new CollectionData();
-            //collection.ImageSource = jrURL.ToString();
-            //collection.Index = item.Index;
-            //if (collection != null)
-            //{
-            //    viewModel.photoBrowser.StartIndex = collection.Index;
-            //    viewModel.photoBrowser.Show();
-            //}
         }
     }
 }
