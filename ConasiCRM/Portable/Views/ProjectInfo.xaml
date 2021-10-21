@@ -254,52 +254,52 @@
 
                         <StackLayout x:Name="stackThongTin" IsVisible="false" BackgroundColor="#eeeeee" Spacing="1">
                             <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Chủ đầu tư" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_investor_name}" TextColor="{StaticResource NavigationPrimary}" HorizontalTextAlignment="End" FontAttributes="Bold" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="14" >
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChuDauTu_Tapped" CommandParameter="{Binding Project.bsd_investor_id}"/>
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </Grid>
-                                    <Grid ColumnDefinitions="3*,7*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Địa chỉ" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_address}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                                <Label Grid.Column="0" Text="Chủ đầu tư" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_investor_name}" TextColor="{StaticResource NavigationPrimary}" HorizontalTextAlignment="End" FontAttributes="Bold" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="14" >
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChuDauTu_Tapped" CommandParameter="{Binding Project.bsd_investor_id}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Grid>
+                            <Grid ColumnDefinitions="3*,7*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Địa chỉ" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_address}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Phần trăm cọc (%)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_depositpercentda,StringFormat='{0:#,0.#0}%'}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Phần trăm cọc (%)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_depositpercentda,StringFormat='{0:#,0.#0}%'}" TextColor="#333333" HorizontalTextAlignment="End" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Ngày dự kiến bàn giao" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_estimatehandoverdate,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Ngày dự kiến bàn giao" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_estimatehandoverdate,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Giá trị QSDĐ (m2)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_landvalueofproject,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Giá trị QSDĐ (m2)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_landvalueofproject,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Phí bảo trì (%)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_maintenancefeespercent,StringFormat='{0:#,0.#0}%'}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Phí bảo trì (%)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_maintenancefeespercent,StringFormat='{0:#,0.#0}%'}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Số tháng tính phí quản lý" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_numberofmonthspaidmf}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Số tháng tính phí quản lý" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_numberofmonthspaidmf}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="4*,6*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Đơn giá phí quản lý (tháng/m2)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_managementamount,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="4*,6*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Đơn giá phí quản lý (tháng/m2)" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_managementamount,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
-                                    <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
-                                        <Label Grid.Column="0" Text="Tiền giữ chỗ" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
-                                        <Label Grid.Column="1" Text="{Binding Project.bsd_bookingfee,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
-                                    </Grid>
+                            <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
+                                <Label Grid.Column="0" Text="Tiền giữ chỗ" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Project.bsd_bookingfee,Converter={StaticResource DecimalToVndConverter}}" TextColor="#333333" HorizontalTextAlignment="End" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" />
+                            </Grid>
 
                             <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Padding="15">
                                 <Label Grid.Column="0" Text="Tiền đặt cọc" FontSize="15" TextColor="#333333"  VerticalOptions="Center"/>
@@ -309,47 +309,47 @@
 
                         <StackLayout x:Name="stackGiuCho" IsVisible="false">
                             <StackLayout BindableLayout.ItemsSource="{Binding ListGiuCho}" BackgroundColor="#eeeeee" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Padding="16" BackgroundColor="White">
-                                                    <StackLayout.GestureRecognizers>
-                                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
-                                                    </StackLayout.GestureRecognizers>
-                                                    <Label Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
-                                                    <Label FontSize="15" TextColor="#333333">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Khách hàng: "/>
-                                                                <Span Text="{Binding customer_name}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label FontSize="15" TextColor="#333333">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Dự án: "/>
-                                                                <Span Text="{Binding bsd_project_name}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                    <Label FontSize="15" TextColor="#333333">
-                                                        <Label.FormattedText>
-                                                            <FormattedString>
-                                                                <Span Text="Thời gian hết hạn: "/>
-                                                                <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
-                                                                <Span Text="{Binding bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
-                                                            </FormattedString>
-                                                        </Label.FormattedText>
-                                                    </Label>
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
+                                <BindableLayout.EmptyViewTemplate>
+                                    <DataTemplate>
+                                        <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                    </DataTemplate>
+                                </BindableLayout.EmptyViewTemplate>
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Padding="16" BackgroundColor="White">
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
+                                            </StackLayout.GestureRecognizers>
+                                            <Label Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
+                                            <Label FontSize="15" TextColor="#333333">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Khách hàng: "/>
+                                                        <Span Text="{Binding customer_name}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label FontSize="15" TextColor="#333333">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Dự án: "/>
+                                                        <Span Text="{Binding bsd_project_name}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label FontSize="15" TextColor="#333333">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Thời gian hết hạn: "/>
+                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
+                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
                             <Button Clicked="ShowMoreListDatCho_Clicked" IsVisible="{Binding ShowMoreBtnGiuCho}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="Xem Thêm" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
                         </StackLayout>
                     </Grid>
