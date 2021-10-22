@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using MediaManager;
@@ -36,10 +37,13 @@ namespace ConasiCRM.Portable.ViewModels
         public bool ShowCollections { get => _showCollections; set { _showCollections = value; OnPropertyChanged(nameof(ShowCollections)); } }
         public Guid UnitId { get; set; }
 
+        private ObservableCollection<ReservationListModel> _bangTinhGiaList;
+        public ObservableCollection<ReservationListModel> BangTinhGiaList { get => _bangTinhGiaList; set { _bangTinhGiaList = value; OnPropertyChanged(nameof(BangTinhGiaList)); } }
+
         public ObservableCollection<QueueFormModel> _list_danhsachdatcho;
         public ObservableCollection<QueueFormModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
-        public ObservableCollection<QuotationReseravtion> list_danhsachdatcoc { get; set; } = new ObservableCollection<QuotationReseravtion>();
-        public ObservableCollection<OptionEntry> list_danhsachhopdong { get; set; } = new ObservableCollection<OptionEntry>();
+        public ObservableCollection<ReservationListModel> list_danhsachdatcoc { get; set; } = new ObservableCollection<ReservationListModel>();
+        public ObservableCollection<ContractModel> list_danhsachhopdong { get; set; } = new ObservableCollection<ContractModel>();
 
         private UnitInfoModel _unitInfo;
         public UnitInfoModel UnitInfo { get => _unitInfo; set { _unitInfo = value; OnPropertyChanged(nameof(UnitInfo)); } }
@@ -65,9 +69,13 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _isShowBtnBangTinhGia;
         public bool IsShowBtnBangTinhGia { get => _isShowBtnBangTinhGia; set { _isShowBtnBangTinhGia = value; OnPropertyChanged(nameof(IsShowBtnBangTinhGia)); } }
 
+        private bool _showMoreBangTinhGia;
+        public bool ShowMoreBangTinhGia { get => _showMoreBangTinhGia; set { _showMoreBangTinhGia = value; OnPropertyChanged(nameof(ShowMoreBangTinhGia)); } }
+
         public int PageDanhSachHopDong { get; set; } = 1;
         public int PageDanhSachDatCoc { get; set; } = 1;
         public int PageDanhSachDatCho { get; set; } = 1;
+        public int PageBangTinhGia { get; set; } = 1;
 
         public bool IsLoaded { get; set; } = false;
 
@@ -161,7 +169,7 @@ namespace ConasiCRM.Portable.ViewModels
                     </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
-            if (result == null || result.value.Count ==0) return;
+            if (result == null || result.value.Count == 0) return;
 
             IsLoaded = true;
             var data = result.value;
@@ -174,42 +182,103 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task LoadReservation()
+        public async Task LoadDanhSachBangTinhGia()
+        {
+            string fetchXml = $@"<fetch version='1.0' count='5' page='{PageBangTinhGia}' output-format='xml-platform' mapping='logical' distinct='false'>
+                      <entity name='quote'>
+                        <attribute name='name' />
+                        <attribute name='totalamount' />
+                        <attribute name='bsd_unitno' alias='bsd_unitno_id' />
+                        <attribute name='statuscode' />
+                        <attribute name='bsd_projectid' alias='bsd_project_id' />
+                        <attribute name='quoteid' />
+                        <order attribute='createdon' descending='true' />
+                        <filter type='and'>
+                            <condition attribute='bsd_unitno' operator='eq' value='{UnitInfo.productid}'/>
+                            <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                            <filter type='or'>
+                              <condition attribute='statuscode' operator='in'>
+                                <value>100000007</value>
+                              </condition>
+                              <filter type='and'>
+                                 <condition attribute='statuscode' operator='in'>
+                                    <value>100000009</value>
+                                    <value>6</value>
+                                  </condition>
+                                  <condition attribute='bsd_quotationsigneddate' operator='null' />
+                              </filter>
+                            </filter>
+                        </filter>
+                        <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
+                            <attribute name='bsd_name' alias='bsd_project_name' />
+                        </link-entity>
+                        <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='b'>
+                          <attribute name='name' alias='bsd_unitno_name' />
+                        </link-entity>
+                        <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='c'>
+                          <attribute name='bsd_name' alias='purchaser_accountname' />
+                        </link-entity>
+                        <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='d'>
+                          <attribute name='bsd_fullname' alias='purchaser_contactname' />
+                        </link-entity>
+                      </entity>
+                    </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationListModel>>("quotes", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+
+            this.ShowMoreBangTinhGia = result.value.Count > 4 ? true : false;
+
+            foreach (var item in result.value)
+            {
+                this.BangTinhGiaList.Add(item);
+            }
+        }
+
+        public async Task LoadDanhSachDatCoc()
         {
             string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachDatCoc}' output-format='xml-platform' mapping='logical' distinct='false'>
-                          <entity name='quote'>
-                            <attribute name='quoteid' />
-                            <attribute name='bsd_projectid' />
-                            <attribute name='bsd_unitno' />
-                            <attribute name='bsd_reservationno' />
-                            <attribute name='customerid' />
-                            <attribute name='statuscode' />
-                            <attribute name='totalamount' />
-                            <attribute name='createdon' />
-                            <order attribute='createdon' descending='true' />
-                            <filter type='and'>
-                              <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                              <condition attribute='bsd_unitno' operator='eq' value='{UnitInfo.productid}'/>
-                            </filter>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='fullname'  alias='customerid_label_contact'/>
-                            </link-entity>
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='customerid_label_account'/>
-                            </link-entity>
-                            <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer'>
-                                <attribute name='bsd_name'  alias='bsd_projectid_label'/>
-                            </link-entity>
-                            <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='bsd_unitno_label'/>
-                            </link-entity>
-                            <link-entity name='transactioncurrency' from='transactioncurrencyid' to='transactioncurrencyid' visible='false' link-type='outer'>
-                                <attribute name='currencysymbol'  alias='transaction_currency'/>
-                            </link-entity>
-                          </entity>
+                              <entity name='quote'>
+                                <attribute name='name' />
+                                <attribute name='totalamount' />
+                                <attribute name='bsd_unitno' alias='bsd_unitno_id' />
+                                <attribute name='statuscode' />
+                                <attribute name='bsd_projectid' alias='bsd_project_id' />
+                                <attribute name='quoteid' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_unitno' operator='eq' value='{UnitInfo.productid}'/>
+                                    <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                    <filter type='or'>
+                                       <condition attribute='statuscode' operator='in'>
+                                           value>100000000</value>
+                                           <value>100000001</value>
+                                           <value>4</value>
+                                       </condition>
+                                       <filter type='and'>
+                                           <condition attribute='statuscode' operator='eq'>
+                                               <value>100000009</value>
+                                               <value>6</value>
+                                           </condition>
+                                           <condition attribute='bsd_quotationsigneddate' operator='not-null' />
+                                       </filter>
+                                     </filter>
+                                </filter>
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
+                                    <attribute name='bsd_name' alias='bsd_project_name' />
+                                </link-entity>
+                                <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='b'>
+                                  <attribute name='name' alias='bsd_unitno_name' />
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='c'>
+                                  <attribute name='bsd_name' alias='purchaser_accountname' />
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='d'>
+                                  <attribute name='bsd_fullname' alias='purchaser_contactname' />
+                                </link-entity>
+                              </entity>
                         </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuotationReseravtion>>("quotes", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationListModel>>("quotes", fetch);
             if (result == null) return;
             IsLoaded = true;
             var data = result.value;
@@ -223,37 +292,36 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadOptoinEntry()
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachHopDong}' output-format='xml-platform' mapping='logical' distinct='false'>
-                          <entity name='salesorder'>
-                            <attribute name='salesorderid' />
-                            <attribute name='bsd_optionno' />
-                            <attribute name='statuscode' />
-                            <attribute name='totalamount' />
-                            <attribute name='bsd_signingexpired' />
-                            <attribute name='createdon' />
-                            <order attribute='bsd_signingexpired' descending='true' />
-                            <filter type='and'>
-                              <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                              <condition attribute='bsd_unitnumber' operator='eq' value='{UnitInfo.productid}'/>
-                            </filter>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='fullname'  alias='customerid_label_contact'/>
-                            </link-entity>
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='customerid_label_account'/>
-                            </link-entity>
-                            <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
-                                <attribute name='bsd_name'  alias='bsd_project_label'/>
-                            </link-entity>
-                            <link-entity name='transactioncurrency' from='transactioncurrencyid' to='transactioncurrencyid' visible='false' link-type='outer'>
-                                <attribute name='currencysymbol'  alias='transactioncurrency'/>
-                            </link-entity>
-                            <link-entity name='product' from='productid' to='bsd_unitnumber' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='bsd_unitnumber_label'/>
-                            </link-entity>
-                          </entity>
+            string fetch = $@"<fetch version='1.0' count='5' page='{PageDanhSachHopDong}' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='salesorder'>
+                                    <attribute name='name' />
+                                    <attribute name='customerid' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='totalamount' />
+                                    <attribute name='bsd_unitnumber' alias='unit_id'/>
+                                    <attribute name='bsd_project' alias='project_id'/>
+                                    <attribute name='salesorderid' />
+                                    <attribute name='ordernumber' />
+                                    <order attribute='bsd_project' descending='true' />
+                                    <filter type='and'>                                      
+                                        <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                        <condition attribute='bsd_unitnumber' operator='eq' value='{UnitInfo.productid}'/>                
+                                    </filter >
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='outer' alias='aa'>
+                                        <attribute name='bsd_name' alias='project_name'/>
+                                    </link-entity>
+                                    <link-entity name='product' from='productid' to='bsd_unitnumber' link-type='outer' alias='ab'>
+                                        <attribute name='name' alias='unit_name'/>
+                                    </link-entity>
+                                    <link-entity name='account' from='accountid' to='customerid' link-type='outer' alias='ac'>
+                                        <attribute name='name' alias='account_name'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='customerid' link-type='outer' alias='ad'>
+                                        <attribute name='bsd_fullname' alias='contact_name'/>
+                                    </link-entity>
+                                </entity>
                         </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionEntry>>("salesorders", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContractModel>>("salesorders", fetch);
             if (result == null) return;
 
             IsLoaded = true;
@@ -330,16 +398,24 @@ namespace ConasiCRM.Portable.ViewModels
                         if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                            }
                             var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
                             var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
                             ImageSource imageSource = image.ToImageSource();
 
-                            Collections.Add(new CollectionData { MediaSource = soucre,PosterMediaSource = imageSource, ImageSource = null, Index = TotalMedia });
+                            Collections.Add(new CollectionData { MediaSource = soucre, PosterMediaSource = imageSource, ImageSource = null, Index = TotalMedia });
                             TotalMedia++;
                         }
                         else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                            }
                             Photos.Add(new Photo { URL = soucre });
                             Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });
                             TotalPhoto++;

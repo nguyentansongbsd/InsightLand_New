@@ -25,6 +25,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.Title = "TẠO MỚI KHÁCH HÀNG";
             Init();
+            datePickerNgaySinh.DefaultDisplay = DateTime.Now;
             viewModel.Rating = RatingData.GetRatingById("2");//mac dinh la warm
         }
         public LeadForm(Guid Id)
@@ -49,42 +50,57 @@ namespace ConasiCRM.Portable.Views
         public async void InitUpdate()
         {
             await viewModel.LoadOneLead();
-            viewModel.AddressComposite = viewModel.singleLead.address1_composite;
-            viewModel.AddressLine1 = viewModel.singleLead.address1_line1;
-            viewModel.AddressPostalCode = viewModel.singleLead.address1_postalcode;
-
-            viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
-            viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
-
-            if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
-            {
-                OptionSet currency = new OptionSet()
-                {
-                    Val = viewModel.singleLead._transactioncurrencyid_value,
-                    Label = viewModel.singleLead.transactioncurrencyid_label
-                };
-                viewModel.SelectedCurrency = currency;
-            }
-
-            if (!string.IsNullOrWhiteSpace(viewModel.singleLead._campaignid_value))
-            {
-                OptionSet campaign = new OptionSet()
-                {
-                    Val = viewModel.singleLead._campaignid_value,
-                    Label = viewModel.singleLead.campaignid_label
-                };
-                viewModel.SelectedCurrency = campaign;
-            }
 
             if (viewModel.singleLead.leadid != Guid.Empty)
+            {
+                viewModel.AddressComposite = viewModel.singleLead.address1_composite;
+                viewModel.AddressLine1 = viewModel.singleLead.address1_line1;
+                viewModel.AddressPostalCode = viewModel.singleLead.address1_postalcode;
+
+                viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
+                viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead.new_gender))
+                {
+                    viewModel.Gender = viewModel.Genders.SingleOrDefault(x => x.Val == viewModel.singleLead.new_gender);
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead.leadsourcecode))
+                {
+                    viewModel.LeadSource = LeadSourcesData.GetLeadSourceById(viewModel.singleLead.leadsourcecode);
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
+                {
+                    OptionSet currency = new OptionSet()
+                    {
+                        Val = viewModel.singleLead._transactioncurrencyid_value,
+                        Label = viewModel.singleLead.transactioncurrencyid_label
+                    };
+                    viewModel.SelectedCurrency = currency;
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead._campaignid_value))
+                {
+                    OptionSet campaign = new OptionSet()
+                    {
+                        Val = viewModel.singleLead._campaignid_value,
+                        Label = viewModel.singleLead.campaignid_label
+                    };
+                    viewModel.SelectedCurrency = campaign;
+                }
+
                 CheckSingleLead?.Invoke(true);
+            }
+
             else
                 CheckSingleLead?.Invoke(false);
         }
 
         public void SetPreOpen()
         {
-            lookUpDanhGia.PreOpenAsync =async () => {
+            lookUpDanhGia.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 viewModel.Ratings = RatingData.Ratings();
                 LoadingHelper.Hide();
@@ -148,6 +164,13 @@ namespace ConasiCRM.Portable.Views
                 {
                     ToastMessageHelper.ShortMessage("Không load được quận/huyện");
                 }
+                LoadingHelper.Hide();
+            };
+
+            lookUpLeadSource.PreOpenAsync = async () =>
+            {
+                LoadingHelper.Show();
+                viewModel.LeadSources = LeadSourcesData.GetListSources();
                 LoadingHelper.Hide();
             };
         }
@@ -264,17 +287,17 @@ namespace ConasiCRM.Portable.Views
             {
                 address.Add(viewModel.AddressStateProvince.Name);
             }
-            
+
             if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCode))
             {
                 address.Add(viewModel.AddressPostalCode);
             }
-            
+
             if (viewModel.AddressCountry != null)
             {
                 address.Add(viewModel.AddressCountry.Name);
             }
-            
+
             viewModel.AddressComposite = string.Join(",", address);
             await centerModalAddress.Hide();
         }
@@ -315,10 +338,17 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");
                 return;
             }
+
+            if (viewModel.singleLead.new_birthday != null && (DateTime.Now.Year - DateTime.Parse(viewModel.singleLead.new_birthday.ToString()).Year < 18))
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng phải từ 18 tuổi");
+                return ;
+            }
+
             LoadingHelper.Show();
 
             viewModel.singleLead.address1_city = viewModel.AddressCity != null ? viewModel.AddressCity.Name : null;
-            viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ?viewModel.AddressStateProvince.Name : null;
+            viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ? viewModel.AddressStateProvince.Name : null;
             viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
 
             viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
