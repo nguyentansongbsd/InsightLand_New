@@ -133,7 +133,7 @@ namespace ConasiCRM.Portable.ViewModels
         public decimal MaintenanceFee { get => _maintenanceFee; set { _maintenanceFee = value; OnPropertyChanged(nameof(MaintenanceFee)); } }
 
         private decimal _totalAmount = 0;
-        public decimal TotalAmount { get => _totalAmount; set { _totalAmount = value; OnPropertyChanged(nameof(TotalAmount)); } }
+        public decimal TotalAmount { get => Math.Round(_totalAmount,2); set { _totalAmount = value; OnPropertyChanged(nameof(TotalAmount)); } }
         #endregion
 
         public OptionSet QuoteDetail { get; set; }
@@ -162,6 +162,7 @@ namespace ConasiCRM.Portable.ViewModels
                     this.TotalDiscount += item.bsd_amount;
                 }
             }
+            this.TotalDiscount = Math.Round(this.TotalDiscount, 0);
         }
 
         public async Task SetTotalHandoverCondition()
@@ -178,6 +179,7 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 this.TotalHandoverCondition = (this.HandoverCondition.bsd_percent * UnitPrice) / 100;
             }
+            this.TotalHandoverCondition = Math.Round(this.TotalHandoverCondition, 0);
         }
 
         public async Task SetNetSellingPrice()
@@ -185,12 +187,14 @@ namespace ConasiCRM.Portable.ViewModels
             // Gia ban truoc thue = Gia ban san pham - Tong chiet khau + Tong dieu kien ban gia
             this.NetSellingPrice = 0;
             this.NetSellingPrice = UnitPrice - this.TotalDiscount + this.TotalHandoverCondition;
+            this.NetSellingPrice = Math.Round(this.NetSellingPrice, 0);
         }
 
         public async Task SetLandValueDeduction()
         {
             // Tổng giá trị QSDĐ = = Land value of unit (sqm) * Net Usable Area
             this.LandValueDeduction = UnitLandValue * UnitNetSaleAbleArea;
+            this.LandValueDeduction = Math.Round(this.LandValueDeduction, 0);
         }
 
         public async Task SetTotalVatTax()
@@ -198,6 +202,7 @@ namespace ConasiCRM.Portable.ViewModels
             //Tổng tiền thuế VAT = ((Gia ban truoc thue - Tổng giá trị QSDĐ) * Ma so thue) // ma so thue fix cung la 10%
             this.TotalVATTax = 0;
             this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * 10) / 100;
+            this.TotalVATTax = Math.Round(this.TotalVATTax, 0);
         }
 
         public async Task SetMaintenanceFee()
@@ -205,12 +210,14 @@ namespace ConasiCRM.Portable.ViewModels
             //Phí bảo trì = (Gia ban truoc thue * Maintenance fee% )/100
             this.MaintenanceFee = 0;
             this.MaintenanceFee = (this.NetSellingPrice * UnitMaintenanceFee) / 100;
+            this.MaintenanceFee = Math.Round(this.MaintenanceFee, 0);
         }
 
         public async Task SetTotalAmount()
         {
             this.TotalAmount = 0;
             this.TotalAmount = this.NetSellingPrice + this.TotalVATTax + this.MaintenanceFee;
+            this.TotalAmount = Math.Round(this.TotalAmount, 0);
         }
         #endregion
 

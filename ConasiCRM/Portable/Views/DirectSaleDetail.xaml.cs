@@ -363,7 +363,7 @@ namespace ConasiCRM.Portable.Views
         private void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid,null);
+            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid,null,null,null);
             reservationForm.CheckReservation = async (isSuccess) => {
                 if (isSuccess)
                 {

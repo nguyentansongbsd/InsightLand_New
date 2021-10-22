@@ -30,7 +30,7 @@ namespace ConasiCRM.Portable.Views
             InitUpdate();
         }
 
-        public ReservationForm(Guid productId, OptionSet queue)
+        public ReservationForm(Guid productId, OptionSet queue,OptionSet saleAgentCompany,string nameOfStaffAgent)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
@@ -38,6 +38,8 @@ namespace ConasiCRM.Portable.Views
             centerModalCoOwner.Body.BindingContext = viewModel;
             viewModel.ProductId = productId;
             viewModel.Queue = queue;
+            viewModel.SalesAgent = saleAgentCompany;
+            viewModel.Quote.bsd_nameofstaffagent = nameOfStaffAgent;
             Init();
         }
 

@@ -52,7 +52,10 @@ namespace ConasiCRM.Portable.ViewModels
                                             <value>4</value>
                                         </condition>
                                         <filter type='and'>
-                                            <condition attribute='statuscode' operator='eq' value='6' />
+                                            <condition attribute='statuscode' operator='eq'>
+                                                <value>100000009</value>
+                                                <value>6</value>
+                                            </condition>
                                             <condition attribute='bsd_quotationsigneddate' operator='not-null' />
                                         </filter>
                                     </filter>
