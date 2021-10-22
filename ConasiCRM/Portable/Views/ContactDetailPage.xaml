@@ -230,14 +230,14 @@
                                         <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" BackgroundColor="White" Grid.Row="0" Padding="10,0,10,10">
                                             <controls:FormLabel Text="Hình chụp CMND" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="0" Grid.Row="1" IsVisible="{Binding frontImage, Converter={StaticResource NullToBool}}">
-                                                <ffimageloading:CachedImage Source="{Binding frontImage}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
+                                                <ffimageloading:CachedImage Source="{Binding frontImage}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300" HeightRequest="120">
                                                     <ffimageloading:CachedImage.GestureRecognizers>
                                                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDFront_Tapped"/>
                                                     </ffimageloading:CachedImage.GestureRecognizers>
                                                 </ffimageloading:CachedImage>
                                             </telerikPrimitives:RadBorder>
                                             <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="1" Grid.Row="1" IsVisible="{Binding behindImage, Converter={StaticResource NullToBool}}">
-                                                <ffimageloading:CachedImage Source="{Binding behindImage}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
+                                                <ffimageloading:CachedImage Source="{Binding behindImage}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300" HeightRequest="120">
                                                     <ffimageloading:CachedImage.GestureRecognizers>
                                                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CMNDBehind_Tapped"/>
                                                     </ffimageloading:CachedImage.GestureRecognizers>

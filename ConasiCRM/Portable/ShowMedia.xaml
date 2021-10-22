@@ -7,7 +7,7 @@
              BackgroundColor="#444444">
     <ContentPage.Content>
         <AbsoluteLayout>
-            <mm:VideoView x:Name="videoView" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" HorizontalOptions="FillAndExpand" VideoAspect="AspectFill" AutoPlay="True" />
+            <mm:VideoView x:Name="videoView" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" HorizontalOptions="FillAndExpand" VideoAspect="AspectFill" AutoPlay="True" ShowControls="True"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
