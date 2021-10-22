@@ -140,8 +140,9 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
-            if (result == null)
+            if (result == null || result.value.Count == 0)
             {
+                ShowMoreDanhSachDatCho = false;
                 return;
             }
             var data = result.value;
@@ -202,8 +203,9 @@ namespace ConasiCRM.Portable.ViewModels
                         </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuotationReseravtion>>("quotes", fetch);
-            if (result == null)
+            if (result == null || result.value.Count == 0)
             {
+                ShowMoreDanhSachDatCoc = false;
                 return;
             }
             var data = result.value;
@@ -261,8 +263,9 @@ namespace ConasiCRM.Portable.ViewModels
                           </entity>
                         </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionEntry>>("salesorders", fetch);
-            if (result == null)
+            if (result == null || result.value.Count == 0)
             {
+                ShowMoreDanhSachHopDong = false;
                 return;
             }
             var data = result.value;
@@ -313,8 +316,9 @@ namespace ConasiCRM.Portable.ViewModels
                           </entity>
                         </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Case>>("incidents", fetch);
-            if (result == null)
+            if (result == null || result.value.Count == 0)
             {
+                ShowMoreChamSocKhachHang = false;
                 return;
             }
             var data = result.value;
