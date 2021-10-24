@@ -70,6 +70,11 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LeadSource = LeadSourcesData.GetLeadSourceById(viewModel.singleLead.leadsourcecode);
                 }
 
+                if (!viewModel.singleLead.new_birthday.HasValue)
+                {
+                    datePickerNgaySinh.DefaultDisplay = DateTime.Now;
+                }
+
                 if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
                 {
                     OptionSet currency = new OptionSet()

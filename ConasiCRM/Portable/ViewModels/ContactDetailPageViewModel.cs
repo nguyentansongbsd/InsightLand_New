@@ -18,7 +18,7 @@ using ConasiCRM.Portable.IServices;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class ContactDetailPageViewModel : FormViewModal
+    public class ContactDetailPageViewModel : BaseViewModel
     {
         private ContactFormModel _singleContact;
         public ContactFormModel singleContact { get { return _singleContact; } set { _singleContact = value; OnPropertyChanged(nameof(singleContact)); } }
@@ -34,7 +34,7 @@ namespace ConasiCRM.Portable.ViewModels
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
         public int PageDanhSachDatCho { get; set; } = 1;
 
-        public ObservableCollection<QuotationReseravtion> list_danhsachdatcoc { get; set; }
+        public ObservableCollection<ReservationListModel> list_danhsachdatcoc { get; set; }
         private bool _showMoreDanhSachDatCoc;
         public bool ShowMoreDanhSachDatCoc { get => _showMoreDanhSachDatCoc; set { _showMoreDanhSachDatCoc = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCoc)); } }
         public int PageDanhSachDatCoc { get; set; } = 1;
@@ -166,42 +166,30 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachDatCoc}' output-format='xml-platform' mapping='logical' distinct='false'>
                           <entity name='quote'>
-                            <attribute name='quoteid' />
-                            <attribute name='bsd_projectid' />
-                            <attribute name='bsd_unitno' />
-                            <attribute name='bsd_reservationno' />
-                            <attribute name='customerid' />
-                            <attribute name='statuscode' />
-                            <attribute name='totalamount' />
-                            <attribute name='createdon' />
-                            <order attribute='createdon' descending='true' />
-                            <filter type='and'>
-                              <condition attribute='customerid' operator='eq' value='{customerId}' />
-                            </filter>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='fullname'  alias='customerid_label_contact'/>
-                            </link-entity>
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='customerid_label_account'/>
-                            </link-entity>
-                            <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer'>
-                                <attribute name='bsd_name'  alias='bsd_projectid_label'/>
-                            </link-entity>
-                            <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='bsd_unitno_label'/>
-                            </link-entity>
-                            <link-entity name='transactioncurrency' from='transactioncurrencyid' to='transactioncurrencyid' visible='false' link-type='outer'>
-                                <attribute name='currencysymbol'  alias='transaction_currency'/>
-                            </link-entity>
-                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                    <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                            </link-entity>
-                          </entity>
+                                <attribute name='name' />
+                                <attribute name='totalamount' />
+                                <attribute name='bsd_unitno' alias='bsd_unitno_id' />
+                                <attribute name='statuscode' />
+                                <attribute name='bsd_projectid' alias='bsd_project_id' />
+                                <attribute name='quoteid' />
+                                <order attribute='createdon' descending='true' />
+                                
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
+                                    <attribute name='bsd_name' alias='bsd_project_name' />
+                                </link-entity>
+                                <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='b'>
+                                  <attribute name='name' alias='bsd_unitno_name' />
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='c'>
+                                  <attribute name='bsd_name' alias='purchaser_accountname' />
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='d'>
+                                  <attribute name='bsd_fullname' alias='purchaser_contactname' />
+                                </link-entity>
+                              </entity>
                         </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuotationReseravtion>>("quotes", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationListModel>>("quotes", fetch);
             if (result == null)
             {
                 return;

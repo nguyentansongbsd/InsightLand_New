@@ -139,7 +139,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageChamSocKhachHang = 1;
 
                 viewModel.list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
-                viewModel.list_danhsachdatcoc = new ObservableCollection<QuotationReseravtion>();
+                viewModel.list_danhsachdatcoc = new ObservableCollection<ReservationListModel>();
                 viewModel.list_danhsachhopdong = new ObservableCollection<OptionEntry>();
                 viewModel.list_chamsockhachhang = new ObservableCollection<Case>();
 
@@ -186,6 +186,26 @@ namespace ConasiCRM.Portable.Views
             viewModel.PageChamSocKhachHang++;
             await viewModel.LoadCaseForContactForm(viewModel.singleContact.contactid.ToString());
             LoadingHelper.Hide();
+        }
+
+        private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
         }
 
         #endregion
