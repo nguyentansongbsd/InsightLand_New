@@ -23,6 +23,8 @@ namespace ConasiCRM.Portable.ViewModels
         public LeadFormModel singleLead { get => _singleLead; set { _singleLead = value; OnPropertyChanged(nameof(singleLead)); } }
         private OptionSet _singleGender;
         public OptionSet singleGender { get => _singleGender; set { _singleGender = value; OnPropertyChanged(nameof(singleGender)); } }
+        private OptionSet _leadSource;
+        public OptionSet LeadSource { get => _leadSource; set { _leadSource = value; OnPropertyChanged(nameof(LeadSource)); } }
         private OptionSet _singleIndustrycode;
         public OptionSet singleIndustrycode { get => _singleIndustrycode; set { _singleIndustrycode = value; OnPropertyChanged(nameof(singleIndustrycode)); } }
 
@@ -94,6 +96,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='address1_stateorprovince' />
                                     <attribute name='address1_postalcode' />
                                     <attribute name='address1_country' />
+                                    <attribute name='new_gender' />
+                                    <attribute name='new_birthday' />
+                                    <attribute name='leadsourcecode' />
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
                                         <condition attribute='leadid' operator='eq' value='{" + leadid + @"}' />
@@ -116,6 +121,8 @@ namespace ConasiCRM.Portable.ViewModels
             }    
             var tmp = result.value.FirstOrDefault();
             this.singleLead = tmp;
+            this.singleGender = list_gender_optionset.SingleOrDefault(x => x.Val == this.singleLead.new_gender);
+            this.LeadSource = LeadSourcesData.GetLeadSourceById(this.singleLead.leadsourcecode);
             LoadAddress();
             await LoadCountryByName();
         }
