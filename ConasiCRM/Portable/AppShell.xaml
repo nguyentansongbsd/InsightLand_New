@@ -83,7 +83,7 @@
         </ShellContent>
     </FlyoutItem>
 
-    <ShellContent x:Name="BanHang" Title="Giỏ hàng" ContentTemplate="{DataTemplate views:DirectSale}">
+    <ShellContent Title="Giỏ hàng" ContentTemplate="{DataTemplate views:DirectSale}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07a;" Size="18"/>
         </ShellContent.Icon>
@@ -103,16 +103,11 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <!--<ShellContent Title="Sự kiện" ContentTemplate="{DataTemplate views:EventList}">
+    <ShellContent Title="Danh sách hợp đồng" ContentTemplate="{DataTemplate views:ContractList}">
         <ShellContent.Icon>
-            <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf274;" Size="18"/>
+            <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Phí môi giới" ContentTemplate="{DataTemplate views:PhiMoGioiList}">
-        <ShellContent.Icon>
-            <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf155;" Size="18"/>
-        </ShellContent.Icon>
-    </ShellContent>-->
     <ShellContent Title="Tài liệu kinh doanh" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07c;" Size="18"/>
@@ -138,24 +133,6 @@
         <ShellContent Title="Hoạt động" Route="HoatDong" ContentTemplate="{DataTemplate views:ActivityList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ae;" Size="18"/>
-            </ShellContent.Icon>
-        </ShellContent>
-    </FlyoutItem>
-
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Phí mô giới giao dịch" ContentTemplate="{DataTemplate views:PhiMoGioiGiaoDichList}">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf571;" Size="18"/>
-            </ShellContent.Icon>
-        </ShellContent>
-        <ShellContent Title="Hoa hồng giao dịch" ContentTemplate="{DataTemplate views:HoaHongGiaoDichList}">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf4c0;" Size="Subtitle"/>
-            </ShellContent.Icon>
-        </ShellContent>
-        <ShellContent Title="Danh sách hợp đồng" ContentTemplate="{DataTemplate views:ContractList}">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="Subtitle"/>
             </ShellContent.Icon>
         </ShellContent>
     </FlyoutItem>

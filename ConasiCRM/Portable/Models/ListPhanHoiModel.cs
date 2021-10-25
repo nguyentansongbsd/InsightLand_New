@@ -9,27 +9,8 @@ namespace ConasiCRM.Portable.Models
         public string subjecttitle { get; set; }
 
         public int caseorigincode { get; set; }
-        public string caseorigincodevalue
-        {
-            get
-            {
-                switch (caseorigincode)
-                {
-                    case 1:
-                        return "Phone";
-                    case 2:
-                        return "Email";
-                    case 3:
-                        return "Web";
-                    case 2483:
-                        return "Facebook";
-                    case 3986:
-                        return "Twitter";
-                    default:
-                        return "";
-                }
-            }
-        }
+        public string caseorigincodevalue => CaseOriginData.GetOriginById(caseorigincode.ToString()).Label;
+
         public string _productid_value { get; set; }
         public string description { get; set; }
         public string title { get; set; }
@@ -42,33 +23,8 @@ namespace ConasiCRM.Portable.Models
             }
         }
         public int statuscode { get; set; }
-        public string statuscodevalue
-        {
-            get
-            {
-                switch (statuscode)
-                {
-                    case 1:
-                        return "In Progress";
-                    case 2:
-                        return "On Hold";
-                    case 3:
-                        return "Waiting for Details";
-                    case 4:
-                        return "Researching";
-                    case 5:
-                        return "Problem Solved";
-                    case 1000:
-                        return "Information Provided";
-                    case 6:
-                        return "Canceled";
-                    case 2000:
-                        return "Merged";
-                    default:
-                        return "";
-                }
-            }
-        }
+        public string statuscodevalue => CaseStatusCodeData.GetCaseStatusCodeById(this.statuscode.ToString()).Label;
+
         public Guid incidentid { get; set; }
         public string case_nameaccount { get; set; }
         public string case_namecontact { get; set; }
@@ -93,24 +49,8 @@ namespace ConasiCRM.Portable.Models
         }
 
         public int casetypecode { get; set; }
+        public string casetypecodevalue => CaseTypeData.GetCaseById(this.casetypecode.ToString()).Label;
 
-        public string casetypecodevalue
-        {
-            get
-            {
-                switch (casetypecode)
-                {
-                    case 1:
-                        return "Question";
-                    case 2:
-                        return "Problem";
-                    case 3:
-                        return "Request";                    
-                    default:
-                        return "";
-                }
-            }
-        }
         public Guid parentcaseid { get; set; }
     }
 }

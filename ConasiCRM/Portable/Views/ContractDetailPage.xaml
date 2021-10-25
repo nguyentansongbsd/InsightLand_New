@@ -39,16 +39,20 @@
                                 <Label Grid.Column="1" Text="{Binding Contract.salesorder_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
+                                <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
+                                <Label Grid.Column="1" Text="{Binding Contract.customer_name}" TextColor="#4BA8F1" FontAttributes="Bold" FontSize="15"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Hợp đồng:" FontSize="15" TextColor="#444444"/>
                                 <Label Grid.Column="1" Text="{Binding Contract.ordernumber}" TextColor="#444444" FontSize="15"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
-                                <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
-                                <Label Grid.Column="1" Text="{Binding Contract.customer_name}" TextColor="#444444" FontSize="15"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Sản phẩm:" FontSize="15" TextColor="#444444"/>
-                                <Label Grid.Column="1" Text="{Binding Contract.unit_name}" TextColor="#444444" FontSize="15"/>
+                                <Label Grid.Column="1" Text="{Binding Contract.unit_name}" TextColor="#4BA8F1" FontAttributes="Bold" FontSize="15">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitDetail_Tapped" CommandParameter="{Binding Contract.unit_id}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
                         </StackLayout>
                     </telerikPrimitives:RadBorder>
@@ -83,87 +87,6 @@
                         <!--tab tổng hợp-->
                         <StackLayout x:Name="TabTongHop" IsVisible="false" Margin="0,5,0,0">
                             <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đồng Sở Hữu"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout BindableLayout.ItemsSource="{Binding CoownerList}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="White" Spacing="1">
-                                        <BindableLayout.EmptyViewTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
-                                            </DataTemplate>
-                                        </BindableLayout.EmptyViewTemplate>
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
-                                                <telerikPrimitives:RadBorder BorderColor="#f3f3f3" BorderThickness="0,0,0,1">
-                                                    <Label Text="{Binding customer}" Padding="25,10" FontAttributes="Bold" TextColor="#1399D5" FontSize="15"/>
-                                                </telerikPrimitives:RadBorder>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Bán Hàng"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Giữ chỗ" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.queue_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.reservation_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Đại lý/Sàn giao dịch" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.salesagentcompany_name}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Tên nhân viên" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.nameofstaffagent}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Giới thiệu" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_followuplist}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
-                                <telerikPrimitives:RadExpander.Header>
-                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Sản Phẩm"/>
-                                    </telerikPrimitives:ExpanderHeader>
-                                </telerikPrimitives:RadExpander.Header>
-                                <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Tình trạng sản phẩm" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_unitstatus_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Diện tích xây dựng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_constructionarea, StringFormat='{0:#,0.#0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Diện tích sử dụng" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_netusablearea, StringFormat='{0:#,0.#0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Diện tích thực" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.unit_actualarea, StringFormat='{0:#,0.#0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                    </StackLayout>
-                                </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                         <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Chi Tiết"/>
@@ -226,29 +149,31 @@
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
+
                             <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Duyệt In Đặc Biệt"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="Đồng Sở Hữu"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
-                                    <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Duyệt in đặc biệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_specialcontractprintingapproval_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Ngày duyệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_approvaldateforspecialcontract,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Người duyệt" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Contract.bsd_approverforspecialcontract_name}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
+                                    <StackLayout BindableLayout.ItemsSource="{Binding CoownerList}" BindableLayout.EmptyView="Không có dữ liệu" BackgroundColor="White" Spacing="1">
+                                        <BindableLayout.EmptyViewTemplate>
+                                            <DataTemplate>
+                                                <Label Text="Không có dữ liệu" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                            </DataTemplate>
+                                        </BindableLayout.EmptyViewTemplate>
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <telerikPrimitives:RadBorder BorderColor="#f3f3f3" BorderThickness="0,0,0,1">
+                                                    <Label Text="{Binding customer}" Padding="25,10" FontAttributes="Bold" TextColor="#1399D5" FontSize="15"/>
+                                                </telerikPrimitives:RadBorder>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
+
                             <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">

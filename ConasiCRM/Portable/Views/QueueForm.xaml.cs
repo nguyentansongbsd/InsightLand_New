@@ -159,6 +159,7 @@ namespace ConasiCRM.Portable.Views
                 if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
                 if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
+                if (Dashboard.NeedToRefreshQueue.HasValue) Dashboard.NeedToRefreshQueue = true;
                 await Navigation.PopAsync();       
                 ToastMessageHelper.ShortMessage("Tạo giữ chỗ thành công");
                 LoadingHelper.Hide();

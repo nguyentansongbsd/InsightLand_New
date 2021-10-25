@@ -31,18 +31,6 @@
                 </ListView.ItemTemplate>
             </ListView>
             
-            <!--Popup Loading-->
-            <local:ModalContentView x:Name="popup_loading"
-                IsVisible="{Binding IsBusy}">
-                
-                <ActivityIndicator
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    IsRunning="{Binding IsBusy}"
-                    IsVisible="{Binding IsBusy}" Color="#000000">
-                </ActivityIndicator>
-            </local:ModalContentView>
-            <!--End Popup-->
         </AbsoluteLayout>
         
     </ContentPage.Content>

@@ -26,7 +26,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='salesorderid' />
                                     <attribute name='ordernumber' />
                                     <order attribute='bsd_project' descending='true' />
-                                    <filter type='and'>                                      
+                                    <filter type='and'>
+                                        <condition attribute = 'bsd_employee' operator= 'eq' value = '{UserLogged.Id}' />  
                                         <filter type='or'>      
                                             <condition attribute='customeridname' operator='like' value ='%25{Keyword}%25' />          
                                             <condition attribute='bsd_projectname' operator='like' value ='%25{Keyword}%25' />              
@@ -48,8 +49,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                 </entity>
                             </fetch>";
-            });
-            // <condition attribute = 'bsd_employee' operator= 'eq' value = '{UserLogged.Id}' />   
+            }); 
         }
     }
 }

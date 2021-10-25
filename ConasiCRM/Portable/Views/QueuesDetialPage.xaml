@@ -99,12 +99,12 @@
                                 </Label>
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="Phí giữ chỗ: " FontSize="15" TextColor="#333333" />
-                                    <Label Text="{Binding Queue.bsd_queuingfee,StringFormat='{0:#0,0} đ'}" IsVisible="{Binding Queue.bsd_queuingfee,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
+                                    <Label Text="{Binding Queue.bsd_queuingfee,StringFormat='{0:#,0} đ'}" IsVisible="{Binding Queue.bsd_queuingfee,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="Ngân sách: " FontSize="15" TextColor="#333333" />
-                                    <Label Text="{Binding Queue.budgetamount,StringFormat='{0:#0,0} đ'}" IsVisible="{Binding Queue.budgetamount,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
+                                    <Label Text="{Binding Queue.budgetamount,StringFormat='{0:#,0} đ'}" IsVisible="{Binding Queue.budgetamount,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">

@@ -36,8 +36,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public ObservableCollection<HuongPhongThuy> list_HuongXau { set; get; }
 
-        public LeadCheckData single_Leadcheck;
-
         private string _address;
         public string Address { get => _address; set { _address = value; OnPropertyChanged(nameof(Address)); } }
 

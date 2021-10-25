@@ -117,7 +117,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             CaseType = CaseTypeData.GetCaseById(Case.casetypecode);
-            Origin = OriginData.GetOriginById(Case.caseorigincode);
+            Origin = CaseOriginData.GetOriginById(Case.caseorigincode);
             StatusCode = CaseStatusCodeData.GetCaseStatusCodeById(Case.statuscode.ToString());
         }
 

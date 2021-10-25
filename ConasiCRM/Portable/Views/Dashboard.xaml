@@ -45,7 +45,7 @@
                                     <telerikChart:CategoricalAxis LabelFitMode="MultiLine" PlotMode="BetweenTicks" ShowLabels="True" MajorTickThickness="1" MajorTickBackgroundColor="#A9A9A9"/>
                                 </telerikChart:RadCartesianChart.HorizontalAxis>
                                 <telerikChart:RadCartesianChart.VerticalAxis>
-                                    <telerikChart:NumericalAxis Minimum="0" Maximum="999" MajorStep="200" LabelFormat="#,0 tr" LineColor="#A9A9A9"/>
+                                    <telerikChart:NumericalAxis Minimum="0" Maximum="300" MajorStep="50" LabelFormat="#,0 tr" LineColor="#A9A9A9"/>
                                 </telerikChart:RadCartesianChart.VerticalAxis>
                                 <telerikChart:RadCartesianChart.Grid>
                                     <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>
@@ -96,7 +96,7 @@
                                     <telerikChart:CategoricalAxis LineColor="#A9A9A9" MajorTickThickness="2" PlotMode="BetweenTicks" LabelFitMode="MultiLine" ShowLabels="True" MajorTickBackgroundColor="#A9A9A9" />
                                 </telerikChart:RadCartesianChart.HorizontalAxis>
                                 <telerikChart:RadCartesianChart.VerticalAxis>
-                                    <telerikChart:NumericalAxis Minimum="0" Maximum="100" MajorStep="20" LineColor="#A9A9A9" />
+                                    <telerikChart:NumericalAxis Minimum="0" Maximum="30" MajorStep="5" LineColor="#A9A9A9" />
                                 </telerikChart:RadCartesianChart.VerticalAxis>
                                 <telerikChart:RadCartesianChart.Grid>
                                     <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>

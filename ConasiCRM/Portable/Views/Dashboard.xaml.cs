@@ -20,6 +20,8 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshPhoneCall = null;
         public static bool? NeedToRefreshMeet = null;
         public static bool? NeedToRefreshTask = null;
+        public static bool? NeedToRefreshQueue = null;
+        public static bool? NeedToRefreshLeads = null;
         public DashboardViewModel viewModel;
 
         public Dashboard()
@@ -29,6 +31,8 @@ namespace ConasiCRM.Portable.Views
             NeedToRefreshPhoneCall = false;
             NeedToRefreshMeet = false;
             NeedToRefreshTask = false;
+            NeedToRefreshQueue = false;
+            NeedToRefreshLeads = false;
             Init();
         }
 
@@ -53,6 +57,24 @@ namespace ConasiCRM.Portable.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            if (NeedToRefreshQueue == true)
+            {
+                LoadingHelper.Show();
+                viewModel.DataMonthQueue.Clear();
+                await viewModel.LoadQueueFourMonths();
+                NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }
+
+            if (NeedToRefreshLeads == true)
+            {
+                LoadingHelper.Show();
+                viewModel.LeadsChart.Clear();
+                await viewModel.LoadLeads();
+                NeedToRefreshLeads = false;
+                LoadingHelper.Hide();
+            }
+
             if (NeedToRefreshMeet == true && viewModel.Meet.activityid != Guid.Empty)
             {
                 LoadingHelper.Show();
