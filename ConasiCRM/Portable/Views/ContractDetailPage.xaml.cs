@@ -187,6 +187,7 @@ namespace ConasiCRM.Portable.Views
                 scrolltDiscount.IsVisible = false;
             }
         }
+
         private async void SutUpSpecialDiscount()
         {
             if (viewModel.Contract.salesorderid != Guid.Empty)
@@ -263,6 +264,25 @@ namespace ConasiCRM.Portable.Views
             lb.FontAttributes = FontAttributes.Bold;
             grid.Children.Add(lb);
             return grid;
+        }
+
+        private void UnitDetail_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var unitId = (Guid)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            UnitInfo unit = new UnitInfo(unitId);
+            unit.OnCompleted = async (isSuccess) => {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(unit);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin sản phẩm");
+                }
+            };
         }
     }
 }

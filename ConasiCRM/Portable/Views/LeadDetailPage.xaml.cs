@@ -98,6 +98,7 @@ namespace ConasiCRM.Portable.Views
             bool IsSuccessQualify = await viewModel.Qualify(viewModel.singleLead.leadid);
             if (IsSuccessQualify == true)
             {
+                if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                 await viewModel.CreateContact();
                 if(!string.IsNullOrWhiteSpace(viewModel.singleLead.companyname))
                 {
@@ -183,6 +184,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.UpdateStatusCodeLead();
                 if (isSuccess)
                 {
+                    if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                     await viewModel.LoadOneLead(Id.ToString());
                     viewModel.ButtonCommandList.Clear();
                     SetButtonFloatingButton();
@@ -205,6 +207,7 @@ namespace ConasiCRM.Portable.Views
             bool isSuccess = await viewModel.UpdateStatusCodeLead();
             if (isSuccess)
             {
+                if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                 await viewModel.LoadOneLead(Id.ToString());
                 viewModel.ButtonCommandList.Clear();
                 SetButtonFloatingButton();
