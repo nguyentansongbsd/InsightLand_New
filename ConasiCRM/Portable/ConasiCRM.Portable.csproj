@@ -86,9 +86,6 @@
       <EmbeddedResource Update="Views\AccountForm.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Views\AccountList.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </EmbeddedResource>
       <EmbeddedResource Update="Views\ActivityList.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
@@ -99,9 +96,6 @@
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\ContactForm.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Views\ContactList.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\ContractDetailPage.xaml">
@@ -134,9 +128,6 @@
       <EmbeddedResource Update="Views\LeadForm.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Views\LeadList.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </EmbeddedResource>
       <EmbeddedResource Update="Views\LookUpView.xaml">
         <Generator>MSBuild:Compile</Generator>
       </EmbeddedResource>
@@ -165,12 +156,6 @@
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\ReservationList.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Views\UnitImageGallery.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Views\UnitImageGalleryDetail.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
       <EmbeddedResource Update="Views\UnitInfo.xaml">

@@ -3,17 +3,10 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-using System.Collections.ObjectModel;
-using Telerik.XamarinForms.DataGrid;
-using ConasiCRM.Portable.Controls.BsdGrid;
 using System.IO;
 using ConasiCRM.Portable.Controls;
 using Xamarin.Essentials;

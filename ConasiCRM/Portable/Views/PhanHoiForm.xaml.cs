@@ -70,7 +70,7 @@ namespace ConasiCRM.Portable.Views
             lookupCaseOrigin.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                viewModel.CaseOrigins = OriginData.Origins();
+                viewModel.CaseOrigins = CaseOriginData.Origins();
                 LoadingHelper.Hide();
             };
 

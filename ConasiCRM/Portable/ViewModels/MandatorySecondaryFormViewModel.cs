@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class MandatorySecondaryFormViewModel : FormLookupViewModel
+    public class MandatorySecondaryFormViewModel : BaseViewModel
     {
         private MandatorySecondaryModel _mandatorySecondary;
         public MandatorySecondaryModel mandatorySecondary { get => _mandatorySecondary; set { _mandatorySecondary = value; OnPropertyChanged(nameof(mandatorySecondary)); } }
