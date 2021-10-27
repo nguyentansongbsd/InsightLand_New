@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ConasiCRM.Portable.Models
 {
-    public class OriginData
+    public class CaseOriginData
     {
         public static List<OptionSet> Origins()
         {

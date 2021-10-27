@@ -210,7 +210,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (!string.IsNullOrWhiteSpace(singlePhanHoi.caseorigincode))
             {
-                this.CaseOrigin = OriginData.GetOriginById(singlePhanHoi.caseorigincode);
+                this.CaseOrigin = CaseOriginData.GetOriginById(singlePhanHoi.caseorigincode);
             }
 
             if (!string.IsNullOrWhiteSpace(singlePhanHoi.subjectId))

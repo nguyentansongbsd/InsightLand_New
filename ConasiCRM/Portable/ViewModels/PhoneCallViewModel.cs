@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class PhoneCallViewModel : FormViewModal
+    public class PhoneCallViewModel : BaseViewModel
     {
         public PhoneCellModel _phoneCellModel;
         public PhoneCellModel PhoneCellModel { get => _phoneCellModel; set { _phoneCellModel = value;OnPropertyChanged(nameof(PhoneCellModel)); } }

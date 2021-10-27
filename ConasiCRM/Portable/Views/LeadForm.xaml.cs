@@ -70,6 +70,11 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LeadSource = LeadSourcesData.GetLeadSourceById(viewModel.singleLead.leadsourcecode);
                 }
 
+                if (!viewModel.singleLead.new_birthday.HasValue)
+                {
+                    datePickerNgaySinh.DefaultDisplay = DateTime.Now;
+                }
+
                 if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
                 {
                     OptionSet currency = new OptionSet()
@@ -364,6 +369,7 @@ namespace ConasiCRM.Portable.Views
                 var result = await viewModel.createLead();
                 if (result.IsSuccess)
                 {
+                    if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                     if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                     ToastMessageHelper.ShortMessage("Thành công");
                     await Navigation.PopAsync();
