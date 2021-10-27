@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Views
@@ -19,6 +23,7 @@ namespace ConasiCRM.Portable.Views
             Init();
             
         }
+
         private async void Init()
         {
             this.BindingContext = viewModel = new UserInfoPageViewModel();
@@ -212,7 +217,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     UserLogged.ContactName = viewModel.ContactModel.bsd_fullname;
                 }
-                Application.Current.MainPage = new AppShell();
+                if (AppShell.NeedToRefeshUserInfo.HasValue) AppShell.NeedToRefeshUserInfo = true;
                 ToastMessageHelper.ShortMessage("Cập nhật thành công");
                 LoadingHelper.Hide();
             }
@@ -220,6 +225,93 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Cập nhật thất bại");
+            }
+        }
+
+        private async void ChangeAvatar_Tapped(object sender, EventArgs e)
+        {
+            string[] options = new string[] { "Thư viện", "Chụp hình" };
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Huỹ", null, options);
+            if (asw == "Thư viện")
+            {
+                LoadingHelper.Show();
+                await CrossMedia.Current.Initialize();
+                PermissionStatus photostatus = await PermissionHelper.RequestPhotosPermission();
+                if (photostatus == PermissionStatus.Granted)
+                {
+                    try
+                    {
+                        var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions() { PhotoSize = PhotoSize.MaxWidthHeight,MaxWidthHeight=600});
+                        if (file != null)
+                        {
+                            viewModel.AvatarArr = System.IO.File.ReadAllBytes(file.Path);
+                            string imgBase64 = Convert.ToBase64String(viewModel.AvatarArr);
+                            viewModel.Avatar = imgBase64;
+                            if (viewModel.Avatar != UserLogged.Avartar)
+                            {
+                                bool isSuccess = await viewModel.ChangeAvatar();
+                                if (isSuccess)
+                                {
+                                    UserLogged.Avartar = viewModel.Avatar;
+                                    if (AppShell.NeedToRefeshUserInfo.HasValue) AppShell.NeedToRefeshUserInfo = true;
+                                    ToastMessageHelper.ShortMessage("Đổi hình đại diện thành công");
+                                    LoadingHelper.Hide();
+                                }
+                                else
+                                {
+                                    LoadingHelper.Hide();
+                                    ToastMessageHelper.ShortMessage("Đổi hình đại diện thất bại");
+                                }
+                            }
+                            LoadingHelper.Hide();
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        ToastMessageHelper.LongMessage(ex.Message);
+                        LoadingHelper.Hide();
+                    }
+                }
+                LoadingHelper.Hide();
+            }
+            else if (asw == "Chụp hình")
+            {
+                LoadingHelper.Show();
+                await CrossMedia.Current.Initialize();
+                PermissionStatus camerastatus = await PermissionHelper.RequestCameraPermission();
+                if (camerastatus == PermissionStatus.Granted)
+                {
+                    string fileName = $"{Guid.NewGuid()}.jpg";
+                    var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+                    {
+                        Name = fileName,
+                        SaveToAlbum = false,
+                        PhotoSize = PhotoSize.MaxWidthHeight,
+                        MaxWidthHeight = 600
+                    });
+                    if (file != null)
+                    {
+                        viewModel.AvatarArr = System.IO.File.ReadAllBytes(file.Path);
+                        viewModel.Avatar = Convert.ToBase64String(viewModel.AvatarArr);
+                        if (viewModel.Avatar != UserLogged.Avartar)
+                        {
+                            bool isSuccess = await viewModel.ChangeAvatar();
+                            if (isSuccess)
+                            {
+                                UserLogged.Avartar = viewModel.Avatar;
+                                if (AppShell.NeedToRefeshUserInfo.HasValue) AppShell.NeedToRefeshUserInfo = true;
+                                ToastMessageHelper.ShortMessage("Đổi hình đại diện thành công");
+                                LoadingHelper.Hide();
+                            }
+                            else
+                            {
+                                LoadingHelper.Hide();
+                                ToastMessageHelper.ShortMessage("Đổi hình đại diện thất bại");
+                            }
+                        }
+                    }
+                }
+                LoadingHelper.Hide();
             }
         }
     }

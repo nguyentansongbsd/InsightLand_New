@@ -190,9 +190,10 @@ namespace ConasiCRM.Portable
                         //    ToastMessageHelper.ShortMessage("Tài khoản không thể đăng nhập trên thiết bị này");
                         //    return;
                         //}
-
+                        
                         UserLogged.Id = employeeModel.bsd_employeeid;
                         UserLogged.User = employeeModel.bsd_name;
+                        UserLogged.Avartar = employeeModel.bsd_avatar;
                         UserLogged.Password = employeeModel.bsd_password;
                         UserLogged.ContactId = employeeModel.contact_id;
                         UserLogged.ContactName = employeeModel.contact_name;
@@ -200,7 +201,7 @@ namespace ConasiCRM.Portable
                         UserLogged.ManagerName = employeeModel.manager_name;
                         UserLogged.IsSaveInforUser = checkboxRememberAcc.IsChecked;
                         UserLogged.IsLogged = true;
-
+                        
                         Application.Current.MainPage = new AppShell();
                         await Task.Delay(1);
                         LoadingHelper.Hide();
@@ -229,6 +230,7 @@ namespace ConasiCRM.Portable
                     <attribute name='bsd_password' />
                     <attribute name='bsd_imeinumber' />
                     <attribute name='bsd_manager' />
+                    <attribute name='bsd_avatar' />
                     <order attribute='bsd_name' descending='false' />
                     <filter type='and'>
                       <condition attribute='bsd_name' operator='eq' value='{UserName}' />

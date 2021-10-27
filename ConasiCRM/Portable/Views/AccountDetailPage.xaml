@@ -337,30 +337,33 @@
                                             </BindableLayout.EmptyViewTemplate>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
-                                                        <Label Text="{Binding quo_nameproject}" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Mã căn hộ: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding quo_nameproduct}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                    <StackLayout BackgroundColor ="White" Padding="15,10">
+                                                        <StackLayout.GestureRecognizers>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChiTietDatCoc_Tapped" CommandParameter="{Binding quoteid}"/>
+                                                        </StackLayout.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <telerikPrimitives:RadBorder Grid.Column="0" CornerRadius="4" BorderColor="Transparent" Padding="5" BackgroundColor="{Binding statuscode,Converter={StaticResource ReservationStatusCodeConverterColor}}">
+                                                                <Label Text="{Binding statuscode_format}" TextColor="White" FontSize="13" FontAttributes="Bold"/>
+                                                            </telerikPrimitives:RadBorder>
+                                                            <Label Grid.Column="1" Text="{Binding name}" FontSize="15" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" VerticalOptions="Center"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Mã đặt cọc: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_quotationnumber}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Khách hàng: " FontSize="15" TextColor="#333333"/>
+                                                            <Label Grid.Column="1" Text="{Binding purchaser}" FontSize="15" TextColor="#333333"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Dự án: " FontSize="15" TextColor="#333333"/>
+                                                            <Label Grid.Column="1" Text="{Binding bsd_project_name}" FontSize="15" TextColor="#333333"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Sản phẩm: " FontSize="15" TextColor="#333333"/>
+                                                            <Label Grid.Column="1" Text="{Binding bsd_unitno_name}" FontSize="15" TextColor="#333333"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Tổng tiền: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding totalamountformat}" LineBreakMode="TailTruncation" TextColor="Red" FontSize="14" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Tổng tiền: " FontSize="15" TextColor="#333333"/>
+                                                            <Label Grid.Column="1" Text="{Binding totalamount_format}" FontSize="15" TextColor="#333333"/>
                                                         </Grid>
-                                                        <Label Grid.Row="0" Grid.Column="1" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding createdonformat}" VerticalOptions="Start"/>
-                                                    </Grid>
+                                                    </StackLayout>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </StackLayout>
@@ -384,29 +387,32 @@
                                             </BindableLayout.EmptyViewTemplate>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
-                                                        <Label Text="{Binding contract_nameproject}" Grid.Row="0" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Mã căn hộ: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding contract_nameproduct}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
+                                                        <Grid.GestureRecognizers>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ItemHopDong_Tapped" CommandParameter="{Binding salesorderid}"/>
+                                                        </Grid.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="0" Grid.Column="0">
+                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
+                                                                <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                            </telerikPrimitives:RadBorder>
+                                                            <Label Grid.Column="1" Text="{Binding ordernumber}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Mã hợp đồng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding bsd_optionno}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                                            <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding customer_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
+                                                            <Label Text="Dự án:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding project_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
+                                                            <Label Text="Sản phẩm:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding unit_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
-                                                            <Label Text="Tổng tiền: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding totalamountformat}" LineBreakMode="TailTruncation" TextColor="Red" FontSize="14" Grid.Column="1"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4">
+                                                            <Label Text="Tổng tiền:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding totalamount}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                                         </Grid>
-                                                        <Label Grid.Row="0" Grid.Column="1" LineBreakMode="TailTruncation" FontSize="15" Text="{Binding createdonformat}" VerticalOptions="Start"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
@@ -431,29 +437,32 @@
                                             </BindableLayout.EmptyViewTemplate>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10">
-                                                        <Label Text="{Binding title}" FontSize="15" Grid.Row="0" FontAttributes="Bold" TextColor="#2196F3"/>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
-                                                            <Label Text="Mã số: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding ticketnumber}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                    <StackLayout BackgroundColor ="White" Padding="15,10" Margin="0,1" Spacing="10">
+                                                        <StackLayout.GestureRecognizers>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CaseItem_Tapped" CommandParameter="{Binding incidentid}"/>
+                                                        </StackLayout.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
+                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode,Converter={StaticResource StatucToColor}}">
+                                                                <Label Grid.Column="0" Text="{Binding statuscodevalue}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                            </telerikPrimitives:RadBorder>
+                                                            <Label Grid.Column="1" Text="{Binding title}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2" >
-                                                            <Label Text="Khách hàng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding customerid}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Loại:" FontSize="15" TextColor="#444444"/>
+                                                            <Label Grid.Column="1" Text="{Binding casetypecodevalue}" TextColor="#444444" FontSize="15"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="3" >
-                                                            <Label Text="Ưu tiên: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding prioritycodevalue}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
+                                                            <Label Grid.Column="1" Text="{Binding contactname}" TextColor="#444444" FontSize="15"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="4" >
-                                                            <Label Text="Nguồn: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding caseorigincodevalue}" LineBreakMode="TailTruncation" TextColor="#333333" FontSize="14" Grid.Column="1"/>
+
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="Nguồn:" FontSize="15" TextColor="#444444"/>
+                                                            <Label Grid.Column="1" Text="{Binding caseorigincodevalue}" TextColor="#444444" FontSize="15"/>
                                                         </Grid>
-                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="5" >
-                                                            <Label Text="Tình trạng: " FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                            <Label Text="{Binding statuscodevalue}" LineBreakMode="TailTruncation" TextColor="#333333" FontSize="14" Grid.Column="1"/>
-                                                        </Grid>
-                                                    </Grid>
+                                                    </StackLayout>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </StackLayout>

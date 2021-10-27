@@ -29,9 +29,9 @@ namespace ConasiCRM.Portable.ViewModels
         public ContactFormModel PrimaryContact { get => _PrimaryContact; set { if (_PrimaryContact != value) { this._PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); } } }
 
         public ObservableCollection<QueueFormModel> list_thongtinqueing { get; set; }
-        public ObservableCollection<ListQuotationAcc> list_thongtinquotation { get; set; }
-        public ObservableCollection<ListContractAcc> list_thongtincontract { get; set; }
-        public ObservableCollection<ListCaseAcc> list_thongtincase { get; set; }
+        public ObservableCollection<ReservationListModel> list_thongtinquotation { get; set; }
+        public ObservableCollection<ContractModel> list_thongtincontract { get; set; }
+        public ObservableCollection<ListPhanHoiModel> list_thongtincase { get; set; }
 
         public ObservableCollection<MandatorySecondaryModel> _list_MandatorySecondary;
         public ObservableCollection<MandatorySecondaryModel> list_MandatorySecondary { get => _list_MandatorySecondary; set { _list_MandatorySecondary = value; OnPropertyChanged(nameof(list_MandatorySecondary)); } }
@@ -71,9 +71,9 @@ namespace ConasiCRM.Portable.ViewModels
             BusinessTypeOptions.Add(new OptionSet("100000003", "Chủ đầu tư"));
 
             list_thongtinqueing = new ObservableCollection<QueueFormModel>();
-            list_thongtinquotation = new ObservableCollection<ListQuotationAcc>();
-            list_thongtincontract = new ObservableCollection<ListContractAcc>();
-            list_thongtincase = new ObservableCollection<ListCaseAcc>();
+            list_thongtinquotation = new ObservableCollection<ReservationListModel>();
+            list_thongtincontract = new ObservableCollection<ContractModel>();
+            list_thongtincase = new ObservableCollection<ListPhanHoiModel>();
             list_MandatorySecondary = new ObservableCollection<MandatorySecondaryModel>();
             MandatorySecondary = new MandatorySecondaryModel();
             isLoadMore = false;
@@ -246,70 +246,52 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageQuotation}' output-format='xml-platform' mapping='logical' distinct='false'>
                             <entity name='quote'>
-                                <all-attributes/>
+                                <attribute name='name' />
+                                <attribute name='totalamount' />
+                                <attribute name='bsd_unitno' alias='bsd_unitno_id' />
+                                <attribute name='statuscode' />
+                                <attribute name='bsd_projectid' alias='bsd_project_id' />
+                                <attribute name='quoteid' />
                                 <order attribute='createdon' descending='true' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='bsd_projects'>
-                                    <attribute name='bsd_name' alias='quo_nameproject'/>
-                                </link-entity>
-                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                    <attribute name='bsd_name' alias='quo_nameaccount'/>
-                                </link-entity>
-                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                    <attribute name='bsd_fullname' alias='quo_namecontact'/>
-                                </link-entity>
-                                <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='products'>
-                                    <attribute name='name' alias='quo_nameproduct'/>
-                                </link-entity>
-                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                       <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                       </filter>
-                                    </link-entity>
                                 <filter type='and'>
-                                    <condition attribute='accountid' operator='eq' uitype='account' value='" + accountid + @"' />
+                                  <condition attribute='customerid' operator='eq' value='{accountid}' />
+                                  <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    <filter type='or'>
+                                       <condition attribute='statuscode' operator='in'>
+                                           <value>100000000</value>
+                                           <value>100000001</value>
+                                           <value>4</value>
+                                       </condition>
+                                       <filter type='and'>
+                                           <condition attribute='statuscode' operator='in'>
+                                               <value>100000009</value>
+                                               <value>6</value>
+                                           </condition>
+                                           <condition attribute='bsd_quotationsigneddate' operator='not-null' />
+                                       </filter>
+                                     </filter>
                                 </filter>
-                            </entity>
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
+                                    <attribute name='bsd_name' alias='bsd_project_name' />
+                                </link-entity>
+                                <link-entity name='product' from='productid' to='bsd_unitno' visible='false' link-type='outer' alias='b'>
+                                  <attribute name='name' alias='bsd_unitno_name' />
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='c'>
+                                  <attribute name='bsd_name' alias='purchaser_accountname' />
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='d'>
+                                  <attribute name='bsd_fullname' alias='purchaser_contactname' />
+                                </link-entity>
+                              </entity>
                         </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListQuotationAcc>>("quotes", fetch);
-            if (result == null)
-            {
-                return;
-            }
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationListModel>>("quotes", fetch);
+            if (result == null || result.value.Any() == false) return;
             var data = result.value;
-
-            if (data.Count < 3)
+            ShowMoreQuotation = data.Count < 3 ? false : true;
+            foreach (var item in data)
             {
-                ShowMoreQuotation = false;
-            }
-            else
-            {
-                ShowMoreQuotation = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.quo_nameproject == null)
-                    {
-                        item.quo_nameproject = " ";
-                    }
-
-                    if (item.quo_nameproduct == null)
-                    {
-                        item.quo_nameproduct = " ";
-                    }
-
-                    if (item.quo_nameaccount != null)
-                    {
-                        item.customerid = item.quo_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.quo_namecontact;
-                    }
-
-                    list_thongtinquotation.Add(item);
-                }
+                list_thongtinquotation.Add(item);
             }
         }
 
@@ -317,126 +299,72 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageContract}' output-format='xml-platform' mapping='logical' distinct='false'>
                             <entity name='salesorder'>
-                                <all-attributes/>
-                                <order attribute='createdon' descending='true' />
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' >
-                                    <attribute name='bsd_name' alias='contract_nameproject'/>
-                                </link-entity>
-                                <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' >
-                                    <attribute name='bsd_name' alias='contract_nameaccount'/>
-                                </link-entity>
-                                <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                    <attribute name='bsd_fullname' alias='contract_namecontact'/>
-                                </link-entity>
-                                <link-entity name='product' from='productid' to='bsd_unitnumber' visible='false' link-type='outer' alias='products'>
-                                  <attribute name='name' alias='contract_nameproduct'/>
-                                </link-entity>
-                                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                       <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                       </filter>
+                                    <attribute name='name' />
+                                    <attribute name='customerid' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='totalamount' />
+                                    <attribute name='bsd_unitnumber' alias='unit_id'/>
+                                    <attribute name='bsd_project' alias='project_id'/>
+                                    <attribute name='salesorderid' />
+                                    <attribute name='ordernumber' />
+                                    <order attribute='bsd_project' descending='true' />
+                                    <filter type='and'>                                      
+                                        <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                        <condition attribute='customerid' operator='eq' value='{accountid}' />               
+                                    </filter >
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='outer' alias='aa'>
+                                        <attribute name='bsd_name' alias='project_name'/>
                                     </link-entity>
-                                <filter type='and'>
-                                    <condition attribute='accountid' operator='eq' uitype='account' value='" + accountid + @"' />
-                                </filter>
-                            </entity>
+                                    <link-entity name='product' from='productid' to='bsd_unitnumber' link-type='outer' alias='ab'>
+                                        <attribute name='name' alias='unit_name'/>
+                                    </link-entity>
+                                    <link-entity name='account' from='accountid' to='customerid' link-type='outer' alias='ac'>
+                                        <attribute name='name' alias='account_name'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='customerid' link-type='outer' alias='ad'>
+                                        <attribute name='bsd_fullname' alias='contact_name'/>
+                                    </link-entity>
+                                </entity>
                         </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListContractAcc>>("salesorders", fetch);
-            if (result == null)
-            {
-                return;
-            }
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContractModel>>("salesorders", fetch);
+            if (result == null || result.value.Any() == false) return;
             var data = result.value;
-
-            if (data.Count < 3)
+            ShowMoreContract = data.Count < 3 ? false : true;
+            foreach (var item in data)
             {
-                ShowMoreContract = false;
-            }
-            else
-            {
-                ShowMoreContract = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.contract_nameproject == null)
-                    {
-                        item.contract_nameproject = " ";
-                    }
-
-                    if (item.contract_nameproduct == null)
-                    {
-                        item.contract_nameproduct = " ";
-                    }
-
-                    if (item.contract_nameaccount != null)
-                    {
-                        item.customerid = item.contract_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.contract_namecontact;
-                    }
-
-                    list_thongtincontract.Add(item);
-
-                }
-
+                list_thongtincontract.Add(item);
             }
         }
 
         public async Task LoadDSCaseAccount(Guid accountid)
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageCase}' output-format='xml-platform' mapping='logical' distinct='false'>
-                        <entity name='incident'>
-                            <all-attributes/>
-                            <order attribute='createdon' descending='true' />
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                <attribute name='bsd_name' alias='case_nameaccount'/>
-                            </link-entity>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                <attribute name='bsd_fullname' alias='case_nameaccontact'/>
-                            </link-entity>
-                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                       <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                       </filter>
+                                <entity name='incident'>
+                                    <attribute name='title' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='casetypecode' />
+                                    <attribute name='caseorigincode' />
+                                    <attribute name='incidentid' />
+                                    <order attribute='createdon' descending='true' />
+                                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
+                                        <attribute name='bsd_name' alias='case_nameaccount'/>
                                     </link-entity>
-                            <filter type='and'>
-                                <condition attribute='customerid' operator='eq' uitype='account' value='" + accountid + @"' />
-                            </filter>
-                        </entity>
-                    </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListCaseAcc>>("incidents", fetch);
-            if (result == null)
-            {
-                return;
-            }
+                                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' >
+                                      <attribute name='bsd_fullname' alias='case_namecontact'/>
+                                    </link-entity>
+                                     <filter type='and'>
+                                        <condition attribute='customerid' operator='eq' value='{accountid}' />
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>         
+                                </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListPhanHoiModel>>("incidents", fetch);
+            if (result == null || result.value.Any() == false) return;
             var data = result.value;
-            if (data.Count < 3)
+            ShowMoreCase = data.Count < 3 ? false : true;
+            foreach (var item in data)
             {
-                ShowMoreCase = false;
-            }
-            else
-            {
-                ShowMoreCase = true;
-            }
-            if (data.Any())
-            {
-                foreach (var item in data)
-                {
-                    if (item.case_nameaccount != null)
-                    {
-                        item.customerid = item.case_nameaccount;
-                    }
-                    else
-                    {
-                        item.customerid = item.case_nameaccontact;
-                    }
-
-                    list_thongtincase.Add(item);
-                }
+                list_thongtincase.Add(item);
             }
         }
 
