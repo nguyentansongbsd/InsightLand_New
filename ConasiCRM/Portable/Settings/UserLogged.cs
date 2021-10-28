@@ -20,6 +20,12 @@ namespace ConasiCRM.Portable.Settings
             get => AppSettings.GetValueOrDefault(nameof(Password), string.Empty);
             set => AppSettings.AddOrUpdateValue(nameof(Password), value);
         }
+
+        public static string Avartar
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Avartar), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(Avartar), value);
+        }
         public static string User
         {
             get => AppSettings.GetValueOrDefault(nameof(User), string.Empty);

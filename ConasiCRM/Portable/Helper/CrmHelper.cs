@@ -55,7 +55,6 @@ namespace ConasiCRM.Portable.Helper
                 else
                 {
                     var a = response.RequestMessage;
-                    
                 }
             }
             catch (Exception ex)

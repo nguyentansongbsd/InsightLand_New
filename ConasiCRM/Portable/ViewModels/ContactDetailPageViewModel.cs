@@ -181,12 +181,12 @@ namespace ConasiCRM.Portable.ViewModels
                                   <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     <filter type='or'>
                                        <condition attribute='statuscode' operator='in'>
-                                           value>100000000</value>
+                                           <value>100000000</value>
                                            <value>100000001</value>
                                            <value>4</value>
                                        </condition>
                                        <filter type='and'>
-                                           <condition attribute='statuscode' operator='eq'>
+                                           <condition attribute='statuscode' operator='in'>
                                                <value>100000009</value>
                                                <value>6</value>
                                            </condition>

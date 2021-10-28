@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using Xamarin.Forms;
 
@@ -10,6 +11,8 @@ namespace ConasiCRM.Portable.ViewModels
     class AppShellViewModel :BaseViewModel
     {
         public ICommand LogoutCommand { get; }
+        private string _avartar;
+        public string Avartar { get => _avartar; set { _avartar = value;OnPropertyChanged(nameof(Avartar)); } }
 
         private string _userName;
         public string UserName { get => _userName; set { _userName = value;OnPropertyChanged(nameof(UserName)); } }
@@ -21,11 +24,13 @@ namespace ConasiCRM.Portable.ViewModels
         {
             LogoutCommand = new Command(Logout);
             UserName = UserLogged.User;
-            ContactName = UserLogged.ContactName;
+            ContactName = string.IsNullOrWhiteSpace(UserLogged.ContactName) ? UserLogged.User : UserLogged.ContactName;
+            Avartar = UserLogged.Avartar;
         }
 
         private async void Logout()
         {
+            
             await Shell.Current.Navigation.PushModalAsync(new Login(),false);          
         }
     }

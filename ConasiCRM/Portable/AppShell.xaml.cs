@@ -13,10 +13,28 @@ namespace ConasiCRM.Portable
     public partial class AppShell : Shell
     {     
         private AppShellViewModel viewModel;
+        public static bool? NeedToRefeshUserInfo = null;
         public AppShell()
         {
             InitializeComponent();
             this.BindingContext = viewModel = new AppShellViewModel();
+            NeedToRefeshUserInfo = false;
+        }
+
+        protected override void OnNavigating(ShellNavigatingEventArgs args)
+        {
+            base.OnNavigating(args);
+            if (NeedToRefeshUserInfo == true)
+            {
+                LoadingHelper.Show();
+                if (viewModel.Avartar != UserLogged.Avartar)
+                {
+                    viewModel.Avartar = UserLogged.Avartar;
+                }
+                viewModel.ContactName = UserLogged.ContactName;
+                NeedToRefeshUserInfo = false;
+                LoadingHelper.Hide();
+            }
         }
 
         private async void UserInfor_Tapped(object sender, EventArgs e)
