@@ -5,6 +5,7 @@ namespace ConasiCRM.Portable.Models
     {
         public Guid bsd_employeeid { get; set; }
         public string bsd_name { get; set; }
+        public string bsd_avatar { get; set; }
         public string bsd_password { get; set; }
         public string bsd_imeinumber { get; set; }
         public Guid contact_id { get; set; }

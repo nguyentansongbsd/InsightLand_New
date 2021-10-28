@@ -18,11 +18,11 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         private Guid AccountId;
-        public static bool? NeedToRefreshAccount= null;
+        public static bool? NeedToRefreshAccount = null;
         public static bool? NeedToRefreshMandatory = null;
         public static bool? NeedToRefreshQueues = null;
         private AccountDetailPageViewModel viewModel;
-        
+
         public AccountDetailPage(Guid accountId)
         {
             InitializeComponent();
@@ -38,7 +38,7 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await LoadDataThongTin(AccountId.ToString());
-            if ((viewModel.singleAccount.employee_id != Guid.Empty && !string.IsNullOrWhiteSpace(viewModel.singleAccount.employee_name))&& (viewModel.singleAccount.employee_id == UserLogged.Id && viewModel.singleAccount.employee_name == UserLogged.User))
+            if ((viewModel.singleAccount.employee_id != Guid.Empty && !string.IsNullOrWhiteSpace(viewModel.singleAccount.employee_name)) && (viewModel.singleAccount.employee_id == UserLogged.Id && viewModel.singleAccount.employee_name == UserLogged.User))
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Người ủy quyền", "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
@@ -144,7 +144,7 @@ namespace ConasiCRM.Portable.Views
             return address;
         }
 
-        private async void Website_Tapped(object sender,EventArgs e)
+        private async void Website_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             await Xamarin.Essentials.Browser.OpenAsync(viewModel.singleAccount.websiteurl);
@@ -155,17 +155,22 @@ namespace ConasiCRM.Portable.Views
         // tab giao dich
         private async Task LoadDataGiaoDich(string Id)
         {
-            if(Id!= null)
+            if (Id != null)
             {
-                if (viewModel.list_thongtinqueing.Count <= 0) { await viewModel.LoadDSQueueingAccount(AccountId); }
-
-                if (viewModel.list_thongtinquotation.Count <= 0) { await viewModel.LoadDSQuotationAccount(AccountId); }
-
-                if (viewModel.list_thongtincontract.Count <= 0) { await viewModel.LoadDSContractAccount(AccountId); }
-
-                if (viewModel.list_thongtincase.Count <= 0) { await viewModel.LoadDSCaseAccount(AccountId); }
+                LoadingHelper.Show();
+                if (viewModel.list_thongtinqueing.Count == 0 && viewModel.list_thongtinquotation.Count == 0 && viewModel.list_thongtincontract.Count == 0 && viewModel.list_thongtincase.Count == 0)
+                {
+                    await Task.WhenAll(
+                        viewModel.LoadDSQueueingAccount(AccountId),
+                        viewModel.LoadDSQuotationAccount(AccountId),
+                        viewModel.LoadDSContractAccount(AccountId),
+                        viewModel.LoadDSCaseAccount(AccountId)
+                        ); 
+                }
+                LoadingHelper.Hide();
             }
         }
+
         private async void ShowMoreQueueing_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -198,15 +203,75 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
+        private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        private void CaseItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            PhanHoiDetailPage newPage = new PhanHoiDetailPage(itemId);
+            newPage.OnCompleted = async (OnCompleted) =>
+            {
+                if (OnCompleted == true)
+                {
+                    await Navigation.PushAsync(newPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin phản hồi");
+                }
+            };
+        }
+
         #endregion
 
         #region tab nguoi uy quyyen 
-        
+
         private async Task LoadDataNguoiUyQuyen(string Id)
         {
-            if (Id != null && viewModel.list_MandatorySecondary.Count <= 0) 
+            if (Id != null && viewModel.list_MandatorySecondary.Count <= 0)
             {
-                await viewModel.Load_List_Mandatory_Secondary(Id); 
+                await viewModel.Load_List_Mandatory_Secondary(Id);
             }
         }
 
@@ -216,20 +281,20 @@ namespace ConasiCRM.Portable.Views
             var a = (TapGestureRecognizer)lblClicked.GestureRecognizers[0];
             MandatorySecondaryModel item = a.CommandParameter as MandatorySecondaryModel;
             var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa người ủy quyền không ?", "Đồng ý", "Hủy");
-            if (conform == false) return;            
+            if (conform == false) return;
             LoadingHelper.Show();
             var IsSuccess = await viewModel.DeleteMandatory_Secondary(item);
-            if(IsSuccess)
+            if (IsSuccess)
             {
                 viewModel.list_MandatorySecondary.Remove(item);
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Đã xóa người ủy quyền được chọn");
-            }   
+            }
             else
             {
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Xóa người ủy quyền thất bại");
-            } 
+            }
         }
 
         private async void ShowMoreMandatory_Clicked(object sender, EventArgs e)
@@ -345,9 +410,9 @@ namespace ConasiCRM.Portable.Views
 
         private void NguoiDaiDien_Tapped(object sender, EventArgs e)
         {
-            if(viewModel.PrimaryContact.contactid != null)
+            if (viewModel.PrimaryContact.contactid != null)
             {
-                LoadingHelper.Show();                
+                LoadingHelper.Show();
                 ContactDetailPage newPage = new ContactDetailPage(viewModel.PrimaryContact.contactid);
                 newPage.OnCompleted = async (OnCompleted) =>
                 {
@@ -381,7 +446,7 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
                 }
-            };    
+            };
         }
 
         private async void AddMandatorySecondary(object sender, EventArgs e)
@@ -397,7 +462,8 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
-            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+            queuesDetialPage.OnCompleted = async (IsSuccess) =>
+            {
                 if (IsSuccess)
                 {
                     await Navigation.PushAsync(queuesDetialPage);
@@ -428,42 +494,42 @@ namespace ConasiCRM.Portable.Views
 
         private async void ListMoreMandatory_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
-            if(e.Item != null)
+            if (e.Item != null)
             {
                 var item = e.Item as MandatorySecondaryModel;
-                if (viewModel.list_MandatorySecondary.IndexOf(item) == viewModel.list_MandatorySecondary.Count()-1)
+                if (viewModel.list_MandatorySecondary.IndexOf(item) == viewModel.list_MandatorySecondary.Count() - 1)
                 {
                     viewModel.isLoadMore = true;
                     viewModel.PageMandatory++;
                     await viewModel.Load_List_Mandatory_Secondary(this.AccountId.ToString());
                     viewModel.isLoadMore = false;
                     SetHeightListView();
-                }    
-            }    
+                }
+            }
         }
 
         private void SetHeightListView()
         {
-            double height_item = (viewModel.list_MandatorySecondary.Count()*110)+50;
-            double height_mb = ((DeviceDisplay.MainDisplayInfo.Height/ DeviceDisplay.MainDisplayInfo.Density)*2/3) +50;
-            if (height_item > height_mb) 
+            double height_item = (viewModel.list_MandatorySecondary.Count() * 110) + 50;
+            double height_mb = ((DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density) * 2 / 3) + 50;
+            if (height_item > height_mb)
             {
                 ListMandatory.HeightRequest = height_mb;
             }
             else
             {
                 ListMandatory.HeightRequest = height_item;
-            }    
-            if(viewModel.list_MandatorySecondary.Count() == 0)
+            }
+            if (viewModel.list_MandatorySecondary.Count() == 0)
             {
                 lb_ListMandatory.IsVisible = true;
                 ListMandatory.IsVisible = false;
-            }   
+            }
             else
             {
                 lb_ListMandatory.IsVisible = false;
                 ListMandatory.IsVisible = true;
-            }    
+            }
         }
     }
 }

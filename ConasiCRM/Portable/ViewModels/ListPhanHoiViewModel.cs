@@ -17,25 +17,17 @@ namespace ConasiCRM.Portable.ViewModels
                 EntityName = "incidents";
                 FetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false' count='15' page='{Page}'>
                                 <entity name='incident'>
-                                    <all-attributes/>
+                                    <attribute name='title' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='casetypecode' />
+                                    <attribute name='caseorigincode' />
+                                    <attribute name='incidentid' />
                                     <order attribute='createdon' descending='true' />
                                     <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
                                         <attribute name='bsd_name' alias='case_nameaccount'/>
                                     </link-entity>
                                     <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' >
                                       <attribute name='bsd_fullname' alias='case_namecontact'/>
-                                    </link-entity>
-                                    <link-entity name='product' from='productid' to='productid' visible='false' link-type='outer' >
-                                        <attribute name='name' alias='productname'/>
-                                    </link-entity>
-                                    <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer'>
-                                      <attribute name='fullname' alias='contactname'/>
-                                    </link-entity>
-                                    <link-entity name='contract' from='contractid' to='contractid' visible='false' link-type='outer' alias='contracts'>
-                                      <attribute name='title' alias='contractname'/>
-                                    </link-entity>
-                                    <link-entity name='subject' from='subjectid' to='subjectid' visible='false' link-type='outer' >
-                                      <attribute name='title' alias='subjecttitle'/>
                                     </link-entity>
                                      <filter type='and'>
                                           <filter type='or'>

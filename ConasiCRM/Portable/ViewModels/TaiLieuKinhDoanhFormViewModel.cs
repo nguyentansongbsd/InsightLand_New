@@ -10,7 +10,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class TaiLieuKinhDoanhFormViewModel : FormViewModal
+    public class TaiLieuKinhDoanhFormViewModel : BaseViewModel
     {
         public Guid salesliteratureid { get; set; }
         private ListInforUnitTLKD _singleListInforUnitTLKD;

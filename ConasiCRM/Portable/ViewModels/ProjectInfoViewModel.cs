@@ -83,6 +83,9 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showMoreBtnGiuCho;
         public bool ShowMoreBtnGiuCho { get => _showMoreBtnGiuCho; set { _showMoreBtnGiuCho = value; OnPropertyChanged(nameof(ShowMoreBtnGiuCho)); } }
 
+        private bool _isHasEvent;
+        public bool IsHasEvent { get=>_isHasEvent; set { _isHasEvent = value; OnPropertyChanged(nameof(IsHasEvent)); } }
+
         public int ChuanBi { get; set; } = 0;
         public int SanSang { get; set; } = 0;
         public int GiuCho { get; set; } = 0;
@@ -92,7 +95,6 @@ namespace ConasiCRM.Portable.ViewModels
         public int ThanhToanDot1 { get; set; } = 0;
         public int DaBan { get; set; } = 0;
 
-        public bool IsHasEvent { get; set; }
         public bool IsLoadedGiuCho { get; set; }
 
         public int PageListGiuCho = 1;
@@ -157,15 +159,11 @@ namespace ConasiCRM.Portable.ViewModels
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
                                   <condition attribute='statuscode' operator='eq' value='100000000' />
+                                  <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{ProjectId}' />
                                 </filter>
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='aa'>
-                                  <filter type='and'>
-                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
-                                  </filter>
-                                </link-entity>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<EventFormModel>>("bsd_events", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<EventModel>>("bsd_events", fetchXml);
             if (result == null || result.value.Any() == false) return;
 
             var data = result.value;

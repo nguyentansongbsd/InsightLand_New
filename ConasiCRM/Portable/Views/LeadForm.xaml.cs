@@ -369,6 +369,7 @@ namespace ConasiCRM.Portable.Views
                 var result = await viewModel.createLead();
                 if (result.IsSuccess)
                 {
+                    if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                     if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                     ToastMessageHelper.ShortMessage("Thành công");
                     await Navigation.PopAsync();

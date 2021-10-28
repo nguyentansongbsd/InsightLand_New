@@ -298,13 +298,13 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='productid' alias='Id'/>
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                      
                                       <condition attribute='statuscode' operator='eq' value='100000002' />
                                       <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
                                       <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
                                     </filter>
                                   </entity>
-                                </fetch>";
+                                </fetch>";//<condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/> : chua co filed bsd_employee
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("products", fetchXml);
             if (result == null) return;
 

@@ -9,7 +9,6 @@
         <ResourceDictionary>
             <local:NullToBooleanConvert x:Key="NullToBool" />
             <local:NotNullToBoolean x:Key="NotNullToBool" />
-            <local:BoolToIntHideGrid x:Key="BoolToInt" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>

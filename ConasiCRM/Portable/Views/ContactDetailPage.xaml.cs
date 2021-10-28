@@ -140,8 +140,8 @@ namespace ConasiCRM.Portable.Views
 
                 viewModel.list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
                 viewModel.list_danhsachdatcoc = new ObservableCollection<ReservationListModel>();
-                viewModel.list_danhsachhopdong = new ObservableCollection<OptionEntry>();
-                viewModel.list_chamsockhachhang = new ObservableCollection<Case>();
+                viewModel.list_danhsachhopdong = new ObservableCollection<ContractModel>();
+                viewModel.list_chamsockhachhang = new ObservableCollection<ListPhanHoiModel>();
 
                 await Task.WhenAll(
                    viewModel.LoadQueuesForContactForm(Id),
@@ -174,7 +174,7 @@ namespace ConasiCRM.Portable.Views
         private async void ShowMoreDanhSachHopDong_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            viewModel.PageDanhSachDatCoc++;
+            viewModel.PageDanhSachHopDong++;
             await viewModel.LoadOptoinEntryForContactForm(viewModel.singleContact.contactid.ToString());
             LoadingHelper.Hide();
         }
@@ -204,6 +204,46 @@ namespace ConasiCRM.Portable.Views
                 {
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                }
+            };
+        }
+
+        private void CaseItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            PhanHoiDetailPage newPage = new PhanHoiDetailPage(itemId);
+            newPage.OnCompleted = async (OnCompleted) =>
+            {
+                if (OnCompleted == true)
+                {
+                    await Navigation.PushAsync(newPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin phản hồi");
                 }
             };
         }

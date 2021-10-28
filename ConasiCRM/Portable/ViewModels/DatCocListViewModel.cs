@@ -52,7 +52,7 @@ namespace ConasiCRM.Portable.ViewModels
                                             <value>4</value>
                                         </condition>
                                         <filter type='and'>
-                                            <condition attribute='statuscode' operator='eq'>
+                                            <condition attribute='statuscode' operator='in'>
                                                 <value>100000009</value>
                                                 <value>6</value>
                                             </condition>

@@ -200,19 +200,19 @@ namespace ConasiCRM.Portable.Views
         private async void NewActivity_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            string[] options = new string[] { "Tạo Cuộc Họp", "Tạo Cuộc Gọi", "Tạo Công Việc" };
+            string[] options = new string[] { "Tạo Công Việc", "Tạo Cuộc Họp", "Tạo Cuộc Gọi" };
             string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
-            if (asw == "Tạo Cuộc Họp")
+            if (asw == "Tạo Công Việc")
             {
-                await Navigation.PushAsync(new MeetingForm());
+                await Navigation.PushAsync(new TaskForm());
             }
             else if (asw == "Tạo Cuộc Gọi")
             {
                 await Navigation.PushAsync(new PhoneCallForm());
             }
-            else if (asw == "Tạo Công Việc")
+            else if (asw == "Tạo Cuộc Họp")
             {
-                await Navigation.PushAsync(new TaskForm());
+                await Navigation.PushAsync(new MeetingForm());
             }
             LoadingHelper.Hide();
         }

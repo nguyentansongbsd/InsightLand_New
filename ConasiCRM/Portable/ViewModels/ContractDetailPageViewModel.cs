@@ -46,42 +46,37 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='name' alias='salesorder_name'/>
                                     <attribute name='totalamount' />
                                     <attribute name='statuscode' />
-                                    <attribute name='bsd_netusablearea' />
-                                    <attribute name='bsd_constructionarea' />
-                                    <attribute name='bsd_nameofstaffagent' alias='nameofstaffagent'/>
                                     <attribute name='bsd_referral' />
                                     <attribute name='bsd_queuingfee' />
                                     <attribute name='bsd_depositamount' />
                                     <attribute name='bsd_allowchangeunitsspec' />
-<attribute name='bsd_estimatehandoverdatecontract' />
-<attribute name='bsd_followuplist' />
-<attribute name='bsd_terminationletter' />
-<attribute name='bsd_specialcontractprintingapproval' />
-<attribute name='bsd_approvaldateforspecialcontract' />
-<attribute name='bsd_dadate' />
-<attribute name='bsd_agreementdate' />
-<attribute name='bsd_signeddadate' />
-<attribute name='bsd_contractnumber' />
-<attribute name='bsd_contracttype' />
-<attribute name='bsd_contracttypedescription' />
-<attribute name='bsd_updatecontractdate' />
-<attribute name='bsd_contractdate' />
-<attribute name='bsd_contractprinteddate' />
-<attribute name='bsd_signingexpired' />
-<attribute name='bsd_signedcontractdate' />
-<attribute name='bsd_bsd_uploadeddate' />
-<attribute name='bsd_detailamount' />
-<attribute name='bsd_discount' />
-<attribute name='bsd_packagesellingamount' />
-<attribute name='bsd_totalamountlessfreight' />
-<attribute name='bsd_landvaluededuction' />
-<attribute name='totaltax' />
-<attribute name='bsd_freightamount' />
-<attribute name='totalamount' alias='bsd_totalamount'/>
-<attribute name='bsd_numberofmonthspaidmf' />
-<attribute name='bsd_managementfee' />
-<attribute name='bsd_waivermanafeemonth' />
-<attribute name='bsd_discounts' />
+                                    <attribute name='bsd_estimatehandoverdatecontract' />
+                                    <attribute name='bsd_followuplist' />
+                                    <attribute name='bsd_terminationletter' />
+                                    <attribute name='bsd_dadate' />
+                                    <attribute name='bsd_agreementdate' />
+                                    <attribute name='bsd_signeddadate' />
+                                    <attribute name='bsd_contractnumber' />
+                                    <attribute name='bsd_contracttype' />
+                                    <attribute name='bsd_contracttypedescription' />
+                                    <attribute name='bsd_updatecontractdate' />
+                                    <attribute name='bsd_contractdate' />
+                                    <attribute name='bsd_contractprinteddate' />
+                                    <attribute name='bsd_signingexpired' />
+                                    <attribute name='bsd_signedcontractdate' />
+                                    <attribute name='bsd_bsd_uploadeddate' />
+                                    <attribute name='bsd_detailamount' />
+                                    <attribute name='bsd_discount' />
+                                    <attribute name='bsd_packagesellingamount' />
+                                    <attribute name='bsd_totalamountlessfreight' />
+                                    <attribute name='bsd_landvaluededuction' />
+                                    <attribute name='totaltax' />
+                                    <attribute name='bsd_freightamount' />
+                                    <attribute name='totalamount' alias='bsd_totalamount'/>
+                                    <attribute name='bsd_numberofmonthspaidmf' />
+                                    <attribute name='bsd_managementfee' />
+                                    <attribute name='bsd_waivermanafeemonth' />
+                                    <attribute name='bsd_discounts' />
                                     <order attribute='ordernumber' descending='false' />
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='outer' alias='aa'>
                                        <attribute name='bsd_projectid' alias='project_id'/>
@@ -90,7 +85,6 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='product' from='productid' to='bsd_unitnumber' link-type='outer' alias='ab'>
                                        <attribute name='productid' alias='unit_id'/>
                                        <attribute name='name' alias='unit_name'/>
-                                       <attribute name='bsd_actualarea' alias='unit_actualarea' />
                                     </link-entity>
                                     <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunch' link-type='outer' alias='ac'>
                                         <attribute name='bsd_phaseslaunchid' alias='phaseslaunch_id'/>
@@ -102,21 +96,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='contact' from='contactid' to='customerid' link-type='outer' alias='ae'>
                                       <attribute name='bsd_fullname' alias='contact_name'/>
                                     </link-entity>
-                                    <link-entity name='opportunity' from='opportunityid' to='opportunityid' link-type='outer' alias='af'>
-                                      <attribute name='name' alias='queue_name' />
-                                      <attribute name='opportunityid' alias='queue_id'/>
-                                    </link-entity>
                                     <link-entity name='bsd_taxcode' from='bsd_taxcodeid' to='bsd_taxcode' link-type='outer' alias='ag'>
                                       <attribute name='bsd_taxcodeid' alias='taxcode_id'/>
                                       <attribute name='bsd_name' alias='taxcode_name'/>
-                                    </link-entity>
-                                    <link-entity name='account' from='accountid' to='bsd_salesagentcompany' link-type='outer' alias='ah'>
-                                      <attribute name='name' alias='salesagentcompany_name'/>
-                                      <attribute name='accountid' alias='salesagentcompany_id'/>
-                                    </link-entity>
-                                    <link-entity name='quote' from='quoteid' to='quoteid' link-type='outer' alias='ai'>
-                                      <attribute name='name' alias='reservation_name' />
-                                      <attribute name='quoteid' alias='reservation_id' />
                                     </link-entity>
                                     <link-entity name='pricelevel' from='pricelevelid' to='pricelevelid' link-type='outer' alias='aj'>
                                         <attribute name='pricelevelid'/>
@@ -148,10 +130,6 @@ namespace ConasiCRM.Portable.ViewModels
                                       <attribute name='bsd_name' alias='bsd_exchangeratedetail_name' />
                                       <attribute name='bsd_exchangeratedetailid'/>
                                     </link-entity>
-                                    <link-entity name='systemuser' from='systemuserid' to='bsd_approverforspecialcontract' link-type='outer' alias='aa'>
-                                      <attribute name='systemuserid' alias='bsd_approverforspecialcontract_id' />
-                                      <attribute name='fullname' alias='bsd_approverforspecialcontract_name'/>
-                                    </link-entity>
                                     <link-entity name='bsd_paymentscheme' from='bsd_paymentschemeid' to='bsd_paymentscheme' link-type='outer' alias='ai'>
                                        <attribute name='bsd_name' alias='paymentscheme_name'/>
                                        <attribute name='bsd_paymentschemeid' alias='paymentscheme_id'/>
@@ -176,7 +154,6 @@ namespace ConasiCRM.Portable.ViewModels
             Contract.bsd_unitsspecification_id = data.bsd_unitsspecification_id;
             Contract.bsd_exchangeratedetail_name = data.bsd_exchangeratedetail_name;
             Contract.bsd_exchangeratedetailid = data.bsd_exchangeratedetailid;
-            Contract.bsd_approverforspecialcontract_name = data.bsd_approverforspecialcontract_name;
             Contract.paymentscheme_name = data.paymentscheme_name;
             Contract.paymentscheme_id = data.paymentscheme_id;
             Contract.discountlist_id = data.discountlist_id;

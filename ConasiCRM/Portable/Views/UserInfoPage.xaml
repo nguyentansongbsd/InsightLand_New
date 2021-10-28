@@ -5,23 +5,37 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:ffimagetransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              Title="Thông tin cá nhân"
              x:Class="ConasiCRM.Portable.Views.UserInfoPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:Base64ToImageSourceConverter x:Key="Base64ToImagesource"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
             <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding=" 0,0,0,60">
-                <StackLayout Padding="10,0">
-                    <controls:ExtendedFrame Padding="4" Margin="0,30,0,20" CornerRadius="32" HorizontalOptions="Center" VerticalOptions="Start">
-                        <ffimageloading:CachedImage Source="user.png" HeightRequest="60" WidthRequest="60" >
-                            <ffimageloading:CachedImage.Transformations>
-                                <ffimagetransformations:CircleTransformation/>
-                            </ffimageloading:CachedImage.Transformations>
-                        </ffimageloading:CachedImage>
-                    </controls:ExtendedFrame>
+                <StackLayout Padding="10,30,10,0">
+                    <Grid HorizontalOptions="CenterAndExpand" HeightRequest="78">
+                        <controls:ExtendedFrame Padding="4" CornerRadius="39" HorizontalOptions="Center" VerticalOptions="Start">
+                            <ffimageloading:CachedImage Source="{Binding Avatar, Converter={StaticResource Base64ToImagesource}}" LoadingPlaceholder="user.png" HeightRequest="70" WidthRequest="70" DownsampleWidth="500">
+                                <ffimageloading:CachedImage.Transformations>
+                                    <ffimagetransformations:CircleTransformation/>
+                                </ffimageloading:CachedImage.Transformations>
+                            </ffimageloading:CachedImage>
+                        </controls:ExtendedFrame>
+                        <telerikPrimitives:RadBorder Margin="0,0,-8,-8" VerticalOptions="EndAndExpand" HorizontalOptions="End" BorderColor="{StaticResource NavigationPrimary}" BorderThickness="2" CornerRadius="20" Padding="8" BackgroundColor="White">
+                            <telerikPrimitives:RadBorder.GestureRecognizers>
+                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChangeAvatar_Tapped"/>
+                            </telerikPrimitives:RadBorder.GestureRecognizers>
+                            <Label Text="&#xf030;" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="{StaticResource NavigationPrimary}"/>
+                        </telerikPrimitives:RadBorder>
+                    </Grid>
 
-                    <controls:FormLabelRequired Text="Họ tên"/>
+                    <controls:FormLabelRequired Text="Họ tên" Margin="0,20,0,0"/>
                     <controls:MainEntry Text="{Binding ContactModel.bsd_fullname}" Placeholder="Nhập họ tên"/>
 
                     <controls:FormLabel Text="Email"/>
@@ -47,7 +61,7 @@
                     <controls:FormLabelRequired Text="Giới tính"/>
                     <controls:LookUp NameDisplay="Label" BottomModal="{Reference LookUpModal}" Placeholder="Chọn giới tính" SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"/>
 
-                    <controls:FormLabel Text="Địa chỉ"/>
+                    <controls:FormLabelRequired Text="Địa chỉ"/>
                     <Grid>
                         <controls:MainEntry Text="{Binding Address}" ShowClearButton="False" Placeholder="Địa chỉ"/>
                         <StackLayout>

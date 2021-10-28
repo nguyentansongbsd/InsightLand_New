@@ -28,28 +28,30 @@ namespace ConasiCRM.Portable.ViewModels
 
         private OptionSet _singleLocalization;
         public OptionSet SingleLocalization { get => _singleLocalization; set { _singleLocalization = value; OnPropertyChanged(nameof(SingleLocalization)); } }
-        public ObservableCollection<QueueFormModel> list_danhsachdatcho { get; set; } = new ObservableCollection<QueueFormModel>();
+        private ObservableCollection<QueueFormModel> _list_danhsachdatcho;
+        public ObservableCollection<QueueFormModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
 
         private bool _showMoreDanhSachDatCho;
         public bool ShowMoreDanhSachDatCho { get => _showMoreDanhSachDatCho; set { _showMoreDanhSachDatCho = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCho)); } }
         public int PageDanhSachDatCho { get; set; } = 1;
 
-        public ObservableCollection<ReservationListModel> list_danhsachdatcoc { get; set; }
+        private ObservableCollection<ReservationListModel> _list_danhsachdatcoc;
+        public ObservableCollection<ReservationListModel> list_danhsachdatcoc { get => _list_danhsachdatcoc; set { _list_danhsachdatcoc = value; OnPropertyChanged(nameof(list_danhsachdatcoc)); } }
         private bool _showMoreDanhSachDatCoc;
         public bool ShowMoreDanhSachDatCoc { get => _showMoreDanhSachDatCoc; set { _showMoreDanhSachDatCoc = value; OnPropertyChanged(nameof(ShowMoreDanhSachDatCoc)); } }
         public int PageDanhSachDatCoc { get; set; } = 1;
 
-        public ObservableCollection<OptionEntry> list_danhsachhopdong { get; set; }
+        private ObservableCollection<ContractModel> _list_danhsachhopdong;
+        public ObservableCollection<ContractModel> list_danhsachhopdong { get => _list_danhsachhopdong; set { _list_danhsachhopdong = value; OnPropertyChanged(nameof(list_danhsachhopdong)); } }
         private bool _showMoreDanhSachHopDong;
         public bool ShowMoreDanhSachHopDong { get => _showMoreDanhSachHopDong; set { _showMoreDanhSachHopDong = value; OnPropertyChanged(nameof(ShowMoreDanhSachHopDong)); } }
         public int PageDanhSachHopDong { get; set; } = 1;
 
-        public ObservableCollection<Case> list_chamsockhachhang { get; set; }
+        private ObservableCollection<ListPhanHoiModel> _list_chamsockhachhang;
+        public ObservableCollection<ListPhanHoiModel> list_chamsockhachhang { get => _list_chamsockhachhang; set { _list_chamsockhachhang = value; OnPropertyChanged(nameof(list_chamsockhachhang)); } }
         private bool _showMoreChamSocKhachHang;
         public bool ShowMoreChamSocKhachHang { get => _showMoreChamSocKhachHang; set { _showMoreChamSocKhachHang = value; OnPropertyChanged(nameof(ShowMoreChamSocKhachHang)); } }
         public int PageChamSocKhachHang { get; set; } = 1;
-        private bool _optionEntryHasOnlyTerminatedStatus;
-        public bool optionEntryHasOnlyTerminatedStatus { get => _optionEntryHasOnlyTerminatedStatus; set { _optionEntryHasOnlyTerminatedStatus = value; OnPropertyChanged(nameof(optionEntryHasOnlyTerminatedStatus)); } }
 
         private PhongThuyModel _PhongThuy;
         public PhongThuyModel PhongThuy { get => _PhongThuy; set { _PhongThuy = value; OnPropertyChanged(nameof(PhongThuy)); } }
@@ -65,9 +67,9 @@ namespace ConasiCRM.Portable.ViewModels
         public string behindImage { get => _behindImage; set { _behindImage = value; OnPropertyChanged(nameof(behindImage)); } }
         public ContactDetailPageViewModel()
         {
-            singleContact = new ContactFormModel();            
+            singleContact = new ContactFormModel();
             list_HuongTot = new ObservableCollection<HuongPhongThuy>();
-            list_HuongXau = new ObservableCollection<HuongPhongThuy>();          
+            list_HuongXau = new ObservableCollection<HuongPhongThuy>();
         }
 
         // load one contat
@@ -90,10 +92,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContactFormModel>>("contacts", fetch);
-            if(result == null)
+            if (result == null)
             {
                 return;
-            }    
+            }
             var tmp = result.value.FirstOrDefault();
             this.singleContact = tmp;
         }
@@ -107,7 +109,7 @@ namespace ConasiCRM.Portable.ViewModels
 
                 string token = (await CrmHelper.getSharePointToken()).access_token;
                 frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
-                behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;               
+                behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
             }
         }
 
@@ -174,7 +176,24 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_projectid' alias='bsd_project_id' />
                                 <attribute name='quoteid' />
                                 <order attribute='createdon' descending='true' />
-                                
+                                <filter type='and'>
+                                  <condition attribute='customerid' operator='eq' value='{customerId}' />
+                                  <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    <filter type='or'>
+                                       <condition attribute='statuscode' operator='in'>
+                                           <value>100000000</value>
+                                           <value>100000001</value>
+                                           <value>4</value>
+                                       </condition>
+                                       <filter type='and'>
+                                           <condition attribute='statuscode' operator='in'>
+                                               <value>100000009</value>
+                                               <value>6</value>
+                                           </condition>
+                                           <condition attribute='bsd_quotationsigneddate' operator='not-null' />
+                                       </filter>
+                                     </filter>
+                                </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
                                     <attribute name='bsd_name' alias='bsd_project_name' />
                                 </link-entity>
@@ -217,38 +236,33 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadOptoinEntryForContactForm(string customerId)
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageDanhSachHopDong}' output-format='xml-platform' mapping='logical' distinct='false'>
-                          <entity name='salesorder'>
-                            <attribute name='salesorderid' />
-                            <attribute name='bsd_optionno' />
-                            <attribute name='statuscode' />
-                            <attribute name='totalamount' />
-                            <attribute name='bsd_signingexpired' />
-                            <attribute name='createdon' />
-                            <order attribute='bsd_signingexpired' descending='true' />
-                            <filter type='and'>
-                              <condition attribute='customerid' operator='eq' value='{customerId}' />
-                            </filter>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='fullname'  alias='customerid_label_contact'/>
-                            </link-entity>
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='customerid_label_account'/>
-                            </link-entity>
-                            <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer'>
-                                <attribute name='bsd_name'  alias='bsd_project_label'/>
-                            </link-entity>
-                            <link-entity name='transactioncurrency' from='transactioncurrencyid' to='transactioncurrencyid' visible='false' link-type='outer'>
-                                <attribute name='currencysymbol'  alias='transactioncurrency'/>
-                            </link-entity>
-                            <link-entity name='product' from='productid' to='bsd_unitnumber' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='bsd_unitnumber_label'/>
-                            </link-entity>
-                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                    <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                                </link-entity>
-                          </entity>
+                                <entity name='salesorder'>
+                                    <attribute name='name' />
+                                    <attribute name='customerid' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='totalamount' />
+                                    <attribute name='bsd_unitnumber' alias='unit_id'/>
+                                    <attribute name='bsd_project' alias='project_id'/>
+                                    <attribute name='salesorderid' />
+                                    <attribute name='ordernumber' />
+                                    <order attribute='bsd_project' descending='true' />
+                                    <filter type='and'>                                      
+                                        <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                                        <condition attribute='customerid' operator='eq' value='{customerId}' />               
+                                    </filter >
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='outer' alias='aa'>
+                                        <attribute name='bsd_name' alias='project_name'/>
+                                    </link-entity>
+                                    <link-entity name='product' from='productid' to='bsd_unitnumber' link-type='outer' alias='ab'>
+                                        <attribute name='name' alias='unit_name'/>
+                                    </link-entity>
+                                    <link-entity name='account' from='accountid' to='customerid' link-type='outer' alias='ac'>
+                                        <attribute name='name' alias='account_name'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='customerid' link-type='outer' alias='ad'>
+                                        <attribute name='bsd_fullname' alias='contact_name'/>
+                                    </link-entity>
+                                </entity>
                         </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionEntry>>("salesorders", fetch);
             if (result == null || result.value.Count == 0)
@@ -257,19 +271,10 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             }
             var data = result.value;
-
-            if (data.Count < 3)
-            {
-                ShowMoreDanhSachHopDong = false;
-            }
-            else
-            {
-                ShowMoreDanhSachHopDong = true;
-            }
+            ShowMoreDanhSachHopDong = data.Count < 3 ? false : true;
 
             foreach (var x in data)
             {
-                if (x.statuscode != "100000006") { optionEntryHasOnlyTerminatedStatus = false; }
                 list_danhsachhopdong.Add(x);
             }
         }
@@ -278,30 +283,24 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadCaseForContactForm(string customerId)
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='false'>
-                          <entity name='incident'>
-                            <attribute name='title' alias='title_label'/>
-                            <attribute name='ticketnumber' />
-                            <attribute name='createdon' />
-                            <attribute name='incidentid' />
-                            <attribute name='caseorigincode' />
-                            <attribute name='statuscode' />
-                            <attribute name='prioritycode' />
-                            <order attribute='title' descending='false' />
-                            <filter type='and'>
-                              <condition attribute='customerid' operator='eq' value='{customerId}' />
-                            </filter>
-                            <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='fullname'  alias='customerid_label_contact'/>
-                            </link-entity>
-                            <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                <attribute name='name'  alias='customerid_label_account'/>
-                            </link-entity>
-                            <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='inner' alias='ae'>
-                                    <filter type='and'>
-                                          <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                                    </filter>
-                            </link-entity>
-                          </entity>
+                                <entity name='incident'>
+                                    <attribute name='title' />
+                                    <attribute name='statuscode' />
+                                    <attribute name='casetypecode' />
+                                    <attribute name='caseorigincode' />
+                                    <attribute name='incidentid' />
+                                    <order attribute='createdon' descending='true' />
+                                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
+                                        <attribute name='bsd_name' alias='case_nameaccount'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' >
+                                      <attribute name='bsd_fullname' alias='case_namecontact'/>
+                                    </link-entity>
+                                     <filter type='and'>
+                                        <condition attribute='customerid' operator='eq' value='{customerId}' />
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>         
+                                </entity>
                         </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Case>>("incidents", fetch);
             if (result == null || result.value.Count == 0)
@@ -310,16 +309,7 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             }
             var data = result.value;
-
-            if (data.Count < 3)
-            {
-                ShowMoreChamSocKhachHang = false;
-            }
-            else
-            {
-                ShowMoreChamSocKhachHang = true;
-            }
-
+            ShowMoreChamSocKhachHang = data.Count < 3 ? false : true;
             foreach (var x in data)
             {
                 list_chamsockhachhang.Add(x);
