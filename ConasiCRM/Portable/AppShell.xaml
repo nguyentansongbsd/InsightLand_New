@@ -27,6 +27,7 @@
             <converters:Base64ToImageSourceConverter x:Key="Base64ToImageSource"/>
         </ResourceDictionary>
     </Shell.Resources>
+
     <Shell.MenuItemTemplate>
         <DataTemplate>
             <Grid ColumnDefinitions="20,*" Padding="16,8,16,8" ColumnSpacing="16">
@@ -146,7 +147,4 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2f5;" Size="18"/>
         </MenuItem.IconImageSource>
     </MenuItem>
-    <Shell.FlyoutFooter>
-        <StackLayout HeightRequest="20"/>
-    </Shell.FlyoutFooter>
 </Shell>

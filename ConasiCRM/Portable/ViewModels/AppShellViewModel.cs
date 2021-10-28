@@ -30,6 +30,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         private async void Logout()
         {
+            
             await Shell.Current.Navigation.PushModalAsync(new Login(),false);          
         }
     }
