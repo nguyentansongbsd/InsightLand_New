@@ -7,6 +7,7 @@
        xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
        xmlns:ffimageTranformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
        xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+       xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
        xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
        ios:Page.UseSafeArea="true"
        Shell.BackgroundColor="{StaticResource NavigationPrimary}"
@@ -22,7 +23,11 @@
             <Setter Property="TextColor" Value="#444444" />
             <Setter Property="FontSize" Value="16" />
         </Style>
+        <ResourceDictionary>
+            <converters:Base64ToImageSourceConverter x:Key="Base64ToImageSource"/>
+        </ResourceDictionary>
     </Shell.Resources>
+
     <Shell.MenuItemTemplate>
         <DataTemplate>
             <Grid ColumnDefinitions="20,*" Padding="16,8,16,8" ColumnSpacing="16">
@@ -49,7 +54,7 @@
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UserInfor_Tapped"/>
                     </Grid.GestureRecognizers>
                     <controls:ExtendedFrame Grid.Column="0" Grid.RowSpan="3" Padding="4" CornerRadius="34"  HorizontalOptions="Center">
-                        <ffimageloading:CachedImage Source="user.png" HeightRequest="60" WidthRequest="60" DownsampleWidth="500">
+                        <ffimageloading:CachedImage Source="{Binding Avartar,Converter={StaticResource Base64ToImageSource}}" LoadingPlaceholder="user.png" HeightRequest="60" WidthRequest="60" DownsampleWidth="500">
                             <ffimageloading:CachedImage.Transformations>
                                 <ffimageTranformations:CircleTransformation/>
                             </ffimageloading:CachedImage.Transformations>
@@ -142,7 +147,4 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2f5;" Size="18"/>
         </MenuItem.IconImageSource>
     </MenuItem>
-    <Shell.FlyoutFooter>
-        <StackLayout HeightRequest="20"/>
-    </Shell.FlyoutFooter>
 </Shell>

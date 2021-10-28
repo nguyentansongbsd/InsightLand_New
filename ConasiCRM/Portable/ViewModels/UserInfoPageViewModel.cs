@@ -14,6 +14,10 @@ namespace ConasiCRM.Portable.ViewModels
         private ContactFormModel _contactModel;
         public ContactFormModel ContactModel { get => _contactModel; set { _contactModel = value;OnPropertyChanged(nameof(ContactModel)); } }
 
+        public byte[] AvatarArr { get; set; }
+        private string _avatar;
+        public string Avatar { get => _avatar; set { _avatar = value; OnPropertyChanged(nameof(Avatar)); } }
+
         private string _address;
         public string Address { get => _address; set { _address = value; OnPropertyChanged(nameof(Address)); } }
 
@@ -78,6 +82,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             Password = UserLogged.Password;
             this.Genders = new List<OptionSet>() { new OptionSet("1", "Nam"), new OptionSet("2", "Nữ"), new OptionSet("100000000", "Khác") };
+            this.Avatar = UserLogged.Avartar;
         }
 
         public async Task LoadContact()
@@ -229,6 +234,25 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return false;
             }
+        }
+
+        public async Task<bool> ChangeAvatar()
+        {
+            string path = $"/bsd_employees({UserLogged.Id})";
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["bsd_avatar"] = this.AvatarArr;
+            
+            var content = data as object;
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, content);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         public async Task<bool> UpdateUserInfor()
