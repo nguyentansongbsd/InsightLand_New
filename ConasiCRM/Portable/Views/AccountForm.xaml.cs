@@ -83,12 +83,12 @@ namespace ConasiCRM.Portable.Views
             //    }
             //    viewModel.BusinessType = ids;
             //}
-            if (viewModel.singleAccount.bsd_localization != null)
+            if (viewModel.singleAccount != null && viewModel.singleAccount.bsd_localization != null)
             {
                 viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
-            if (viewModel.singleAccount.primarycontactname != null)
+            if (viewModel.singleAccount != null && viewModel.singleAccount.primarycontactname != null)
             {
                 viewModel.GetPrimaryContactByID();
             }

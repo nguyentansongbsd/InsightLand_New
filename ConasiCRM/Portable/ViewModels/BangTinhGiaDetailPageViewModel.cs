@@ -1,5 +1,7 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,6 +40,8 @@ namespace ConasiCRM.Portable.ViewModels
         public string UpdateQuotation = "2";
         public string ConfirmReservation = "3";
         public string UpdateReservation = "4";
+        private string CodeContact = LookUpMultipleTabs.CodeContac;
+        private string CodeAccount = LookUpMultipleTabs.CodeAccount;
         public BangTinhGiaDetailPageViewModel()
         {
             CoownerList = new ObservableCollection<ReservationCoownerModel>();
@@ -418,7 +422,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task<bool> UpdatePaymentScheme()
+        public async Task<string> UpdatePaymentScheme()
         {
             if (Reservation.paymentscheme_id != Guid.Empty)
             {
@@ -426,16 +430,24 @@ namespace ConasiCRM.Portable.ViewModels
                 CrmApiResponse updateResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})/Microsoft.Dynamics.CRM.bsd_Action_Resv_Gene_PMS", data);
                 if (updateResponse.IsSuccess)
                 {
-                    return true;
+                    return updateResponse.IsSuccess.ToString();
                 }
                 else
                 {
-                    return false;
+                    if (updateResponse.GetErrorMessage().Contains("Localization") == true)
+                    {
+                        return "Localization";
+                    }
+                    else
+                    {
+                        return updateResponse.IsSuccess.ToString();
+                    }
+                    
                 }
             }
             else
             {
-                return false;
+                return "False";
             }
         }
     }

@@ -312,7 +312,7 @@ namespace ConasiCRM.Portable.ViewModels
                 x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Name;
                 QueueList.Add(x);
             }
-            if (QueueList.Any(x=>x.statuscode == 100000000))
+            if (QueueList.Any(x=>x.statuscode == 100000000))  // chỗ này đang bị lỗi khi có 2 giữ chỗ queue
             {
                 var item = QueueList.SingleOrDefault(x => x.statuscode == 100000000);
                 QueueList.Remove(item);

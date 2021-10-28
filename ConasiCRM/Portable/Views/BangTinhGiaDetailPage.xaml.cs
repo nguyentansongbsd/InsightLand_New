@@ -266,7 +266,8 @@ namespace ConasiCRM.Portable.Views
         private async void CreatePaymentScheme(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            if (await viewModel.UpdatePaymentScheme())
+            string IsSuccess = await viewModel.UpdatePaymentScheme();
+            if (IsSuccess == "True")
             {
                 NeedToRefresh = true;
                 OnAppearing();
@@ -275,8 +276,27 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Tạo lịch thanh toán thất bại. Vui lòng thử lại");
+                if (IsSuccess == "Localization")
+                {
+                    string asw = await App.Current.MainPage.DisplayActionSheet("Khách hàng chưa chọn quốc gia", "Hủy", "Thêm quốc gia");
+                    if (asw == "Thêm địa chỉ")
+                    {
+                        if (!string.IsNullOrEmpty(viewModel.Reservation.purchaser_contact_name))
+                        {
+                            await App.Current.MainPage.Navigation.PushAsync(new ContactForm(Guid.Parse(viewModel.Customer.Val)));
+                        }
+                        else
+                        {
+                            await App.Current.MainPage.Navigation.PushAsync(new AccountForm(Guid.Parse(viewModel.Customer.Val)));
+                        }
+                    }
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Tạo lịch thanh toán thất bại. Vui lòng thử lại");
+                }    
             }
         }
 
