@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
@@ -13,12 +15,38 @@ namespace ConasiCRM.Portable.ViewModels
     public class LichLamViecViewModel : BaseViewModel
     {
         public ObservableCollection<CalendarEvent> lstEvents { get; set; }
-        public ObservableCollection<CalendarEvent> selectedDateEvents { get; set; }
-        public ObservableCollection<Grouping<DateTime, CalendarEvent>> selectedDateEventsGrouped { get; set; }
+        private ObservableCollection<CalendarEvent> _selectedDateEvents;
+        public ObservableCollection<CalendarEvent> selectedDateEvents { get=>_selectedDateEvents; set { _selectedDateEvents = value;OnPropertyChanged(nameof(selectedDateEvents)); } }
+        private ObservableCollection<Grouping<DateTime, CalendarEvent>> _selectedDateEventsGrouped;
+        public ObservableCollection<Grouping<DateTime, CalendarEvent>> selectedDateEventsGrouped { get =>_selectedDateEventsGrouped; set { _selectedDateEventsGrouped = value;OnPropertyChanged(nameof(selectedDateEventsGrouped)); } }
 
+        public PhoneCellModel _phoneCall;
+        public PhoneCellModel PhoneCall { get => _phoneCall; set { _phoneCall = value; OnPropertyChanged(nameof(PhoneCall)); } }
+        public TaskFormModel _task;
+        public TaskFormModel Task { get => _task; set { _task = value; OnPropertyChanged(nameof(Task)); } }
+        public MeetingModel _meet;
+        public MeetingModel Meet { get => _meet; set { _meet = value; OnPropertyChanged(nameof(Meet)); } }
+
+        public bool _showGridButton;
+        public bool ShowGridButton { get => _showGridButton; set { _showGridButton = value; OnPropertyChanged(nameof(ShowGridButton)); } }
+
+        private StatusCodeModel _activityStatusCode;
+        public StatusCodeModel ActivityStatusCode { get => _activityStatusCode; set { _activityStatusCode = value; OnPropertyChanged(nameof(ActivityStatusCode)); } }
+
+        private string _activityType;
+        public string ActivityType { get => _activityType; set { _activityType = value; OnPropertyChanged(nameof(ActivityType)); } }
+
+        private DateTime? _scheduledStartTask;
+        public DateTime? ScheduledStartTask { get => _scheduledStartTask; set { _scheduledStartTask = value; OnPropertyChanged(nameof(ScheduledStartTask)); } }
+
+        private DateTime? _scheduledEndTask;
+        public DateTime? ScheduledEndTask { get => _scheduledEndTask; set { _scheduledEndTask = value; OnPropertyChanged(nameof(ScheduledEndTask)); } }
 
         private DateTime? _selectedDate;
         public DateTime? selectedDate { get => _selectedDate; set { _selectedDate = value; DayLabel = ""; OnPropertyChanged(nameof(selectedDate)); } }
+
+        public string CodeCompleted = "completed";
+        public string CodeCancel = "cancel";
 
         private string _DayLabel;
         public string DayLabel
@@ -45,8 +73,15 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
+        public string entity { get; set; }
+        public string EntityName { get; set; }
+
         public LichLamViecViewModel()
         {
+            PhoneCall = new PhoneCellModel();
+            Task = new TaskFormModel();
+            Meet = new MeetingModel();
+
             lstEvents = new ObservableCollection<CalendarEvent>();
             selectedDateEvents = new ObservableCollection<CalendarEvent>();
             selectedDateEventsGrouped = new ObservableCollection<Grouping<DateTime, CalendarEvent>>();
@@ -64,37 +99,31 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task loadAllActivities()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='activitypointer'>
-                                <attribute name='subject' />
-                                <attribute name='regardingobjectid' />
-                                <attribute name='activitytypecode' />
-                                <attribute name='statecode' />
-                                <attribute name='scheduledstart' />
-                                <attribute name='scheduledend' />
-                                <attribute name='activityid' />
-                                <attribute name='statuscode' />
-                                <order attribute='scheduledstart' descending='false' />
-                                <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer'>
-                                    <attribute name='fullname'  alias='regardingobjectid_label_contact'/>
-                                </link-entity>
-                                <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer'>
-                                    <attribute name='name'  alias='regardingobjectid_label_account'/>
-                                </link-entity>
-                                <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer'>
-                                    <attribute name='fullname'  alias='regardingobjectid_label_lead'/>
-                                </link-entity>
-                                <filter type='and'>
-                                  <condition attribute='isregularactivity' operator='eq' value='1' />
-                                </filter>
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='{entity}'>
+                                    <attribute name='activitytypecode' />
+                                    <attribute name='subject' />
+                                    <attribute name='statecode' />
+                                    <attribute name='activityid' />
+                                    <attribute name='scheduledstart' />
+                                    <attribute name='scheduledend' />
+                                    <order attribute='modifiedon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='isregularactivity' operator='eq' value='1' />
+                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>
+                                    <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer'>
+                                        <attribute name='fullname' alias='regardingobjectid_label_contact'/>
+                                    </link-entity>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer'>
+                                        <attribute name='bsd_name' alias='regardingobjectid_label_account'/>
+                                    </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer'>
+                                        <attribute name='fullname' alias='regardingobjectid_label_lead'/>
+                                    </link-entity>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListActivitiesAcc>>("activitypointers", fetch);
-            //if (result == null)
-            //{
-            //    await Xamarin.Forms.Application.Current.MainPage.DisplayAlert("Error", "Đã có lỗi xảy ra. Vui lòng thử lại sau.", "OK");
-            //    await Xamarin.Forms.Application.Current.MainPage.Navigation.PopAsync();
-            //}
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListActivitiesAcc>>(EntityName, fetch);
             var data = result.value;
             if (data.Any())
             {
@@ -132,7 +161,7 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 var currentDayOfWeek = i;
                 var balance = currentDayOfWeek - dayOfWeek;
-                var currentDate = value.AddDays(balance);
+                var currentDate = value.AddDays(balance).Date;
                 var checkHasValue = false;
 
                 foreach (CalendarEvent item in this.lstEvents)
@@ -161,6 +190,446 @@ namespace ConasiCRM.Portable.ViewModels
                          group eventCalendar by eventCalendar.dateForGroupingWeek.Value into dateGrouped
                          select new Grouping<DateTime, CalendarEvent>(dateGrouped.Key, dateGrouped);
             this.selectedDateEventsGrouped = new ObservableCollection<Grouping<DateTime, CalendarEvent>>(sorted);
+        }
+
+        public async Task loadPhoneCall(Guid id)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            <entity name='phonecall'>
+                <attribute name='subject' />
+                <attribute name='statecode' />
+                <attribute name='prioritycode' />
+                <attribute name='scheduledend' alias='scheduledend' />
+                <attribute name='createdby' />
+                <attribute name='regardingobjectid' />
+                <attribute name='activityid' />
+                <attribute name='statuscode' />
+                <attribute name='scheduledstart' alias='scheduledstart' />
+                <attribute name='actualdurationminutes' />
+                <attribute name='description' />
+                <attribute name='activitytypecode' />
+                <attribute name='phonenumber' />
+                <order attribute='subject' descending='false' />
+                <filter type='and'>
+                    <condition attribute='activityid' operator='eq' uitype='phonecall' value='" + id + @"' />
+                </filter>
+                <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer' alias='a_9b4f4019bdc24dd79b1858c2d087a27d'>
+                    <attribute name='accountid' alias='account_id' />                  
+                    <attribute name='bsd_name' alias='account_name'/>
+                </link-entity>
+                <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer' alias='a_66b6d0af970a40c9a0f42838936ea5ce'>
+                    <attribute name='contactid' alias='contact_id' />                  
+                    <attribute name='fullname' alias='contact_name'/>
+                </link-entity>
+                <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='a_fb87dbfd8304e911a98b000d3aa2e890'>
+                    <attribute name='leadid' alias='lead_id'/>                  
+                    <attribute name='fullname' alias='lead_name'/>
+                </link-entity>
+                <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='outer' alias='aa'>
+                    <attribute name='bsd_name' alias='user_name'/>
+                    <attribute name='bsd_employeeid' alias='user_id'/>
+                </link-entity>
+            </entity>
+          </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhoneCellModel>>("phonecalls", fetch);
+            if (result == null || result.value == null)
+                return;
+            var data = result.value.FirstOrDefault();
+            PhoneCall = data;
+
+            if (data.scheduledend != null && data.scheduledstart != null)
+            {
+                PhoneCall.scheduledend = data.scheduledend.Value.ToLocalTime();
+                PhoneCall.scheduledstart = data.scheduledstart.Value.ToLocalTime();
+            }
+
+            if (PhoneCall.contact_id != Guid.Empty)
+            {
+                PhoneCall.Customer = new CustomerLookUp
+                {
+                    Name = PhoneCall.contact_name
+                };
+            }
+            else if (PhoneCall.account_id != Guid.Empty)
+            {
+                PhoneCall.Customer = new CustomerLookUp
+                {
+                    Name = PhoneCall.account_name
+                };
+            }
+            else if (PhoneCall.lead_id != Guid.Empty)
+            {
+                PhoneCall.Customer = new CustomerLookUp
+                {
+                    Name = PhoneCall.lead_name
+                };
+            }
+
+            if (PhoneCall.statecode == 0)
+                ShowGridButton = true;
+            else
+                ShowGridButton = false;
+        }
+        public async Task loadFromTo(Guid id)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true' >
+                                    <entity name='phonecall' >
+                                        <attribute name='subject' />
+                                        <attribute name='activityid' />
+                                        <order attribute='subject' descending='false' />
+                                        <filter type='and' >
+                                            <condition attribute='activityid' operator='eq' value='" + id + @"' />
+                                        </filter>
+                                        <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='ab' >
+                                            <attribute name='partyid' alias='partyID'/>
+                                            <attribute name='participationtypemask' alias='typemask' />
+                                            <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='partyaccount' >
+                                                <attribute name='bsd_name' alias='account_name'/>
+                                            </link-entity>
+                                            <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='partycontact' >
+                                                <attribute name='fullname' alias='contact_name'/>
+                                            </link-entity>
+                                            <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='partylead' >
+                                                <attribute name='fullname' alias='lead_name'/>
+                                            </link-entity>
+                                            <link-entity name='systemuser' from='systemuserid' to='partyid' link-type='outer' alias='partyuser' >
+                                                <attribute name='fullname' alias='user_name'/>
+                                            </link-entity>
+                                        </link-entity>
+                                    </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PartyModel>>("phonecalls", fetch);
+            if (result == null || result.value == null)
+                return;
+            var data = result.value;
+            if (data.Any())
+            {
+                foreach (var item in data)
+                {
+                    if (item.typemask == 1) // from call
+                    {
+                        PhoneCall.call_from = item.user_name;
+                    }
+                    else if (item.typemask == 2) // to call
+                    {
+                        if (item.contact_name != null && item.contact_name != string.Empty)
+                        {
+                            PhoneCall.call_to = item.contact_name;
+                        }
+                        else if (item.account_name != null && item.account_name != string.Empty)
+                        {
+                            PhoneCall.call_to = item.account_name;
+                        }
+                        else if (item.lead_name != null && item.lead_name != string.Empty)
+                        {
+                            PhoneCall.call_to = item.lead_name;
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task loadTask(Guid id)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='task'>
+                                <attribute name='subject' />
+                                <attribute name='statecode' />
+                                <attribute name='scheduledend' />
+                                <attribute name='activityid' />
+                                <attribute name='statuscode' />
+                                <attribute name='scheduledstart' />
+                                <attribute name='description' />
+                                <order attribute='subject' descending='false' />
+                                <filter type='and' >
+                                    <condition attribute='activityid' operator='eq' value='" + id + @"' />
+                                </filter>
+                                <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ah'>
+    	                            <attribute name='accountid' alias='account_id' />                  
+    	                            <attribute name='bsd_name' alias='account_name'/>
+                                </link-entity>
+                                <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='ai'>
+	                            <attribute name='contactid' alias='contact_id' />                  
+                                    <attribute name='fullname' alias='contact_name'/>
+                                </link-entity>
+                                <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='aj'>
+	                            <attribute name='leadid' alias='lead_id'/>                  
+                                    <attribute name='fullname' alias='lead_name'/>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskFormModel>>("tasks", fetch);
+            if (result == null || result.value == null) return;
+            Task = result.value.FirstOrDefault();
+
+            this.ScheduledStartTask = Task.scheduledstart.Value.ToLocalTime();
+            this.ScheduledEndTask = Task.scheduledend.Value.ToLocalTime();
+
+            if (Task.contact_id != Guid.Empty)
+            {
+                Task.Customer = new CustomerLookUp
+                {
+                    Name = Task.contact_name
+                };
+            }
+            else if (Task.account_id != Guid.Empty)
+            {
+                Task.Customer = new CustomerLookUp
+                {
+                    Name = Task.account_name
+                };
+            }
+            else if (Task.lead_id != Guid.Empty)
+            {
+                Task.Customer = new CustomerLookUp
+                {
+                    Name = Task.lead_name
+                };
+            }
+
+            if (Task.statecode == 0)
+                ShowGridButton = true;
+            else
+                ShowGridButton = false;
+        }
+
+        public async Task loadMeet(Guid id)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                            <entity name='appointment'>
+                                <attribute name='subject' />
+                                <attribute name='statecode' />
+                                <attribute name='createdby' />
+                                <attribute name='statuscode' />
+                                <attribute name='requiredattendees' />
+                                <attribute name='prioritycode' />
+                                <attribute name='scheduledstart' />
+                                <attribute name='scheduledend' />
+                                <attribute name='scheduleddurationminutes' />
+                                <attribute name='bsd_mmeetingformuploaded' />
+                                <attribute name='optionalattendees' />
+                                <attribute name='isalldayevent' />
+                                <attribute name='location' />
+                                <attribute name='activityid' />
+                                <attribute name='description' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='activityid' operator='eq' uitype='appointment' value='" + id + @"' />
+                                </filter>               
+                                <link-entity name='contact' from='contactid' to='regardingobjectid' visible='false' link-type='outer' alias='contacts'>
+                                  <attribute name='contactid' alias='contact_id' />                  
+                                  <attribute name='fullname' alias='contact_name'/>
+                                </link-entity>
+                                <link-entity name='account' from='accountid' to='regardingobjectid' visible='false' link-type='outer' alias='accounts'>
+                                    <attribute name='accountid' alias='account_id' />                  
+                                    <attribute name='bsd_name' alias='account_name'/>
+                                </link-entity>
+                                <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='leads'>
+                                    <attribute name='leadid' alias='lead_id'/>                  
+                                    <attribute name='fullname' alias='lead_name'/>
+                                </link-entity>
+                            </entity>
+                          </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<MeetingModel>>("appointments", fetch);
+            if (result == null || result.value == null)
+                return;
+            var data = result.value.FirstOrDefault();
+            Meet = data;
+
+            if (data.scheduledend != null && data.scheduledstart != null)
+            {
+                Meet.scheduledend = data.scheduledend.Value.ToLocalTime();
+                Meet.scheduledstart = data.scheduledstart.Value.ToLocalTime();
+            }
+
+            if (Meet.contact_id != Guid.Empty)
+            {
+                Meet.Customer = new CustomerLookUp
+                {
+                    Name = Meet.contact_name
+                };
+            }
+            else if (Meet.account_id != Guid.Empty)
+            {
+                Meet.Customer = new CustomerLookUp
+                {
+                    Name = Meet.account_name
+                };
+            }
+            else if (Meet.lead_id != Guid.Empty)
+            {
+                Meet.Customer = new CustomerLookUp
+                {
+                    Name = Meet.lead_name
+                };
+            }
+
+            if (Meet.statecode == 0)
+                ShowGridButton = true;
+            else
+                ShowGridButton = false;
+        }
+
+        public async Task loadFromToMeet(Guid id)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+                                <entity name='appointment'>
+                                    <attribute name='subject' />
+                                    <attribute name='createdon' />
+                                    <attribute name='activityid' />
+                                    <order attribute='createdon' descending='false' />
+                                    <filter type='and'>
+                                        <condition attribute='activityid' operator='eq' value='" + id + @"' />
+                                    </filter>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='ab'>
+                                        <attribute name='partyid' alias='partyID'/>
+                                        <attribute name='participationtypemask' alias='typemask'/>
+                                      <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='partyaccount'>
+                                        <attribute name='bsd_name' alias='account_name'/>
+                                      </link-entity>
+                                      <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='partycontact'>
+                                        <attribute name='fullname' alias='contact_name'/>
+                                      </link-entity>
+                                      <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='partylead'>
+                                        <attribute name='fullname' alias='lead_name'/>
+                                      </link-entity>
+                                      <link-entity name='systemuser' from='systemuserid' to='partyid' link-type='outer' alias='partyuser'>
+                                        <attribute name='fullname' alias='user_name'/>
+                                      </link-entity>
+                                    </link-entity>
+                                </entity>
+                              </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PartyModel>>("appointments", fetch);
+            if (result == null || result.value == null)
+                return;
+            var data = result.value;
+            if (data.Any())
+            {
+                List<string> required = new List<string>();
+                List<string> optional = new List<string>();
+                foreach (var item in data)
+                {
+                    if (item.typemask == 5) // from call
+                    {
+                        if (item.contact_name != null && item.contact_name != string.Empty)
+                        {
+                            required.Add(item.contact_name);
+                        }
+                        else if (item.account_name != null && item.account_name != string.Empty)
+                        {
+                            required.Add(item.account_name);
+                        }
+                        else if (item.lead_name != null && item.lead_name != string.Empty)
+                        {
+                            required.Add(item.lead_name);
+                        }
+                    }
+                    else if (item.typemask == 6) // to call
+                    {
+                        if (item.contact_name != null && item.contact_name != string.Empty)
+                        {
+                            optional.Add(item.contact_name);
+                        }
+                        else if (item.account_name != null && item.account_name != string.Empty)
+                        {
+                            optional.Add(item.account_name);
+                        }
+                        else if (item.lead_name != null && item.lead_name != string.Empty)
+                        {
+                            optional.Add(item.lead_name);
+                        }
+                    }
+                }
+                Meet.required = string.Join(", ", required);
+                Meet.optional = string.Join(", ", optional);
+            }
+        }
+
+        public async Task<bool> UpdateStatusTask(string update)
+        {
+            if (update == CodeCompleted)
+            {
+                Task.statecode = 1;
+            }
+            else if (update == CodeCancel)
+            {
+                Task.statecode = 2;
+            }
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = Task.statecode;
+
+            string path = "/tasks(" + Task.activityid + ")";
+            CrmApiResponse result = await CrmHelper.PatchData(path, data);
+            if (result.IsSuccess)
+            {
+                ShowGridButton = false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateStatusPhoneCall(string update)
+        {
+            if (update == CodeCompleted)
+            {
+                PhoneCall.statecode = 1;
+                PhoneCall.statuscode = 2;
+            }
+            else if (update == CodeCancel)
+            {
+                PhoneCall.statecode = 2;
+                PhoneCall.statuscode = 3;
+            }
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = PhoneCall.statecode;
+            data["statuscode"] = PhoneCall.statuscode;
+
+            string path = "/phonecalls(" + PhoneCall.activityid + ")";
+            CrmApiResponse result = await CrmHelper.PatchData(path, data);
+            if (result.IsSuccess)
+            {
+                ShowGridButton = false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateStatusMeet(string update)
+        {
+            if (update == CodeCompleted)
+            {
+                Meet.statecode = 1;
+            }
+            else if (update == CodeCancel)
+            {
+                Meet.statecode = 2;
+            }
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = Meet.statecode;
+
+            string path = "/appointments(" + Meet.activityid + ")";
+            CrmApiResponse result = await CrmHelper.PatchData(path, data);
+            if (result.IsSuccess)
+            {
+                ShowGridButton = false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

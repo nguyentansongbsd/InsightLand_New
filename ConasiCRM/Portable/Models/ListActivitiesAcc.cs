@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Models
 {
-    public class ListActivitiesAcc : ContentView
+    public class ListActivitiesAcc 
     {
         public string subject { get; set; }
         public string description { get; set; }
