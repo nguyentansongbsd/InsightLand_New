@@ -27,7 +27,7 @@ namespace ConasiCRM.Portable.Views
         private void listView_ItemTapped(System.Object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
             LoadingHelper.Show();
-            var item = e.Item as FollowUpListPageModel;
+            var item = e.Item as FollowUpModel;
             FollowDetailPage followDetailPage = new FollowDetailPage(item.bsd_followuplistid);
             followDetailPage.OnLoaded = async(isSuccess) =>
             {
@@ -45,18 +45,18 @@ namespace ConasiCRM.Portable.Views
             
         }
 
-        private async void Search_Pressed(object sender, EventArgs e)
+        private async void SearchBar_SearchButtonPressed(System.Object sender, System.EventArgs e)
         {
             LoadingHelper.Show();
             await viewModel.LoadOnRefreshCommandAsync();
             LoadingHelper.Hide();
         }
 
-        private void Search_TextChanged(object sender, EventArgs e)
+        private void SearchBar_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
             if (string.IsNullOrEmpty(viewModel.Keyword))
             {
-                Search_Pressed(null, EventArgs.Empty);
+                SearchBar_SearchButtonPressed(null, EventArgs.Empty);
             }
         }
     }
