@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
@@ -21,10 +22,15 @@ namespace ConasiCRM.Portable.Views
 
         public async void loadData()
         {
-            //viewModel.selectedDate = DateTime.Now.Date;
-            //viewModel.UpdateSelectedEventsForWeekView(viewModel.selectedDate.Value);
+            viewModel.EntityName = "tasks";
+            viewModel.entity = "task";
+            VisualStateManager.GoToState(radBorderTask, "Active");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "Active");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
 
-            //listView.ItemsSource = viewModel.selectedDateEventsGrouped;
             await viewModel.loadAllActivities();
             Handle_DateSelected(null, new Xamarin.Forms.DateChangedEventArgs(DateTime.Now, DateTime.Now));         
             if (viewModel.lstEvents != null && viewModel.lstEvents.Count > 0)
@@ -33,32 +39,94 @@ namespace ConasiCRM.Portable.Views
                 OnComplete?.Invoke(false);
         }
 
+        private async void Task_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radBorderTask, "Active");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "Active");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
+
+            if (viewModel.entity != "task")
+            {
+                viewModel.EntityName = "tasks";
+                viewModel.entity = "task";
+                viewModel.lstEvents.Clear();
+                await viewModel.loadAllActivities();
+                viewModel.UpdateSelectedEventsForWeekView(viewModel.selectedDate.Value);
+            }
+
+            LoadingHelper.Hide();
+        }
+
+        private async void Meeting_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radBorderTask, "InActive");
+            VisualStateManager.GoToState(radBorderMeeting, "Active");
+            VisualStateManager.GoToState(radBorderPhoneCall, "InActive");
+            VisualStateManager.GoToState(lblTask, "InActive");
+            VisualStateManager.GoToState(lblMeeting, "Active");
+            VisualStateManager.GoToState(lblPhoneCall, "InActive");
+
+            if (viewModel.entity != "appointment")
+            {
+                viewModel.EntityName = "appointments";
+                viewModel.entity = "appointment";
+                viewModel.lstEvents.Clear();
+                await viewModel.loadAllActivities();
+                viewModel.UpdateSelectedEventsForWeekView(viewModel.selectedDate.Value);
+            }
+
+            LoadingHelper.Hide();
+        }
+
+        private async void PhoneCall_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            VisualStateManager.GoToState(radBorderTask, "InActive");
+            VisualStateManager.GoToState(radBorderMeeting, "InActive");
+            VisualStateManager.GoToState(radBorderPhoneCall, "Active");
+            VisualStateManager.GoToState(lblTask, "InActive");
+            VisualStateManager.GoToState(lblMeeting, "InActive");
+            VisualStateManager.GoToState(lblPhoneCall, "Active");
+
+            if (viewModel.entity != "phonecall")
+            {
+                viewModel.EntityName = "phonecalls";
+                viewModel.entity = "phonecall";
+                viewModel.lstEvents.Clear();
+                await viewModel.loadAllActivities();
+                viewModel.UpdateSelectedEventsForWeekView(viewModel.selectedDate.Value);
+            }
+
+            LoadingHelper.Hide();
+        }
+
         void Handle_DateSelected(object sender, Xamarin.Forms.DateChangedEventArgs e)
         {
             viewModel.selectedDate = e.NewDate;
             viewModel.UpdateSelectedEventsForWeekView(viewModel.selectedDate.Value);
-
-            listView.ItemsSource = viewModel.selectedDateEventsGrouped;
         }
 
-        async void AddButton_Clicked(object sender, System.EventArgs e)
+        private async void AddButton_Clicked(object sender, System.EventArgs e)
         {
-            var choice = await DisplayActionSheet("Chọn Activity để thêm", "Huỷ", null, new String[] { "Cuộc gọi", "Công việc", "Cuộc họp" });
             LoadingHelper.Show();
-            if (choice == "Công việc")
+            string[] options = new string[] { "Tạo Công Việc", "Tạo Cuộc Họp", "Tạo Cuộc Gọi" };
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
+            if (asw == "Tạo Công Việc")
             {
-                await Navigation.PushAsync(new TaskForm(viewModel.selectedDate.Value));
-                LoadingHelper.Hide();
+                await Navigation.PushAsync(new TaskForm());
             }
-            else if (choice == "Cuộc gọi")
+            else if (asw == "Tạo Cuộc Gọi")
             {
-               // await Navigation.PushAsync(new PhoneCallForm(viewModel.selectedDate.Value));
-                LoadingHelper.Hide();
+                await Navigation.PushAsync(new PhoneCallForm());
             }
-            else if (choice == "Cuộc họp")
+            else if (asw == "Tạo Cuộc Họp")
             {
-                //await Navigation.PushAsync(new MeetingForm(viewModel.selectedDate.Value));
-                //LoadingHelper.Hide();
+                await Navigation.PushAsync(new MeetingForm());
             }
             LoadingHelper.Hide();
         }
@@ -71,54 +139,71 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 if (val.Activity.activitytypecode == "task")
                 {
-                    TaskForm newPage = new TaskForm(val.Activity.activityid);
-                    newPage.CheckTaskForm = async (CheckEventData) =>
+                    await viewModel.loadTask(val.Activity.activityid);
+                    viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
+                    viewModel.ActivityType = "Task";
+                    if (viewModel.Task.activityid != Guid.Empty)
                     {
-                        if (CheckEventData == true)
-                        {
-                            await Navigation.PushAsync(newPage);
-                            LoadingHelper.Hide();
-                        }
-                        else
-                        {
-                            LoadingHelper.Hide();
-                            await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
-                        }
-                    };
+                        ContentActivity.IsVisible = true;
+                        ContentPhoneCall.IsVisible = false;
+                        ContentTask.IsVisible = true;
+                        ContentMeet.IsVisible = false;
+
+                        viewModel.PhoneCall.activityid = Guid.Empty;
+                        viewModel.Meet.activityid = Guid.Empty;
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
                 }
                 else if (val.Activity.activitytypecode == "phonecall")
                 {
-                    //PhoneCallForm newPage = new PhoneCallForm(val.Activity.activityid);
-                    //newPage.CheckPhoneCell = async (CheckEventData) =>
-                    //{
-                    //    if (CheckEventData == true)
-                    //    {
-                    //        await Navigation.PushAsync(newPage);
-                    //        LoadingHelper.Hide();
-                    //    }
-                    //    else
-                    //    {
-                    //        LoadingHelper.Hide();
-                    //        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
-                    //    }
-                    //};
+                    await viewModel.loadPhoneCall(val.Activity.activityid);
+                    await viewModel.loadFromTo(val.Activity.activityid);
+                    viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
+                    viewModel.ActivityType = "Phone Call";
+                    if (viewModel.PhoneCall.activityid != Guid.Empty)
+                    {
+                        ContentActivity.IsVisible = true;
+                        ContentPhoneCall.IsVisible = true;
+                        ContentTask.IsVisible = false;
+                        ContentMeet.IsVisible = false;
+
+                        viewModel.Task.activityid = Guid.Empty;
+                        viewModel.Meet.activityid = Guid.Empty;
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
                 }
                 else if (val.Activity.activitytypecode == "appointment")
                 {
-                    //MeetingForm newPage = new MeetingForm(val.Activity.activityid);
-                    //newPage.CheckMeeting = async (CheckEventData) =>
-                    //{
-                    //    if (CheckEventData == true)
-                    //    {
-                    //        await Navigation.PushAsync(newPage);
-                    //        LoadingHelper.Hide();
-                    //    }
-                    //    else
-                    //    {
-                    //        LoadingHelper.Hide();
-                    //        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
-                    //    }
-                    //};
+                    await viewModel.loadMeet(val.Activity.activityid);
+                    await viewModel.loadFromToMeet(val.Activity.activityid);
+                    viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
+                    viewModel.ActivityType = "Collection Meeting";
+                    if (viewModel.Meet.activityid != Guid.Empty)
+                    {
+                        ContentActivity.IsVisible = true;
+                        ContentPhoneCall.IsVisible = false;
+                        ContentTask.IsVisible = false;
+                        ContentMeet.IsVisible = true;
+
+                        viewModel.Task.activityid = Guid.Empty;
+                        viewModel.PhoneCall.activityid = Guid.Empty;
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
                 }
             }
             else
@@ -126,6 +211,173 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
                 await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
             }
+        }
+
+        private void CloseContentActivity_Tapped(object sender, EventArgs e)
+        {
+            ContentActivity.IsVisible = false;
+        }
+
+        private async void Update_Clicked(object sender, EventArgs e)
+        {
+            if (viewModel.PhoneCall.activityid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                PhoneCallForm newPage = new PhoneCallForm(viewModel.PhoneCall.activityid);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
+            }
+            else if (viewModel.Task.activityid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                TaskForm newPage = new TaskForm(viewModel.Task.activityid);
+                newPage.CheckTaskForm = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
+            }
+            else if (viewModel.Meet.activityid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                MeetingForm newPage = new MeetingForm(viewModel.Meet.activityid);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
+            }
+        }
+
+        private async void Completed_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            string[] options = new string[] { "Hoàn Thành", "Hủy" };
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Đóng", null, options);
+            if (asw == "Hoàn Thành")
+            {
+                if (viewModel.PhoneCall.activityid != Guid.Empty)
+                {
+                    LoadingHelper.Show();
+                    if (await viewModel.UpdateStatusPhoneCall(viewModel.CodeCompleted))
+                    {
+                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Cuộc gọi đã hoàn thành");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành cuộc gọi. Vui lòng thử lại");
+                    }
+                }
+                else if (viewModel.Task.activityid != Guid.Empty)
+                {
+                    LoadingHelper.Show();
+                    if (await viewModel.UpdateStatusTask(viewModel.CodeCompleted))
+                    {
+                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Công việc đã hoàn thành");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành công việc. Vui lòng thử lại");
+                    }
+                }
+                else if (viewModel.Meet.activityid != Guid.Empty)
+                {
+                    LoadingHelper.Show();
+                    if (await viewModel.UpdateStatusMeet(viewModel.CodeCompleted))
+                    {
+                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Cuộc họp đã hoàn thành");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành cuộc họp. Vui lòng thử lại");
+                    }
+                }
+            }
+            else if (asw == "Hủy")
+            {
+                if (viewModel.PhoneCall.activityid != Guid.Empty)
+                {
+                    LoadingHelper.Show();
+                    if (await viewModel.UpdateStatusPhoneCall(viewModel.CodeCancel))
+                    {
+                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Cuộc gọi đã được hủy");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Lỗi khi hủy cuộc gọi. Vui lòng thử lại");
+                    }
+                }
+                else if (viewModel.Task.activityid != Guid.Empty)
+                {
+                    LoadingHelper.Show();
+                    if (await viewModel.UpdateStatusTask(viewModel.CodeCancel))
+                    {
+                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Công việc đã được hủy");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Lỗi khi hủy công việc. Vui lòng thử lại");
+                    }
+                }
+                else if (viewModel.Meet.activityid != Guid.Empty)
+                {
+                    LoadingHelper.Show();
+                    if (await viewModel.UpdateStatusMeet(viewModel.CodeCancel))
+                    {
+                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Cuộc họp đã được hủy");
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Lỗi khi hủy cuộc họp. Vui lòng thử lại");
+                    }
+                }
+            }
+            LoadingHelper.Hide();
         }
     }
 }
