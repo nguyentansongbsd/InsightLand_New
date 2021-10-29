@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Services;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class QueuListViewModel : ListViewBaseViewModel2<QueueListModel>
+    public class QueuListViewModel : ListViewBaseViewModel2<QueuesModel>
     {
         public string Keyword { get; set; }
         public ICommand PhoneCommand { get; }
@@ -24,39 +25,31 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 EntityName = "opportunities";
                 FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='false'>
-                  <entity name='opportunity'>
-                    <attribute name='name' />
-                    <attribute name='statecode' />
-                    <attribute name='customerid' alias='customer_id'/>
-                    <attribute name='emailaddress' />
-                    <attribute name='bsd_queuenumber' />
-                    <attribute name='statuscode' />
-                    <attribute name='bsd_queuingfee' />
-                    <attribute name='bsd_project' alias='project_id' />
-                    <attribute name='bsd_phaselaunch' />
-                    <attribute name='createdon' />
-                    <attribute name='bsd_queuingexpired' />
-                    <attribute name='statuscode' />
-                    <attribute name='opportunityid' />                    
-                    <order attribute='createdon' descending='true' />
-                    <filter type='and'>
-                      <condition attribute='name' operator='like' value='%{Keyword}%' />
-                    </filter>
-                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='a'>
-                      <attribute name='bsd_name' alias='account_name' />
-                      <attribute name='telephone1' alias='telephone' />
-                    </link-entity>
-                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='b'>
-                      <attribute name='bsd_fullname'  alias='contact_name'/>
-                    </link-entity>
-                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' alias='c'>
-                      <attribute name='bsd_name' alias='project_name' />
-                    </link-entity>
-                    <link-entity name='product' from='productid' to='bsd_units' visible='false' link-type='outer' alias='a_b088efffb214e911a97f000d3aa04914'>
-                        <attribute name='name' alias='unit_name' />
-                    </link-entity>
-                  </entity>
-                </fetch>";
+                      <entity name='opportunity'>
+                        <attribute name='name'/>
+                        <attribute name='statuscode' />
+                        <attribute name='bsd_project' />
+                        <attribute name='opportunityid' />
+                        <attribute name='bsd_queuenumber' />
+                        <attribute name='bsd_queuingexpired' />
+                        <attribute name='createdon' />
+                        <order attribute='createdon' descending='true' />
+                        <filter type='and'>                          
+                            <filter type='or'>
+                                <condition attribute='name' operator='like' value='%25{Keyword}%25' />
+                                <condition attribute='customeridname' operator='like' value='%25{Keyword}%25' />
+                                <condition attribute='bsd_queuenumber' operator='like' value='%25{Keyword}%25' />
+                            </filter>
+                          <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                        </filter>
+                        <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
+                           <attribute name='fullname'  alias='contact_name'/>
+                        </link-entity>
+                        <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
+                           <attribute name='name'  alias='account_name'/>
+                        </link-entity>
+                      </entity>
+                    </fetch>";
             });
         }
 

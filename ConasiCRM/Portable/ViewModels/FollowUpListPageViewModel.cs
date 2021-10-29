@@ -23,7 +23,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_followuplistcode' />
                                     <attribute name='bsd_followuplistid' />
                                     <attribute name='bsd_expiredate' />
-                                    <order attribute='createdon' descending='true' />
+                                    <order attribute='createdon' descending='true' /> 
                                     <filter type='or'>
                                       <condition attribute='bsd_unitsname' operator='like' value='%25{Keyword}%25' />
                                       <condition attribute='bsd_name' operator='like' value='%25{Keyword}%25' />

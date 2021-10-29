@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
@@ -46,7 +47,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            QueueListModel val = e.Item as QueueListModel;
+            QueuesModel val = e.Item as QueuesModel;
             LoadingHelper.Show();
             //QueueForm newPage = new QueueForm(val.opportunityid);
             //newPage.CheckQueueInfo = async (CheckQueueInfo) =>
