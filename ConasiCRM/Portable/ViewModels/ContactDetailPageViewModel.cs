@@ -210,11 +210,7 @@ namespace ConasiCRM.Portable.ViewModels
                         </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationListModel>>("quotes", fetch);
-            if (result == null)
-//=======
-//            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuotationReseravtion>>("quotes", fetch);
-//            if (result == null || result.value.Count == 0)
-//>>>>>>> develop
+            if (result == null || result.value.Count == 0)
             {
                 ShowMoreDanhSachDatCoc = false;
                 return;
@@ -268,17 +264,12 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                 </entity>
                         </fetch>";
-
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ContractModel>>("salesorders", fetch);
-            if (result == null || result.value.Count() == 0) return;
-//=======
-//            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionEntry>>("salesorders", fetch);
-//            if (result == null || result.value.Count == 0)
-//            {
-//                ShowMoreDanhSachHopDong = false;
-//                return;
-//            }
-//>>>>>>> develop
+            if (result == null || result.value.Count == 0)
+            {
+                ShowMoreDanhSachHopDong = false;
+                return;
+            }
             var data = result.value;
             ShowMoreDanhSachHopDong = data.Count < 3 ? false : true;
 
@@ -311,18 +302,12 @@ namespace ConasiCRM.Portable.ViewModels
                                     </filter>         
                                 </entity>
                         </fetch>";
-
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListPhanHoiModel>>("incidents", fetch);
-            if (result == null || result.value.Any() == false) return;
-
-//=======
-//            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Case>>("incidents", fetch);
-//            if (result == null || result.value.Count == 0)
-//            {
-//                ShowMoreChamSocKhachHang = false;
-//                return;
-//            }
-//>>>>>>> develop
+            if (result == null || result.value.Count == 0)
+            {
+                ShowMoreChamSocKhachHang = false;
+                return;
+            }
             var data = result.value;
             ShowMoreChamSocKhachHang = data.Count < 3 ? false : true;
             foreach (var x in data)
