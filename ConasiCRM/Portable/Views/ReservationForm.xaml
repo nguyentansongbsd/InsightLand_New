@@ -248,8 +248,8 @@
                                         <controls:FormLabelRequired Text="Loại hợp đồng" Margin="0,10,0,0"/>
                                         <controls:LookUp x:Name="lookupLoaiHopDong" Placeholder="Chọn loại hợp đồng" BottomModal="{Reference lookUpModal}" NameDisplay="Label" SelectedItem="{Binding ContractType}" ItemsSource="{Binding ContractTypes}"/>
 
-                                        <controls:FormLabelRequired Text="Mô tả" Margin="0,10,0,0"/>
-                                        <controls:MainEntry Placeholder="Nhập mô tả" Text="{Binding Quote.name}"/>
+                                        <controls:FormLabelRequired Text="Tiêu đề" Margin="0,10,0,0"/>
+                                        <controls:MainEntry Placeholder="Nhập tiêu đề" Text="{Binding Quote.name}"/>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>

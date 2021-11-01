@@ -64,8 +64,50 @@ namespace ConasiCRM.Portable.Views
             await centerModelPassword.Show();
         }
 
+        private void OldPassword_TextChanged(object sender, EventArgs e)
+        {
+            if (viewModel.OldPassword.Contains(" "))
+            {
+                ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+            }
+        }
+
+        private void NewPassword_TextChanged(object sender, EventArgs e)
+        {
+            if (viewModel.NewPassword.Contains(" "))
+            {
+                ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+            }
+        }
+
+        private void ConfirmPassword_TextChanged(object sender, EventArgs e)
+        {
+            if (viewModel.ConfirmNewPassword.Contains(" "))
+            {
+                ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+            }
+        }
+
         private async void SaveChangedPassword_Clicked(object sender, EventArgs e)
         {
+            if (viewModel.OldPassword == " ")
+            {
+                ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+                return;
+            }
+
+            if (viewModel.NewPassword == " ")
+            {
+                ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+                return;
+            }
+
+            if (viewModel.ConfirmNewPassword == " ")
+            {
+                ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(viewModel.OldPassword))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập mật khẩu cũ");
@@ -93,6 +135,12 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.NewPassword != viewModel.ConfirmNewPassword)
             {
                 ToastMessageHelper.ShortMessage("Xác nhận mật khẩu không đúng");
+                return;
+            }
+
+            if (viewModel.OldPassword == viewModel.NewPassword)
+            {
+                ToastMessageHelper.LongMessage("Bạn đang sử dụng mật khẩu cũ. Vui lòng nhập lại.");
                 return;
             }
 
@@ -184,12 +232,6 @@ namespace ConasiCRM.Portable.Views
 
         private async void SaveUserInfor_Clicked(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(viewModel.ContactModel.bsd_fullname))
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(viewModel.ContactModel.mobilephone))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");
@@ -231,7 +273,7 @@ namespace ConasiCRM.Portable.Views
         private async void ChangeAvatar_Tapped(object sender, EventArgs e)
         {
             string[] options = new string[] { "Thư viện", "Chụp hình" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Huỹ", null, options);
+            string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
             if (asw == "Thư viện")
             {
                 LoadingHelper.Show();

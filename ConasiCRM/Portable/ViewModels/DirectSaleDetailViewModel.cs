@@ -205,6 +205,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='name' />
                                 <attribute name='statuscode' />
                                 <attribute name='price' />
+                                <attribute name='bsd_phaseslaunchid' />
                                 <order attribute='name' descending='false' />
                                 <filter type='and'>
                                     <condition attribute='statuscode' operator='ne' value='0' />
@@ -260,6 +261,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_floor' alias='floorid'/>
                                     <attribute name='bsd_blocknumber' alias='blockid'/>
                                     <attribute name='bsd_phaseslaunchid' />
+                                    <attribute name='bsd_vippriority' />
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{unitId}' />

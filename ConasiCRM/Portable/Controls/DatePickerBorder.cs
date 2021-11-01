@@ -4,12 +4,12 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Controls
 {
-    public class DatePickerBorder :  RadDateTimePicker
+    public class DatePickerBorder : DatePicker
     {
         public DatePickerBorder()
         {
-            //this.FontSize = 15;
-            //this.TextColor = Color.FromHex("#333333");
+            this.FontSize = 15;
+            this.TextColor = Color.FromHex("#333333");
         }
     }
 }

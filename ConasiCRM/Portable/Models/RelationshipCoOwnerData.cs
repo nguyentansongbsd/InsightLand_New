@@ -10,11 +10,11 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("100000000","Spouse"),
-                new OptionSet("100000001","Child"),
-                new OptionSet("100000002","Parent"),
-                new OptionSet("100000003","Friend"),
-                new OptionSet("100000004","Other"),
+                new OptionSet("100000000","Vợ chồng"),
+                new OptionSet("100000001","Con"),
+                new OptionSet("100000002","Cha mẹ"),
+                new OptionSet("100000003","Bạn"),
+                new OptionSet("100000004","Khác"),
             };
         }
         public static OptionSet GetRelationshipById(string id)

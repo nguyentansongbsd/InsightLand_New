@@ -18,6 +18,9 @@ namespace ConasiCRM.Portable.ViewModels
         private string _avatar;
         public string Avatar { get => _avatar; set { _avatar = value; OnPropertyChanged(nameof(Avatar)); } }
 
+        private string _userName;
+        public string UserName { get => _userName; set { _userName = value;OnPropertyChanged(nameof(UserName)); } }
+
         private string _address;
         public string Address { get => _address; set { _address = value; OnPropertyChanged(nameof(Address)); } }
 
@@ -83,6 +86,7 @@ namespace ConasiCRM.Portable.ViewModels
             Password = UserLogged.Password;
             this.Genders = new List<OptionSet>() { new OptionSet("1", "Nam"), new OptionSet("2", "Nữ"), new OptionSet("100000000", "Khác") };
             this.Avatar = UserLogged.Avartar;
+            this.UserName = UserLogged.User;
         }
 
         public async Task LoadContact()
@@ -279,8 +283,8 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> GetContent()
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data["lastname"] = this.ContactModel.bsd_fullname;
-            data["bsd_fullname"] = this.ContactModel.bsd_fullname;
+            //data["lastname"] = this.ContactModel.bsd_fullname;
+            //data["bsd_fullname"] = this.ContactModel.bsd_fullname;
             data["emailaddress1"] = this.ContactModel.emailaddress1;
             data["mobilephone"] = this.ContactModel.mobilephone;
             data["birthdate"] = (DateTime.Parse(this.ContactModel.birthdate.ToString()).ToLocalTime()).ToString("yyyy-MM-dd");
