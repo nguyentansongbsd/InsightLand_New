@@ -85,6 +85,7 @@
             <converter:NullToHideConverter x:Key="NullToHideConverter"/>
             <converter:UnitItemWidthConverter x:Key="UnitItemWidthConverter"/>
             <converter:BackgroundUnitConverter x:Key="BackgroundUnitConverter"/>
+            <converter:HidePriceOnDirectSaleConverter x:Key="HidePriceOnDirectSaleConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -106,7 +107,8 @@
                                         <telerikPrimitives:RadBorder.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Block_Tapped" CommandParameter="{Binding}" />
                                         </telerikPrimitives:RadBorder.GestureRecognizers>
-                                        <Label Text="{Binding bsd_name}" Style="{StaticResource lblBlocks}" TextColor="#B3B3B3" FontSize="15"/><!--,StringFormat='Toà {0}'-->
+                                        <Label Text="{Binding bsd_name}" Style="{StaticResource lblBlocks}" TextColor="#B3B3B3" FontSize="15"/>
+                                        <!--,StringFormat='Toà {0}'-->
                                     </telerikPrimitives:RadBorder>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -151,19 +153,21 @@
                                         </Grid>
 
                                         <BoxView HeightRequest="1" BackgroundColor="LightGray" Margin="0,16" IsVisible="{Binding Source={x:Reference flexContentUnits},Path=IsVisible}"/>
-                                         
+
                                         <FlexLayout x:Name="flexContentUnits" IsVisible="false" Padding="8,0" Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
-                                            <FlexLayout.GestureRecognizers><TapGestureRecognizer/></FlexLayout.GestureRecognizers>
+                                            <FlexLayout.GestureRecognizers>
+                                                <TapGestureRecognizer/>
+                                            </FlexLayout.GestureRecognizers>
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <telerikPrimitives:RadBorder CornerRadius="10" BackgroundColor="{Binding statuscode, Converter={StaticResource BackgroundUnitConverter}}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
+                                                    <telerikPrimitives:RadBorder x:Name="test" CornerRadius="10" BackgroundColor="{Binding statuscode, Converter={StaticResource BackgroundUnitConverter}}" Padding="0,20" Margin="4" WidthRequest = "{Binding Source={Reference flexContentUnits},Path=Padding, Converter={StaticResource UnitItemWidthConverter}}">
                                                         <telerikPrimitives:RadBorder.GestureRecognizers>
                                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding productid}"/>
                                                         </telerikPrimitives:RadBorder.GestureRecognizers>
                                                         <StackLayout>
                                                             <Label Text="{Binding name}" TextColor="White" FontSize="23" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
                                                             <Label Text="{Binding NumQueses,StringFormat='Giữ chỗ: {0}'}" FontFamily="FontRobotoMedium" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-                                                            <Label Text="{Binding price,StringFormat='{0:0,0 đ}'}" TextColor="White" FontFamily="FontRobotoBold" FontSize="20" HorizontalTextAlignment="Center" />
+                                                            <Label Text="{Binding price,StringFormat='{0:0,0 đ}'}" IsVisible="{Binding _bsd_phaseslaunchid_value, Converter={StaticResource HidePriceOnDirectSaleConverter}}" TextColor="White" FontFamily="FontRobotoBold" FontSize="20" HorizontalTextAlignment="Center" />
                                                         </StackLayout>
                                                     </telerikPrimitives:RadBorder>
                                                 </DataTemplate>
@@ -201,11 +205,18 @@
                                     </Label.GestureRecognizers>
                                 </Label>
                             </Grid>
-                            <Label Text="{Binding Unit.price,Converter={StaticResource DecimalToVndConverter}}" FontSize="16" FontAttributes="Bold" TextColor="#790311"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{Binding Unit.price,Converter={StaticResource DecimalToVndConverter}}" FontSize="16" FontAttributes="Bold" TextColor="#790311"/>
+                                <StackLayout Grid.Column="1" IsVisible="{Binding Unit.bsd_vippriority}" HorizontalOptions="End" Orientation="Horizontal">
+                                    <Label Text="VIP" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
+                                    <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
+                                </StackLayout>
+                            </Grid>
+
                             <Label FontSize="15" TextColor="#444444">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Diện tích: "/>
+                                        <Span Text="Diện tích sử dụng : "/>
                                         <Span Text="{Binding Unit.bsd_constructionarea,StringFormat='{0:#,0.#0} m2'}"/>
                                     </FormattedString>
                                 </Label.FormattedText>

@@ -18,6 +18,8 @@ namespace ConasiCRM.Portable.Models
                 new OptionSet("100000000","Tòa chào mừng"),
                 new OptionSet("100000001","Sân chơi trẻ em ngoài trời"),
                 new OptionSet("100000002","Biển"),
+                new OptionSet("100000003","Garden"),
+                new OptionSet("100000004","Pool")
             };
         }
     }

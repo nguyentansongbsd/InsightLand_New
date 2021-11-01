@@ -550,6 +550,19 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
+            if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng không được trùng với người mua");
+                viewModel.CustomerCoOwner = null;
+                return;
+            }
+
+            if (viewModel.CoOwnerList.Any(x=>x.contact_id == Guid.Parse(viewModel.CustomerCoOwner?.Val) || x.account_id == Guid.Parse(viewModel.CustomerCoOwner?.Val)) )
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng đã được chọn");
+                return;
+            }
+
             LoadingHelper.Show();
             if (viewModel.CustomerCoOwner.Title == "2")
             {
@@ -692,7 +705,7 @@ namespace ConasiCRM.Portable.Views
 
             if (string.IsNullOrWhiteSpace(viewModel.Quote.name))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả");
+                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
                 return;
             }
             if (viewModel.SalesAgent == null)
@@ -703,6 +716,12 @@ namespace ConasiCRM.Portable.Views
             if (string.IsNullOrWhiteSpace(viewModel.Quote.bsd_waivermanafeemonth))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng điền số tháng miễn giảm phí quản lý");
+                return;
+            }
+
+            if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)
+            {
+                ToastMessageHelper.ShortMessage("Khách hàng Co-Owner và người mua không được trùng.");
                 return;
             }
 

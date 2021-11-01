@@ -10,9 +10,9 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("100000000","Long term lease"),
-                new OptionSet("100000001","Local SPA"),
-                new OptionSet("100000002","Foreigner SPA"),
+                new OptionSet("100000000","Cho thuê dài hạn"),
+                new OptionSet("100000001","Hợp đồng mua bán trong nước"),
+                new OptionSet("100000002","HĐMB nước ngoài"),
             };
         }
         public static OptionSet GetContractTypeById(string id)
