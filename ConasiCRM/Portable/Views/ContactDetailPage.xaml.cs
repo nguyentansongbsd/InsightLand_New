@@ -101,30 +101,36 @@ namespace ConasiCRM.Portable.Views
 
         private void CMNDFront_Tapped(object sender, EventArgs e)
         {
-            photoBrowser = new PhotoBrowser
+            if (!string.IsNullOrWhiteSpace(viewModel.frontImage))
             {
-                Photos = new List<Photo>
+                photoBrowser = new PhotoBrowser
+                {
+                    Photos = new List<Photo>
                 {
                     new Photo{
                         URL = viewModel.frontImage
                     }
                 }
-            };
-            photoBrowser.Show();
+                };
+                photoBrowser.Show();
+            }
         }
 
         private void CMNDBehind_Tapped(object sender, EventArgs e)
         {
-            photoBrowser = new PhotoBrowser
+            if (!string.IsNullOrWhiteSpace(viewModel.behindImage))
             {
-                Photos = new List<Photo>
+                photoBrowser = new PhotoBrowser
+                {
+                    Photos = new List<Photo>
                 {
                     new Photo{
                         URL = viewModel.behindImage
                     }
                 }
-            };
-            photoBrowser.Show();
+                };
+                photoBrowser.Show();
+            }
         }
 
         #region Tab giao dich
@@ -448,6 +454,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
                 }
             };
-        }
+        }    
     }
 }

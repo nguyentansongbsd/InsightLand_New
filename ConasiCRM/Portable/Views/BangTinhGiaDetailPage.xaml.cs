@@ -279,7 +279,7 @@ namespace ConasiCRM.Portable.Views
                 if (IsSuccess == "Localization")
                 {
                     string asw = await App.Current.MainPage.DisplayActionSheet("Khách hàng chưa chọn quốc gia", "Hủy", "Thêm quốc gia");
-                    if (asw == "Thêm địa chỉ")
+                    if (asw == "Thêm quốc gia")
                     {
                         if (!string.IsNullOrEmpty(viewModel.Reservation.purchaser_contact_name))
                         {
