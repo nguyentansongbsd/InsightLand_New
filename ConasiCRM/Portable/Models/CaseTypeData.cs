@@ -13,6 +13,7 @@ namespace ConasiCRM.Portable.Models
                 new OptionSet("1","Question"),
                 new OptionSet("2","Problem"),
                 new OptionSet("3","Request"),
+                 new OptionSet("0",""),
             };
         }
 

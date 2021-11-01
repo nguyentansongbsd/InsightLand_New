@@ -190,15 +190,6 @@ namespace ConasiCRM.Portable.Views
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (QueueForm.NeedToRefreshContactList.HasValue) QueueForm.NeedToRefreshContactList = true;
 
-                    if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
-                    {
-                        await viewModel.UpLoadCMNDFront();
-                    }
-                    if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
-                    {
-                        await viewModel.UpLoadCMNDBehind();
-                    }
-
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
                     LoadingHelper.Hide();

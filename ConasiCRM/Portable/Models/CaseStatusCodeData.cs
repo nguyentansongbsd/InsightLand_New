@@ -18,7 +18,9 @@ namespace ConasiCRM.Portable.Models
                 new OptionSet("5", "Problem Solved"),
                 new OptionSet("1000", "Information Provided"),
                 new OptionSet("6", "Canceled"),
-                new OptionSet("2000", "Merged")
+                new OptionSet("2000", "Merged"),
+                 new OptionSet("0", "")
+
             };
         }
 

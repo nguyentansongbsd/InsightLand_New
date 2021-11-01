@@ -16,6 +16,7 @@ namespace ConasiCRM.Portable.Models
                 new OptionSet("2483","Facebook"),
                 new OptionSet("3986","Twitter"),
                 new OptionSet("700610000","IoT"),
+                new OptionSet("0","")
             };
         }
 

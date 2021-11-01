@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -212,6 +213,23 @@ namespace ConasiCRM.Portable.ViewModels
                 } 
                 QueueUnitModel queueUnit = await ContentQueueUnit();
                 await CreateQueueUnit(queueUnit);
+
+                //var data = new
+                //{
+                //    Command = "Book"
+                //};
+
+                //var res = await CrmHelper.PostData($"/products({QueueFormModel.bsd_units_id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
+
+                //if (res.IsSuccess)
+                //{
+                //  string b =  res.Content;
+                //   var m = JsonConvert.DeserializeObject<object>(res.Content);
+                //}
+                //else
+                //{
+
+                //}
                 return true;
             }
             else

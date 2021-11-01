@@ -65,6 +65,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private string _behindImage;
         public string behindImage { get => _behindImage; set { _behindImage = value; OnPropertyChanged(nameof(behindImage)); } }
+
+        private bool _showCMND;
+        public bool ShowCMND { get => _showCMND; set { _showCMND = value; OnPropertyChanged(nameof(ShowCMND)); } }
         public ContactDetailPageViewModel()
         {
             singleContact = new ContactFormModel();
@@ -102,14 +105,34 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task GetImageCMND()
         {
+            ShowCMND = false;
             if (this.singleContact.contactid != Guid.Empty)
             {
                 var frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
                 var behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
 
                 string token = (await CrmHelper.getSharePointToken()).access_token;
-                frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
-                behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
+                var client = BsdHttpClient.Instance();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+                                + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
+                var front_result = await client.SendAsync(front_request);
+                if (front_result.IsSuccessStatusCode)
+                {
+                    ShowCMND = true;
+                    frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
+                }
+
+                var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+                                + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
+                var behind_result = await client.SendAsync(behind_request);
+                if (behind_result.IsSuccessStatusCode)
+                {
+                    ShowCMND = true;
+                    behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
+                }
             }
         }
 

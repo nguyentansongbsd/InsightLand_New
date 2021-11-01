@@ -248,6 +248,14 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (result.IsSuccess)
             {
+                if (singleContact.bsd_mattruoccmnd_base64 != null)
+                {
+                    await UpLoadCMNDFront();
+                }
+                if (singleContact.bsd_matsaucmnd_base64 != null)
+                {
+                    await UpLoadCMNDBehind();
+                }
                 return contact.contactid;
             }
             else
@@ -266,6 +274,7 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> getContent(ContactFormModel contact)
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
+            data["contactid"] = contact.contactid;
             data["lastname"] = contact.bsd_fullname;
             data["bsd_fullname"] = contact.bsd_fullname;
             data["emailaddress1"] = contact.emailaddress1;
