@@ -333,13 +333,21 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 // them promotion
-                foreach (var item in viewModel.SelectedPromotionIds)
+                if (viewModel.SelectedPromotionIds.Count == 0)
                 {
-                    if (itemPromotion.Val != item)
+                    this.newSelectedPromotionIds.Add(itemPromotion.Val);
+                }
+                else
+                {
+                    foreach (var item in viewModel.SelectedPromotionIds)
                     {
-                        this.newSelectedPromotionIds.Add(itemPromotion.Val);
+                        if (itemPromotion.Val != item)
+                        {
+                            this.newSelectedPromotionIds.Add(itemPromotion.Val);
+                        }
                     }
                 }
+                
                 itemPromotion.Selected = !itemPromotion.Selected;
             }
             LoadingHelper.Hide();
@@ -364,6 +372,7 @@ namespace ConasiCRM.Portable.Views
                 if (this.needDeletedPromotionIds.Count !=0)
                 {
                     await DeletedPromotions();
+                    if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                 }
 
                 if (this.newSelectedPromotionIds.Count != 0)
@@ -372,6 +381,7 @@ namespace ConasiCRM.Portable.Views
                     if (IsSuccess)
                     {
                         this.newSelectedPromotionIds.Clear();
+                        if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                         ToastMessageHelper.ShortMessage("Thêm khuyến mãi thành công");
                     }
                     else
@@ -426,6 +436,7 @@ namespace ConasiCRM.Portable.Views
             var deleteResponse = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_promotion({item.Val})/$ref");
             if (deleteResponse.IsSuccess)
             {
+                if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                 viewModel.PromotionsSelected.Remove(item);
                 viewModel.SelectedPromotionIds.Remove(item.Val);
                 ToastMessageHelper.ShortMessage("Xóa khuyến mãi thành công");
@@ -589,6 +600,7 @@ namespace ConasiCRM.Portable.Views
                     bool IsSuccess = await viewModel.AddCoOwer();
                     if (IsSuccess)
                     {
+                        if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                         ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thành công");
                         LoadingHelper.Hide();
                     }
