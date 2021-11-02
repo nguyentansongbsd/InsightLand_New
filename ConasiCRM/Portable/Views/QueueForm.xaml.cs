@@ -64,7 +64,7 @@ namespace ConasiCRM.Portable.Views
             lookUpDaiLy.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadSalesAgent();
+                await viewModel.LoadSalesAgent();               
                 LoadingHelper.Hide();
             };
             if (viewModel.AccountsLookUp.Count <= 0)
@@ -153,7 +153,7 @@ namespace ConasiCRM.Portable.Views
                 btnSave.Text = "Tạo Giữ Chỗ";
                 return;
             }
-            var created = await viewModel.createQueue();
+            var created = await viewModel.UpdateQueue(viewModel.idQueueDraft);
             if (created)
             {
                 if (ProjectInfo.NeedToRefreshQueue.HasValue) ProjectInfo.NeedToRefreshQueue = true;
