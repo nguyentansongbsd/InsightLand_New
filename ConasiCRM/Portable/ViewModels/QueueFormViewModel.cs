@@ -40,6 +40,8 @@ namespace ConasiCRM.Portable.ViewModels
         private LookUp _daiLyOption;
         public LookUp DailyOption { get => _daiLyOption; set { _daiLyOption = value; OnPropertyChanged(nameof(DailyOption)); } }
 
+        public Guid idQueueDraft { get; set; }
+
         public QueueFormViewModel()
         {
             QueueFormModel = new QueueFormModel();
@@ -75,6 +77,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.QueueFormModel = tmp;
             QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
             QueueFormModel._queue_createdon = DateTime.Now;
+            idQueueDraft = await createQueueDraft(true);
         }
 
         public async Task LoadFromUnit(Guid UnitId)
@@ -126,6 +129,8 @@ namespace ConasiCRM.Portable.ViewModels
             else if (QueueFormModel.bsd_bookingf > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
             QueueFormModel._queue_createdon = DateTime.Now;
+            string a = QueueFormModel.bsd_phaseslaunch_id.ToString();
+            idQueueDraft = await createQueueDraft(false);
         }
 
         public async Task<bool> SetQueueTime()
@@ -213,23 +218,6 @@ namespace ConasiCRM.Portable.ViewModels
                 } 
                 QueueUnitModel queueUnit = await ContentQueueUnit();
                 await CreateQueueUnit(queueUnit);
-
-                //var data = new
-                //{
-                //    Command = "Book"
-                //};
-
-                //var res = await CrmHelper.PostData($"/products({QueueFormModel.bsd_units_id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
-
-                //if (res.IsSuccess)
-                //{
-                //  string b =  res.Content;
-                //   var m = JsonConvert.DeserializeObject<object>(res.Content);
-                //}
-                //else
-                //{
-
-                //}
                 return true;
             }
             else
@@ -600,6 +588,139 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             }
 
+        }
+
+        public async Task<Guid> createQueueDraft(bool isQueueProject)
+        {
+            if(isQueueProject)
+            {
+                var data = new
+                {
+                    Command = "ProjectQue"
+                };
+
+                var res = await CrmHelper.PostData($"/bsd_projects({QueueFormModel.bsd_project_id})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
+
+                if (res.IsSuccess)
+                {
+                    string str = res.Content.ToString();
+                    string[] arrListStr = str.Split(',');
+                    foreach (var item in arrListStr)
+                    {
+                        if (item.Contains("content") == true)
+                        {
+                            var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
+                            if (Guid.Parse(itemformat) != Guid.Empty)
+                                return Guid.Parse(itemformat);
+                            else
+                                return Guid.Empty;
+                        }
+                    }
+                    return Guid.Empty;
+                }
+                else
+                {
+                    return Guid.Empty;
+                }
+            }   
+            else
+            {
+                var data = new
+                {
+                    Command = "Book"
+                };
+
+                var res = await CrmHelper.PostData($"/products({QueueFormModel.bsd_units_id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
+
+                if (res.IsSuccess)
+                {
+                    string str = res.Content.ToString();
+                    string[] arrListStr = str.Split(',');
+                    foreach (var item in arrListStr)
+                    {
+                        if (item.Contains("content") == true)
+                        {
+                            var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
+                            if (Guid.Parse(itemformat) != Guid.Empty)
+                                return Guid.Parse(itemformat);
+                            else
+                                return Guid.Empty;
+                        }
+                    }
+                    return Guid.Empty;
+                }
+                else
+                {
+                    return Guid.Empty;
+                }
+            }    
+              
+        }
+
+        public async Task<bool> UpdateQueue(Guid id)
+        {
+            if (id != Guid.Empty)
+            {
+                string path = "/opportunities(" + id + ")";
+                QueueFormModel.opportunityid = Guid.NewGuid();
+                var content = await this.getContent2();
+                CrmApiResponse result = await CrmHelper.PatchData(path, content);
+                if (result.IsSuccess)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+                return false;
+        }
+
+        private async Task<object> getContent2()
+        {
+            IDictionary<string, object> data = new Dictionary<string, object>();
+          //  data["bsd_queuingfee"] = QueueFormModel.bsd_queuingfee;
+            data["name"] = QueueFormModel.name;
+
+            if (Customer != null || Customer.Id != Guid.Empty)
+            {
+                if (Customer.Detail == "1")
+                {
+                    data["customerid_account@odata.bind"] = $"/accounts({Customer.Id})";
+                    await DeletLookup("customerid_contact", QueueFormModel.opportunityid);
+                }
+                else
+                {
+                    data["customerid_contact@odata.bind"] = $"/contacts({Customer.Id})";
+                    await DeletLookup("customerid_account", QueueFormModel.opportunityid);
+                }
+            }
+
+            data["budgetamount"] = QueueFormModel.budgetamount;
+            data["description"] = QueueFormModel.description;
+
+            if (DailyOption == null || DailyOption.Id == Guid.Empty)
+            {
+                await DeletLookup("bsd_salesagentcompany", QueueFormModel.opportunityid);
+            }
+            else
+            {
+                data["bsd_salesagentcompany@odata.bind"] = $"/accounts({DailyOption.Id})";
+            }
+
+            data["bsd_nameofstaffagent"] = QueueFormModel.bsd_nameofstaffagent;
+
+            if (UserLogged.Id != null)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            }
+            return data;
         }
     }
 }
