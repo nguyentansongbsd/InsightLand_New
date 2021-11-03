@@ -353,7 +353,7 @@
                                         <controls:LookUp x:Name="lookupDaiLySanGiaoDich" Placeholder="Chọn Đại lý/Sàn giao dịch" SelectedItemChange="SalesAgent_SelectedItemChange" BottomModal="{Reference lookUpModal}" NameDisplay="Label" SelectedItem="{Binding SalesAgent}" ItemsSource="{Binding SalesAgents}"/>
 
                                         <controls:FormLabel Text="Nhân viên Đại lý/Sàn" Margin="0,10,0,0"/>
-                                        <controls:MainEntry Placeholder="Điền tên nhân viên Đại lý/Sàn" Text="{Binding Quote.bsd_nameofstaffagent}"/>
+                                        <controls:MainEntry x:Name="entryNhanVienDaiLy" Placeholder="Điền tên nhân viên Đại lý/Sàn" Text="{Binding Quote.bsd_nameofstaffagent}"/>
 
                                         <controls:FormLabel Text="Giới thiệu" Margin="0,10,0,0"/>
                                         <controls:MainEditor Placeholder="Điền thông tin giới thiệu" Text="{Binding Quote.bsd_referral}" AutoSize="TextChanges"/>

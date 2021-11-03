@@ -30,7 +30,7 @@ namespace ConasiCRM.Portable.Views
             InitUpdate();
         }
 
-        public ReservationForm(Guid productId, OptionSet queue,OptionSet saleAgentCompany,string nameOfStaffAgent)
+        public ReservationForm(Guid productId, OptionSet queue,OptionSet saleAgentCompany,string nameOfStaffAgent,OptionSet customer)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
@@ -38,8 +38,24 @@ namespace ConasiCRM.Portable.Views
             centerModalCoOwner.Body.BindingContext = viewModel;
             viewModel.ProductId = productId;
             viewModel.Queue = queue;
-            viewModel.SalesAgent = saleAgentCompany;
-            viewModel.Quote.bsd_nameofstaffagent = nameOfStaffAgent;
+
+            if (saleAgentCompany != null)
+            {
+                viewModel.SalesAgent = saleAgentCompany;
+                lookupDaiLySanGiaoDich.IsEnabled = false;
+            }
+            if (string.IsNullOrWhiteSpace(nameOfStaffAgent))
+            {
+                viewModel.Quote.bsd_nameofstaffagent = nameOfStaffAgent;
+                entryNhanVienDaiLy.IsEnabled = false;
+            }
+            if (customer != null)
+            {
+                viewModel.Buyer = customer;
+                lookupNguoiMua.IsEnabled = false;
+                lookupNguoiMua.HideClearButton();
+            }
+            
             Init();
         }
 
@@ -51,6 +67,7 @@ namespace ConasiCRM.Portable.Views
                 if (viewModel.Queue != null)
                 {
                     lookupGiuCho.IsEnabled = false;
+                    lookupGiuCho.HideClearButton();
                 }
                 await viewModel.LoadTaxCode();
                 SetPreOpen();
