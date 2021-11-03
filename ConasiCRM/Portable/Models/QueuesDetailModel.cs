@@ -16,6 +16,7 @@ namespace ConasiCRM.Portable.Models
 
         public string bsd_queuenumber { get; set; }
 
+        public Guid contactid { get; set; }
         public string contact_name { get; set; }
         public string PhoneContact { get; set; }
 
