@@ -395,7 +395,9 @@ namespace ConasiCRM.Portable.ViewModels
                     var list = sharePointFieldResult.value;
                     foreach (var item in list)
                     {
-                        if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
+                        var names = item.Name.ToLower().Split('.');
+                        string type_item = names[names.Count() - 1];
+                        if (type_item == "flv" || type_item == "mp4" || type_item == "m3u8" || type_item == "3gp" || type_item == "mov" || type_item == "avi" || type_item == "wmv")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             if (Device.RuntimePlatform == Device.iOS)
@@ -409,7 +411,7 @@ namespace ConasiCRM.Portable.ViewModels
                             Collections.Add(new CollectionData { MediaSource = soucre, PosterMediaSource = imageSource, ImageSource = null, Index = TotalMedia });
                             TotalMedia++;
                         }
-                        else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
+                        else if (type_item == "jpg" || type_item == "jpeg" || type_item == "png")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             if (Device.RuntimePlatform == Device.iOS)

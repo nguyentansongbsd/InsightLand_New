@@ -316,37 +316,23 @@
                                 </BindableLayout.EmptyViewTemplate>
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-                                        <StackLayout Padding="16" BackgroundColor="White">
-                                            <StackLayout.GestureRecognizers>
-                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
-                                            </StackLayout.GestureRecognizers>
-                                            <Label Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
-                                            <Label FontSize="15" TextColor="#333333">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="Khách hàng: "/>
-                                                        <Span Text="{Binding customer_name}"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                            <Label FontSize="15" TextColor="#333333">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="Dự án: "/>
-                                                        <Span Text="{Binding bsd_project_name}"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                            <Label FontSize="15" TextColor="#333333">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <Span Text="Thời gian hết hạn: "/>
-                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
-                                                        <Span Text="{Binding bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                        </StackLayout>
+                                        <Grid RowDefinitions="Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
+                                            <Grid ColumnDefinitions="Auto,*" Grid.Row="0" Grid.Column="0">
+                                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
+                                                    <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                </telerikPrimitives:RadBorder>
+                                                <Label Grid.Column="1" Text="{Binding name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                            </Grid>
+                                            <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                                <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                <Label Text="{Binding customername}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                            </Grid>
+                                            <Grid ColumnDefinitions="Auto,Auto,*" Grid.Row="2">
+                                                <Label Text="Thời gian hết hạn:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                <Label Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" TextColor="#444444" FontSize="15" Grid.Column="1" />
+                                                <Label Text="{Binding bsd_queuingexpired ,StringFormat=' {0:h:mm tt}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
+                                            </Grid>
+                                        </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>

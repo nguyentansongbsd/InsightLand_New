@@ -35,6 +35,13 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await viewModel.LoadData();
+            viewModel.FilterList.Add(new OptionSet("1","Tình trạng ↑")) ;
+            viewModel.FilterList.Add(new OptionSet("2", "Tình trạng ↓"));
+            viewModel.FilterList.Add(new OptionSet("3","Dự án ↑"));
+            viewModel.FilterList.Add(new OptionSet("4", "Dự án ↓"));
+            viewModel.FilterList.Add(new OptionSet("5", "Sản phẩm ↑"));
+            viewModel.FilterList.Add(new OptionSet("6", "Sản phẩm ↓"));
+            viewModel.Filter = viewModel.FilterList[0];
             LoadingHelper.Hide();
         }
 
@@ -75,6 +82,13 @@ namespace ConasiCRM.Portable.Views
             {
                 SearchBar_SearchButtonPressed(null, EventArgs.Empty);
             }
+        }
+
+        private async void FilterPicker_SelectedItemChange(object sender, LookUpChangeEvent e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadOnRefreshCommandAsync();
+            LoadingHelper.Hide();
         }
     }
 }

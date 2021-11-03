@@ -39,8 +39,8 @@ namespace ConasiCRM.Portable.ViewModels
         public List<ChartModel> unitChartModels { get; set; }
         public ObservableCollection<ChartModel> UnitChart { get; set; } = new ObservableCollection<ChartModel>();
 
-        private ObservableCollection<QueueFormModel> _listGiuCho;
-        public ObservableCollection<QueueFormModel> ListGiuCho { get => _listGiuCho; set { _listGiuCho = value; OnPropertyChanged(nameof(ListGiuCho)); } }
+        private ObservableCollection<QueuesModel> _listGiuCho;
+        public ObservableCollection<QueuesModel> ListGiuCho { get => _listGiuCho; set { _listGiuCho = value; OnPropertyChanged(nameof(ListGiuCho)); } }
 
         private ProjectInfoModel _project;
         public ProjectInfoModel Project
@@ -101,7 +101,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public ProjectInfoViewModel()
         {
-            ListGiuCho = new ObservableCollection<QueueFormModel>();
+            ListGiuCho = new ObservableCollection<QueuesModel>();
             Photos = new List<Photo>();
             this.Collections = new ObservableCollection<CollectionData>();
             photoBrowser = new PhotoBrowser
@@ -334,13 +334,20 @@ namespace ConasiCRM.Portable.ViewModels
             string fetchXml = $@"<fetch version='1.0' count='10' page='{PageListGiuCho}' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
                                 <attribute name='name' />
-                                <attribute name='customerid' />
-                                <attribute name='createdon' />
+                                <attribute name='customerid' alias='customer_id'/>
+                                <attribute name='bsd_bookingtime' />
+                                <attribute name='statuscode' />
                                 <attribute name='bsd_queuingexpired' />
                                 <attribute name='opportunityid' />
-                                <order attribute='createdon' descending='true' />
+                                <order attribute='bsd_bookingtime' descending='false' />
+                                <filter type='and'>
+                                  <condition attribute='statuscode' operator='in'>
+                                    <value>100000002</value>
+                                    <value>100000000</value>
+                                  </condition>
+                                </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
-                                    <attribute name='bsd_name' alias='bsd_project_name'/>
+                                    <attribute name='bsd_name' alias='project_name'/>
                                   <filter type='and'>
                                     <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
                                   </filter>
@@ -359,25 +366,14 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueuesModel>>("opportunities", fetchXml);
             if (result == null || result.value.Any() == false) return;
 
-            List<QueueFormModel> data = result.value;
+            List<QueuesModel> data = result.value;
             ShowMoreBtnGiuCho = data.Count < 10 ? false : true;
             foreach (var item in data)
             {
-                QueueFormModel queue = new QueueFormModel();
-                queue = item;
-                if (!string.IsNullOrWhiteSpace(item.contact_name))
-                {
-                    queue.customer_name = item.contact_name;
-                }
-                else if (!string.IsNullOrWhiteSpace(item.account_name))
-                {
-                    queue.customer_name = item.account_name;
-                }
-
-                ListGiuCho.Add(queue);
+                ListGiuCho.Add(item);
             }
         }
 
@@ -406,7 +402,9 @@ namespace ConasiCRM.Portable.ViewModels
                     var list = sharePointFieldResult.value;
                     foreach (var item in list)
                     {
-                        if (item.Name.Split('.')[1] == "flv" || item.Name.Split('.')[1] == "mp4" || item.Name.Split('.')[1] == "m3u8" || item.Name.Split('.')[1] == "3gp" || item.Name.Split('.')[1] == "mov" || item.Name.Split('.')[1] == "avi" || item.Name.Split('.')[1] == "wmv")
+                        var names = item.Name.ToLower().Split('.');
+                        string type_item = names[names.Count() - 1];
+                        if (type_item == "flv" || type_item == "mp4" || type_item == "m3u8" || type_item == "3gp" || type_item == "mov" || type_item == "avi" || type_item == "wmv")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             if (Device.RuntimePlatform == Device.iOS)
@@ -419,7 +417,7 @@ namespace ConasiCRM.Portable.ViewModels
                             Collections.Add(new CollectionData { MediaSource = soucre,PosterMediaSource= imageSource, ImageSource = null, Index = TotalMedia });
                             TotalMedia++;
                         }
-                        else if (item.Name.ToLower().Split('.')[1] == "jpg" || item.Name.ToLower().Split('.')[1] == "jpeg" || item.Name.ToLower().Split('.')[1] == "png")
+                        else if (type_item == "jpg" || type_item == "jpeg" || type_item == "png")
                         {
                             var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
                             if (Device.RuntimePlatform == Device.iOS)

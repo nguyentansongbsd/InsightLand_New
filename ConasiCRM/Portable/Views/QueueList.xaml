@@ -14,10 +14,13 @@
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid RowDefinitions="Auto,*" RowSpacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                <controls:SearchBarFrame  Grid.Row="0" Margin="10,5">
-                    <SearchBar Text="{Binding Keyword}" Placeholder="Từ khoá" FontSize="15" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
-                </controls:SearchBarFrame>
-                
+                <Grid Grid.Row="0" Margin="10,5" ColumnDefinitions="65*,35*">
+                    <controls:SearchBarFrame  Grid.Column="0">
+                        <SearchBar Text="{Binding Keyword}" Placeholder="Từ khoá" FontSize="15" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
+                    </controls:SearchBarFrame>
+                    <controls:FilterPicker x:Name="filter" Grid.Column="1" ItemsSource="{Binding FilterList}" SelectedItemChange="FilterPicker_SelectedItemChange" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedItem="{Binding Filter}"/>
+                </Grid>
+
                 <controls:BsdListView x:Name="listView" Grid.Row="1" ItemsSource="{Binding Data}" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
                     <controls:BsdListView.ItemTemplate>
                         <DataTemplate>
@@ -46,10 +49,6 @@
                                             </Grid>
                                             <Label Text="{Binding createdon,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="14" TextColor="Gray"/>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Start" Grid.Row="0">
-                                            <Label Text="Mã:" TextColor="Gray" FontSize="14" Grid.Column="0"/>
-                                            <Label Text="{Binding bsd_queuenumber}" TextColor="Gray" FontSize="14" Grid.Column="1" LineBreakMode="TailTruncation" />
-                                        </Grid>
                                         <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0">
                                             <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
                                                 <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
@@ -72,6 +71,7 @@
                     </controls:BsdListView.ItemTemplate>
                 </controls:BsdListView>
             </Grid>
+            <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

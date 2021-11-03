@@ -207,7 +207,7 @@
                                             <controls:FormLabelValue Text="{Binding singleContact.bsd_jobtitlevn}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="5">
-                                            <controls:FormLabel Text="SDT kinh doanh" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="SĐT kinh doanh" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.telephone1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="6">
@@ -229,7 +229,7 @@
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
-                                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" BackgroundColor="White" Grid.Row="0" Padding="10,0,10,10" IsVisible="{Binding ShowCMND}}">
+                                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" BackgroundColor="White" Grid.Row="0" Padding="10,0,10,10" IsVisible="{Binding ShowCMND}">
                                             <controls:FormLabel Text="Hình chụp CMND" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <telerikPrimitives:RadBorder BorderThickness="1" BorderColor="#f1f1f1" CornerRadius="5" Grid.Column="0" Grid.Row="1">
                                                 <ffimageloading:CachedImage Source="{Binding frontImage}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300" HeightRequest="120">

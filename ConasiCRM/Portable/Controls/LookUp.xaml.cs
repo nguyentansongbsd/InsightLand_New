@@ -16,7 +16,7 @@ namespace ConasiCRM.Portable.Controls
         public event EventHandler<LookUpChangeEvent> SelectedItemChange;
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUp), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
-        private LookUpView _lookUpView;
+        public LookUpView _lookUpView;
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(LookUp), null, BindingMode.TwoWay);
         public object SelectedItem
         {
