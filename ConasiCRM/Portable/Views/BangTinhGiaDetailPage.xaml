@@ -49,7 +49,11 @@
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
-                                <Label Grid.Column="1" Text="{Binding Customer.Label}" TextColor="#444444" FontSize="15"/>
+                                <Label Grid.Column="1" Text="{Binding Customer.Label}" TextColor="#1399D5" FontSize="15">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Customer_Tapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Sản phẩm:" FontSize="15" TextColor="#444444"/>
@@ -275,13 +279,13 @@
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Thời gian đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
+                                            <controls:FormLabel Text="Ngày tạo" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.bsd_reservationtime,StringFormat='{0:HH:mm - dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
+                                        <!--<Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Ngày đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.bsd_deposittime,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
+                                        </Grid>-->
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Đại lý/Sàn giao dịch" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.salescompany_account_name}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="#1399D5" Padding="25,10" HorizontalTextAlignment="End">
@@ -293,10 +297,6 @@
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Nhân viên Đại lý/Sàn" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.bsd_nameofstaffagent}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Giới thiệu" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.bsd_referral}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -324,7 +324,7 @@
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
-                            <telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
+                            <!--<telerikPrimitives:RadExpander IsExpanded="False" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                         <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Đặt Cọc"/>
@@ -354,7 +354,7 @@
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
-                            </telerikPrimitives:RadExpander>
+                            </telerikPrimitives:RadExpander>-->
                         </StackLayout>
                         <!--tab chi tiết-->
                         <StackLayout x:Name="TabChiTiet" IsVisible="false" Margin="0,5,0,0">
@@ -396,7 +396,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Tổng tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.totalamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding Reservation.totalamount, StringFormat='{0:#,0} đ'}" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="Red" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>

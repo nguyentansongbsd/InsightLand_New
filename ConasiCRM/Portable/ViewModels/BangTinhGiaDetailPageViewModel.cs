@@ -40,8 +40,8 @@ namespace ConasiCRM.Portable.ViewModels
         public string UpdateQuotation = "2";
         public string ConfirmReservation = "3";
         public string UpdateReservation = "4";
-        private string CodeContact = LookUpMultipleTabs.CodeContac;
-        private string CodeAccount = LookUpMultipleTabs.CodeAccount;
+        public string CodeContact = LookUpMultipleTabs.CodeContac;
+        public string CodeAccount = LookUpMultipleTabs.CodeAccount;
         public BangTinhGiaDetailPageViewModel()
         {
             CoownerList = new ObservableCollection<ReservationCoownerModel>();
@@ -190,11 +190,14 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 Customer.Val = Reservation.purchaser_accountid.ToString();
                 Customer.Label = Reservation.purchaser_account_name;
+                Customer.Title = CodeAccount;
+
             }
             else
             {
                 Customer.Val = Reservation.purchaser_contactid.ToString();
                 Customer.Label = Reservation.purchaser_contact_name;
+                Customer.Title = CodeContact;
             }
             
             this.QuoteStatus = QuoteStatusCodeData.GetQuoteStatusCodeById(this.Reservation.statuscode.ToString());

@@ -4,6 +4,7 @@ using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,10 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class QueuListViewModel : ListViewBaseViewModel2<QueuesModel>
     {
+        public ObservableCollection<OptionSet> FilterList { get; set; } = new ObservableCollection<OptionSet>();
+
+        public OptionSet _filter;
+        public OptionSet Filter { get => _filter; set { _filter = value; OnPropertyChanged(nameof(Filter)); } }
         public string Keyword { get; set; }
         public ICommand PhoneCommand { get; }
         public QueuListViewModel()
@@ -23,6 +28,29 @@ namespace ConasiCRM.Portable.ViewModels
             PhoneCommand = new Command<string>(PhoneCommandAsync);
             PreLoadData = new Command(() =>
             {
+                string filter = string.Empty;
+                if (Filter != null)
+                {
+                    if (Filter.Val == "1")
+                        filter = $@"<order attribute='statuscode' descending='true' />";
+                    else if (Filter.Val == "2")
+                        filter = $@"<order attribute='statuscode' descending='false' />";
+                    else if (Filter.Val == "3")
+                        filter = $@"<order attribute='bsd_project' descending='true' />";
+                    else if (Filter.Val == "4")
+                        filter = $@"<order attribute='bsd_project' descending='false' />";
+                    else if (Filter.Val == "5")
+                        filter = $@"<order attribute='bsd_units' descending='true' />";
+                    else if (Filter.Val == "6")
+                        filter = $@"<order attribute='bsd_units' descending='false' />";
+                    else
+                        filter = $@"<order attribute='statuscode' descending='true' />";
+                }
+                else
+                {
+                    filter = $@"<order attribute='statuscode' descending='true' />";
+                }
+
                 EntityName = "opportunities";
                 FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='opportunity'>
@@ -33,12 +61,12 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_queuenumber' />
                         <attribute name='bsd_queuingexpired' />
                         <attribute name='createdon' />
-                        <order attribute='createdon' descending='true' />
                         <filter type='and'>                          
                             <filter type='or'>
                                 <condition attribute='name' operator='like' value='%25{Keyword}%25' />
                                 <condition attribute='customeridname' operator='like' value='%25{Keyword}%25' />
                                 <condition attribute='bsd_queuenumber' operator='like' value='%25{Keyword}%25' />
+                                <condition attribute='bsd_unitsname' operator='like' value='%25{Keyword}%25' /> 
                             </filter>
                           <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
                         </filter>
@@ -48,6 +76,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='name'  alias='account_name'/>
                         </link-entity>
+                        " + filter + @"
                       </entity>
                     </fetch>";
             });
