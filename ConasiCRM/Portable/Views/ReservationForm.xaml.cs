@@ -30,7 +30,7 @@ namespace ConasiCRM.Portable.Views
             InitUpdate();
         }
 
-        public ReservationForm(Guid productId, OptionSet queue,OptionSet saleAgentCompany,string nameOfStaffAgent,OptionSet customer)
+        public ReservationForm(Guid productId, OptionSet queue, OptionSet saleAgentCompany, string nameOfStaffAgent, OptionSet customer)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ReservationFormViewModel();
@@ -55,7 +55,7 @@ namespace ConasiCRM.Portable.Views
                 lookupNguoiMua.IsEnabled = false;
                 lookupNguoiMua.HideClearButton();
             }
-            
+
             Init();
         }
 
@@ -86,7 +86,7 @@ namespace ConasiCRM.Portable.Views
             {
                 this.Title = "CẬP NHẬT BẢNG TÍNH GIÁ";
                 buttonSave.Text = "CẬP NHẬT BẢNG TÍNH GIÁ";
-                
+
                 SetPreOpen();
                 this.isSetTotal = true;// set = true de khong nhay vao ham SetTotal
                 await Task.WhenAll(
@@ -96,8 +96,8 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LoadPromotions(),
                     viewModel.LoadCoOwners(),
                     viewModel.CheckTaoLichThanhToan()
-                    ) ;
-                
+                    );
+
                 if (viewModel.IsHadLichThanhToan == true)
                 {
                     lookupDieuKienBanGiao.IsEnabled = true;
@@ -266,12 +266,12 @@ namespace ConasiCRM.Portable.Views
                 viewModel.DiscountChilds.Clear();
                 isSetTotal = false;
             }
-            if (viewModel.DiscountChilds.Count== 0)
+            if (viewModel.DiscountChilds.Count == 0)
             {
                 viewModel.DiscountChilds.Clear();
                 await viewModel.LoadDiscountChilds();
             }
-            
+
             viewModel.TotalDiscount = 0;
             LoadingHelper.Hide();
         }
@@ -327,69 +327,64 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             var itemPromotion = (OptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            
-            if (viewModel.QuoteId == Guid.Empty)
-            {
-                itemPromotion.Selected = !itemPromotion.Selected;
-                LoadingHelper.Hide();
-                return;
-            }
-
-            if (itemPromotion.Selected == true)
-            {
-                //xoa promotion
-                foreach (var item in viewModel.SelectedPromotionIds)
-                {
-                    if (itemPromotion.Val == item)
-                    {
-                        needDeletedPromotionIds.Add(itemPromotion.Val);
-                    }
-                }
-                itemPromotion.Selected = !itemPromotion.Selected;
-            }
-            else
-            {
-                // them promotion
-                if (viewModel.SelectedPromotionIds.Count == 0)
-                {
-                    this.newSelectedPromotionIds.Add(itemPromotion.Val);
-                }
-                else
-                {
-                    foreach (var item in viewModel.SelectedPromotionIds)
-                    {
-                        if (itemPromotion.Val != item)
-                        {
-                            this.newSelectedPromotionIds.Add(itemPromotion.Val);
-                        }
-                    }
-                }
-                
-                itemPromotion.Selected = !itemPromotion.Selected;
-            }
+            itemPromotion.Selected = !itemPromotion.Selected;
             LoadingHelper.Hide();
         }
 
         private async void SaveSelectedPromotion_CLicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            viewModel.PromotionsSelected.Clear();
-            viewModel.SelectedPromotionIds.Clear();
-
-            foreach (var itemPromotion in viewModel.Promotions)
+            if (viewModel.QuoteId == Guid.Empty)
             {
-                if (itemPromotion.Selected)
+                viewModel.PromotionsSelected.Clear();
+                viewModel.SelectedPromotionIds.Clear();
+
+                foreach (var itemPromotion in viewModel.Promotions)
                 {
-                    viewModel.PromotionsSelected.Add(itemPromotion);
-                    viewModel.SelectedPromotionIds.Add(itemPromotion.Val);
+                    if (itemPromotion.Selected)
+                    {
+                        viewModel.PromotionsSelected.Add(itemPromotion);
+                        viewModel.SelectedPromotionIds.Add(itemPromotion.Val);
+                    }
                 }
             }
-            if (viewModel.QuoteId != Guid.Empty)
+            else
             {
-                if (this.needDeletedPromotionIds.Count !=0)
+                foreach (var item in viewModel.Promotions)
+                {
+                    if (item.Selected == true)
+                    {
+                        if (viewModel.SelectedPromotionIds.Count != 0 && viewModel.SelectedPromotionIds.Any(x => x != item.Val))
+                        {
+                            this.newSelectedPromotionIds.Add(item.Val);
+                        }
+                        else
+                        {
+                            this.newSelectedPromotionIds.Add(item.Val);
+                        }
+                    }
+                    else if (item.Selected == false)
+                    {
+                        if (viewModel.SelectedPromotionIds.Any(x => x == item.Val))
+                        {
+                            this.needDeletedPromotionIds.Add(item.Val);
+                        }
+                    }
+                }
+
+                if (this.needDeletedPromotionIds.Count != 0)
                 {
                     await DeletedPromotions();
                     if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
+                    viewModel.PromotionsSelected.Clear();
+
+                    foreach (var itemPromotion in viewModel.Promotions)
+                    {
+                        if (itemPromotion.Selected)
+                        {
+                            viewModel.PromotionsSelected.Add(itemPromotion);
+                        }
+                    }
                 }
 
                 if (this.newSelectedPromotionIds.Count != 0)
@@ -398,6 +393,15 @@ namespace ConasiCRM.Portable.Views
                     if (IsSuccess)
                     {
                         this.newSelectedPromotionIds.Clear();
+                        viewModel.PromotionsSelected.Clear();
+
+                        foreach (var itemPromotion in viewModel.Promotions)
+                        {
+                            if (itemPromotion.Selected)
+                            {
+                                viewModel.PromotionsSelected.Add(itemPromotion);
+                            }
+                        }
                         if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                         ToastMessageHelper.ShortMessage("Thêm khuyến mãi thành công");
                     }
@@ -439,13 +443,13 @@ namespace ConasiCRM.Portable.Views
                 var deleteResponse = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_promotion({item})/$ref");
                 if (deleteResponse.IsSuccess)
                 {
-                    viewModel.PromotionsSelected.Remove(viewModel.PromotionsSelected.SingleOrDefault(x=>x.Val == item));
+                    viewModel.PromotionsSelected.Remove(viewModel.PromotionsSelected.SingleOrDefault(x => x.Val == item));
                     viewModel.SelectedPromotionIds.Remove(item);
                 }
             }
         }
 
-        private async void DeletedPromotion(OptionSet item )
+        private async void DeletedPromotion(OptionSet item)
         {
             var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa khuyến mãi không ?", "Đồng ý", "Hủy");
             if (conform == false) return;
@@ -585,7 +589,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (viewModel.CoOwnerList.Any(x=>x.contact_id == Guid.Parse(viewModel.CustomerCoOwner?.Val) || x.account_id == Guid.Parse(viewModel.CustomerCoOwner?.Val)) )
+            if (viewModel.CoOwnerList.Any(x => x.contact_id == Guid.Parse(viewModel.CustomerCoOwner?.Val) || x.account_id == Guid.Parse(viewModel.CustomerCoOwner?.Val)))
             {
                 ToastMessageHelper.ShortMessage("Khách hàng đã được chọn");
                 return;
@@ -699,7 +703,7 @@ namespace ConasiCRM.Portable.Views
 
         private async Task SetTotal()
         {
-            if (this.isSetTotal==false)
+            if (this.isSetTotal == false)
             {
                 await viewModel.SetNetSellingPrice();
                 await viewModel.SetTotalVatTax();
@@ -768,7 +772,7 @@ namespace ConasiCRM.Portable.Views
                         viewModel.AddHandoverCondition(),
                         viewModel.CreateQuoteProduct()
                         );
-
+                    if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage("Tạo bảng tính giá thành công");
@@ -806,10 +810,10 @@ namespace ConasiCRM.Portable.Views
                     }
                 }
 
-
                 bool isSuccess = await viewModel.UpdateQuote();
                 if (isSuccess)
                 {
+                    if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     await Navigation.PopAsync();
