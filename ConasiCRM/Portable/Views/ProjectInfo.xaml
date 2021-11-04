@@ -332,6 +332,9 @@
                                                 <Label Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" TextColor="#444444" FontSize="15" Grid.Column="1" />
                                                 <Label Text="{Binding bsd_queuingexpired ,StringFormat=' {0:h:mm tt}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
                                             </Grid>
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
+                                            </Grid.GestureRecognizers>
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>

@@ -151,7 +151,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='createdon' />
                         <attribute name='bsd_queuingexpired' />
                         <attribute name='opportunityid' />
-                        <order attribute='createdon' descending='true' />
+                        <order attribute='bsd_bookingtime' descending='false' />
                         <filter type='and'>
                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                           <condition attribute='bsd_units' operator='eq' value='{UnitInfo.productid}' />
