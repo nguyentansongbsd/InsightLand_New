@@ -42,6 +42,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         public Guid idQueueDraft { get; set; }
 
+        public Guid UnitId { get; set; }
+
         public QueueFormViewModel()
         {
             QueueFormModel = new QueueFormModel();
@@ -50,7 +52,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadFromProject(Guid ProjectId)
         {
-
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_project'>
                                     <attribute name='bsd_projectid' alias='bsd_project_id' />
@@ -76,7 +77,6 @@ namespace ConasiCRM.Portable.ViewModels
             this.QueueFormModel = tmp;
             QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
             QueueFormModel._queue_createdon = DateTime.Now;
-            idQueueDraft = await createQueueDraft(true);
         }
 
         public async Task LoadFromUnit(Guid UnitId)
@@ -127,8 +127,6 @@ namespace ConasiCRM.Portable.ViewModels
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_units_queuingfee;
             else if (QueueFormModel.bsd_bookingf > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
-
-            idQueueDraft = await createQueueDraft(false);
         }
 
         public async Task<bool> SetQueueTime()
@@ -588,7 +586,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         //}
 
-        public async Task<Guid> createQueueDraft(bool isQueueProject)
+        public async void createQueueDraft(bool isQueueProject)
         {
             if(isQueueProject)
             {
@@ -597,7 +595,7 @@ namespace ConasiCRM.Portable.ViewModels
                     Command = "ProjectQue"
                 };
 
-                var res = await CrmHelper.PostData($"/bsd_projects({QueueFormModel.bsd_project_id})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
+                var res = await CrmHelper.PostData($"/bsd_projects({this.UnitId})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
 
                 if (res.IsSuccess)
                 {
@@ -609,16 +607,16 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
-                                return Guid.Parse(itemformat);
+                                this.idQueueDraft = Guid.Parse(itemformat);
                             else
-                                return Guid.Empty;
+                                this.idQueueDraft = Guid.Empty;
                         }
                     }
-                    return Guid.Empty;
+                    this.idQueueDraft = Guid.Empty;
                 }
                 else
                 {
-                    return Guid.Empty;
+                    this.idQueueDraft = Guid.Empty;
                 }
             }   
             else
@@ -628,7 +626,7 @@ namespace ConasiCRM.Portable.ViewModels
                     Command = "Book"
                 };
 
-                var res = await CrmHelper.PostData($"/products({QueueFormModel.bsd_units_id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
+                var res = await CrmHelper.PostData($"/products({this.UnitId})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
 
                 if (res.IsSuccess)
                 {
@@ -640,16 +638,16 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
-                                return Guid.Parse(itemformat);
+                                this.idQueueDraft = Guid.Parse(itemformat);
                             else
-                                return Guid.Empty;
+                                this.idQueueDraft = Guid.Empty;
                         }
                     }
-                    return Guid.Empty;
+                    this.idQueueDraft = Guid.Empty;
                 }
                 else
                 {
-                    return Guid.Empty;
+                    this.idQueueDraft = Guid.Empty;
                 }
             }    
               

@@ -341,14 +341,14 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void GiuCho_Clicked(object sender, EventArgs e)
+        private async void GiuCho_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             QueueForm queue = new QueueForm(viewModel.Unit.productid, true);
             queue.OnCompleted = async (IsSuccess) => {
                 if (IsSuccess)
                 {
-                    await Navigation.PushAsync(queue);
+                    await Shell.Current.Navigation.PushAsync(queue);
                     LoadingHelper.Hide();
                 }
                 else
@@ -357,7 +357,7 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
                 }
             };
-            LoadingHelper.Hide();
+            
         }
 
         private void BangTinhGia_Clicked(object sender, EventArgs e)
