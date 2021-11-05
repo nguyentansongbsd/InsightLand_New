@@ -13,6 +13,7 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty ModalContentProperty = BindableProperty.Create(nameof(ModalContent), typeof(View), typeof(BottomModal), null, BindingMode.TwoWay);
         public View ModalContent { get => (View)GetValue(ModalContentProperty); set => SetValue(ModalContentProperty, value); }
 
+        public event EventHandler OnHide;
         public BottomModal()
         {
             InitializeComponent();
@@ -30,6 +31,9 @@ namespace ConasiCRM.Portable.Controls
             this.IsVisible = false;
             await ModalPopup.TranslateTo(0, ModalPopup.Height, 50);
             ModalPopup.IsVisible = false;
+
+            EventHandler eventHandler = this.OnHide;
+            eventHandler?.Invoke((object)this, EventArgs.Empty);
         }
         private async void Hide_Tapped(object sender, EventArgs e)
         {

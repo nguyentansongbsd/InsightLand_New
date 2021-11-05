@@ -743,6 +743,28 @@ namespace ConasiCRM.Portable.ViewModels
             var result_phasesLaunch = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLaunch>>("bsd_phaseslaunchs", fetchphaseslaunch);
             if (result_phasesLaunch == null || result_phasesLaunch.value.Count == 0)
                 return;
+
+            string develop = $@"<link-entity name='bsd_project' from='bsd_investor' to='accountid' link-type='inner' alias='aj'>
+                                                <filter type='and'>
+                                                    <condition attribute='bsd_projectid' operator='eq' value='{QueueFormModel.bsd_project_id}' />
+                                                </filter>
+                                            </link-entity>";
+            string all = $@"<link-entity name='bsd_projectshare' from='bsd_salesagent' to='accountid' link-type='inner' alias='az'>
+                                                <filter type='and'>
+                                                    <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
+                                                </filter>
+                                            </link-entity>";
+            string sale_phasesLaunch = $@"<link-entity name='bsd_phaseslaunch' from='bsd_salesagentcompany' to='accountid' link-type='inner' alias='ak'>
+                                                        <filter type='and'>
+                                                            <condition attribute='bsd_phaseslaunchid' operator='eq' value='{QueueFormModel.bsd_phaseslaunch_id}' />
+                                                         </filter>
+                                                    </link-entity>";
+            string isproject = $@"<filter type='and'>
+                                       <condition attribute='bsd_businesstypesys' operator='contain-values'>
+                                         <value>100000002</value>
+                                       </condition>                                
+                                    </filter>";
+
             var phasesLaunch = result_phasesLaunch.value.FirstOrDefault();
             if (phasesLaunch != null)
             {
@@ -750,46 +772,70 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     if(string.IsNullOrWhiteSpace(phasesLaunch.salesagentcompany_name))
                     {
-                        string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
-                                          <entity name='account'>
-                                            <attribute name='bsd_name' />
-                                            <attribute name='name' alias='Name'/>
-                                            <attribute name='accountid' alias='Id'/>
-                                            <order attribute='createdon' descending='true' />
-                                            <link-entity name='bsd_projectshare' from='bsd_salesagent' to='accountid' link-type='inner' alias='az'>
-                                                <filter type='and'>
-                                                    <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
-                                                </filter>
-                                            </link-entity>
-                                          </entity>
-                                        </fetch>";
-                        var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("accounts", fetch);
-                        if (result == null)
-                            return;
-                        var data = result.value;
-                        foreach (var item in data)
+                        if(DaiLyOptions != null)
                         {
-                            DaiLyOptions.Add(item);
-                        }
+                            DaiLyOptions.AddRange(await LoadAccuntSales(all));
+                            DaiLyOptions.AddRange(await LoadAccuntSales(develop));
+                        }    
                     }
                     else
                     {
-
+                        if (DaiLyOptions != null)
+                        {
+                            DaiLyOptions.AddRange(await LoadAccuntSales(sale_phasesLaunch));
+                            DaiLyOptions.AddRange(await LoadAccuntSales(develop));
+                        }
                     }
                 }
                 else if (phasesLaunch.bsd_locked == true)
                 {
                     if (string.IsNullOrWhiteSpace(phasesLaunch.salesagentcompany_name))
                     {
-
+                        if (DaiLyOptions != null)
+                        {
+                            DaiLyOptions.AddRange(await LoadAccuntSales(develop));
+                        }
                     }
                     else
                     {
-
+                        if (DaiLyOptions != null)
+                        {
+                            DaiLyOptions.AddRange(await LoadAccuntSales(sale_phasesLaunch));
+                        }
                     }
                 }
 
             }
+            else
+            {
+                if (DaiLyOptions != null)
+                {
+                    DaiLyOptions.AddRange(await LoadAccuntSales(isproject));
+                }
+            }
+        }
+
+        public async Task<List<LookUp>> LoadAccuntSales(string filter)
+        {
+            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='account'>
+                                    <attribute name='name' alias='Name' />
+                                    <attribute name='accountid' alias='Id' />
+                                    <order attribute='createdon' descending='true' />
+                                    " + filter + @"
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("accounts", fetch);
+            if (result == null || result.value.Count == 0)
+                return null;
+
+            var data = result.value;
+            List<LookUp> list = new List<LookUp>();
+            foreach (var item in data)
+            {
+                list.Add(item);
+            }
+            return list;
         }
     }
 }
