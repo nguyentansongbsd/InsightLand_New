@@ -36,7 +36,9 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>
+            <telerikInput:RadDateTimePicker  Margin="0,100,0,0"/>
+            <DatePicker Margin="0,200,0,0"/>
+            <!--<CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>-->
 
             <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Margin="0,100,0,0">
                 
