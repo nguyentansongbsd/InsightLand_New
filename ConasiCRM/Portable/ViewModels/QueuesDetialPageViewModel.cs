@@ -91,12 +91,12 @@ namespace ConasiCRM.Portable.ViewModels
                                 </link-entity>
                                 <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='a_434f5ec290d1eb11bacc000d3a80021e'>
                                     <attribute name='bsd_name' alias='account_name'/>
-                                    <attribute name='accountid' />
+                                    <attribute name='accountid' alias='account_id'/>
                                     <attribute name='telephone1' alias='PhoneAccount'/>
                                 </link-entity>
                                 <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='a_884f5ec290d1eb11bacc000d3a80021e'>
                                     <attribute name='bsd_fullname' alias='contact_name' />
-                                    <attribute name='contactid' />
+                                    <attribute name='contactid' alias='contact_id'/>
                                     <attribute name='mobilephone' alias='PhoneContact'/>
                                 </link-entity>
                                 <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaselaunch' visible='false' link-type='outer' alias='a_485347ca19dbeb11bacb002248168cad'>
@@ -114,11 +114,11 @@ namespace ConasiCRM.Portable.ViewModels
             var data = result.value.FirstOrDefault();
             if (!string.IsNullOrWhiteSpace(data.account_name))
             {
-                Customer = new OptionSet() { Val= data.accountid.ToString(), Label = data.account_name, Title="3"};
+                Customer = new OptionSet() { Val= data.account_id.ToString(), Label = data.account_name, Title="3"};
             }
             else if (!string.IsNullOrWhiteSpace(data.contact_name))
             {
-                Customer = new OptionSet() { Val = data.contactid.ToString(), Label = data.contact_name, Title = "2" }; ;
+                Customer = new OptionSet() { Val = data.contact_id.ToString(), Label = data.contact_name, Title = "2" }; ;
             }
 
             if (!string.IsNullOrWhiteSpace(data.PhoneAccount))
@@ -215,12 +215,12 @@ namespace ConasiCRM.Portable.ViewModels
                             <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
                             <filter type='or'>
                                <condition attribute='statuscode' operator='in'>
-                                   value>100000000</value>
+                                   <value>100000000</value>
                                    <value>100000001</value>
                                    <value>4</value>
                                </condition>
                                <filter type='and'>
-                                   <condition attribute='statuscode' operator='eq'>
+                                   <condition attribute='statuscode' operator='in'>
                                        <value>100000009</value>
                                        <value>6</value>
                                    </condition>
