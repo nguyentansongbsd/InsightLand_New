@@ -64,7 +64,6 @@ namespace ConasiCRM.Portable.Views
             lookUpDaiLy.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadSalesAgent();
                 await viewModel.LoadSalesAgentCompany();
                 LoadingHelper.Hide();
             };

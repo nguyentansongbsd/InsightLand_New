@@ -34,30 +34,11 @@ namespace ConasiCRM.Portable.Views
         }
         public async void Init()
         {
-            await viewModel.LoadData();
-            viewModel.FilterList.Add(new OptionSet("1","Tình trạng ↑")) ;
-            viewModel.FilterList.Add(new OptionSet("2", "Tình trạng ↓"));
-            viewModel.FilterList.Add(new OptionSet("3","Dự án ↑"));
-            viewModel.FilterList.Add(new OptionSet("4", "Dự án ↓"));
-            viewModel.FilterList.Add(new OptionSet("5", "Sản phẩm ↑"));
-            viewModel.FilterList.Add(new OptionSet("6", "Sản phẩm ↓"));
-            viewModel.Filter = viewModel.FilterList[0];
-
-            viewModel.FiltersStatus.Add(new OptionSet("4", "Tất cả"));
-            viewModel.FiltersStatus.Add(new OptionSet("5", "Trạng thái 1"));
-            viewModel.FiltersStatus.Add(new OptionSet("6", "Trạng thái 2"));
-            viewModel.FilterStatus = viewModel.FiltersStatus[0];
-
-            viewModel.FiltersProject.Add(new OptionSet("4", "Tất cả"));
-            viewModel.FiltersProject.Add(new OptionSet("5", "Sản phẩm 1"));
-            viewModel.FiltersProject.Add(new OptionSet("6", "Sản phẩm 2"));
-            viewModel.FilterProject = viewModel.FiltersProject[0];
-
-            viewModel.FiltersUnit.Add(new OptionSet("4", "Tất cả Dự án"));
-            viewModel.FiltersUnit.Add(new OptionSet("5", "Dự án 1"));
-            viewModel.FiltersUnit.Add(new OptionSet("6", "Dự án 2"));
-            viewModel.FilterUnit = viewModel.FiltersUnit[0];
-
+            await Task.WhenAll(
+                  viewModel.LoadData(),
+                  viewModel.LoadProject()
+                  );
+            viewModel.LoadStatus();
             LoadingHelper.Hide();
         }
 
@@ -98,9 +79,25 @@ namespace ConasiCRM.Portable.Views
             {
                 SearchBar_SearchButtonPressed(null, EventArgs.Empty);
             }
+        }        
+
+        private async void FiltersProject_SelectedItemChange(object sender, LookUpChangeEvent e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadOnRefreshCommandAsync();
+            viewModel.FiltersUnit.Clear();
+            await viewModel.LoadUnit();
+            LoadingHelper.Hide();
         }
 
-        private async void FilterPicker_SelectedItemChange(object sender, LookUpChangeEvent e)
+        private async void FiltersStatus_SelectedItemChanged(object sender, LookUpChangeEvent e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadOnRefreshCommandAsync();
+            LoadingHelper.Hide();
+        }
+
+        private async void FiltersUnit_SelectedItemChanged(object sender, LookUpChangeEvent e)
         {
             LoadingHelper.Show();
             await viewModel.LoadOnRefreshCommandAsync();

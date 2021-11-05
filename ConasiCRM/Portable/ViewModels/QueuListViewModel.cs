@@ -19,20 +19,17 @@ namespace ConasiCRM.Portable.ViewModels
     {
         public ObservableCollection<OptionSet> FiltersStatus { get; set; } = new ObservableCollection<OptionSet>();
 
-        public OptionSet _filterStatus;
-        public OptionSet FilterStatus { get => _filterStatus; set { _filterStatus = value; OnPropertyChanged(nameof(FilterStatus)); } }
+        public List<string> _filterStatus;
+        public List<string> FilterStatus { get => _filterStatus; set { _filterStatus = value; OnPropertyChanged(nameof(FilterStatus)); } }
         public ObservableCollection<OptionSet> FiltersProject { get; set; } = new ObservableCollection<OptionSet>();
 
         public OptionSet _filterProject;
         public OptionSet FilterProject { get => _filterProject; set { _filterProject = value; OnPropertyChanged(nameof(FilterProject)); } }
         public ObservableCollection<OptionSet> FiltersUnit { get; set; } = new ObservableCollection<OptionSet>();
 
-        public OptionSet _filterUnit;
-        public OptionSet FilterUnit { get => _filter; set { _filter = value; OnPropertyChanged(nameof(FilterUnit)); } }
-        public ObservableCollection<OptionSet> FilterList { get; set; } = new ObservableCollection<OptionSet>();
+        public List<string> _filterUnit;
+        public List<string> FilterUnit { get => _filterUnit; set { _filterUnit = value; OnPropertyChanged(nameof(FilterUnit)); } }
 
-        public OptionSet _filter;
-        public OptionSet Filter { get => _filter; set { _filter = value; OnPropertyChanged(nameof(Filter)); } }
         public string Keyword { get; set; }
         public ICommand PhoneCommand { get; }
         public QueuListViewModel()
@@ -40,27 +37,36 @@ namespace ConasiCRM.Portable.ViewModels
             PhoneCommand = new Command<string>(PhoneCommandAsync);
             PreLoadData = new Command(() =>
             {
-                string filter = string.Empty;
-                if (Filter != null)
+                string project = null;
+                string status = null;
+                string units = null;
+                if (FilterStatus != null && FilterStatus.Count > 0)
                 {
-                    if (Filter.Val == "1")
-                        filter = $@"<order attribute='statuscode' descending='true' />";
-                    else if (Filter.Val == "2")
-                        filter = $@"<order attribute='statuscode' descending='false' />";
-                    else if (Filter.Val == "3")
-                        filter = $@"<order attribute='bsd_project' descending='true' />";
-                    else if (Filter.Val == "4")
-                        filter = $@"<order attribute='bsd_project' descending='false' />";
-                    else if (Filter.Val == "5")
-                        filter = $@"<order attribute='bsd_units' descending='true' />";
-                    else if (Filter.Val == "6")
-                        filter = $@"<order attribute='bsd_units' descending='false' />";
-                    else
-                        filter = $@"<order attribute='statuscode' descending='true' />";
+                    if (string.IsNullOrWhiteSpace(FilterStatus.Where(x => x == "-1").FirstOrDefault()))
+                    {
+                        string sts = string.Empty;
+                        foreach (var item in FilterStatus)
+                        {
+                            sts += $@"<value>{item}</value>";
+                        }
+                        status = @"<condition attribute='statuscode' operator='in'>" + sts + "</condition>";
+                    }
                 }
-                else
+                if(FilterProject != null)
                 {
-                    filter = $@"<order attribute='statuscode' descending='true' />";
+                    project = $@"<condition attribute='bsd_project' operator='eq' value='{FilterProject.Val}' />";
+                }
+                if (FilterUnit != null && FilterUnit.Count > 0)
+                {
+                    if (string.IsNullOrWhiteSpace(FilterUnit.Where(x => x == "-1").FirstOrDefault()))
+                    {
+                        string unit = string.Empty;
+                        foreach (var item in FilterUnit)
+                        {
+                            unit += $@"<value>{item}</value>";
+                        }
+                        units = @"<condition attribute='bsd_units' operator='in'>" + unit + "</condition>";
+                    }
                 }
 
                 EntityName = "opportunities";
@@ -81,6 +87,9 @@ namespace ConasiCRM.Portable.ViewModels
                                 <condition attribute='bsd_unitsname' operator='like' value='%25{Keyword}%25' /> 
                             </filter>
                           <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                          "+ status + @"
+                            " + project + @"
+                            " + units + @"
                         </filter>
                         <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='fullname'  alias='contact_name'/>
@@ -88,7 +97,6 @@ namespace ConasiCRM.Portable.ViewModels
                         <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='name'  alias='account_name'/>
                         </link-entity>
-                        " + filter + @"
                       </entity>
                     </fetch>";
             });
@@ -104,6 +112,70 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 await Application.Current.MainPage.DisplayAlert("Lỗi", "Không có số điện thoại", "OK");
+            }
+        }
+
+        public void LoadStatus()
+        {
+            if (FiltersStatus != null && FiltersStatus.Count == 0)
+            {
+                FiltersStatus.Add(new OptionSet("-1", "Tất cả"));
+                var list = QueuesStatusCodeData.GetQueuesData();
+                foreach (var item in list)
+                {
+                    FiltersStatus.Add(new OptionSet(item.Id, item.Name));
+                }
+            }
+        }
+
+        public async Task LoadProject()
+        {
+            if (FiltersStatus != null && FiltersStatus.Count == 0)
+            {
+                string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                <entity name='bsd_project'>
+                                    <attribute name='bsd_projectid' alias='Val'/>
+                                    <attribute name='bsd_projectcode'/>
+                                    <attribute name='bsd_name' alias='Label'/>
+                                    <attribute name='createdon' />
+                                    <order attribute='bsd_name' descending='false' />
+                                  </entity>
+                            </fetch>";
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_projects", fetchXml);
+                if (result == null || result.value.Any() == false) return;
+
+                FiltersProject.Add(new OptionSet("-1", "Tất cả"));
+                var data = result.value;
+                foreach (var item in data)
+                {
+                    FiltersProject.Add(item);
+                }
+            }
+        }
+
+        public async Task LoadUnit()
+        {
+            if (Guid.Parse(FilterProject.Val) != Guid.Empty)
+            {
+                string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                    <entity name='product'>
+                                        <attribute name='name' alias='Label'/>
+                                        <attribute name='productid' alias='Val'/>
+                                        <order attribute='createdon' descending='true' />
+                                        <filter type='and'>
+                                             <condition attribute='bsd_projectcode' operator='eq' value='{FilterProject.Val}' />
+                                        </filter>
+                                    </entity>
+                                </fetch>";
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("products", fetchXml);
+                if (result == null || result.value.Any() == false) return;
+
+                FiltersUnit.Add(new OptionSet("-1","Tất cả"));
+                var data = result.value;
+                foreach (var item in data)
+                {
+                    FiltersUnit.Add(item);
+                }
             }
         }
     }
