@@ -42,6 +42,22 @@ namespace ConasiCRM.Portable.Views
             viewModel.FilterList.Add(new OptionSet("5", "Sản phẩm ↑"));
             viewModel.FilterList.Add(new OptionSet("6", "Sản phẩm ↓"));
             viewModel.Filter = viewModel.FilterList[0];
+
+            viewModel.FiltersStatus.Add(new OptionSet("4", "Tất cả"));
+            viewModel.FiltersStatus.Add(new OptionSet("5", "Trạng thái 1"));
+            viewModel.FiltersStatus.Add(new OptionSet("6", "Trạng thái 2"));
+            viewModel.FilterStatus = viewModel.FiltersStatus[0];
+
+            viewModel.FiltersProject.Add(new OptionSet("4", "Tất cả"));
+            viewModel.FiltersProject.Add(new OptionSet("5", "Sản phẩm 1"));
+            viewModel.FiltersProject.Add(new OptionSet("6", "Sản phẩm 2"));
+            viewModel.FilterProject = viewModel.FiltersProject[0];
+
+            viewModel.FiltersUnit.Add(new OptionSet("4", "Tất cả Dự án"));
+            viewModel.FiltersUnit.Add(new OptionSet("5", "Dự án 1"));
+            viewModel.FiltersUnit.Add(new OptionSet("6", "Dự án 2"));
+            viewModel.FilterUnit = viewModel.FiltersUnit[0];
+
             LoadingHelper.Hide();
         }
 

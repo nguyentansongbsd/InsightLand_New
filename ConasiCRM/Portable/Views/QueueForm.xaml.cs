@@ -64,7 +64,8 @@ namespace ConasiCRM.Portable.Views
             lookUpDaiLy.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadSalesAgent();               
+                await viewModel.LoadSalesAgent();
+                await viewModel.LoadSalesAgentCompany();
                 LoadingHelper.Hide();
             };
             if (viewModel.AccountsLookUp.Count <= 0)
@@ -89,7 +90,7 @@ namespace ConasiCRM.Portable.Views
             if(from)
             {
                 await viewModel.LoadFromUnit(this.UnitId);
-                topic.Text = viewModel.QueueFormModel.bsd_units_name;
+                topic.Text = viewModel.QueueFormModel.bsd_units_name;              
                 if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
                 else
@@ -98,7 +99,7 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 await viewModel.LoadFromProject(this.UnitId);
-                topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");
+                topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");                
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
                 else

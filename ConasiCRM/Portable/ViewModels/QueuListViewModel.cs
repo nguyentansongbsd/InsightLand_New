@@ -17,6 +17,18 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class QueuListViewModel : ListViewBaseViewModel2<QueuesModel>
     {
+        public ObservableCollection<OptionSet> FiltersStatus { get; set; } = new ObservableCollection<OptionSet>();
+
+        public OptionSet _filterStatus;
+        public OptionSet FilterStatus { get => _filterStatus; set { _filterStatus = value; OnPropertyChanged(nameof(FilterStatus)); } }
+        public ObservableCollection<OptionSet> FiltersProject { get; set; } = new ObservableCollection<OptionSet>();
+
+        public OptionSet _filterProject;
+        public OptionSet FilterProject { get => _filterProject; set { _filterProject = value; OnPropertyChanged(nameof(FilterProject)); } }
+        public ObservableCollection<OptionSet> FiltersUnit { get; set; } = new ObservableCollection<OptionSet>();
+
+        public OptionSet _filterUnit;
+        public OptionSet FilterUnit { get => _filter; set { _filter = value; OnPropertyChanged(nameof(FilterUnit)); } }
         public ObservableCollection<OptionSet> FilterList { get; set; } = new ObservableCollection<OptionSet>();
 
         public OptionSet _filter;

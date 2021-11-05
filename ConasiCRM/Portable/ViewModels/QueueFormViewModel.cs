@@ -46,7 +46,6 @@ namespace ConasiCRM.Portable.ViewModels
         {
             QueueFormModel = new QueueFormModel();
             DaiLyOptions = new List<LookUp>();
-
         }
 
         public async Task LoadFromProject(Guid ProjectId)
@@ -128,8 +127,7 @@ namespace ConasiCRM.Portable.ViewModels
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_units_queuingfee;
             else if (QueueFormModel.bsd_bookingf > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
-            QueueFormModel._queue_createdon = DateTime.Now;
-            string a = QueueFormModel.bsd_phaseslaunch_id.ToString();
+
             idQueueDraft = await createQueueDraft(false);
         }
 
@@ -176,165 +174,165 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             }
 
-            if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
-            {
-                QueueFormModel._queue_bsd_bookingtime = DateTime.Now;
-                QueueFormModel.statuscode = 100000000;
-            }
-            else
-            {
-                var queue = (QueueFormModel)data.OrderBy(x => x._queue_bsd_queuingexpired).LastOrDefault();
-                QueueFormModel._queue_bsd_bookingtime = queue._queue_bsd_queuingexpired;
-                QueueFormModel.statuscode = 100000002;
-            }
+            //if (data.Count <= 0 || data.Where(x => x.statuscode == 100000000).ToList().Count <= 0)
+            //{
+            //    QueueFormModel._queue_bsd_bookingtime = DateTime.Now;
+            //    QueueFormModel.statuscode = 100000000;
+            //}
+            //else
+            //{
+            //    var queue = (QueueFormModel)data.OrderBy(x => x._queue_bsd_queuingexpired).LastOrDefault();
+            //    QueueFormModel._queue_bsd_bookingtime = queue._queue_bsd_queuingexpired;
+            //    QueueFormModel.statuscode = 100000002;
+            //}
 
-            if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
-            {
-                QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
-            }
-            else
-            {
-                QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
-            }
+            //if (QueueFormModel.bsd_phaseslaunch_id != null || QueueFormModel.bsd_phaseslaunch_id != Guid.Empty)
+            //{
+            //    QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddHours(QueueFormModel.bsd_shorttime);
+            //}
+            //else
+            //{
+            //    QueueFormModel._queue_bsd_queuingexpired = QueueFormModel._queue_bsd_bookingtime.AddDays(QueueFormModel.bsd_longtime);
+            //}
 
             return true;
         }
 
-        public async Task<bool> createQueue()
-        {
-            string path = "/opportunities";
-            QueueFormModel.opportunityid = Guid.NewGuid();
-            var content = await this.getContent();
-            CrmApiResponse result = await CrmHelper.PostData(path, content);
-            if (result.IsSuccess)
-            {
-                if (QueueFormModel.UnitStatusCode > 0)
-                {
-                    UpdateStatusUnit();
-                }
-                else
-                {
-                    await SetStatusQueueProject(QueueFormModel.opportunityid);
-                } 
-                QueueUnitModel queueUnit = await ContentQueueUnit();
-                await CreateQueueUnit(queueUnit);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        //public async Task<bool> createQueue()
+        //{
+        //    string path = "/opportunities";
+        //    QueueFormModel.opportunityid = Guid.NewGuid();
+        //    var content = await this.getContent();
+        //    CrmApiResponse result = await CrmHelper.PostData(path, content);
+        //    if (result.IsSuccess)
+        //    {
+        //        if (QueueFormModel.UnitStatusCode > 0)
+        //        {
+        //            UpdateStatusUnit();
+        //        }
+        //        else
+        //        {
+        //            await SetStatusQueueProject(QueueFormModel.opportunityid);
+        //        } 
+        //        QueueUnitModel queueUnit = await ContentQueueUnit();
+        //        await CreateQueueUnit(queueUnit);
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
 
-        }
+        //}
 
-        private async Task<QueueUnitModel> ContentQueueUnit()
-        {
-            QueueUnitModel queueUnit = new QueueUnitModel();
-            queueUnit.opportunityproductid = Guid.NewGuid();
-            queueUnit.bsd_status = true;
-            queueUnit.bsd_pricelist = this.QueueFormModel.pricelist_id.ToString();
-            queueUnit.bsd_booking = this.QueueFormModel.opportunityid.ToString();
-            queueUnit.bsd_project = this.QueueFormModel.bsd_project_id.ToString();
-            queueUnit.bsd_block = this.QueueFormModel.bsd_block_id.ToString();
-            queueUnit.bsd_units = this.QueueFormModel.bsd_units_id.ToString();
-            queueUnit.bsd_phaseslaunch = this.QueueFormModel.bsd_phaseslaunch_id.ToString();
-            queueUnit.bsd_floor = this.QueueFormModel.bsd_floor_id.ToString();
-            queueUnit.isproductoverridden = false;
-            queueUnit.productid = this.QueueFormModel.bsd_units_id.ToString();
-            queueUnit.ispriceoverridden = false;
-            queueUnit.priceperunit = this.QueueFormModel.unit_price;
-            queueUnit.uomid = this.QueueFormModel._defaultuomid_value;
-            queueUnit.baseamount = this.QueueFormModel.unit_price;
-            queueUnit.extendedamount = this.QueueFormModel.unit_price;
-            queueUnit.transactioncurrencyid = this.QueueFormModel._transactioncurrencyid_value;
-            queueUnit.tax = this.QueueFormModel.bsd_taxpercent;
-            queueUnit.createdby = UserLogged.ManagerId.ToString();
-            return queueUnit;
-        }
+        //private async Task<QueueUnitModel> ContentQueueUnit()
+        //{
+        //    QueueUnitModel queueUnit = new QueueUnitModel();
+        //    queueUnit.opportunityproductid = Guid.NewGuid();
+        //    queueUnit.bsd_status = true;
+        //    queueUnit.bsd_pricelist = this.QueueFormModel.pricelist_id.ToString();
+        //    queueUnit.bsd_booking = this.QueueFormModel.opportunityid.ToString();
+        //    queueUnit.bsd_project = this.QueueFormModel.bsd_project_id.ToString();
+        //    queueUnit.bsd_block = this.QueueFormModel.bsd_block_id.ToString();
+        //    queueUnit.bsd_units = this.QueueFormModel.bsd_units_id.ToString();
+        //    queueUnit.bsd_phaseslaunch = this.QueueFormModel.bsd_phaseslaunch_id.ToString();
+        //    queueUnit.bsd_floor = this.QueueFormModel.bsd_floor_id.ToString();
+        //    queueUnit.isproductoverridden = false;
+        //    queueUnit.productid = this.QueueFormModel.bsd_units_id.ToString();
+        //    queueUnit.ispriceoverridden = false;
+        //    queueUnit.priceperunit = this.QueueFormModel.unit_price;
+        //    queueUnit.uomid = this.QueueFormModel._defaultuomid_value;
+        //    queueUnit.baseamount = this.QueueFormModel.unit_price;
+        //    queueUnit.extendedamount = this.QueueFormModel.unit_price;
+        //    queueUnit.transactioncurrencyid = this.QueueFormModel._transactioncurrencyid_value;
+        //    queueUnit.tax = this.QueueFormModel.bsd_taxpercent;
+        //    queueUnit.createdby = UserLogged.ManagerId.ToString();
+        //    return queueUnit;
+        //}
 
-        private async Task<bool> CreateQueueUnit(QueueUnitModel queueUnit)
-        {
-            string path = "/opportunityproducts";
-            var content = await GetContentQueueUnit(queueUnit);
-            CrmApiResponse result = await CrmHelper.PostData(path, content);
-            if (result.IsSuccess)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //private async Task<bool> CreateQueueUnit(QueueUnitModel queueUnit)
+        //{
+        //    string path = "/opportunityproducts";
+        //    var content = await GetContentQueueUnit(queueUnit);
+        //    CrmApiResponse result = await CrmHelper.PostData(path, content);
+        //    if (result.IsSuccess)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
-        private async Task<object> GetContentQueueUnit(QueueUnitModel queueUnit)
-        {
-            IDictionary<string, object> data = new Dictionary<string, object>();
-            data["opportunityproductid"] = queueUnit.opportunityproductid;
-            data["bsd_status"] = queueUnit.bsd_status;
-            data["isproductoverridden"] = queueUnit.isproductoverridden;
-            data["ispriceoverridden"] = queueUnit.ispriceoverridden;
-            data["priceperunit"] = queueUnit.priceperunit;
-            data["quantity"] = 1;
+        //private async Task<object> GetContentQueueUnit(QueueUnitModel queueUnit)
+        //{
+        //    IDictionary<string, object> data = new Dictionary<string, object>();
+        //    data["opportunityproductid"] = queueUnit.opportunityproductid;
+        //    data["bsd_status"] = queueUnit.bsd_status;
+        //    data["isproductoverridden"] = queueUnit.isproductoverridden;
+        //    data["ispriceoverridden"] = queueUnit.ispriceoverridden;
+        //    data["priceperunit"] = queueUnit.priceperunit;
+        //    data["quantity"] = 1;
 
-            data["opportunityid@odata.bind"] = $"/opportunities({queueUnit.bsd_booking})";
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_pricelist))
-            {
-                data["bsd_PriceList@odata.bind"] = $"/pricelevels({queueUnit.bsd_pricelist})";
-            }
+        //    data["opportunityid@odata.bind"] = $"/opportunities({queueUnit.bsd_booking})";
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_pricelist))
+        //    {
+        //        data["bsd_PriceList@odata.bind"] = $"/pricelevels({queueUnit.bsd_pricelist})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_booking))
-            {
-                data["bsd_Booking@odata.bind"] = $"/opportunities({queueUnit.bsd_booking})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_booking))
+        //    {
+        //        data["bsd_Booking@odata.bind"] = $"/opportunities({queueUnit.bsd_booking})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_project))
-            {
-                data["bsd_Project@odata.bind"] = $"/bsd_projects({queueUnit.bsd_project})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_project))
+        //    {
+        //        data["bsd_Project@odata.bind"] = $"/bsd_projects({queueUnit.bsd_project})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_block))
-            {
-                data["bsd_Block@odata.bind"] = $"/bsd_blocks({queueUnit.bsd_block})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_block))
+        //    {
+        //        data["bsd_Block@odata.bind"] = $"/bsd_blocks({queueUnit.bsd_block})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_units))
-            {
-                data["bsd_Units@odata.bind"] = $"/products({queueUnit.bsd_units})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_units))
+        //    {
+        //        data["bsd_Units@odata.bind"] = $"/products({queueUnit.bsd_units})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_phaseslaunch))
-            {
-                data["bsd_PhasesLaunch@odata.bind"] = $"/bsd_phaseslaunchs({queueUnit.bsd_phaseslaunch})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_phaseslaunch))
+        //    {
+        //        data["bsd_PhasesLaunch@odata.bind"] = $"/bsd_phaseslaunchs({queueUnit.bsd_phaseslaunch})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.bsd_floor))
-            {
-                data["bsd_Floor@odata.bind"] = $"/bsd_floors({queueUnit.bsd_floor})";
-            }
-            
-            if (!string.IsNullOrWhiteSpace(queueUnit.uomid))
-            {
-                data["uomid@odata.bind"] = $"/products({queueUnit.uomid})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.bsd_floor))
+        //    {
+        //        data["bsd_Floor@odata.bind"] = $"/bsd_floors({queueUnit.bsd_floor})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.productid))
-            {
-                data["productid@odata.bind"] = $"/products({queueUnit.productid})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.uomid))
+        //    {
+        //        data["uomid@odata.bind"] = $"/products({queueUnit.uomid})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.transactioncurrencyid))
-            {
-                data["transactioncurrencyid@odata.bind"] = $"/transactioncurrencies({queueUnit.transactioncurrencyid})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.productid))
+        //    {
+        //        data["productid@odata.bind"] = $"/products({queueUnit.productid})";
+        //    }
 
-            if (!string.IsNullOrWhiteSpace(queueUnit.createdby))
-            {
-                data["createdby@odata.bind"] = $"/systemusers({queueUnit.createdby})";
-            }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.transactioncurrencyid))
+        //    {
+        //        data["transactioncurrencyid@odata.bind"] = $"/transactioncurrencies({queueUnit.transactioncurrencyid})";
+        //    }
 
-            return data;
-        }
+        //    if (!string.IsNullOrWhiteSpace(queueUnit.createdby))
+        //    {
+        //        data["createdby@odata.bind"] = $"/systemusers({queueUnit.createdby})";
+        //    }
+
+        //    return data;
+        //}
 
         public async Task LoadContactsLookUp()
         {
@@ -404,95 +402,95 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        private async Task<object> getContent()
-        {
-            IDictionary<string, object> data = new Dictionary<string, object>();
-            data["opportunityid"] = QueueFormModel.opportunityid;
+        //private async Task<object> getContent()
+        //{
+        //    IDictionary<string, object> data = new Dictionary<string, object>();
+        //    data["opportunityid"] = QueueFormModel.opportunityid;
 
-            if (QueueFormModel.bsd_project_id == null || QueueFormModel.bsd_project_id == Guid.Empty)
-            {
-                await DeletLookup("bsd_Project", QueueFormModel.opportunityid);
-            }
-            else
-            {
-                data["bsd_Project@odata.bind"] = $"/bsd_projects({QueueFormModel.bsd_project_id})";
-            }
+        //    if (QueueFormModel.bsd_project_id == null || QueueFormModel.bsd_project_id == Guid.Empty)
+        //    {
+        //        await DeletLookup("bsd_Project", QueueFormModel.opportunityid);
+        //    }
+        //    else
+        //    {
+        //        data["bsd_Project@odata.bind"] = $"/bsd_projects({QueueFormModel.bsd_project_id})";
+        //    }
 
-            if (QueueFormModel.bsd_units_id == null || QueueFormModel.bsd_units_id == Guid.Empty)
-            {
-                await DeletLookup("bsd_units", QueueFormModel.opportunityid);
-            }
-            else
-            {
-                data["bsd_units@odata.bind"] = $"/products({QueueFormModel.bsd_units_id})";
-            }
+        //    if (QueueFormModel.bsd_units_id == null || QueueFormModel.bsd_units_id == Guid.Empty)
+        //    {
+        //        await DeletLookup("bsd_units", QueueFormModel.opportunityid);
+        //    }
+        //    else
+        //    {
+        //        data["bsd_units@odata.bind"] = $"/products({QueueFormModel.bsd_units_id})";
+        //    }
 
-            if (QueueFormModel.bsd_phaseslaunch_id == null || QueueFormModel.bsd_phaseslaunch_id == Guid.Empty)
-            {
-                await DeletLookup("bsd_phaseslaunch", QueueFormModel.opportunityid);
-            }
-            else
-            {
-                data["bsd_phaselaunch@odata.bind"] = $"/bsd_phaseslaunchs({QueueFormModel.bsd_phaseslaunch_id})";
-            }
+        //    if (QueueFormModel.bsd_phaseslaunch_id == null || QueueFormModel.bsd_phaseslaunch_id == Guid.Empty)
+        //    {
+        //        await DeletLookup("bsd_phaseslaunch", QueueFormModel.opportunityid);
+        //    }
+        //    else
+        //    {
+        //        data["bsd_phaselaunch@odata.bind"] = $"/bsd_phaseslaunchs({QueueFormModel.bsd_phaseslaunch_id})";
+        //    }
 
-            data["bsd_queuingfee"] = QueueFormModel.bsd_queuingfee;
+        //    data["bsd_queuingfee"] = QueueFormModel.bsd_queuingfee;
 
-            data["name"] = QueueFormModel.name;
+        //    data["name"] = QueueFormModel.name;
 
-            if (Customer != null || Customer.Id != Guid.Empty)
-            {
-                if (Customer.Detail == "1")
-                {
-                    data["customerid_account@odata.bind"] = $"/accounts({Customer.Id})";
-                    await DeletLookup("customerid_contact", QueueFormModel.opportunityid);
-                }
-                else
-                {
-                    data["customerid_contact@odata.bind"] = $"/contacts({Customer.Id})";
-                    await DeletLookup("customerid_account", QueueFormModel.opportunityid);
-                }
-            }
+        //    if (Customer != null || Customer.Id != Guid.Empty)
+        //    {
+        //        if (Customer.Detail == "1")
+        //        {
+        //            data["customerid_account@odata.bind"] = $"/accounts({Customer.Id})";
+        //            await DeletLookup("customerid_contact", QueueFormModel.opportunityid);
+        //        }
+        //        else
+        //        {
+        //            data["customerid_contact@odata.bind"] = $"/contacts({Customer.Id})";
+        //            await DeletLookup("customerid_account", QueueFormModel.opportunityid);
+        //        }
+        //    }
 
-            data["budgetamount"] = QueueFormModel.budgetamount;
-            data["description"] = QueueFormModel.description;
+        //    data["budgetamount"] = QueueFormModel.budgetamount;
+        //    data["description"] = QueueFormModel.description;
 
-            if (DailyOption == null || DailyOption.Id == Guid.Empty)
-            {
-                await DeletLookup("bsd_salesagentcompany", QueueFormModel.opportunityid);
-            }
-            else
-            {
-                data["bsd_salesagentcompany@odata.bind"] = $"/accounts({DailyOption.Id})";
-            }
+        //    if (DailyOption == null || DailyOption.Id == Guid.Empty)
+        //    {
+        //        await DeletLookup("bsd_salesagentcompany", QueueFormModel.opportunityid);
+        //    }
+        //    else
+        //    {
+        //        data["bsd_salesagentcompany@odata.bind"] = $"/accounts({DailyOption.Id})";
+        //    }
 
-            data["bsd_nameofstaffagent"] = QueueFormModel.bsd_nameofstaffagent;
+        //    data["bsd_nameofstaffagent"] = QueueFormModel.bsd_nameofstaffagent;
 
-            if (UserLogged.Id != null)
-            {
-                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
-            }
-            if (UserLogged.ManagerId != Guid.Empty)
-            {
-                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
-            }
-            if (QueueFormModel.statuscode != 0)
-            {
-                data["statuscode"] = QueueFormModel.statuscode;
-                data["bsd_bookingtime"] = QueueFormModel._queue_bsd_bookingtime;
-                data["bsd_queuingexpired"] = QueueFormModel._queue_bsd_queuingexpired;
-                data["bsd_queueforproject"] = false;
-            }
-            else
-            {
-                data["statecode"] = 0;
-                data["statuscode"] = 1;
-                data["bsd_queueforproject"] = true;
-            }
-            data["createdon"] = QueueFormModel._queue_createdon;
+        //    if (UserLogged.Id != null)
+        //    {
+        //        data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+        //    }
+        //    if (UserLogged.ManagerId != Guid.Empty)
+        //    {
+        //        data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+        //    }
+        //    if (QueueFormModel.statuscode != 0)
+        //    {
+        //        data["statuscode"] = QueueFormModel.statuscode;
+        //        data["bsd_bookingtime"] = QueueFormModel._queue_bsd_bookingtime;
+        //        data["bsd_queuingexpired"] = QueueFormModel._queue_bsd_queuingexpired;
+        //        data["bsd_queueforproject"] = false;
+        //    }
+        //    else
+        //    {
+        //        data["statecode"] = 0;
+        //        data["statuscode"] = 1;
+        //        data["bsd_queueforproject"] = true;
+        //    }
+        //    data["createdon"] = QueueFormModel._queue_createdon;
 
-            return data;
-        }
+        //    return data;
+        //}
 
         public async Task<Boolean> DeletLookup(string fieldName, Guid AccountId)
         {
@@ -500,95 +498,95 @@ namespace ConasiCRM.Portable.ViewModels
             return result.IsSuccess;
         }
 
-        private async void UpdateStatusUnit()
-        {
-            if (QueueFormModel.UnitStatusCode == 1 || QueueFormModel.UnitStatusCode == 100000000)
-            {
-                await updateStatusUnit();
-            }
-        }
+        //private async void UpdateStatusUnit()
+        //{
+        //    if (QueueFormModel.UnitStatusCode == 1 || QueueFormModel.UnitStatusCode == 100000000)
+        //    {
+        //        await updateStatusUnit();
+        //    }
+        //}
 
-        public async Task<Boolean> updateStatusUnit()
-        {
-            string path = "/products(" + QueueFormModel.bsd_units_id + ")";
-            var content = await this.getContentUnit();
-            CrmApiResponse result = await CrmHelper.PatchData(path, content);
-            if (result.IsSuccess)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        //public async Task<Boolean> updateStatusUnit()
+        //{
+        //    string path = "/products(" + QueueFormModel.bsd_units_id + ")";
+        //    var content = await this.getContentUnit();
+        //    CrmApiResponse result = await CrmHelper.PatchData(path, content);
+        //    if (result.IsSuccess)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
 
-        }
+        //}
 
-        private async Task<object> getContentUnit()
-        {
-            IDictionary<string, object> data = new Dictionary<string, object>();
-            data["statecode"] = 0;
-            data["statuscode"] = 100000004;
-            return data;
-        }
+        //private async Task<object> getContentUnit()
+        //{
+        //    IDictionary<string, object> data = new Dictionary<string, object>();
+        //    data["statecode"] = 0;
+        //    data["statuscode"] = 100000004;
+        //    return data;
+        //}
 
-        private async Task<bool> SetStatusQueueProject(Guid queue_id)
-        {
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                      <entity name='opportunity'>
-                                        <attribute name='bsd_queuenumber' />
-                                        <attribute name='bsd_queuingexpired' />
-                                        <order attribute='bsd_queuingexpired' descending='true' />
-                                        <filter type='and'>
-                                          <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
-                                          <condition attribute='statuscode' operator='in'>
-                                            <value>100000000</value>
-                                            <value>100000002</value>
-                                          </condition>
-                                          <condition attribute='opportunityid' operator='ne' value='{queue_id}' />
-                                        </filter>
-                                      </entity>
-                                    </fetch>"; ;
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
-            if (result == null)
-                return false;
-            var data = result.value;
+        //private async Task<bool> SetStatusQueueProject(Guid queue_id)
+        //{
+        //    string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+        //                              <entity name='opportunity'>
+        //                                <attribute name='bsd_queuenumber' />
+        //                                <attribute name='bsd_queuingexpired' />
+        //                                <order attribute='bsd_queuingexpired' descending='true' />
+        //                                <filter type='and'>
+        //                                  <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
+        //                                  <condition attribute='statuscode' operator='in'>
+        //                                    <value>100000000</value>
+        //                                    <value>100000002</value>
+        //                                  </condition>
+        //                                  <condition attribute='opportunityid' operator='ne' value='{queue_id}' />
+        //                                </filter>
+        //                              </entity>
+        //                            </fetch>"; ;
+        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
+        //    if (result == null)
+        //        return false;
+        //    var data = result.value;
 
-            if (data.ToList().Count > 0)
-            {
-              return await updateStatusQueueProject(false);
-            }
-            else
-            {
-                return await updateStatusQueueProject(true);
-            }
-        }
+        //    if (data.ToList().Count > 0)
+        //    {
+        //      return await updateStatusQueueProject(false);
+        //    }
+        //    else
+        //    {
+        //        return await updateStatusQueueProject(true);
+        //    }
+        //}
 
-        public async Task<Boolean> updateStatusQueueProject(bool isQueue)
-        {
-            string path = "/opportunities(" + QueueFormModel.opportunityid + ")";
-            IDictionary<string, object> data = new Dictionary<string, object>();
-            if(isQueue)
-            {
-                data["statecode"] = 0;
-                data["statuscode"] = 100000000;
-            }
-            else
-            {
-                data["statecode"] = 0;
-                data["statuscode"] = 100000002;
-            }
-            CrmApiResponse result = await CrmHelper.PatchData(path, data);
-            if (result.IsSuccess)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        //public async Task<Boolean> updateStatusQueueProject(bool isQueue)
+        //{
+        //    string path = "/opportunities(" + QueueFormModel.opportunityid + ")";
+        //    IDictionary<string, object> data = new Dictionary<string, object>();
+        //    if(isQueue)
+        //    {
+        //        data["statecode"] = 0;
+        //        data["statuscode"] = 100000000;
+        //    }
+        //    else
+        //    {
+        //        data["statecode"] = 0;
+        //        data["statuscode"] = 100000002;
+        //    }
+        //    CrmApiResponse result = await CrmHelper.PatchData(path, data);
+        //    if (result.IsSuccess)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
 
-        }
+        //}
 
         public async Task<Guid> createQueueDraft(bool isQueueProject)
         {
@@ -698,7 +696,11 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
 
-            data["budgetamount"] = QueueFormModel.budgetamount;
+            // data["budgetamount"] = QueueFormModel.budgetamount;
+            if(QueueFormModel.bsd_units_id == Guid.Empty)
+            {
+                data["estimatedvalue"] = 0;
+            }    
             data["description"] = QueueFormModel.description;
 
             if (DailyOption == null || DailyOption.Id == Guid.Empty)
@@ -721,6 +723,75 @@ namespace ConasiCRM.Portable.ViewModels
                 data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
             return data;
+        }
+
+        public async Task LoadSalesAgentCompany()
+        {
+            string fetchphaseslaunch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='bsd_phaseslaunch'>
+                                <attribute name='bsd_name' />
+                                <attribute name='bsd_locked' />
+                                <attribute name='bsd_salesagentcompany' />
+                                <attribute name='bsd_phaseslaunchid' />
+                                <order attribute='bsd_name' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_phaseslaunchid' operator='eq' value='{QueueFormModel.bsd_phaseslaunch_id}' />
+                                </filter>
+                                <link-entity name='account' from='accountid' to='bsd_salesagentcompany' link-type='outer' alias='aw'>
+                                    <attribute name='name' alias='salesagentcompany_name' />
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result_phasesLaunch = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLaunch>>("bsd_phaseslaunchs", fetchphaseslaunch);
+            if (result_phasesLaunch == null || result_phasesLaunch.value.Count == 0)
+                return;
+            var phasesLaunch = result_phasesLaunch.value.FirstOrDefault();
+            if (phasesLaunch != null)
+            {
+                if (phasesLaunch.bsd_locked == false)
+                {
+                    if(string.IsNullOrWhiteSpace(phasesLaunch.salesagentcompany_name))
+                    {
+                        string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+                                          <entity name='account'>
+                                            <attribute name='bsd_name' />
+                                            <attribute name='name' alias='Name'/>
+                                            <attribute name='accountid' alias='Id'/>
+                                            <order attribute='createdon' descending='true' />
+                                            <link-entity name='bsd_projectshare' from='bsd_salesagent' to='accountid' link-type='inner' alias='az'>
+                                                <filter type='and'>
+                                                    <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
+                                                </filter>
+                                            </link-entity>
+                                          </entity>
+                                        </fetch>";
+                        var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("accounts", fetch);
+                        if (result == null)
+                            return;
+                        var data = result.value;
+                        foreach (var item in data)
+                        {
+                            DaiLyOptions.Add(item);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (phasesLaunch.bsd_locked == true)
+                {
+                    if (string.IsNullOrWhiteSpace(phasesLaunch.salesagentcompany_name))
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+            }
         }
     }
 }
