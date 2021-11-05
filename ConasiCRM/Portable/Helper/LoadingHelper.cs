@@ -21,7 +21,14 @@ namespace ConasiCRM.Portable.Helper
 
         public static void Hide()
         {
-            DependencyService.Get<ILoadingService>().Hide();
+            try
+            {
+                DependencyService.Get<IServices.ILoadingService>().Hide();
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
