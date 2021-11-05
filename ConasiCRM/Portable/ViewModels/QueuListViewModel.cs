@@ -51,10 +51,22 @@ namespace ConasiCRM.Portable.ViewModels
                         }
                         status = @"<condition attribute='statuscode' operator='in'>" + sts + "</condition>";
                     }
+                    else
+                    {
+                        status = null;
+                    }
                 }
-                if(FilterProject != null)
+                else
+                {
+                    status = null;
+                }
+                if (FilterProject != null && FilterProject.Val != "-1")
                 {
                     project = $@"<condition attribute='bsd_project' operator='eq' value='{FilterProject.Val}' />";
+                }
+                else
+                {
+                    project = null;
                 }
                 if (FilterUnit != null && FilterUnit.Count > 0)
                 {
@@ -67,6 +79,14 @@ namespace ConasiCRM.Portable.ViewModels
                         }
                         units = @"<condition attribute='bsd_units' operator='in'>" + unit + "</condition>";
                     }
+                    else
+                    {
+                        units = null;
+                    }
+                }
+                else
+                {
+                    units = null;
                 }
 
                 EntityName = "opportunities";
@@ -155,7 +175,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadUnit()
         {
-            if (Guid.Parse(FilterProject.Val) != Guid.Empty)
+            if (!string.IsNullOrWhiteSpace(FilterProject.Val) &&  FilterProject.Val != "-1")
             {
                 string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                     <entity name='product'>
