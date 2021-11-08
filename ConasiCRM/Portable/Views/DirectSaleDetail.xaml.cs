@@ -357,7 +357,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
                 }
             };
-            LoadingHelper.Hide();
         }
 
         private void BangTinhGia_Clicked(object sender, EventArgs e)

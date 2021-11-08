@@ -76,7 +76,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.QueueFormModel = tmp;
             QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
             QueueFormModel._queue_createdon = DateTime.Now;
-            idQueueDraft = await createQueueDraft(true);
+           // idQueueDraft = await createQueueDraft(true);
         }
 
         public async Task LoadFromUnit(Guid UnitId)
@@ -128,7 +128,7 @@ namespace ConasiCRM.Portable.ViewModels
             else if (QueueFormModel.bsd_bookingf > 0)
                 QueueFormModel.bsd_queuingfee = QueueFormModel.bsd_bookingf;
 
-            idQueueDraft = await createQueueDraft(false);
+           // idQueueDraft = await createQueueDraft(false);
         }
 
         public async Task<bool> SetQueueTime()
@@ -588,7 +588,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         //}
 
-        public async Task<Guid> createQueueDraft(bool isQueueProject)
+        public async Task createQueueDraft(bool isQueueProject, Guid id)
         {
             if(isQueueProject)
             {
@@ -597,7 +597,7 @@ namespace ConasiCRM.Portable.ViewModels
                     Command = "ProjectQue"
                 };
 
-                var res = await CrmHelper.PostData($"/bsd_projects({QueueFormModel.bsd_project_id})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
+                var res = await CrmHelper.PostData($"/bsd_projects({id})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
 
                 if (res.IsSuccess)
                 {
@@ -608,17 +608,10 @@ namespace ConasiCRM.Portable.ViewModels
                         if (item.Contains("content") == true)
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
-                            if (Guid.Parse(itemformat) != Guid.Empty)
-                                return Guid.Parse(itemformat);
-                            else
-                                return Guid.Empty;
+                            if (Guid.Parse(itemformat) != Guid.Empty) 
+                                idQueueDraft = Guid.Parse(itemformat);
                         }
                     }
-                    return Guid.Empty;
-                }
-                else
-                {
-                    return Guid.Empty;
                 }
             }   
             else
@@ -628,7 +621,7 @@ namespace ConasiCRM.Portable.ViewModels
                     Command = "Book"
                 };
 
-                var res = await CrmHelper.PostData($"/products({QueueFormModel.bsd_units_id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
+                var res = await CrmHelper.PostData($"/products({id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
 
                 if (res.IsSuccess)
                 {
@@ -640,19 +633,11 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
-                                return Guid.Parse(itemformat);
-                            else
-                                return Guid.Empty;
+                                idQueueDraft = Guid.Parse(itemformat);
                         }
                     }
-                    return Guid.Empty;
-                }
-                else
-                {
-                    return Guid.Empty;
                 }
             }    
-              
         }
 
         public async Task<bool> UpdateQueue(Guid id)
@@ -743,8 +728,6 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var result_phasesLaunch = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLaunch>>("bsd_phaseslaunchs", fetchphaseslaunch);
-            if (result_phasesLaunch == null || result_phasesLaunch.value.Count == 0)
-                return;
 
             string develop = $@"<link-entity name='bsd_project' from='bsd_investor' to='accountid' link-type='inner' alias='aj'>
                                                 <filter type='and'>
@@ -767,9 +750,9 @@ namespace ConasiCRM.Portable.ViewModels
                                        </condition>                                
                                     </filter>";
 
-            var phasesLaunch = result_phasesLaunch.value.FirstOrDefault();
-            if (phasesLaunch != null)
+            if (result_phasesLaunch != null && result_phasesLaunch.value.Count > 0)
             {
+                var phasesLaunch = result_phasesLaunch.value.FirstOrDefault();
                 if (phasesLaunch.bsd_locked == false)
                 {
                     if(string.IsNullOrWhiteSpace(phasesLaunch.salesagentcompany_name))

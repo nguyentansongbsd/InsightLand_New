@@ -69,15 +69,15 @@ namespace ConasiCRM.Portable.Views
             };
             if (viewModel.AccountsLookUp.Count <= 0)
             {
-                LoadingHelper.Show();
+               // LoadingHelper.Show();
                 await viewModel.LoadAccountsLookUp();
-                LoadingHelper.Hide();
+               // LoadingHelper.Hide();
             }
             if (viewModel.ContactsLookUp.Count <= 0)
             {
-                LoadingHelper.Show();
+                //LoadingHelper.Show();
                 await viewModel.LoadContactsLookUp();
-                LoadingHelper.Hide();
+               // LoadingHelper.Hide();
             }
         }
 
@@ -88,7 +88,10 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Tạo Giữ Chỗ";
             if(from)
             {
-                await viewModel.LoadFromUnit(this.UnitId);
+                await Task.WhenAll(
+                 viewModel.LoadFromUnit(this.UnitId),
+                 viewModel.createQueueDraft(false, this.UnitId)
+                 );
                 topic.Text = viewModel.QueueFormModel.bsd_units_name;              
                 if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
@@ -97,7 +100,10 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
-                await viewModel.LoadFromProject(this.UnitId);
+                await Task.WhenAll(
+                viewModel.LoadFromProject(this.UnitId),
+                viewModel.createQueueDraft(true,this.UnitId)
+                );
                 topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");                
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);

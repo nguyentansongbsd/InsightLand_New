@@ -85,19 +85,10 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             await viewModel.LoadOnRefreshCommandAsync();
-            viewModel.FiltersUnit.Clear();
-            await viewModel.LoadUnit();
             LoadingHelper.Hide();
         }
 
         private async void FiltersStatus_SelectedItemChanged(object sender, LookUpChangeEvent e)
-        {
-            LoadingHelper.Show();
-            await viewModel.LoadOnRefreshCommandAsync();
-            LoadingHelper.Hide();
-        }
-
-        private async void FiltersUnit_SelectedItemChanged(object sender, LookUpChangeEvent e)
         {
             LoadingHelper.Show();
             await viewModel.LoadOnRefreshCommandAsync();
