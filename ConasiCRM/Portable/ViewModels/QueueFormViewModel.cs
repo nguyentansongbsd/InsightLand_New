@@ -586,7 +586,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         //}
 
-        public async void createQueueDraft(bool isQueueProject)
+        public async void createQueueDraft(bool isQueueProject, Guid id)
         {
             if(isQueueProject)
             {
@@ -594,7 +594,7 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     Command = "ProjectQue"
                 };
-                var res = await CrmHelper.PostData($"/bsd_projects({this.UnitId})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
+                var res = await CrmHelper.PostData($"/bsd_projects({id})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
 
                 if (res.IsSuccess)
                 {
@@ -611,7 +611,6 @@ namespace ConasiCRM.Portable.ViewModels
                                 this.idQueueDraft = Guid.Empty;
                         }
                     }
-                    this.idQueueDraft = Guid.Empty;
                 }
                 else
                 {
@@ -625,7 +624,7 @@ namespace ConasiCRM.Portable.ViewModels
                     Command = "Book"
                 };
 
-                var res = await CrmHelper.PostData($"/products({this.UnitId})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
+                var res = await CrmHelper.PostData($"/products({id})//Microsoft.Dynamics.CRM.bsd_Action_DirectSale", data);
 
                 if (res.IsSuccess)
                 {
@@ -637,13 +636,11 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
-
                                 this.idQueueDraft = Guid.Parse(itemformat);
                             else
                                 this.idQueueDraft = Guid.Empty;
                         }
                     }
-                    this.idQueueDraft = Guid.Empty;
                 }
                 else
                 {
