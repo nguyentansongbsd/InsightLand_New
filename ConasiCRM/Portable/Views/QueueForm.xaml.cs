@@ -87,10 +87,8 @@ namespace ConasiCRM.Portable.Views
             this.Title = "Tạo Giữ Chỗ";
             if(from)
             {
-                await Task.WhenAll(
-                    viewModel.LoadFromUnit(viewModel.UnitId)
-                    );
-                viewModel.createQueueDraft(false);
+                await viewModel.LoadFromUnit(viewModel.UnitId);
+                viewModel.createQueueDraft(false, viewModel.UnitId);
                 topic.Text = viewModel.QueueFormModel.bsd_units_name;              
                 if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
@@ -99,12 +97,8 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
-                await Task.WhenAll(
-                    viewModel.LoadFromProject(viewModel.UnitId)
-                    //viewModel.createQueueDraft(true)
-                    );
-                viewModel.createQueueDraft(true);
-
+                await viewModel.LoadFromProject(viewModel.UnitId);
+                viewModel.createQueueDraft(true, viewModel.UnitId);
                 topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");                
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
