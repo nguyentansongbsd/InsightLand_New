@@ -83,6 +83,7 @@
     <Compile Include="Renderers\ExtendedFrameRenderer.cs" />
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
     <Compile Include="Services\UrlEnCodeService.cs" />
+    <Compile Include="Services\ThumbnailService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon-60%402x.png" />

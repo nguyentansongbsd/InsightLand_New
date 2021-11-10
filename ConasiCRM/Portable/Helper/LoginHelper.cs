@@ -30,5 +30,24 @@ namespace ConasiCRM.Portable.Helper
             var response = await client.SendAsync(request);
             return response;
         }
+
+        public static async Task<GetTokenResponse> getSharePointToken()
+        {
+            var client = BsdHttpClient.Instance();
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/common/oauth2/token");
+            var formContent = new FormUrlEncodedContent(new[]
+                {
+                        new KeyValuePair<string, string>("client_id", "2ad88395-b77d-4561-9441-d0e40824f9bc"),
+                        new KeyValuePair<string, string>("username","bsddev@conasi.vn"), // UserLogged.User), sai thông tin login, là user app chứ không phải admin
+                        new KeyValuePair<string, string>("password", "admin123$5"), // UserLogged.Password),
+                        new KeyValuePair<string, string>("grant_type", "password"),
+                        new KeyValuePair<string, string>("resource", OrgConfig.SharePointResource)
+                    });
+            request.Content = formContent;
+            var response = await client.SendAsync(request);
+            var body = await response.Content.ReadAsStringAsync();
+            GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
+            return tokenData;
+        }
     }
 }

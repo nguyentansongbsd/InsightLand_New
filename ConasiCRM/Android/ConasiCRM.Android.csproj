@@ -106,6 +106,7 @@
     <Compile Include="Services\ToastMessage.cs" />
     <Compile Include="Renderers\MainSearchBarRenderer.cs" />
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
+    <Compile Include="Services\ThumbnailService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
