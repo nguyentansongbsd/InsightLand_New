@@ -142,6 +142,9 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (Dashboard.NeedToRefreshTask.HasValue) Dashboard.NeedToRefreshTask = true;
                     if (ActivityList.NeedToRefreshTask.HasValue) ActivityList.NeedToRefreshTask = true;
+                    if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
+                    if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
+                    if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     ToastMessageHelper.ShortMessage("Tạo công việc thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -159,6 +162,9 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (Dashboard.NeedToRefreshTask.HasValue) Dashboard.NeedToRefreshTask = true;
                     if (ActivityList.NeedToRefreshTask.HasValue) ActivityList.NeedToRefreshTask = true;
+                    if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
+                    if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
+                    if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     ToastMessageHelper.ShortMessage("Cập nhật công việc thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();

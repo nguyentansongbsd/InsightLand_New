@@ -12,12 +12,26 @@ namespace ConasiCRM.Portable.Views
     {
         LichLamViecViewModel viewModel;
         public Action<bool> OnComplete;
+        public static bool? NeedToRefresh = null;
         public LichLamViecTheoTuan()
         {
             InitializeComponent();
 
             this.BindingContext = viewModel = new LichLamViecViewModel();
+            NeedToRefresh = false;
             loadData();
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (NeedToRefresh == true)
+            {
+                LoadingHelper.Show();
+                await viewModel.loadAllActivities();
+                NeedToRefresh = false;
+                LoadingHelper.Hide();
+            }
         }
 
         public async void loadData()

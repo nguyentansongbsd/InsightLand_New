@@ -32,9 +32,7 @@ namespace ConasiCRM.Portable.Controls
 
         public static readonly BindableProperty SelectedDipslayProperty = BindableProperty.Create(nameof(SelectedItem), typeof(string), typeof(Filter), null, BindingMode.OneWay);
         public string SelectedDisplay { get => (string)GetValue(SelectedDipslayProperty); set { SetValue(SelectedDipslayProperty, value); } }
-
-        public static readonly BindableProperty MultipleProperty = BindableProperty.Create(nameof(Multiple), typeof(bool), typeof(Filter), null, BindingMode.OneWay);
-        public bool Multiple { get => (bool)GetValue(MultipleProperty); set { SetValue(MultipleProperty, value); } }
+        public bool Multiple { get; set; }
 
         public bool PreOpenOneTime { get; set; } = true;
         public BottomModal BottomModal { get; set; }
@@ -45,6 +43,7 @@ namespace ConasiCRM.Portable.Controls
         public Action PreOpen;
         public event EventHandler<LookUpChangeEvent> SelectedItemChange;
         public event EventHandler<LookUpChangeEvent> SelectedItemChanged;
+        public event EventHandler<LookUpChangeEvent> SearchChanged;
 
         public Filter()
         {
@@ -138,7 +137,7 @@ namespace ConasiCRM.Portable.Controls
             {
                 control.setUnActive();
             }
-        }
+        }      
 
         private void SetUpListView()
         {
@@ -233,6 +232,20 @@ namespace ConasiCRM.Portable.Controls
             if(Multiple)
             {
                 var item = e.Item as OptionSet;
+                if(item.Label != null && item.Label == "Tất cả" && item.Label.Contains("Tất cả") && item.Selected == false)
+                {
+                    foreach(var i in ItemsSource.Cast<OptionSet>().ToList())
+                    {
+                        i.Selected = false;
+                    }    
+                }
+                
+                var selectedAll = ItemsSource.Cast<OptionSet>().ToList().Where(x => x.Val=="-1").FirstOrDefault();
+
+                if (item.Label != null && item.Label != "Tất cả" && !item.Label.Contains("Tất cả") && selectedAll != null && selectedAll.Selected == true)
+                {
+                    selectedAll.Selected = false;
+                }
                 item.Selected = !item.Selected;
                 SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
             }
@@ -249,15 +262,16 @@ namespace ConasiCRM.Portable.Controls
         private void SearchBar_TextChangedEventArgs(object sender, TextChangedEventArgs e)
         {
             var text = e.NewTextValue;
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                lookUpListView.ItemsSource = this.ItemsSource;
-            }
-            else
-            {
-                lookUpListView.ItemsSource = this.ItemsSource.Cast<object>().ToList().Where(x => GetValObjDy(x, NameDisplay).ToString().ToLower().Contains(text.ToLower()));
-            }
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    lookUpListView.ItemsSource = this.ItemsSource;
+                }
+                else
+                {
+                    lookUpListView.ItemsSource = this.ItemsSource.Cast<object>().ToList().Where(x => GetValObjDy(x, NameDisplay).ToString().ToLower().Contains(text.ToLower()));
+                }
         }
+      
         public object GetValObjDy(object obj, string propertyName)
         {
             return obj.GetType().GetProperty(propertyName).GetValue(obj, null);

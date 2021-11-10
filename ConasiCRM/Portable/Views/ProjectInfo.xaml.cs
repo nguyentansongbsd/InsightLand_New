@@ -144,7 +144,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
                 }
             };
-            LoadingHelper.Hide();
         }
 
         private async void ShowMoreListDatCho_Clicked(object sender, EventArgs e)

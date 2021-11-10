@@ -19,57 +19,39 @@
                     <SearchBar Text="{Binding Keyword}" Placeholder="Từ khoá" FontSize="15" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
                 </controls:SearchBarFrame>
 
-                <Grid ColumnDefinitions="*,*,*" Grid.Row="1" Margin="10,5">
+                <Grid ColumnDefinitions="*,*" Grid.Row="1" Margin="10,5">
                     <controls:Filter x:Name="FiltersStatus" Grid.Column="0" Placeholder="Trạng thái" SelectedItemChanged="FiltersStatus_SelectedItemChanged" ItemsSource="{Binding FiltersStatus}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedIds="{Binding FilterStatus}" Multiple="True" SelectedDisplay="Selected"/>
                     <controls:Filter x:Name="FiltersProject" Grid.Column="1" Placeholder="Dự án" SelectedItemChange="FiltersProject_SelectedItemChange" ItemsSource="{Binding FiltersProject}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedItem="{Binding FilterProject}" Multiple="False"/>
-                    <controls:Filter x:Name="FiltersUnit" Grid.Column="2" Placeholder="Sẩn phẩm" SelectedItemChanged="FiltersUnit_SelectedItemChanged" ItemsSource="{Binding FiltersUnit}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedIds="{Binding FilterUnit}" Multiple="True" SelectedDisplay="Selected"/>
                 </Grid>
 
                 <controls:BsdListView x:Name="listView" Grid.Row="2" ItemsSource="{Binding Data}" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
                     <controls:BsdListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <SwipeView>
-                                    <SwipeView.RightItems>
-                                        <SwipeItems Mode="Reveal" >
-                                            <SwipeItemView>
-                                                <StackLayout Padding="10">
-                                                    <telerikPrimitives:RadBorder Grid.Row="0" Grid.Column="1" BorderThickness="1" HeightRequest="35" WidthRequest="35" CornerRadius="18" BackgroundColor="Green" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                                                        <Label Text="&#xf095;" FontSize="15" Padding="3" TextColor="White" FontFamily="FontAwesomeSolid" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                                                    </telerikPrimitives:RadBorder>
-                                                    <Label Text="Liên lạc" FontSize="15" FontAttributes="Bold" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="#333333"/>
-                                                    <StackLayout.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Path= BindingContext.PhoneCommand, Source={x:Reference listView}}" CommandParameter="{Binding telephone}"/>
-                                                    </StackLayout.GestureRecognizers>
-                                                </StackLayout>
-                                            </SwipeItemView>
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
-                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
-                                        <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
-                                            <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Start" Grid.Column="0">
-                                                <Label Text="Mã:" TextColor="Gray" FontSize="14" Grid.Column="0"/>
-                                                <Label Text="{Binding bsd_queuenumber}" TextColor="Gray" FontSize="14" Grid.Column="1" LineBreakMode="TailTruncation" />
-                                            </Grid>
-                                            <Label Text="{Binding createdon,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="14" TextColor="Gray"/>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
+                                    <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+                                        <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Start" Grid.Column="0">
+                                            <Label Text="Mã:" TextColor="Gray" FontSize="14" Grid.Column="0"/>
+                                            <Label Text="{Binding bsd_queuenumber}" TextColor="Gray" FontSize="14" Grid.Column="1" LineBreakMode="TailTruncation" />
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0">
-                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
-                                                <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
-                                            </telerikPrimitives:RadBorder>
-                                            <Label Grid.Column="1" Text="{Binding name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                            <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                            <Label Text="{Binding customername}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
-                                        </Grid>
-                                        <Grid ColumnDefinitions="Auto,Auto,*" Grid.Row="3">
-                                            <Label Text="Thời gian hết hạn:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                            <Label Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" TextColor="#444444" FontSize="15" Grid.Column="1" />
-                                            <Label Text="{Binding bsd_queuingexpired ,StringFormat=' {0:h:mm tt}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
-                                        </Grid>
+                                        <Label Text="{Binding createdon,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="14" TextColor="Gray"/>
                                     </Grid>
-                                </SwipeView>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0">
+                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
+                                            <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                        </telerikPrimitives:RadBorder>
+                                        <Label Grid.Column="1" Text="{Binding name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
+                                        <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding customername}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,Auto,*" Grid.Row="3">
+                                        <Label Text="Thời gian hết hạn:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" TextColor="#444444" FontSize="15" Grid.Column="1" />
+                                        <Label Text="{Binding bsd_queuingexpired ,StringFormat=' {0:h:mm tt}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
+                                    </Grid>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </controls:BsdListView.ItemTemplate>

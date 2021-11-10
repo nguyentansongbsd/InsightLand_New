@@ -25,21 +25,13 @@ namespace ConasiCRM.Portable.ViewModels
 
         public OptionSet _filterProject;
         public OptionSet FilterProject { get => _filterProject; set { _filterProject = value; OnPropertyChanged(nameof(FilterProject)); } }
-        public ObservableCollection<OptionSet> FiltersUnit { get; set; } = new ObservableCollection<OptionSet>();
-
-        public List<string> _filterUnit;
-        public List<string> FilterUnit { get => _filterUnit; set { _filterUnit = value; OnPropertyChanged(nameof(FilterUnit)); } }
-
         public string Keyword { get; set; }
-        public ICommand PhoneCommand { get; }
         public QueuListViewModel()
         {
-            PhoneCommand = new Command<string>(PhoneCommandAsync);
             PreLoadData = new Command(() =>
             {
                 string project = null;
                 string status = null;
-                string units = null;
                 if (FilterStatus != null && FilterStatus.Count > 0)
                 {
                     if (string.IsNullOrWhiteSpace(FilterStatus.Where(x => x == "-1").FirstOrDefault()))
@@ -68,26 +60,6 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     project = null;
                 }
-                if (FilterUnit != null && FilterUnit.Count > 0)
-                {
-                    if (string.IsNullOrWhiteSpace(FilterUnit.Where(x => x == "-1").FirstOrDefault()))
-                    {
-                        string unit = string.Empty;
-                        foreach (var item in FilterUnit)
-                        {
-                            unit += $@"<value>{item}</value>";
-                        }
-                        units = @"<condition attribute='bsd_units' operator='in'>" + unit + "</condition>";
-                    }
-                    else
-                    {
-                        units = null;
-                    }
-                }
-                else
-                {
-                    units = null;
-                }
 
                 EntityName = "opportunities";
                 FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -109,7 +81,6 @@ namespace ConasiCRM.Portable.ViewModels
                           <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
                           "+ status + @"
                             " + project + @"
-                            " + units + @"
                         </filter>
                         <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='fullname'  alias='contact_name'/>
@@ -120,19 +91,6 @@ namespace ConasiCRM.Portable.ViewModels
                       </entity>
                     </fetch>";
             });
-        }
-
-        private async void PhoneCommandAsync(string phone)
-        {
-            var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-            if (checkVadate == true)
-            {
-                await Launcher.OpenAsync($"tel:{phone}");
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Lỗi", "Không có số điện thoại", "OK");
-            }
         }
 
         public void LoadStatus()
@@ -150,7 +108,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadProject()
         {
-            if (FiltersStatus != null && FiltersStatus.Count == 0)
+            if (FiltersProject != null)
             {
                 string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                 <entity name='bsd_project'>
@@ -169,32 +127,6 @@ namespace ConasiCRM.Portable.ViewModels
                 foreach (var item in data)
                 {
                     FiltersProject.Add(item);
-                }
-            }
-        }
-
-        public async Task LoadUnit()
-        {
-            if (!string.IsNullOrWhiteSpace(FilterProject.Val) &&  FilterProject.Val != "-1")
-            {
-                string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                    <entity name='product'>
-                                        <attribute name='name' alias='Label'/>
-                                        <attribute name='productid' alias='Val'/>
-                                        <order attribute='createdon' descending='true' />
-                                        <filter type='and'>
-                                             <condition attribute='bsd_projectcode' operator='eq' value='{FilterProject.Val}' />
-                                        </filter>
-                                    </entity>
-                                </fetch>";
-                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("products", fetchXml);
-                if (result == null || result.value.Any() == false) return;
-
-                FiltersUnit.Add(new OptionSet("-1","Tất cả"));
-                var data = result.value;
-                foreach (var item in data)
-                {
-                    FiltersUnit.Add(item);
                 }
             }
         }

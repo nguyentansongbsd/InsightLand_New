@@ -68,15 +68,15 @@ namespace ConasiCRM.Portable.Views
             };
             if (viewModel.AccountsLookUp.Count <= 0)
             {
-                LoadingHelper.Show();
+               // LoadingHelper.Show();
                 await viewModel.LoadAccountsLookUp();
-                LoadingHelper.Hide();
+               // LoadingHelper.Hide();
             }
             if (viewModel.ContactsLookUp.Count <= 0)
             {
-                LoadingHelper.Show();
+                //LoadingHelper.Show();
                 await viewModel.LoadContactsLookUp();
-                LoadingHelper.Hide();
+               // LoadingHelper.Hide();
             }
         }
 
@@ -104,6 +104,7 @@ namespace ConasiCRM.Portable.Views
                     //viewModel.createQueueDraft(true)
                     );
                 viewModel.createQueueDraft(true);
+
                 topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");                
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);

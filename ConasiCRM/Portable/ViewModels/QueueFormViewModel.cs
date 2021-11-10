@@ -594,7 +594,6 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     Command = "ProjectQue"
                 };
-
                 var res = await CrmHelper.PostData($"/bsd_projects({this.UnitId})//Microsoft.Dynamics.CRM.bsd_Action_Project_QueuesForProject", data);
 
                 if (res.IsSuccess)
@@ -638,6 +637,7 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
+
                                 this.idQueueDraft = Guid.Parse(itemformat);
                             else
                                 this.idQueueDraft = Guid.Empty;
@@ -650,7 +650,6 @@ namespace ConasiCRM.Portable.ViewModels
                     this.idQueueDraft = Guid.Empty;
                 }
             }    
-              
         }
 
         public async Task<bool> UpdateQueue(Guid id)
@@ -741,8 +740,6 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
             var result_phasesLaunch = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<PhasesLaunch>>("bsd_phaseslaunchs", fetchphaseslaunch);
-            if (result_phasesLaunch == null || result_phasesLaunch.value.Count == 0)
-                return;
 
             string develop = $@"<link-entity name='bsd_project' from='bsd_investor' to='accountid' link-type='inner' alias='aj'>
                                                 <filter type='and'>
@@ -765,9 +762,9 @@ namespace ConasiCRM.Portable.ViewModels
                                        </condition>                                
                                     </filter>";
 
-            var phasesLaunch = result_phasesLaunch.value.FirstOrDefault();
-            if (phasesLaunch != null)
+            if (result_phasesLaunch != null && result_phasesLaunch.value.Count > 0)
             {
+                var phasesLaunch = result_phasesLaunch.value.FirstOrDefault();
                 if (phasesLaunch.bsd_locked == false)
                 {
                     if(string.IsNullOrWhiteSpace(phasesLaunch.salesagentcompany_name))

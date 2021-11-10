@@ -34,7 +34,7 @@
                             <Label Text="&#xf030;" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="{StaticResource NavigationPrimary}"/>
                         </telerikPrimitives:RadBorder>
                     </Grid>
-
+                    
                     <controls:FormLabelRequired Text="Họ tên" Margin="0,20,0,0"/>
                     <controls:MainEntry Text="{Binding ContactModel.bsd_fullname}" IsEnabled="False" ShowClearButton="False"/>
 
