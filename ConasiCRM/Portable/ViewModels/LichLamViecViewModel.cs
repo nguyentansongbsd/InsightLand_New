@@ -105,7 +105,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='subject' />
                                     <attribute name='statecode' />
                                     <attribute name='activityid' />
-                                    <attribute name='scheduledstart' />
+                                    <attribute name='scheduledstart'/>
                                     <attribute name='scheduledend' />
                                     <order attribute='modifiedon' descending='true' />
                                     <filter type='and'>
