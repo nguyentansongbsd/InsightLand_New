@@ -27,7 +27,7 @@ namespace ConasiCRM.Portable.Helper
             try
             {
                 var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
+                string Token = UserLogged.AccessToken;
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{OrgConfig.ApiUrl}/{EntityName}?fetchXml={FetchXml}");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -46,7 +46,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await RetrieveMultiple<T>(EntityName, FetchXml);
                         return api_Response;
@@ -64,12 +64,49 @@ namespace ConasiCRM.Portable.Helper
             return null;
         }
 
+        public static async Task<T> RetrieveMultipleImages<T>(string url) where T : class
+        {
+            try
+            {
+                var client = BsdHttpClient.Instance();
+                string fileListUrl = $"{OrgConfig.SharePointResource}/sites/{OrgConfig.SharePointSiteName}/_api/web/{url}";
+                var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserLogged.AccessTokenSharePoint);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                    var api_response = JsonConvert.DeserializeObject<T>(body);
+                    return api_response;
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var loginSharePonit = await LoginHelper.getSharePointToken();
+                    if (loginSharePonit.access_token != null)
+                    {
+                        UserLogged.AccessTokenSharePoint = loginSharePonit.access_token;
+                        var api_response = await RetrieveMultipleImages<T>(url);
+                        return api_response;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception ex)
+            {
+            }
+            return null;
+        }
+
         public static async Task<T> Get<T>(string content) where T : class
         {
             try
             {
                 var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
+                string Token = UserLogged.AccessToken;
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{OrgConfig.ApiUrl}/{content}");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -91,7 +128,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await Get<T>(content);
                         return api_Response;
@@ -121,7 +158,7 @@ namespace ConasiCRM.Portable.Helper
             try
             {
                 var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
+                string Token = UserLogged.AccessToken;
                 var request = new HttpRequestMessage(HttpMethod.Delete, $"{OrgConfig.ApiUrl}/{EntityName}({Id})/{FieldName}/$ref");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -140,7 +177,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_response= await SetNullLookupField(EntityName, Id, FieldName);
                         return api_response;
@@ -191,7 +228,7 @@ namespace ConasiCRM.Portable.Helper
         /// <returns></returns>
         public static async Task<CrmApiResponse> PostData(string path, object formContent = null)
         {
-            string Token = App.Current.Properties["Token"] as string;
+            string Token = UserLogged.AccessToken;
             var client = BsdHttpClient.Instance();
             CrmApiResponse res = new CrmApiResponse();
             try
@@ -226,7 +263,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await PostData(path, formContent);
                         return api_Response;
@@ -267,7 +304,7 @@ namespace ConasiCRM.Portable.Helper
         /// <returns></returns>
         public static async Task<CrmApiResponse> PatchData(string path, object formContent)
         {
-            string Token = App.Current.Properties["Token"] as string;
+            string Token = UserLogged.AccessToken;
             var client = BsdHttpClient.Instance();
             CrmApiResponse res = new CrmApiResponse();
             try
@@ -296,7 +333,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await PatchData(path, formContent);
                         return api_Response;
@@ -326,7 +363,7 @@ namespace ConasiCRM.Portable.Helper
 
         public static async Task<CrmApiResponse> DeleteRecord(string path)
         {
-            string Token = App.Current.Properties["Token"] as string;
+            string Token = UserLogged.AccessToken;
             var client = BsdHttpClient.Instance();
             CrmApiResponse res = new CrmApiResponse();
             try
@@ -347,7 +384,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await DeleteRecord(path);
                         return api_Response;
@@ -393,5 +430,7 @@ namespace ConasiCRM.Portable.Helper
             GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
             return tokenData;
         }
+
+        
     }
 }

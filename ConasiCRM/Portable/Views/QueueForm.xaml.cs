@@ -16,15 +16,14 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshContactList = null;
         public static bool? NeedToRefreshAccountList = null;
         public QueueFormViewModel viewModel;
-        public Guid UnitId;
         public Guid QueueId;
         private bool from;
         public QueueForm(Guid unitId, bool fromDirectSale) // Direct Sales (add)
         {
-            InitializeComponent();         
-            UnitId = unitId;
-            from = fromDirectSale;
+            InitializeComponent();   
             Init();
+            viewModel.UnitId = unitId;
+            from = fromDirectSale;
             Create();
         }
 
@@ -89,9 +88,9 @@ namespace ConasiCRM.Portable.Views
             if(from)
             {
                 await Task.WhenAll(
-                 viewModel.LoadFromUnit(this.UnitId),
-                 viewModel.createQueueDraft(false, this.UnitId)
-                 );
+                    viewModel.LoadFromUnit(viewModel.UnitId)
+                    );
+                viewModel.createQueueDraft(false);
                 topic.Text = viewModel.QueueFormModel.bsd_units_name;              
                 if (viewModel.QueueFormModel.bsd_units_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
@@ -101,9 +100,11 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 await Task.WhenAll(
-                viewModel.LoadFromProject(this.UnitId),
-                viewModel.createQueueDraft(true,this.UnitId)
-                );
+                    viewModel.LoadFromProject(viewModel.UnitId)
+                    //viewModel.createQueueDraft(true)
+                    );
+                viewModel.createQueueDraft(true);
+
                 topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");                
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);

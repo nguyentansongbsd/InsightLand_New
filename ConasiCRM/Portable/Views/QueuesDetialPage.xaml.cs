@@ -15,12 +15,14 @@ namespace ConasiCRM.Portable.Views
     public partial class QueuesDetialPage : ContentPage
     {
         public Action<bool> OnCompleted;
+        public static bool? NeedToRefreshBTG=null;
         public QueuesDetialPageViewModel viewModel;
         public QueuesDetialPage(Guid queueId)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new QueuesDetialPageViewModel();
             viewModel.QueueId = queueId;
+            NeedToRefreshBTG = false;
             Init();
         }
 
@@ -41,6 +43,20 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 OnCompleted?.Invoke(false);
+            }
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (NeedToRefreshBTG==true)
+            {
+                LoadingHelper.Show();
+                viewModel.BangTinhGiaList.Clear();
+                viewModel.PageBangTinhGia = 1;
+                await viewModel.LoadDanhSachBangTinhGia();
+                NeedToRefreshBTG = false;
+                LoadingHelper.Hide();
             }
         }
 
@@ -203,7 +219,8 @@ namespace ConasiCRM.Portable.Views
             OptionSet Queue = new OptionSet(viewModel.Queue.opportunityid, viewModel.Queue.name);
             OptionSet SaleAgentCompany = new OptionSet(viewModel.Queue._bsd_salesagentcompany_value.ToString(), viewModel.Queue.salesagentcompany_name);
             string NameOfStaffAgent = viewModel.Queue.bsd_nameofstaffagent;
-            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue, SaleAgentCompany, NameOfStaffAgent);
+
+            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue, SaleAgentCompany, NameOfStaffAgent,viewModel.Customer);
             reservationForm.CheckReservation = async (isSuccess) =>
             {
                 if (isSuccess)

@@ -154,7 +154,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            ProjectInfo projectInfo = new ProjectInfo(Guid.Parse(viewModel.Project.bsd_projectid));
+            ProjectInfo projectInfo = new ProjectInfo(Guid.Parse(viewModel.Project.bsd_projectid),viewModel.Project.bsd_name);
             projectInfo.OnCompleted = async (IsSuccess) =>
             {
                 if (IsSuccess == true)

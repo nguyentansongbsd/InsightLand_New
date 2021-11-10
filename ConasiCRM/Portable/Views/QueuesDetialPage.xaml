@@ -93,7 +93,7 @@
                                     <Label.FormattedText>
                                         <FormattedString>
                                             <Span Text="Khách hàng: "/>
-                                            <Span Text="{Binding Customer}"/>
+                                            <Span Text="{Binding Customer.Label}"/>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>

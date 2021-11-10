@@ -26,10 +26,6 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.Id = Guid.Empty;
-            datePickerNgaySinh.DefaultDisplay = DateTime.Now;
-            datePickerNgayCap.DefaultDisplay = DateTime.Now;
-            datePickerNgayCapHoChieu.DefaultDisplay = DateTime.Now;
-            datePikerNgayCapTheCanCuoc.DefaultDisplay = DateTime.Now;
             Init();
             Create();
         }

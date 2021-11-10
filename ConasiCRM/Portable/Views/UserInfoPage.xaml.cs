@@ -120,6 +120,12 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
+            if (viewModel.NewPassword.Length < 6)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng nhập password nhiều hơn 6 ký tự");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(viewModel.ConfirmNewPassword))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập xác nhận mật khẩu mới");

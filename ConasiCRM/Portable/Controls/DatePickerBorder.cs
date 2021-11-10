@@ -11,5 +11,6 @@ namespace ConasiCRM.Portable.Controls
             this.FontSize = 15;
             this.TextColor = Color.FromHex("#333333");
         }
+        
     }
 }

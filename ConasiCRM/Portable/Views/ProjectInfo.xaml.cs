@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using FFImageLoading.Forms;
@@ -22,12 +23,13 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshQueue = null;
         public ProjectInfoViewModel viewModel;
 
-        public ProjectInfo(Guid Id)
+        public ProjectInfo(Guid projectId,string projectName = null)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ProjectInfoViewModel();
             NeedToRefreshQueue = false;
-            viewModel.ProjectId = Id;
+            viewModel.ProjectId = projectId;
+            viewModel.ProjectName = projectName;
             Init();
         }
 
@@ -42,12 +44,13 @@ namespace ConasiCRM.Portable.Views
 
             await Task.WhenAll(
                 viewModel.LoadData(),
+                viewModel.LoadAllCollection(),
                 viewModel.CheckEvent(),
                 viewModel.LoadThongKe(),
                 viewModel.LoadThongKeGiuCho(),
                 viewModel.LoadThongKeHopDong(),
                 viewModel.LoadThongKeBangTinhGia()
-            );
+            ) ;
 
             if (viewModel.Project != null)
             {
@@ -189,13 +192,28 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private async void Meida_Tapped(object sender, EventArgs e)
+        private async void ItemSlider_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            Grid mediaElement = (Grid)sender;
-            var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-            CollectionData item = a.CommandParameter as CollectionData;
-            if (item != null)
+            var item = (CollectionData)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item.SharePointType == SharePointType.Image)
+            {
+                string url = item.ImageSource.ToString().Replace("Uri: ", "");
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    url = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(url);
+                }
+                var img = viewModel.Photos.SingleOrDefault(x => x.URL == url);
+                var index = viewModel.Photos.IndexOf(img);
+
+                new PhotoBrowser()
+                {
+                    Photos = viewModel.Photos,
+                    StartIndex = index,
+                    EnableGrid = true
+                }.Show();
+            }
+            else if (item.SharePointType == SharePointType.Video)
             {
                 await Navigation.PushAsync(new ShowMedia(item.MediaSource));
                 LoadingHelper.Hide();
@@ -203,21 +221,16 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void Image_Tapped(object sender, EventArgs e)
+        private void ScollTo_Video_Tapped(object sender, EventArgs e)
         {
-            CachedImage image = (CachedImage)sender;
-            var a = (TapGestureRecognizer)image.GestureRecognizers[0];
-            CollectionData item = a.CommandParameter as CollectionData;
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Video));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
 
-            var img = viewModel.Photos.SingleOrDefault(x => x.URL == item.ImageSource);
-            var index = viewModel.Photos.IndexOf(img);
-
-            new PhotoBrowser()
-            {
-                Photos = viewModel.Photos,
-                StartIndex = index,
-                EnableGrid = true
-            }.Show();
+        private void ScollTo_Image_Tapped(object sender, EventArgs e)
+        {
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
         }
     }
 }
