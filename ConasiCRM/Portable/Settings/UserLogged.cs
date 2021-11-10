@@ -15,6 +15,24 @@ namespace ConasiCRM.Portable.Settings
             set => AppSettings.AddOrUpdateValue(nameof(Id), value);
         }
 
+        public static string AccessToken
+        {
+            get => AppSettings.GetValueOrDefault(nameof(AccessToken), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(AccessToken), value);
+        }
+
+        public static string RefreshToken
+        {
+            get => AppSettings.GetValueOrDefault(nameof(RefreshToken), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(RefreshToken), value);
+        }
+
+        public static string AccessTokenSharePoint
+        {
+            get => AppSettings.GetValueOrDefault(nameof(AccessTokenSharePoint), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(AccessTokenSharePoint), value);
+        }
+
         public static string Password
         {
             get => AppSettings.GetValueOrDefault(nameof(Password), string.Empty);

@@ -8,10 +8,15 @@ namespace ConasiCRM.Portable.Models
     public class CollectionData
     {
         public string MediaSource { get; set; }
-        public ImageSource PosterMediaSource { get; set; }
-        public string ImageSource { get; set; }
+        public ImageSource ImageSource { get; set; }
+        public SharePointType SharePointType { get; set; }
         public int Index { get; set; }
         public CollectionData()
         { }
+    }
+    public enum SharePointType
+    {
+        Video,
+        Image
     }
 }

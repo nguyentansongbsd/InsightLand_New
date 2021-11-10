@@ -11,6 +11,7 @@ using Stormlion.PhotoBrowser;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,13 +22,12 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class ProjectInfoViewModel : BaseViewModel
     {
-        private ObservableCollection<CollectionData> _collections;
-        public ObservableCollection<CollectionData> Collections { get => _collections; set { _collections = value; OnPropertyChanged(nameof(Collections)); } }
+        public ObservableCollection<CollectionData> Collections { get; set; } = new ObservableCollection<CollectionData>();
 
         public List<Photo> Photos;
         public PhotoBrowser photoBrowser;
 
-        private bool _showCollections;
+        private bool _showCollections = true;
         public bool ShowCollections { get => _showCollections; set { _showCollections = value; OnPropertyChanged(nameof(ShowCollections)); } }
 
         private int _totalMedia;
@@ -36,6 +36,7 @@ namespace ConasiCRM.Portable.ViewModels
         private int _totalPhoto;
         public int TotalPhoto { get => _totalPhoto; set { _totalPhoto = value; OnPropertyChanged(nameof(TotalPhoto)); } }
         public Guid ProjectId { get; set; }
+        public string ProjectName { get; set; }
         public List<ChartModel> unitChartModels { get; set; }
         public ObservableCollection<ChartModel> UnitChart { get; set; } = new ObservableCollection<ChartModel>();
 
@@ -103,7 +104,6 @@ namespace ConasiCRM.Portable.ViewModels
         {
             ListGiuCho = new ObservableCollection<QueuesModel>();
             Photos = new List<Photo>();
-            this.Collections = new ObservableCollection<CollectionData>();
             photoBrowser = new PhotoBrowser
             {
                 Photos = Photos,
@@ -143,7 +143,6 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectInfoModel>>("bsd_projects", FetchXml);
             if (result == null || result.value.Any() == false) return;
             Project = result.value.FirstOrDefault();
-            await LoadAllCollection();
         }
 
         public async Task CheckEvent()
@@ -192,6 +191,9 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='productid' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
+                                    <condition attribute='statuscode' operator='not-in'>
+                                        <value>0</value>
+                                    </condition>
                                     <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
                                   </filter>
                               </entity>
@@ -214,40 +216,14 @@ namespace ConasiCRM.Portable.ViewModels
                 IsShowBtnGiuCho = false;
                 var data = result.value;
                 NumUnit = data.Count;
-                foreach (var item in data)
-                {
-                    switch (item.statuscode)
-                    {
-                        case 1:
-                            ChuanBi++;
-                            break;
-                        case 100000000:
-                            SanSang++;
-                            break;
-                        case 100000004:
-                            GiuCho++;
-                            break;
-                        case 100000006:
-                            DatCoc++;
-                            SoDatCoc++;
-                            break;
-                        case 100000005:
-                            DongYChuyenCoc++;
-                            break;
-                        case 100000003:
-                            DaDuTienCoc++;
-                            break;
-                        case 100000001:
-                            ThanhToanDot1++;
-                            break;
-                        case 100000002:
-                            DaBan++;
-                            break;
-                        default:
-                            break;
-
-                    }
-                }
+                ChuanBi = data.Where(x => x.statuscode == 1).Count();
+                SanSang = data.Where(x => x.statuscode == 100000000).Count();
+                GiuCho = data.Where(x => x.statuscode == 100000004).Count();
+                SoDatCoc = DatCoc = data.Where(x => x.statuscode == 100000006).Count();
+                DongYChuyenCoc = data.Where(x => x.statuscode == 100000005).Count();
+                DaDuTienCoc = data.Where(x => x.statuscode == 100000003).Count();
+                ThanhToanDot1 = data.Where(x => x.statuscode == 100000001).Count();
+                DaBan = data.Where(x => x.statuscode == 100000002).Count();
             }
 
             unitChartModels = new List<ChartModel>()
@@ -379,64 +355,49 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAllCollection()
         {
-            if (ProjectId != null && Project != null && !string.IsNullOrWhiteSpace(Project.bsd_name))
+            if (ProjectId != null && !string.IsNullOrWhiteSpace(ProjectName))
             {
-                var Folder = Project.bsd_name.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
+                var Folder = ProjectName.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
                 var Category = "Project";
                 var category_value = "bsd_project";
 
-                GetTokenResponse getTokenResponse = await CrmHelper.getSharePointToken();
-                var client = BsdHttpClient.Instance();
-                string fileListUrl = $"{OrgConfig.SharePointResource}/sites/" + OrgConfig.SharePointSiteName + "/_api/web/Lists/GetByTitle('" + Category + "')/RootFolder/Folders('" + Folder + "')/Files";
-                var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", getTokenResponse.access_token);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
-                {
-                    TotalMedia = 0;
-                    TotalPhoto = 0;
-                    var body = await response.Content.ReadAsStringAsync();
-                    SharePointFieldResult sharePointFieldResult = JsonConvert.DeserializeObject<SharePointFieldResult>(body);
-                    var list = sharePointFieldResult.value;
-                    foreach (var item in list)
-                    {
-                        var names = item.Name.ToLower().Split('.');
-                        string type_item = names[names.Count() - 1];
-                        if (type_item == "flv" || type_item == "mp4" || type_item == "m3u8" || type_item == "3gp" || type_item == "mov" || type_item == "avi" || type_item == "wmv")
-                        {
-                            var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
-                            if (Device.RuntimePlatform == Device.iOS)
-                            {
-                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
-                            }
-                            var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
-                            var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
-                            ImageSource imageSource = image.ToImageSource();
-                            Collections.Add(new CollectionData { MediaSource = soucre,PosterMediaSource= imageSource, ImageSource = null, Index = TotalMedia });
-                            TotalMedia++;
-                        }
-                        else if (type_item == "jpg" || type_item == "jpeg" || type_item == "png")
-                        {
-                            var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
-                            if (Device.RuntimePlatform == Device.iOS)
-                            {
-                                soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
-                            }
-                            Photos.Add(new Photo { URL = soucre });
-                            Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });
-                            TotalPhoto++;
-                        }
-                    }
-                }
-                if (Collections != null && Collections.Count > 0)
-                {
-                    ShowCollections = true;
-                }
-                else
+                string url = $"Lists/GetByTitle('{Category}')/RootFolder/Folders('{Folder}')/Files";
+                var result = await CrmHelper.RetrieveMultipleImages<SharePointFieldResult>(url);
+                if (result == null || result.value.Any() == false)
                 {
                     ShowCollections = false;
+                    return;
+                }
+                List<SharePointFile> list = result.value;
+
+                var videos = list.Where(x => x.Name.Contains(".mp4") || x.Name.Contains(".flv") || x.Name.Contains(".m3u8") || x.Name.Contains(".3gp") || x.Name.Contains(".mov") || x.Name.Contains(".avi") || x.Name.Contains(".wmv")).ToList();
+                var images = list.Where(x => x.Name.Contains(".jpg") || x.Name.Contains(".jpeg") || x.Name.Contains(".png")).ToList();
+                this.TotalMedia = videos.Count;
+                this.TotalPhoto = images.Count;
+                for (int i = 0; i < TotalMedia; i++)
+                {
+                    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + videos[i].Name + "&access_token=" + UserLogged.AccessTokenSharePoint;
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                    }
+                    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
+                    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
+                    ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
+                    Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = imageSource.ToImageSource(),SharePointType = SharePointType.Video, Index = TotalMedia });
+                }
+
+                for (int i = 0; i < TotalPhoto; i++)
+                {
+                    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + images[i].Name + "&access_token=" + UserLogged.AccessTokenSharePoint;
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                    }
+                    Photos.Add(new Photo { URL = soucre });
+                    var a = soucre;
+                    ImageSource image = soucre;
+                    Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, SharePointType = SharePointType.Image, Index = TotalMedia });
                 }
             }
         }

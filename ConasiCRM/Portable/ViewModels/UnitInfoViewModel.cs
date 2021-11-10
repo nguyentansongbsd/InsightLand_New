@@ -408,7 +408,7 @@ namespace ConasiCRM.Portable.ViewModels
                             var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
                             ImageSource imageSource = image.ToImageSource();
 
-                            Collections.Add(new CollectionData { MediaSource = soucre, PosterMediaSource = imageSource, ImageSource = null, Index = TotalMedia });
+                            Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = imageSource, Index = TotalMedia });
                             TotalMedia++;
                         }
                         else if (type_item == "jpg" || type_item == "jpeg" || type_item == "png")

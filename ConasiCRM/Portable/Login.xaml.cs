@@ -158,8 +158,11 @@ namespace ConasiCRM.Portable
                 {
                     var body = await response.Content.ReadAsStringAsync();
                     GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                    App.Current.Properties["Token"] = tokenData.access_token;
-                    App.Current.Properties["RefreshToken"] = tokenData.refresh_token;
+                    GetTokenResponse getTokenResponse = await LoginHelper.getSharePointToken();
+
+                    UserLogged.AccessToken = tokenData.access_token;
+                    UserLogged.RefreshToken = tokenData.refresh_token;
+                    UserLogged.AccessTokenSharePoint = getTokenResponse.access_token;
 
                     EmployeeModel employeeModel = await LoginUser();
                     if (employeeModel != null)
