@@ -745,6 +745,7 @@ namespace ConasiCRM.Portable.ViewModels
                                             </link-entity>";
             string all = $@"<link-entity name='bsd_projectshare' from='bsd_salesagent' to='accountid' link-type='inner' alias='az'>
                                                 <filter type='and'>
+                                                    <condition attribute='statuscode' operator='eq' value='1' />
                                                     <condition attribute='bsd_project' operator='eq' value='{QueueFormModel.bsd_project_id}' />
                                                 </filter>
                                             </link-entity>";
@@ -804,13 +805,15 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 if (DaiLyOptions != null)
                 {
-                    DaiLyOptions.AddRange(await LoadAccuntSales(isproject));
+                    DaiLyOptions.AddRange(await LoadAccuntSales(all));
+                    DaiLyOptions.AddRange(await LoadAccuntSales(develop));
                 }
             }
         }
 
         public async Task<List<LookUp>> LoadAccuntSales(string filter)
         {
+            List<LookUp> list = new List<LookUp>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='account'>
                                     <attribute name='name' alias='Name' />
@@ -820,15 +823,14 @@ namespace ConasiCRM.Portable.ViewModels
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("accounts", fetch);
-            if (result == null || result.value.Count == 0)
-                return null;
-
-            var data = result.value;
-            List<LookUp> list = new List<LookUp>();
-            foreach (var item in data)
+            if (result != null && result.value.Count != 0)
             {
-                list.Add(item);
-            }
+                var data = result.value;
+                foreach (var item in data)
+                {
+                    list.Add(item);
+                }
+            }   
             return list;
         }
     }

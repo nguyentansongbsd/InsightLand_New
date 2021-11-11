@@ -53,7 +53,7 @@
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UserInfor_Tapped"/>
                     </Grid.GestureRecognizers>
-                    <controls:ExtendedFrame Grid.Column="0" Grid.RowSpan="3" Padding="4" CornerRadius="34"  HorizontalOptions="Center">
+                    <controls:ExtendedFrame Grid.Column="0" Grid.RowSpan="3" Padding="4" CornerRadius="34"  HorizontalOptions="Center" VerticalOptions="StartAndExpand">
                         <ffimageloading:CachedImage Source="{Binding Avartar,Converter={StaticResource Base64ToImageSource}}" LoadingPlaceholder="user.png" HeightRequest="60" WidthRequest="60" DownsampleWidth="500">
                             <ffimageloading:CachedImage.Transformations>
                                 <ffimageTranformations:CircleTransformation/>

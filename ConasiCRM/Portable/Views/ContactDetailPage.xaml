@@ -5,7 +5,8 @@
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
              xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="ConasiCRM.Portable.Views.ContactDetailPage"
-             Title="THÔNG TIN KHÁCH HÀNG">
+             Title="THÔNG TIN KHÁCH HÀNG"
+             x:Name="this">
     <ContentPage.Resources>
         <!--header-->
         <Style x:Key="rabBorder_Tab" TargetType="telerikPrimitives:RadBorder">
@@ -559,9 +560,7 @@
                     </Grid>
                 </StackLayout>
             </ScrollView>
-            <controls:ExtendedFrame x:Name="frameEdit" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#1399D5" Padding="0" VerticalOptions="End" HorizontalOptions="End" Margin="0,0,15,15" HeightRequest="44" WidthRequest="44" CornerRadius="22">
-                <Button Text="&#xf044;" Clicked="EditContact_Clicked"  TextColor="White" FontSize="20" FontFamily="FontAwesomeRegular" WidthRequest="44" HeightRequest="44" CornerRadius="22" BackgroundColor="#1399D5" VerticalOptions="Center" Padding="5,0,0,2"/>
-            </controls:ExtendedFrame>
+            <controls:FloatingButtonGroup x:Name="floatingButtonGroup" ItemsSource="{Binding BindingContext.ButtonCommandList,Source={x:Reference this}}"/>
             <Grid x:Name="LookUpImage" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">
                 <controls:PinchZoomImage>
                     <controls:PinchZoomImage.Content>

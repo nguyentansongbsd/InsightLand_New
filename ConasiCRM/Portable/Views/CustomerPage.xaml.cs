@@ -146,7 +146,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             string[] options = new string[] { "Khách hàng tiềm năng", "Khách hàng cá nhân", "Khách hàng doanh nghiệp" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Huỷ", null, options);
+            string asw = await DisplayActionSheet("Tùy chọn", "Hủy", null, options);
             if (asw == "Khách hàng tiềm năng")
             {
                 await Navigation.PushAsync(new LeadForm());

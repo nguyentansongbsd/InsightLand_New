@@ -40,8 +40,8 @@ namespace ConasiCRM.Portable.ViewModels
         private ObservableCollection<ReservationListModel> _bangTinhGiaList;
         public ObservableCollection<ReservationListModel> BangTinhGiaList { get => _bangTinhGiaList; set { _bangTinhGiaList = value; OnPropertyChanged(nameof(BangTinhGiaList)); } }
 
-        public ObservableCollection<QueueFormModel> _list_danhsachdatcho;
-        public ObservableCollection<QueueFormModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
+        public ObservableCollection<QueuesModel> _list_danhsachdatcho;
+        public ObservableCollection<QueuesModel> list_danhsachdatcho { get => _list_danhsachdatcho; set { _list_danhsachdatcho = value; OnPropertyChanged(nameof(list_danhsachdatcho)); } }
         public ObservableCollection<ReservationListModel> list_danhsachdatcoc { get; set; } = new ObservableCollection<ReservationListModel>();
         public ObservableCollection<ContractModel> list_danhsachhopdong { get; set; } = new ObservableCollection<ContractModel>();
 
@@ -83,7 +83,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public UnitInfoViewModel()
         {
-            list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
+            list_danhsachdatcho = new ObservableCollection<QueuesModel>();
             Photos = new List<Photo>();
             Collections = new List<CollectionData>();
             photoBrowser = new PhotoBrowser
@@ -149,6 +149,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='name' />
                         <attribute name='customerid' />
                         <attribute name='createdon' />
+                        <attribute name='statuscode' />
                         <attribute name='bsd_queuingexpired' />
                         <attribute name='opportunityid' />
                         <order attribute='bsd_bookingtime' descending='false' />
@@ -163,12 +164,12 @@ namespace ConasiCRM.Portable.ViewModels
                            <attribute name='name'  alias='account_name'/>
                         </link-entity>
                         <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' visible='false' link-type='outer' alias='a_805e44d019dbeb11bacb002248168cad'>
-                          <attribute name='bsd_name' alias='bsd_project_name'/>
+                          <attribute name='bsd_name' alias='project_name'/>
                         </link-entity>
                       </entity>
                     </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueuesModel>>("opportunities", fetch);
             if (result == null || result.value.Count == 0) return;
 
             IsLoaded = true;
@@ -177,7 +178,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var item in data)
             {
-                item.customer_name = !string.IsNullOrWhiteSpace(item.contact_name) ? item.contact_name : item.account_name;
                 list_danhsachdatcho.Add(item);
             }
         }

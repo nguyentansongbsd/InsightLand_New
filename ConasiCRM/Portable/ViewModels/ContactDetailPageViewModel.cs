@@ -68,6 +68,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         private bool _showCMND;
         public bool ShowCMND { get => _showCMND; set { _showCMND = value; OnPropertyChanged(nameof(ShowCMND)); } }
+        public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; } = new ObservableCollection<FloatButtonItem>();
         public ContactDetailPageViewModel()
         {
             singleContact = new ContactFormModel();

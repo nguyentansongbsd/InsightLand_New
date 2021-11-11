@@ -48,6 +48,16 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng nhập topic");
                 return;
             }
+            if (viewModel.Contact == null || viewModel.Contact.Id == null)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn người ủy quyền");
+                return;
+            }
+            if (viewModel.mandatorySecondary.bsd_effectivedatefrom == null || viewModel.mandatorySecondary.bsd_effectivedateto == null)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian hiệu lực");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(viewModel.mandatorySecondary.bsd_descriptionsvn))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả (VN)");
@@ -56,11 +66,6 @@ namespace ConasiCRM.Portable.Views
             if (string.IsNullOrWhiteSpace(viewModel.mandatorySecondary.bsd_descriptionsen))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng nhập mô tả (EN)");
-                return;
-            }
-            if(viewModel.Contact == null || viewModel.Contact.Id==null)
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người ủy quyền");
                 return;
             }
             LoadingHelper.Show();

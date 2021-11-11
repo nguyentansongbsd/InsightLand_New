@@ -288,8 +288,12 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_queuingexpired' />
                         <order attribute='statuscode' descending='true' />
                         <filter type='and'>
-                          <condition attribute='bsd_units' operator='eq' value='{unitId}'/>
-                          <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                            <condition attribute='bsd_units' operator='eq' value='{unitId}'/>
+                            <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                            <condition attribute='statuscode' operator='in'>
+                                <value>100000002</value>
+                                <value>100000000</value>
+                            </condition>
                         </filter>
                         <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='fullname'  alias='contact_name'/>

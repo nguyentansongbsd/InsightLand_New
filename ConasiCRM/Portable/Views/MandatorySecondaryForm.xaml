@@ -32,16 +32,16 @@
         <AbsoluteLayout>
             <ScrollView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,10,0,60">
                 <StackLayout BackgroundColor="White" Padding="10">
-                    <controls:FormLabelRequired Text="Topic"/>
-                    <controls:MainEntry Placeholder="Nhập topic" Text="{Binding mandatorySecondary.bsd_name}" FontSize="15"/>
+                    <controls:FormLabelRequired Text="Tiêu đề"/>
+                    <controls:MainEntry Placeholder="Nhập tiêu đề" Text="{Binding mandatorySecondary.bsd_name}" FontSize="15"/>
 
-                    <controls:FormLabelRequired Text="Tên công ty (Account)" Margin="0,10,0,0"/>
+                    <controls:FormLabelRequired Text="Công ty" Margin="0,10,0,0"/>
                     <controls:MainEntry Text="{Binding mandatorySecondary.bsd_developeraccount}" FontSize="15" IsEnabled="False"/>
 
                     <controls:FormLabelRequired Text="Người ủy quyền" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="Lookup_Account" Placeholder="Chọn người ủy quyền" ItemsSource="{Binding list_contact_lookup}" SelectedItem="{Binding Contact}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                    <controls:FormLabel Text="Ngày có hiệu lực" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:FormLabelRequired Text="Thời gian hiệu lực" Margin="0,10,0,0"/>
                     <Grid ColumnDefinitions="*,*">
                         <Grid ColumnDefinitions="Auto,*" Grid.Column="0">
                             <controls:FormLabel Text="Từ" FontSize="15" Grid.Column="0"/>

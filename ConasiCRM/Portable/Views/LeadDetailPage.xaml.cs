@@ -62,12 +62,12 @@ namespace ConasiCRM.Portable.Views
             }
             else if (viewModel.singleLead.statuscode == "4" || viewModel.singleLead.statuscode == "5" || viewModel.singleLead.statuscode == "6"|| viewModel.singleLead.statuscode == "7")
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Reactivate Lead", "FontAwesomeSolid", "\uf1b8", null, ReactivateLead));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Kích hoạt lại KH", "FontAwesomeSolid", "\uf1b8", null, ReactivateLead));
             }
             else
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chuyển đổi khách hàng", "FontAwesomeSolid", "\uf542", null, LeadQualify));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Disqualify", "FontAwesomeSolid", "\uf05e", null, LeadDisQualify));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Không chuyển đổi", "FontAwesomeSolid", "\uf05e", null, LeadDisQualify));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
             }
         }

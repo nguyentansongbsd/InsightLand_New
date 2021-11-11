@@ -40,9 +40,14 @@ namespace ConasiCRM.Portable.Views
         {
             await LoadDataThongTin(Id.ToString());
 
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Cuộc họp", "FontAwesomeRegular", "\uf274", null, NewMeet));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Cuộc gọi", "FontAwesomeSolid", "\uf095", null, NewPhoneCall));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Công việc", "FontAwesomeSolid", "\uf073", null, NewTask));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, EditContact));
             if (viewModel.singleContact.employee_id != UserLogged.Id)
             {
-                frameEdit.IsVisible = false;
+
+                floatingButtonGroup.IsVisible = false;
             }
 
             if (viewModel.singleContact.contactid != Guid.Empty)
@@ -51,6 +56,47 @@ namespace ConasiCRM.Portable.Views
                 OnCompleted(false);
             LoadingHelper.Hide();
         }
+
+        private async void NewMeet(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new MeetingForm());
+            LoadingHelper.Hide();
+        }
+
+        private async void NewPhoneCall(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new PhoneCallForm());
+            LoadingHelper.Hide();
+        }
+
+        private async void NewTask(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new TaskForm());
+            LoadingHelper.Hide();
+        }
+
+        private void EditContact(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            ContactForm newPage = new ContactForm(Id);
+            newPage.OnCompleted = async (OnCompleted) =>
+            {
+                if (OnCompleted == true)
+                {
+                    await Navigation.PushAsync(newPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin khách hàng");
+                }
+            };
+        }
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -416,26 +462,7 @@ namespace ConasiCRM.Portable.Views
                     }
                 };
             }
-        }
-
-        private void EditContact_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            ContactForm newPage = new ContactForm(Id);
-            newPage.OnCompleted = async (OnCompleted) =>
-            {
-                if (OnCompleted == true)
-                {
-                    await Navigation.PushAsync(newPage);
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin khách hàng");
-                }
-            };
-        }
+        }      
 
         private void GiuChoItem_Tapped(object sender, EventArgs e)
         {
