@@ -374,18 +374,20 @@ namespace ConasiCRM.Portable.ViewModels
                 var images = list.Where(x => x.Name.Contains(".jpg") || x.Name.Contains(".jpeg") || x.Name.Contains(".png")).ToList();
                 this.TotalMedia = videos.Count;
                 this.TotalPhoto = images.Count;
-                for (int i = 0; i < TotalMedia; i++)
-                {
-                    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + videos[i].Name + "&access_token=" + UserLogged.AccessTokenSharePoint;
-                    if (Device.RuntimePlatform == Device.iOS)
-                    {
-                        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
-                    }
-                    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
-                    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
-                    ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
-                    Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = imageSource.ToImageSource(),SharePointType = SharePointType.Video, Index = TotalMedia });
-                }
+                //for (int i = 0; i < TotalMedia; i++)
+                //{
+                //    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + videos[i].Name + "&access_token=" + UserLogged.AccessTokenSharePoint;
+                //    if (Device.RuntimePlatform == Device.iOS)
+                //    {
+                //        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                //    }
+                //    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
+                //    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
+                //    //ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
+
+                //    ImageSource a =  DependencyService.Get<IThumbnailService>().GenerateThumbnailImageSource(soucre, 5000);
+                //    Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = a.ToImageSource(),SharePointType = SharePointType.Video, Index = TotalMedia });
+                //}
 
                 for (int i = 0; i < TotalPhoto; i++)
                 {

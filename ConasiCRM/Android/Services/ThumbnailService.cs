@@ -1,9 +1,7 @@
 ﻿using Android.Graphics;
 using Android.Media;
-using Android.OS;
 using ConasiCRM.Droid.Services;
 using ConasiCRM.Portable.IServices;
-using Java.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,24 +15,44 @@ namespace ConasiCRM.Droid.Services
     {
         public async Task<ImageSource> GetImageSourceAsync(string url)
         {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            if ((int)Build.VERSION.SdkInt >=16)
+            try
             {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 retriever.SetDataSource(url, new Dictionary<string, string>());
+                //await retriever.SetDataSourceAsync(url,new Dictionary<string,string>());
+
+                Bitmap bitmap = retriever.GetFrameAtTime(5000);
+                if (bitmap != null)
+                {
+                    MemoryStream stream = new MemoryStream();
+                    bitmap.Compress(Bitmap.CompressFormat.Png, 0, stream);
+                    byte[] bitmapData = stream.ToArray();
+                    ImageSource imageSource = ImageSource.FromStream(() => new MemoryStream(bitmapData));
+                    return imageSource;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                retriever.SetDataSource(url);
+                var a = ex.Message;
             }
             
-            Bitmap bitmap = retriever.GetFrameAtTime(5000, Option.Closest);
+            return null;
+        }
+
+        public ImageSource GenerateThumbnailImageSource(string url, long usecond)
+        {
+            // Extract thumbnail from video into a bitmap          
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.SetDataSource(url,new Dictionary<string,string>());
+            Bitmap bitmap = retriever.GetFrameAtTime(usecond);
+
+            //Convert bitmap to a 'Stream' and then to an 'ImageSource' 
             if (bitmap != null)
             {
                 MemoryStream stream = new MemoryStream();
                 bitmap.Compress(Bitmap.CompressFormat.Png, 0, stream);
                 byte[] bitmapData = stream.ToArray();
-                ImageSource imageSource = ImageSource.FromStream(() => new MemoryStream(bitmapData));
-                return imageSource;
+                return ImageSource.FromStream(() => new MemoryStream(bitmapData));
             }
             return null;
         }
