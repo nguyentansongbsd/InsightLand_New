@@ -8,6 +8,5 @@ namespace ConasiCRM.Portable.IServices
     public interface IThumbnailService
     {
         Task<ImageSource> GetImageSourceAsync(string url);
-        ImageSource GenerateThumbnailImageSource(string url, long usecond);
     }
 }

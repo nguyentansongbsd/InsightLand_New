@@ -38,23 +38,5 @@ namespace ConasiCRM.Droid.Services
             
             return null;
         }
-
-        public ImageSource GenerateThumbnailImageSource(string url, long usecond)
-        {
-            // Extract thumbnail from video into a bitmap          
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.SetDataSource(url,new Dictionary<string,string>());
-            Bitmap bitmap = retriever.GetFrameAtTime(usecond);
-
-            //Convert bitmap to a 'Stream' and then to an 'ImageSource' 
-            if (bitmap != null)
-            {
-                MemoryStream stream = new MemoryStream();
-                bitmap.Compress(Bitmap.CompressFormat.Png, 0, stream);
-                byte[] bitmapData = stream.ToArray();
-                return ImageSource.FromStream(() => new MemoryStream(bitmapData));
-            }
-            return null;
-        }
     }
 }

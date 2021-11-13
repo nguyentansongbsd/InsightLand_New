@@ -447,7 +447,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.PriceListApply = this.PriceListPhasesLaunch;
 
             this.Quote.unit_id = UnitInfor.productid;
-            this.Quote.unit_name = UnitInfor.name;
+            this.Quote.name = this.Quote.unit_name = UnitInfor.name;
             this.Quote.bsd_constructionarea = UnitInfor.bsd_constructionarea;
             this.Quote.bsd_netusablearea = UnitInfor.bsd_netsaleablearea;
             this.Quote.bsd_actualarea = UnitInfor.bsd_actualarea;
@@ -896,7 +896,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_bookingfee"] = this.Quote.bsd_bookingfee;
             data["bsd_contracttypedescripton"] = this.ContractType.Val;
             data["bsd_nameofstaffagent"] = this.Quote.bsd_nameofstaffagent;// this.StaffAgentQuote;
-            data["bsd_referral"] = this.Quote.bsd_referral;// this.DescriptionQuote;
+            //data["bsd_referral"] = this.Quote.bsd_referral;// this.DescriptionQuote;
 
             data["bsd_detailamount"] = this.Quote.bsd_detailamount; ;//this.UnitInfor.price;
             data["bsd_discount"] = this.TotalDiscount;
