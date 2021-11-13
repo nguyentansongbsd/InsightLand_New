@@ -193,13 +193,13 @@ namespace ConasiCRM.Portable.Views
                 viewModel.list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
                 viewModel.list_danhsachdatcoc = new ObservableCollection<ReservationListModel>();
                 viewModel.list_danhsachhopdong = new ObservableCollection<ContractModel>();
-                viewModel.list_chamsockhachhang = new ObservableCollection<ListPhanHoiModel>();
+                viewModel.list_chamsockhachhang = new ObservableCollection<HoatDongListModel>();
 
                 await Task.WhenAll(
                    viewModel.LoadQueuesForContactForm(Id),
                    viewModel.LoadReservationForContactForm(Id),
                    viewModel.LoadOptoinEntryForContactForm(Id),
-                   viewModel.LoadCaseForContactForm(Id)
+                   viewModel.LoadCaseForContactForm()
                );
                 LoadingHelper.Hide();
             }          
@@ -236,7 +236,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageChamSocKhachHang++;
-            await viewModel.LoadCaseForContactForm(viewModel.singleContact.contactid.ToString());
+            await viewModel.LoadCaseForContactForm();
             LoadingHelper.Hide();
         }
 
@@ -283,21 +283,61 @@ namespace ConasiCRM.Portable.Views
         private void CaseItem_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            PhanHoiDetailPage newPage = new PhanHoiDetailPage(itemId);
-            newPage.OnCompleted = async (OnCompleted) =>
+            var item = (HoatDongListModel)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item.activityid != Guid.Empty && item.activitytypecode == "phonecall")
             {
-                if (OnCompleted == true)
+                LoadingHelper.Show();
+                PhoneCallForm newPage = new PhoneCallForm(item.activityid);
+                newPage.OnCompleted = async (OnCompleted) =>
                 {
-                    await Navigation.PushAsync(newPage);
-                    LoadingHelper.Hide();
-                }
-                else
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
+            }
+            else if (item.activityid != Guid.Empty && item.activitytypecode == "task")
+            {
+                LoadingHelper.Show();
+                TaskForm newPage = new TaskForm(item.activityid);
+                newPage.CheckTaskForm = async (OnCompleted) =>
                 {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin phản hồi");
-                }
-            };
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
+            }
+            else if (item.activityid != Guid.Empty && item.activitytypecode == "appointment")
+            {
+                LoadingHelper.Show();
+                MeetingForm newPage = new MeetingForm(item.activityid);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    }
+                };
+            }           
         }
 
         #endregion

@@ -21,6 +21,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_name' />
                                     <attribute name='createdon' />
                                     <attribute name='statuscode' />
+                                    <attribute name='bsd_type' />
                                     <attribute name='bsd_followuplistcode' />
                                     <attribute name='bsd_followuplistid' />
                                     <attribute name='bsd_expiredate' />

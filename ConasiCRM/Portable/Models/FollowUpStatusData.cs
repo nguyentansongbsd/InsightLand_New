@@ -11,9 +11,9 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<StatusCodeModel>()
             {
-                new StatusCodeModel("1","Active","#03ACF5"), // nháp
-                new StatusCodeModel("100000000","Complete","#06CF79"), // hoàn thành
-                new StatusCodeModel("2","Inactive","#FDC206"), // vô hiệu lực
+                new StatusCodeModel("1","Nháp","#03ACF5"), // nháp Active
+                new StatusCodeModel("100000000","Hoàn thành","#06CF79"), // Complete
+                new StatusCodeModel("2","Vô hiệu lực","#FDC206"), // Inactive
                 new StatusCodeModel("0","","#333333")
             };
         }

@@ -47,8 +47,8 @@ namespace ConasiCRM.Portable.ViewModels
         public bool ShowMoreDanhSachHopDong { get => _showMoreDanhSachHopDong; set { _showMoreDanhSachHopDong = value; OnPropertyChanged(nameof(ShowMoreDanhSachHopDong)); } }
         public int PageDanhSachHopDong { get; set; } = 1;
 
-        private ObservableCollection<ListPhanHoiModel> _list_chamsockhachhang;
-        public ObservableCollection<ListPhanHoiModel> list_chamsockhachhang { get => _list_chamsockhachhang; set { _list_chamsockhachhang = value; OnPropertyChanged(nameof(list_chamsockhachhang)); } }
+        private ObservableCollection<HoatDongListModel> _list_chamsockhachhang;
+        public ObservableCollection<HoatDongListModel> list_chamsockhachhang { get => _list_chamsockhachhang; set { _list_chamsockhachhang = value; OnPropertyChanged(nameof(list_chamsockhachhang)); } }
         private bool _showMoreChamSocKhachHang;
         public bool ShowMoreChamSocKhachHang { get => _showMoreChamSocKhachHang; set { _showMoreChamSocKhachHang = value; OnPropertyChanged(nameof(ShowMoreChamSocKhachHang)); } }
         public int PageChamSocKhachHang { get; set; } = 1;
@@ -304,83 +304,56 @@ namespace ConasiCRM.Portable.ViewModels
         }
 
         // CHAM SOC KHACH HANG
-        public async Task LoadCaseForContactForm(string customerId)
+        public async Task LoadCaseForContactForm()
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                <entity name='incident'>
-                                    <attribute name='title' />
-                                    <attribute name='statuscode' />
-                                    <attribute name='casetypecode' />
-                                    <attribute name='caseorigincode' />
-                                    <attribute name='incidentid' />
-                                    <order attribute='createdon' descending='true' />
-                                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                        <attribute name='bsd_name' alias='case_nameaccount'/>
-                                    </link-entity>
-                                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' >
-                                      <attribute name='bsd_fullname' alias='case_namecontact'/>
-                                    </link-entity>
-                                     <filter type='and'>
-                                        <condition attribute='customerid' operator='eq' value='{customerId}' />
-                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
-                                    </filter>         
-                                </entity>
-                        </fetch>";
-
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListPhanHoiModel>>("incidents", fetch);
-            if (result == null || result.value.Count == 0)
+            if(list_chamsockhachhang != null && singleContact.contactid != Guid.Empty)
             {
-                ShowMoreChamSocKhachHang = false;
-                return;
+                await Task.WhenAll(
+                    LoadActiviy(singleContact.contactid, "task", "tasks"),
+                    LoadActiviy(singleContact.contactid, "phonecall", "phonecalls"),
+                    LoadActiviy(singleContact.contactid, "appointment", "appointments")
+                );
             }
-            var data = result.value;
-            ShowMoreChamSocKhachHang = data.Count < 3 ? false : true;
-            foreach (var x in data)
-            {
-                list_chamsockhachhang.Add(x);
-            }
+            ShowMoreChamSocKhachHang = list_chamsockhachhang.Count < (3* PageChamSocKhachHang) ? false : true;
         }
 
-        //public async Task LoadActiviy(string customerId)
-        //{
-        //    string fetch = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='true'>
-        //                          <entity name='{entity}'>
-        //                            <attribute name='activitytypecode' />
-        //                            <attribute name='subject' />
-        //                            <attribute name='statecode' />
-        //                            <attribute name='activityid' />
-        //                            <attribute name='scheduledstart' />
-        //                            <attribute name='scheduledend' />
-        //                            <order attribute='modifiedon' descending='true' />
-        //                            <filter type='and'>
-        //                              <condition attribute='subject' operator='like' value='%25{Keyword}%25' />
-        //                              <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
-        //                            </filter>
-        //                            <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
-        //                                <attribute name='bsd_name' alias='accounts_bsd_name'/>
-        //                            </link-entity>
-        //                            <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
-        //                                <attribute name='fullname' alias='contact_bsd_fullname'/>
-        //                            </link-entity>
-        //                            <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
-        //                                <attribute name='fullname' alias='lead_fullname'/>
-        //                            </link-entity>
-        //                          </entity>
-        //                        </fetch>";
+        public async Task LoadActiviy(Guid contactID, string entity, string entitys)
+        {
+            string fetch = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                  <entity name='{entity}'>
+                                    <attribute name='activitytypecode' />
+                                    <attribute name='subject' />
+                                    <attribute name='statecode' />
+                                    <attribute name='activityid' />
+                                    <attribute name='scheduledstart' />
+                                    <attribute name='scheduledend' />
+                                    <order attribute='modifiedon' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='regardingobjectid' operator='eq' value='{contactID}' />
+                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+                                        <attribute name='bsd_name' alias='accounts_bsd_name'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
+                                        <attribute name='fullname' alias='contact_bsd_fullname'/>
+                                    </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
+                                        <attribute name='fullname' alias='lead_fullname'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
 
-        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>("incidents", fetch);
-        //    if (result == null || result.value.Count == 0)
-        //    {
-        //        ShowMoreChamSocKhachHang = false;
-        //        return;
-        //    }
-        //    var data = result.value;
-        //    ShowMoreChamSocKhachHang = data.Count < 3 ? false : true;
-        //    foreach (var x in data)
-        //    {
-        //        list_chamsockhachhang.Add(x);
-        //    }
-        //}
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>(entitys, fetch);
+            if (result != null || result.value.Count > 0)
+            {
+                var data = result.value;
+                foreach (var x in data)
+                {
+                    list_chamsockhachhang.Add(x);
+                }
+            }
+        }
 
         // phon thuy
         public void LoadPhongThuy()

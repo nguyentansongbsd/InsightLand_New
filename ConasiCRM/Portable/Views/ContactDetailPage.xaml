@@ -470,28 +470,31 @@
                                                 <DataTemplate>
                                                     <StackLayout BackgroundColor ="White" Padding="15,10" Margin="0,1" Spacing="10">
                                                         <StackLayout.GestureRecognizers>
-                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CaseItem_Tapped" CommandParameter="{Binding incidentid}"/>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CaseItem_Tapped" CommandParameter="{Binding .}"/>
                                                         </StackLayout.GestureRecognizers>
                                                         <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
-                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode,Converter={StaticResource StatucToColor}}">
-                                                                <Label Grid.Column="0" Text="{Binding statuscodevalue}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statecode_color}">
+                                                                <Label Grid.Column="0" Text="{Binding statecode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                                             </telerikPrimitives:RadBorder>
-                                                            <Label Grid.Column="1" Text="{Binding title}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                                            <Label Grid.Column="1" Text="{Binding subject}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                                         </Grid>
 
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Grid.Column="0" Text="Loại:" FontSize="15" TextColor="#444444"/>
-                                                            <Label Grid.Column="1" Text="{Binding casetypecodevalue}" TextColor="#444444" FontSize="15"/>
+                                                            <Label Grid.Column="1" Text="{Binding activitytypecode_format}" TextColor="#444444" FontSize="15"/>
                                                         </Grid>
 
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
-                                                            <Label Grid.Column="1" Text="{Binding contactname}" TextColor="#444444" FontSize="15"/>
+                                                            <Label Grid.Column="1" Text="{Binding regarding_name}" TextColor="#444444" FontSize="15"/>
                                                         </Grid>
-
                                                         <Grid ColumnDefinitions="Auto,*">
-                                                            <Label Grid.Column="0" Text="Nguồn:" FontSize="15" TextColor="#444444"/>
-                                                            <Label Grid.Column="1" Text="{Binding caseorigincodevalue}" TextColor="#444444" FontSize="15"/>
+                                                            <Label Text="Thời gian bắt đầu: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding scheduledstart_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Text="Thời gian kết thúc: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding scheduledend_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                         </Grid>
                                                     </StackLayout>
                                                 </DataTemplate>
