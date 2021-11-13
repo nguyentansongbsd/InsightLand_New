@@ -50,6 +50,9 @@ namespace ConasiCRM.Portable.Views
         {
             this.Title = "Tạo Mới Khách Hàng Cá Nhân";
             btn_save_contact.Text = "Tạo Mới";
+            datePickerNgayCap.DefaultDisplay = DateTime.Now;
+            datePickerNgayCapHoChieu.DefaultDisplay = DateTime.Now;
+            datePikerNgayCapTheCanCuoc.DefaultDisplay = DateTime.Now;
             btn_save_contact.Clicked += CreateContact_Clicked;
         }
 

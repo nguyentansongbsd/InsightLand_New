@@ -28,6 +28,7 @@ namespace ConasiCRM.Portable.ViewModels
                       <entity name='lead'>
                         <attribute name='lastname' />
                         <attribute name='subject' />
+                        <attribute name='statuscode' />
                         <attribute name='mobilephone'/>
                         <attribute name='emailaddress1' />
                         <attribute name='createdon' />

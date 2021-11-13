@@ -322,12 +322,17 @@
                                                         <Grid.GestureRecognizers>
                                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>
                                                         </Grid.GestureRecognizers>
-                                                        <Label Grid.Row="0" Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
+                                                        <Grid ColumnDefinitions="Auto,*" Grid.Row="0">
+                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
+                                                                <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                            </telerikPrimitives:RadBorder>
+                                                            <Label Grid.Column="1" Text="{Binding name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                                        </Grid>
                                                         <Label Grid.Row="1" FontSize="15" TextColor="#333333">
                                                             <Label.FormattedText>
                                                                 <FormattedString>
                                                                     <Span Text="Khách hàng: "/>
-                                                                    <Span Text="{Binding customer_name}"/>
+                                                                    <Span Text="{Binding customername}"/>
                                                                 </FormattedString>
                                                             </Label.FormattedText>
                                                         </Label>
@@ -335,7 +340,7 @@
                                                             <Label.FormattedText>
                                                                 <FormattedString>
                                                                     <Span Text="Dự án: "/>
-                                                                    <Span Text="{Binding bsd_project_name}"/>
+                                                                    <Span Text="{Binding project_name}"/>
                                                                 </FormattedString>
                                                             </Label.FormattedText>
                                                         </Label>

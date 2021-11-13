@@ -40,6 +40,9 @@ namespace ConasiCRM.Portable.Views
             await LoadDataThongTin(AccountId.ToString());
             if ((viewModel.singleAccount.employee_id != Guid.Empty && !string.IsNullOrWhiteSpace(viewModel.singleAccount.employee_name)) && (viewModel.singleAccount.employee_id == UserLogged.Id && viewModel.singleAccount.employee_name == UserLogged.User))
             {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Cuộc họp", "FontAwesomeRegular", "\uf274", null, NewMeet));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Cuộc gọi", "FontAwesomeSolid", "\uf095", null, NewPhoneCall));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Công việc", "FontAwesomeSolid", "\uf073", null, NewTask));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Người ủy quyền", "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
             }
@@ -530,6 +533,27 @@ namespace ConasiCRM.Portable.Views
                 lb_ListMandatory.IsVisible = false;
                 ListMandatory.IsVisible = true;
             }
+        }
+
+        private async void NewMeet(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new MeetingForm());
+            LoadingHelper.Hide();
+        }
+
+        private async void NewPhoneCall(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new PhoneCallForm());
+            LoadingHelper.Hide();
+        }
+
+        private async void NewTask(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new TaskForm());
+            LoadingHelper.Hide();
         }
     }
 }

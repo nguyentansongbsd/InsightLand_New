@@ -12,31 +12,31 @@ namespace ConasiCRM.Portable.Converters
         {
             if ((string)value == "1")
             {
-                return "New";
+                return "Mới"; // New
             }
             else if ((string)value == "2")
             {
-                return "Contacted";
+                return "Đã Liên Hệ"; // Contacted
             }
             else if ((string)value == "3")
             {
-                return "Qualified";
+                return "Đã Xác Nhận";
             }
             else if ((string)value == "4")
             {
-                return "Lost";
+                return "Mất Khách Hàng"; // Lost
             }
             else if ((string)value == "5")
             {
-                return "Cannot Contact";
+                return "Không Liên Hệ Được"; // Cannot Contact
             }
             else if ((string)value == "6")
             {
-                return "No Longer Interested";
+                return "Không Quan Tâm";  //No Longer Interested
             }
             else if ((string)value == "7")
             {
-                return "Canceled";
+                return "Không Quan Tâm"; // Canceled
             }
             else
             {

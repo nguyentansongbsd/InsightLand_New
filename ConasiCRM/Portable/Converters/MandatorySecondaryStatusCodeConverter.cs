@@ -15,13 +15,13 @@ namespace ConasiCRM.Portable.Converters
                 switch ((int)value)
                 {
                     case 1: 
-                        return "Active";
+                        return "Nháp"; // Active
                     case 100000000: 
-                        return "Applying";
+                        return "Đang áp dụng"; // Applying
                     case 100000001: 
-                        return "Cancel";
+                        return "Hủy"; //Cancel
                     case 2: 
-                        return "Inactive";
+                        return "Vô hiệu lực"; // Inactive 
                     default:
                         return "";
                 }

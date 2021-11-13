@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
@@ -24,12 +25,15 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_followuplistid' />
                                     <attribute name='bsd_expiredate' />
                                     <order attribute='createdon' descending='true' /> 
-                                    <filter type='or'>
-                                      <condition attribute='bsd_unitsname' operator='like' value='%25{Keyword}%25' />
-                                      <condition attribute='bsd_name' operator='like' value='%25{Keyword}%25' />
-                                      <condition attribute='bsd_followuplistcode' operator='like' value='%25{Keyword}%25' />
-                                      <condition entityname='customer_reservation' attribute='customeridname' operator='like' value='%25{Keyword}%25' />
-                                      <condition entityname='customer_optionentry' attribute='customeridname' operator='like' value='%25{Keyword}%25' />
+                                    <filter type='and'>
+                                        <filter type='or'>
+                                          <condition attribute='bsd_unitsname' operator='like' value='%25{Keyword}%25' />
+                                          <condition attribute='bsd_name' operator='like' value='%25{Keyword}%25' />
+                                          <condition attribute='bsd_followuplistcode' operator='like' value='%25{Keyword}%25' />
+                                          <condition entityname='customer_reservation' attribute='customeridname' operator='like' value='%25{Keyword}%25' />
+                                          <condition entityname='customer_optionentry' attribute='customeridname' operator='like' value='%25{Keyword}%25' />
+                                        </filter>
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}'/>
                                     </filter>
                                     <link-entity name='quote' from='quoteid' to='bsd_reservation' visible='false' link-type='outer' alias='customer_reservation'>
                                         <attribute name='name' alias='name_reservation'/>

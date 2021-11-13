@@ -14,16 +14,17 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<QueuesStatusCodeModel>()
             {
-                new QueuesStatusCodeModel("1","Draft","#808080"),
-                new QueuesStatusCodeModel("2","On Hold","#808080"),
-                new QueuesStatusCodeModel("3","Won","#808080"),
-                new QueuesStatusCodeModel("4","Canceled","#808080"),
-                new QueuesStatusCodeModel("5","Out-Sold","#808080"),
+                new QueuesStatusCodeModel("1","Nháp","#808080"), // Draft
+                new QueuesStatusCodeModel("2","On Hold","#808080"), //?????
+                new QueuesStatusCodeModel("3","Won","#808080"), //?????
+                new QueuesStatusCodeModel("4","Đã hủy","#808080"),
+                new QueuesStatusCodeModel("5","Out-Sold","#808080"), //?????
                 new QueuesStatusCodeModel("100000000","Giữ chỗ","#00CF79"),
-                new QueuesStatusCodeModel("100000001","Collected Queuing Fee","#808080"),
+                new QueuesStatusCodeModel("100000001","Collected Queuing Fee","#808080"), //?????
                 new QueuesStatusCodeModel("100000002","Đang đợi","#FDC206"),
                 new QueuesStatusCodeModel("100000003","Hết hạn","#B3B3B3"),
-                new QueuesStatusCodeModel("100000004","Hoàn thành","#C50147")
+                new QueuesStatusCodeModel("100000004","Hoàn thành","#C50147"),
+                new QueuesStatusCodeModel("0","","#808080")
             };
         }
     }
