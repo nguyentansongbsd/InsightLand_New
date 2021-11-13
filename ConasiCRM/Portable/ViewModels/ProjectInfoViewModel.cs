@@ -355,41 +355,65 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAllCollection()
         {
-            if (ProjectId != null && !string.IsNullOrWhiteSpace(ProjectName))
+            if (ProjectId != null)
             {
-                var Folder = ProjectName.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
-                var Category = "Project";
-                var category_value = "bsd_project";
+                string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='sharepointdocument'>
+                                    <attribute name='documentid' />
+                                    <attribute name='sharepointdocumentid' />
+                                    <attribute name='absoluteurl' />
+                                    <attribute name='fullname' />
+                                    <attribute name='filetype' />
+                                    <attribute name='relativelocation' />
+                                    <attribute name='author' />
+                                    <order attribute='relativelocation' descending='false' />
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='regardingobjectid' link-type='inner' alias='ad'>
+                                      <filter type='and'>
+                                        <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}' />
+                                      </filter>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<SharePonitModel>>("sharepointdocuments", fetchXml);
 
-                string url = $"Lists/GetByTitle('{Category}')/RootFolder/Folders('{Folder}')/Files";
-                var result = await CrmHelper.RetrieveMultipleImages<SharePointFieldResult>(url);
+                //var Folder = ProjectName.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
+                //var Category = "Project";
+                //var category_value = "bsd_project";
+
+                //string url = $"Lists/GetByTitle('{Category}')/RootFolder/Folders('{Folder}')/Files";
+                //var result = await CrmHelper.RetrieveMultipleImages<SharePointFieldResult>(url);
+
                 if (result == null || result.value.Any() == false)
                 {
                     ShowCollections = false;
                     return;
                 }
-                List<SharePointFile> list = result.value;
+                var Category = "Project";
+                var category_value = "bsd_project";
+                List<SharePonitModel> list = result.value;
 
-                var videos = list.Where(x => x.Name.Contains(".mp4") || x.Name.Contains(".flv") || x.Name.Contains(".m3u8") || x.Name.Contains(".3gp") || x.Name.Contains(".mov") || x.Name.Contains(".avi") || x.Name.Contains(".wmv")).ToList();
-                var images = list.Where(x => x.Name.Contains(".jpg") || x.Name.Contains(".jpeg") || x.Name.Contains(".png")).ToList();
+                var videos = list.Where(x => x.filetype == "mp4" || x.filetype == "flv" || x.filetype == "m3u8" || x.filetype=="3gp" || x.filetype=="mov" || x.filetype == "avi" || x.filetype == "wmv").ToList();
+                var images = list.Where(x => x.filetype == "jpg" || x.filetype == "jpeg" || x.filetype == "png").ToList();
                 this.TotalMedia = videos.Count;
                 this.TotalPhoto = images.Count;
-                for (int i = 0; i < TotalMedia; i++)
-                {
-                    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + videos[i].Name + "&access_token=" + UserLogged.AccessTokenSharePoint;
-                    if (Device.RuntimePlatform == Device.iOS)
-                    {
-                        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
-                    }
-                    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
-                    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
-                    ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
-                    Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = imageSource.ToImageSource(),SharePointType = SharePointType.Video, Index = TotalMedia });
-                }
+                //for (int i = 0; i < TotalMedia; i++)
+                //{
+                //    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + videos[i].relativelocation + "&access_token=" + UserLogged.AccessTokenSharePoint;
+                //    if (Device.RuntimePlatform == Device.iOS)
+                //    {
+                //        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                //    }
+                //    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
+                //    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
+                //    //ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
+
+                //    ImageSource a =  DependencyService.Get<IThumbnailService>().GenerateThumbnailImageSource(soucre, 5000);
+                //    Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = a.ToImageSource(),SharePointType = SharePointType.Video, Index = TotalMedia });
+                //}
 
                 for (int i = 0; i < TotalPhoto; i++)
                 {
-                    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + images[i].Name + "&access_token=" + UserLogged.AccessTokenSharePoint;
+                    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + images[i].relativelocation + "&access_token=" + UserLogged.AccessTokenSharePoint;
                     if (Device.RuntimePlatform == Device.iOS)
                     {
                         soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);

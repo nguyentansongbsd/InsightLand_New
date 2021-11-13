@@ -39,6 +39,12 @@ namespace ConasiCRM.Portable.Views
             viewModel.ProductId = productId;
             viewModel.Queue = queue;
 
+            if (viewModel.Queue == null)
+            {
+                lblGiuCho.IsVisible = false;
+                lookupGiuCho.IsVisible = false;
+            }
+
             if (saleAgentCompany != null)
             {
                 viewModel.SalesAgent = saleAgentCompany;
@@ -589,7 +595,7 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (viewModel.CoOwnerList.Any(x => x.contact_id == Guid.Parse(viewModel.CustomerCoOwner?.Val) || x.account_id == Guid.Parse(viewModel.CustomerCoOwner?.Val)))
+            if (viewModel.CoOwner.bsd_coownerid == Guid.Empty && viewModel.CoOwnerList.Any(x => x.contact_id == Guid.Parse(viewModel.CustomerCoOwner?.Val) || x.account_id == Guid.Parse(viewModel.CustomerCoOwner?.Val)))
             {
                 ToastMessageHelper.ShortMessage("Khách hàng đã được chọn");
                 return;
@@ -727,7 +733,7 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.Buyer == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người mua");
+                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng");
                 return;
             }
             if (viewModel.ContractType == null)
@@ -754,7 +760,7 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)
             {
-                ToastMessageHelper.ShortMessage("Khách hàng Co-Owner và người mua không được trùng.");
+                ToastMessageHelper.ShortMessage("Khách hàng Co-Owner và khách hàng không được trùng.");
                 return;
             }
 

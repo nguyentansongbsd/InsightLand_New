@@ -6,7 +6,9 @@ namespace ConasiCRM.Portable.Models
     public class QuoteModel : BaseViewModel
     {
         public Guid quoteid { get; set; }
-        public string name { get; set; }
+
+        private string _name;
+        public string name { get=>_name; set { _name = value; OnPropertyChanged(nameof(name)); } }
 
         public Guid paymentscheme_id { get; set; }
         public string paymentscheme_name { get; set; }

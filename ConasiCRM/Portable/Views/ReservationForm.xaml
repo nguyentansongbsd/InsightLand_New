@@ -239,11 +239,11 @@
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Padding="10">
-                                        <controls:FormLabel Text="Giữ chỗ" Margin="0,10,0,0"/>
+                                        <controls:FormLabel x:Name="lblGiuCho" Text="Giữ chỗ" Margin="0,10,0,0"/>
                                         <controls:LookUp x:Name="lookupGiuCho" Placeholder="Chọn giữ chỗ" BottomModal="{Reference lookUpModal}" NameDisplay="Label" SelectedItem="{Binding Queue}" ItemsSource="{Binding Queues}"/>
 
-                                        <controls:FormLabelRequired Text="Người mua" Margin="0,10,0,0"/>
-                                        <controls:LookUpMultipleTabs x:Name="lookupNguoiMua" SelectedItemChange="Buyer_SelectedItemChange" Placeholder="Chọn người mua" ShowContact="True" ShowAccount="True" SelectedItem="{Binding Buyer}" CenterModal="{Reference centerModal}" />
+                                        <controls:FormLabelRequired Text="Khách hàng" Margin="0,10,0,0"/>
+                                        <controls:LookUpMultipleTabs x:Name="lookupNguoiMua" SelectedItemChange="Buyer_SelectedItemChange" Placeholder="Chọn khách hàng" ShowContact="True" ShowAccount="True" SelectedItem="{Binding Buyer}" CenterModal="{Reference centerModal}" />
 
                                         <controls:FormLabelRequired Text="Loại hợp đồng" Margin="0,10,0,0"/>
                                         <controls:LookUp x:Name="lookupLoaiHopDong" Placeholder="Chọn loại hợp đồng" BottomModal="{Reference lookUpModal}" NameDisplay="Label" SelectedItem="{Binding ContractType}" ItemsSource="{Binding ContractTypes}"/>
@@ -355,8 +355,8 @@
                                         <controls:FormLabel Text="Nhân viên Đại lý/Sàn" Margin="0,10,0,0"/>
                                         <controls:MainEntry x:Name="entryNhanVienDaiLy" Placeholder="Điền tên nhân viên Đại lý/Sàn" Text="{Binding Quote.bsd_nameofstaffagent}"/>
 
-                                        <controls:FormLabel Text="Giới thiệu" Margin="0,10,0,0"/>
-                                        <controls:MainEditor Placeholder="Điền thông tin giới thiệu" Text="{Binding Quote.bsd_referral}" AutoSize="TextChanges"/>
+                                        <!--<controls:FormLabel Text="Giới thiệu" Margin="0,10,0,0"/>
+                                        <controls:MainEditor Placeholder="Điền thông tin giới thiệu" Text="{Binding Quote.bsd_referral}" AutoSize="TextChanges"/>-->
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
