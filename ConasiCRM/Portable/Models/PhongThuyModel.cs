@@ -48,7 +48,7 @@ namespace ConasiCRM.Portable.Models
                 {
                     #region Ten nam sinh am lich
                     can_value = value % 10;
-                    chi_value = (value % 100) % 12;
+                    chi_value = (value - 4) % 12; // sai
                     string can_label = lst_can[can_value];
                     string chi_label = lst_chi[chi_value];
                     ten_nam_sinh_am_lich = can_label + " " + chi_label;

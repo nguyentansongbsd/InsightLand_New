@@ -326,6 +326,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </filter>         
                                 </entity>
                         </fetch>";
+
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListPhanHoiModel>>("incidents", fetch);
             if (result == null || result.value.Count == 0)
             {
@@ -339,6 +340,47 @@ namespace ConasiCRM.Portable.ViewModels
                 list_chamsockhachhang.Add(x);
             }
         }
+
+        //public async Task LoadActiviy(string customerId)
+        //{
+        //    string fetch = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='true'>
+        //                          <entity name='{entity}'>
+        //                            <attribute name='activitytypecode' />
+        //                            <attribute name='subject' />
+        //                            <attribute name='statecode' />
+        //                            <attribute name='activityid' />
+        //                            <attribute name='scheduledstart' />
+        //                            <attribute name='scheduledend' />
+        //                            <order attribute='modifiedon' descending='true' />
+        //                            <filter type='and'>
+        //                              <condition attribute='subject' operator='like' value='%25{Keyword}%25' />
+        //                              <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+        //                            </filter>
+        //                            <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+        //                                <attribute name='bsd_name' alias='accounts_bsd_name'/>
+        //                            </link-entity>
+        //                            <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
+        //                                <attribute name='fullname' alias='contact_bsd_fullname'/>
+        //                            </link-entity>
+        //                            <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
+        //                                <attribute name='fullname' alias='lead_fullname'/>
+        //                            </link-entity>
+        //                          </entity>
+        //                        </fetch>";
+
+        //    var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>("incidents", fetch);
+        //    if (result == null || result.value.Count == 0)
+        //    {
+        //        ShowMoreChamSocKhachHang = false;
+        //        return;
+        //    }
+        //    var data = result.value;
+        //    ShowMoreChamSocKhachHang = data.Count < 3 ? false : true;
+        //    foreach (var x in data)
+        //    {
+        //        list_chamsockhachhang.Add(x);
+        //    }
+        //}
 
         // phon thuy
         public void LoadPhongThuy()
