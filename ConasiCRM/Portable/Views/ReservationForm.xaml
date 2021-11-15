@@ -132,7 +132,7 @@
                                             <StackLayout.GestureRecognizers>
                                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiscountChildItem_Tapped" CommandParameter="{Binding .}"/>
                                             </StackLayout.GestureRecognizers>
-                                            <CheckBox Color="#2093EE" HeightRequest="35" IsChecked="{Binding Selected}"/>
+                                            <CheckBox Color="#2093EE" HeightRequest="35" IsEnabled="False" IsChecked="{Binding Selected}"/>
                                             <Label Text="{Binding Label}" FontSize="15" TextColor="#444444" VerticalOptions="CenterAndExpand"/>
                                         </StackLayout>
                                     </DataTemplate>

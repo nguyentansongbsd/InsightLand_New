@@ -415,7 +415,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </filter>
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectcode' visible='false' link-type='outer' alias='a_9a5e44d019dbeb11bacb002248168cad'>
                                       <attribute name='bsd_name' alias='project_name'/>
-                                      <attribute name='bsd_projectid'/>
+                                      <attribute name='bsd_projectid' alias='project_id'/>
                                     </link-entity>
                                     <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' visible='false' link-type='outer' alias='a_645347ca19dbeb11bacb002248168cad'>
                                         <attribute name='bsd_name' alias='phaseslaunch_name'/>
@@ -453,6 +453,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.Quote.bsd_actualarea = UnitInfor.bsd_actualarea;
             this.Quote._bsd_projectcode_value = UnitInfor._bsd_projectcode_value;
             this.Quote.project_name = UnitInfor.project_name;
+            this.Quote.project_id = UnitInfor.project_id;
             this.Quote.bsd_bookingfee = UnitInfor.bsd_queuingfee;
             this.Quote.bsd_depositfee = UnitInfor.bsd_depositamount;
             this.Quote._bsd_phaseslaunchid_value = UnitInfor._bsd_phaseslaunchid_value;
@@ -686,7 +687,7 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadSalesAgents()
         {
             //Load account co field bsd_businesstypesys la sales agent(100000002)
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='account'>
                                     <attribute name='name' alias='Label'/>
                                     <attribute name='accountid' alias='Val' />
@@ -951,12 +952,12 @@ namespace ConasiCRM.Portable.ViewModels
             if (this.Buyer.Title == "2")
             {
                 data["customerid_contact@odata.bind"] = $"/contacts({this.Buyer.Val})";
-                await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "customerid_account");
+                //await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "customerid_account");
             }
-            else
+            else if (this.Buyer.Title == "3")
             {
                 data["customerid_account@odata.bind"] = $"/accounts({this.Buyer.Val})";
-                await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "customerid_contact");
+                //await CrmHelper.SetNullLookupField("quotes", this.Quote.quoteid, "customerid_contact");
             }
 
             if (UserLogged.Id != Guid.Empty)

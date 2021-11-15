@@ -15,7 +15,7 @@ namespace ConasiCRM.Portable.Views
     public partial class QueuesDetialPage : ContentPage
     {
         public Action<bool> OnCompleted;
-        public static bool? NeedToRefreshBTG=null;
+        public static bool? NeedToRefreshBTG = null;
         public QueuesDetialPageViewModel viewModel;
         public QueuesDetialPage(Guid queueId)
         {
@@ -49,7 +49,7 @@ namespace ConasiCRM.Portable.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            if (NeedToRefreshBTG==true)
+            if (viewModel.BangTinhGiaList != null && NeedToRefreshBTG == true)
             {
                 LoadingHelper.Show();
                 viewModel.BangTinhGiaList.Clear();
@@ -220,7 +220,7 @@ namespace ConasiCRM.Portable.Views
             OptionSet SaleAgentCompany = new OptionSet(viewModel.Queue._bsd_salesagentcompany_value.ToString(), viewModel.Queue.salesagentcompany_name);
             string NameOfStaffAgent = viewModel.Queue.bsd_nameofstaffagent;
 
-            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue, SaleAgentCompany, NameOfStaffAgent,viewModel.Customer);
+            ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue, SaleAgentCompany, NameOfStaffAgent, viewModel.Customer);
             reservationForm.CheckReservation = async (isSuccess) =>
             {
                 if (isSuccess)
@@ -264,7 +264,7 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LoadDanhSachBangTinhGia(),
                     viewModel.LoadDanhSachDatCoc(),
                     viewModel.LoadDanhSachHopDong()
-                    ); 
+                    );
             }
             LoadingHelper.Hide();
         }
@@ -298,7 +298,8 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
-            bangTinhGiaDetail.OnCompleted = async (isSuccess) => {
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
                 if (isSuccess)
                 {
                     await Navigation.PushAsync(bangTinhGiaDetail);

@@ -92,8 +92,14 @@ namespace ConasiCRM.Portable.Views
             {
                 this.Title = "CẬP NHẬT BẢNG TÍNH GIÁ";
                 buttonSave.Text = "CẬP NHẬT BẢNG TÍNH GIÁ";
+                lookupNguoiMua.IsEnabled = false;
+                
+                if (viewModel.Queue == null)
+                {
+                    lblGiuCho.IsVisible = false;
+                    lookupGiuCho.IsVisible = false;
+                }
 
-                SetPreOpen();
                 this.isSetTotal = true;// set = true de khong nhay vao ham SetTotal
                 await Task.WhenAll(
                     viewModel.LoadDiscountChilds(),
@@ -103,6 +109,7 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LoadCoOwners(),
                     viewModel.CheckTaoLichThanhToan()
                     );
+                SetPreOpen();
 
                 if (viewModel.IsHadLichThanhToan == true)
                 {
@@ -134,37 +141,62 @@ namespace ConasiCRM.Portable.Views
 
         private void SetPreOpen()
         {
-            lookupPhuongThucThanhToan.HideClearButton();
-            lookupPhuongThucThanhToan.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadPaymentSchemes();
-                LoadingHelper.Hide();
-            };
-
             lookupDieuKienBanGiao.HideClearButton();
-            lookupDieuKienBanGiao.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadHandoverConditions();
-                LoadingHelper.Hide();
-            };
-
+            lookupPhuongThucThanhToan.HideClearButton();
             lookupChieuKhau.PreOpenOneTime = false;
-            lookupChieuKhau.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                if (viewModel.DiscountLists == null)
-                {
-                    await viewModel.LoadDiscountList();
-                }
 
-                if (viewModel.DiscountLists == null) // dot mo ban khong co chieu khau
+            if (viewModel.IsHadLichThanhToan)
+            {
+                lookupDieuKienBanGiao.PreOpenOneTime = false;
+                lookupPhuongThucThanhToan.PreOpenOneTime = false;
+                lookupChieuKhau.HideClearButton();
+
+                lookupDieuKienBanGiao.PreOpen = () =>
                 {
-                    ToastMessageHelper.ShortMessage("Không có chiết khấu");
-                }
-                LoadingHelper.Hide();
-            };
+                    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                };
+
+                lookupPhuongThucThanhToan.PreOpen = () =>
+                {
+                    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                };
+
+                lookupChieuKhau.PreOpen = () =>
+                {
+                    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                };
+            }
+            else
+            {
+                lookupDieuKienBanGiao.PreOpenAsync = async () =>
+                {
+                    LoadingHelper.Show();
+                    await viewModel.LoadHandoverConditions();
+                    LoadingHelper.Hide();
+                };
+
+                lookupPhuongThucThanhToan.PreOpenAsync = async () =>
+                {
+                    LoadingHelper.Show();
+                    await viewModel.LoadPaymentSchemes();
+                    LoadingHelper.Hide();
+                };
+
+                lookupChieuKhau.PreOpenAsync = async () =>
+                {
+                    LoadingHelper.Show();
+                    if (viewModel.DiscountLists == null)
+                    {
+                        await viewModel.LoadDiscountList();
+                    }
+
+                    if (viewModel.DiscountLists == null) // dot mo ban khong co chieu khau
+                    {
+                        ToastMessageHelper.ShortMessage("Không có chiết khấu");
+                    }
+                    LoadingHelper.Hide();
+                };
+            }
 
             lookupQuanHe.PreOpenAsync = async () =>
             {
@@ -721,6 +753,12 @@ namespace ConasiCRM.Portable.Views
 
         private async void SaveQuote_Clicked(object sender, EventArgs e)
         {
+            if (viewModel.IsHadLichThanhToan == true)
+            {
+                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, Vui lòng xoá lịch thanh toán để cập nhật");
+                return;
+            }
+
             if (viewModel.PaymentScheme == null)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn phương thức thanh toán");
@@ -763,6 +801,8 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Khách hàng Co-Owner và khách hàng không được trùng.");
                 return;
             }
+
+
 
             LoadingHelper.Show();
 
