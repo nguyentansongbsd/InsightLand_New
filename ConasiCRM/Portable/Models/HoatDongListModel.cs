@@ -112,5 +112,24 @@ namespace ConasiCRM.Portable.Models
             get => StringHelper.DateFormat(this.createdon);
         }
 
+        public string statecode_color
+        {
+            get
+            {
+                switch (this.statecode)
+                {
+                    case 0:
+                        return "#06CF79";
+                    case 1:
+                        return "#03ACF5";
+                    case 2:
+                        return "#333333";
+                    case 3:
+                        return "#04A388";
+                    default:
+                        return "#333333";
+                }
+            }
+        }
     }
 }
