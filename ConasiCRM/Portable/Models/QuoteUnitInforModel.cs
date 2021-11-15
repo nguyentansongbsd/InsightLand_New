@@ -14,6 +14,7 @@ namespace ConasiCRM.Portable.Models
         public decimal bsd_netsaleablearea { get; set; }
         public decimal bsd_actualarea { get; set; }
 
+        public Guid project_id { get; set; }
         public string project_name { get; set; }
         public string phaseslaunch_name { get; set; }
         public Guid pricelist_id_phaseslaunch { get; set; }
