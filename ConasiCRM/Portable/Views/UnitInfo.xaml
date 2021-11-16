@@ -76,7 +76,7 @@
             <converter:ReservationStatusCodeConverterColor x:Key="ReservationStatusCodeConverterColor"/>
             <DataTemplate x:Key="Media">
                 <Grid>
-                    <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300"/>
+                    <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.jpg" DownsampleWidth="300"/>
                     <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Meida_Tapped" CommandParameter="{Binding .}"/>
@@ -84,7 +84,7 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="Image">
-                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
+                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.jpg" DownsampleWidth="300">
                     <ffimageloading:CachedImage.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Image_Tapped" CommandParameter="{Binding .}"/>
                     </ffimageloading:CachedImage.GestureRecognizers>

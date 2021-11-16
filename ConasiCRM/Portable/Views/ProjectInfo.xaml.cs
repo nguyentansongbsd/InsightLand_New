@@ -35,9 +35,6 @@ namespace ConasiCRM.Portable.Views
 
         public async void Init()
         {
-            string a = "https://conasivn.sharepoint.com/sites/Conasi/bsd_project/THẢO ĐIỀN GREEN_1F0E1C763DE5EB11BACB00224816626E/bsd_caan.png";
-
-            test.Source = a;
             VisualStateManager.GoToState(radborderThongKe, "Active");
             VisualStateManager.GoToState(radborderThongTin, "InActive");
             VisualStateManager.GoToState(radborderGiuCho, "InActive");
@@ -54,6 +51,8 @@ namespace ConasiCRM.Portable.Views
                 viewModel.LoadThongKeHopDong(),
                 viewModel.LoadThongKeBangTinhGia()
             ) ;
+
+            test.Source = viewModel.Collections[0].ImageSource;
 
             if (viewModel.Project != null)
             {

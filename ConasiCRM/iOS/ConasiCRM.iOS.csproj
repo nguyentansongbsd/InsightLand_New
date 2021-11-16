@@ -107,6 +107,7 @@
     <BundleResource Include="Resources\unit2.jpg" />
     <BundleResource Include="Resources\conasi_logo.png" />
     <BundleResource Include="Resources\user.png" />
+    <BundleResource Include="Resources\image_placeholder.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
