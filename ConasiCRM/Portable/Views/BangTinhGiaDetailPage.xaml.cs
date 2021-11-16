@@ -19,7 +19,8 @@ namespace ConasiCRM.Portable.Views
         private BangTinhGiaDetailPageViewModel viewModel;
         public Action<bool> OnCompleted;
         private Guid ReservationId;
-        public static bool? NeedToRefresh = null;
+        public static bool? NeedToRefresh = null; 
+        public static bool? NeedToRefreshInstallment = null;
 
         public BangTinhGiaDetailPage(Guid id)
         {
@@ -27,6 +28,7 @@ namespace ConasiCRM.Portable.Views
             ReservationId = id;
             BindingContext = viewModel = new BangTinhGiaDetailPageViewModel();
             NeedToRefresh = false;
+            NeedToRefreshInstallment = false;
             Tab_Tapped(1);
             Init();
         }
@@ -66,6 +68,19 @@ namespace ConasiCRM.Portable.Views
                 SetUpButtonGroup();
                 NeedToRefresh = false;
 
+                LoadingHelper.Hide();
+            }
+            if (NeedToRefreshInstallment == true)
+            {
+                LoadingHelper.Show();
+
+                viewModel.ShowInstallmentList = false;
+                viewModel.NumberInstallment = 0;
+                viewModel.InstallmentList.Clear();
+                LoadInstallmentList(ReservationId);                
+                viewModel.ButtonCommandList.Clear();
+                SetUpButtonGroup();
+                NeedToRefreshInstallment = false;
                 LoadingHelper.Hide();
             }
         }
@@ -191,6 +206,10 @@ namespace ConasiCRM.Portable.Views
         {
             if (viewModel.Reservation.statuscode == 100000007)
             {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Xóa Lịch Thanh Toán", "FontAwesomeRegular", "\uf1c3", null, CancelInstallment));
+            }
+            if (viewModel.Reservation.statuscode == 100000007)
+            {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Bảng Tính Giá", "FontAwesomeRegular", "\uf273", null, CancelQuotes));
             }
             if (viewModel.Reservation.statuscode == 100000007)
@@ -220,6 +239,26 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 floatingButtonGroup.IsVisible = false;
+            }
+        }
+
+        private async void CancelInstallment(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                if (await viewModel.DeactiveInstallment())
+                {
+                    NeedToRefreshInstallment = true;
+                    OnAppearing();
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Đã xóa lịch thanh toán");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Xóa lịch thanh toán thất bại. Vui lòng thử lại");
+                }
             }
         }
 
@@ -269,7 +308,7 @@ namespace ConasiCRM.Portable.Views
             string IsSuccess = await viewModel.UpdatePaymentScheme();
             if (IsSuccess == "True")
             {
-                NeedToRefresh = true;
+                NeedToRefreshInstallment = true;
                 OnAppearing();
                 LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage("Tạo lịch thanh toán thành công");
