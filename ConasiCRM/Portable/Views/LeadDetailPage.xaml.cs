@@ -99,6 +99,9 @@ namespace ConasiCRM.Portable.Views
             if (IsSuccessQualify == true)
             {
                 if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
+                if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
+                if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
+                if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                 await viewModel.CreateContact();
                 if(!string.IsNullOrWhiteSpace(viewModel.singleLead.companyname))
                 {
