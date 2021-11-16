@@ -20,17 +20,20 @@ namespace ConasiCRM.Portable.ViewModels
         private string _contactName;
         public string ContactName { get => _contactName; set { _contactName = value; OnPropertyChanged(nameof(ContactName)); } }
 
+        private string _verApp;
+        public string VerApp { get => _verApp; set { _verApp = value; OnPropertyChanged(nameof(VerApp)); } }
+
         public AppShellViewModel()
         {
             LogoutCommand = new Command(Logout);
             UserName = UserLogged.User;
             ContactName = string.IsNullOrWhiteSpace(UserLogged.ContactName) ? UserLogged.User : UserLogged.ContactName;
             Avartar = UserLogged.Avartar;
+            VerApp = Config.OrgConfig.VerApp;
         }
 
         private async void Logout()
         {
-            
             await Shell.Current.Navigation.PushModalAsync(new Login(),false);          
         }
     }

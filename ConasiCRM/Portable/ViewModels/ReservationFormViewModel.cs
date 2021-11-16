@@ -484,6 +484,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_taxcodeid'/>
                                     <attribute name='bsd_value'/>
                                     <order attribute='bsd_name' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_default' operator='eq' value='1' />
+                                    </filter>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaxCodeModel>>("bsd_taxcodes", fetchXml);

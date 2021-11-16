@@ -25,12 +25,16 @@ namespace ConasiCRM.Portable
         private bool _issShowPass = true;
         public bool IsShowPass { get => _issShowPass; set { _issShowPass = value; OnPropertyChanged(nameof(IsShowPass)); } }
 
+        private string _verApp;
+        public string VerApp { get => _verApp; set { _verApp = value; OnPropertyChanged(nameof(VerApp)); } }
+
         public string ImeiNum { get; set; }
         public Login()
         {
             InitializeComponent();
             this.BindingContext = this;
 
+            VerApp = Config.OrgConfig.VerApp;
             if (UserLogged.IsLogged && UserLogged.IsSaveInforUser)
             {
                 checkboxRememberAcc.IsChecked = true;

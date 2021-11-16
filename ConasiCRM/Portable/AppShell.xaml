@@ -147,4 +147,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2f5;" Size="18"/>
         </MenuItem.IconImageSource>
     </MenuItem>
+    <Shell.FlyoutFooter>
+        <Label Text="{Binding VerApp}" TextColor="#444444" FontSize="15" Padding="20,16,10,16"/>
+    </Shell.FlyoutFooter>
 </Shell>

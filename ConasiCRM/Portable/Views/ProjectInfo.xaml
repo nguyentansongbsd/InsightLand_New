@@ -84,7 +84,7 @@
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ItemSlider_Tapped" CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
-                                        <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="500"/>
+                                        <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.jpg" DownsampleWidth="500"/>
                                         <Label Text="&#xf144;" IsVisible="{Binding MediaSource,Converter={StaticResource nullToHideConverter}}" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
                                     </Grid>
                                 </DataTemplate>
