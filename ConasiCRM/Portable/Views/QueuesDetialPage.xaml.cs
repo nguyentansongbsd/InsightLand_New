@@ -203,13 +203,13 @@ namespace ConasiCRM.Portable.Views
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 if (AccountDetailPage.NeedToRefreshQueues.HasValue) AccountDetailPage.NeedToRefreshQueues = true;
                 if (ContactDetailPage.NeedToRefreshQueues.HasValue) ContactDetailPage.NeedToRefreshQueues = true;
-                ToastMessageHelper.ShortMessage("Huỷ giữ chỗ thành công");
+                ToastMessageHelper.ShortMessage("Hủy giữ chỗ thành công");
                 LoadingHelper.Hide();
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Huỷ giữ chỗ thất bại");
+                ToastMessageHelper.ShortMessage("Hủy giữ chỗ thất bại");
             }
         }
 
