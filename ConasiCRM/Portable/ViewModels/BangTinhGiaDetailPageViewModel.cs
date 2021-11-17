@@ -61,7 +61,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='statecode' />
                                     <attribute name='statuscode' />
                                     <attribute name='quoteid' />
-                                    <attribute name='bsd_reservationno' />
+                                    <attribute name='bsd_reservationno' />  
+                                    <attribute name='bsd_quotationnumber' />
                                     <attribute name='quotenumber' />
                                     <attribute name='bsd_numberofmonthspaidmf' />
                                     <attribute name='bsd_waivermanafeemonth' />
@@ -364,6 +365,7 @@ namespace ConasiCRM.Portable.ViewModels
                 <attribute name='bsd_depositamount' />
                 <order attribute='bsd_ordernumber' descending='false' />
                 <filter type='and'>
+                  <condition attribute='statecode' operator='eq' value='0' />
                   <condition attribute='bsd_reservation' operator='eq' uitype='quote' value='{ReservationId}' />
                 </filter>
               </entity>
@@ -452,6 +454,44 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 return "False";
+            }
+        }
+
+        public async Task<bool> DeactiveInstallment()
+        {
+            if (InstallmentList != null && InstallmentList.Count > 0)
+            {
+                int count = 0;
+                foreach (var item in InstallmentList)
+                {
+                    if (item.bsd_paymentschemedetailid != Guid.Empty && await Deactive(item.bsd_paymentschemedetailid))
+                        count++;
+                }
+                if (count == InstallmentList.Count)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+
+        public async Task<bool> Deactive(Guid installmentid)
+        {
+            string path = $"/bsd_paymentschemedetails({installmentid})";
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = 1;
+            data["statuscode"] = 2;
+
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

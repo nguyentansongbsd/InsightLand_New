@@ -20,7 +20,8 @@ namespace ConasiCRM.Portable.Models
         public Guid purchaser_contactid { get; set; } // id khach hang contact
         public string purchaser_contact_name { get; set; } // ten khach hang contact
         public string bsd_reservationno { get; set; } // đặt cọc trang đầu
-        public string quotenumber { get; set; } // bảng tính giá trang đầu
+        public string bsd_quotationnumber { get; set; } // bảng tính giá trang đầu
+        public string quotenumber { get; set; }
         public Guid unit_id { get; set; } // id unit trang đầu
         public string unit_name { get; set; } // tên unit trang đầu
 
@@ -40,7 +41,7 @@ namespace ConasiCRM.Portable.Models
         private string _paymentscheme_name; // tên phương thức thanh toán
         public string paymentscheme_name { get => _paymentscheme_name; set { _paymentscheme_name = value; OnPropertyChanged(nameof(paymentscheme_name)); } }
 
-        // thông tin bán hàng
+        // thông tin bán hàng 
         public Guid queue_id { get; set; } // id đặt chỗ
         public string queue_name { get; set; } // tên đặt chỗ
         public bool bsd_followuplist { get; set; } // danh sách theo dõi

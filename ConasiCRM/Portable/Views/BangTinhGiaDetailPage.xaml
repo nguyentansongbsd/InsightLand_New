@@ -45,7 +45,7 @@
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Bảng tính giá:" FontSize="15" TextColor="#444444"/>
-                                <Label Grid.Column="1" Text="{Binding Reservation.quotenumber}" TextColor="#444444" FontSize="15"/>
+                                <Label Grid.Column="1" Text="{Binding Reservation.bsd_quotationnumber}" TextColor="#444444" FontSize="15"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
@@ -60,8 +60,8 @@
                                 <Label Grid.Column="1" Text="{Binding Reservation.unit_name}" TextColor="#444444" FontSize="15"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
-                                <Label Grid.Column="0" Text="Đặt cọc:" FontSize="15" TextColor="#444444"/>
-                                <Label Grid.Column="1" Text="{Binding Reservation.bsd_reservationno}" TextColor="#444444" FontSize="15"/>
+                                <Label Grid.Column="0" Text="Phí đặt cọc:" FontSize="15" TextColor="#444444"/>
+                                <Label Grid.Column="1" Text="{Binding Reservation.bsd_depositfee, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15"/>
                             </Grid>
                         </StackLayout>
                     </telerikPrimitives:RadBorder>
