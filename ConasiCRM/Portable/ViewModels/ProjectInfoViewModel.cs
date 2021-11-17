@@ -366,12 +366,12 @@ namespace ConasiCRM.Portable.ViewModels
                 var body = await response.Content.ReadAsStringAsync();
                 SharePointFieldResult sharePointFieldResult = JsonConvert.DeserializeObject<SharePointFieldResult>(body);
                 var list = sharePointFieldResult.value;
-                
-                
+
+
             }
             else
             {
-                
+
             }
 
 
@@ -415,10 +415,11 @@ namespace ConasiCRM.Portable.ViewModels
             //    var category_value = "bsd_project";
             //    List<SharePonitModel> list = result.value;
 
-            //    var videos = list.Where(x => x.filetype == "mp4" || x.filetype == "flv" || x.filetype == "m3u8" || x.filetype=="3gp" || x.filetype=="mov" || x.filetype == "avi" || x.filetype == "wmv").ToList();
+            //    var videos = list.Where(x => x.filetype == "mp4" || x.filetype == "flv" || x.filetype == "m3u8" || x.filetype == "3gp" || x.filetype == "mov" || x.filetype == "avi" || x.filetype == "wmv").ToList();
             //    var images = list.Where(x => x.filetype == "jpg" || x.filetype == "jpeg" || x.filetype == "png").ToList();
             //    this.TotalMedia = videos.Count;
             //    this.TotalPhoto = images.Count;
+
             //    //for (int i = 0; i < TotalMedia; i++)
             //    //{
             //    //    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + videos[i].relativelocation + "&access_token=" + UserLogged.AccessTokenSharePoint;
