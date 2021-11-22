@@ -18,7 +18,7 @@ namespace ConasiCRM.Portable.Config
 
         public const string LinkLogin = "https://login.microsoftonline.com/b8ff1d2e-28ba-44e6-bf5b-c96188196711/oauth2/token";
         //public const string Resource = "https://cnssb.crm5.dynamics.com";
-        public const string Resource = "https://conasicrm.crm5.dynamics.com/";
+        public const string Resource = "https://conasi-uat.crm5.dynamics.com/";
         public const string ClientId = "bbdc1207-6048-415a-a21c-02a734872571";
         public const string ClientSecret = "_~~NDM9PVbrSD22Ef-.qRnxioPHcG5xsJ8";
         public const string UserName = "bsddev@conasi.vn";
