@@ -94,7 +94,7 @@ namespace ConasiCRM.Portable.Models
                             quemenh_value = lst_quemenh_gioitinh[1][tmp_quemenh];
                         }
 
-                        image = lst_image[quemenh_value];
+                        image = lst_image[quemenh_value]; 
 
                         var lst_huong_tmp = lst_huong_theo_quemenh[quemenh_value];
                         var huong1 = lst_huong_tmp.IndexOf(0);
@@ -206,7 +206,7 @@ namespace ConasiCRM.Portable.Models
             lst_nguhanhnapam.Add(new ObservableCollection<string>()
             {
                 "Hải Trung Kim - Vàng trong biển",
-                "Lô Trung Hỏa",
+                "Lô Trung Hỏa - Lửa trong lò",
                 "Đại Lâm Mộc - Gỗ trong rừng",
                 "Lộ Bàng Thổ - Đất ven đường",
                 "Kiếm Phong Kim - Sắt đầu kiếm"
@@ -271,7 +271,7 @@ namespace ConasiCRM.Portable.Models
             lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 3,4,7,5,1,2,0,6});
             lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 5,7,4,3,2,1,6,0});
             lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 7,5,3,4,6,0,2,1});
-            lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 4,3,5,7,0,6,1,2});
+            lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 4,3,5,7,0,6,1,2}); 
             lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 2,6,0,1,5,3,7,4});
             lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 6,2,1,0,7,4,5,3});
             lst_huong_theo_quemenh.Add(new ObservableCollection<int>() { 0,1,2,6,4,7,3,5});
