@@ -2,6 +2,7 @@
 using Android.Content;
 using ConasiCRM.Droid.Renderers;
 using ConasiCRM.Portable.Controls;
+using FFImageLoading;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 

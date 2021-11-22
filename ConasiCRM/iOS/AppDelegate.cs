@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using ConasiCRM.Portable.IServices;
+using FFImageLoading;
+using FFImageLoading.Config;
 using FFImageLoading.Forms.Platform;
 using Foundation;
 using MediaManager;

@@ -84,6 +84,7 @@
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
     <Compile Include="Services\UrlEnCodeService.cs" />
     <Compile Include="Services\ThumbnailService.cs" />
+    <Compile Include="Renderers\ImageCustomRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon-60%402x.png" />
