@@ -229,17 +229,20 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task CheckTaoLichThanhToan()
         {
-            string fetchXml = $@"<fetch>
-                                  <entity name='quote'>
-                                    <filter>
-                                      <condition attribute='quoteid' operator='eq' value='{this.QuoteId}'/>
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_paymentschemedetail'>
+                                    <attribute name='bsd_paymentschemedetailid' alias='Val'/>
+                                    <attribute name='bsd_name' alias='Label'/>
+                                    <order attribute='bsd_name' descending='false' />
+                                    <filter type='and'>
+                                      <condition attribute='bsd_reservation' operator='in'>
+                                        <value uitype='quote'>{this.QuoteId}</value>\
+                                      </condition>
+                                      <condition attribute='statecode' operator='eq' value='0' />
                                     </filter>
-                                    <link-entity name='bsd_paymentschemedetail' from='bsd_reservation' to='quoteid'>
-                                      <attribute name='bsd_name' alias='Val'/>
-                                    </link-entity>
                                   </entity>
                                 </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("quotes", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_paymentschemedetails", fetchXml);
             if (result == null) return;
             this.IsHadLichThanhToan = result.value.Count != 0 ? true: false;
         }
