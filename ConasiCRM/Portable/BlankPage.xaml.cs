@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
+using FFImageLoading;
+using FFImageLoading.Config;
 using FFImageLoading.Forms;
 using FormsVideoLibrary;
 using Newtonsoft.Json;
@@ -16,6 +22,23 @@ using Xamarin.Forms;
 
 namespace ConasiCRM.Portable
 {
+    public class AuthenticatedHttpImageClientHandler : HttpClientHandler
+    {
+        private readonly string _getToken;
+
+        public AuthenticatedHttpImageClientHandler(string getToken)
+        {
+            if (getToken == null) throw new ArgumentNullException("getToken");
+            _getToken = getToken;
+        }
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            request.Headers.Add("Authorization", "Bearer " + _getToken);
+            return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
     public partial class BlankPage : ContentPage
     {
         public ViewModel viewModel;
@@ -35,16 +58,49 @@ namespace ConasiCRM.Portable
 
         public async void Init()
         {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='sharepointdocument'>
+                                    <attribute name='documentid' />
+                                    <attribute name='sharepointdocumentid' />
+                                    <attribute name='absoluteurl' />
+                                    <attribute name='fullname' />
+                                    <attribute name='filetype' />
+                                    <attribute name='relativelocation' />
+                                    <attribute name='author' />
+                                    <order attribute='relativelocation' descending='false' />
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='regardingobjectid' link-type='inner' alias='ad'>
+                                      <filter type='and'>
+                                        <condition attribute='bsd_projectid' operator='eq' value='A7ABBBAF-0A2C-EC11-B6E6-000D3A80FA69' />
+                                      </filter>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<SharePonitModel>>("sharepointdocuments", fetchXml);
+
+            List<SharePonitModel> data = result.value;
+
+            HttpClient httpClient = new HttpClient();
+            ImageService.Instance.Initialize(new Configuration
+            {
+                HttpClient = new HttpClient(new AuthenticatedHttpImageClientHandler(UserLogged.AccessTokenSharePoint))
+            });
+
+
+            test.Url = "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"; //data[0].absoluteurl;
+            test.Token = UserLogged.AccessTokenSharePoint;
+
+            //test.Source = ImageService.Instance.LoadUrl(data[0].absoluteurl).Path;
+
+            //ImageService.Instance.Initialize(new Configuration
+            //{
+            //    HttpClient = NetworkHelper.GetAuthenticatedHttpClient(Constants.__IOS__)
+            //});
+            //ImageService.Instance.LoadUrl(url).Into(imageView);
+
+
             //string url = "https://conasivn.sharepoint.com/sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/bsd_project/THẢO ĐIỀN GREEN_1F0E1C763DE5EB11BACB00224816626E/Condotel Ariyana Da Nang.mp4&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCIsImtpZCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCJ9.eyJhdWQiOiJodHRwczovL2NvbmFzaXZuLnNoYXJlcG9pbnQuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYjhmZjFkMmUtMjhiYS00NGU2LWJmNWItYzk2MTg4MTk2NzExLyIsImlhdCI6MTYzNjQyNDcwMiwibmJmIjoxNjM2NDI0NzAyLCJleHAiOjE2MzY0Mjg2MDIsImFjciI6IjEiLCJhaW8iOiJFMlpnWUpBcjhEUjdxU21lcmZ0dmhwM3lMaVhQYXcvak9MY0gzOUQ4L2VtcFFyckk1YThBIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJEeW5hbWljcyAzNjUgRGV2ZWxvcG1lbnQgVG9vbHMiLCJhcHBpZCI6IjJhZDg4Mzk1LWI3N2QtNDU2MS05NDQxLWQwZTQwODI0ZjliYyIsImFwcGlkYWNyIjoiMCIsImdpdmVuX25hbWUiOiJic2QiLCJpZHR5cCI6InVzZXIiLCJpcGFkZHIiOiIxMTYuOTkuMTQwLjk3IiwibmFtZSI6IkNvbmcgdHkgQlNEIiwib2lkIjoiNTkwOWUzZGItZjhhMy00NTA2LWI1OGYtZGE0ODdmZjAxZDBhIiwicHVpZCI6IjEwMDMyMDAwMzcwMDcxMDUiLCJyaCI6IjAuQVQ0QUxoM191TG9vNWtTX1c4bGhpQmxuRVpXRDJDcDl0MkZGbEVIUTVBZ2stYnctQUlRLiIsInNjcCI6InVzZXJfaW1wZXJzb25hdGlvbiIsInNpZCI6IjExMTNkYmM3LTllYzAtNDUxNC05OWZhLWE4YmY3ZjczNTRhZSIsInN1YiI6IkZzaUJTZTFLelhUNmpNTkhScHQ0aGNFczhkZjExNE95MjdzZTdYTDM1SUEiLCJ0aWQiOiJiOGZmMWQyZS0yOGJhLTQ0ZTYtYmY1Yi1jOTYxODgxOTY3MTEiLCJ1bmlxdWVfbmFtZSI6ImJzZGRldkBjb25hc2kudm4iLCJ1cG4iOiJic2RkZXZAY29uYXNpLnZuIiwidXRpIjoiWWJ0VzVPbi1FazJvQm5uZDFVTUVBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il19.pYOUAXeWsVBOsmxQgiam2R3P_0N5L6hrmZOC1lXNm9seToWSQVtKZC4wx2HEqD5ocDGLf3mUp73CZgFCT7XFV4XEhDIeu8Cuh941BspT8iaJqAxIIQV9vsWaTsJVrd5jR9v2I09TmHQr5AQTCeio_86njG6jjmjU7qGLBdo-FTdhoeAiZ8ei4kM5JcXvjAD3h1f4olfdhXkMfdMyS-fqIT62-O15r0bJiPrehs_LYehdggTdJSA13wqY-Q3xCETTz9r7JHNCiK0gh_L54rTX6eQe6FmgmC7zY_kxSLccK4pqdJN8HNTxhgzIbksakkn_b1yZbAOh092Fs3dH6G9JQA";
             //ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(url);
-            
-            var r = 0.98;
-            var R = 1.81;
 
-            var VeTren = (4 * ((4 / 3) * Math.PI * (r * r * r))) + (4 * ((4 / 3) * Math.PI * (R * R * R)));
-
-            var M = VeTren / (((2 * r) + (2 * R)) * ((2 * r) + (2 * R)) * ((2 * r) + (2 * R))) *100;
-            System.Diagnostics.Debug.WriteLine("The tich: " + M);
         }
 
         private async void Meida_Tapped(object sender, EventArgs e)

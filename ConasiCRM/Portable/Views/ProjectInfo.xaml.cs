@@ -52,8 +52,6 @@ namespace ConasiCRM.Portable.Views
                 viewModel.LoadThongKeBangTinhGia()
             ) ;
 
-            test.Source = viewModel.Collections[0].ImageSource;
-
             if (viewModel.Project != null)
             {
                 viewModel.ProjectType = ProjectTypeData.GetProjectType(viewModel.Project.bsd_projecttype);
@@ -225,14 +223,14 @@ namespace ConasiCRM.Portable.Views
 
         private void ScollTo_Video_Tapped(object sender, EventArgs e)
         {
-            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Video));
-            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+            //var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Video));
+            //carouseView.ScrollTo(index, position: ScrollToPosition.End);
         }
 
         private void ScollTo_Image_Tapped(object sender, EventArgs e)
         {
-            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
-            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+            //var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
+            //carouseView.ScrollTo(index, position: ScrollToPosition.End);
         }
     }
 }
