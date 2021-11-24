@@ -84,9 +84,6 @@
                             <controls:FormLabel Text="Quốc gia"/>
                             <controls:LookUp x:Name="lookUpContacAddressCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountryContac}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="ContacAddressCountry_Changed"/>
 
-                            <controls:FormLabel Text="ZIP code"/>
-                            <controls:MainEntry Placeholder="Nhập ZIP code" Text="{Binding AddressPostalCodeContac}"/>
-
                             <controls:FormLabel Text="Tỉnh thành"/>
                             <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvinceContac}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="ContacAddressProvince_Changed"/>
 

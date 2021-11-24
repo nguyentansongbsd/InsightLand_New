@@ -47,7 +47,7 @@ namespace ConasiCRM.Portable
         {
             InitializeComponent();
             //this.BindingContext = this;
-            //this.BindingContext = viewModel = new ViewModel();
+           // this.BindingContext = viewModel = new ViewModel();
             //media1.Source = MediaSource.FromUri("https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/Screen%20-%20CNS%20-%20Figma%202021-07-20%2016-28-24.mp4?alt=media&token=4a31d437-ffe2-4a98-8ac3-e39a6ce57fd3");
             //  media1.Source = MediaSource.FromUri("https://www.deviantart.com/sakimichan/art/Ahri-D-vafied-nsfw-optional-681732764");
             //image.Source = "https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg";
@@ -159,6 +159,47 @@ namespace ConasiCRM.Portable
         {
             var a = mydate;
         }
+
+        private void Image_Pinching(object sender, MR.Gestures.PinchEventArgs e)
+        {
+        }
+
+        private void Image_Swiped(object sender, MR.Gestures.SwipeEventArgs e)
+        {
+
+        }
+
+        private void Image_Up(object sender, MR.Gestures.DownUpEventArgs e)
+        {
+
+        }
+
+        private void Image_Down(object sender, MR.Gestures.DownUpEventArgs e)
+        {
+
+        }
+
+        private void Image_Pinched(object sender, MR.Gestures.PinchEventArgs e)
+        {
+           var a = e.DistanceX;
+            var b = e.DistanceY;
+            var c = e.DeltaScaleX;
+            var d = e.DeltaScaleX;
+            var f = e.DeltaScale;
+            var g = e.Distance;
+            var l = e.TotalScale;
+            var p = e.TotalScaleX;
+            var o = e.TotalScaleY;
+            var t = e.Center;
+        }
+
+        private void ContentView_Swiped(object sender, MR.Gestures.SwipeEventArgs e)
+        {
+            if (img.Scale == 1)
+            {
+
+            }
+        }
     }
     public class CategoricalData
     {
@@ -178,13 +219,13 @@ namespace ConasiCRM.Portable
 
         public ViewModel()
         {
-            this.Data = new ObservableCollection<CollectionData>();
-            this.Data = GetCollectionData();
-            OnComplate = true;
-            photoBrowser = new PhotoBrowser
-            {
-                Photos = Photos,
-            };
+            //this.Data = new ObservableCollection<CollectionData>();
+            //this.Data = GetCollectionData();
+            //OnComplate = true;
+            //photoBrowser = new PhotoBrowser
+            //{
+            //    Photos = Photos,
+            //};
         }
         private ObservableCollection<CollectionData> GetCollectionData()
         {

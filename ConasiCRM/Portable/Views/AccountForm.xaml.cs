@@ -284,11 +284,6 @@ namespace ConasiCRM.Portable.Views
                 viewModel.AddressLine1Contac = viewModel.singleAccount.bsd_housenumberstreet;
             }
 
-            if (viewModel.AddressPostalCodeContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_postalcode))
-            {
-                viewModel.AddressPostalCodeContac = viewModel.singleAccount.bsd_postalcode;
-            }
-
             if (viewModel.AddressCountryContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.country_name))
             {
                 viewModel.AddressCountryContac = await viewModel.LoadCountryByName(viewModel.singleAccount.country_name);
@@ -367,16 +362,6 @@ namespace ConasiCRM.Portable.Views
                 viewModel.singleAccount._bsd_province_value = null;
             }
 
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                viewModel.singleAccount.bsd_postalcode = viewModel.AddressPostalCodeContac;
-                address.Add(viewModel.AddressPostalCodeContac);
-            }
-            else
-            {
-                viewModel.singleAccount.bsd_postalcode = null;
-            }
-
             if (viewModel.AddressCountryContac != null)
             {
                 viewModel.singleAccount.country_name = viewModel.AddressCountryContac.Name;
@@ -403,10 +388,6 @@ namespace ConasiCRM.Portable.Views
             if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvinceContac?.Detail))
             {
                 addressEn.Add(viewModel.AddressStateProvinceContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                addressEn.Add(viewModel.AddressPostalCodeContac);
             }
             if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryContac?.Detail))
             {

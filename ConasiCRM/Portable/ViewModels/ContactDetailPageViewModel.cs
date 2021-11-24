@@ -68,6 +68,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         private bool _showCMND;
         public bool ShowCMND { get => _showCMND; set { _showCMND = value; OnPropertyChanged(nameof(ShowCMND)); } }
+        public ObservableCollection<PhotoCMND> CollectionCMNDs { get; set; } = new ObservableCollection<PhotoCMND>();
         public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; } = new ObservableCollection<FloatButtonItem>();
         public ContactDetailPageViewModel()
         {
@@ -123,7 +124,9 @@ namespace ConasiCRM.Portable.ViewModels
                 if (front_result.IsSuccessStatusCode)
                 {
                     ShowCMND = true;
-                    frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
+                    singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
+                    CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_mattruoccmnd_source });
+                  //  frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
                 }
 
                 var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
@@ -132,7 +135,10 @@ namespace ConasiCRM.Portable.ViewModels
                 if (behind_result.IsSuccessStatusCode)
                 {
                     ShowCMND = true;
-                    behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
+                    var abc = behind_result.Content.ReadAsByteArrayAsync().Result;
+                    singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
+                    CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_matsaucmnd_source });
+                    // behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
                 }
             }
         }

@@ -85,9 +85,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        private string _addressPostalCode;
-        public string AddressPostalCode { get => _addressPostalCode; set { _addressPostalCode = value; OnPropertyChanged(nameof(AddressPostalCode)); } }
-
         private LookUp _addressStateProvince;
         public LookUp AddressStateProvince
         {
@@ -229,7 +226,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["address1_line1"] = singleLead.address1_line1;
             data["address1_city"] = singleLead.address1_city;
             data["address1_stateorprovince"] = singleLead.address1_stateorprovince;
-            data["address1_postalcode"] = singleLead.address1_postalcode;
+           // data["address1_postalcode"] = singleLead.address1_postalcode;
             data["address1_country"] = singleLead.address1_country;
             data["description"] = singleLead.description;
             data["industrycode"] = singleLead.industrycode;
