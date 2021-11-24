@@ -14,40 +14,14 @@
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
     x:Class="ConasiCRM.Portable.BlankPage">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <DataTemplate x:Key="Media">
-                <Grid>
-                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" MediaOpened="MediaElement_MediaOpened" MediaFailed="MediaElement_MediaFailed"/>
-                    <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
-                    <Image Source="image_placeholder.png" Aspect="AspectFill" IsVisible="{Binding Path= BindingContext.OnComplate, Source={x:Reference carouselView}}"/>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Meida_Tapped" CommandParameter="{Binding .}"/>
-                    </Grid.GestureRecognizers>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="Image">
-                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png" DownsampleWidth="300">
-                    <ffimageloading:CachedImage.GestureRecognizers>
-                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Image_Tapped" CommandParameter="{Binding .}"/>
-                    </ffimageloading:CachedImage.GestureRecognizers>
-                </ffimageloading:CachedImage>
-            </DataTemplate>
-            <helper:CollectionDataTemplateSelector x:Key="ItemTemplate" Media="{StaticResource Media}" Image="{StaticResource Image}"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+    
     <ContentPage.Content>
         <AbsoluteLayout>
-            <telerikInput:RadDateTimePicker  Margin="0,100,0,0"/>
-            <DatePicker Margin="0,200,0,0"/>
-            <!--<CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>-->
 
-            <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Margin="0,100,0,0">
-                
-                <controls:DatePickerControl Date="{Binding mydate}" Placeholder="song song"/>
-                <Button Text="test" Clicked="Button_Clicked_1"/>
-            </StackLayout>-->
-            <!--<controls:DatePickerBorder Date="{Binding mydate}"  HorizontalOptions="Center" />-->
+            <StackLayout Margin="0,200,0,0">
+                <!--<ffimageloading:CachedImage x:Name="test" HeightRequest="100" WidthRequest="100" LoadingPlaceholder="image_placeholder.jpg"/>-->
+                <controls:ImageControl x:Name="test"  HeightRequest="100" WidthRequest="100" BackgroundColor="Red"/>
+            </StackLayout>
 
             <!--<Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>-->
             <mr:ContentView Swiped="ContentView_Swiped" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsVisible="true">

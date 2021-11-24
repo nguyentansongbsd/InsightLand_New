@@ -12,6 +12,9 @@ using ConasiCRM.Droid;
 using Xamarin.Forms;
 using ConasiCRM.Portable.IServices;
 using MediaManager;
+using FFImageLoading;
+using Android.Content.Res;
+using ConasiCRM.Portable;
 
 namespace ConasiCRM.Android
 {
@@ -27,8 +30,10 @@ namespace ConasiCRM.Android
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Stormlion.PhotoBrowser.Droid.Platform.Init(this);
             CrossMediaManager.Current.Init(this);
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
             LoadApplication(new Portable.App());
             DependencyService.Get<ILoadingService>().Initilize();
         }

@@ -22,7 +22,7 @@ namespace ConasiCRM.Portable.ViewModels
         public List<Photo> Photos;
         public PhotoBrowser photoBrowser;
 
-        private bool _showCollections = true;
+        private bool _showCollections = false;
         public bool ShowCollections { get => _showCollections; set { _showCollections = value; OnPropertyChanged(nameof(ShowCollections)); } }
 
         private int _totalMedia;
@@ -501,6 +501,7 @@ namespace ConasiCRM.Portable.ViewModels
             //        Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, SharePointType = SharePointType.Image, Index = TotalMedia });
             //    }
             //}
+
         }
     }
 }

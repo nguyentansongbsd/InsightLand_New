@@ -50,7 +50,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.SalesAgent = saleAgentCompany;
                 lookupDaiLySanGiaoDich.IsEnabled = false;
             }
-            if (string.IsNullOrWhiteSpace(nameOfStaffAgent))
+            if (!string.IsNullOrWhiteSpace(nameOfStaffAgent))
             {
                 viewModel.Quote.bsd_nameofstaffagent = nameOfStaffAgent;
                 entryNhanVienDaiLy.IsEnabled = false;
@@ -322,6 +322,8 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
             var item = (DiscountChildOptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item.IsExpired == true || item.IsNotApplied == true) return;
+
             item.Selected = !item.Selected;
             await viewModel.SetTotalDiscount();
             isSetTotal = false;

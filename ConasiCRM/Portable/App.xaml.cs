@@ -18,7 +18,6 @@ namespace ConasiCRM.Portable
             InitializeComponent();
             CrossMediaManager.Current.Init();
             MainPage = new Login();
-            //MainPage = new BlankPage();
         }
 
 
