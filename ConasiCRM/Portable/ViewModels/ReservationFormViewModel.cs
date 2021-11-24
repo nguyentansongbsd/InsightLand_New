@@ -463,10 +463,13 @@ namespace ConasiCRM.Portable.ViewModels
             this.Quote.phaseslaunch_name = UnitInfor.phaseslaunch_name;
             this.Quote.bsd_detailamount = UnitInfor.price;
             this.Quote.bsd_numberofmonthspaidmf = UnitInfor.bsd_numberofmonthspaidmf;
-            this.Quote.bsd_managementfee = UnitInfor.bsd_managementamountmonth;
+            //this.Quote.bsd_managementfee = UnitInfor.bsd_managementamountmonth;
             this.Quote.bsd_unitstatus = UnitInfor.statuscode;
             this.Quote.pricelist_phaselaunch_id = Guid.Parse(PriceListPhasesLaunch.Val);
             this.Quote.pricelist_apply_id = Guid.Parse(PriceListApply.Val);
+            
+            this.Quote.bsd_managementfee = this.UnitInfor.bsd_managementamountmonth * this.UnitInfor.bsd_actualarea * this.UnitInfor.bsd_numberofmonthspaidmf * (decimal)1.1;
+
             this.UnitType = UnitInfor._bsd_unittype_value;
 
             this.UnitPrice = this.UnitInfor.price;
@@ -604,6 +607,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_amount'/>
                                     <attribute name='bsd_percentage'/>
                                     <attribute name='new_type'/>
+                                    <attribute name='bsd_startdate'/>
+                                    <attribute name='bsd_enddate'/>
+                                    <attribute name='createdon'/>
                                     <order attribute='bsd_name' descending='false' />
                                     <link-entity name='bsd_bsd_discounttype_bsd_discount' from='bsd_discountid' to='bsd_discountid' visible='false' intersect='true'>
                                       <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discounttypeid' alias='ab'>
@@ -834,6 +840,9 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_name"] = coOwner.bsd_name;
             data["bsd_relationship"] = coOwner.bsd_relationshipId;
             data["bsd_reservation@odata.bind"] = $"quotes({this.Quote.quoteid})";
+
+            data["bsd_project@odata.bind"] = $"/bsd_projects({this.Quote.project_id})";
+            data["bsd_units@odata.bind"] = $"/products({this.Quote.unit_id})";
 
             if (this.CustomerCoOwner.Title == "2")
             {
