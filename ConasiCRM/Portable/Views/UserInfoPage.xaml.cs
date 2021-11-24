@@ -155,7 +155,7 @@ namespace ConasiCRM.Portable.Views
             if (isSuccess)
             {
                 await centerModelPassword.Hide();
-                //UserLogged.Password = viewModel.ConfirmNewPassword;
+                UserLogged.Password = viewModel.ConfirmNewPassword;
                 ToastMessageHelper.ShortMessage("Đổi mật khẩu thành công");
                 LoadingHelper.Hide();
             }
