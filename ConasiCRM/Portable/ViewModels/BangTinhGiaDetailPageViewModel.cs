@@ -363,6 +363,8 @@ namespace ConasiCRM.Portable.ViewModels
                 <attribute name='bsd_amountofthisphase' />
                 <attribute name='bsd_amountwaspaid' />
                 <attribute name='bsd_depositamount' />
+                <attribute name='bsd_ordernumber' />
+                <attribute name='bsd_amountpercent' />
                 <order attribute='bsd_ordernumber' descending='false' />
                 <filter type='and'>
                   <condition attribute='statecode' operator='eq' value='0' />
@@ -459,6 +461,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> DeactiveInstallment()
         {
+            if (InstallmentList == null || InstallmentList.Count == 0)
+                await LoadInstallmentList(Reservation.quoteid);
+
             if (InstallmentList != null && InstallmentList.Count > 0)
             {
                 int count = 0;
@@ -471,9 +476,11 @@ namespace ConasiCRM.Portable.ViewModels
                     return true;
                 else
                     return false;
-            }
+            } 
             else
+            {
                 return false;
+            }    
         }
 
         public async Task<bool> Deactive(Guid installmentid)

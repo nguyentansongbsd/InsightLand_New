@@ -26,6 +26,7 @@ namespace ConasiCRM.Portable.Views
         private ContactDetailPageViewModel viewModel;
         private Guid Id;
         private PhotoBrowser photoBrowser;
+        PhotoShow photoShow;
         public ContactDetailPage(Guid contactId)
         {
             InitializeComponent();
@@ -141,42 +142,51 @@ namespace ConasiCRM.Portable.Views
                 {
                     viewModel.SingleLocalization = null;
                 }
+                photoShow = new PhotoShow(viewModel.CollectionCMNDs);
                 LoadingHelper.Hide();
             }
         }
 
         private void CMNDFront_Tapped(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(viewModel.frontImage))
+            if(viewModel.singleContact.bsd_mattruoccmnd_source != null)
             {
-                photoBrowser = new PhotoBrowser
-                {
-                    Photos = new List<Photo>
-                {
-                    new Photo{
-                        URL = viewModel.frontImage
-                    }
-                }
-                };
-                photoBrowser.Show();
-            }
+                photoShow.Show(this,0);
+            }    
+            //if (!string.IsNullOrWhiteSpace(viewModel.frontImage))
+            //{
+            //    photoBrowser = new PhotoBrowser
+            //    {
+            //        Photos = new List<Photo>
+            //    {
+            //        new Photo{
+            //            URL = viewModel.frontImage
+            //        }
+            //    }
+            //    };
+            //    photoBrowser.Show();
+            //}
         }
 
         private void CMNDBehind_Tapped(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(viewModel.behindImage))
+            if (viewModel.singleContact.bsd_matsaucmnd_source != null)
             {
-                photoBrowser = new PhotoBrowser
-                {
-                    Photos = new List<Photo>
-                {
-                    new Photo{
-                        URL = viewModel.behindImage
-                    }
-                }
-                };
-                photoBrowser.Show();
+                photoShow.Show(this, 1);
             }
+            //if (!string.IsNullOrWhiteSpace(viewModel.behindImage))
+            //{
+            //    photoBrowser = new PhotoBrowser
+            //    {
+            //        Photos = new List<Photo>
+            //    {
+            //        new Photo{
+            //            URL = viewModel.behindImage
+            //        }
+            //    }
+            //    };
+            //    photoBrowser.Show();
+            //}
         }
 
         #region Tab giao dich

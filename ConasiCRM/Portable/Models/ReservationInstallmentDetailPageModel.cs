@@ -25,5 +25,23 @@ namespace ConasiCRM.Portable.Models
                     return bsd_depositamount.ToString();
             }
         }
+
+        public int bsd_ordernumber { get; set; } // đợt
+        public decimal bsd_amountpercent { get; set; }  // phần trăm thah toán
+
+        public string bsd_name_format
+        {
+            get
+            {
+                string name = "";
+                //if (!string.IsNullOrWhiteSpace(bsd_name))
+                //    name += bsd_name;
+                if (bsd_ordernumber != 0)
+                    name += $" Đợt {bsd_ordernumber}";
+                if (bsd_amountpercent != 0)
+                    name += string.Format(" - {0:#,0}%", bsd_amountpercent);
+                return name;
+            }
+        }
     }
 }

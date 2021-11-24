@@ -116,7 +116,8 @@ namespace ConasiCRM.Portable.Helper
                 {
                     var body = await response.Content.ReadAsStringAsync();
                     var a = body.Replace(@"\", "");
-                    string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
+                    // string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
+                    string a1 = a.Replace(@"https://conasi-uat.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
                     string a2 = a1.Substring(0, a1.Length - 2);
                     var api_Response = JsonConvert.DeserializeObject<T>(a2);
                     return api_Response;

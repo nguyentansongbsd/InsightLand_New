@@ -95,6 +95,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         public int PageListGiuCho = 1;
 
+        private ImageSource _ImageSource;
+        public ImageSource ImageSource { get => _ImageSource; set { _ImageSource = value; OnPropertyChanged(nameof(ImageSource)); } }
+
         public ProjectInfoViewModel()
         {
             ListGiuCho = new ObservableCollection<QueuesModel>();
@@ -138,6 +141,7 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectInfoModel>>("bsd_projects", FetchXml);
             if (result == null || result.value.Any() == false) return;
             Project = result.value.FirstOrDefault();
+            await LoadAllCollection();
         }
 
         public async Task CheckEvent()
@@ -350,33 +354,82 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadAllCollection()
         {
-            var Folder = ProjectName.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
-            var Category = "Project";
-            var category_value = "bsd_project";
-
-            var client = BsdHttpClient.Instance();
-            string fileListUrl = $"{OrgConfig.SharePointResource}/sites/" + OrgConfig.SharePointSiteName + "/_api/web/Lists/GetByTitle('" + Category + "')/RootFolder/Folders('" + Folder + "')/Files";
-            var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserLogged.AccessTokenSharePoint);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            if (ProjectId != null && Project != null && !string.IsNullOrWhiteSpace(Project.bsd_name))
             {
-                var body = await response.Content.ReadAsStringAsync();
-                SharePointFieldResult sharePointFieldResult = JsonConvert.DeserializeObject<SharePointFieldResult>(body);
-                var list = sharePointFieldResult.value;
+                var Folder = Project.bsd_name.Replace('.', '-') + "_" + ProjectId.ToString().Replace("-", string.Empty).ToUpper();
+                var Category = "Project";
+                var category_value = "bsd_project";
 
+                GetTokenResponse getTokenResponse = await CrmHelper.getSharePointToken();
+                var client = BsdHttpClient.Instance();
+                string fileListUrl = $"{OrgConfig.SharePointResource}/sites/" + OrgConfig.SharePointSiteName + "/_api/web/Lists/GetByTitle('" + Category + "')/RootFolder/Folders('" + Folder + "')/Files";
+                var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
 
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", getTokenResponse.access_token);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    TotalMedia = 0;
+                    TotalPhoto = 0;
+                    var body = await response.Content.ReadAsStringAsync();
+                    SharePointFieldResult sharePointFieldResult = JsonConvert.DeserializeObject<SharePointFieldResult>(body);
+                    var list = sharePointFieldResult.value;
+                    foreach (var item in list)
+                    {
+                        var names = item.Name.ToLower().Split('.');
+                        string type_item = names[names.Count() - 1];
+                        if (type_item == "flv" || type_item == "mp4" || type_item == "m3u8" || type_item == "3gp" || type_item == "mov" || type_item == "avi" || type_item == "wmv")
+                        {
+                            var soure = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "')/$value");
+                            var result = await client.SendAsync(soure);
+                            if (result.IsSuccessStatusCode)
+                            {
+                                var abc = result.Content.ReadAsByteArrayAsync().Result;
+                                var imageSource = Convert.ToBase64String(result.Content.ReadAsByteArrayAsync().Result);
+
+                                ImageSource = ImageSource.FromStream(() => new System.IO.MemoryStream(abc));
+                                Collections.Add(new CollectionData { MediaSource = null, SharePointType = SharePointType.Image, ImageSourceBase64 = imageSource, Index = TotalPhoto });
+                                TotalPhoto++;
+                            }
+                            //var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "&access_token=" + getTokenResponse.access_token;
+                            //if (Device.RuntimePlatform == Device.iOS)
+                            //{
+                            //    soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                            //}
+                            //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
+                            //var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
+                            //ImageSource imageSource = image.ToImageSource();
+                            //Collections.Add(new CollectionData { MediaSource = soucre, PosterMediaSource = imageSource, ImageSource = null, Index = TotalMedia });
+                           // TotalMedia++;
+                        }
+                        else if (type_item == "jpg" || type_item == "jpeg" || type_item == "png")
+                        {
+                            var soure = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "')/$value");
+                            var url = OrgConfig.SharePointResource
+                            + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + Folder + "/" + item.Name + "')/$value";
+                            var result = await client.SendAsync(soure);
+                            if (result.IsSuccessStatusCode)
+                            {
+                                var abc = result.Content.ReadAsByteArrayAsync().Result;
+                                var imageSource = Convert.ToBase64String(result.Content.ReadAsByteArrayAsync().Result);
+                                Collections.Add(new CollectionData { MediaSource = null, SharePointType = SharePointType.Image, ImageSourceBase64 = imageSource ,Index = TotalPhoto});
+                                TotalPhoto++;
+                            }
+                        }
+                    }
+                }
+                if (Collections != null && Collections.Count > 0)
+                {
+                    ShowCollections = true;
+                }
+                else
+                {
+                    ShowCollections = false;
+                }
             }
-            else
-            {
-
-            }
-
-
-
-
 
             //if (ProjectId != null)
             //{

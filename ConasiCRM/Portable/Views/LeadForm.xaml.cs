@@ -55,7 +55,6 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.AddressComposite = viewModel.singleLead.address1_composite;
                 viewModel.AddressLine1 = viewModel.singleLead.address1_line1;
-                viewModel.AddressPostalCode = viewModel.singleLead.address1_postalcode;
 
                 viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
                 viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
@@ -291,12 +290,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.AddressStateProvince != null)
             {
                 address.Add(viewModel.AddressStateProvince.Name);
-            }
-
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCode))
-            {
-                address.Add(viewModel.AddressPostalCode);
-            }
+            }           
 
             if (viewModel.AddressCountry != null)
             {
@@ -312,13 +306,11 @@ namespace ConasiCRM.Portable.Views
             viewModel.AddressComposite = null;
             viewModel.AddressLine1 = null;
             viewModel.AddressCity = null;
-            viewModel.AddressPostalCode = null;
             viewModel.AddressStateProvince = null;
             viewModel.AddressCountry = null;
 
             viewModel.singleLead.address1_line1 = null;
             viewModel.singleLead.address1_city = null;
-            viewModel.singleLead.address1_postalcode = null;
             viewModel.singleLead.address1_stateorprovince = null;
             viewModel.singleLead.address1_country = null;
             viewModel.singleLead.address1_composite = null;
@@ -357,7 +349,6 @@ namespace ConasiCRM.Portable.Views
             viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
 
             viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
-            viewModel.singleLead.address1_postalcode = viewModel.AddressPostalCode;
             viewModel.singleLead.address1_composite = viewModel.AddressComposite;
 
             viewModel.singleLead.industrycode = viewModel.IndustryCode != null ? viewModel.IndustryCode.Val : null;

@@ -49,9 +49,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        private string _addressPostalCodeContac;
-        public string AddressPostalCodeContac { get => _addressPostalCodeContac; set { _addressPostalCodeContac = value; OnPropertyChanged(nameof(AddressPostalCodeContac)); } }
-
         private LookUp _addressStateProvinceContac;
         public LookUp AddressStateProvinceContac
         {
@@ -298,7 +295,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_housenumberstreet"] = contact.bsd_housenumberstreet;
             data["bsd_contactaddress"] = contact.bsd_contactaddress;
             data["bsd_diachi"] = contact.bsd_diachi;
-            data["bsd_postalcode"] = contact.bsd_postalcode;
+          //  data["bsd_postalcode"] = contact.bsd_postalcode;
             data["bsd_housenumber"] = contact.bsd_housenumberstreet;
 
             data["bsd_permanentaddress1"] = contact.bsd_permanentaddress1;

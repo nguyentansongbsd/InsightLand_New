@@ -17,46 +17,66 @@ namespace ConasiCRM.Portable.Controls
     {
         public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(ObservableCollection<PhotoCMND>), typeof(LookUp), null, BindingMode.TwoWay, null);
         public ObservableCollection<PhotoCMND> ItemsSource { get => (ObservableCollection<PhotoCMND>)GetValue(ItemsSourceProperty); set { SetValue(ItemsSourceProperty, value); } }
+        private int index { get; set; } = 0;
 
-        public PhotoShow(ObservableCollection<PhotoCMND> list_image, int i)
+        public PhotoShow(ObservableCollection<PhotoCMND> list_image)
         {
             InitializeComponent();
             this.BindingContext = this;
             if(list_image != null && list_image.Count>0)
             {
                 ItemsSource = list_image;
-                if (i >= 0 && i < ItemsSource.Count)
-                    carousel.ScrollTo(i);
             }
         }    
 
-        public async void Show(Page view)
+        public async void Show(Page view, int i)
         {
             if (ItemsSource != null)
             {
                 await view.Navigation.PushModalAsync(this);
+                if (ItemsSource != null && ItemsSource.Count > 0)
+                {
+                    if (i >= 0 && i < ItemsSource.Count)
+                    //carousel.ScrollTo(i);
+                    {
+                        image.Source = ItemsSource[i].ImageSoure;
+                        index = i;
+                    }
+                }
             }
         }
 
-        private void PinchZoomImage_OnZoom(object sender, EventArgs e)
+        private async void Hide_Tapped(object sender, EventArgs e)
         {
-            carousel.IsSwipeEnabled = false;
+            await Navigation.PopModalAsync();
         }
 
-        private void PinchZoomImage_OutZoom(object sender, EventArgs e)
+        private void Image_Swiped(object sender, MR.Gestures.SwipeEventArgs e)
         {
-            carousel.IsSwipeEnabled = true;
+            if (ItemsSource != null && image.Scale == 1)
+            {
+                if(e.Direction == MR.Gestures.Direction.Left)
+                {
+                    ScrollTo(index - 1);
+                }
+                else if (e.Direction == MR.Gestures.Direction.Left)
+                {
+                    ScrollTo(index + 1);
+                }
+               var  a = ((int)e.Direction);
+            }
         }
 
-        // chưa sử dụng được
-        //private async void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
-        //{
-        //    FFImageLoading.Forms.CachedImage cachedImage = sender as FFImageLoading.Forms.CachedImage;
-        //    if (cachedImage.Scale == 1)
-        //    {
-        //        await carousel.TranslateTo(0, 100, 10);
-        //        await Navigation.PopModalAsync();
-        //    }
-        //}
+        private void ScrollTo(int i)
+        {
+            if(ItemsSource!= null)
+            {
+                if(0 >= i && i <= ItemsSource.Count)
+                {
+                    image.Source = ItemsSource[i].ImageSoure;
+                    index = i;
+                }
+            }
+        }
     } 
 }

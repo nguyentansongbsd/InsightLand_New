@@ -52,7 +52,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.LoadThongKeBangTinhGia()
             ) ;
 
-            test.Source = viewModel.Collections[0].ImageSource;
+            //test.Source = viewModel.Collections[0].ImageSource;
 
             if (viewModel.Project != null)
             {

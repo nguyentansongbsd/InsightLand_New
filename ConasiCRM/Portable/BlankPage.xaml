@@ -10,7 +10,9 @@
     xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
     xmlns:telerikprim="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
     xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
-    xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper" 
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
     x:Class="ConasiCRM.Portable.BlankPage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -48,6 +50,12 @@
             <!--<controls:DatePickerBorder Date="{Binding mydate}"  HorizontalOptions="Center" />-->
 
             <!--<Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>-->
+            <mr:ContentView Swiped="ContentView_Swiped" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsVisible="true">
+                <controls:PinchZoomImage>
+                    <Image x:Name="img" Source="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg"/>
+                </controls:PinchZoomImage>
+            </mr:ContentView>
+            <mr:Image IsVisible="false" Source="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg" Pinching="Image_Pinching" Swiped="Image_Swiped" Pinched="Image_Pinched" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Up="Image_Up" Down="Image_Down"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
