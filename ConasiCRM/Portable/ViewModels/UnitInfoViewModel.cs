@@ -139,7 +139,7 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<UnitInfoModel>>("products", fetchXml);
             if (result == null || result.value.Count == 0) return;
             UnitInfo = result.value.FirstOrDefault();
-            await LoadAllCollection();
+            //await LoadAllCollection();
         }
 
         public async Task LoadQueues()
