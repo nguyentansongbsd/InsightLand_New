@@ -9,6 +9,9 @@ namespace ConasiCRM.Portable.Models
         public DateTime? bsd_startdate { get; set; }
         public DateTime? bsd_enddate { get; set; }
         public DateTime createdon { get; set; }
+
+        public bool IsEnableChecked { get; set; }
+
         private string _itemColor = "#444444";
         public string ItemColor { get => _itemColor; set { _itemColor = value; OnPropertyChanged(nameof(ItemColor)); } }
         public bool IsExpired

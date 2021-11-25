@@ -93,21 +93,24 @@ namespace ConasiCRM.Portable.Views
                 this.Title = "CẬP NHẬT BẢNG TÍNH GIÁ";
                 buttonSave.Text = "CẬP NHẬT BẢNG TÍNH GIÁ";
                 lookupNguoiMua.IsEnabled = false;
-                
+                lookupGiuCho.IsEnabled = false;
+                lookupDaiLySanGiaoDich.IsEnabled = false;
+                entryNhanVienDaiLy.IsEnabled = false;
+
                 if (viewModel.Queue == null)
-                {
+                { 
                     lblGiuCho.IsVisible = false;
                     lookupGiuCho.IsVisible = false;
                 }
 
                 this.isSetTotal = true;// set = true de khong nhay vao ham SetTotal
+                await viewModel.CheckTaoLichThanhToan();
                 await Task.WhenAll(
                     viewModel.LoadDiscountChilds(),
                     viewModel.LoadHandoverCondition(),
                     viewModel.LoadPromotionsSelected(),
                     viewModel.LoadPromotions(),
-                    viewModel.LoadCoOwners(),
-                    viewModel.CheckTaoLichThanhToan()
+                    viewModel.LoadCoOwners()
                     );
                 SetPreOpen();
 

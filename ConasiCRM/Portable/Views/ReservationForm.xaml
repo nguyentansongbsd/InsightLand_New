@@ -132,7 +132,7 @@
                                             <StackLayout.GestureRecognizers>
                                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiscountChildItem_Tapped" CommandParameter="{Binding .}"/>
                                             </StackLayout.GestureRecognizers>
-                                            <CheckBox Color="#2093EE" HeightRequest="35" IsEnabled="False" IsChecked="{Binding Selected}"/>
+                                            <CheckBox Color="#2093EE" HeightRequest="35" IsEnabled="{Binding IsEnableChecked}" IsChecked="{Binding Selected}"/>
                                             <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="5">
                                                 <Label Text="{Binding Label}" FontSize="15" TextColor="{Binding ItemColor}" VerticalOptions="CenterAndExpand"/>
                                                 <Label Text="(Hết hạn)" TextColor="{Binding ItemColor}" IsVisible="{Binding IsExpired}" FontSize="15" VerticalOptions="CenterAndExpand"/>

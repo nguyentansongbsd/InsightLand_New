@@ -625,6 +625,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var item in result.value)
             {
+                item.IsEnableChecked = this.IsHadLichThanhToan == true ? false : true;
                 this.DiscountChilds.Add(item);
             }
         }
