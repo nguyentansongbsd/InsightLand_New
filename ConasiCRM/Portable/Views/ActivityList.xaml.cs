@@ -443,5 +443,123 @@ namespace ConasiCRM.Portable.Views
 
             LoadingHelper.Hide();
         }
+
+        private void PhoneCallTo_Tapped(object sender, EventArgs e)
+        {
+            if(viewModel.PhoneCall != null)
+            {
+                if(viewModel.PhoneCall.lead_id != Guid.Empty)
+                {
+                    LeadDetailPage newPage = new LeadDetailPage(viewModel.PhoneCall.lead_id);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                        }
+                    };
+
+                }  else if(viewModel.PhoneCall.contact_id != Guid.Empty)
+                {
+                    ContactDetailPage newPage = new ContactDetailPage(viewModel.PhoneCall.contact_id);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+
+                }   else if(viewModel.PhoneCall.account_id != Guid.Empty)
+                {
+                    AccountDetailPage newPage = new AccountDetailPage(viewModel.PhoneCall.account_id);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }    
+            }    
+        }
+
+        private void TaskCustomer_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.Task != null)
+            {
+                if (viewModel.Task.lead_id != Guid.Empty)
+                {
+                    LeadDetailPage newPage = new LeadDetailPage(viewModel.Task.lead_id);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                        }
+                    };
+
+                }
+                else if (viewModel.Task.contact_id != Guid.Empty)
+                {
+                    ContactDetailPage newPage = new ContactDetailPage(viewModel.Task.contact_id);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+
+                }
+                else if (viewModel.Task.account_id != Guid.Empty)
+                {
+                    AccountDetailPage newPage = new AccountDetailPage(viewModel.Task.account_id);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+            }
+        }
     }
 }
