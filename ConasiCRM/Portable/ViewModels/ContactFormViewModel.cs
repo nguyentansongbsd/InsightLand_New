@@ -276,7 +276,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["lastname"] = contact.bsd_fullname;
             data["bsd_fullname"] = contact.bsd_fullname;
             data["emailaddress1"] = contact.emailaddress1;
-            data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToLocalTime()).ToString("yyyy-MM-dd") : null;
+            data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToUniversalTime()).ToString("yyyy-MM-dd") : null;
             data["mobilephone"] = contact.mobilephone;
             data["gendercode"] = contact.gendercode;
             if (checkCMND != contact.bsd_identitycardnumber)

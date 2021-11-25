@@ -336,7 +336,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["mobilephone"] = singleLead.mobilephone;          
             data["bsd_jobtitlevn"] = singleLead.jobtitle;
             data["telephone1"] = singleLead.telephone1;
-             data["birthdate"] = singleLead.new_birthday.HasValue ? (DateTime.Parse(singleLead.new_birthday.ToString()).ToLocalTime()).ToString("yyyy-MM-dd") : null;
+             data["birthdate"] = singleLead.new_birthday.HasValue ? (DateTime.Parse(singleLead.new_birthday.ToString()).ToUniversalTime()).ToString("yyyy-MM-dd") : null;
             data["gendercode"] = singleLead.new_gender;
 
             if (UserLogged.Id != null)
