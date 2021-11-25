@@ -42,13 +42,6 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private async void NewMenu_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new AccountForm());
-            LoadingHelper.Hide();
-        }
-
         private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             QueuesModel val = e.Item as QueuesModel;

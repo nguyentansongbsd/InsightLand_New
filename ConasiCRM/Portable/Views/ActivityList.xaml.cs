@@ -57,7 +57,7 @@ namespace ConasiCRM.Portable.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            if (viewModel.Data != null && NeedToRefreshPhoneCall == true)
+            if (viewModel.Data != null && NeedToRefreshPhoneCall == true && viewModel.entity == "phonecall")
             {
                 LoadingHelper.Show();
                 viewModel.EntityName = "phonecalls";
@@ -71,7 +71,7 @@ namespace ConasiCRM.Portable.Views
                 NeedToRefreshPhoneCall = false;
                 LoadingHelper.Hide();
             }
-            if (viewModel.Data != null && NeedToRefreshMeet == true)
+            if (viewModel.Data != null && NeedToRefreshMeet == true && viewModel.entity == "appointment")
             {
                 LoadingHelper.Show();
                 viewModel.EntityName = "appointments";
@@ -86,7 +86,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
 
-            if (viewModel.Data != null && NeedToRefreshTask == true)
+            if (viewModel.Data != null && NeedToRefreshTask == true && viewModel.entity == "task")
             {
                 LoadingHelper.Show();
                 viewModel.EntityName = "tasks";

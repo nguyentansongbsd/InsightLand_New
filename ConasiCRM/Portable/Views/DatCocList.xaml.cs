@@ -33,7 +33,7 @@ namespace ConasiCRM.Portable.Views
         {
             ReservationListModel val = e.Item as ReservationListModel;
             LoadingHelper.Show();
-            BangTinhGiaDetailPage newPage = new BangTinhGiaDetailPage(val.quoteid);
+            BangTinhGiaDetailPage newPage = new BangTinhGiaDetailPage(val.quoteid) { Title = "Đặt cọc" };
             newPage.OnCompleted = async (OnCompleted) =>
             {
                 if (OnCompleted == true)
