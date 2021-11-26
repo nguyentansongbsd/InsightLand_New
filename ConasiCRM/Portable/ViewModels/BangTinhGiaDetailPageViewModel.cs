@@ -116,6 +116,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='outer' alias='ac'>
                                         <attribute name='bsd_name' alias='project_name'/>
                                         <attribute name='bsd_projectid' alias='project_id' />
+                                        <attribute name='bsd_quotationvalidatetime' alias='quotationvalidate'/>
                                     </link-entity>
                                     <link-entity name='pricelevel' from='pricelevelid' to='pricelevelid' link-type='outer' alias='ad'>
                                         <attribute name='pricelevelid' alias='pricelevel_id_apply'/>
@@ -393,6 +394,40 @@ namespace ConasiCRM.Portable.ViewModels
         }
         #endregion
 
+        public async Task<bool> ConfirmSinging()
+        {
+            string path = $"/quotes({Reservation.quoteid})";
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["bsd_quotationprinteddate"] = DateTime.Now.ToUniversalTime();
+            data["bsd_expireddateofsigningqf"] = DateTime.Now.AddDays(this.Reservation.quotationvalidate).ToUniversalTime();
+
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SignQuotation()
+        {
+            var data = new{};
+            var apiResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})//Microsoft.Dynamics.CRM.bsd_Action_QuotationReservation_ConvertToReservation", data);
+
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> UpdateQuotes(string option)
         {
             string path = $"/quotes({Reservation.quoteid})";
@@ -403,16 +438,12 @@ namespace ConasiCRM.Portable.ViewModels
                 data["statecode"] = Reservation.statecode;
                 data["statuscode"] = Reservation.statuscode;
             }
-            if (option == UpdateQuotation)
-            {
-                data["statecode"] = Reservation.statecode;
-                data["statuscode"] = Reservation.statuscode;
-                data["bsd_quotationsigneddate"] = Reservation.bsd_quotationsigneddate.Value.ToUniversalTime(); ;
-            }
+            
             if (option == ConfirmReservation)
             {
                 data["bsd_reservationuploadeddate"] = Reservation.bsd_reservationuploadeddate.Value.ToUniversalTime(); ;
             }
+
             if (option == UpdateReservation)
             {
                 data["bsd_reservationformstatus"] = Reservation.bsd_reservationformstatus;

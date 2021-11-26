@@ -14,7 +14,7 @@ namespace ConasiCRM.Portable.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ReservationForm : ContentPage
     {
-        public Action<bool> CheckReservation;
+        public Action<int> CheckReservation;
         public ReservationFormViewModel viewModel;
         private bool isSetTotal;
         private List<string> newSelectedPromotionIds;
@@ -70,6 +70,11 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadUnitInfor();
             if (viewModel.UnitInfor != null)
             {
+                if (viewModel.UnitInfor.statuscode == "100000006") // 100000006 :  Reserve
+                {
+                    CheckReservation?.Invoke(1);
+                    return;
+                }
                 if (viewModel.Queue != null)
                 {
                     lookupGiuCho.IsEnabled = false;
@@ -77,11 +82,11 @@ namespace ConasiCRM.Portable.Views
                 }
                 await viewModel.LoadTaxCode();
                 SetPreOpen();
-                CheckReservation?.Invoke(true);
+                CheckReservation?.Invoke(0);
             }
             else
             {
-                CheckReservation?.Invoke(false);
+                CheckReservation?.Invoke(2);
             }
         }
 
@@ -134,11 +139,11 @@ namespace ConasiCRM.Portable.Views
                         }
                     }
                 }
-                this.CheckReservation?.Invoke(true);
+                this.CheckReservation?.Invoke(0);
             }
             else
             {
-                this.CheckReservation?.Invoke(false);
+                this.CheckReservation?.Invoke(2);
             }
         }
 

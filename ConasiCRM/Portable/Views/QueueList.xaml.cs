@@ -1,20 +1,9 @@
-﻿using ConasiCRM.Portable.Config;
-using ConasiCRM.Portable.Helper;
-using ConasiCRM.Portable.Helpers;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Telerik.XamarinForms.Common;
-using Telerik.XamarinForms.DataGrid;
-using Telerik.XamarinForms.DataGrid.Commands;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

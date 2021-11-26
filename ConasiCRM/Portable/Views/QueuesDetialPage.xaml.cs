@@ -223,10 +223,15 @@ namespace ConasiCRM.Portable.Views
             ReservationForm reservationForm = new ReservationForm(viewModel.Queue._bsd_units_value, Queue, SaleAgentCompany, NameOfStaffAgent, viewModel.Customer);
             reservationForm.CheckReservation = async (isSuccess) =>
             {
-                if (isSuccess)
+                if (isSuccess == 0)
                 {
                     await Navigation.PushAsync(reservationForm);
                     LoadingHelper.Hide();
+                }
+                else if (isSuccess == 1)
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Sản phẩm đang ở trạng thái Reserve không thể tạo bảng tính giá");
                 }
                 else
                 {
