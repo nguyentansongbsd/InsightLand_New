@@ -206,15 +206,10 @@ namespace ConasiCRM.Portable.Views
         {
             if (viewModel.Reservation.statuscode == 100000007)
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Xóa Lịch Thanh Toán", "FontAwesomeRegular", "\uf1c3", null, CancelInstallment));
-            }
-            if (viewModel.Reservation.statuscode == 100000007)
-            {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Bảng Tính Giá", "FontAwesomeRegular", "\uf273", null, CancelQuotes));
-            }
-            if (viewModel.Reservation.statuscode == 100000007)
-            {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Cập Nhật Bảng Tính Giá", "FontAwesomeRegular", "\uf044", null, EditQuotes));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Bảng Tính Giá", "FontAwesomeRegular", "\uf273", null, CancelQuotes));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Xác nhận in", "FontAwesomeSolid", "\uf02f", null, ConfirmSigning));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Xóa Lịch Thanh Toán", "FontAwesomeRegular", "\uf1c3", null, CancelInstallment));
             }
             if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate == null && viewModel.Reservation.bsd_quotationsigneddate == null)
             {
@@ -222,7 +217,7 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate != null && viewModel.Reservation.bsd_quotationsigneddate == null)
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, CompletedQuotation));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, SignQuotationClicked));
             }
             if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_reservationuploadeddate == null && viewModel.Reservation.bsd_rfsigneddate == null)
             {
@@ -262,6 +257,21 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
+        private async void ConfirmSigning(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            bool isSuccess = await viewModel.ConfirmSinging();
+            if (isSuccess)
+            {
+                ToastMessageHelper.ShortMessage("Xác nhận in thành công");
+            }
+            else
+            {
+                ToastMessageHelper.ShortMessage("Xác nhận in thất bại");
+            }
+            LoadingHelper.Hide();
+        }
+
         private async void ConfirmReservation(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -289,10 +299,15 @@ namespace ConasiCRM.Portable.Views
             ReservationForm reservation = new ReservationForm(this.ReservationId);
             reservation.CheckReservation = async (isSuccess) =>
             {
-                if (isSuccess)
+                if (isSuccess == 0)
                 {
                     await Navigation.PushAsync(reservation);
                     LoadingHelper.Hide();
+                }
+                else if (isSuccess == 1)
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Sản phẩm đang ở trạng thái Reserve không thể tạo bảng tính giá");
                 }
                 else
                 {
@@ -361,15 +376,12 @@ namespace ConasiCRM.Portable.Views
             }
         }
 
-        private async void CompletedQuotation(object sender, EventArgs e)
+        private async void SignQuotationClicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             if (viewModel.Reservation.quoteid != Guid.Empty)
             {
-                viewModel.Reservation.statecode = 0;
-                viewModel.Reservation.statuscode = 100000000;
-                viewModel.Reservation.bsd_quotationsigneddate = DateTime.Now;
-                if (await viewModel.UpdateQuotes(viewModel.UpdateQuotation))
+                if (await viewModel.SignQuotation())
                 {
                     NeedToRefresh = true;
                     OnAppearing();
@@ -387,8 +399,8 @@ namespace ConasiCRM.Portable.Views
         private async void CancelQuotes(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            string options = await DisplayActionSheet("Hủy Bảng Tính Giá", "Không", "Có", "Xác nhận hủy bảng tính giá");
-            if (options == "Có")
+            string options = await DisplayActionSheet("Hủy Bảng Tính Giá", "Đóng", null, "Xác nhận hủy bảng tính giá");
+            if (options == "Xác nhận hủy bảng tính giá")
             {
                 viewModel.Reservation.statecode = 3;
                 viewModel.Reservation.statuscode = 6;
@@ -405,10 +417,7 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Hủy bảng tính giá thất bại. Vui lòng thử lại");
                 }
             }
-            else if (options == "Không")
-            {
-                LoadingHelper.Hide();
-            }
+            LoadingHelper.Hide();
         }
 
         private Grid SetUpItem(string content)

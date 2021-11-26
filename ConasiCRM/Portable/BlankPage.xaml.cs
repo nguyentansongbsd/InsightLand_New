@@ -58,36 +58,45 @@ namespace ConasiCRM.Portable
 
         public async void Init()
         {
-            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='sharepointdocument'>
-                                    <attribute name='documentid' />
-                                    <attribute name='sharepointdocumentid' />
-                                    <attribute name='absoluteurl' />
-                                    <attribute name='fullname' />
-                                    <attribute name='filetype' />
-                                    <attribute name='relativelocation' />
-                                    <attribute name='author' />
-                                    <order attribute='relativelocation' descending='false' />
-                                    <link-entity name='bsd_project' from='bsd_projectid' to='regardingobjectid' link-type='inner' alias='ad'>
-                                      <filter type='and'>
-                                        <condition attribute='bsd_projectid' operator='eq' value='A7ABBBAF-0A2C-EC11-B6E6-000D3A80FA69' />
-                                      </filter>
-                                    </link-entity>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<SharePonitModel>>("sharepointdocuments", fetchXml);
+            DateTime a = new DateTime(2021, 11, 11);
+            DateTime now = DateTime.Now;
 
-            List<SharePonitModel> data = result.value;
+            TimeSpan time = now - a;
 
-            HttpClient httpClient = new HttpClient();
-            ImageService.Instance.Initialize(new Configuration
-            {
-                HttpClient = new HttpClient(new AuthenticatedHttpImageClientHandler(UserLogged.AccessTokenSharePoint))
-            });
+            
+
+            System.Diagnostics.Debug.WriteLine("aksjdfhasdf: " +time.Days);
+
+            //string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            //                      <entity name='sharepointdocument'>
+            //                        <attribute name='documentid' />
+            //                        <attribute name='sharepointdocumentid' />
+            //                        <attribute name='absoluteurl' />
+            //                        <attribute name='fullname' />
+            //                        <attribute name='filetype' />
+            //                        <attribute name='relativelocation' />
+            //                        <attribute name='author' />
+            //                        <order attribute='relativelocation' descending='false' />
+            //                        <link-entity name='bsd_project' from='bsd_projectid' to='regardingobjectid' link-type='inner' alias='ad'>
+            //                          <filter type='and'>
+            //                            <condition attribute='bsd_projectid' operator='eq' value='A7ABBBAF-0A2C-EC11-B6E6-000D3A80FA69' />
+            //                          </filter>
+            //                        </link-entity>
+            //                      </entity>
+            //                    </fetch>";
+            //var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<SharePonitModel>>("sharepointdocuments", fetchXml);
+
+            //List<SharePonitModel> data = result.value;
+
+            //HttpClient httpClient = new HttpClient();
+            //ImageService.Instance.Initialize(new Configuration
+            //{
+            //    HttpClient = new HttpClient(new AuthenticatedHttpImageClientHandler(UserLogged.AccessTokenSharePoint))
+            //});
 
 
-            test.Url = "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"; //data[0].absoluteurl;
-            test.Token = UserLogged.AccessTokenSharePoint;
+            //test.Url = "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"; //data[0].absoluteurl;
+            //test.Token = UserLogged.AccessTokenSharePoint;
 
             //test.Source = ImageService.Instance.LoadUrl(data[0].absoluteurl).Path;
 

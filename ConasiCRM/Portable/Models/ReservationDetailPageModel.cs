@@ -56,6 +56,7 @@ namespace ConasiCRM.Portable.Models
         // thông tin chi tiết
         public Guid project_id { get; set; } // id dự án
         public string project_name { get; set; } // tên dự án
+        public int quotationvalidate { get; set; }
         public Guid phaseslaunch_id { get; set; } // id đợt mở bán
         public string phaseslaunch_name { get; set; } // tên đợt mở bán
         public Guid pricelevel_id_phaseslaunch { get; set; } // id bảng giá đmb

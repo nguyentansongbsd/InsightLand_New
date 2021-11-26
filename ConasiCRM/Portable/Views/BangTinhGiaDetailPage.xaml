@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
              ios:Page.UseSafeArea="true"
              x:Class="ConasiCRM.Portable.Views.BangTinhGiaDetailPage"
-             Title="Đặt Cọc"
+             Title="Bảng tính giá"
              x:Name="this">
     <ContentPage.Resources>
         <Style x:Key="ExpanderHeaderStyle" TargetType="telerikPrimitives:ExpanderHeader">
