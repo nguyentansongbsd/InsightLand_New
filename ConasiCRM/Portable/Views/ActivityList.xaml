@@ -207,7 +207,11 @@
 
                                     <controls:FormLabel Text="Gọi đến" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="2"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="2" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding PhoneCall.call_to}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding PhoneCall.call_to}" FontSize="14" TextColor="#2196F3" HorizontalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="PhoneCallTo_Tapped"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Số điện thoại" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="3"/>
@@ -242,7 +246,11 @@
 
                                     <controls:FormLabel Text="Người liên quan" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="1"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="1" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding Task.Customer.Name}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding Task.Customer.Name}" FontSize="14" TextColor="#2196F3" HorizontalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TaskCustomer_Tapped"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Thời gian bắt đầu" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="2"/>
