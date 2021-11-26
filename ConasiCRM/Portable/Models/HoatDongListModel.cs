@@ -65,11 +65,11 @@ namespace ConasiCRM.Portable.Models
                 switch (this.statecode)
                 {
                     case 0:
-                        return "Open";
+                        return "Đang Mở";
                     case 1:
-                        return "Completed";
+                        return "Hoàn Thành";
                     case 2:
-                        return "Canceled";
+                        return "Đã hủy";
                     case 3:
                         return "Scheduled";
                     default:
@@ -119,13 +119,13 @@ namespace ConasiCRM.Portable.Models
                 switch (this.statecode)
                 {
                     case 0:
-                        return "#06CF79";
+                        return "#06CF79"; // open
                     case 1:
-                        return "#03ACF5";
+                        return "#03ACF5"; //com
                     case 2:
-                        return "#333333";
+                        return "#333333"; //can
                     case 3:
-                        return "#04A388";
+                        return "#04A388"; //sha
                     default:
                         return "#333333";
                 }

@@ -16,10 +16,10 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<StatusCodeModel>()
             {
-                new StatusCodeModel("1","Hoàn Thành","#06CF79"),
-                new StatusCodeModel("0","Đang Mở","#03ACF5"),
-                new StatusCodeModel("2","Đã hủy","#FA7901"),
-        //        new StatusCodeModel("3","Scheduled","#FA7901"),
+                new StatusCodeModel("1","Hoàn Thành","#03ACF5"),
+                new StatusCodeModel("0","Đang Mở","#06CF79"),
+                new StatusCodeModel("2","Đã hủy","#333333"),
+                new StatusCodeModel("3","Scheduled","#04A388"),
             };
         }
     }

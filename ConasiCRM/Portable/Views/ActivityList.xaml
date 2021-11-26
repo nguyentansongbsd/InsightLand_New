@@ -150,7 +150,12 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
-                                    <Label Text="{Binding subject}" FontAttributes="Bold" FontSize="16" TextColor="#026294" Grid.Row="0"/>
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
+                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statecode_color}" VerticalOptions="Start">
+                                            <Label Grid.Column="0" Text="{Binding statecode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                        </telerikPrimitives:RadBorder>
+                                        <Label Grid.Column="1" Text="{Binding subject}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                         <Label Text="Khách hàng: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding regarding_name}" TextColor="#444444" FontSize="15" Grid.Column="1"/>

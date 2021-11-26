@@ -126,7 +126,7 @@ namespace ConasiCRM.Portable.ViewModels
                     ShowCMND = true;
                     singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
                     CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_mattruoccmnd_source });
-                  //  frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
+                    frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
                 }
 
                 var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
@@ -326,18 +326,22 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadActiviy(Guid contactID, string entity, string entitys)
         {
             string fetch = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='true'>
-                                  <entity name='{entity}'>
-                                    <attribute name='activitytypecode' />
+                                <entity name='{entity}'>
                                     <attribute name='subject' />
                                     <attribute name='statecode' />
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
-                                    <attribute name='scheduledend' />
+                                    <attribute name='scheduledend' /> 
+                                    <attribute name='activitytypecode' /> 
                                     <order attribute='modifiedon' descending='true' />
                                     <filter type='and'>
-                                      <condition attribute='regardingobjectid' operator='eq' value='{contactID}' />
-                                      <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                        <filter type='or'>
+                                            <condition entityname='party' attribute='partyid' operator='eq' value='{contactID}'/>
+                                            <condition attribute='regardingobjectid' operator='eq' value='{contactID}' />
+                                        </filter>
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='party'/>
                                     <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
                                         <attribute name='bsd_name' alias='accounts_bsd_name'/>
                                     </link-entity>
@@ -347,8 +351,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
                                         <attribute name='fullname' alias='lead_fullname'/>
                                     </link-entity>
-                                  </entity>
-                                </fetch>";
+                                </entity>
+                            </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>(entitys, fetch);
             if (result != null || result.value.Count > 0)
