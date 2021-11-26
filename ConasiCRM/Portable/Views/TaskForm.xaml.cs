@@ -56,7 +56,16 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadTask();
             if (viewModel.TaskFormModel != null)
             {
-                viewModel.Title = "Cập Nhật Công Việc";
+                if(viewModel.TaskFormModel.statecode == 1)
+                {
+                    viewModel.Title = "Chi Tiết Công Việc";
+                    btnSave.IsVisible = false;
+                }    
+                else
+                {
+                    viewModel.Title = "Cập Nhật Công Việc";
+                    btnSave.IsVisible = true;
+                }    
                 btnSave.Text = "Cập nhật công việc";
                 CheckTaskForm?.Invoke(true);
             }

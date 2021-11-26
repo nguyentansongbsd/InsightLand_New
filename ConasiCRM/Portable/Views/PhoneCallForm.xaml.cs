@@ -61,11 +61,21 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
-            this.Title = "Cập nhật cuộc gọi";
             BtnSave.Text = "Cập nhật";
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadPhoneCall(this.PhoneCallId);
             await viewModel.loadFromTo(this.PhoneCallId);
+            if (viewModel.PhoneCellModel != null && viewModel.PhoneCellModel.statecode == 1)
+            {
+                this.Title = "Chi Tiết cuộc gọi";
+                BtnSave.IsVisible = false;
+            }
+            else
+            {
+                this.Title = "Cập nhật cuộc gọi";
+                BtnSave.IsVisible = true;
+            }
+
             if (viewModel.PhoneCellModel.activityid != Guid.Empty)
             {
                 OnCompleted?.Invoke(true);
