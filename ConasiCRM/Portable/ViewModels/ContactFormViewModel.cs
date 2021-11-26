@@ -274,9 +274,10 @@ namespace ConasiCRM.Portable.ViewModels
             IDictionary<string, object> data = new Dictionary<string, object>();
             data["contactid"] = contact.contactid;
             data["lastname"] = contact.bsd_fullname;
+            data["firstname"] = "";
             data["bsd_fullname"] = contact.bsd_fullname;
             data["emailaddress1"] = contact.emailaddress1;
-            data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToLocalTime()).ToString("yyyy-MM-dd") : null;
+            data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToUniversalTime()).ToString("yyyy-MM-dd") : null;
             data["mobilephone"] = contact.mobilephone;
             data["gendercode"] = contact.gendercode;
             if (checkCMND != contact.bsd_identitycardnumber)

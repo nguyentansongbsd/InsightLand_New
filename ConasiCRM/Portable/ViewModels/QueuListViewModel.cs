@@ -71,6 +71,7 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_queuenumber' />
                         <attribute name='bsd_queuingexpired' />
                         <attribute name='createdon' />
+                        <order attribute='bsd_bookingtime' descending='true' />
                         <filter type='and'>                          
                             <filter type='or'>
                                 <condition attribute='name' operator='like' value='%25{Keyword}%25' />
@@ -78,6 +79,13 @@ namespace ConasiCRM.Portable.ViewModels
                                 <condition attribute='bsd_queuenumber' operator='like' value='%25{Keyword}%25' />
                                 <condition attribute='bsd_unitsname' operator='like' value='%25{Keyword}%25' /> 
                             </filter>
+                        <condition attribute='statuscode' operator='in'>
+                            <value>4</value>
+                            <value>100000004</value>
+                            <value>100000003</value>
+                            <value>100000000</value>
+                            <value>100000002</value>
+                          </condition>
                           <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
                           "+ status + @"
                             " + project + @"
@@ -98,7 +106,7 @@ namespace ConasiCRM.Portable.ViewModels
             if (FiltersStatus != null && FiltersStatus.Count == 0)
             {
                 FiltersStatus.Add(new OptionSet("-1", "Tất cả"));
-                var list = QueuesStatusCodeData.GetQueuesData();
+                var list = QueuesStatusCodeData.GetQueuesByIds("4,100000000,100000002,100000003,100000004");
                 foreach (var item in list)
                 {
                     FiltersStatus.Add(new OptionSet(item.Id, item.Name));

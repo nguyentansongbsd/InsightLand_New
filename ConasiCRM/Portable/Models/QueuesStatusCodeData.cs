@@ -10,6 +10,16 @@ namespace ConasiCRM.Portable.Models
         {
             return GetQueuesData().SingleOrDefault(x => x.Id == id);
         }
+        public static List<QueuesStatusCodeModel> GetQueuesByIds(string ids)
+        {
+            List<QueuesStatusCodeModel> listQueue = new List<QueuesStatusCodeModel>();
+            string[] Ids = ids.Split(',');
+            foreach (var item in Ids)
+            {
+                listQueue.Add(GetQueuesById(item));
+            }
+            return listQueue;
+        }
         public static List<QueuesStatusCodeModel> GetQueuesData()
         {
             return new List<QueuesStatusCodeModel>()
