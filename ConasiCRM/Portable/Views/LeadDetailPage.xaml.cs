@@ -160,23 +160,23 @@ namespace ConasiCRM.Portable.Views
         private async void LeadDisQualify(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            string[] options = new string[] { "Lost", "Cannot Contact", "No Longer Interested", "Canceled" };
+            string[] options = new string[] { "Mất khách hàng", "Không liên hệ được", "Không quan tâm", "Đã hủy" };
             
             string aws = await DisplayActionSheet("Tuỳ chọn", "Huỷ", null, options);
 
-            if (aws == "Lost")
+            if (aws == "Mất khách hàng")
             {
                 viewModel.LeadStatusCode = 4;
             }
-            else if (aws == "Cannot Contact")
+            else if (aws == "Không liên hệ được")
             {
                 viewModel.LeadStatusCode = 5;
             }
-            else if (aws == "No Longer Interested")
+            else if (aws == "Không quan tâm")
             {
                 viewModel.LeadStatusCode = 6;
             }
-            else if (aws == "Canceled")
+            else if (aws == "Đã hủy")
             {
                 viewModel.LeadStatusCode = 7;
             }

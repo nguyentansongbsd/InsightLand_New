@@ -10,16 +10,16 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("1","Advertisement"),
-                new OptionSet("2","Employee Referral"),
-                new OptionSet("3","External Referral"),
-                new OptionSet("4","Partner"),
-                new OptionSet("5","Public Relations"),
-                new OptionSet("6","Seminar"),
-                new OptionSet("7","Trade Show"),
-                new OptionSet("8","Web"),
-                new OptionSet("9","Word of Mouth"),
-                new OptionSet("10","Other"),
+                new OptionSet("1","Quảng cáo"),
+                new OptionSet("2","Nhân viên giới thiệu"),
+                new OptionSet("3","Giới thiệu bên ngoài"),
+                new OptionSet("4","Đối tác"),
+                new OptionSet("5","Quan hệ công chúng"),
+                new OptionSet("6","Hội thảo"),
+                new OptionSet("7","Triển lãm thương mại"),
+                new OptionSet("8","Trang Web"),
+                new OptionSet("9","Truyền miệng"),
+                new OptionSet("10","Khác"),
             };
         }
 

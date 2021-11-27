@@ -60,8 +60,8 @@
                                 <controls:FormLabel Text="Ngày sinh"/>
                                 <controls:DatePickerControl x:Name="datePickerNgaySinh" Date="{Binding singleLead.new_birthday}" Placeholder="Chọn ngày sinh" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
 
-                                <controls:FormLabel Text="Lead source"/>
-                                <controls:LookUp x:Name="lookUpLeadSource" Placeholder="Chọn Lead source" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding LeadSource}" ItemsSource="{Binding LeadSources}"/>
+                                <controls:FormLabel Text="Nguồn khách hàng"/>
+                                <controls:LookUp x:Name="lookUpLeadSource" Placeholder="Chọn nguồn khách hàng" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding LeadSource}" ItemsSource="{Binding LeadSources}"/>
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>

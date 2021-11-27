@@ -11,14 +11,14 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("1", "In Progress"),
-                new OptionSet("2", "On Hold"),
-                new OptionSet("3", "Waiting for Details"),
-                new OptionSet("4", "Researching"),
-                new OptionSet("5", "Problem Solved"),
-                new OptionSet("1000", "Information Provided"),
-                new OptionSet("6", "Canceled"),
-                new OptionSet("2000", "Merged"),
+                new OptionSet("1", "Đang xử lý"),
+                new OptionSet("2", "Đang chờ"),
+                new OptionSet("3", "Đang chờ thông tin chi tiết"),
+                new OptionSet("4", "Nghiên cứu"),
+                new OptionSet("5", "Vấn đề đã được giải quyết"),
+                new OptionSet("1000", "Cung cấp thông tin"),
+                new OptionSet("6", "Đã hủy"),
+                new OptionSet("2000", "Hợp nhất"),
                  new OptionSet("0", "")
 
             };
