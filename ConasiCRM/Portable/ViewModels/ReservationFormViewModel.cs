@@ -478,7 +478,6 @@ namespace ConasiCRM.Portable.ViewModels
             this.UnitMaintenanceFee = this.UnitInfor.bsd_maintenancefeespercent;
             this.PhasesLaunchId = this.UnitInfor._bsd_phaseslaunchid_value;
 
-
             SetLandValueDeduction();
         }
 
