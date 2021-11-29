@@ -70,16 +70,7 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadTask();
             if (viewModel.TaskFormModel != null)
             {
-                if(viewModel.TaskFormModel.statecode == 1)
-                {
-                    viewModel.Title = "Chi Tiết Công Việc";
-                    btnSave.IsVisible = false;
-                }    
-                else
-                {
-                    viewModel.Title = "Cập Nhật Công Việc";
-                    btnSave.IsVisible = true;
-                }    
+                viewModel.Title = "Cập Nhật Công Việc";
                 btnSave.Text = "Cập nhật công việc";
                 CheckTaskForm?.Invoke(true);
             }
@@ -168,6 +159,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+                    if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Tạo công việc thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -188,6 +180,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+                    if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Cập nhật công việc thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();

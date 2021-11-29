@@ -65,17 +65,7 @@ namespace ConasiCRM.Portable.Views
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadPhoneCall(this.PhoneCallId);
             await viewModel.loadFromTo(this.PhoneCallId);
-            if (viewModel.PhoneCellModel != null && viewModel.PhoneCellModel.statecode == 1)
-            {
-                this.Title = "Chi Tiết cuộc gọi";
-                BtnSave.IsVisible = false;
-            }
-            else
-            {
-                this.Title = "Cập nhật cuộc gọi";
-                BtnSave.IsVisible = true;
-            }
-
+            this.Title = "Cập nhật cuộc gọi";
             if (viewModel.PhoneCellModel.activityid != Guid.Empty)
             {
                 OnCompleted?.Invoke(true);
@@ -132,6 +122,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+                    if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Đã thêm cuộc gọi");                   
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -151,6 +142,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+                    if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Cập nhật thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();

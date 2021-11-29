@@ -20,7 +20,7 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(Filter), null, BindingMode.TwoWay, propertyChanged: ItemChanged);
         public object SelectedItem { get => (object)GetValue(SelectedItemProperty); set { SetValue(SelectedItemProperty, value); } }
 
-        public static readonly BindableProperty SelectedIdsProperty = BindableProperty.Create(nameof(SelectedIds), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemChanged);
+        public static readonly BindableProperty SelectedIdsProperty = BindableProperty.Create(nameof(SelectedIds), typeof(List<string>), typeof(Filter), null, BindingMode.TwoWay, null, propertyChanged: ItemChanged);
         public List<string> SelectedIds { get => (List<string>)GetValue(SelectedIdsProperty); set { SetValue(SelectedIdsProperty, value); } }
 
         public static readonly BindableProperty NameDipslayProperty = BindableProperty.Create(nameof(SelectedItem), typeof(string), typeof(Filter), null, BindingMode.OneWay);

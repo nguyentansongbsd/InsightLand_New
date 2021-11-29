@@ -18,14 +18,14 @@ namespace ConasiCRM.Portable.ViewModels
         private List<Block> _blocks;
         public List<Block> Blocks { get => _blocks; set { _blocks = value; OnPropertyChanged(nameof(Blocks)); } }
 
-        private List<OptionSet> _directionOptions;
-        public List<OptionSet> DirectionOptions { get=>_directionOptions; set { _directionOptions = value;OnPropertyChanged(nameof(DirectionOptions)); } }
+        private List<OptionSetFilter> _directionOptions;
+        public List<OptionSetFilter> DirectionOptions { get=>_directionOptions; set { _directionOptions = value;OnPropertyChanged(nameof(DirectionOptions)); } }
 
         private List<string> _selectedDirections;
         public List<string> SelectedDirections { get => _selectedDirections; set { _selectedDirections = value; OnPropertyChanged(nameof(SelectedDirections)); } }
 
-        private List<OptionSet> _unitStatusOptions;
-        public List<OptionSet> UnitStatusOptions { get=>_unitStatusOptions; set { _unitStatusOptions = value;OnPropertyChanged(nameof(UnitStatusOptions)); } }
+        private List<OptionSetFilter> _unitStatusOptions;
+        public List<OptionSetFilter> UnitStatusOptions { get=>_unitStatusOptions; set { _unitStatusOptions = value;OnPropertyChanged(nameof(UnitStatusOptions)); } }
 
         private List<string> _selectedUnitStatus;
         public List<string> SelectedUnitStatus { get => _selectedUnitStatus; set { _selectedUnitStatus = value; OnPropertyChanged(nameof(SelectedUnitStatus)); } }
