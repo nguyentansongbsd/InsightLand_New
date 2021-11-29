@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
@@ -26,9 +27,9 @@ namespace ConasiCRM.Portable.ViewModels
         public bool IsEventAllDay { get => _isEventAllDay; set { _isEventAllDay = value; OnPropertyChanged(nameof(IsEventAllDay)); } }
 
         public Guid TaskId { get; set; }
-        public string customerTypeLead = "1";
-        public string customerTypeContact = "2";
-        public string customerTypeAccount = "3";
+        public string Codelead = LookUpMultipleTabs.CodeLead;
+        public string CodeContact = LookUpMultipleTabs.CodeContac;
+        public string CodeAccount = LookUpMultipleTabs.CodeAccount;
 
         public TaskFormViewModel()
         {
@@ -139,17 +140,17 @@ namespace ConasiCRM.Portable.ViewModels
             data["scheduledstart"] = ScheduledStart.Value.ToUniversalTime();
             data["scheduledend"] = ScheduledEnd.Value.ToUniversalTime();
 
-            if (Customer != null && Customer.Title == "1")
+            if (Customer != null && Customer.Title == Codelead)
             {
                 data["regardingobjectid_lead_task@odata.bind"] = "/leads(" + Customer.Val + ")";
                 
             }
-            else if (Customer != null && Customer.Title == "2")
+            else if (Customer != null && Customer.Title == CodeContact)
             {
                 data["regardingobjectid_contact_task@odata.bind"] = "/contacts(" + Customer.Val+ ")";
                 
             }
-            else if(Customer != null && Customer.Title == "3")
+            else if(Customer != null && Customer.Title == CodeAccount)
             {
                 data["regardingobjectid_account_task@odata.bind"] = "/accounts(" + Customer.Val+ ")";
             }

@@ -18,24 +18,47 @@ namespace ConasiCRM.Portable.Models
         {
             get
             {
-                if(this.accounts_bsd_name != null)
+                if(activitytypecode == "phonecall")
                 {
-                    return this.accounts_bsd_name;
-                }
-                else if(this.contact_bsd_fullname != null)
-                {
-                    return this.contact_bsd_fullname;
-                }else if(this.lead_fullname != null)
-                {
-                    return this.lead_fullname;
-                }
-                else if(this.systemsetup_bsd_name != null)
-                {
-                    return this.systemsetup_bsd_name;
+                    if (this.callto_contact_name != null)
+                    {
+                        return this.callto_contact_name;
+                    }
+                    else if (this.callto_accounts_name != null)
+                    {
+                        return this.callto_accounts_name;
+                    }
+                    else if (this.callto_lead_name != null)
+                    {
+                        return this.callto_lead_name;
+                    }
+                    else
+                    {
+                        return " ";
+                    }
                 }
                 else
                 {
-                    return " ";
+                    if (this.accounts_bsd_name != null)
+                    {
+                        return this.accounts_bsd_name;
+                    }
+                    else if (this.contact_bsd_fullname != null)
+                    {
+                        return this.contact_bsd_fullname;
+                    }
+                    else if (this.lead_fullname != null)
+                    {
+                        return this.lead_fullname;
+                    }
+                    else if (this.systemsetup_bsd_name != null)
+                    {
+                        return this.systemsetup_bsd_name;
+                    }
+                    else
+                    {
+                        return " ";
+                    }
                 }
             }
         }
@@ -131,5 +154,11 @@ namespace ConasiCRM.Portable.Models
                 }
             }
         }
+
+        // sử dụng cho phonecall
+
+        public string callto_contact_name { get; set; }
+        public string callto_accounts_name { get; set; }
+        public string callto_lead_name { get; set; }
     }
 }

@@ -243,8 +243,15 @@ namespace ConasiCRM.Portable.Views
                 {
                     var timeStart = viewModel.MeetingModel.scheduledstart.Value;
                     viewModel.MeetingModel.timeStart = new TimeSpan(timeStart.Hour, timeStart.Minute, timeStart.Second);
-                    var actualdurationminutes = Math.Round((viewModel.MeetingModel.scheduledend.Value - viewModel.MeetingModel.scheduledstart.Value).TotalMinutes);
-                    viewModel.MeetingModel.scheduleddurationminutes = int.Parse(actualdurationminutes.ToString());
+                    if (viewModel.MeetingModel.scheduledend != null)
+                    {
+                        var actualdurationminutes = Math.Round((viewModel.MeetingModel.scheduledend.Value - viewModel.MeetingModel.scheduledstart.Value).TotalMinutes);
+                        viewModel.MeetingModel.scheduleddurationminutes = int.Parse(actualdurationminutes.ToString());
+                    }
+                    else
+                    {
+                        viewModel.MeetingModel.scheduleddurationminutes = 0;
+                    }    
 
                     viewModel.MeetingModel.scheduledstart = new DateTime(timeStart.Year, timeStart.Month, timeStart.Day, 0, 0, 0);
                     viewModel.MeetingModel.scheduledend = viewModel.MeetingModel.scheduledstart.Value.AddDays(1);
@@ -260,6 +267,7 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
+                viewModel.MeetingModel.isalldayevent = false;
                 ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
             }    
         }

@@ -51,6 +51,25 @@ namespace ConasiCRM.Portable.ViewModels
             Meet = new MeetingModel();
             PreLoadData = new Command(() =>
             {
+                string forphonecall = null;
+                if (entity == "phonecall")
+                {
+                    forphonecall = @"<link-entity name='activityparty' from='activityid' to='activityid' link-type='outer' alias='aee'>
+                                        <filter type='and'>
+                                            <condition attribute='participationtypemask' operator='eq' value='2' />
+                                        </filter>
+                                        <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='aff'>
+                                            <attribute name='fullname' alias='callto_contact_name'/>
+                                        </link-entity>
+                                        <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
+                                            <attribute name='bsd_name' alias='callto_accounts_name'/>
+                                        </link-entity>
+                                        <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
+                                            <attribute name='fullname' alias='callto_lead_name'/>
+                                        </link-entity>
+                                    </link-entity>";
+                }
+
                 FetchXml = $@"<fetch version='1.0' count='15' page='{Page}' output-format='xml-platform' mapping='logical' distinct='true'>
                                   <entity name='{entity}'>
                                     <attribute name='activitytypecode' />
@@ -73,6 +92,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
                                         <attribute name='fullname' alias='lead_fullname'/>
                                     </link-entity>
+                                    {forphonecall}
                                   </entity>
                                 </fetch>";
             });

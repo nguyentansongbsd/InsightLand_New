@@ -366,6 +366,8 @@ namespace ConasiCRM.Portable.ViewModels
                 <attribute name='bsd_depositamount' />
                 <attribute name='bsd_ordernumber' />
                 <attribute name='bsd_amountpercent' />
+                <attribute name='bsd_managementamount' />
+                <attribute name='bsd_maintenanceamount' />
                 <order attribute='bsd_ordernumber' descending='false' />
                 <filter type='and'>
                   <condition attribute='statecode' operator='eq' value='0' />
