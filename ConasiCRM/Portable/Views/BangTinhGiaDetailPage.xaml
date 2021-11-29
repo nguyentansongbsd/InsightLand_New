@@ -201,7 +201,7 @@
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout Spacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
-                                            <controls:FormLabel Text="Tình trạng sản phẩm (m²)" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <controls:FormLabel Text="Tình trạng sản phẩm" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.bsd_unitstatus_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
@@ -213,7 +213,7 @@
                                             <controls:FormLabelValue Text="{Binding Reservation.bsd_netusablearea, StringFormat='{0:#,0.#0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Diện tích thực tế" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
+                                            <controls:FormLabel Text="Diện tích thực tế (m²)" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10" VerticalOptions="Start"/>
                                             <controls:FormLabelValue Text="{Binding Reservation.bsd_actualarea, StringFormat='{0:#,0.#0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Padding="25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
@@ -511,14 +511,6 @@
                                                         <Label Text="Ngày đến hạn:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                                         <Label Text="{Binding bsd_duedate,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                     </Grid>
-                                                    <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding bsd_managementamount_format,Converter={StaticResource NullToHideConverter}}" >
-                                                        <Label Text="Phí quản lý:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                        <Label Text="{Binding bsd_managementamount_format, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
-                                                    </Grid>
-                                                    <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding bsd_maintenanceamount_format,Converter={StaticResource NullToHideConverter}}" >
-                                                        <Label Text="Phí bảo trì:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                        <Label Text="{Binding bsd_maintenanceamount_format, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
-                                                    </Grid>
                                                     <Grid ColumnDefinitions="Auto,*">
                                                         <Label Text="Tiền đợt:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                                         <Label Text="{Binding bsd_amountofthisphase, StringFormat='{0:#,0} đ'}" TextColor="Red" FontSize="15" Grid.Column="1"/>
@@ -530,6 +522,16 @@
                                                     <Grid ColumnDefinitions="Auto,*">
                                                         <Label Text="Đã thanh toán:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                                         <Label Text="{Binding bsd_amountwaspaid, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                    </Grid>
+                                                    <Grid ColumnDefinitions="Auto,Auto,*" IsVisible="{Binding bsd_managementamount_format,Converter={StaticResource NullToHideConverter}}" >
+                                                        <Label Grid.Column="0" Text="&#xf192;" VerticalOptions="Center" TextColor="#b2b2b2" FontFamily="FontAwesomeSolid" FontSize="11" Margin="5,0,0,0"/>
+                                                        <Label Text="Phí quản lý:" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                        <Label Text="{Binding bsd_managementamount, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="2"/>
+                                                    </Grid>
+                                                    <Grid ColumnDefinitions="Auto,Auto,*" IsVisible="{Binding bsd_maintenanceamount_format,Converter={StaticResource NullToHideConverter}}" >
+                                                        <Label Grid.Column="0" Text="&#xf192;" TextColor="#b2b2b2" VerticalOptions="Center" FontFamily="FontAwesomeSolid" FontSize="11" Margin="5,0,0,0"/>
+                                                        <Label Text="Phí bảo trì:" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                        <Label Text="{Binding bsd_maintenanceamount, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="2"/>
                                                     </Grid>
                                                 </StackLayout>
                                             </telerikPrimitives:RadBorder>
