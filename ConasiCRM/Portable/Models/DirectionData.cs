@@ -13,17 +13,17 @@ namespace ConasiCRM.Portable.Models
             return diretion;
         }
 
-        public static List<OptionSet> Directions()
+        public static List<OptionSetFilter> Directions()
         {
-            var directions = new List<OptionSet>();
-            directions.Add(new OptionSet("100000000", "Đông"));
-            directions.Add(new OptionSet("100000001", "Tây"));
-            directions.Add(new OptionSet("100000002", "Nam"));
-            directions.Add(new OptionSet("100000003", "Bắc"));
-            directions.Add(new OptionSet("100000004", "Tây bắc"));
-            directions.Add(new OptionSet("100000005", "Đông bắc"));
-            directions.Add(new OptionSet("100000006", "Tây nam"));
-            directions.Add(new OptionSet("100000007", "Đông nam"));
+            var directions = new List<OptionSetFilter>();
+            directions.Add(new OptionSetFilter {Val = "100000000",Label= "Đông" });
+            directions.Add(new OptionSetFilter { Val = "100000001", Label = "Tây" });
+            directions.Add(new OptionSetFilter { Val = "100000002", Label = "Nam" });
+            directions.Add(new OptionSetFilter { Val = "100000003", Label = "Bắc" });
+            directions.Add(new OptionSetFilter { Val = "100000004", Label = "Tây bắc" });
+            directions.Add(new OptionSetFilter { Val = "100000005", Label = "Đông bắc" });
+            directions.Add(new OptionSetFilter { Val = "100000006", Label = "Tây nam" });
+            directions.Add(new OptionSetFilter { Val = "100000007", Label = "Đông nam" });
             return directions;
         }
     }

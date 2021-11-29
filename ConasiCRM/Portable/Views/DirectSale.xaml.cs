@@ -45,10 +45,10 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 var unitStatus = StatusCodeUnit.StatusCodes();
                 unitStatus.RemoveAt(0);
-                viewModel.UnitStatusOptions = new List<OptionSet>();
+                viewModel.UnitStatusOptions = new List<OptionSetFilter>();
                 foreach (var item in unitStatus)
                 {
-                    viewModel.UnitStatusOptions.Add(new OptionSet(item.Id, item.Name));
+                    viewModel.UnitStatusOptions.Add(new OptionSetFilter { Val = item.Id, Label = item.Name });
                 }
                 LoadingHelper.Hide();
             };

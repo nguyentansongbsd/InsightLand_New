@@ -436,6 +436,20 @@ namespace ConasiCRM.Portable.ViewModels
                                           <attribute name='leadid' alias='lead_id'/>
                                           <attribute name='lastname' alias='lead_name'/>
                                     </link-entity>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='outer' alias='aee'>
+                                        <filter type='and'>
+                                            <condition attribute='participationtypemask' operator='eq' value='5' />
+                                        </filter>
+                                        <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='aff'>
+                                            <attribute name='fullname' alias='callto_contact_name'/>
+                                        </link-entity>
+                                        <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
+                                            <attribute name='bsd_name' alias='callto_accounts_name'/>
+                                        </link-entity>
+                                        <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
+                                            <attribute name='fullname' alias='callto_lead_name'/>
+                                        </link-entity>
+                                    </link-entity>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ActivitiModel>>("appointments", fetchXml);
@@ -443,22 +457,43 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var item in result.value)
             {
-                item.scheduledstart = item.scheduledstart.ToLocalTime();
-                item.scheduledend = item.scheduledend.ToLocalTime();
-                if (!string.IsNullOrWhiteSpace(item.contact_name))
+                var meet =  Activities.FirstOrDefault(x=>x.activityid==item.activityid);
+                if (meet != null)
                 {
-                    item.customer = item.contact_name;
+                    if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                    {
+                        string new_customer = ", " + item.callto_contact_name;
+                        meet.customer += new_customer;
+                    }
+                    if (!string.IsNullOrWhiteSpace(item.callto_accounts_name))
+                    {
+                        string new_customer = ", " + item.callto_accounts_name;
+                        meet.customer += new_customer;
+                    }
+                    if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                    {
+                        string new_customer = ", " + item.callto_lead_name;
+                        meet.customer += new_customer;
+                    }
                 }
-                if (!string.IsNullOrWhiteSpace(item.account_name))
+                else
                 {
-                    item.customer = item.account_name;
+                    item.scheduledstart = item.scheduledstart.ToLocalTime();
+                    item.scheduledend = item.scheduledend.ToLocalTime();
+                    if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                    {
+                        item.customer = item.callto_contact_name;
+                    }
+                    if (!string.IsNullOrWhiteSpace(item.callto_accounts_name))
+                    {
+                        item.customer = item.callto_accounts_name;
+                    }
+                    if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                    {
+                        item.customer = item.callto_lead_name;
+                    }
+                    this.Activities.Add(item);
                 }
-                if (!string.IsNullOrWhiteSpace(item.lead_name))
-                {
-                    item.customer = item.lead_name;
-                }
-
-                this.Activities.Add(item);
             }
         }
 
@@ -489,6 +524,20 @@ namespace ConasiCRM.Portable.ViewModels
                                           <attribute name='leadid' alias='lead_id'/>
                                           <attribute name='lastname' alias='lead_name'/>
                                     </link-entity>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='outer' alias='aee'>
+                                        <filter type='and'>
+                                            <condition attribute='participationtypemask' operator='eq' value='2' />
+                                        </filter>
+                                        <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='aff'>
+                                            <attribute name='fullname' alias='callto_contact_name'/>
+                                        </link-entity>
+                                        <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
+                                            <attribute name='bsd_name' alias='callto_accounts_name'/>
+                                        </link-entity>
+                                        <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
+                                            <attribute name='fullname' alias='callto_lead_name'/>
+                                        </link-entity>
+                                    </link-entity>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ActivitiModel>>("phonecalls", fetchXml);
@@ -498,17 +547,17 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 item.scheduledstart = item.scheduledstart.ToLocalTime();
                 item.scheduledend = item.scheduledend.ToLocalTime();
-                if (!string.IsNullOrWhiteSpace(item.contact_name))
+                if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
                 {
-                    item.customer = item.contact_name;
+                    item.customer = item.callto_contact_name;
                 }
-                if (!string.IsNullOrWhiteSpace(item.account_name))
+                if (!string.IsNullOrWhiteSpace(item.callto_accounts_name))
                 {
-                    item.customer = item.account_name;
+                    item.customer = item.callto_accounts_name;
                 }
-                if (!string.IsNullOrWhiteSpace(item.lead_name))
+                if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
                 {
-                    item.customer = item.lead_name;
+                    item.customer = item.callto_lead_name;
                 }
 
                 this.Activities.Add(item);

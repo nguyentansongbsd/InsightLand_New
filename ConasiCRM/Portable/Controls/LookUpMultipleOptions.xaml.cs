@@ -16,8 +16,8 @@ namespace ConasiCRM.Portable.Controls
 
         public Func<Task> PreShow;
 
-        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(List<OptionSet>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
-        public List<OptionSet> ItemsSource { get => (List<OptionSet>)GetValue(ItemsSourceProperty); set { SetValue(ItemsSourceProperty, value); } }
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(List<OptionSetFilter>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
+        public List<OptionSetFilter> ItemsSource { get => (List<OptionSetFilter>)GetValue(ItemsSourceProperty); set { SetValue(ItemsSourceProperty, value); } }
 
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
@@ -35,8 +35,8 @@ namespace ConasiCRM.Portable.Controls
         public string Text { get => _text; set { _text = value; OnPropertyChanged(nameof(Text)); } }
 
         //edit
-        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSet>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
-        public List<List<OptionSet>> ListListView { get => (List<List<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
+        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSetFilter>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
+        public List<List<OptionSetFilter>> ListListView { get => (List<List<OptionSetFilter>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
 
         public static readonly BindableProperty ListTabProperty = BindableProperty.Create(nameof(ListTab), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
         public List<string> ListTab { get => (List<string>)GetValue(ListTabProperty); set { SetValue(ListTabProperty, value); } }
@@ -268,11 +268,27 @@ namespace ConasiCRM.Portable.Controls
             {
                 if (ListListView != null && ListListView.Count > 0 && ListTab != null && ListTab.Count > 0)
                 {
-                    lookUpListView.ItemsSource = this.ListListView[indexTab].Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                    var list = from Item in ListListView[indexTab]
+                               where Item.Label.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.SDT != null && Item.SDT.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CMND != null && Item.CMND.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CCCD != null && Item.CCCD.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.HC != null && Item.HC.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.SoGPKD != null && Item.SoGPKD.ToString().ToLower().Contains(text.ToLower())
+                               select Item;
+                    lookUpListView.ItemsSource = list;
                 }
                 else
                 {
-                    lookUpListView.ItemsSource = this.ItemsSource.Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                    var list = from Item in ItemsSource
+                               where Item.Label.ToString().ToLower().Contains(text.ToLower())||
+                               Item.SDT != null && Item.SDT.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CMND != null && Item.CMND.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CCCD != null && Item.CCCD.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.HC != null && Item.HC.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.SoGPKD != null && Item.SoGPKD.ToString().ToLower().Contains(text.ToLower())
+                               select Item;
+                    lookUpListView.ItemsSource = list;
                 }
             }
         }
@@ -363,11 +379,11 @@ namespace ConasiCRM.Portable.Controls
                 ClearFlexLayout();
             }
         }
-        public void SetList(List<OptionSet> selectedInSource)
+        public void SetList(List<OptionSetFilter> selectedInSource)
         {
             this.Entry.IsVisible = false;
             this.flexLayout.IsVisible = true;
-            selectedInSource.Add(new OptionSet()
+            selectedInSource.Add(new OptionSetFilter()
             {
                 Val = "0"
             });
@@ -405,7 +421,7 @@ namespace ConasiCRM.Portable.Controls
         {
             if (ItemsSource == null || ItemsSource.Count <= 0)
             {
-                ItemsSource = new List<OptionSet>();
+                ItemsSource = new List<OptionSetFilter>();
                 for (int i = 0; i < ListListView.Count; i++)
                 {
                     ItemsSource.AddRange(ListListView[i]);

@@ -16,29 +16,29 @@ namespace ConasiCRM.Portable.ViewModels
         private MeetingModel _meetingModel;
         public MeetingModel MeetingModel { get => _meetingModel; set { if (_meetingModel != value) { _meetingModel = value; OnPropertyChanged(nameof(MeetingModel)); } } }
 
-        private List<OptionSet> _leadsLookUpRequired;
-        public List<OptionSet> LeadsLookUpRequired { get => _leadsLookUpRequired; set { _leadsLookUpRequired = value; OnPropertyChanged(nameof(LeadsLookUpRequired)); } }
+        private List<OptionSetFilter> _leadsLookUpRequired;
+        public List<OptionSetFilter> LeadsLookUpRequired { get => _leadsLookUpRequired; set { _leadsLookUpRequired = value; OnPropertyChanged(nameof(LeadsLookUpRequired)); } }
 
-        private List<OptionSet> _contactsLookUpRequired;
-        public List<OptionSet> ContactsLookUpRequired { get => _contactsLookUpRequired; set { _contactsLookUpRequired = value; OnPropertyChanged(nameof(ContactsLookUpRequired)); } }
+        private List<OptionSetFilter> _contactsLookUpRequired;
+        public List<OptionSetFilter> ContactsLookUpRequired { get => _contactsLookUpRequired; set { _contactsLookUpRequired = value; OnPropertyChanged(nameof(ContactsLookUpRequired)); } }
 
-        private List<OptionSet> _accountsLookUpRequired;
-        public List<OptionSet> AccountsLookUpRequired { get => _accountsLookUpRequired; set { _accountsLookUpRequired = value; OnPropertyChanged(nameof(AccountsLookUpRequired)); } }
+        private List<OptionSetFilter> _accountsLookUpRequired;
+        public List<OptionSetFilter> AccountsLookUpRequired { get => _accountsLookUpRequired; set { _accountsLookUpRequired = value; OnPropertyChanged(nameof(AccountsLookUpRequired)); } }
 
-        private List<List<OptionSet>> _allsLookUpRequired;
-        public List<List<OptionSet>> AllsLookUpRequired { get => _allsLookUpRequired; set { _allsLookUpRequired = value; OnPropertyChanged(nameof(AllsLookUpRequired)); } }
+        private List<List<OptionSetFilter>> _allsLookUpRequired;
+        public List<List<OptionSetFilter>> AllsLookUpRequired { get => _allsLookUpRequired; set { _allsLookUpRequired = value; OnPropertyChanged(nameof(AllsLookUpRequired)); } }
 
-        private List<OptionSet> _leadsLookUpOptional;
-        public List<OptionSet> LeadsLookUpOptional { get => _leadsLookUpOptional; set { _leadsLookUpOptional = value; OnPropertyChanged(nameof(LeadsLookUpOptional)); } }
+        private List<OptionSetFilter> _leadsLookUpOptional;
+        public List<OptionSetFilter> LeadsLookUpOptional { get => _leadsLookUpOptional; set { _leadsLookUpOptional = value; OnPropertyChanged(nameof(LeadsLookUpOptional)); } }
 
-        private List<OptionSet> _contactsLookUpOptional;
-        public List<OptionSet> ContactsLookUpOptional { get => _contactsLookUpOptional; set { _contactsLookUpOptional = value; OnPropertyChanged(nameof(ContactsLookUpOptional)); } }
+        private List<OptionSetFilter> _contactsLookUpOptional;
+        public List<OptionSetFilter> ContactsLookUpOptional { get => _contactsLookUpOptional; set { _contactsLookUpOptional = value; OnPropertyChanged(nameof(ContactsLookUpOptional)); } }
 
-        private List<OptionSet> _accountsLookUpOptional;
-        public List<OptionSet> AccountsLookUpOptional { get => _accountsLookUpOptional; set { _accountsLookUpOptional = value; OnPropertyChanged(nameof(AccountsLookUpOptional)); } }
+        private List<OptionSetFilter> _accountsLookUpOptional;
+        public List<OptionSetFilter> AccountsLookUpOptional { get => _accountsLookUpOptional; set { _accountsLookUpOptional = value; OnPropertyChanged(nameof(AccountsLookUpOptional)); } }
 
-        private List<List<OptionSet>> _allsLookUpOptional;
-        public List<List<OptionSet>> AllsLookUpOptional { get => _allsLookUpOptional; set { _allsLookUpOptional = value; OnPropertyChanged(nameof(AllsLookUpOptional)); } }
+        private List<List<OptionSetFilter>> _allsLookUpOptional;
+        public List<List<OptionSetFilter>> AllsLookUpOptional { get => _allsLookUpOptional; set { _allsLookUpOptional = value; OnPropertyChanged(nameof(AllsLookUpOptional)); } }
 
         public List<string> Tabs { get; set; }
 
@@ -67,8 +67,8 @@ namespace ConasiCRM.Portable.ViewModels
         public MeetingViewModel()
         {
             MeetingModel = new MeetingModel();
-            AllsLookUpRequired = new List<List<OptionSet>>();
-            AllsLookUpOptional = new List<List<OptionSet>>();
+            AllsLookUpRequired = new List<List<OptionSetFilter>>();
+            AllsLookUpOptional = new List<List<OptionSetFilter>>();
             Tabs = new List<string>();
             ShowButton = true;
         }
@@ -137,7 +137,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (data.contact_id != Guid.Empty)
             {
-                Customer = new OptionSet
+                Customer = new OptionSetFilter
                 {
                     Title = CodeContac,
                     Val = data.contact_id.ToString(),
@@ -146,7 +146,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             else if (data.account_id != Guid.Empty)
             {
-                Customer = new OptionSet
+                Customer = new OptionSetFilter
                 {
                     Title = CodeAccount,
                     Val = data.account_id.ToString(),
@@ -155,7 +155,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
             else if (data.lead_id != Guid.Empty)
             {
-                Customer = new OptionSet
+                Customer = new OptionSetFilter
                 {
                     Title = CodeLead,
                     Val = data.lead_id.ToString(),
@@ -415,19 +415,20 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadLeadsLookUp()
         {
-            LeadsLookUpRequired = new List<OptionSet>();
-            LeadsLookUpOptional = new List<OptionSet>();
+            LeadsLookUpRequired = new List<OptionSetFilter>();
+            LeadsLookUpOptional = new List<OptionSetFilter>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
                                 <attribute name='fullname' alias='Label' />
                                 <attribute name='leadid' alias='Val' />
+                                <attribute name='mobilephone' alias='SDT' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                 </filter>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSetFilter>>("leads", fetch);
             if (result == null || result.value == null)
                 return;
             var data = result.value;
@@ -435,25 +436,28 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 item.Title = CodeLead;
                 LeadsLookUpRequired.Add(item);
-                LeadsLookUpOptional.Add(new OptionSet { Val = item.Val, Label = item.Label, Title = CodeLead });
+                LeadsLookUpOptional.Add(new OptionSetFilter { Val = item.Val, Label = item.Label, Title = CodeLead });
             }
         }
 
         public async Task LoadContactsLookUp()
         {
-            ContactsLookUpRequired = new List<OptionSet>();
-            ContactsLookUpOptional = new List<OptionSet>();
+            ContactsLookUpRequired = new List<OptionSetFilter>();
+            ContactsLookUpOptional = new List<OptionSetFilter>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Val' />
                     <attribute name='fullname' alias='Label' />
+                    <attribute name='mobilephone' alias='SDT' />
+                    <attribute name='bsd_identitycardnumber' alias='CMND' />
+                    <attribute name='bsd_passport' alias='HC' />
                     <order attribute='fullname' descending='false' />                   
                     <filter type='and'>
                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                     </filter>
                   </entity>
                 </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("contacts", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSetFilter>>("contacts", fetch);
             if (result == null || result.value == null)
                 return;
             var data = result.value;
@@ -461,25 +465,27 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 item.Title = CodeContac;
                 ContactsLookUpRequired.Add(item);
-                ContactsLookUpOptional.Add(new OptionSet { Val = item.Val, Label = item.Label, Title = CodeContac });
+                ContactsLookUpOptional.Add(new OptionSetFilter { Val = item.Val, Label = item.Label, Title = CodeContac });
             }
         }
 
         public async Task LoadAccountsLookUp()
         {
-            AccountsLookUpRequired = new List<OptionSet>();
-            AccountsLookUpOptional = new List<OptionSet>();
+            AccountsLookUpRequired = new List<OptionSetFilter>();
+            AccountsLookUpOptional = new List<OptionSetFilter>();
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='account'>
                                 <attribute name='name' alias='Label'/>
                                 <attribute name='accountid' alias='Val'/>
+                                <attribute name='telephone1' alias='SDT'/>
+                                <attribute name='bsd_registrationcode' alias='SoGPKD'/>
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                 </filter>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("accounts", fetch);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSetFilter>>("accounts", fetch);
             if (result == null || result.value == null)
                 return;
             var data = result.value;
@@ -487,7 +493,7 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 item.Title = CodeAccount;
                 AccountsLookUpRequired.Add(item);
-                AccountsLookUpOptional.Add(new OptionSet { Val = item.Val, Label = item.Label, Title = CodeAccount });
+                AccountsLookUpOptional.Add(new OptionSetFilter { Val = item.Val, Label = item.Label, Title = CodeAccount });
             }
         }
 
