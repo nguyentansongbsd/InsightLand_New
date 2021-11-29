@@ -75,7 +75,7 @@ namespace ConasiCRM.Portable.Views
         private async void NewTask(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            await Navigation.PushAsync(new TaskForm());
+            await Navigation.PushAsync(new TaskForm(viewModel.singleContact.contactid,viewModel.singleContact.bsd_fullname));
             LoadingHelper.Hide();
         }
 

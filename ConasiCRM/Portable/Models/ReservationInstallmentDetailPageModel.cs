@@ -43,5 +43,27 @@ namespace ConasiCRM.Portable.Models
                 return name;
             }
         }
+        public decimal bsd_maintenanceamount { get; set; } // phí bảo trì
+        public string bsd_maintenanceamount_format
+        {
+            get
+            {
+                if (bsd_maintenanceamount == 0)
+                    return null;
+                else
+                    return bsd_maintenanceamount.ToString();
+            }
+        }
+        public decimal bsd_managementamount { get;set;} // phí quản lý
+        public string bsd_managementamount_format
+        {
+            get
+            {
+                if (bsd_managementamount == 0)
+                    return null;
+                else
+                    return bsd_managementamount.ToString();
+            }
+        }
     }
 }

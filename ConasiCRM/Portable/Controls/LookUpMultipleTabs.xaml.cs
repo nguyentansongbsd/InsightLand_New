@@ -301,6 +301,7 @@ namespace ConasiCRM.Portable.Controls
                 {
                     item.Title = CodeContac;
                     SelectedItem = item;
+                    SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
                     await CenterModal.Hide();
                 }
             };
@@ -328,6 +329,7 @@ namespace ConasiCRM.Portable.Controls
                 {
                     item.Title = CodeLead;
                     SelectedItem = item;
+                    SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
                     await CenterModal.Hide();
                 }
             };
@@ -355,6 +357,7 @@ namespace ConasiCRM.Portable.Controls
                 {
                     item.Title = CodeAccount;
                     SelectedItem = item;
+                    SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
                     await CenterModal.Hide();
                 }
             };

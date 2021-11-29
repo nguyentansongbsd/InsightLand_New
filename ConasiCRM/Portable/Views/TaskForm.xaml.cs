@@ -22,6 +22,8 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             Init();
             InitAdd();
+            Lookup_NguoiLienQuan.IsVisible = true;
+            ContactMapping.IsVisible = false;
         }
 
         public TaskForm(Guid taskId)
@@ -30,12 +32,24 @@ namespace ConasiCRM.Portable.Views
             Init();
             viewModel.TaskId = taskId;
             InitUpdate();
+            Lookup_NguoiLienQuan.IsVisible = true;
+            ContactMapping.IsVisible = false;
         }
 
         public TaskForm(DateTime dateTimeNew)
         {
             InitializeComponent();
 
+        }
+
+        public TaskForm(Guid idContact,string nameContact)
+        {
+            InitializeComponent();
+            Init();
+            InitAdd();
+            viewModel.Customer = new OptionSet { Val= idContact.ToString(), Label = nameContact, Title = viewModel.CodeContact};
+            Lookup_NguoiLienQuan.IsVisible = false;
+            ContactMapping.IsVisible = true;
         }
 
         public void Init()

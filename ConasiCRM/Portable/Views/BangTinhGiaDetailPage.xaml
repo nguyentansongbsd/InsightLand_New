@@ -511,6 +511,14 @@
                                                         <Label Text="Ngày đến hạn:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                                         <Label Text="{Binding bsd_duedate,StringFormat='{0:dd/MM/yyyy}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                     </Grid>
+                                                    <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding bsd_managementamount_format,Converter={StaticResource NullToHideConverter}}" >
+                                                        <Label Text="Phí quản lý:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                        <Label Text="{Binding bsd_managementamount_format, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                    </Grid>
+                                                    <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding bsd_maintenanceamount_format,Converter={StaticResource NullToHideConverter}}" >
+                                                        <Label Text="Phí bảo trì:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                        <Label Text="{Binding bsd_maintenanceamount_format, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                    </Grid>
                                                     <Grid ColumnDefinitions="Auto,*">
                                                         <Label Text="Tiền đợt:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                                         <Label Text="{Binding bsd_amountofthisphase, StringFormat='{0:#,0} đ'}" TextColor="Red" FontSize="15" Grid.Column="1"/>
