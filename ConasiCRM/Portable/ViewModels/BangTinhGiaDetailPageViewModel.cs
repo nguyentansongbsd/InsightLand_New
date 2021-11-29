@@ -203,9 +203,6 @@ namespace ConasiCRM.Portable.ViewModels
             }
             
             this.QuoteStatus = QuoteStatusCodeData.GetQuoteStatusCodeById(this.Reservation.statuscode.ToString());
-            await LoadHandoverCondition(ReservationId);
-            await LoadPromotions(ReservationId);
-            await LoadSpecialDiscount(ReservationId);
         }
 
         public async Task LoadHandoverCondition(Guid ReservationId)

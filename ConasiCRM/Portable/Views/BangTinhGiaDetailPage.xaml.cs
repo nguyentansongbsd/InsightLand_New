@@ -77,10 +77,12 @@ namespace ConasiCRM.Portable.Views
                 viewModel.ShowInstallmentList = false;
                 viewModel.NumberInstallment = 0;
                 viewModel.InstallmentList.Clear();
-                LoadInstallmentList(ReservationId);                
                 viewModel.ButtonCommandList.Clear();
+
+                await viewModel.LoadInstallmentList(ReservationId);    
                 SetUpButtonGroup();
                 NeedToRefreshInstallment = false;
+
                 LoadingHelper.Hide();
             }
         }
@@ -92,7 +94,11 @@ namespace ConasiCRM.Portable.Views
             if (id != Guid.Empty)
             {
                 await Task.WhenAll(
-                    viewModel.LoadReservation(id)
+                    viewModel.LoadReservation(id),
+                    viewModel.LoadHandoverCondition(ReservationId),
+                    viewModel.LoadPromotions(ReservationId),
+                    viewModel.LoadSpecialDiscount(ReservationId),
+                    viewModel.LoadInstallmentList(ReservationId)
                     );
                 await viewModel.LoadDiscounts();
                 SutUpSpecialDiscount();
@@ -128,7 +134,10 @@ namespace ConasiCRM.Portable.Views
         private void Lich_Tapped(object sender, EventArgs e)
         {
             Tab_Tapped(4);
-            LoadInstallmentList(ReservationId);
+            if (viewModel.InstallmentList.Count == 0)
+            {
+                LoadInstallmentList(ReservationId);
+            }
         }
 
         private void Tab_Tapped(int tab)
@@ -211,11 +220,11 @@ namespace ConasiCRM.Portable.Views
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Xác nhận in", "FontAwesomeSolid", "\uf02f", null, ConfirmSigning));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Xóa Lịch Thanh Toán", "FontAwesomeRegular", "\uf1c3", null, CancelInstallment));
             }
-            if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate == null && viewModel.Reservation.bsd_quotationsigneddate == null)
+            if (viewModel.Reservation.statuscode == 100000007 && viewModel.InstallmentList.Count == 0)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Tạo Lịch Thanh Toán", "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
             }
-            if (viewModel.Reservation.statuscode == 100000007 && viewModel.Reservation.bsd_quotationprinteddate != null && viewModel.Reservation.bsd_quotationsigneddate == null)
+            if (viewModel.Reservation.statuscode == 100000007 && viewModel.InstallmentList.Count > 0 )
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, SignQuotationClicked));
             }
@@ -260,9 +269,23 @@ namespace ConasiCRM.Portable.Views
         private async void ConfirmSigning(object sender, EventArgs e)
         {
             LoadingHelper.Show();
+            if (viewModel.Reservation.bsd_quotationprinteddate.HasValue)
+            {
+                ToastMessageHelper.ShortMessage("Đã xác nhận in");
+                LoadingHelper.Hide();
+                return;
+            }
+            if (viewModel.InstallmentList.Count == 0)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng tạo lịch thanh toán");
+                LoadingHelper.Hide();
+                return;
+            }
             bool isSuccess = await viewModel.ConfirmSinging();
             if (isSuccess)
             {
+                NeedToRefresh = true;
+                OnAppearing();
                 ToastMessageHelper.ShortMessage("Xác nhận in thành công");
             }
             else
@@ -332,8 +355,8 @@ namespace ConasiCRM.Portable.Views
             {
                 if (IsSuccess == "Localization")
                 {
-                    string asw = await App.Current.MainPage.DisplayActionSheet("Khách hàng chưa chọn quốc gia", "Hủy", "Thêm quốc gia");
-                    if (asw == "Thêm quốc gia")
+                    string asw = await App.Current.MainPage.DisplayActionSheet("Khách hàng chưa chọn quốc tịch", "Hủy", "Thêm quốc tịch");
+                    if (asw == "Thêm quốc tịch")
                     {
                         if (!string.IsNullOrEmpty(viewModel.Reservation.purchaser_contact_name))
                         {
@@ -379,12 +402,19 @@ namespace ConasiCRM.Portable.Views
         private async void SignQuotationClicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
+            if (viewModel.InstallmentList.Count == 0)
+            {
+                ToastMessageHelper.ShortMessage("Vui lòng tạo lịch thanh toán");
+                LoadingHelper.Hide();
+                return;
+            }
             if (viewModel.Reservation.quoteid != Guid.Empty)
             {
                 if (await viewModel.SignQuotation())
                 {
                     NeedToRefresh = true;
                     OnAppearing();
+                    if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Bảng tính giá đã được ký");
                 }
@@ -408,6 +438,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     NeedToRefresh = true;
                     OnAppearing();
+                    if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage("Đã hủy bảng tính giá");
                 }

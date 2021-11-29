@@ -213,7 +213,7 @@ namespace ConasiCRM.Portable.Views
                 else if (isSuccess == 1)
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Sản phẩm đang ở trạng thái Reserve không thể tạo bảng tính giá");
+                    ToastMessageHelper.ShortMessage("Sản phẩm không thể tạo bảng tính giá");
                 }
                 else
                 {

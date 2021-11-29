@@ -10,9 +10,9 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("1","Question"),
-                new OptionSet("2","Problem"),
-                new OptionSet("3","Request"),
+                new OptionSet("1","Câu hỏi"),
+                new OptionSet("2","Vấn đề"),
+                new OptionSet("3","Yêu cầu"),
                  new OptionSet("0",""),
             };
         }
