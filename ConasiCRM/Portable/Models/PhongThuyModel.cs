@@ -48,7 +48,8 @@ namespace ConasiCRM.Portable.Models
                 {
                     #region Ten nam sinh am lich
                     can_value = value % 10;
-                    chi_value = (value % 100) % 12;
+                    //var chi_value = (value % 100)% 12;
+                    var chi_value = value % 12;
                     string can_label = lst_can[can_value];
                     string chi_label = lst_chi[chi_value];
                     ten_nam_sinh_am_lich = can_label + " " + chi_label;
@@ -56,21 +57,21 @@ namespace ConasiCRM.Portable.Models
 
                     #region Ngu hanh nap am
                     var balance = (can_value < 4) ? (can_value + 10) - 4 : can_value - 4;
-                    var chi_giap = (chi_value < balance) ? (chi_value + 12) - balance : chi_value - balance;
+                    var chi_giap = (nam_sinh - balance) % 12;
                     int index_menh = balance % 2 == 0 ? balance / 2 : (balance - 1) / 2;
-                    if (chi_giap == 0 || chi_giap == 6)
-                    {
-                        menhnapam_label = chi_giap == 0 ? lst_nguhanhnapam[0][index_menh] : lst_nguhanhnapam[1][index_menh];
-                        menh_value = lst_nhagiap_menh[0][index_menh];
-                    }
                     if (chi_giap == 4 || chi_giap == 10)
                     {
-                        menhnapam_label = chi_giap == 4 ? lst_nguhanhnapam[2][index_menh] : lst_nguhanhnapam[3][index_menh];
+                        menhnapam_label = chi_giap == 4 ? lst_nguhanhnapam[0][index_menh] : lst_nguhanhnapam[1][index_menh];
+                        menh_value = lst_nhagiap_menh[0][index_menh];
+                    }
+                    if (chi_giap == 8 || chi_giap == 2)
+                    {
+                        menhnapam_label = chi_giap == 8 ? lst_nguhanhnapam[2][index_menh] : lst_nguhanhnapam[3][index_menh];
                         menh_value = lst_nhagiap_menh[1][index_menh];
                     }
-                    if (chi_giap == 2 || chi_giap == 8)
+                    if (chi_giap == 6 || chi_giap == 0)
                     {
-                        menhnapam_label = chi_giap == 2 ? lst_nguhanhnapam[4][index_menh] : lst_nguhanhnapam[5][index_menh];
+                        menhnapam_label = chi_giap == 6 ? lst_nguhanhnapam[4][index_menh] : lst_nguhanhnapam[5][index_menh];
                         menh_value = lst_nhagiap_menh[2][index_menh];
                     }
                     menh_label = lst_menh[menh_value] + ", " + menhnapam_label;
@@ -180,7 +181,8 @@ namespace ConasiCRM.Portable.Models
         public PhongThuyModel()
         {
             //Danh sach chi
-            lst_chi = new ObservableCollection<string>() { "Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"};
+          //  lst_chi = new ObservableCollection<string>() { "Tý","Sửu","Dần","Mão","Thìn","Tỵ","Ngọ","Mùi","Thân","Dậu","Tuất","Hợi"};
+            lst_chi = new ObservableCollection<string>() { "Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi" };
 
             //Danh sach can
             lst_can = new ObservableCollection<string>() { "Canh","Tân","Nhâm","Quý","Giáp","Ất","Bính","Đinh","Mậu","Kỷ"};
@@ -205,17 +207,17 @@ namespace ConasiCRM.Portable.Models
             ///Nap am nha giap Ty
             lst_nguhanhnapam.Add(new ObservableCollection<string>()
             {
-                "Hải Trung Kim - Vàng trong biển",
-                "Lô Trung Hỏa - Lửa trong lò",
-                "Đại Lâm Mộc - Gỗ trong rừng",
-                "Lộ Bàng Thổ - Đất ven đường",
-                "Kiếm Phong Kim - Sắt đầu kiếm"
+                "Hải Trung Kim - Vàng trong biển", 
+                "Lô Trung Hỏa - Lửa trong lò", 
+                "Đại Lâm Mộc - Gỗ trong rừng", 
+                "Lộ Bàng Thổ - Đất ven đường", 
+                "Kiếm Phong Kim - Sắt đầu kiếm" 
             });
 
             ///Nap am nha giap Ngo
             lst_nguhanhnapam.Add(new ObservableCollection<string>()
             {
-                "Sa Trung Kim - Vàng trong cát",
+                "Sa Trung Kim - Vàng trong cát", 
                 "Sơn Họa Hỏa - Lửa chân núi",
                 "Bình Địa Mộc - Cây đất bằng",
                 "Bích Thượng Thổ - Đất trên vách",
@@ -235,7 +237,7 @@ namespace ConasiCRM.Portable.Models
             ///Nap am nha giap Tuat
             lst_nguhanhnapam.Add(new ObservableCollection<string>()
             {
-                "Sơn Đầu Hỏa - Lửa đỉnh núi",
+                "Sơn Đầu Hỏa - Lửa đỉnh núi", 
                 "Giản Hạ Thủy - Nước dưới suối",
                 "Thành Đầu Thổ - Đất đầu thành",
                 "Bạch Lạp Kim - Vàng trong nến",
@@ -248,7 +250,7 @@ namespace ConasiCRM.Portable.Models
                 "Đại Khuê Thủy - Nước khe lớn",
                 "Sa Trung Thổ - Đất trong cát",
                 "Thiên Thượng Hỏa - Lửa trên trời",
-                "Thạch Lựu Mộc - Gỗ thạc lựu",
+                "Thạch Lựu Mộc - Gỗ thạch lựu",
                 "Đại Hải Thủy - Nước biển lớn"
             });
 
@@ -262,9 +264,8 @@ namespace ConasiCRM.Portable.Models
                 "Trường Lưu Thủy - Nước suối lớn"
             });
 
-
             ///Danh sach que menh
-            lst_quemenh = new ObservableCollection<string>(){ "Càn", "Đoài", "Cần", "Khôn", "Ly", "Khảm", "Tốn", "Chấn" };
+            lst_quemenh = new ObservableCollection<string>(){ "Càn", "Đoài", "Cấn", "Khôn", "Ly", "Khảm", "Tốn", "Chấn" };
             lst_image = new ObservableCollection<string>() { "bsd_can.png","bsd_doai.png","bsd_caan.png","bsd_khon.png","bsd_ly.png","bsd_kham.png","bsd_ton.png","bsd_chan.png"};
             ///Danh sach huong theo que menh (thu tu huong ung voi sinh_khi, thien_y,dien_nien.phuc_vi,tuyet_menh,ngu_quy,luc_sat,hoa_hai)
             lst_huong_theo_quemenh = new ObservableCollection<ObservableCollection<int>>();
