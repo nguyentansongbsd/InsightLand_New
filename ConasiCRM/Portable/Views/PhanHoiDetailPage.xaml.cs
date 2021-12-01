@@ -245,5 +245,46 @@ namespace ConasiCRM.Portable.Views
                 TabPhanHoiLienQuan.IsVisible = false;
             }
         }
+
+        private void Customer_Tapped(object sender, EventArgs e)
+        {
+            if(viewModel.Case != null)
+            {
+                if(!string.IsNullOrWhiteSpace(viewModel.Case.accountId))
+                {
+                    AccountDetailPage newPage = new AccountDetailPage(Guid.Parse(viewModel.Case.accountId));
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+                else if (!string.IsNullOrWhiteSpace(viewModel.Case.contactId))
+                {
+                    ContactDetailPage newPage = new ContactDetailPage(Guid.Parse(viewModel.Case.contactId));
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+            }
+        }
     }
 }

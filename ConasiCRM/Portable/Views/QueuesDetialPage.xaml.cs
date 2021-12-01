@@ -338,5 +338,45 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
+        private void Customer_Tapped(object sender, EventArgs e)
+        {
+            if(viewModel.Customer!= null)
+            {
+                if(viewModel.Customer.Title == viewModel.CodeContact)
+                {
+                    ContactDetailPage newPage = new ContactDetailPage(Guid.Parse(viewModel.Customer.Val));
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+                else if (viewModel.Customer.Title == viewModel.CodeAccount)
+                {
+                    AccountDetailPage newPage = new AccountDetailPage(Guid.Parse(viewModel.Customer.Val));
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+            }
+        }
     }
 }

@@ -9,6 +9,9 @@ namespace ConasiCRM.Portable.Models
     {
         public Guid partyID { get; set; }
         public int typemask { get; set; }
+        public Guid contact_id { get; set; }
+        public Guid account_id { get; set; }
+        public Guid lead_id { get; set; }
         public string contact_name { get; set; }
         public string account_name { get; set; }
         public string lead_name { get; set; }

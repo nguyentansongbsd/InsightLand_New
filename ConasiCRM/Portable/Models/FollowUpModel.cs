@@ -36,6 +36,11 @@ namespace ConasiCRM.Portable.Models
         public string bsd_units { get; set; }
         public Guid bsd_reservation_id { get; set; }
         public string name_reservation { get; set; } // đặt cọc
+
+        public Guid contact_id_oe { get; set; } // id khách hàng Option Entry
+        public Guid account_id_oe { get; set; } // id khách hàng Option Entry
+        public Guid contact_id_re { get; set; } // id khách hàng Reservation
+        public Guid account_id_re { get; set; } // id khách hàng Reservation
         public string contact_name_oe { get; set; } // khách hàng Option Entry
         public string account_name_oe { get; set; } // khách hàng Option Entry
         public string contact_name_re { get; set; } // khách hàng Reservation

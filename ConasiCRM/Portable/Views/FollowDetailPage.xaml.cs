@@ -137,5 +137,54 @@ namespace ConasiCRM.Portable.Views
                 };
             }
         }
+
+        private void Customer_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.FollowDetail != null)
+            {
+                if (viewModel.FollowDetail.contact_id_oe != Guid.Empty || viewModel.FollowDetail.contact_id_re != Guid.Empty)
+                {
+                    ContactDetailPage newPage;
+                    if(viewModel.FollowDetail.contact_id_oe != Guid.Empty)
+                        newPage = new ContactDetailPage(viewModel.FollowDetail.contact_id_oe);
+                    else
+                        newPage = new ContactDetailPage(viewModel.FollowDetail.contact_id_re);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+                else if (viewModel.FollowDetail.account_id_oe != Guid.Empty || viewModel.FollowDetail.account_id_re != Guid.Empty)
+                {
+                    AccountDetailPage newPage;
+                    if (viewModel.FollowDetail.account_id_oe != Guid.Empty)
+                        newPage = new AccountDetailPage(viewModel.FollowDetail.account_id_oe);
+                    else
+                        newPage = new AccountDetailPage(viewModel.FollowDetail.account_id_re);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                        }
+                    };
+                }
+            }
+        }
     }
 }

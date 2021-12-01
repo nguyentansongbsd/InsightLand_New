@@ -55,11 +55,15 @@
                                 <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding FollowDetail.statuscode_color}" VerticalOptions="StartAndExpand">
                                     <Label Grid.Column="0" Text="{Binding FollowDetail.statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                 </telerikPrimitives:RadBorder>
-                                <Label Grid.Column="1" Text="{Binding FollowDetail.bsd_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding FollowDetail.bsd_name}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Text="Khách hàng:" Grid.Column="0" FontSize="15" TextColor="#444444"/>
-                                <Label Text="{Binding FollowDetail.customer}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
+                                <Label Text="{Binding FollowDetail.customer}" Grid.Column="1" FontSize="15" TextColor="{StaticResource NavigationPrimary}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Customer_Tapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Text="Sản phẩm:" Grid.Column="0" FontSize="15" TextColor="#444444"/>

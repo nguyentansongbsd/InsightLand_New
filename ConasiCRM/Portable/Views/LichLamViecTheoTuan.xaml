@@ -148,7 +148,7 @@
                             <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding ActivityStatusCode.Background}">
                                 <Label Grid.Column="0" Text="{Binding ActivityStatusCode.Name}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                             </telerikPrimitives:RadBorder>
-                            <Label Grid.Column="1" Text="{Binding ActivityType}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="{Binding ActivityType}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Label Grid.Column="2" Text="&#xf057;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="20" Padding="5" TextColor="#666666">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CloseContentActivity_Tapped"/>
@@ -159,7 +159,7 @@
                         <ScrollView Grid.Row="1">
                             <Grid>
                                 <Grid x:Name="ContentPhoneCall" IsVisible="false" RowSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
-                                    <Label Text="{Binding PhoneCall.subject}" FontSize="16" FontAttributes="Bold" TextColor="#03ACF5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
+                                    <Label Text="{Binding PhoneCall.subject}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
 
                                     <controls:FormLabel Text="Gọi từ" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="1"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="1" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
@@ -168,7 +168,11 @@
 
                                     <controls:FormLabel Text="Gọi đến" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="2"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="2" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding PhoneCall.call_to}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding PhoneCall.call_to}" FontSize="14" TextColor="{StaticResource NavigationPrimary}" HorizontalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="PhoneCallTo_Tapped"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Số điện thoại" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="3"/>
@@ -199,11 +203,15 @@
                                 </Grid>
 
                                 <Grid x:Name="ContentTask" IsVisible="false" RowSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" ColumnDefinitions="Auto,*" >
-                                    <Label Text="{Binding Task.subject}" FontSize="16" FontAttributes="Bold" TextColor="#03ACF5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
+                                    <Label Text="{Binding Task.subject}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
 
                                     <controls:FormLabel Text="Người liên quan" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="1"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="1" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
-                                        <Label Text="{Binding Task.Customer.Name}" FontSize="14" TextColor="#444444" HorizontalOptions="Center"/>
+                                        <Label Text="{Binding Task.Customer.Name}" FontSize="14" TextColor="{StaticResource NavigationPrimary}" HorizontalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TaskCustomer_Tapped"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </telerikPrimitives:RadBorder>
 
                                     <controls:FormLabel Text="Thời gian bắt đầu" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="2"/>
@@ -223,7 +231,7 @@
                                 </Grid>
 
                                 <Grid x:Name="ContentMeet" IsVisible="false" RowSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="4*,6*">
-                                    <Label Text="{Binding Meet.subject}" FontSize="16" FontAttributes="Bold" TextColor="#03ACF5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
+                                    <Label Text="{Binding Meet.subject}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="0,5"/>
 
                                     <controls:FormLabel Text="Người tham dự bắt buộc" Grid.Column="0" FontSize="14" TextColor="#444444" Grid.Row="1" LineHeight="1.2"/>
                                     <telerikPrimitives:RadBorder Grid.Column="1" Grid.Row="1" BorderColor="#f3f3f3" Padding="5" CornerRadius="5" BorderThickness="1" Margin="10,0,0,0">
