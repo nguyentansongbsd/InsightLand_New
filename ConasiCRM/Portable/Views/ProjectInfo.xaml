@@ -75,7 +75,7 @@
         <AbsoluteLayout>
             <ScrollView Padding="0,0,0,60" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
                 <StackLayout >
-                    <Image x:Name="test" Source="{Binding ImageSource}" HeightRequest="200" WidthRequest="200"/>
+                    <!--<Image x:Name="test" Source="{Binding ImageSource}" HeightRequest="200" WidthRequest="200"/>-->
 
                     <Grid RowDefinitions="Auto,80">
                         <CarouselView x:Name="carouseView" ItemsSource="{Binding Collections}" Grid.Row="0" HeightRequest="200" IsVisible="{Binding ShowCollections}">

@@ -198,20 +198,24 @@ namespace ConasiCRM.Portable.Views
             var item = (CollectionData)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             if (item.SharePointType == SharePointType.Image)
             {
-                string url = item.ImageSource.ToString().Replace("Uri: ", "");
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    url = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(url);
-                }
-                var img = viewModel.Photos.SingleOrDefault(x => x.URL == url);
+                //string url = item.ImageSource;
+                //if (Device.RuntimePlatform == Device.iOS)
+                //{
+                //    url = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(url);
+                //}
+                var img = viewModel.Photos.SingleOrDefault(x => x.Source == item.ImageSource);
                 var index = viewModel.Photos.IndexOf(img);
 
-                new PhotoBrowser()
-                {
-                    Photos = viewModel.Photos,
-                    StartIndex = index,
-                    EnableGrid = true
-                }.Show();
+                viewModel.photoBrowser.StartIndex = index;
+                viewModel.photoBrowser.EnableGrid = true;
+                viewModel.photoBrowser.Show();
+
+                //new SongPhotoBrowser()
+                //{
+                //    songPhotos = viewModel.Photos,
+                //    StartIndex = index,
+                //    EnableGrid = true
+                //}.Show();
             }
             else if (item.SharePointType == SharePointType.Video)
             {

@@ -8,7 +8,7 @@ namespace ConasiCRM.Portable.Config
     public class OrgConfig
     {
         public static int RecordPerPage = 30;
-        public const string VerApp = "Insight Land - Version ver_23_test";
+        public const string VerApp = "Insight Land - Version ver_24_test";
         public const string ApiUrl = "https://conasi-uat.api.crm5.dynamics.com/api/data/v9.1";
         //public const string ApiUrl = "https://cnssb.api.crm5.dynamics.com/api/data/v9.1";
 
