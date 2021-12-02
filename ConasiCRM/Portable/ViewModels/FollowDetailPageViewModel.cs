@@ -50,17 +50,21 @@ namespace ConasiCRM.Portable.ViewModels
                                         <attribute name='quoteid' alias='bsd_reservation_id' />
                                         <link-entity name='account' from='accountid' to='customerid' link-type='outer' alias='aa'>
                                             <attribute name='bsd_name' alias='account_name_oe'/>
+                                            <attribute name='accountid' alias='account_id_oe'/>
                                         </link-entity>
                                         <link-entity name='contact' from='contactid' to='customerid' link-type='outer' alias='ab'>
                                             <attribute name='bsd_fullname' alias='contact_name_oe'/>
+                                            <attribute name='contactid' alias='contact_id_oe'/>
                                         </link-entity>
                                     </link-entity>
                                     <link-entity name='salesorder' from='salesorderid' to='bsd_optionentry' visible='false' link-type='outer' alias='customer_optionentry'>
                                         <link-entity name='account' from='accountid' to='customerid' link-type='outer' alias='ad'>
                                             <attribute name='name' alias='account_name_re'/>
+                                            <attribute name='accountid' alias='account_id_re'/>
                                         </link-entity>
                                         <link-entity name='contact' from='contactid' to='customerid' link-type='outer' alias='ae'>
                                             <attribute name='bsd_fullname' alias='contact_name_re'/>
+                                            <attribute name='contactid' alias='contact_id_re'/>
                                         </link-entity>
                                     </link-entity>
                                     <link-entity name='product' from='productid' to='bsd_units' link-type='outer' alias='af'>

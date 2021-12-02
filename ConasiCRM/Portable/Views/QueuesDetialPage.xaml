@@ -89,26 +89,26 @@
                                     </telerikPrimitives:RadBorder>
                                     <Label Grid.Column="1" Text="{Binding Queue.name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" VerticalTextAlignment="Center"/>
                                 </Grid>
-                                <Label FontSize="15" TextColor="#333333" >
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="Khách hàng: "/>
-                                            <Span Text="{Binding Customer.Label}"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="Phí giữ chỗ: " FontSize="15" TextColor="#333333" />
+                                    <Label Text="Khách hàng:" FontSize="15" TextColor="#333333" />
+                                    <Label Text="{Binding Customer.Label}" FontSize="15" TextColor="{StaticResource NavigationPrimary}" >
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Customer_Tapped"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Phí giữ chỗ:" FontSize="15" TextColor="#333333" />
                                     <Label Text="{Binding Queue.bsd_queuingfee,StringFormat='{0:#,0} đ'}" IsVisible="{Binding Queue.bsd_queuingfee,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="Ngân sách: " FontSize="15" TextColor="#333333" />
+                                    <Label Text="Ngân sách:" FontSize="15" TextColor="#333333" />
                                     <Label Text="{Binding Queue.budgetamount,StringFormat='{0:#,0} đ'}" IsVisible="{Binding Queue.budgetamount,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="Giữ chỗ dự án: " FontSize="15" TextColor="#333333"/>
+                                    <Label Text="Giữ chỗ dự án:" FontSize="15" TextColor="#333333"/>
                                     <Label Text="{Binding QueueProject}" TextColor="#333333" FontSize="15"/>
                                 </StackLayout>
                             </StackLayout>

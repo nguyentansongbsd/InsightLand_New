@@ -69,16 +69,18 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='statuscode' />
                                     <attribute name='statecode' />
                                     <attribute name='casetypecode' />
-                                    <attribute name='description' />s
+                                    <attribute name='description' />
                                   <order attribute='title' descending='false' />
                                   <filter type='and'>
                                       <condition attribute='incidentid' operator='eq'  value='{" + CaseID + @"}' />
                                   </filter>
                                   <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer' alias='accounts'>
-                                  <attribute name='bsd_name' alias='accountName'/>
+                                    <attribute name='bsd_name' alias='accountName'/>
+                                    <attribute name='accountid' alias='accountId'/>
                                 </link-entity>
                                 <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' alias='contacts'>
-                                  <attribute name='bsd_fullname' alias='contactName'/>
+                                    <attribute name='bsd_fullname' alias='contactName'/>
+                                    <attribute name='contactid' alias='contactId'/>
                                 </link-entity>
                                 <link-entity name='product' from='productid' to='productid' visible='false' link-type='outer' alias='products'>
                                   <attribute name='name' alias='unitName'/>

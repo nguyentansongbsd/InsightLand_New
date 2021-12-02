@@ -286,12 +286,15 @@ namespace ConasiCRM.Portable.ViewModels
                                             <attribute name='participationtypemask' alias='typemask' />
                                             <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='partyaccount' >
                                                 <attribute name='bsd_name' alias='account_name'/>
+                                                <attribute name='accountid' alias='account_id'/>
                                             </link-entity>
                                             <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='partycontact' >
                                                 <attribute name='fullname' alias='contact_name'/>
+                                                <attribute name='contactid' alias='contact_id'/>
                                             </link-entity>
                                             <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='partylead' >
                                                 <attribute name='fullname' alias='lead_name'/>
+                                                <attribute name='leadid' alias='lead_id'/>
                                             </link-entity>
                                             <link-entity name='systemuser' from='systemuserid' to='partyid' link-type='outer' alias='partyuser' >
                                                 <attribute name='fullname' alias='user_name'/>
@@ -316,14 +319,17 @@ namespace ConasiCRM.Portable.ViewModels
                         if (item.contact_name != null && item.contact_name != string.Empty)
                         {
                             PhoneCall.call_to = item.contact_name;
+                            PhoneCall.callto_contact_id = item.contact_id;
                         }
                         else if (item.account_name != null && item.account_name != string.Empty)
                         {
                             PhoneCall.call_to = item.account_name;
+                            PhoneCall.callto_account_id = item.account_id;
                         }
                         else if (item.lead_name != null && item.lead_name != string.Empty)
                         {
                             PhoneCall.call_to = item.lead_name;
+                            PhoneCall.callto_lead_id = item.lead_id;
                         }
                     }
                 }

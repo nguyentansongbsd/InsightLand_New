@@ -448,9 +448,9 @@ namespace ConasiCRM.Portable.Views
         {
             if(viewModel.PhoneCall != null)
             {
-                if(viewModel.PhoneCall.lead_id != Guid.Empty)
+                if(viewModel.PhoneCall.callto_lead_id != Guid.Empty)
                 {
-                    LeadDetailPage newPage = new LeadDetailPage(viewModel.PhoneCall.lead_id);
+                    LeadDetailPage newPage = new LeadDetailPage(viewModel.PhoneCall.callto_lead_id);
                     newPage.OnCompleted = async (OnCompleted) =>
                     {
                         if (OnCompleted == true)
@@ -465,9 +465,9 @@ namespace ConasiCRM.Portable.Views
                         }
                     };
 
-                }  else if(viewModel.PhoneCall.contact_id != Guid.Empty)
+                }  else if(viewModel.PhoneCall.callto_contact_id != Guid.Empty)
                 {
-                    ContactDetailPage newPage = new ContactDetailPage(viewModel.PhoneCall.contact_id);
+                    ContactDetailPage newPage = new ContactDetailPage(viewModel.PhoneCall.callto_contact_id);
                     newPage.OnCompleted = async (OnCompleted) =>
                     {
                         if (OnCompleted == true)
@@ -482,9 +482,9 @@ namespace ConasiCRM.Portable.Views
                         }
                     };
 
-                }   else if(viewModel.PhoneCall.account_id != Guid.Empty)
+                }   else if(viewModel.PhoneCall.callto_account_id != Guid.Empty)
                 {
-                    AccountDetailPage newPage = new AccountDetailPage(viewModel.PhoneCall.account_id);
+                    AccountDetailPage newPage = new AccountDetailPage(viewModel.PhoneCall.callto_account_id);
                     newPage.OnCompleted = async (OnCompleted) =>
                     {
                         if (OnCompleted == true)

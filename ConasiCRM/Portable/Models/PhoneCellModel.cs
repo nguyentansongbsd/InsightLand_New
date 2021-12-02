@@ -199,8 +199,13 @@ namespace ConasiCRM.Portable.Models
 
         // call from
         public int typemask { get; set; }
+
+        public Guid callto_contact_id { get; set; }
+        public Guid callto_account_id { get; set; }
+        public Guid callto_lead_id { get; set; }
+
         public string callto_contact_name { get; set; }
-        public string callto_accounts_name { get; set; }
+        public string callto_account_name { get; set; }
         public string callto_lead_name { get; set; }
 
         private string _call_from;

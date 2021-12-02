@@ -14,13 +14,13 @@ namespace ConasiCRM.Portable.ViewModels
         public string NumPhone { get; set; }
 
         private ObservableCollection<ReservationListModel> _bangTinhGiaList;
-        public ObservableCollection<ReservationListModel> BangTinhGiaList { get=>_bangTinhGiaList; set { _bangTinhGiaList = value;OnPropertyChanged(nameof(BangTinhGiaList)); } }
+        public ObservableCollection<ReservationListModel> BangTinhGiaList { get => _bangTinhGiaList; set { _bangTinhGiaList = value; OnPropertyChanged(nameof(BangTinhGiaList)); } }
 
         private ObservableCollection<ReservationListModel> _datCocList;
         public ObservableCollection<ReservationListModel> DatCocList { get => _datCocList; set { _datCocList = value; OnPropertyChanged(nameof(DatCocList)); } }
 
         private ObservableCollection<ContractModel> _hopDongList;
-        public ObservableCollection<ContractModel> HopDongList { get=>_hopDongList; set { _hopDongList = value;OnPropertyChanged(nameof(HopDongList)); } }
+        public ObservableCollection<ContractModel> HopDongList { get => _hopDongList; set { _hopDongList = value; OnPropertyChanged(nameof(HopDongList)); } }
 
         private QueuesDetailModel _queue;
         public QueuesDetailModel Queue { get => _queue; set { _queue = value; OnPropertyChanged(nameof(Queue)); } }
@@ -35,7 +35,7 @@ namespace ConasiCRM.Portable.ViewModels
         public string QueueProject { get => _queueProject; set { _queueProject = value; OnPropertyChanged(nameof(QueueProject)); } }
 
         private bool _showBtnHuyGiuCho;
-        public bool ShowBtnHuyGiuCho{ get => _showBtnHuyGiuCho; set { _showBtnHuyGiuCho = value; OnPropertyChanged(nameof(ShowBtnHuyGiuCho)); } }
+        public bool ShowBtnHuyGiuCho { get => _showBtnHuyGiuCho; set { _showBtnHuyGiuCho = value; OnPropertyChanged(nameof(ShowBtnHuyGiuCho)); } }
 
         private bool _showBtnBangTinhGia;
         public bool ShowBtnBangTinhGia { get => _showBtnBangTinhGia; set { _showBtnBangTinhGia = value; OnPropertyChanged(nameof(ShowBtnBangTinhGia)); } }
@@ -55,6 +55,10 @@ namespace ConasiCRM.Portable.ViewModels
         public int PageBangTinhGia { get; set; } = 1;
         public int PageDatCoc { get; set; } = 1;
         public int PageHopDong { get; set; } = 1;
+
+        public string CodeContact = "2";
+
+        public string CodeAccount = "3";
 
         public QueuesDetialPageViewModel()
         {
@@ -114,11 +118,11 @@ namespace ConasiCRM.Portable.ViewModels
             var data = result.value.FirstOrDefault();
             if (!string.IsNullOrWhiteSpace(data.account_name))
             {
-                Customer = new OptionSet() { Val= data.account_id.ToString(), Label = data.account_name, Title="3"};
+                Customer = new OptionSet() { Val= data.account_id.ToString(), Label = data.account_name, Title= CodeAccount };
             }
             else if (!string.IsNullOrWhiteSpace(data.contact_name))
             {
-                Customer = new OptionSet() { Val = data.contact_id.ToString(), Label = data.contact_name, Title = "2" }; ;
+                Customer = new OptionSet() { Val = data.contact_id.ToString(), Label = data.contact_name, Title = CodeContact }; ;
             }
 
             if (!string.IsNullOrWhiteSpace(data.PhoneAccount))

@@ -359,7 +359,7 @@ namespace ConasiCRM.Portable.ViewModels
                                             <attribute name='fullname' alias='callto_contact_name'/>
                                         </link-entity>
                                         <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
-                                            <attribute name='bsd_name' alias='callto_accounts_name'/>
+                                            <attribute name='bsd_name' alias='callto_account_name'/>
                                         </link-entity>
                                         <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
                                             <attribute name='fullname' alias='callto_lead_name'/>
@@ -562,9 +562,9 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             PhoneCall.call_to = item.callto_lead_name;
                         }
-                        else if (item.callto_accounts_name != null && item.callto_accounts_name != string.Empty)
+                        else if (item.callto_account_name != null && item.callto_account_name != string.Empty)
                         {
-                            PhoneCall.call_to = item.callto_accounts_name;
+                            PhoneCall.call_to = item.callto_account_name;
                         }
                         else if (item.callto_contact_name != null && item.callto_contact_name != string.Empty)
                         {

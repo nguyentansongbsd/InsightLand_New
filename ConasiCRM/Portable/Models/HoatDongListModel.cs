@@ -24,9 +24,9 @@ namespace ConasiCRM.Portable.Models
                     {
                         return this.callto_contact_name;
                     }
-                    else if (this.callto_accounts_name != null)
+                    else if (this.callto_account_name != null)
                     {
-                        return this.callto_accounts_name;
+                        return this.callto_account_name;
                     }
                     else if (this.callto_lead_name != null)
                     {
@@ -158,7 +158,7 @@ namespace ConasiCRM.Portable.Models
         // sử dụng cho phonecall
 
         public string callto_contact_name { get; set; }
-        public string callto_accounts_name { get; set; }
+        public string callto_account_name { get; set; }
         public string callto_lead_name { get; set; }
     }
 }

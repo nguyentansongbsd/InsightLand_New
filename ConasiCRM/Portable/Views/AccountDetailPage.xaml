@@ -90,7 +90,7 @@
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto">
                             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
-                                <Label Text="{Binding singleAccount.bsd_name}" FontAttributes="Bold" Grid.Row="0" FontSize="16" TextColor="#026294"/>
+                                <Label Text="{Binding singleAccount.bsd_name}" FontAttributes="Bold" Grid.Row="0" FontSize="16" TextColor="{StaticResource NavigationPrimary}"/>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                     <Label Text="Nhóm:" Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                     <Label Text="{Binding Localization.Label}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
@@ -101,7 +101,11 @@
                                 </Grid>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
                                     <Label Text="Đại diện:" Grid.Column="0" FontSize="15" TextColor="#444444"/>
-                                    <Label Text="{Binding PrimaryContact.bsd_fullname}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
+                                    <Label Text="{Binding PrimaryContact.bsd_fullname}" Grid.Column="1" FontSize="15" TextColor="{StaticResource NavigationPrimary}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="NguoiDaiDien_Tapped"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
                                 </Grid>
 
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="4">
