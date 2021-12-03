@@ -125,7 +125,7 @@
 
                                 <controls:FormLabelRequired Text="Khách hàng" Margin="0,10,0,0"/>
                                 <Grid>
-                                    <controls:MainEntry Text="{Binding QueueFormModel.customer_name}" Placeholder="Chọn khách hàng tiềm năng" FontSize="15"/>
+                                    <controls:MainEntry Text="{Binding QueueFormModel.customer_name}" Placeholder="Chọn khách hàng" FontSize="15"/>
                                     <StackLayout>
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="KhachHangTiemNang_Tapped"/>

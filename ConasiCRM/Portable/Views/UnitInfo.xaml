@@ -245,11 +245,11 @@
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
-                                            <Label Text="Giá trị QSDĐ/m2" FontSize="15" TextColor="#333333" />
+                                            <Label Text="Giá trị QSDĐ/m²" FontSize="15" TextColor="#333333" />
                                             <Label Text="{Binding UnitInfo.bsd_landvalueofunit,Converter={StaticResource DecimalToVndConverter}}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" TextColor="#333333" />
                                         </StackLayout>
                                         <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
-                                            <Label Text="Tổng giá trị" FontSize="15" TextColor="#333333" />
+                                            <Label Text="Tổng giá trị QSDĐ" FontSize="15" TextColor="#333333" />
                                             <Label Text="{Binding UnitInfo.bsd_landvalue,Converter={StaticResource DecimalToVndConverter}}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" TextColor="#333333" />
                                         </StackLayout>
                                         <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="17,15">
