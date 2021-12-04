@@ -14,22 +14,7 @@
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
     x:Class="ConasiCRM.Portable.BlankPage">
-    
+
     <ContentPage.Content>
-        <AbsoluteLayout>
-
-            <StackLayout Margin="0,200,0,0">
-                <!--<ffimageloading:CachedImage x:Name="test" HeightRequest="100" WidthRequest="100" LoadingPlaceholder="image_placeholder.jpg"/>-->
-                <controls:ImageControl x:Name="test"  HeightRequest="100" WidthRequest="100" BackgroundColor="Red"/>
-            </StackLayout>
-
-            <!--<Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>-->
-            <mr:ContentView Swiped="ContentView_Swiped" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsVisible="true">
-                <controls:PinchZoomImage>
-                    <Image x:Name="img" Source="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg"/>
-                </controls:PinchZoomImage>
-            </mr:ContentView>
-            <mr:Image IsVisible="false" Source="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg" Pinching="Image_Pinching" Swiped="Image_Swiped" Pinched="Image_Pinched" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Up="Image_Up" Down="Image_Down"/>
-        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
