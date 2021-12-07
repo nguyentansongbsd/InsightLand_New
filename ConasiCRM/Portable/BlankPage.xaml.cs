@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
@@ -58,14 +61,39 @@ namespace ConasiCRM.Portable
 
         public async void Init()
         {
-            DateTime a = new DateTime(2021, 11, 11);
-            DateTime now = DateTime.Now;
 
-            TimeSpan time = now - a;
 
-            
+            //string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            //                      <entity name='sharepointdocument'>
+            //                        <attribute name='documentid' />
+            //                        <attribute name='sharepointdocumentid' />
+            //                        <attribute name='absoluteurl' />
+            //                        <attribute name='fullname' />
+            //                        <attribute name='filetype' />
+            //                        <attribute name='relativelocation' />
+            //                        <attribute name='author' />
+            //                        <order attribute='relativelocation' descending='false' />
+            //                        <link-entity name='bsd_project' from='bsd_projectid' to='regardingobjectid' link-type='inner' alias='ad'>
+            //                          <filter type='and'>
+            //                            <condition attribute='bsd_projectid' operator='eq' value='A7ABBBAF-0A2C-EC11-B6E6-000D3A80FA69' />
+            //                          </filter>
+            //                        </link-entity>
+            //                      </entity>
+            //                    </fetch>";
+            //var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<SharePonitModel>>("sharepointdocuments", fetchXml);
 
-            System.Diagnostics.Debug.WriteLine("aksjdfhasdf: " +time.Days);
+            //var Category = "Project";
+            //var category_value = "bsd_project";
+            //List<SharePonitModel> list = result.value;
+
+            //var videos = list.Where(x => x.filetype == "mp4" || x.filetype == "flv" || x.filetype == "m3u8" || x.filetype == "3gp" || x.filetype == "mov" || x.filetype == "avi" || x.filetype == "wmv").ToList();
+
+            //byte[] resultImg;
+            //for (int i = 0; i < videos.Count; i++)
+            //{
+            //    resultImg = await CrmHelper.RetrieveImagesSharePoint<byte[]>($"{OrgConfig.SharePointSiteName}/{category_value}/{videos[i].relativelocation}");
+            //}
+
 
             //string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
             //                      <entity name='sharepointdocument'>
@@ -204,10 +232,10 @@ namespace ConasiCRM.Portable
 
         private void ContentView_Swiped(object sender, MR.Gestures.SwipeEventArgs e)
         {
-            if (img.Scale == 1)
-            {
+            //if (img.Scale == 1)
+            //{
 
-            }
+            //}
         }
     }
     public class CategoricalData

@@ -15,11 +15,15 @@ using System.Threading.Tasks;
 using System.Drawing;
 using Xamarin.Forms;
 using ConasiCRM.Portable.IServices;
+using Newtonsoft.Json;
 
 namespace ConasiCRM.Portable.ViewModels
 {
     public class ContactDetailPageViewModel : BaseViewModel
     {
+        private ImageSource _myImage;
+        public ImageSource MyImage { get => _myImage; set { _myImage = value; OnPropertyChanged(nameof(MyImage)); } }
+
         private ContactFormModel _singleContact;
         public ContactFormModel singleContact { get { return _singleContact; } set { _singleContact = value; OnPropertyChanged(nameof(singleContact)); } }
 
@@ -130,40 +134,46 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task GetImageCMND()
         {
-            ShowCMND = false;
-            if (this.singleContact.contactid != Guid.Empty)
-            {
-                var frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-                var behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
+            ShowCMND = true;
 
-                string token = (await CrmHelper.getSharePointToken()).access_token;
-                var client = BsdHttpClient.Instance();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var result = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<Thumbnail>>();
 
-                var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                                + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
-                var front_result = await client.SendAsync(front_request);
-                if (front_result.IsSuccessStatusCode)
-                {
-                    ShowCMND = true;
-                    singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
-                    CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_mattruoccmnd_source });
-                    frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
-                }
+            var a = result.value;
+            MyImage = a[0].medium.url;
 
-                var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-                                + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
-                var behind_result = await client.SendAsync(behind_request);
-                if (behind_result.IsSuccessStatusCode)
-                {
-                    ShowCMND = true;
-                    var abc = behind_result.Content.ReadAsByteArrayAsync().Result;
-                    singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
-                    CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_matsaucmnd_source });
-                    // behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
-                }
-            }
+            //if (this.singleContact.contactid != Guid.Empty)
+            //{
+            //    var frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
+            //    var behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
+
+            //    string token = (await CrmHelper.getSharePointToken()).access_token;
+            //    var client = BsdHttpClient.Instance();
+            //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //    var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+            //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
+            //    var front_result = await client.SendAsync(front_request);
+            //    if (front_result.IsSuccessStatusCode)
+            //    {
+            //        ShowCMND = true;
+            //        singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
+            //        CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_mattruoccmnd_source });
+            //        frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
+            //    }
+
+            //    var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
+            //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
+            //    var behind_result = await client.SendAsync(behind_request);
+            //    if (behind_result.IsSuccessStatusCode)
+            //    {
+            //        ShowCMND = true;
+            //        var abc = behind_result.Content.ReadAsByteArrayAsync().Result;
+            //        singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
+            //        CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_matsaucmnd_source });
+            //        // behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
+            //    }
+            //}
         }
 
         // giao dich
@@ -886,4 +896,109 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
     }
+
+    public class User
+    {
+        public string email { get; set; }
+        public string id { get; set; }
+        public string displayName { get; set; }
+    }
+
+    public class CreatedBy
+    {
+        public User user { get; set; }
+    }
+
+    public class LastModifiedBy
+    {
+        public User user { get; set; }
+    }
+
+    public class ParentReference
+    {
+        public string driveId { get; set; }
+        public string driveType { get; set; }
+        public string id { get; set; }
+        public string path { get; set; }
+    }
+
+    public class Hashes
+    {
+        public string quickXorHash { get; set; }
+    }
+
+    public class File
+    {
+        public string mimeType { get; set; }
+        public Hashes hashes { get; set; }
+    }
+
+    public class FileSystemInfo
+    {
+        public DateTime createdDateTime { get; set; }
+        public DateTime lastModifiedDateTime { get; set; }
+    }
+
+    public class Image
+    {
+        public int height { get; set; }
+        public int width { get; set; }
+    }
+
+    public class Root
+    {
+        [JsonProperty("@odata.context")]
+        public string OdataContext { get; set; }
+
+        [JsonProperty("@microsoft.graph.downloadUrl")]
+        public string MicrosoftGraphDownloadUrl { get; set; }
+        public DateTime createdDateTime { get; set; }
+        public string eTag { get; set; }
+        public string id { get; set; }
+        public DateTime lastModifiedDateTime { get; set; }
+        public string name { get; set; }
+        public string webUrl { get; set; }
+        public string cTag { get; set; }
+        public int size { get; set; }
+        public CreatedBy createdBy { get; set; }
+        public LastModifiedBy lastModifiedBy { get; set; }
+        public ParentReference parentReference { get; set; }
+        public File file { get; set; }
+        public FileSystemInfo fileSystemInfo { get; set; }
+        public Image image { get; set; }
+    }
+
+
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class Large
+    {
+        public int height { get; set; }
+        public string url { get; set; }
+        public int width { get; set; }
+    }
+
+    public class Medium
+    {
+        public int height { get; set; }
+        public string url { get; set; }
+        public int width { get; set; }
+    }
+
+    public class Small
+    {
+        public int height { get; set; }
+        public string url { get; set; }
+        public int width { get; set; }
+    }
+
+    public class Thumbnail
+    {
+        public string id { get; set; }
+        public Large large { get; set; }
+        public Medium medium { get; set; }
+        public Small small { get; set; }
+    }
+
+
+
 }

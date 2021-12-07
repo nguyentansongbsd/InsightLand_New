@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Core;
 using Xamarin.Forms;
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -476,26 +477,64 @@ namespace ConasiCRM.Portable.ViewModels
                 this.TotalMedia = videos.Count;
                 this.TotalPhoto = images.Count;
 
-                //for (int i = 0; i < TotalMedia; i++)
-                //{
-                //    var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + videos[i].relativelocation + "&access_token=" + UserLogged.AccessTokenSharePoint;
-                //    if (Device.RuntimePlatform == Device.iOS)
-                //    {
-                //        soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
-                //    }
-                //    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
-                //    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
-                //    //ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
+                for (int i = 0; i < TotalMedia; i++)
+                {
+                    //var soucre = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + videos[i].relativelocation + "&access_token=" + UserLogged.AccessTokenSharePoint;
+                    //if (Device.RuntimePlatform == Device.iOS)
+                    //{
+                    //    soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
+                    //}
+                    //var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
+                    //var imageSource = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
+                    //ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(soucre);
 
-                //    ImageSource a =  DependencyService.Get<IThumbnailService>().GenerateThumbnailImageSource(soucre, 5000);
-                //    Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = a.ToImageSource(),SharePointType = SharePointType.Video, Index = TotalMedia });
-                //}
+                    //ImageSource a = DependencyService.Get<IThumbnailService>().GenerateThumbnailImageSource(soucre, 5000);
+
+                    //var resultImg = await CrmHelper.RetrieveImagesSharePoint<byte[]>($"{OrgConfig.SharePointSiteName}/{category_value}/{videos[i].relativelocation}");
+
+                    //ImageSource source = ImageSource.FromStream(() => new MemoryStream(resultImg));
+
+                    //string base64String = Convert.ToBase64String(resultImg, 0, resultImg.Length);
+
+                    ////byte[] ret = Convert.FromBase64String(base64String);
+                    ////string date = DateTime.Now.ToString().Replace(@"/", @"_").Replace(@":", @"_").Replace(@" ", @"_");
+                    ////string path = HttpContext.Current.Server.MapPath("~/App_Data/Video/Film");
+                    //FileInfo fil = new FileInfo("video.mp4");
+                    //using (Stream sw = fil.OpenWrite())
+                    //{
+                    //    sw.Write(resultImg, 0, resultImg.Length);
+                    //    sw.Close();
+                    //}
+
+
+                    
+
+                    //Stream stream = new Stream
+
+                    //File.WriteAllBytes("Foo.mp4", resultImg);
+                    //MediaSource media = MediaSource.FromFile("Foo.mp4");
+
+                    //using (Stream video = File.OpenRead("~/Foo.mp4"))
+                    //{
+                    //    //byte[] buffer = new byte[4096];
+
+                    //    while (true)
+                    //    {
+                    //        int bytesRead = video.Read(resultImg, 0, resultImg.Length);
+
+                    //        if (bytesRead == 0) break;
+                    //        //requestStream.Write(buffer, 0, bytesRead);
+                    //    }
+                    //}
+
+                    //Collections.Add(new CollectionData { MediaSource = null, ImageSource =source, SharePointType = SharePointType.Video, Index = TotalMedia });
+                }
 
                 for (int i = 0; i < TotalPhoto; i++)
                 {
-                    var resultImg = await CrmHelper.RetrieveImagesSharePoint<byte[]>($"{OrgConfig.SharePointSiteName}/{category_value}/{images[i].relativelocation}");
+                    //var resultImg = await CrmHelper.RetrieveImagesSharePoint<byte[]>($"{OrgConfig.SharePointSiteName}/{category_value}/{images[i].relativelocation}");
 
-                    ImageSource source = ImageSource.FromStream(() => new MemoryStream(resultImg));
+                    //ImageSource source = ImageSource.FromStream(() => new MemoryStream(resultImg));
 
                     //var soucre = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
                     //        + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + category_value + "/" + images[i].relativelocation + "')/$value");
@@ -507,9 +546,9 @@ namespace ConasiCRM.Portable.ViewModels
                     //    soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
                     //}
 
-                    Photos.Add(new SongPhoto { URL = source.ToString().Replace("Uri: ", "")});
-                    //ImageSource image = soucre;
-                    Collections.Add(new CollectionData { MediaSource = null, ImageSource = source, SharePointType = SharePointType.Image, Index = TotalMedia });
+                    //Photos.Add(new SongPhoto { URL = source.ToString().Replace("Uri: ", "")});
+                    ////ImageSource image = soucre;
+                    //Collections.Add(new CollectionData { MediaSource = null, ImageSource = source, SharePointType = SharePointType.Image, Index = TotalMedia });
                 }
             }
 
