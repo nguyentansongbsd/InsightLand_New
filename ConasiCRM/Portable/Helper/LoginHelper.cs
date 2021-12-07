@@ -44,7 +44,7 @@ namespace ConasiCRM.Portable.Helper
                         //new KeyValuePair<string, string>("client_id", "bbdc1207-6048-415a-a21c-02a734872571"),
                         //new KeyValuePair<string, string>("client_secret", "_~~NDM9PVbrSD22Ef-.qRnxioPHcG5xsJ8"),
                         //new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                        new KeyValuePair<string, string>("resource", OrgConfig.SharePointResource)
+                        new KeyValuePair<string, string>("resource", OrgConfig.GraphReSource)
                     });
             request.Content = formContent;
             var response = await client.SendAsync(request);
