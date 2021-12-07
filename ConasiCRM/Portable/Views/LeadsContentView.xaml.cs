@@ -62,12 +62,10 @@ namespace ConasiCRM.Portable.Views
 
         private async void Search_TextChanged(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
             if (string.IsNullOrEmpty(viewModel.Keyword))
             {
-                await viewModel.LoadOnRefreshCommandAsync();
+                Search_Pressed(null, EventArgs.Empty);
             }
-            LoadingHelper.Hide();
         }
     }
 }

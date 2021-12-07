@@ -110,8 +110,8 @@
                                 <controls:FormLabel VerticalOptions="Center" Text="Mã SIC" FontSize="15"/>
                                 <controls:MainEntry x:Name="sic_text" Text="{Binding singleLead.sic}" Placeholder="Nhập mã SIC" FontSize="15"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Đơn vị tiền tệ" FontSize="15" />
-                                <controls:LookUp x:Name="lookUpCurrency" Placeholder="Chọn đơn vị tiền tệ" BottomModal="{Reference LookUpModal}" ItemsSource="{Binding list_currency_lookup}" SelectedItem="{Binding SelectedCurrency}" NameDisplay="Label"/>
+                                <!--<controls:FormLabel VerticalOptions="Center" Text="Đơn vị tiền tệ" FontSize="15" />
+                                <controls:LookUp x:Name="lookUpCurrency" Placeholder="Chọn đơn vị tiền tệ" BottomModal="{Reference LookUpModal}" ItemsSource="{Binding list_currency_lookup}" SelectedItem="{Binding SelectedCurrency}" NameDisplay="Label"/>-->
 
                                 <controls:FormLabel VerticalOptions="Center" Text="Chiến dịch" FontSize="15"/>
                                 <controls:LookUp x:Name="lookUpChienDich" Placeholder="Chọn chiến dịch" NameDisplay="Label" BottomModal="{Reference LookUpModal}" SelectedItem="{Binding Campaign}" ItemsSource="{Binding list_campaign_lookup}"/>
@@ -121,8 +121,8 @@
                                     <CheckBox Grid.Column="1" IsChecked="{Binding singleLead.donotsendmm}" HorizontalOptions="End" Color="#1C78C2"/>
                                 </Grid>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Ngày cuối chiến dịch" FontSize="15"/>
-                                <controls:MainEntry Text="{Binding singleLead.lastusedincampaign,StringFormat='{0:dd/MM/yyy}'}" Placeholder="Ngày cuối chiến dịch" IsEnabled="False"/>
+                                <!--<controls:FormLabel VerticalOptions="Center" Text="Ngày cuối chiến dịch" FontSize="15"/>
+                                <controls:MainEntry Text="{Binding singleLead.lastusedincampaign,StringFormat='{0:dd/MM/yyy}'}" Placeholder="Ngày cuối chiến dịch" IsEnabled="False"/>-->
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>

@@ -690,7 +690,7 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
 
-            // data["budgetamount"] = QueueFormModel.budgetamount;
+            data["budgetamount"] = QueueFormModel.budgetamount;
             if(QueueFormModel.bsd_units_id == Guid.Empty)
             {
                 data["estimatedvalue"] = 0;

@@ -144,7 +144,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             ShowBtnHuyGiuCho = (data.statuscode == 100000000 || data.statuscode == 100000002) ? true : false;
-            ShowBtnBangTinhGia = data.statuscode == 100000000 ? true : false;
+            ShowBtnBangTinhGia = (data.statuscode == 100000000 && !string.IsNullOrWhiteSpace(data.phaselaunch_name)) ? true : false;
 
             this.QueueStatusCode = QueuesStatusCodeData.GetQueuesById(data.statuscode.ToString());
 

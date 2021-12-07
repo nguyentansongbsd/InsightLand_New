@@ -11,6 +11,26 @@ namespace ConasiCRM.Portable.Models
         public string bsd_queuenumber { get; set; }
         public string name { get; set; }
         public decimal budgetamount { get; set; }
+
+        public decimal budget;
+        public string budgetamount_format
+        {
+            get
+            {
+                if (budget > 0 )
+                    return budget + "đ";
+                else
+                    return "";
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value.Replace("đ", "")) && Decimal.Parse(value.Replace("đ", "")) > 0)
+                    budget = Decimal.Parse(value.Replace("đ", ""));
+                else
+                    budget = 0;
+                OnPropertyChanged(nameof(budgetamount_format));
+            }
+        }
         public string description { get; set; }
 
         /// <summary>
@@ -91,6 +111,6 @@ namespace ConasiCRM.Portable.Models
         public string bsd_bookingid { get; set; }
         public string _defaultuomid_value { get; set; }
         public string _transactioncurrencyid_value { get; set; }
-        public decimal bsd_taxpercent { get; set; }
+        public decimal bsd_taxpercent { get; set; } 
     }
 }

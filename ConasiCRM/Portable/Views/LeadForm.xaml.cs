@@ -31,7 +31,7 @@ namespace ConasiCRM.Portable.Views
         public LeadForm(Guid Id)
         {
             InitializeComponent();
-            this.Title = "CẬP NHẬT KHÁCH HÀNG";
+            this.Title = "CẬP NHẬT KH TIỀM NĂNG";
             btn_save_lead.Text = "CẬP NHẬT KHÁCH HÀNG";
             Init();
             viewModel.LeadId = Id;
@@ -108,17 +108,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.Ratings = RatingData.Ratings();
                 LoadingHelper.Hide();
-            };
-            lookUpCurrency.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadCurrenciesForLookup();
-                if (viewModel.list_currency_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage("Không load được đơn vị tiền tệ");
-                }
-                LoadingHelper.Hide();
-            };
+            };          
 
             lookUpLinhVuc.PreOpenAsync = async () =>
             {
