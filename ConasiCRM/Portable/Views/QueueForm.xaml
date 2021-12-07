@@ -134,7 +134,7 @@
                                 </Grid>
 
                                 <controls:FormLabel Text="Ngân sách" FontSize="15" Margin="0,10,0,0"/>
-                                <controls:MainEntry Placeholder="Nhập ngân sách" Text="{Binding QueueFormModel.budgetamount}" FontSize="15"/>
+                                <controls:MainEntry Placeholder="Nhập ngân sách" Text="{Binding QueueFormModel.budgetamount, StringFormat='{0:#,##0}'}" FontSize="15"/>
 
                                 <controls:FormLabel Text="Mô tả" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Placeholder="Nhập mô tả" Text="{Binding QueueFormModel.description}" FontSize="15" />

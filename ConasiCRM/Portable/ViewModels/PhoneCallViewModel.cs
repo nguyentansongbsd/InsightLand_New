@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
@@ -25,11 +26,11 @@ namespace ConasiCRM.Portable.ViewModels
         public OptionSet _callTo;
         public OptionSet CallTo { get => _callTo; set { _callTo = value; OnPropertyChanged(nameof(CallTo)); } }
 
-        public string CodeAccount = "3";
+        public string CodeAccount = LookUpMultipleTabs.CodeAccount;
 
-        public string CodeContac = "2";
+        public string CodeContac = LookUpMultipleTabs.CodeContac;
 
-        public string CodeLead = "1";
+        public string CodeLead = LookUpMultipleTabs.CodeLead;
 
         public bool _showButton;
         public bool ShowButton { get => _showButton; set { _showButton = value; OnPropertyChanged(nameof(ShowButton)); } }

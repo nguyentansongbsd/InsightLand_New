@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,16 @@ namespace ConasiCRM.Portable.Views
             Init();
             MeetId = id;
             Update();
+        }
+
+        public MeetingForm(Guid idCustomer, string nameCustomer, string codeCustomer)
+        {
+            InitializeComponent();
+            Init();
+            Create();
+            viewModel.CustomerMapping = new OptionSet { Val = idCustomer.ToString(), Label = nameCustomer, Title = codeCustomer };
+            Lookup_Required.IsVisible = false;
+            CustomerMapping.IsVisible = true;
         }
 
         private void Init()
@@ -121,10 +132,13 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage("Vui lòng nhập chủ đề cuộc họp");
                 return;
             }
-            if (viewModel.Required == null || viewModel.Required.Count<=0)
+            if (viewModel.CustomerMapping == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người tham dự bắt buộc");
-                return;
+                if (viewModel.Required == null || viewModel.Required.Count <= 0)
+                {
+                    ToastMessageHelper.ShortMessage("Vui lòng chọn người tham dự bắt buộc");
+                    return;
+                }
             }
             if (viewModel.MeetingModel.scheduledstart == null || viewModel.MeetingModel.scheduledend == null)
             {

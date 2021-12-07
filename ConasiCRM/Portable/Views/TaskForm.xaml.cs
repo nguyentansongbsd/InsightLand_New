@@ -42,12 +42,12 @@ namespace ConasiCRM.Portable.Views
 
         }
 
-        public TaskForm(Guid idContact,string nameContact)
+        public TaskForm(Guid idCustomer, string nameCustomer, string codeCustomer)
         {
             InitializeComponent();
             Init();
             InitAdd();
-            viewModel.Customer = new OptionSet { Val= idContact.ToString(), Label = nameContact, Title = viewModel.CodeContact};
+            viewModel.Customer = new OptionSet { Val= idCustomer.ToString(), Label = nameCustomer, Title = codeCustomer};
             Lookup_NguoiLienQuan.IsVisible = false;
             ContactMapping.IsVisible = true;
         }

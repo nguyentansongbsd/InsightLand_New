@@ -64,6 +64,9 @@ namespace ConasiCRM.Portable.ViewModels
         public int PageContact = 1;
         public int PageAccount = 1;
 
+        private OptionSet _customerMapping;
+        public OptionSet CustomerMapping { get => _customerMapping; set { _customerMapping = value; OnPropertyChanged(nameof(CustomerMapping)); } }
+
         public MeetingViewModel()
         {
             MeetingModel = new MeetingModel();
@@ -297,6 +300,23 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             List<object> arrayMeeting = new List<object>();
+
+            if (CustomerMapping != null)
+            {
+                IDictionary<string, object> item_required = new Dictionary<string, object>();
+                if (CustomerMapping.Title == CodeContac)
+                {
+                    item_required["partyid_contact@odata.bind"] = "/contacts(" + CustomerMapping.Val + ")";
+                    item_required["participationtypemask"] = 5;
+                    arrayMeeting.Add(item_required);
+                }
+                else if (CustomerMapping.Title == CodeAccount)
+                {
+                    item_required["partyid_account@odata.bind"] = "/accounts(" + CustomerMapping.Val + ")";
+                    item_required["participationtypemask"] = 5;
+                    arrayMeeting.Add(item_required);
+                }
+            }
 
             foreach (var list in AllsLookUpRequired)
             {

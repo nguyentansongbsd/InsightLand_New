@@ -44,7 +44,7 @@ namespace ConasiCRM.Portable
 
     public partial class BlankPage : ContentPage
     {
-       
+
         public BlankPage()
         {
 

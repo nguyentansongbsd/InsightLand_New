@@ -38,6 +38,17 @@ namespace ConasiCRM.Portable.Views
             Update();
         }
 
+        public PhoneCallForm(Guid idCustomer, string nameCustomer, string codeCustomer)
+        {
+            InitializeComponent();
+            Init();
+            Create();
+            viewModel.CallTo = new OptionSet { Val = idCustomer.ToString(), Label = nameCustomer, Title = codeCustomer };
+            Lookup_CallTo.IsVisible = false;
+            CustomerMapping.IsVisible = true;
+            Lookup_CallTo_SelectedItemChange(null, null);
+        }
+
         private void Init()
         {
             LoadingHelper.Show();
