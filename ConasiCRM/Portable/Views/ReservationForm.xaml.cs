@@ -322,19 +322,23 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private async void DiscountChildItem_Tapped(object sender, EventArgs e)
+        private async void DiscountChildItem_CheckedChanged(System.Object sender, Xamarin.Forms.CheckedChangedEventArgs e)
         {
             if (viewModel.IsHadLichThanhToan == true)
             {
                 ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
                 return;
             }
+            await viewModel.SetTotalDiscount();
+            isSetTotal = false;
+        }
+
+        private void DiscountChildItem_Tapped(object sender, EventArgs e)
+        {
             var item = (DiscountChildOptionSet)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             if (item.IsExpired == true || item.IsNotApplied == true) return;
 
             item.Selected = !item.Selected;
-            await viewModel.SetTotalDiscount();
-            isSetTotal = false;
         }
         #endregion
 

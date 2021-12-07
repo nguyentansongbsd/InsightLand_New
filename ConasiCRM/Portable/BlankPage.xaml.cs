@@ -161,14 +161,14 @@ namespace ConasiCRM.Portable
             CollectionData item = a.CommandParameter as CollectionData;
             if (item != null)
             {
-                viewModel.photoBrowser.StartIndex = item.Index;
-                viewModel.photoBrowser.Show();
+                //viewModel.photoBrowser.StartIndex = item.Index;
+                //viewModel.photoBrowser.Show();
             }
         }
 
         private void MediaElement_MediaOpened(object sender, EventArgs e)
         {
-            viewModel.OnComplate = false;
+            //viewModel.OnComplate = false;
         }
 
         private void MediaElement_MediaFailed(object sender, EventArgs e)
@@ -178,7 +178,7 @@ namespace ConasiCRM.Portable
             CollectionData item = a.CommandParameter as CollectionData;
             if (item != null)
             {
-                viewModel.Data.Remove(item);
+                //viewModel.Data.Remove(item);
             }
         }
 
@@ -194,7 +194,7 @@ namespace ConasiCRM.Portable
 
         void Button_Clicked_1(System.Object sender, System.EventArgs e)
         {
-            var a = mydate;
+            //var a = mydate;
         }
 
         private void Image_Pinching(object sender, MR.Gestures.PinchEventArgs e)
