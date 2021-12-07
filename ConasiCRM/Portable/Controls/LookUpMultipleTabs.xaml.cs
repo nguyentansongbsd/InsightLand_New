@@ -24,6 +24,7 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
         public bool ShowLead { get; set; } = false;
+        public bool LoadNewLead { get; set; } = false;
         public bool ShowContact { get; set; } = false;
         public bool ShowAccount { get; set; } = false;
 
@@ -309,12 +310,21 @@ namespace ConasiCRM.Portable.Controls
 
         private void SetUpLead()
         {
+            string loadNewLead = null;
+            if(LoadNewLead)
+            {
+                loadNewLead = @" <condition attribute='statecode' operator='in'>
+                                    <value>0</value>
+                                  </condition>";
+            }
+
             string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
                                 <attribute name='lastname' alias='Label' />
                                 <attribute name='leadid' alias='Val' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
+                                    "+ loadNewLead + @"
                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                 </filter>
                               </entity>

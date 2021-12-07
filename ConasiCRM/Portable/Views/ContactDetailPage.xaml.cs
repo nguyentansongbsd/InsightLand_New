@@ -314,7 +314,7 @@ namespace ConasiCRM.Portable.Views
                     {
                         await viewModel.loadPhoneCall(item.activityid);
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
-                        viewModel.ActivityType = "Phone Call";
+                        viewModel.ActivityType = "Cuộc Gọi";
                         if (viewModel.PhoneCall.activityid != Guid.Empty)
                         {
                             ContentActivity.IsVisible = true;
@@ -338,7 +338,7 @@ namespace ConasiCRM.Portable.Views
                     {
                         await viewModel.loadTask(item.activityid);
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Taskk.statecode.ToString());
-                        viewModel.ActivityType = "Task";
+                        viewModel.ActivityType = "Công Việc";
                         if (viewModel.Taskk.activityid != Guid.Empty)
                         {
                             ContentActivity.IsVisible = true;
@@ -363,7 +363,7 @@ namespace ConasiCRM.Portable.Views
                         await viewModel.loadMeet(item.activityid);
                         await viewModel.loadFromToMeet(item.activityid);
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
-                        viewModel.ActivityType = "Collection Meeting";
+                        viewModel.ActivityType = "Cuộc Họp";
                         if (viewModel.Meet.activityid != Guid.Empty)
                         {
                             ContentActivity.IsVisible = true;

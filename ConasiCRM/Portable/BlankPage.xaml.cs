@@ -44,10 +44,10 @@ namespace ConasiCRM.Portable
 
     public partial class BlankPage : ContentPage
     {
-        public ViewModel viewModel;
-        public DateTime? mydate { get; set; }
+       
         public BlankPage()
         {
+
             InitializeComponent();
             //this.BindingContext = this;
            // this.BindingContext = viewModel = new ViewModel();
@@ -263,34 +263,6 @@ namespace ConasiCRM.Portable
             //{
             //    Photos = Photos,
             //};
-        }
-        private ObservableCollection<CollectionData> GetCollectionData()
-        {
-            var list = new List<CollectionData>
-            {
-                new CollectionData { MediaSource = "https://sec.ch9.ms/ch9/5d93/a1eab4bf-3288-4faf-81c4-294402a85d93/XamarinShow_mid.mp4",ImageSource= null,Index = 1},
-                new CollectionData { MediaSource = "https://sec.ch9.ms/ch9/5d93/a1eab4bf-3288-4faf-81c4-294402a85d93/XamarinShow_mid.mp4",ImageSource= null,Index = 2},
-                new CollectionData { MediaSource = null,ImageSource="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg",Index = 1},
-                new CollectionData { MediaSource = null,ImageSource="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg",Index = 2},
-            };
-            var data = new ObservableCollection<CollectionData>();
-            Photos = new List<Photo>();
-            Media = new List<Photo>();
-
-            foreach (var item in list)
-            {
-                if (item.ImageSource != null)
-                {
-                    Photos.Add(new Photo { URL = item.ImageSource.ToString() });
-                    data.Add(item);
-                }
-                else
-                {
-                    Media.Add(new Photo { URL = item.ImageSource.ToString() });
-                    data.Add(item);
-                }
-            }
-            return data;
         }
     }
 }

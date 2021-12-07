@@ -429,8 +429,8 @@ namespace ConasiCRM.Portable.Views
         private async void CancelQuotes(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            string options = await DisplayActionSheet("Hủy Bảng Tính Giá", "Đóng", null, "Xác nhận hủy bảng tính giá");
-            if (options == "Xác nhận hủy bảng tính giá")
+            string options = await DisplayActionSheet("Hủy Bảng Tính Giá", "Đóng", "Xác nhận");
+            if (options == "Xác nhận")
             {
                 viewModel.Reservation.statecode = 3;
                 viewModel.Reservation.statuscode = 6;

@@ -82,7 +82,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0c0;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Danh bạ" ContentTemplate="{DataTemplate views:DanhBa}">
+        <ShellContent Title="Đồng bộ danh bạ" ContentTemplate="{DataTemplate views:DanhBa}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2c1;" Size="18"/>
             </ShellContent.Icon>
@@ -109,7 +109,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Danh sách hợp đồng" ContentTemplate="{DataTemplate views:ContractList}">
+    <ShellContent Title="Hợp đồng" ContentTemplate="{DataTemplate views:ContractList}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>

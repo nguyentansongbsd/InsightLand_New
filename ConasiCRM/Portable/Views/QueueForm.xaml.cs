@@ -141,7 +141,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (!await viewModel.SetQueueTime())
                 {
-                    ToastMessageHelper.ShortMessage("Khách hàng tiềm năng đã tham gia giữ chỗ cho dự án này");
+                    ToastMessageHelper.ShortMessage("Khách hàng đã tham gia giữ chỗ cho dự án này");
                     LoadingHelper.Hide();
                     btnSave.Text = "Tạo Giữ Chỗ";
                     return;
@@ -149,7 +149,7 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.Customer != null && viewModel.Customer.Id != Guid.Empty && viewModel.DailyOption != null && viewModel.DailyOption.Id != Guid.Empty && viewModel.DailyOption.Id == viewModel.Customer.Id)
             {
-                ToastMessageHelper.ShortMessage("Khách hàng tiềm năng phải khác Đại lý bán hàng");
+                ToastMessageHelper.ShortMessage("Khách hàng phải khác Đại lý bán hàng");
                 LoadingHelper.Hide();
                 btnSave.Text = "Tạo Giữ Chỗ";
                 return;

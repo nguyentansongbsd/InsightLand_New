@@ -424,7 +424,7 @@ namespace ConasiCRM.Portable.Helper
                         new KeyValuePair<string, string>("username","bsddev@conasi.vn"), // UserLogged.User), sai thông tin login, là user app chứ không phải admin
                         new KeyValuePair<string, string>("password", "admin123$5"), // UserLogged.Password),
                         new KeyValuePair<string, string>("grant_type", "password"),
-                        new KeyValuePair<string, string>("resource", OrgConfig.SharePointResource)
+                        new KeyValuePair<string, string>("resource", OrgConfig.SharePointResource) //
                     });
             request.Content = formContent;
             var response = await client.SendAsync(request);
