@@ -62,23 +62,32 @@ namespace ConasiCRM.Portable.Views
 
         private async void NewMeet(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new MeetingForm());
-            LoadingHelper.Hide();
+            if (viewModel.singleContact != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new MeetingForm(viewModel.singleContact.contactid, viewModel.singleContact.bsd_fullname, viewModel.CodeContac));
+                LoadingHelper.Hide();
+            }
         }
 
         private async void NewPhoneCall(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new PhoneCallForm());
-            LoadingHelper.Hide();
+            if (viewModel.singleContact != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new PhoneCallForm(viewModel.singleContact.contactid, viewModel.singleContact.bsd_fullname, viewModel.CodeContac));
+                LoadingHelper.Hide();
+            }
         }
 
         private async void NewTask(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new TaskForm(viewModel.singleContact.contactid,viewModel.singleContact.bsd_fullname));
-            LoadingHelper.Hide();
+            if (viewModel.singleContact != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new TaskForm(viewModel.singleContact.contactid, viewModel.singleContact.bsd_fullname, viewModel.CodeContac));
+                LoadingHelper.Hide();
+            }
         }
 
         private void EditContact(object sender, EventArgs e)
@@ -303,87 +312,10 @@ namespace ConasiCRM.Portable.Views
 
         private async void CaseItem_Tapped(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
             var item = (HoatDongListModel)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            if (item != null)
+            if (item != null && item.activityid != Guid.Empty)
             {
-                if (item.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (item.activitytypecode == "phonecall")
-                    {
-                        await viewModel.loadPhoneCall(item.activityid);
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
-                        viewModel.ActivityType = "Cuộc Gọi";
-                        if (viewModel.PhoneCall.activityid != Guid.Empty)
-                        {
-                            ContentActivity.IsVisible = true;
-                            ContentPhoneCall.IsVisible = true;
-                            ContentTask.IsVisible = false;
-                            ContentMeet.IsVisible = false;
-
-                            if (viewModel.Taskk != null)
-                                viewModel.Taskk.activityid = Guid.Empty;
-                            if (viewModel.Meet != null)
-                                viewModel.Meet.activityid = Guid.Empty;
-                            LoadingHelper.Hide();
-                        }
-                        else
-                        {
-                            LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
-                        }
-                    }
-                    else if (item.activitytypecode == "task")
-                    {
-                        await viewModel.loadTask(item.activityid);
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Taskk.statecode.ToString());
-                        viewModel.ActivityType = "Công Việc";
-                        if (viewModel.Taskk.activityid != Guid.Empty)
-                        {
-                            ContentActivity.IsVisible = true;
-                            ContentPhoneCall.IsVisible = false;
-                            ContentTask.IsVisible = true;
-                            ContentMeet.IsVisible = false;
-
-                            if (viewModel.PhoneCall != null)
-                                viewModel.PhoneCall.activityid = Guid.Empty;
-                            if (viewModel.Meet != null)
-                                viewModel.Meet.activityid = Guid.Empty;
-                            LoadingHelper.Hide();
-                        }
-                        else
-                        {
-                            LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
-                        }
-                    }
-                    else if (item.activitytypecode == "appointment")
-                    {
-                        await viewModel.loadMeet(item.activityid);
-                        await viewModel.loadFromToMeet(item.activityid);
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
-                        viewModel.ActivityType = "Cuộc Họp";
-                        if (viewModel.Meet.activityid != Guid.Empty)
-                        {
-                            ContentActivity.IsVisible = true;
-                            ContentPhoneCall.IsVisible = false;
-                            ContentTask.IsVisible = false;
-                            ContentMeet.IsVisible = true;
-
-                            if (viewModel.Taskk != null)
-                                viewModel.Taskk.activityid = Guid.Empty;
-                            if (viewModel.PhoneCall != null)
-                                viewModel.PhoneCall.activityid = Guid.Empty;
-                            LoadingHelper.Hide();
-                        }
-                        else
-                        {
-                            LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
-                        }
-                    }
-                }
+                ActivityPopup.ShowActivityPopup(item.activityid, item.activitytypecode);
             }
         }
 
@@ -570,175 +502,5 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private void CloseContentActivity_Tapped(object sender, EventArgs e)
-        {
-            ContentActivity.IsVisible = false;
-        }
-
-        private async void Update_Clicked(object sender, EventArgs e)
-        {
-            if(viewModel.PhoneCall != null && viewModel.PhoneCall.activityid != Guid.Empty)
-            {
-                LoadingHelper.Show();
-                PhoneCallForm newPage = new PhoneCallForm(viewModel.PhoneCall.activityid);
-                newPage.OnCompleted = async (OnCompleted) =>
-                {
-                    if (OnCompleted == true)
-                    {
-                        await Navigation.PushAsync(newPage);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
-                    }
-                };
-            }
-            else if (viewModel.Taskk != null && viewModel.Taskk.activityid != Guid.Empty)
-            {
-                LoadingHelper.Show();
-                TaskForm newPage = new TaskForm(viewModel.Taskk.activityid);
-                newPage.CheckTaskForm = async (OnCompleted) =>
-                {
-                    if (OnCompleted == true)
-                    {
-                        await Navigation.PushAsync(newPage);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
-                    }
-                };
-            }
-            else if (viewModel.Meet != null && viewModel.Meet.activityid != Guid.Empty)
-            {
-                LoadingHelper.Show();
-                MeetingForm newPage = new MeetingForm(viewModel.Meet.activityid);
-                newPage.OnCompleted = async (OnCompleted) =>
-                {
-                    if (OnCompleted == true)
-                    {
-                        await Navigation.PushAsync(newPage);
-                        LoadingHelper.Hide();
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
-                    }
-                };
-            }
-        }
-
-        private async void Completed_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            string[] options = new string[] { "Hoàn Thành", "Hủy" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Đóng", null, options);
-            if (asw == "Hoàn Thành")
-            {
-                if (viewModel.PhoneCall != null && viewModel.PhoneCall.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (await viewModel.UpdateStatusPhoneCall(viewModel.CodeCompleted))
-                    {
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc gọi đã hoàn thành");
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành cuộc gọi. Vui lòng thử lại");
-                    }
-                }
-                else if (viewModel.Taskk != null && viewModel.Taskk.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (await viewModel.UpdateStatusTask(viewModel.CodeCompleted))
-                    {
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Taskk.statecode.ToString());
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Công việc đã hoàn thành");
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành công việc. Vui lòng thử lại");
-                    }
-                }
-                else if (viewModel.Meet != null && viewModel.Meet.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (await viewModel.UpdateStatusMeet(viewModel.CodeCompleted))
-                    {
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc họp đã hoàn thành");
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành cuộc họp. Vui lòng thử lại");
-                    }
-                }
-                NeedToRefreshActivity = true;
-                OnAppearing();
-            }
-            else if (asw == "Hủy")
-            {
-                if (viewModel.PhoneCall.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (await viewModel.UpdateStatusPhoneCall(viewModel.CodeCancel))
-                    {
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc gọi đã được hủy");
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hủy cuộc gọi. Vui lòng thử lại");
-                    }
-                }
-                else if (viewModel.Taskk.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (await viewModel.UpdateStatusTask(viewModel.CodeCancel))
-                    {
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Taskk.statecode.ToString());
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Công việc đã được hủy");
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hủy công việc. Vui lòng thử lại");
-                    }
-                }
-                else if (viewModel.Meet.activityid != Guid.Empty)
-                {
-                    LoadingHelper.Show();
-                    if (await viewModel.UpdateStatusMeet(viewModel.CodeCancel))
-                    {
-                        viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc họp đã được hủy");
-                    }
-                    else
-                    {
-                        LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hủy cuộc họp. Vui lòng thử lại");
-                    }
-                }
-                NeedToRefreshActivity = true;
-                OnAppearing();
-            }
-            LoadingHelper.Hide();
-        }
     }
 }

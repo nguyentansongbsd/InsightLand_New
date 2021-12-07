@@ -10,27 +10,7 @@ namespace ConasiCRM.Portable.Models
         public Guid opportunityid { get; set; }
         public string bsd_queuenumber { get; set; }
         public string name { get; set; }
-        public decimal budgetamount { get; set; }
-
-        public decimal budget;
-        public string budgetamount_format
-        {
-            get
-            {
-                if (budget > 0 )
-                    return budget + "đ";
-                else
-                    return "";
-            }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value.Replace("đ", "")) && Decimal.Parse(value.Replace("đ", "")) > 0)
-                    budget = Decimal.Parse(value.Replace("đ", ""));
-                else
-                    budget = 0;
-                OnPropertyChanged(nameof(budgetamount_format));
-            }
-        }
+        public decimal budgetamount { get; set; }       
         public string description { get; set; }
 
         /// <summary>

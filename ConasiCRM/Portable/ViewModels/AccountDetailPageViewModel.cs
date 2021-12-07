@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
 using System;
@@ -62,6 +63,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         private bool _isLoadMore;
         public bool isLoadMore { get => _isLoadMore; set { _isLoadMore = value; OnPropertyChanged(nameof(isLoadMore)); } }
+
+        public string CodeAccount = LookUpMultipleTabs.CodeAccount;
         public AccountDetailPageViewModel()
         {
             BusinessTypeOptions = new ObservableCollection<OptionSet>();

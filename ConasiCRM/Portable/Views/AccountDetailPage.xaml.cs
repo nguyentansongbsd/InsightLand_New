@@ -537,23 +537,32 @@ namespace ConasiCRM.Portable.Views
 
         private async void NewMeet(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new MeetingForm());
-            LoadingHelper.Hide();
+            if (viewModel.singleAccount != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new MeetingForm(viewModel.singleAccount.accountid,viewModel.singleAccount.bsd_name,viewModel.CodeAccount));
+                LoadingHelper.Hide();
+            }
         }
 
         private async void NewPhoneCall(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new PhoneCallForm());
-            LoadingHelper.Hide();
+            if (viewModel.singleAccount != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new PhoneCallForm(viewModel.singleAccount.accountid, viewModel.singleAccount.bsd_name, viewModel.CodeAccount));
+                LoadingHelper.Hide();
+            }
         }
 
         private async void NewTask(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new TaskForm());
-            LoadingHelper.Hide();
+            if (viewModel.singleAccount != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new TaskForm(viewModel.singleAccount.accountid, viewModel.singleAccount.bsd_name, viewModel.CodeAccount));
+                LoadingHelper.Hide();
+            }
         }
     }
 }
