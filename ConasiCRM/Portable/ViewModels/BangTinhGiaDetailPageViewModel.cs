@@ -209,8 +209,8 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                     <entity name='bsd_packageselling'>
-                                        <attribute name='bsd_name' alias='handovercondition_name' />
-                                        <attribute name='bsd_packagesellingid' alias='handovercondition_id' />
+                                        <attribute name='bsd_name' alias='Label' />
+                                        <attribute name='bsd_packagesellingid' alias='Val' />
                                         <order attribute='bsd_name' descending='true' />
                                         <link-entity name='bsd_quote_bsd_packageselling' from='bsd_packagesellingid' to='bsd_packagesellingid' visible='false' intersect='true'>
                                             <link-entity name='quote' from='quoteid' to='quoteid' alias='ab'>
@@ -222,13 +222,11 @@ namespace ConasiCRM.Portable.ViewModels
                                     </entity>
                                 </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationDetailPageModel>>("bsd_packagesellings", fetchXml);
-            if (result == null || result.value.Count == 0)
-            {
-                return;
-            }
-            Reservation.handovercondition_id = result.value.FirstOrDefault().handovercondition_id;
-            Reservation.handovercondition_name = result.value.FirstOrDefault().handovercondition_name;
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_packagesellings", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+
+            Reservation.handovercondition_id = Guid.Parse(result.value.FirstOrDefault().Val);
+            Reservation.handovercondition_name = result.value.FirstOrDefault().Label ;
         }
 
         public async Task LoadSpecialDiscount(Guid ReservationId)
