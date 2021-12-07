@@ -69,6 +69,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.OldPassword != null && viewModel.OldPassword.Contains(" "))
             {
                 ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+                viewModel.OldPassword = viewModel.OldPassword.Trim();
             }
         }
 
@@ -77,6 +78,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.NewPassword != null && viewModel.NewPassword.Contains(" "))
             {
                 ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+                viewModel.NewPassword = viewModel.NewPassword.Trim();
             }
         }
 
@@ -85,24 +87,25 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.ConfirmNewPassword != null && viewModel.ConfirmNewPassword.Contains(" "))
             {
                 ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
+                viewModel.ConfirmNewPassword = viewModel.ConfirmNewPassword.Trim();
             }
         }
 
         private async void SaveChangedPassword_Clicked(object sender, EventArgs e)
         {
-            if (viewModel.OldPassword == " ")
+            if (viewModel.OldPassword.Contains(" "))
             {
                 ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
                 return;
             }
 
-            if (viewModel.NewPassword == " ")
+            if (viewModel.NewPassword.Contains(" "))
             {
                 ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
                 return;
             }
 
-            if (viewModel.ConfirmNewPassword == " ")
+            if (viewModel.ConfirmNewPassword.Contains(" "))
             {
                 ToastMessageHelper.ShortMessage("Password không được chứa ký tự khoảng trắng");
                 return;
