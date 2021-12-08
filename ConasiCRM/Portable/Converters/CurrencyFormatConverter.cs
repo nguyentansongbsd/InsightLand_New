@@ -8,7 +8,7 @@ namespace ConasiCRM.Portable.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            decimal currency = (decimal)value;
+            double currency = decimal.ToDouble((decimal)value);
             if (currency > 0 && currency.ToString().Length <= 6) // đ
             {
                 return string.Format("{0:#,0} đ", currency);

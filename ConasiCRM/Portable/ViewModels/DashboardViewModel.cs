@@ -164,9 +164,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private async Task<double> TotalAMonth(decimal total)
         {
-            if (total > 0)
+            if (total > 0 && total.ToString().Length > 6)
             {
-                var _currency = total.ToString().Substring(0, total.ToString().Length - 6);
+                var _currency = decimal.ToDouble(total).ToString().Substring(0, decimal.ToDouble(total).ToString().Length - 6);
                 return double.Parse(_currency);
             }
             else
@@ -457,7 +457,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var item in result.value)
             {
-                var meet =  Activities.FirstOrDefault(x=>x.activityid==item.activityid);
+                var meet = Activities.FirstOrDefault(x => x.activityid == item.activityid);
                 if (meet != null)
                 {
                     if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
@@ -573,6 +573,9 @@ namespace ConasiCRM.Portable.ViewModels
             this.DataMonthUnit.Clear();
             this.CommissionTransactionChart.Clear();
             this.LeadsChart.Clear();
+
+            this.TotalCommissionAMonth = 0;
+            this.TotalPaidCommissionAMonth = 0;
 
             await Task.WhenAll(
                  this.LoadTasks(),

@@ -95,11 +95,11 @@ namespace ConasiCRM.Portable.Views
             {
                 await Task.WhenAll(
                     viewModel.LoadReservation(id),
-                    viewModel.LoadHandoverCondition(ReservationId),
                     viewModel.LoadPromotions(ReservationId),
                     viewModel.LoadSpecialDiscount(ReservationId),
                     viewModel.LoadInstallmentList(ReservationId)
                     );
+                await viewModel.LoadHandoverCondition(ReservationId);
                 await viewModel.LoadDiscounts();
                 SutUpSpecialDiscount();
             }
