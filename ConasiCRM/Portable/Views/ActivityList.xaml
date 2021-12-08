@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" xmlns:helper="clr-namespace:ConasiCRM.Portable.Helper"
-             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" xmlns:views="clr-namespace:ConasiCRM.Portable.Views" xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
              x:Class="ConasiCRM.Portable.Views.ActivityList"
              Title="Hoạt Động">
     <ContentPage.Resources>
@@ -53,6 +53,7 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
+        <converters:NullToHideConverter x:Key="NullToHideConverter" />
         <!--<ResourceDictionary> chưa dùng 
             <DataTemplate x:Key="Task">
                 <ViewCell>
@@ -158,7 +159,8 @@
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                         <Label Text="Khách hàng: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="{Binding regarding_name}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                        <Label Text="{Binding regarding_name}" IsVisible="{Binding regarding_name,Converter={StaticResource NullToHideConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                        <Label Text="{Binding customer}" IsVisible="{Binding customer,Converter={StaticResource NullToHideConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
                                         <Label Text="Thời gian bắt đầu: " TextColor="#444444" FontSize="15" Grid.Column="0"/>

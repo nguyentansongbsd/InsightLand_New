@@ -486,7 +486,7 @@
 
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
-                                                            <Label Grid.Column="1" Text="{Binding regarding_name}" TextColor="#444444" FontSize="15"/>
+                                                            <Label Grid.Column="1" Text="{Binding customer}" TextColor="#444444" FontSize="15"/>
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Text="Thời gian bắt đầu: " TextColor="#444444" FontSize="15" Grid.Column="0"/>

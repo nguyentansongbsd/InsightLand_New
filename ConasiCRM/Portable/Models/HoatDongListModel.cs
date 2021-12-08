@@ -18,7 +18,12 @@ namespace ConasiCRM.Portable.Models
         {
             get
             {
-                if(activitytypecode == "phonecall")
+                if (activitytypecode == "appointment")
+                {
+                    return null;
+                }
+
+                    if (activitytypecode == "phonecall")
                 {
                     if (this.callto_contact_name != null)
                     {
@@ -70,11 +75,11 @@ namespace ConasiCRM.Portable.Models
                 switch (activitytypecode)
                 {
                     case "task":
-                        return "Task";
+                        return "Công Việc";
                     case "phonecall":
-                        return "Phone Call";
+                        return "Cuộc Gọi";
                     case "appointment":
-                        return "Collection Meeting";
+                        return "Cuộc Họp";
                     default:
                         return " ";
                 }
@@ -160,5 +165,8 @@ namespace ConasiCRM.Portable.Models
         public string callto_contact_name { get; set; }
         public string callto_account_name { get; set; }
         public string callto_lead_name { get; set; }
+
+        public string _customer;
+        public string customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(customer)); } }
     }
 }

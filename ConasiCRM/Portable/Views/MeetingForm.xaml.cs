@@ -166,6 +166,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+                    if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Đã thêm cuộc họp");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -186,6 +187,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+                    if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Cập nhật thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
