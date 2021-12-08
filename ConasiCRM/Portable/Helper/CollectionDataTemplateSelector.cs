@@ -12,7 +12,7 @@ namespace ConasiCRM.Portable.Helper
         public DataTemplate Media { get; set; }
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            return ((CollectionData)item).MediaSource != null ? Media : Image;
+            return ((CollectionData)item).MediaSourceId != null ? Media : Image;
         }
     }
 }

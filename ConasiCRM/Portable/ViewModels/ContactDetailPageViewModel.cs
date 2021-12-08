@@ -117,10 +117,10 @@ namespace ConasiCRM.Portable.ViewModels
         {
             ShowCMND = true;
 
-            var result = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<Thumbnail>>();
+            //var result = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<Thumbnail>>();
 
-            var a = result.value;
-            MyImage = a[0].medium.url;
+            //var a = result.value;
+            //MyImage = a[0].medium.url;
 
             //if (this.singleContact.contactid != Guid.Empty)
             //{

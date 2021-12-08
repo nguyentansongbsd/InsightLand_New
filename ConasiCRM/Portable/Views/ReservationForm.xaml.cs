@@ -19,6 +19,7 @@ namespace ConasiCRM.Portable.Views
         private bool isSetTotal;
         private List<string> newSelectedPromotionIds;
         private List<string> needDeletedPromotionIds;
+        private bool _isEnableCheck { get; set; }
 
         public ReservationForm(Guid quoteId)
         {
@@ -101,6 +102,7 @@ namespace ConasiCRM.Portable.Views
                 lookupGiuCho.IsEnabled = false;
                 lookupDaiLySanGiaoDich.IsEnabled = false;
                 entryNhanVienDaiLy.IsEnabled = false;
+                _isEnableCheck = true;
 
                 if (viewModel.Queue == null)
                 { 
@@ -118,7 +120,7 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LoadCoOwners()
                     );
                 SetPreOpen();
-
+                
                 if (viewModel.IsHadLichThanhToan == true)
                 {
                     lookupDieuKienBanGiao.IsEnabled = true;
@@ -140,6 +142,7 @@ namespace ConasiCRM.Portable.Views
                     }
                 }
                 this.CheckReservation?.Invoke(0);
+                _isEnableCheck = false;
             }
             else
             {
@@ -324,6 +327,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void DiscountChildItem_CheckedChanged(System.Object sender, Xamarin.Forms.CheckedChangedEventArgs e)
         {
+            if (_isEnableCheck) return;
             if (viewModel.IsHadLichThanhToan == true)
             {
                 ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
@@ -345,11 +349,11 @@ namespace ConasiCRM.Portable.Views
         #region Promotion // Khuyen mai
         private async void Promotion_Tapped(object sender, EventArgs e)
         {
-            if (viewModel.IsHadLichThanhToan == true)
-            {
-                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
-                return;
-            }
+            //if (viewModel.IsHadLichThanhToan == true)
+            //{
+            //    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+            //    return;
+            //}
             LoadingHelper.Show();
             this.needDeletedPromotionIds = new List<string>();
             this.newSelectedPromotionIds = new List<string>();
@@ -469,11 +473,11 @@ namespace ConasiCRM.Portable.Views
 
         private async void UnSelect_Clicked(object sender, EventArgs e)
         {
-            if (viewModel.IsHadLichThanhToan == true)
-            {
-                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
-                return;
-            }
+            //if (viewModel.IsHadLichThanhToan == true)
+            //{
+            //    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+            //    return;
+            //}
             LoadingHelper.Show();
             var item = (OptionSet)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             if (viewModel.QuoteId != Guid.Empty)
@@ -567,7 +571,11 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.QuoteId != Guid.Empty)
             {
                 var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa người đồng sở hữu này không ?", "Đồng ý", "Hủy");
-                if (conform == false) return;
+                if (conform == false)
+                {
+                    LoadingHelper.Hide();
+                    return;
+                }
                 var deleteResponse = await CrmHelper.DeleteRecord($"/bsd_coowners({item.bsd_coownerid})");
                 if (deleteResponse.IsSuccess)
                 {
@@ -767,11 +775,11 @@ namespace ConasiCRM.Portable.Views
 
         private async void SaveQuote_Clicked(object sender, EventArgs e)
         {
-            if (viewModel.IsHadLichThanhToan == true)
-            {
-                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, Vui lòng xoá lịch thanh toán để cập nhật");
-                return;
-            }
+            //if (viewModel.IsHadLichThanhToan == true)
+            //{
+            //    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, Vui lòng xoá lịch thanh toán để cập nhật");
+            //    return;
+            //}
 
             if (viewModel.PaymentScheme == null)
             {

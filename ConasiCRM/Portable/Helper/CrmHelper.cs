@@ -64,12 +64,12 @@ namespace ConasiCRM.Portable.Helper
             return null;
         }
 
-        public static async Task<T> RetrieveImagesSharePoint<T>() where T : class
+        public static async Task<T> RetrieveImagesSharePoint<T>(string url) where T : class
         {
             try
             {
                 var client = BsdHttpClient.Instance();
-                string fileListUrl = $"{OrgConfig.GraphApi}{OrgConfig.SharepointSiteId}/lists/{OrgConfig.SharePointProjectId}/items/6/driveItem/thumbnails";
+                string fileListUrl = $"{OrgConfig.GraphApi}{OrgConfig.SharepointSiteId}/lists/{url}";
                 var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserLogged.AccessTokenSharePoint);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -83,13 +83,13 @@ namespace ConasiCRM.Portable.Helper
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    //var loginSharePonit = await LoginHelper.getSharePointToken();
-                    //if (loginSharePonit.access_token != null)
-                    //{
-                    //    UserLogged.AccessTokenSharePoint = loginSharePonit.access_token;
-                    //    var api_response = await RetrieveImagesSharePoint<T>(url);
-                    //    return api_response;
-                    //}
+                    var loginSharePonit = await LoginHelper.getSharePointToken();
+                    if (loginSharePonit.access_token != null)
+                    {
+                        UserLogged.AccessTokenSharePoint = loginSharePonit.access_token;
+                        var api_response = await RetrieveImagesSharePoint<T>(url);
+                        return api_response;
+                    }
                 }
                 else
                 {
