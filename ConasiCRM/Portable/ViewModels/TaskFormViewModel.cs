@@ -33,6 +33,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public TaskFormViewModel()
         {
+            TaskFormModel = new TaskFormModel();
         }
 
         public async Task LoadTask()
@@ -67,7 +68,14 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<TaskFormModel>>("tasks", fetchXml);
             if (result == null || result.value.Count == 0) return;
 
-            this.TaskFormModel = result.value.FirstOrDefault();
+            var data = result.value.FirstOrDefault();
+            this.TaskFormModel = data;
+            if (data.scheduledend != null && data.scheduledstart != null)
+            {
+                TaskFormModel.scheduledend = data.scheduledend.Value.ToLocalTime();
+                TaskFormModel.scheduledstart = data.scheduledstart.Value.ToLocalTime();
+            }
+         //   this.TaskFormModel = result.value.FirstOrDefault();
 
             //customer type = 1 -> lead.  customer type = 2 -> contact. customer type = 3 -> account
             if (this.TaskFormModel.lead_id != Guid.Empty)
@@ -94,9 +102,6 @@ namespace ConasiCRM.Portable.ViewModels
                 customer.Title = "3";
                 this.Customer = customer;
             }
-            
-            ScheduledStart = this.TaskFormModel.scheduledstart.Value.ToLocalTime();
-            ScheduledEnd = this.TaskFormModel.scheduledend.Value.ToLocalTime();
         }
 
         public async Task<bool> CreateTask()
@@ -137,8 +142,8 @@ namespace ConasiCRM.Portable.ViewModels
             data["activityid"] = TaskFormModel.activityid.ToString();
             data["subject"] = TaskFormModel.subject;
             data["description"] = TaskFormModel.description ?? "";
-            data["scheduledstart"] = ScheduledStart.Value.ToUniversalTime();
-            data["scheduledend"] = ScheduledEnd.Value.ToUniversalTime();
+            data["scheduledstart"] = TaskFormModel.scheduledstart.Value.ToUniversalTime();
+            data["scheduledend"] = TaskFormModel.scheduledend.Value.ToUniversalTime();
 
             if (Customer != null && Customer.Title == Codelead)
             {

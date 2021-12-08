@@ -82,9 +82,9 @@ namespace ConasiCRM.Portable.Views
 
         private void DateStart_Selected(object sender, EventArgs e)
         {
-            if (viewModel.ScheduledStart.HasValue && viewModel.ScheduledEnd.HasValue)
+            if (viewModel.TaskFormModel.scheduledstart.HasValue && viewModel.TaskFormModel.scheduledend.HasValue)
             {
-                if (viewModel.ScheduledStart > viewModel.ScheduledEnd || viewModel.ScheduledStart == viewModel.ScheduledEnd)
+                if (viewModel.TaskFormModel.scheduledstart > viewModel.TaskFormModel.scheduledend || viewModel.TaskFormModel.scheduledstart == viewModel.TaskFormModel.scheduledend)
                 {
                     ToastMessageHelper.ShortMessage("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
                 }
@@ -93,9 +93,9 @@ namespace ConasiCRM.Portable.Views
 
         private void DateEnd_Selected(object sender, EventArgs e)
         {
-            if (viewModel.ScheduledStart.HasValue && viewModel.ScheduledEnd.HasValue)
+            if (viewModel.TaskFormModel.scheduledstart.HasValue && viewModel.TaskFormModel.scheduledend.HasValue)
             {
-                if (viewModel.ScheduledStart > viewModel.ScheduledEnd || viewModel.ScheduledStart == viewModel.ScheduledEnd)
+                if (viewModel.TaskFormModel.scheduledstart > viewModel.TaskFormModel.scheduledend || viewModel.TaskFormModel.scheduledstart == viewModel.TaskFormModel.scheduledend)
                 {
                     ToastMessageHelper.ShortMessage("Thời gian kết thúc phải lớn hơn thời gian bắt đầu");
                 }
@@ -109,7 +109,7 @@ namespace ConasiCRM.Portable.Views
 
         private void CheckedBoxEventAllDay_Change(object sender, EventArgs e)
         {
-            if (!viewModel.ScheduledStart.HasValue)
+            if (!viewModel.TaskFormModel.scheduledstart.HasValue)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
                 viewModel.IsEventAllDay = false;
@@ -117,8 +117,8 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.IsEventAllDay == true)
             {
-                viewModel.ScheduledStart = new DateTime(viewModel.ScheduledStart.Value.Year, viewModel.ScheduledStart.Value.Month, viewModel.ScheduledStart.Value.Day, 8, 0, 0); ;
-                viewModel.ScheduledEnd = viewModel.ScheduledStart.Value.AddDays(1);
+                viewModel.TaskFormModel.scheduledstart = new DateTime(viewModel.TaskFormModel.scheduledstart.Value.Year, viewModel.TaskFormModel.scheduledstart.Value.Month, viewModel.TaskFormModel.scheduledstart.Value.Day, 8, 0, 0); ;
+                viewModel.TaskFormModel.scheduledend = viewModel.TaskFormModel.scheduledstart.Value.AddDays(1);
             }
         }
 
@@ -130,19 +130,19 @@ namespace ConasiCRM.Portable.Views
                 return;
             }
 
-            if (!viewModel.ScheduledStart.HasValue)
+            if (!viewModel.TaskFormModel.scheduledstart.HasValue)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
                 return;
             }
 
-            if (!viewModel.ScheduledEnd.HasValue)
+            if (!viewModel.TaskFormModel.scheduledend.HasValue)
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc");
                 return;
             }
 
-            if ((viewModel.ScheduledStart.HasValue && viewModel.ScheduledEnd.HasValue) && (viewModel.ScheduledStart > viewModel.ScheduledEnd))
+            if ((viewModel.TaskFormModel.scheduledstart.HasValue && viewModel.TaskFormModel.scheduledend.HasValue) && (viewModel.TaskFormModel.scheduledstart > viewModel.TaskFormModel.scheduledend))
             {
                 ToastMessageHelper.ShortMessage("Thời gian kết thúc phải lớn hơn thời gian bắt đầu");
                 return;
@@ -160,6 +160,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+                    if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Tạo công việc thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -181,6 +182,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+                    if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage("Cập nhật công việc thành công");
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();

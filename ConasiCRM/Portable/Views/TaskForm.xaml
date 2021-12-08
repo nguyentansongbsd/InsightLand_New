@@ -21,7 +21,7 @@
                     </telerikPrimitives:RadBorder>
 
                     <controls:FormLabelRequired Text="Thời gian bắt đầu"/>
-                    <controls:DatePickerControl x:Name="dateTimeTGBatDau" Date="{Binding ScheduledStart}" Placeholder="Chọn thời gian bắt đầu" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateStart_Selected"/>
+                    <controls:DatePickerControl x:Name="dateTimeTGBatDau" Date="{Binding TaskFormModel.scheduledstart}" Placeholder="Chọn thời gian bắt đầu" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateStart_Selected"/>
 
                     <StackLayout Orientation="Horizontal" Spacing="15">
                         <Label Text="Sự kiện cả ngày" TextColor="#444444" FontSize="15" VerticalTextAlignment="Center" >
@@ -33,7 +33,7 @@
                     </StackLayout>
                     
                     <controls:FormLabelRequired Text="Thời gian kết thúc"/>
-                    <controls:DatePickerControl x:Name="dateTimeTGKetThuc" Date="{Binding ScheduledEnd}" Placeholder="Chọn thời gian kết thúc" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateEnd_Selected"/>
+                    <controls:DatePickerControl x:Name="dateTimeTGKetThuc" Date="{Binding TaskFormModel.scheduledend}" Placeholder="Chọn thời gian kết thúc" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DateEnd_Selected"/>
 
                     <controls:FormLabel Text="Mô tả" />
                     <controls:MainEditor Text="{Binding TaskFormModel.description}"  HeightRequest="100" Placeholder="Nhập mô tả" FontSize="15"/>

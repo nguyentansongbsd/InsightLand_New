@@ -32,7 +32,7 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<QueueFormModel> list_thongtinqueing { get; set; }
         public ObservableCollection<ReservationListModel> list_thongtinquotation { get; set; }
         public ObservableCollection<ContractModel> list_thongtincontract { get; set; }
-        public ObservableCollection<ListPhanHoiModel> list_thongtincase { get; set; }
+        public ObservableCollection<HoatDongListModel> list_thongtincase { get; set; }
 
         public ObservableCollection<MandatorySecondaryModel> _list_MandatorySecondary;
         public ObservableCollection<MandatorySecondaryModel> list_MandatorySecondary { get => _list_MandatorySecondary; set { _list_MandatorySecondary = value; OnPropertyChanged(nameof(list_MandatorySecondary)); } }
@@ -76,7 +76,7 @@ namespace ConasiCRM.Portable.ViewModels
             list_thongtinqueing = new ObservableCollection<QueueFormModel>();
             list_thongtinquotation = new ObservableCollection<ReservationListModel>();
             list_thongtincontract = new ObservableCollection<ContractModel>();
-            list_thongtincase = new ObservableCollection<ListPhanHoiModel>();
+            list_thongtincase = new ObservableCollection<HoatDongListModel>();
             list_MandatorySecondary = new ObservableCollection<MandatorySecondaryModel>();
             MandatorySecondary = new MandatorySecondaryModel();
             isLoadMore = false;
@@ -339,35 +339,78 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task LoadDSCaseAccount(Guid accountid)
+        public async Task LoadCaseForAccountForm()
         {
-            string fetch = $@"<fetch version='1.0' count='3' page='{PageCase}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                <entity name='incident'>
-                                    <attribute name='title' />
-                                    <attribute name='statuscode' />
-                                    <attribute name='casetypecode' />
-                                    <attribute name='caseorigincode' />
-                                    <attribute name='incidentid' />
-                                    <order attribute='createdon' descending='true' />
-                                    <link-entity name='account' from='accountid' to='customerid' visible='false' link-type='outer'>
-                                        <attribute name='bsd_name' alias='case_nameaccount'/>
-                                    </link-entity>
-                                    <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer' >
-                                      <attribute name='bsd_fullname' alias='case_namecontact'/>
-                                    </link-entity>
-                                     <filter type='and'>
-                                        <condition attribute='customerid' operator='eq' value='{accountid}' />
+            if (list_thongtincase != null && singleAccount != null && singleAccount.accountid != Guid.Empty)
+            {
+                await Task.WhenAll(
+                    LoadActiviy(singleAccount.accountid, "task", "tasks"),
+                    LoadActiviy(singleAccount.accountid, "phonecall", "phonecalls"),
+                    LoadActiviy(singleAccount.accountid, "appointment", "appointments")
+                );
+            }
+            ShowMoreCase = list_thongtincase.Count < (3 * PageCase) ? false : true;
+        }
+
+        public async Task LoadActiviy(Guid accountID, string entity, string entitys)
+        {
+            string forphonecall = null;
+            if (entity == "phonecall")
+            {
+                forphonecall = @"<link-entity name='activityparty' from='activityid' to='activityid' link-type='outer' alias='aee'>
+                                        <filter type='and'>
+                                            <condition attribute='participationtypemask' operator='eq' value='2' />
+                                        </filter>
+                                        <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='aff'>
+                                            <attribute name='fullname' alias='callto_contact_name'/>
+                                        </link-entity>
+                                        <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
+                                            <attribute name='bsd_name' alias='callto_account_name'/>
+                                        </link-entity>
+                                        <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
+                                            <attribute name='fullname' alias='callto_lead_name'/>
+                                        </link-entity>
+                                    </link-entity>";
+            }
+
+            string fetch = $@"<fetch version='1.0' count='3' page='{PageCase}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                <entity name='{entity}'>
+                                    <attribute name='subject' />
+                                    <attribute name='statecode' />
+                                    <attribute name='activityid' />
+                                    <attribute name='scheduledstart' />
+                                    <attribute name='scheduledend' /> 
+                                    <attribute name='activitytypecode' /> 
+                                    <order attribute='modifiedon' descending='true' />
+                                    <filter type='and'>
+                                        <filter type='or'>
+                                            <condition entityname='party' attribute='partyid' operator='eq' value='{accountID}'/>
+                                            <condition attribute='regardingobjectid' operator='eq' value='{accountID}' />
+                                        </filter>
                                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
-                                    </filter>         
+                                    </filter>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='party'/>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+                                        <attribute name='bsd_name' alias='accounts_bsd_name'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
+                                        <attribute name='fullname' alias='contact_bsd_fullname'/>
+                                    </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
+                                        <attribute name='fullname' alias='lead_fullname'/>
+                                    </link-entity>
+                                    {forphonecall}
                                 </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ListPhanHoiModel>>("incidents", fetch);
-            if (result == null || result.value.Any() == false) return;
-            var data = result.value;
-            ShowMoreCase = data.Count < 3 ? false : true;
-            foreach (var item in data)
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>(entitys, fetch);
+            if (result != null || result.value.Count > 0)
             {
-                list_thongtincase.Add(item);
+                var data = result.value;
+                foreach (var x in data)
+                {
+                    list_thongtincase.Add(x);
+                }
             }
         }
 

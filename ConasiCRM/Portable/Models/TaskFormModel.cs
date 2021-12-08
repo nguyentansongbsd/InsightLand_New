@@ -11,9 +11,34 @@ namespace ConasiCRM.Portable.Models
         public string subject { get; set; }
         public string description { get; set; }
 
-        public DateTime? scheduledstart { get; set; }    
-        public DateTime? scheduledend { get; set; }
-        
+        public DateTime? _scheduledstart;
+        public DateTime? scheduledstart
+        {
+            get => this._scheduledstart;
+            set
+            {
+                if (value.HasValue)
+                {
+                    _scheduledstart = value;
+                    OnPropertyChanged(nameof(scheduledstart));
+                }
+            }
+        }
+
+        public DateTime? _scheduledend;
+        public DateTime? scheduledend
+        {
+            get => this._scheduledend;
+            set
+            {
+                if (value.HasValue)
+                {
+                    _scheduledend = value;
+                    OnPropertyChanged(nameof(scheduledend));
+                }
+            }
+        }     
+
         public Guid contact_id { get; set; }
         public string contact_name { get; set; }
 

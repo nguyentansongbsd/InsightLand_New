@@ -21,6 +21,8 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshMeet = null;
         public static bool? NeedToRefreshTask = null;
         private List<Label> meetRequired = new List<Label>();
+        private Guid ActivityId;
+        private string activitytype;
 
         public ActivityPopupContentView()
         {
@@ -38,6 +40,8 @@ namespace ConasiCRM.Portable.Views
         {
             if (activityid != Guid.Empty)
             {
+                ActivityId = activityid;
+                activitytype = activitytypecode;
                 LoadingHelper.Show();
                 if (activitytypecode == "phonecall")
                 {
@@ -45,7 +49,7 @@ namespace ConasiCRM.Portable.Views
                     await viewModel.loadFromTo(activityid);
                     viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
                     viewModel.ActivityType = "Cuộc Gọi";
-                    if (viewModel.PhoneCall.activityid != Guid.Empty)
+                    if (viewModel.PhoneCall != null && viewModel.PhoneCall.activityid != Guid.Empty)
                     {
                         this.IsVisible = true;
                         ContentPhoneCall.IsVisible = true;
@@ -69,7 +73,7 @@ namespace ConasiCRM.Portable.Views
                     await viewModel.loadTask(activityid);
                     viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
                     viewModel.ActivityType = "Công Việc";
-                    if (viewModel.Task.activityid != Guid.Empty)
+                    if (viewModel.Task != null && viewModel.Task.activityid != Guid.Empty)
                     {
                         this.IsVisible = true;
                         ContentPhoneCall.IsVisible = false;
@@ -94,7 +98,7 @@ namespace ConasiCRM.Portable.Views
                     await viewModel.loadFromToMeet(activityid);
                     viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
                     viewModel.ActivityType = "Cuộc Họp";
-                    if (viewModel.Meet.activityid != Guid.Empty)
+                    if (viewModel.Meet != null && viewModel.Meet.activityid != Guid.Empty)
                     {
                         this.IsVisible = true;
                         ContentPhoneCall.IsVisible = false;
@@ -403,6 +407,7 @@ namespace ConasiCRM.Portable.Views
         {
             if(viewModel.MeetRequired != null && viewModel.MeetRequired.Count>0)
             {
+                flexRequired.Children.Clear();
                 for (int i=0;i< viewModel.MeetRequired.Count;i++)
                 {
                     Label label = new Label();
@@ -484,6 +489,13 @@ namespace ConasiCRM.Portable.Views
                         }
                     };
                 }
+            }
+        }
+        public void Refresh()
+        {
+            if (this.IsVisible && ActivityId != Guid.Empty && !string.IsNullOrWhiteSpace(activitytype))
+            {
+                ShowActivityPopup(ActivityId, activitytype);
             }
         }
     }

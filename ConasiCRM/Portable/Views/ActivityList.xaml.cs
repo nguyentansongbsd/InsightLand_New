@@ -62,11 +62,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.EntityName = "phonecalls";
                 viewModel.entity = "phonecall";
                 await viewModel.LoadOnRefreshCommandAsync();
-                if (viewModel.PhoneCall.activityid != Guid.Empty)
-                {
-                    await viewModel.loadPhoneCall(viewModel.PhoneCall.activityid);
-                    await viewModel.loadFromTo(viewModel.PhoneCall.activityid);
-                }
+                ActivityPopup.Refresh();
                 NeedToRefreshPhoneCall = false;
                 LoadingHelper.Hide();
             }
@@ -76,11 +72,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.EntityName = "appointments";
                 viewModel.entity = "appointment";
                 await viewModel.LoadOnRefreshCommandAsync();
-                if (viewModel.Meet.activityid != Guid.Empty)
-                {
-                    await viewModel.loadMeet(viewModel.Meet.activityid);
-                    await viewModel.loadFromToMeet(viewModel.Meet.activityid);
-                }
+                ActivityPopup.Refresh();
                 NeedToRefreshMeet = false;
                 LoadingHelper.Hide();
             }
@@ -91,7 +83,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.EntityName = "tasks";
                 viewModel.entity = "task";
                 await viewModel.LoadOnRefreshCommandAsync();
-                
+                ActivityPopup.Refresh();
                 NeedToRefreshTask = false;
                 LoadingHelper.Hide();
             }
@@ -156,8 +148,8 @@ namespace ConasiCRM.Portable.Views
                 viewModel.EntityName = "tasks";
                 viewModel.entity = "task";
                 await viewModel.LoadOnRefreshCommandAsync();
+               // listView.ItemsSource = viewModel.Data;
             }
-            
             LoadingHelper.Hide();
         }
 
@@ -176,6 +168,57 @@ namespace ConasiCRM.Portable.Views
                 viewModel.EntityName = "appointments";
                 viewModel.entity = "appointment";
                 await viewModel.LoadOnRefreshCommandAsync();
+
+                if(viewModel.Data != null && viewModel.Data.Count > 0)
+                {
+                    List<HoatDongListModel> list = new List<HoatDongListModel>();
+                    foreach (var item in viewModel.Data)
+                    {
+                        var meet = list.FirstOrDefault(x => x.activityid == item.activityid);
+                        if (meet != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                            {
+                                string new_customer = ", " + item.callto_contact_name;
+                                meet.customer += new_customer;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                            {
+                                string new_customer = ", " + item.callto_account_name;
+                                meet.customer += new_customer;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                            {
+                                string new_customer = ", " + item.callto_lead_name;
+                                meet.customer += new_customer;
+                            }
+                        }
+                        else
+                        {
+                            item.scheduledstart = item.scheduledstart.ToLocalTime();
+                            item.scheduledend = item.scheduledend.ToLocalTime();
+                            if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                            {
+                                item.customer = item.callto_contact_name;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                            {
+                                item.customer = item.callto_account_name;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                            {
+                                item.customer = item.callto_lead_name;
+                            }
+                            list.Add(item);
+                        }
+                    }
+                    viewModel.Data.Clear();
+                    foreach (var item in list)
+                    {
+                        viewModel.Data.Add(item);
+                    }
+                    //= new Xamarin.Forms.Extended.InfiniteScrollCollection<HoatDongListModel>(list);
+                }
             }
             
             LoadingHelper.Hide();

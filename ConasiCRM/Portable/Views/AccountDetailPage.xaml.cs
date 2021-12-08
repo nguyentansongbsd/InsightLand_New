@@ -21,6 +21,7 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshAccount = null;
         public static bool? NeedToRefreshMandatory = null;
         public static bool? NeedToRefreshQueues = null;
+        public static bool? NeedToRefreshActivity = null;
         private AccountDetailPageViewModel viewModel;
 
         public AccountDetailPage(Guid accountId)
@@ -30,6 +31,7 @@ namespace ConasiCRM.Portable.Views
             this.BindingContext = viewModel = new AccountDetailPageViewModel();
             NeedToRefreshAccount = false;
             NeedToRefreshMandatory = false;
+            NeedToRefreshActivity = false;
             LoadingHelper.Show();
             Tab_Tapped(1);
             Init();
@@ -94,6 +96,16 @@ namespace ConasiCRM.Portable.Views
                 viewModel.list_thongtinqueing.Clear();
                 await viewModel.LoadDSQueueingAccount(AccountId);
                 NeedToRefreshQueues = false;
+                LoadingHelper.Hide();
+            }
+            if (NeedToRefreshActivity == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageCase++;
+                viewModel.list_thongtincase.Clear();
+                await viewModel.LoadCaseForAccountForm();
+                ActivityPopup.Refresh();
+                NeedToRefreshActivity = false;
                 LoadingHelper.Hide();
             }
         }
@@ -167,7 +179,7 @@ namespace ConasiCRM.Portable.Views
                         viewModel.LoadDSQueueingAccount(AccountId),
                         viewModel.LoadDSQuotationAccount(AccountId),
                         viewModel.LoadDSContractAccount(AccountId),
-                        viewModel.LoadDSCaseAccount(AccountId)
+                        viewModel.LoadCaseForAccountForm()
                         ); 
                 }
                 LoadingHelper.Hide();
@@ -202,7 +214,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageCase++;
-            await viewModel.LoadDSCaseAccount(AccountId);
+            await viewModel.LoadCaseForAccountForm();
             LoadingHelper.Hide();
         }
 
@@ -248,22 +260,11 @@ namespace ConasiCRM.Portable.Views
 
         private void CaseItem_Tapped(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
-            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            PhanHoiDetailPage newPage = new PhanHoiDetailPage(itemId);
-            newPage.OnCompleted = async (OnCompleted) =>
+            var item = (HoatDongListModel)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item != null && item.activityid != Guid.Empty)
             {
-                if (OnCompleted == true)
-                {
-                    await Navigation.PushAsync(newPage);
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin phản hồi");
-                }
-            };
+                ActivityPopup.ShowActivityPopup(item.activityid, item.activitytypecode);
+            }
         }
 
         #endregion

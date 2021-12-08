@@ -131,12 +131,13 @@ namespace ConasiCRM.Portable.Views
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
-            if(NeedToRefreshActivity == true)
+            if(NeedToRefreshActivity == true && viewModel.list_chamsockhachhang != null)
             {
                 LoadingHelper.Show();
                 viewModel.PageChamSocKhachHang = 1;
                 viewModel.list_chamsockhachhang.Clear();
                 await viewModel.LoadCaseForContactForm();
+                ActivityPopup.Refresh();
                 NeedToRefreshActivity = false;
                 LoadingHelper.Hide();
             }    
