@@ -1,13 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
-using MediaManager;
+using ConasiCRM.Portable.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.CommunityToolkit.Core;
-using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,25 +9,33 @@ namespace ConasiCRM.Portable
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShowMedia : ContentPage
     {
-        public ShowMedia(string MediaSources)
+        public Action<bool> OnCompleted;
+        private string mediaSourceId { get; set; }
+        private string folderId { get; set; }
+        public ShowMedia(string FolderId, string MediaSourceId)
         {
             InitializeComponent();
-            if(videoView != null)
+            folderId = FolderId;
+            mediaSourceId = MediaSourceId;
+            Init();
+        }
+
+        private async void Init()
+        {
+            if (videoView != null)
             {
-                LoadingHelper.Show();
-                MediaManager.Forms.VideoView video = new MediaManager.Forms.VideoView();
-                MediaSource media ;
-                StreamMediaSource stream;
-                
-                videoView.Source = MediaSources;
-                LoadingHelper.Hide();
-                
-            }  
-            else
-            {
-                 Navigation.PopAsync();
+                var result = await CrmHelper.RetrieveImagesSharePoint<GrapDownLoadUrlModel>($"{folderId}/items/{mediaSourceId}/driveItem");
+                if (result != null)
+                {
+                    string url = result.MicrosoftGraphDownloadUrl;
+                    videoView.Source = url;
+                    OnCompleted?.Invoke(true);
+                }
+                else
+                {
+                    OnCompleted?.Invoke(false);
+                }
             }
-            LoadingHelper.Hide();
-        }      
+        }
     }
 }

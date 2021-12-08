@@ -406,10 +406,10 @@ namespace ConasiCRM.Portable.ViewModels
                             }
                             var mediaItem = await CrossMediaManager.Current.Extractor.CreateMediaItem(soucre);
                             var image = await CrossMediaManager.Current.Extractor.GetVideoFrame(mediaItem, TimeSpan.FromSeconds(5));
-                            ImageSource imageSource = image.ToImageSource();
+                            //ImageSource imageSource = image.ToImageSource();
 
-                            Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = imageSource, Index = TotalMedia });
-                            TotalMedia++;
+                            //Collections.Add(new CollectionData { MediaSource = soucre, ImageSource = imageSource, Index = TotalMedia });
+                            //TotalMedia++;
                         }
                         else if (type_item == "jpg" || type_item == "jpeg" || type_item == "png")
                         {
@@ -419,7 +419,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 soucre = await DependencyService.Get<IUrlEnCodeSevice>().GetUrlEnCode(soucre);
                             }
                             Photos.Add(new Photo { URL = soucre });
-                            Collections.Add(new CollectionData { MediaSource = null, ImageSource = soucre, Index = TotalPhoto });
+                            Collections.Add(new CollectionData { MediaSourceId = null, ImageSource = soucre, Index = TotalPhoto });
                             TotalPhoto++;
                         }
                     }

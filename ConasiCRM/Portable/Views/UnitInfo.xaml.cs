@@ -299,7 +299,7 @@ namespace ConasiCRM.Portable.Views
             if (item != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new ShowMedia(item.MediaSource));
+                //await Navigation.PushAsync(new ShowMedia(item.MediaSourceId));
                 LoadingHelper.Hide();
 
             }

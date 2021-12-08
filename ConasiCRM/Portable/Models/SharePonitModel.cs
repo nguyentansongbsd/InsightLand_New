@@ -5,7 +5,7 @@ namespace ConasiCRM.Portable.Models
 {
     public class SharePonitModel
     {
-        public object documentid { get; set; }
+        public int documentid { get; set; }
         public string sharepointdocumentid { get; set; }
         public string absoluteurl { get; set; }
         public string fullname { get; set; }

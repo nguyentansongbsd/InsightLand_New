@@ -5,10 +5,6 @@
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
-             xmlns:reservationConverter="clr-namespace:ConasiCRM.Portable.Converters.Reservation"
-             xmlns:unitConverter="clr-namespace:ConasiCRM.Portable.Converters.Unit"
-             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
-             xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
@@ -61,13 +57,7 @@
                     </VisualStateGroupList>
                 </Setter>
             </Style>
-            <converter:DateFormatConverter x:Key="DateFormatConverter" />
-            <converter:DecimalToAreaConverter x:Key="DecimalToAreaConverter" />
-            <converter:DecimalToPercentConverter x:Key="DecimalToPercentConverter" />
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
-            <reservationConverter:StatusLabelConverter x:Key="StatusLabelConverter" />
-            <unitConverter:StatusLabelConverter x:Key="unitStatusLabelConverter" />
-            <converter:ObjToBoolConverter x:Key="ObjToBool" />
             <converter:NullToHideConverter x:Key="nullToHideConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -75,8 +65,6 @@
         <AbsoluteLayout>
             <ScrollView Padding="0,0,0,60" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
                 <StackLayout >
-                    <!--<Image x:Name="test" Source="{Binding ImageSource}" HeightRequest="200" WidthRequest="200"/>-->
-
                     <Grid RowDefinitions="Auto,80">
                         <CarouselView x:Name="carouseView" ItemsSource="{Binding Collections}" Grid.Row="0" HeightRequest="200" IsVisible="{Binding ShowCollections}">
                             <CarouselView.ItemTemplate>
@@ -86,7 +74,7 @@
                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ItemSlider_Tapped" CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
                                         <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.jpg" DownsampleWidth="500"/>
-                                        <Label Text="&#xf144;" IsVisible="{Binding MediaSource,Converter={StaticResource nullToHideConverter}}" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                        <Label Text="&#xf144;" IsVisible="{Binding MediaSourceId,Converter={StaticResource nullToHideConverter}}" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
                                     </Grid>
                                 </DataTemplate>
                             </CarouselView.ItemTemplate>

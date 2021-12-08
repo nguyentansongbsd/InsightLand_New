@@ -7,8 +7,9 @@ namespace ConasiCRM.Portable.Models
 {
     public class CollectionData
     {
-        public string MediaSource { get; set; }
-        public ImageSource ImageSource { get; set; }
+        public int Id { get; set; }
+        public string MediaSourceId { get; set; }
+        public string ImageSource { get; set; }
         public string ImageSourceBase64 { get; set; }
         public SharePointType SharePointType { get; set; }
         public int Index { get; set; }
