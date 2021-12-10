@@ -35,7 +35,6 @@ namespace ConasiCRM.iOS
             CachedImageRenderer.Init();
             LoadApplication(new Portable.App());
             DependencyService.Get<ILoadingService>().Initilize();
-            Stormlion.PhotoBrowser.iOS.Platform.Init();
 
             return base.FinishedLaunching(app, options);
         }
