@@ -529,5 +529,20 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             }
         }
+
+        public async Task<bool> CancelDeposit()
+        {
+            var data = new { };
+            var apiResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})//Microsoft.Dynamics.CRM.bsd_Action_Reservation_Cancel", data);
+
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

@@ -118,6 +118,7 @@ namespace ConasiCRM.Portable.ViewModels
                 <attribute name='bsd_handovercondition' />
                 <attribute name='bsd_direction' />
                 <attribute name='bsd_vippriority' />
+                <attribute name='bsd_phaseslaunchid' alias='_bsd_phaseslaunchid_value' />
                 <attribute name='bsd_view' />
                 <filter type='and'>
                   <condition attribute='productid' operator='eq' uitype='product' value='" + UnitId.ToString() + @"' />

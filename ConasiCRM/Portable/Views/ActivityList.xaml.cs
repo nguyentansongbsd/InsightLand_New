@@ -168,7 +168,6 @@ namespace ConasiCRM.Portable.Views
                 viewModel.EntityName = "appointments";
                 viewModel.entity = "appointment";
                 await viewModel.LoadOnRefreshCommandAsync();
-
                 if(viewModel.Data != null && viewModel.Data.Count > 0)
                 {
                     List<HoatDongListModel> list = new List<HoatDongListModel>();

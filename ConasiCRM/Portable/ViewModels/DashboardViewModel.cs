@@ -462,7 +462,7 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
                     {
-                        string new_customer = ", " + item.callto_contact_name;
+                        string new_customer = ", " + item.callto_contact_name; 
                         meet.customer += new_customer;
                     }
                     if (!string.IsNullOrWhiteSpace(item.callto_accounts_name))

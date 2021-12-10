@@ -74,6 +74,7 @@
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
             <converter:InformationLabelConverter x:Key="InformationLabelConverter"/>
             <converter:ReservationStatusCodeConverterColor x:Key="ReservationStatusCodeConverterColor"/>
+            <converter:HidePriceOnDirectSaleConverter x:Key="HidePriceOnDirectSaleConverter"/>
             <DataTemplate x:Key="Media">
                 <Grid>
                     <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.jpg" DownsampleWidth="300"/>
@@ -127,7 +128,7 @@
                                             <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
                                         </StackLayout>
                                     </Grid>
-                                    <Label Text="{Binding UnitInfo.price,Converter={StaticResource DecimalToVndConverter}}" FontSize="16" FontAttributes="Bold" TextColor="#790311"/>
+                                    <Label Text="{Binding UnitInfo.price,Converter={StaticResource DecimalToVndConverter}}" IsVisible="{Binding UnitInfo._bsd_phaseslaunchid_value,Converter={StaticResource HidePriceOnDirectSaleConverter}}" FontSize="16" FontAttributes="Bold" TextColor="#790311"/>
                                     <Label FontSize="15" TextColor="#444444">
                                         <Label.FormattedText>
                                             <FormattedString>

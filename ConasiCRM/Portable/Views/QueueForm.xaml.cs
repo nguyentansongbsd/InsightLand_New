@@ -13,8 +13,7 @@ namespace ConasiCRM.Portable.Views
     public partial class QueueForm : ContentPage
     {
         public Action<bool> OnCompleted;
-        public static bool? NeedToRefreshContactList = null;
-        public static bool? NeedToRefreshAccountList = null;
+        public static bool? NeedToRefresh;
         public QueueFormViewModel viewModel;
         public Guid QueueId;
         private bool from;
@@ -30,30 +29,19 @@ namespace ConasiCRM.Portable.Views
         public void Init()
         {          
             this.BindingContext = viewModel = new QueueFormViewModel();
-            centerModalKHTN.Body.BindingContext = viewModel;
-            NeedToRefreshAccountList = false;
-            NeedToRefreshContactList = false;
+            //centerModalKHTN.Body.BindingContext = viewModel;
+            NeedToRefresh = false;
             SetPreOpen();            
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            if (NeedToRefreshAccountList == true)
+            if (NeedToRefresh == true)
             {
                 LoadingHelper.Show();
-                viewModel.AccountsLookUp.Clear();
-                await viewModel.LoadAccountsLookUp();
-                NeedToRefreshAccountList = false;
-                LoadingHelper.Hide();
-            }
-
-            if (NeedToRefreshContactList == true)
-            {
-                LoadingHelper.Show();
-                viewModel.ContactsLookUp.Clear();
-                await viewModel.LoadContactsLookUp();
-                NeedToRefreshContactList = false;
+                Lookup_KhachHang.Refresh();
+                NeedToRefresh = false;
                 LoadingHelper.Hide();
             }
         }
@@ -66,18 +54,6 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadSalesAgentCompany();
                 LoadingHelper.Hide();
             };
-            if (viewModel.AccountsLookUp.Count <= 0)
-            {
-               // LoadingHelper.Show();
-                await viewModel.LoadAccountsLookUp();
-               // LoadingHelper.Hide();
-            }
-            if (viewModel.ContactsLookUp.Count <= 0)
-            {
-                //LoadingHelper.Show();
-                await viewModel.LoadContactsLookUp();
-               // LoadingHelper.Hide();
-            }
         }
 
         public async void Create()
@@ -123,7 +99,7 @@ namespace ConasiCRM.Portable.Views
                 btnSave.Text = "Tạo Giữ Chỗ";
                 return;
             }
-            if (viewModel.Customer == null || viewModel.Customer.Id == null || viewModel.Customer.Id == Guid.Empty)
+            if (viewModel.Customer == null || string.IsNullOrWhiteSpace(viewModel.Customer.Val))
             {
                 ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng tiềm năng");
                 LoadingHelper.Hide();
@@ -147,7 +123,7 @@ namespace ConasiCRM.Portable.Views
                     return;
                 }
             }
-            if (viewModel.Customer != null && viewModel.Customer.Id != Guid.Empty && viewModel.DailyOption != null && viewModel.DailyOption.Id != Guid.Empty && viewModel.DailyOption.Id == viewModel.Customer.Id)
+            if (viewModel.Customer != null && !string.IsNullOrWhiteSpace(viewModel.Customer.Val) && viewModel.DailyOption != null && viewModel.DailyOption.Id != Guid.Empty && viewModel.DailyOption.Id == Guid.Parse(viewModel.Customer.Val))
             {
                 ToastMessageHelper.ShortMessage("Khách hàng phải khác Đại lý bán hàng");
                 LoadingHelper.Hide();
@@ -171,99 +147,6 @@ namespace ConasiCRM.Portable.Views
                 btnSave.Text = "Tạo Giữ Chỗ";
                 ToastMessageHelper.ShortMessage("Tạo giữ chỗ thất bại");
             }
-        }
-
-        private async void KhachHangTiemNang_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            Tab_Tapped(1);           
-            await centerModalKHTN.Show();
-            LoadingHelper.Hide();
-        }
-
-        private void Contact_Tapped(object sender, EventArgs e)
-        {
-            Tab_Tapped(1);
-        }
-
-        private void Account_Tapped(object sender, EventArgs e)
-        {
-            Tab_Tapped(2);
-        }
-
-        private async void CloseKHTN_Clicked(object sender, EventArgs e)
-        {
-            await centerModalKHTN.Hide();
-        }       
-
-        private void Tab_Tapped(int tab)
-        {
-            if (tab == 1)
-            {
-                VisualStateManager.GoToState(radBorderContact, "Selected");
-                VisualStateManager.GoToState(lbContact, "Selected");
-                LookUpContact.IsVisible = true;
-            }
-            else
-            {
-                VisualStateManager.GoToState(radBorderContact, "Normal");
-                VisualStateManager.GoToState(lbContact, "Normal");
-                LookUpContact.IsVisible = false;
-            }
-            if (tab == 2)
-            {
-                VisualStateManager.GoToState(radBorderAccount, "Selected");
-                VisualStateManager.GoToState(lbAccount, "Selected");
-                LookUpAccount.IsVisible = true;
-            }
-            else
-            {
-                VisualStateManager.GoToState(radBorderAccount, "Normal");
-                VisualStateManager.GoToState(lbAccount, "Normal");
-                LookUpAccount.IsVisible = false;
-            }
-        }
-
-        private async void LookUpContact_ItemTapped(object sender, EventArgs e)
-        {
-            var item = (LookUp)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            if (item != null)
-            {
-                viewModel.Customer = new LookUp();
-                viewModel.Customer.Id = item.Id;
-                viewModel.Customer.Name = item.Name;
-                viewModel.Customer.Detail = "2";
-                viewModel.QueueFormModel.customer_name = item.Name;
-            }
-            await centerModalKHTN.Hide();
-        }
-
-        private async void LookUpAccount_ItemTapped(object sender, EventArgs e)
-        {
-            var item = (LookUp)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            if (item != null)
-            {
-                viewModel.Customer = new LookUp();
-                viewModel.Customer.Id = item.Id;
-                viewModel.Customer.Name = item.Name;
-                viewModel.Customer.Detail = "1";
-                viewModel.QueueFormModel.customer_name = item.Name;
-            }
-            await centerModalKHTN.Hide();
-        }      
-
-        private async void AddContact_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new ContactForm());
-            LoadingHelper.Hide();
-        }
-
-        private async void AddAccount_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new AccountForm());
-            LoadingHelper.Hide();
         }
     }
 }

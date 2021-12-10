@@ -245,7 +245,7 @@ namespace ConasiCRM.Portable.Views
                 var created = await viewModel.createAccount();
                 if (created)
                 {
-                    if (QueueForm.NeedToRefreshAccountList.HasValue) QueueForm.NeedToRefreshAccountList = true;
+                    if (QueueForm.NeedToRefresh.HasValue) QueueForm.NeedToRefresh = true;
                     if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
                     ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thành công");
                     await Navigation.PopAsync();

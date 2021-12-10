@@ -441,7 +441,7 @@ namespace ConasiCRM.Portable.ViewModels
                               <entity name='lead'>
                                 <attribute name='fullname' alias='Label' />
                                 <attribute name='leadid' alias='Val' />
-                                <attribute name='mobilephone' alias='SDT' />
+                                <attribute name='mobilephone' alias='SDT' /> 
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />

@@ -20,8 +20,8 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<LookUp> ContactsLookUp { get; set; } = new ObservableCollection<LookUp>();
         public ObservableCollection<LookUp> AccountsLookUp { get; set; } = new ObservableCollection<LookUp>();
 
-        private LookUp _customer;
-        public LookUp Customer
+        private OptionSetFilter _customer;
+        public OptionSetFilter Customer 
         {
             get => _customer;
             set
@@ -167,7 +167,7 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             var data = result.value;
 
-            if (data.Where(x => x.account_id == Customer.Id).ToList().Count > 0 || data.Where(x => x.contact_id == Customer.Id).ToList().Count > 0)
+            if (data.Where(x => x.account_id == Guid.Parse(Customer.Val)).ToList().Count > 0 || data.Where(x => x.contact_id == Guid.Parse(Customer.Val)).ToList().Count > 0)
             {
                 return false;
             }
@@ -676,16 +676,16 @@ namespace ConasiCRM.Portable.ViewModels
           //  data["bsd_queuingfee"] = QueueFormModel.bsd_queuingfee;
             data["name"] = QueueFormModel.name;
 
-            if (Customer != null || Customer.Id != Guid.Empty)
+            if (Customer != null || !string.IsNullOrWhiteSpace(Customer.Val))
             {
-                if (Customer.Detail == "1")
+                if (Customer.Title == Controls.LookUpMultipleTabs.CodeAccount)
                 {
-                    data["customerid_account@odata.bind"] = $"/accounts({Customer.Id})";
+                    data["customerid_account@odata.bind"] = $"/accounts({Customer.Val})";
                     await DeletLookup("customerid_contact", QueueFormModel.opportunityid);
                 }
                 else
                 {
-                    data["customerid_contact@odata.bind"] = $"/contacts({Customer.Id})";
+                    data["customerid_contact@odata.bind"] = $"/contacts({Customer.Val})";
                     await DeletLookup("customerid_account", QueueFormModel.opportunityid);
                 }
             }
