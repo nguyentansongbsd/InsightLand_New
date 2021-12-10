@@ -329,12 +329,12 @@ namespace ConasiCRM.Portable.ViewModels
             if(list_chamsockhachhang != null && singleContact.contactid != Guid.Empty)
             {
                 await Task.WhenAll(
-                LoadActiviy(singleContact.contactid, "task", "tasks"),
-                LoadActiviy(singleContact.contactid, "phonecall", "phonecalls"),
-                LoadActiviy(singleContact.contactid, "appointment", "appointments")
-                //LoadTasks(singleContact.contactid),
-                //LoadMettings(singleContact.contactid),
-                //LoadPhoneCalls(singleContact.contactid)
+                //LoadActiviy(singleContact.contactid, "task", "tasks"),
+                //LoadActiviy(singleContact.contactid, "phonecall", "phonecalls"),
+                //LoadActiviy(singleContact.contactid, "appointment", "appointments"),
+                LoadTasks(singleContact.contactid),
+                LoadMettings(singleContact.contactid),
+                LoadPhoneCalls(singleContact.contactid)
                 );
             }
             ShowMoreChamSocKhachHang = list_chamsockhachhang.Count < (3* PageChamSocKhachHang) ? false : true;
@@ -404,15 +404,15 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadTasks(Guid contactID)
         {
-            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='task'>
+            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                <entity name='task'>
                                     <attribute name='subject' />
+                                    <attribute name='statecode' />
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
-                                    <attribute name='scheduledend' />
-                                    <attribute name='activitytypecode' />
-                                    <attribute name='createdon' />
-                                    <order attribute='modifiedon' descending='false' />
+                                    <attribute name='scheduledend' /> 
+                                    <attribute name='activitytypecode' /> 
+                                    <order attribute='modifiedon' descending='true' />
                                     <filter type='and'>
                                         <filter type='or'>
                                             <condition entityname='party' attribute='partyid' operator='eq' value='{contactID}'/>
@@ -420,7 +420,8 @@ namespace ConasiCRM.Portable.ViewModels
                                         </filter>
                                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
-                                     <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='party'/>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
                                         <attribute name='bsd_name' alias='accounts_bsd_name'/>
                                     </link-entity>
                                     <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
@@ -429,8 +430,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
                                         <attribute name='fullname' alias='lead_fullname'/>
                                     </link-entity>
-                                  </entity>
-                                </fetch>";
+                                </entity>
+                            </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>("tasks", fetchXml);
             if (result == null || result.value.Count == 0) return;
 
@@ -455,23 +456,24 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadMettings(Guid contactID)
         {
-            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='appointment'>
+            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                <entity name='appointment'>
                                     <attribute name='subject' />
+                                    <attribute name='statecode' />
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
-                                    <attribute name='scheduledend' />
-                                    <attribute name='activitytypecode' />   
-                                    <attribute name='createdon' />
-                                    <order attribute='modifiedon' descending='false' />
-                                   <filter type='and'>
+                                    <attribute name='scheduledend' /> 
+                                    <attribute name='activitytypecode' /> 
+                                    <order attribute='modifiedon' descending='true' />
+                                    <filter type='and'>
                                         <filter type='or'>
                                             <condition entityname='party' attribute='partyid' operator='eq' value='{contactID}'/>
                                             <condition attribute='regardingobjectid' operator='eq' value='{contactID}' />
                                         </filter>
                                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
-                                   <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='party'/>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
                                         <attribute name='bsd_name' alias='accounts_bsd_name'/>
                                     </link-entity>
                                     <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
@@ -494,8 +496,8 @@ namespace ConasiCRM.Portable.ViewModels
                                             <attribute name='fullname' alias='callto_lead_name'/>
                                         </link-entity>
                                     </link-entity>
-                                  </entity>
-                                </fetch>";
+                                </entity>
+                            </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>("appointments", fetchXml);
             if (result == null || result.value.Count == 0) return;
 
@@ -541,15 +543,15 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadPhoneCalls(Guid contactID)
         {
-            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='phonecall'>
+            string fetchXml = $@"<fetch version='1.0' count='3' page='{PageChamSocKhachHang}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                <entity name='phonecall'>
                                     <attribute name='subject' />
+                                    <attribute name='statecode' />
                                     <attribute name='activityid' />
                                     <attribute name='scheduledstart' />
-                                    <attribute name='scheduledend' />
-                                    <attribute name='activitytypecode' />
-                                    <attribute name='createdon' />
-                                    <order attribute='modifiedon' descending='false' />
+                                    <attribute name='scheduledend' /> 
+                                    <attribute name='activitytypecode' /> 
+                                    <order attribute='modifiedon' descending='true' />
                                     <filter type='and'>
                                         <filter type='or'>
                                             <condition entityname='party' attribute='partyid' operator='eq' value='{contactID}'/>
@@ -557,7 +559,8 @@ namespace ConasiCRM.Portable.ViewModels
                                         </filter>
                                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
-                                     <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='party'/>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
                                         <attribute name='bsd_name' alias='accounts_bsd_name'/>
                                     </link-entity>
                                     <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
@@ -574,14 +577,14 @@ namespace ConasiCRM.Portable.ViewModels
                                             <attribute name='fullname' alias='callto_contact_name'/>
                                         </link-entity>
                                         <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
-                                            <attribute name='bsd_name' alias='callto_accounts_name'/>
+                                            <attribute name='bsd_name' alias='callto_account_name'/>
                                         </link-entity>
                                         <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
                                             <attribute name='fullname' alias='callto_lead_name'/>
                                         </link-entity>
                                     </link-entity>
-                                  </entity>
-                                </fetch>";
+                                </entity>
+                            </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>("phonecalls", fetchXml);
             if (result == null || result.value.Count == 0) return;
 
