@@ -2,6 +2,7 @@
 using ConasiCRM.Portable.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class FollowDetailPageViewModel : BaseViewModel
     {
+        public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; } = new ObservableCollection<FloatButtonItem>();
+
         private FollowUpModel _followDetail;
         public FollowUpModel FollowDetail { get => _followDetail; set { _followDetail = value; OnPropertyChanged(nameof(FollowDetail)); } }
 
@@ -85,7 +88,7 @@ namespace ConasiCRM.Portable.ViewModels
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<FollowUpModel>>("bsd_followuplists", fetchXml);
-            if (result != null)
+            if (result != null && result.value.Count > 0)
             {
                 FollowDetail = result.value.FirstOrDefault();
             }

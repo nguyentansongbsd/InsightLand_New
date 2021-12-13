@@ -35,6 +35,7 @@ namespace ConasiCRM.Portable.Views
         {
             await Task.WhenAll(
                 viewModel.LoadUnit(),
+                viewModel.LoadAllCollection(),
                 viewModel.CheckShowBtnBangTinhGia()
                 );
             
@@ -290,32 +291,51 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private async void Meida_Tapped(object sender, EventArgs e)
+        private void ItemSlider_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            Grid mediaElement = (Grid)sender;
-            var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-            CollectionData item = a.CommandParameter as CollectionData;
-            if (item != null)
+            var item = (CollectionData)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item.SharePointType == SharePointType.Image)
             {
-                LoadingHelper.Show();
-                //await Navigation.PushAsync(new ShowMedia(item.MediaSourceId));
-                LoadingHelper.Hide();
+                var img = viewModel.Photos.SingleOrDefault(x => x.URL == item.ImageSource);
+                var index = viewModel.Photos.IndexOf(img);
 
+                new PhotoBrowser()
+                {
+                    Photos = viewModel.Photos,
+                    StartIndex = index,
+                    EnableGrid = true
+                }.Show();
+            }
+            else if (item.SharePointType == SharePointType.Video)
+            {
+                ShowMedia showMedia = new ShowMedia(Config.OrgConfig.SharePointProjectId, item.MediaSourceId);
+                showMedia.OnCompleted = async (isSuccess) => {
+                    if (isSuccess)
+                    {
+                        await Navigation.PushAsync(showMedia);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không lấy được video");
+                    }
+                };
             }
             LoadingHelper.Hide();
         }
 
-        private void Image_Tapped(object sender, EventArgs e)
+        private void ScollTo_Video_Tapped(object sender, EventArgs e)
         {
-            CachedImage image = (CachedImage)sender;
-            var a = (TapGestureRecognizer)image.GestureRecognizers[0];
-            CollectionData item = a.CommandParameter as CollectionData;
-            if (item != null)
-            {
-                viewModel.photoBrowser.StartIndex = item.Index;
-                viewModel.photoBrowser.Show();
-            }
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Video));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
+
+        private void ScollTo_Image_Tapped(object sender, EventArgs e)
+        {
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
         }
     }
 }

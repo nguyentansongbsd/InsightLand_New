@@ -218,6 +218,10 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Đặt Cọc", "FontAwesomeSolid", "\uf05e", null, CancelDeposit));
             }
+            if (viewModel.Reservation.statuscode == 3)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Đề nghị thanh lý", "FontAwesomeSolid", "\uf560", null, FULTerminate));
+            }
             if (viewModel.Reservation.statuscode == 100000007)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Cập Nhật Bảng Tính Giá", "FontAwesomeRegular", "\uf044", null, EditQuotes));
@@ -248,6 +252,38 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 floatingButtonGroup.IsVisible = false;
+            }
+        }
+
+        private async void FULTerminate(object sender, EventArgs e)
+        {
+            if (viewModel.Reservation != null && viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                var fulid = await viewModel.FULTerminate();
+                if (fulid != Guid.Empty)
+                {
+                    FollowUpListForm newPage = new FollowUpListForm(fulid);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                        }
+                    };
+                    ToastMessageHelper.ShortMessage("Đã tạo danh sách theo dõi");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Đề nghị thanh lý thất bại");
+                }
             }
         }
 

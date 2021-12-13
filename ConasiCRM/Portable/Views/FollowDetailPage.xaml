@@ -6,7 +6,8 @@
              xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
              xmlns:viewmodels="clr-namespace:ConasiCRM.Portable.ViewModels" x:DataType="viewmodels:FollowDetailPageViewModel"
-             Title="Danh Sách Theo Dõi">
+             Title="Danh Sách Theo Dõi"
+             x:Name="this">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:GroupConverter x:Key="groupConverter"/>
@@ -100,7 +101,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Dự án" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding FollowDetail.project_name}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="#1C78C2" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
+                                            <controls:FormLabelValue Text="{Binding FollowDetail.project_name}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Project_Tapped"/>
                                                 </controls:FormLabelValue.GestureRecognizers>
@@ -108,7 +109,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Sản phẩm" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding FollowDetail.bsd_units}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="#1C78C2" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
+                                            <controls:FormLabelValue Text="{Binding FollowDetail.bsd_units}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Unit_Tapped"/>
                                                 </controls:FormLabelValue.GestureRecognizers>
@@ -188,7 +189,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding FollowDetail.bsd_resell}">
                                             <controls:FormLabel Text="Đợt mở bán" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding FollowDetail.phaseslaunch_name}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="#1C78C2" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
+                                            <controls:FormLabelValue Text="{Binding FollowDetail.phaseslaunch_name}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
@@ -204,7 +205,7 @@
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="Họp định kỳ" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding FollowDetail.bsd_collectionmeeting_subject}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="#1C78C2" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
+                                            <controls:FormLabelValue Text="{Binding FollowDetail.bsd_collectionmeeting_subject}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CollectionMeeting_Tapped"/>
                                                 </controls:FormLabelValue.GestureRecognizers>
@@ -221,6 +222,7 @@
                     </Grid>
                 </StackLayout>
             </ScrollView>
+            <controls:FloatingButtonGroup x:Name="floatingButtonGroup" ItemsSource="{Binding BindingContext.ButtonCommandList,Source={x:Reference this}}"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

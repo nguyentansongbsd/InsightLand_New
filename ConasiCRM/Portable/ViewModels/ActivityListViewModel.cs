@@ -116,60 +116,63 @@ namespace ConasiCRM.Portable.ViewModels
             });
         }
 
-        public override Task LoadOnRefreshCommandAsync()
+        public async override Task LoadOnRefreshCommandAsync()
         {
-            var a = base.LoadOnRefreshCommandAsync();
-            if (Data != null && Data.Count > 0)
+            Page = 1;
+            OutOfData = false;
+            await LoadData();
+            if (entity == "appointment")
             {
-                List<HoatDongListModel> list = new List<HoatDongListModel>();
-                foreach (var item in Data)
+                if (Data != null && Data.Count > 0)
                 {
-                    var meet = list.FirstOrDefault(x => x.activityid == item.activityid);
-                    if (meet != null)
+                    List<HoatDongListModel> list = new List<HoatDongListModel>();
+                    foreach (var item in Data)
                     {
-                        if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                        var meet = list.FirstOrDefault(x => x.activityid == item.activityid);
+                        if (meet != null)
                         {
-                            string new_customer = ", " + item.callto_contact_name;
-                            meet.customer += new_customer;
+                            if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                            {
+                                string new_customer = ", " + item.callto_contact_name;
+                                meet.customer += new_customer;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                            {
+                                string new_customer = ", " + item.callto_account_name;
+                                meet.customer += new_customer;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                            {
+                                string new_customer = ", " + item.callto_lead_name;
+                                meet.customer += new_customer;
+                            }
                         }
-                        if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                        else
                         {
-                            string new_customer = ", " + item.callto_account_name;
-                            meet.customer += new_customer;
-                        }
-                        if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
-                        {
-                            string new_customer = ", " + item.callto_lead_name;
-                            meet.customer += new_customer;
+                            item.scheduledstart = item.scheduledstart.ToLocalTime();
+                            item.scheduledend = item.scheduledend.ToLocalTime();
+                            if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                            {
+                                item.customer = item.callto_contact_name;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                            {
+                                item.customer = item.callto_account_name;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                            {
+                                item.customer = item.callto_lead_name;
+                            }
+                            list.Add(item);
                         }
                     }
-                    else
+                    Data.Clear();
+                    foreach (var item in list)
                     {
-                        item.scheduledstart = item.scheduledstart.ToLocalTime();
-                        item.scheduledend = item.scheduledend.ToLocalTime();
-                        if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
-                        {
-                            item.customer = item.callto_contact_name;
-                        }
-                        if (!string.IsNullOrWhiteSpace(item.callto_account_name))
-                        {
-                            item.customer = item.callto_account_name;
-                        }
-                        if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
-                        {
-                            item.customer = item.callto_lead_name;
-                        }
-                        list.Add(item);
+                        Data.Add(item);
                     }
                 }
-                Data.Clear();
-                foreach (var item in list)
-                {
-                    Data.Add(item);
-                }
-                //= new Xamarin.Forms.Extended.InfiniteScrollCollection<HoatDongListModel>(list);
             }
-            return a;
         }
     }
 }

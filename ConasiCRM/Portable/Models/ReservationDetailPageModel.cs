@@ -24,6 +24,7 @@ namespace ConasiCRM.Portable.Models
         public string quotenumber { get; set; }
         public Guid unit_id { get; set; } // id unit trang đầu
         public string unit_name { get; set; } // tên unit trang đầu
+        public string bsd_projectcode { get; set; }
 
         // chính sách
         public Guid bsd_discounttypeid { get; set; } // id discount
