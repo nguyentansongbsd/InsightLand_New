@@ -115,5 +115,64 @@ namespace ConasiCRM.Portable.ViewModels
                                 </fetch>";
             });
         }
+
+        public async override Task LoadOnRefreshCommandAsync()
+        {
+            Page = 1;
+            OutOfData = false;
+            await LoadData();
+            if (entity == "appointment")
+            {
+                if (Data != null && Data.Count > 0)
+                {
+                    List<HoatDongListModel> list = new List<HoatDongListModel>();
+                    foreach (var item in Data)
+                    {
+                        var meet = list.FirstOrDefault(x => x.activityid == item.activityid);
+                        if (meet != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                            {
+                                string new_customer = ", " + item.callto_contact_name;
+                                meet.customer += new_customer;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                            {
+                                string new_customer = ", " + item.callto_account_name;
+                                meet.customer += new_customer;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                            {
+                                string new_customer = ", " + item.callto_lead_name;
+                                meet.customer += new_customer;
+                            }
+                        }
+                        else
+                        {
+                            item.scheduledstart = item.scheduledstart.ToLocalTime();
+                            item.scheduledend = item.scheduledend.ToLocalTime();
+                            if (!string.IsNullOrWhiteSpace(item.callto_contact_name))
+                            {
+                                item.customer = item.callto_contact_name;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_account_name))
+                            {
+                                item.customer = item.callto_account_name;
+                            }
+                            if (!string.IsNullOrWhiteSpace(item.callto_lead_name))
+                            {
+                                item.customer = item.callto_lead_name;
+                            }
+                            list.Add(item);
+                        }
+                    }
+                    Data.Clear();
+                    foreach (var item in list)
+                    {
+                        Data.Add(item);
+                    }
+                }
+            }
+        }
     }
 }

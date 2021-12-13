@@ -19,11 +19,12 @@ namespace ConasiCRM.Portable.Views
     {
         public FollowDetailPageViewModel viewModel;
         public Action<bool> OnLoaded;
-
+        public static bool? NeedToRefresh = null;
         public FollowDetailPage(Guid id)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new FollowDetailPageViewModel();
+            NeedToRefresh = false;
             Init(id);            
         }
 
@@ -39,6 +40,7 @@ namespace ConasiCRM.Portable.Views
             //{
             //   // nameWork.Text = "Hợp đồng: ";
             //}
+            SetUpButton();
 
             if (viewModel.FollowDetail != null && viewModel.FollowDetail.bsd_followuplistid != Guid.Empty)
             {
@@ -47,6 +49,52 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 OnLoaded?.Invoke(false);
+            }
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if(NeedToRefresh == true && viewModel.FollowDetail != null && viewModel.FollowDetail.bsd_followuplistid != Guid.Empty)
+            {
+                await viewModel.Load(viewModel.FollowDetail.bsd_followuplistid);
+                viewModel.ButtonCommandList.Clear();
+                SetUpButton();
+                NeedToRefresh = false;
+            }
+        }
+
+        public void SetUpButton()
+        {
+            if (viewModel.FollowDetail != null && viewModel.FollowDetail.bsd_followuplistid != Guid.Empty && viewModel.FollowDetail.statuscode == 1)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, FULForm));
+            }
+            else
+            {
+                floatingButtonGroup.IsVisible = false;
+            }
+        }
+
+        private void FULForm(object sender, EventArgs e)
+        {
+            if (viewModel.FollowDetail != null && viewModel.FollowDetail.bsd_collectionmeeting_id != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                FollowUpListForm newPage = new FollowUpListForm(viewModel.FollowDetail.bsd_followuplistid);
+                newPage.OnCompleted = async (OnCompleted) =>
+                {
+                    if (OnCompleted == true)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    }
+                };
             }
         }
 

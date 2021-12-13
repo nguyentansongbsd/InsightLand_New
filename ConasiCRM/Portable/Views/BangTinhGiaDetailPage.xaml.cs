@@ -66,6 +66,7 @@ namespace ConasiCRM.Portable.Views
                 );
                 viewModel.ButtonCommandList.Clear();
                 SetUpButtonGroup();
+                if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                 NeedToRefresh = false;
 
                 LoadingHelper.Hide();
@@ -213,6 +214,14 @@ namespace ConasiCRM.Portable.Views
 
         private void SetUpButtonGroup()
         {
+            if (viewModel.Reservation.statuscode == 100000007 || viewModel.Reservation.statuscode == 100000000)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Hủy Đặt Cọc", "FontAwesomeSolid", "\uf05e", null, CancelDeposit));
+            }
+            if (viewModel.Reservation.statuscode == 3)
+            {
+                viewModel.ButtonCommandList.Add(new FloatButtonItem("Đề nghị thanh lý", "FontAwesomeSolid", "\uf560", null, FULTerminate));
+            }
             if (viewModel.Reservation.statuscode == 100000007)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Cập Nhật Bảng Tính Giá", "FontAwesomeRegular", "\uf044", null, EditQuotes));
@@ -224,7 +233,7 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Tạo Lịch Thanh Toán", "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
             }
-            if (viewModel.Reservation.statuscode == 100000007 && viewModel.InstallmentList.Count > 0 )
+            if (viewModel.Reservation.statuscode == 100000007 && viewModel.InstallmentList.Count > 0)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem("Ký Bảng Tính Giá", "FontAwesomeRegular", "\uf274", null, SignQuotationClicked));
             }
@@ -243,6 +252,59 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 floatingButtonGroup.IsVisible = false;
+            }
+        }
+
+        private async void FULTerminate(object sender, EventArgs e)
+        {
+            if (viewModel.Reservation != null && viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                var fulid = await viewModel.FULTerminate();
+                if (fulid != Guid.Empty)
+                {
+                    FollowUpListForm newPage = new FollowUpListForm(fulid);
+                    newPage.OnCompleted = async (OnCompleted) =>
+                    {
+                        if (OnCompleted == true)
+                        {
+                            await Navigation.PushAsync(newPage);
+                            LoadingHelper.Hide();
+                        }
+                        else
+                        {
+                            LoadingHelper.Hide();
+                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                        }
+                    };
+                    ToastMessageHelper.ShortMessage("Đã tạo danh sách theo dõi");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Đề nghị thanh lý thất bại");
+                }
+            }
+        }
+
+        private async void CancelDeposit(object sender, EventArgs e)
+        {
+            if (viewModel.Reservation.quoteid != Guid.Empty)
+            {
+                if (await viewModel.CancelDeposit())
+                {
+                    NeedToRefresh = true;
+                    OnAppearing();
+                    if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
+                    if (DatCocList.NeedToRefresh.HasValue) DatCocList.NeedToRefresh = true;
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Đã hủy đặt cọc");
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage("Hủy đặt cọc thất bại. Vui lòng thử lại");
+                }
             }
         }
 
@@ -464,7 +526,6 @@ namespace ConasiCRM.Portable.Views
             grid.Children.Add(lb);
             return grid;
         }
-
         private void Project_Tapped(object sender, EventArgs e)
         {
             if (viewModel.Reservation.project_id != Guid.Empty)
@@ -486,7 +547,6 @@ namespace ConasiCRM.Portable.Views
                 };
             }
         }
-
         private void SalesCompany_Tapped(object sender, EventArgs e)
         {
             if (viewModel.Reservation.salescompany_accountid != Guid.Empty)
@@ -508,7 +568,6 @@ namespace ConasiCRM.Portable.Views
                 };
             }
         }
-
         private void Customer_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();

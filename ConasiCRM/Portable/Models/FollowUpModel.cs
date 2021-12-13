@@ -8,7 +8,9 @@ namespace ConasiCRM.Portable.Models
     public class FollowUpModel : BaseViewModel
     {
         public Guid bsd_followuplistid { get; set; }
-        public string bsd_name { get; set; }
+
+        private string _name;
+        public string bsd_name { get => _name; set { _name = value; OnPropertyChanged(nameof(bsd_name)); } }
         public DateTime createdon { get; set; }
 
         public DateTime? _bsd_expiredate; // ngày hết hạn
@@ -36,6 +38,9 @@ namespace ConasiCRM.Portable.Models
         public string bsd_units { get; set; }
         public Guid bsd_reservation_id { get; set; }
         public string name_reservation { get; set; } // đặt cọc
+
+        public Guid bsd_optionentry_id { get; set; }
+        public string name_optionentry { get; set; }
 
         public Guid contact_id_oe { get; set; } // id khách hàng Option Entry
         public Guid account_id_oe { get; set; } // id khách hàng Option Entry
@@ -75,17 +80,7 @@ namespace ConasiCRM.Portable.Models
         public decimal bsd_totalforfeitureamount { get; set; } // tổng tiền phạt
         public decimal bsd_forfeitureamount { get; set; } // hoàn tiền
         public int bsd_takeoutmoney { get; set; } // phương thức phạt
-        public string bsd_takeoutmoney_format 
-        { get 
-            {
-                if (bsd_takeoutmoney == 100000001)
-                    return "Forfeiture";
-                else if (bsd_takeoutmoney == 100000000)
-                    return "Refund";
-                else
-                    return "";
-            } 
-        }
+        public string bsd_takeoutmoney_format { get {return FollowUpListTakeOutMoney.GetFollowUpListTakeOutMoneyById(bsd_takeoutmoney.ToString()).Name; }}
         public decimal bsd_forfeiturepercent { get; set; } // hoàn tiền
         public bool isRefund
         {
@@ -107,15 +102,23 @@ namespace ConasiCRM.Portable.Models
                     return false;
             }
         }
-        public bool bsd_terminateletter { get; set; } // thư thanh lý
+
+        public bool _bsd_terminateletter;// thư thanh lý
+        public bool bsd_terminateletter { get => _bsd_terminateletter; set { _bsd_terminateletter = value; OnPropertyChanged(nameof(bsd_terminateletter));}}
         public string bsd_terminateletter_format { get { return BoolToStringData.GetStringByBool(bsd_terminateletter); } }
-        public bool bsd_termination { get; set; } // thanh lý
+
+        public bool _bsd_termination; // thanh lý
+        public bool bsd_termination { get => _bsd_termination; set { _bsd_termination = value; OnPropertyChanged(nameof(bsd_termination)); } }
         public string bsd_termination_format { get { return BoolToStringData.GetStringByBool(bsd_termination); } }
-        public bool bsd_resell { get; set; } // bán lại
+
+        public bool _bsd_resell; // bán lại
+        public bool bsd_resell { get => _bsd_resell; set { _bsd_resell = value; OnPropertyChanged(nameof(bsd_resell)); } }
         public string bsd_resell_format { get { return BoolToStringData.GetStringByBool(bsd_resell); } }
+        public Guid phaseslaunch_id { get; set; }
         public string phaseslaunch_name { get; set; } // đợt mở bán
         public Guid bsd_collectionmeeting_id { get; set; }
         public string bsd_collectionmeeting_subject { get; set; } // cuộc họp
         public string bsd_description { get; set; } //bình luận và quyết định nội dung
+        public string project_code { get; set; }
     }
 }

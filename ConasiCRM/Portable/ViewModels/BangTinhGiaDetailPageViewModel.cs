@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.Views;
 using System;
 using System.Collections.Generic;
@@ -527,6 +528,75 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 return false;
+            }
+        }
+
+        public async Task<bool> CancelDeposit()
+        {
+            var data = new { };
+            var apiResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})//Microsoft.Dynamics.CRM.bsd_Action_Reservation_Cancel", data);
+
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<Guid> FULTerminate()
+        {
+            var fulid = Guid.NewGuid();
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["bsd_followuplistid"] = fulid;
+            if (Reservation.project_id != Guid.Empty)
+            {
+                data["bsd_project@odata.bind"] = "/bsd_projects(" + Reservation.project_id + ")";
+            }
+
+            data["bsd_group"] = 100000000;
+            // parameters["bsd_date"] = new Date().toISOString();
+
+            if (Reservation.statuscode == 3)
+                data["bsd_type"] = 100000005;
+            else if (Reservation.statuscode == 100000006 || Reservation.statuscode == 100000004)
+                data["bsd_type"] = 100000001;
+            else if (Reservation.bsd_reservationformstatus == 100000001)
+                data["bsd_type"] = 100000000;
+            else if (Reservation.statuscode == 100000000)
+                data["bsd_type"] = 100000000;
+
+            data["bsd_reservation@odata.bind"] = "/quotes(" + Reservation.quoteid + ")";
+            data["bsd_depositfee"] = Reservation.bsd_depositfee;
+            if (Reservation.unit_id != Guid.Empty)
+            {
+                data["bsd_Units@odata.bind"] = "/products(" + Reservation.unit_id + ")";
+            }
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            }
+
+            data["bsd_sellingprice"] = Reservation.totalamount;
+            data["bsd_totalamount"] = Reservation.totalamount;
+            data["bsd_totalamountpaid"] = Reservation.bsd_totalamountpaid;
+
+            string path = "/bsd_followuplists";
+            CrmApiResponse result = await CrmHelper.PostData(path, data);
+            if (result.IsSuccess)
+            {
+                return fulid;
+            }
+            else
+            {
+                return Guid.Empty;
             }
         }
     }

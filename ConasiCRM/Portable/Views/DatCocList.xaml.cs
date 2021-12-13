@@ -16,10 +16,13 @@ namespace ConasiCRM.Portable.Views
     public partial class DatCocList : ContentPage
     {
         private readonly DatCocListViewModel viewModel;
+        public static bool? NeedToRefresh;
+
         public DatCocList()
         {
             InitializeComponent();
             BindingContext = viewModel = new DatCocListViewModel();
+            NeedToRefresh = false;
             LoadingHelper.Show();
             Init();
         }
@@ -27,6 +30,18 @@ namespace ConasiCRM.Portable.Views
         {
             await viewModel.LoadData();
             LoadingHelper.Hide();
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if(NeedToRefresh == true)
+            {
+                LoadingHelper.Show();
+                await viewModel.LoadOnRefreshCommandAsync();
+                LoadingHelper.Hide();
+                NeedToRefresh = false;
+            }    
         }
 
         private void listView_ItemTapped(object sender, ItemTappedEventArgs e)
