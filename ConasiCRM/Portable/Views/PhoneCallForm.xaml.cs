@@ -128,7 +128,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.createPhoneCall())
                 {
-                    if (Dashboard.NeedToRefreshPhoneCall.HasValue) Dashboard.NeedToRefreshPhoneCall = true;
+                    if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
                     if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
@@ -149,7 +149,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.UpdatePhoneCall(id))
                 {
-                    if (Dashboard.NeedToRefreshPhoneCall.HasValue) Dashboard.NeedToRefreshPhoneCall = true;
+                    if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
                     if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;

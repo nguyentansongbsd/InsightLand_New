@@ -34,7 +34,7 @@ namespace ConasiCRM.Portable.Views
             SetPreOpen();            
         }
 
-        protected async override void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
             if (NeedToRefresh == true)

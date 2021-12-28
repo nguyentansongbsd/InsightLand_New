@@ -82,6 +82,7 @@
                                         </StackLayout.GestureRecognizers>
                                     </StackLayout>
                                 </Grid>
+                                <controls:LookUpAddress Placeholder="Chọn địa chỉ liên lạc" BottomModal="{Reference BottomModal}" SelectedItem="{Binding Address1}" CenterModal="{Reference CenterModal}"/>
 
                                 <controls:FormLabelRequired Text="Địa chỉ thường trú" Margin="0,10,0,0"/>
                                 <Grid>

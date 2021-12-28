@@ -31,7 +31,7 @@ namespace ConasiCRM.Portable.Models
                     OnPropertyChanged(nameof(bsd_expiredate));
                 }
             }
-        } 
+        }
         public int statuscode { get; set; }
         public string bsd_followuplistcode { get; set; }
         public Guid product_id { get; set; }
@@ -50,7 +50,7 @@ namespace ConasiCRM.Portable.Models
         public string account_name_oe { get; set; } // khách hàng Option Entry
         public string contact_name_re { get; set; } // khách hàng Reservation
         public string account_name_re { get; set; } // khách hàng Reservation
-        public string customer 
+        public string customer
         {
             get
             {
@@ -74,13 +74,14 @@ namespace ConasiCRM.Portable.Models
         public string bsd_group_format { get { return FollowUpGroup.GetFollowUpGroupById(bsd_group.ToString()).Name; } }
         public Guid project_id { get; set; }
         public string project_name { get; set; }
+        public decimal bsd_depositfee { get; set; }
         public decimal bsd_sellingprice { get; set; } // giá bán
         public decimal bsd_totalamount { get; set; } // tổng tiền
         public decimal bsd_totalamountpaid { get; set; } // tổng tiền thanh toán 
         public decimal bsd_totalforfeitureamount { get; set; } // tổng tiền phạt
         public decimal bsd_forfeitureamount { get; set; } // hoàn tiền
         public int bsd_takeoutmoney { get; set; } // phương thức phạt
-        public string bsd_takeoutmoney_format { get {return FollowUpListTakeOutMoney.GetFollowUpListTakeOutMoneyById(bsd_takeoutmoney.ToString()).Name; }}
+        public string bsd_takeoutmoney_format { get { return FollowUpListTakeOutMoney.GetFollowUpListTakeOutMoneyById(bsd_takeoutmoney.ToString()).Name; } }
         public decimal bsd_forfeiturepercent { get; set; } // hoàn tiền
         public bool isRefund
         {
@@ -104,7 +105,7 @@ namespace ConasiCRM.Portable.Models
         }
 
         public bool _bsd_terminateletter;// thư thanh lý
-        public bool bsd_terminateletter { get => _bsd_terminateletter; set { _bsd_terminateletter = value; OnPropertyChanged(nameof(bsd_terminateletter));}}
+        public bool bsd_terminateletter { get => _bsd_terminateletter; set { _bsd_terminateletter = value; OnPropertyChanged(nameof(bsd_terminateletter)); } }
         public string bsd_terminateletter_format { get { return BoolToStringData.GetStringByBool(bsd_terminateletter); } }
 
         public bool _bsd_termination; // thanh lý
@@ -120,5 +121,29 @@ namespace ConasiCRM.Portable.Models
         public string bsd_collectionmeeting_subject { get; set; } // cuộc họp
         public string bsd_description { get; set; } //bình luận và quyết định nội dung
         public string project_code { get; set; }
+        public decimal bsd_totalforfeitureamount_calculator // tổng tiền phạt
+        {
+            get
+            {
+                if (bsd_takeoutmoney == 100000000 && bsd_forfeitureamount != 0)
+                {
+                    var totalforfeiture = bsd_depositfee - bsd_forfeitureamount;
+                    return totalforfeiture;
+                }
+                else
+                {
+                    if (bsd_takeoutmoney == 100000001 && bsd_forfeiturepercent != 0)
+                    {
+
+                        var totalforfeiture = (bsd_depositfee * bsd_forfeitureamount) / 100;
+                        return totalforfeiture;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
     }
 }

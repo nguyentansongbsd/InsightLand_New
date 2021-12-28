@@ -115,46 +115,18 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task GetImageCMND()
         {
-            ShowCMND = true;
-
-            //var result = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<Thumbnail>>();
-
-            //var a = result.value;
-            //MyImage = a[0].medium.url;
-
-            //if (this.singleContact.contactid != Guid.Empty)
-            //{
-            //    var frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            //    var behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
-
-            //    string token = (await CrmHelper.getSharePointToken()).access_token;
-            //    var client = BsdHttpClient.Instance();
-            //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //    var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-            //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
-            //    var front_result = await client.SendAsync(front_request);
-            //    if (front_result.IsSuccessStatusCode)
-            //    {
-            //        ShowCMND = true;
-            //        singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
-            //        CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_mattruoccmnd_source });
-            //        frontImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "&access_token=" + token;
-            //    }
-
-            //    var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-            //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
-            //    var behind_result = await client.SendAsync(behind_request);
-            //    if (behind_result.IsSuccessStatusCode)
-            //    {
-            //        ShowCMND = true;
-            //        var abc = behind_result.Content.ReadAsByteArrayAsync().Result;
-            //        singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
-            //        CollectionCMNDs.Add(new PhotoCMND { ImageSoure = singleContact.bsd_matsaucmnd_source });
-            //        // behindImage = OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_layouts/15/download.aspx?SourceUrl=/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token;
-            //    }
-            //}
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_behind) || !string.IsNullOrWhiteSpace(singleContact.bsd_etag_front))
+                ShowCMND = true;
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_behind))
+            {
+                var urlVideo = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<GraphThumbnailsUrlModel>>($"{Config.OrgConfig.SharePointContact_CMNDId}/items/{singleContact.bsd_etag_behind}/driveItem/thumbnails");
+                singleContact.bsd_etag_behind_url = urlVideo.value.SingleOrDefault().large.url;
+            }
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_front))
+            {
+                var urlVideo = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<GraphThumbnailsUrlModel>>($"{Config.OrgConfig.SharePointContact_CMNDId}/items/{singleContact.bsd_etag_front}/driveItem/thumbnails");
+                singleContact.bsd_etag_front_url = urlVideo.value.SingleOrDefault().large.url;
+            }
         }
 
         // giao dich

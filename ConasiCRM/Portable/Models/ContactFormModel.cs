@@ -371,6 +371,14 @@ namespace ConasiCRM.Portable.Models
         public string bsd_postalcode { get { return _bsd_postalcode; } set { _bsd_postalcode = value; OnPropertyChanged(nameof(bsd_postalcode)); } }
 
         public Guid employee_id { get; set; }
+        public string bsd_etag_behind { get; set; }
+        public string bsd_etag_front { get; set; }
+
+        private string _bsd_etag_behind_url;
+        public string bsd_etag_behind_url { get => _bsd_etag_behind_url; set { _bsd_etag_behind_url = value; OnPropertyChanged(nameof(bsd_etag_behind_url)); } }
+
+        private string _bsd_etag_front_url;
+        public string bsd_etag_front_url { get => _bsd_etag_front_url; set { _bsd_etag_front_url = value; OnPropertyChanged(nameof(bsd_etag_front_url)); } }
 
     }
 }

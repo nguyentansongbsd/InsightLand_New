@@ -3,13 +3,16 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable
@@ -264,6 +267,7 @@ namespace ConasiCRM.Portable
             }
         }
 
+
         public async Task UpdateImei(string employeeId)
         {
             string path = $"/bsd_employees({employeeId})";
@@ -272,7 +276,7 @@ namespace ConasiCRM.Portable
             if (!crmApiResponse.IsSuccess)
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Không cập nhật được thông tin Imei");
+                ToastMessageHelper.ShortMessage(Language_vn.khong_cap_nhat_duoc_thong_tin_imei);
                 return;
             }
         }
@@ -282,6 +286,28 @@ namespace ConasiCRM.Portable
             Dictionary<string, object> data = new Dictionary<string, object>();
             data["bsd_imeinumber"] = ImeiNum;
             return data;
+        }
+
+        private void Flag_Tapped(object sender, EventArgs e)
+        {
+            string code = (string)((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (code == UserLogged.Language) return;
+            LoadingHelper.Show();
+            UserLogged.Language = code;
+            CultureInfo cultureInfo = new CultureInfo(UserLogged.Language);
+            Language_vn.Culture = cultureInfo;
+            if (code == "vi")
+            {
+                flagVN.BorderColor = Color.FromHex("#2196F3");
+                flagEN.BorderColor = Color.FromHex("#eeeeee");
+            }
+            else if (code == "en")
+            {
+                flagVN.BorderColor = Color.FromHex("#eeeeee");
+                flagEN.BorderColor = Color.FromHex("#2196F3");
+            }
+            Application.Current.MainPage = new Login();
+            LoadingHelper.Hide();
         }
     }
 }
