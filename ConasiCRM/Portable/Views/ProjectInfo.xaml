@@ -339,6 +339,10 @@
             <StackLayout x:Name="btnGiuCho" IsVisible="{Binding IsShowBtnGiuCho}" AbsoluteLayout.LayoutBounds="0,1,1,50" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White">
                 <Button Text="Giữ chỗ" Clicked="GiuCho_Clicked" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" Margin="10,5"/>
             </StackLayout>
+
+            <controls:CenterModal x:Name="event">
+                
+            </controls:CenterModal>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
