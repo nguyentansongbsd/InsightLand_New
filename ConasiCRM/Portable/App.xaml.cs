@@ -1,6 +1,9 @@
 using ConasiCRM.Portable.IServices;
+using ConasiCRM.Portable.Resources;
+using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.Views;
 using MediaManager;
+using System.Globalization;
 using System.Net.Http;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,6 +20,8 @@ namespace ConasiCRM.Portable
         {
             InitializeComponent();
             CrossMediaManager.Current.Init();
+            CultureInfo cultureInfo = new CultureInfo(UserLogged.Language);
+            Language.Culture = cultureInfo;
             MainPage = new Login();
         }
 

@@ -8,6 +8,7 @@ using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -23,7 +24,7 @@ namespace ConasiCRM.Portable.Views
         public LeadForm()
         {
             InitializeComponent();
-            this.Title = "TẠO MỚI KHÁCH HÀNG";
+            this.Title = Language.tao_moi_khach_hang_tiem_nang_title;
             Init();
             datePickerNgaySinh.DefaultDisplay = DateTime.Now;
             viewModel.Rating = RatingData.GetRatingById("2");//mac dinh la warm
@@ -31,8 +32,8 @@ namespace ConasiCRM.Portable.Views
         public LeadForm(Guid Id)
         {
             InitializeComponent();
-            this.Title = "CẬP NHẬT KH TIỀM NĂNG";
-            btn_save_lead.Text = "CẬP NHẬT KHÁCH HÀNG";
+            this.Title = Language.cap_nhat_khach_hang_tiem_nang_title;
+            btn_save_lead.Text = Language.cap_nhat_khach_hang;
             Init();
             viewModel.LeadId = Id;
             InitUpdate();
@@ -123,7 +124,7 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadCampainsForLookup();
                 if (viewModel.list_campaign_lookup.Count == 0)
                 {
-                    ToastMessageHelper.ShortMessage("Không load được chiến dịch");
+                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_chien_dich);
                 }
                 LoadingHelper.Hide();
             };
@@ -134,7 +135,7 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadCountryForLookup();
                 if (viewModel.list_country_lookup.Count == 0)
                 {
-                    ToastMessageHelper.ShortMessage("Không load được quốc gia");
+                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_quoc_gia);
                 }
                 LoadingHelper.Hide();
             };
@@ -145,7 +146,7 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.loadProvincesForLookup();
                 if (viewModel.list_province_lookup.Count == 0)
                 {
-                    ToastMessageHelper.ShortMessage("Không load được tỉnh thành");
+                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_tinh_thanh);
                 }
                 LoadingHelper.Hide();
             };
@@ -156,7 +157,7 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.loadDistrictForLookup();
                 if (viewModel.list_district_lookup.Count == 0)
                 {
-                    ToastMessageHelper.ShortMessage("Không load được quận/huyện");
+                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_quan_huyen);
                 }
                 LoadingHelper.Hide();
             };
@@ -262,7 +263,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.AddressLine1))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_nha_duong_phuong);
                 return;
             }
 
@@ -310,25 +311,25 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.bsd_topic_label))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_tieu_de);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.lastname))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_ho_ten);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.mobilephone))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt);
                 return;
             }
 
             if (viewModel.singleLead.new_birthday != null && (DateTime.Now.Year - DateTime.Parse(viewModel.singleLead.new_birthday.ToString()).Year < 18))
             {
-                ToastMessageHelper.ShortMessage("Khách hàng phải từ 18 tuổi");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_phai_tu_18_tuoi);
                 return ;
             }
 
@@ -352,14 +353,14 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                     if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
-                    ToastMessageHelper.ShortMessage("Thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không thêm được khách hàng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.khong_them_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
             else
@@ -370,13 +371,13 @@ namespace ConasiCRM.Portable.Views
                     if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                     if (LeadDetailPage.NeedToRefreshLeadDetail.HasValue) LeadDetailPage.NeedToRefreshLeadDetail = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không cập nhật được khách hàng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
         }

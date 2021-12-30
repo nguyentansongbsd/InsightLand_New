@@ -36,15 +36,10 @@
         <Compile Update="Login.xaml.cs">
           <DependentUpon>Login.xaml</DependentUpon>
         </Compile>
-        <Compile Update="Resources\Language_en.Designer.cs">
+        <Compile Update="Resources\Language.Designer.cs">
           <DesignTime>True</DesignTime>
           <AutoGen>True</AutoGen>
-          <DependentUpon>Language_en.resx</DependentUpon>
-        </Compile>
-        <Compile Update="Resources\Language_vn.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Language_vn.resx</DependentUpon>
+          <DependentUpon>Language.resx</DependentUpon>
         </Compile>
         <Compile Update="Views\DirectSaleContentView - Copy.xaml.cs">
           <DependentUpon>%(Filename)</DependentUpon>
@@ -92,13 +87,9 @@
       <EmbeddedResource Update="MasterDetailPage1Master.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Language_en.resx">
+      <EmbeddedResource Update="Resources\Language.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Language_en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\Language_vn.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Language_vn.Designer.cs</LastGenOutput>
+        <LastGenOutput>Language.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="ShowMedia.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

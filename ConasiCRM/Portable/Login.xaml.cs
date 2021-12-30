@@ -76,9 +76,9 @@ namespace ConasiCRM.Portable
             {
                 Grid.SetRow(lblUserName, 0);
                 Grid.SetRow(entryUserName, 0);
-                Grid.SetRowSpan(entryUserName, 2);             
-                
-                entryUserName.Placeholder = "Tên đăng nhập";               
+                Grid.SetRowSpan(entryUserName, 2);
+
+                entryUserName.Placeholder = Language.ten_dang_nhap;
             }
         }
 
@@ -113,7 +113,7 @@ namespace ConasiCRM.Portable
                 }
 
                 EyePass = false;
-                entryPassword.Placeholder = "Mật khẩu";
+                entryPassword.Placeholder = Language.mat_khau;
             }
         }
 
@@ -149,12 +149,12 @@ namespace ConasiCRM.Portable
         {
             if (string.IsNullOrWhiteSpace(UserName))
             {
-                ToastMessageHelper.ShortMessage("Tên đăng nhập không được để trống");
+                ToastMessageHelper.ShortMessage(Language.ten_dang_nhap_khong_duoc_de_trong);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ToastMessageHelper.ShortMessage("Mật khẩu không được để trống");
+                ToastMessageHelper.ShortMessage(Language.mat_khau_khong_duoc_de_trong);
                 return;
             }
             try
@@ -177,14 +177,14 @@ namespace ConasiCRM.Portable
                         if (employeeModel.bsd_name != UserName)
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Tên đăng nhập không đúng");
+                            ToastMessageHelper.ShortMessage(Language.ten_dang_nhap_khong_dung);
                             return;
                         }
 
                         if (employeeModel.bsd_password != Password)
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Mật khẩu không đúng");
+                            ToastMessageHelper.ShortMessage(Language.mat_khau_khong_dung);
                             return;
                         }
 
@@ -219,14 +219,14 @@ namespace ConasiCRM.Portable
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy user");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_user);
                     }
                 }
             }
             catch (Exception ex)
             {
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông báo", "Lỗi kết nối đến Server. \n" + ex.Message, "Đóng");
+                await DisplayAlert(Language.thong_bao, Language.loi_ket_noi_den_server + "\n" + ex.Message,Language.dong);
             }
         }
 
@@ -276,7 +276,7 @@ namespace ConasiCRM.Portable
             if (!crmApiResponse.IsSuccess)
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage(Language_vn.khong_cap_nhat_duoc_thong_tin_imei);
+                ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_thong_tin_imei);
                 return;
             }
         }
@@ -295,16 +295,16 @@ namespace ConasiCRM.Portable
             LoadingHelper.Show();
             UserLogged.Language = code;
             CultureInfo cultureInfo = new CultureInfo(UserLogged.Language);
-            Language_vn.Culture = cultureInfo;
+            Language.Culture = cultureInfo;
             if (code == "vi")
             {
-                flagVN.BorderColor = Color.FromHex("#2196F3");
-                flagEN.BorderColor = Color.FromHex("#eeeeee");
+                flagVN.BorderColor = Color.FromHex("2196F3");
+                flagEN.BorderColor = Color.FromHex("eeeeee");
             }
             else if (code == "en")
             {
-                flagVN.BorderColor = Color.FromHex("#eeeeee");
-                flagEN.BorderColor = Color.FromHex("#2196F3");
+                flagVN.BorderColor = Color.FromHex("EEEEEE");
+                flagEN.BorderColor = Color.FromHex("2196F3");
             }
             Application.Current.MainPage = new Login();
             LoadingHelper.Hide();

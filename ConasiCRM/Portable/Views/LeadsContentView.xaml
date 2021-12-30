@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters" xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
+             xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters" 
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.LeadsContentView">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -32,11 +36,11 @@
                                     </Grid>-->
                                     <Label Text="{Binding subject}" TextColor="#444444" Grid.Row="1" FontSize="15"/>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="Số điện thoại: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{x:Static language:Language.sdt_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding mobilephone}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="Trạng thái: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{x:Static language:Language.tinh_trang_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding statuscode,Converter={StaticResource StatusCodeConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                 </Grid>

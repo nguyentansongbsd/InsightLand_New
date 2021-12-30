@@ -8,6 +8,7 @@
        xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
        xmlns:ffimageTranformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
        xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+       xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
        xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
        xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
        ios:Page.UseSafeArea="true"
@@ -72,71 +73,71 @@
     </Shell.FlyoutHeaderTemplate>
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Trang chủ" ContentTemplate="{DataTemplate views:Dashboard}">
+        <ShellContent Title="{x:Static language:Language.trang_chu}" ContentTemplate="{DataTemplate views:Dashboard}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf015;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Khách hàng" ContentTemplate="{DataTemplate views:CustomerPage}">
+        <ShellContent Title="{x:Static language:Language.khach_hang}" ContentTemplate="{DataTemplate views:CustomerPage}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0c0;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Đồng bộ danh bạ" ContentTemplate="{DataTemplate views:DanhBa}">
+        <ShellContent Title="{x:Static language:Language.dong_bo_danh_ba}" ContentTemplate="{DataTemplate views:DanhBa}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2c1;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
     </FlyoutItem>
 
-    <ShellContent Title="Giỏ hàng" ContentTemplate="{DataTemplate views:DirectSale}">
+    <ShellContent Title="{x:Static language:Language.gio_hang}" ContentTemplate="{DataTemplate views:DirectSale}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07a;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Giữ chỗ" ContentTemplate="{DataTemplate views:QueueList}">
+    <ShellContent Title="{x:Static language:Language.giu_cho}" ContentTemplate="{DataTemplate views:QueueList}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf02d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Bảng tính giá" ContentTemplate="{DataTemplate views:ReservationList}" >
+    <ShellContent Title="{x:Static language:Language.bang_tinh_gia}" ContentTemplate="{DataTemplate views:ReservationList}" >
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Đặt cọc" ContentTemplate="{DataTemplate views:DatCocList}" >
+    <ShellContent Title="{x:Static language:Language.dat_coc_appshell}" ContentTemplate="{DataTemplate views:DatCocList}" >
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Hợp đồng" ContentTemplate="{DataTemplate views:ContractList}">
+    <ShellContent Title="{x:Static language:Language.hop_dong}" ContentTemplate="{DataTemplate views:ContractList}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Tài liệu kinh doanh" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
+    <ShellContent Title="{x:Static language:Language.tai_lieu_kinh_doanh}" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07c;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="Danh sách theo dõi" ContentTemplate="{DataTemplate views:FollowUpListPage}">
+    <ShellContent Title="{x:Static language:Language.danh_sach_theo_doi_appshell}" ContentTemplate="{DataTemplate views:FollowUpListPage}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="Phản hồi" ContentTemplate="{DataTemplate views:ListPhanHoi}">
+        <ShellContent Title="{x:Static language:Language.phan_hoi}" ContentTemplate="{DataTemplate views:ListPhanHoi}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf086;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Lịch làm việc" ContentTemplate="{DataTemplate views:LichLamViec}">
+        <ShellContent Title="{x:Static language:Language.lich_lam_viec}" ContentTemplate="{DataTemplate views:LichLamViec}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf073;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Hoạt động" Route="HoatDong" ContentTemplate="{DataTemplate views:ActivityList}">
+        <ShellContent Title="{x:Static language:Language.hoat_dong}" Route="HoatDong" ContentTemplate="{DataTemplate views:ActivityList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ae;" Size="18"/>
             </ShellContent.Icon>
@@ -148,7 +149,7 @@
         </ShellContent>
     </FlyoutItem>
 
-    <MenuItem Text="Đăng xuất" Command="{Binding LogoutCommand}" >
+    <MenuItem Text="{x:Static language:Language.dang_xuat_appshell}" Command="{Binding LogoutCommand}" >
         <MenuItem.IconImageSource>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2f5;" Size="18"/>
         </MenuItem.IconImageSource>
