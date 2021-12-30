@@ -8,7 +8,7 @@ namespace ConasiCRM.Portable.Config
     public class OrgConfig
     {
         public static int RecordPerPage = 30;
-        public const string VerApp = "Insight Land - Version ver_24.1_test";
+        public const string VerApp = "Insight Land - Version ver_25_test";
 
         public const string GraphApi = "https://graph.microsoft.com/v1.0/sites/";
         public const string GraphReSource = "https://graph.microsoft.com";
