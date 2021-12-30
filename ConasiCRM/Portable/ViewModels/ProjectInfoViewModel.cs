@@ -90,6 +90,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private ImageSource _ImageSource;
         public ImageSource ImageSource { get => _ImageSource; set { _ImageSource = value; OnPropertyChanged(nameof(ImageSource)); } }
+        
+        private EventModel _event;
+        public EventModel Event { get => _event; set { _event = value; OnPropertyChanged(nameof(Event)); } }
 
         public ProjectInfoViewModel()
         {
@@ -388,6 +391,39 @@ namespace ConasiCRM.Portable.ViewModels
                     this.Photos.Add(new Photo { URL = url });
                     Collections.Add(new CollectionData { Id = item.documentid, MediaSourceId = null, ImageSource = url, SharePointType = SharePointType.Image, Index = TotalMedia });
                 }
+            }
+        }
+
+        public async Task LoadDataEvent()
+        {
+            if (ProjectId == Guid.Empty) return;
+
+            string FetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_event'>
+                                    <attribute name='bsd_name' />
+                                    <attribute name='bsd_startdate' />
+                                    <attribute name='bsd_eventcode' />
+                                    <attribute name='bsd_enddate' />
+                                    <attribute name='bsd_eventid' />
+                                    <order attribute='bsd_eventcode' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='statuscode' operator='eq' value='100000000' />
+                                      <condition attribute='bsd_project' operator='eq' value='{ProjectId}' />
+                                    </filter>
+                                    <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaselaunch' link-type='outer' alias='ab'>
+                                      <attribute name='bsd_name' alias='bsd_phaselaunch_name'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<EventModel>>("bsd_events", FetchXml);
+            if (result == null || result.value.Any() == false) return;
+            var data = result.value.FirstOrDefault();
+            Event = data;
+            if (data.bsd_startdate != null && data.bsd_enddate != null)
+            {
+                Event.bsd_startdate = data.bsd_startdate.Value.ToLocalTime();
+                Event.bsd_enddate = data.bsd_enddate.Value.ToLocalTime();
             }
         }
     }
