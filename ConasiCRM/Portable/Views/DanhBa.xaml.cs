@@ -74,13 +74,14 @@ namespace ConasiCRM.Portable.Views
                         {
                             item.IsConvertToLead = false;
                             viewModel.Contacts.Add(item);
-                           // SelectedContact.Add(item);
+                            // SelectedContact.Add(item); triggerOutputs()?['headers/x-ms-file-etag'].replace("{",string.empty).replace("}",string.empty).replace('"',string.empty).split(',')[0]
                         }
                         else
                         {
                             item.IsConvertToLead = true;
                             viewModel.Contacts.Add(item);
                         }
+                        //triggerOutputs()?['headers/x-ms-file-etag'].replace("{", string.empty).replace("}", string.empty).split(',')[0]
                     }
                 }
                 viewModel.total = viewModel.Contacts.Count();

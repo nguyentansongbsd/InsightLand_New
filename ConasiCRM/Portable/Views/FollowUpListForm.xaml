@@ -107,7 +107,7 @@
 
                                 <controls:FormLabel Text="Tổng tiền phạt" FontSize="15" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
-                                    <Label Text="{Binding FULDetail.bsd_totalforfeitureamount, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
+                                    <Label Text="{Binding FULDetail.bsd_totalforfeitureamount_calculator, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
                             </StackLayout>

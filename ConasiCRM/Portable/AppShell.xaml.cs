@@ -1,6 +1,7 @@
 ﻿using System;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using ConasiCRM.Portable.Views;
@@ -42,7 +43,7 @@ namespace ConasiCRM.Portable
             LoadingHelper.Show();
             if (UserLogged.ContactId == Guid.Empty)
             {
-                ToastMessageHelper.ShortMessage("Chưa có contact, không thể chỉnh sửa thông tin");
+                ToastMessageHelper.ShortMessage(Language.chua_co_contact_khong_the_chinh_sua_thong_tin);
                 LoadingHelper.Hide();
                 return;
             }

@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace ConasiCRM.Portable.Views
                     await viewModel.loadPhoneCall(activityid);
                     await viewModel.loadFromTo(activityid);
                     viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
-                    viewModel.ActivityType = "Cuộc Gọi";
+                    viewModel.ActivityType = Language.cuoc_goi_title;
                     if (viewModel.PhoneCall != null && viewModel.PhoneCall.activityid != Guid.Empty)
                     {
                         this.IsVisible = true;
@@ -65,14 +66,14 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                     }
                 }
                 else if (activitytypecode == "task")
                 {
                     await viewModel.loadTask(activityid);
                     viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
-                    viewModel.ActivityType = "Công Việc";
+                    viewModel.ActivityType = Language.cong_viec_title;
                     if (viewModel.Task != null && viewModel.Task.activityid != Guid.Empty)
                     {
                         this.IsVisible = true;
@@ -89,7 +90,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                     }
                 }
                 else if (activitytypecode == "appointment")
@@ -97,7 +98,7 @@ namespace ConasiCRM.Portable.Views
                     await viewModel.loadMeet(activityid);
                     await viewModel.loadFromToMeet(activityid);
                     viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
-                    viewModel.ActivityType = "Cuộc Họp";
+                    viewModel.ActivityType = Language.cuoc_hop_title;
                     if (viewModel.Meet != null && viewModel.Meet.activityid != Guid.Empty)
                     {
                         this.IsVisible = true;
@@ -115,7 +116,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                     }
                 }
             }
@@ -137,7 +138,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                     }
                 };
             }
@@ -155,7 +156,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                     }
                 };
             }
@@ -173,7 +174,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                     }
                 };
             }
@@ -182,9 +183,9 @@ namespace ConasiCRM.Portable.Views
         private async void Completed_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            string[] options = new string[] { "Hoàn Thành", "Hủy" };
-            string asw = await App.Current.MainPage.DisplayActionSheet("Tuỳ chọn", "Đóng", null, options);
-            if (asw == "Hoàn Thành")
+            string[] options = new string[] { Language.hoan_thanh, Language.huy };
+            string asw = await App.Current.MainPage.DisplayActionSheet(Language.tuy_chon, Language.dong, null, options);
+            if (asw == Language.hoan_thanh)
             {
                 if (viewModel.PhoneCall != null && viewModel.PhoneCall.activityid != Guid.Empty)
                 {
@@ -193,12 +194,12 @@ namespace ConasiCRM.Portable.Views
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc gọi đã hoàn thành");
+                        ToastMessageHelper.ShortMessage(Language.cuoc_goi_da_hoan_thanh);
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành cuộc gọi. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.loi_khi_hoan_thanh_cuoc_goi_vui_long_thu_lai);
                     }
                 }
                 else if (viewModel.Task != null && viewModel.Task.activityid != Guid.Empty)
@@ -208,12 +209,12 @@ namespace ConasiCRM.Portable.Views
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Công việc đã hoàn thành");
+                        ToastMessageHelper.ShortMessage(Language.cong_viec_da_hoan_thanh);
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành công việc. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.loi_khi_hoan_thanh_cong_viec_vui_long_thu_lai);
                     }
                 }
                 else if (viewModel.Meet != null && viewModel.Meet.activityid != Guid.Empty)
@@ -223,16 +224,16 @@ namespace ConasiCRM.Portable.Views
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc họp đã hoàn thành");
+                        ToastMessageHelper.ShortMessage(Language.cuoc_hop_da_hoan_thanh);
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hoàn thành cuộc họp. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.loi_khi_hoan_thanh_cuoc_hop_vui_long_thu_lai);
                     }
                 }
             }
-            else if (asw == "Hủy")
+            else if (asw == Language.huy)
             {
                 if (viewModel.PhoneCall != null && viewModel.PhoneCall.activityid != Guid.Empty)
                 {
@@ -241,12 +242,12 @@ namespace ConasiCRM.Portable.Views
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc gọi đã được hủy");
+                        ToastMessageHelper.ShortMessage(Language.cuoc_goi_da_duoc_huy);
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hủy cuộc gọi. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.loi_khi_huy_cuoc_goi_vui_long_thu_lai);
                     }
                 }
                 else if (viewModel.Task != null && viewModel.Task.activityid != Guid.Empty)
@@ -256,12 +257,12 @@ namespace ConasiCRM.Portable.Views
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Công việc đã được hủy");
+                        ToastMessageHelper.ShortMessage(Language.cong_viec_da_duoc_huy);
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hủy công việc. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.loi_khi_huy_cong_viec_vui_long_thu_lai);
                     }
                 }
                 else if (viewModel.Meet != null && viewModel.Meet.activityid != Guid.Empty)
@@ -271,12 +272,12 @@ namespace ConasiCRM.Portable.Views
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cuộc họp đã được hủy");
+                        ToastMessageHelper.ShortMessage(Language.cuoc_hop_da_duoc_huy);
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Lỗi khi hủy cuộc họp. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.loi_khi_huy_cuoc_hop_vui_long_thu_lai);
                     }
                 }
             }
@@ -300,7 +301,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
 
@@ -318,7 +319,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
 
@@ -336,7 +337,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }
@@ -360,7 +361,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
 
@@ -378,7 +379,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
 
@@ -396,7 +397,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }
@@ -451,7 +452,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }
@@ -468,7 +469,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }
@@ -485,7 +486,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }

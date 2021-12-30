@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="bang_tinh_gia_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ban_dang_su_dung_mat_khau_cu_vui_long_nhap_lai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cap_nhat_thanh_cong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cap_nhat_that_bai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ca_nhan" xml:space="preserve">
+    <value />
+  </data>
+  <data name="chien_dich" xml:space="preserve">
+    <value />
+  </data>
+  <data name="chinh_sua" xml:space="preserve">
+    <value />
+  </data>
+  <data name="chua_co_contact_khong_the_chinh_sua_thong_tin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="chuc_vu" xml:space="preserve">
+    <value />
+  </data>
+  <data name="chup_hinh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="chuyen_doi_khach_hang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cong_viec_hom_nay" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dai_dien_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dang_nhap" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="dang_xuat_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="danh_sach_theo_doi_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dat_coc_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="da_ban" xml:space="preserve">
+    <value />
+  </data>
+  <data name="da_chuyen_doi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="da_huy" xml:space="preserve">
+    <value />
+  </data>
+  <data name="da_nhan" xml:space="preserve">
+    <value />
+  </data>
+  <data name="da_xay_ra_loi_vui_long_thu_lai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dia_chi" xml:space="preserve">
+    <value>Address:</value>
+  </data>
+  <data name="dia_chi_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dia_chi_lien_lac_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dia_chi_thuong_tru_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="doanh_nghiep" xml:space="preserve">
+    <value />
+  </data>
+  <data name="doanh_thu_moi_nam" xml:space="preserve">
+    <value />
+  </data>
+  <data name="doi_mat_khau_thanh_cong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="doi_mat_khau_that_bai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dong" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="dong_bo_danh_ba_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="don_vi_tien_te" xml:space="preserve">
+    <value />
+  </data>
+  <data name="email" xml:space="preserve">
+    <value />
+  </data>
+  <data name="email_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ghi_nho_dang_nhap" xml:space="preserve">
+    <value>Remember</value>
+  </data>
+  <data name="giao_dich" xml:space="preserve">
+    <value />
+  </data>
+  <data name="giao_dich_tab" xml:space="preserve">
+    <value />
+  </data>
+  <data name="gioi_tinh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="gio_hang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="giu_cho" xml:space="preserve">
+    <value />
+  </data>
+  <data name="goi_dien" xml:space="preserve">
+    <value />
+  </data>
+  <data name="gui_tai_lieu_tiep_thi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="hinh_chup_cmnd" xml:space="preserve">
+    <value />
+  </data>
+  <data name="hoat_dong_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="hoa_hong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="hom_nay_khong_co_cong_viec" xml:space="preserve">
+    <value />
+  </data>
+  <data name="hop_dong_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="huong_tot" xml:space="preserve">
+    <value />
+  </data>
+  <data name="huong_xau" xml:space="preserve">
+    <value />
+  </data>
+  <data name="huy" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="khach_hang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khach_hang_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khach_hang_khong_co_sdt_vui_long_thu_lai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khach_hang_moi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khach_hang_tiem_nang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_cap_nhat_duoc_thong_tin_imei" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_chuyen_doi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_co_du_lieu" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_lien_he_duoc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_quan_tam" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_the_qualify" xml:space="preserve">
+    <value />
+  </data>
+  <data name="khong_tim_thay_user" xml:space="preserve">
+    <value />
+  </data>
+  <data name="kich_hoat_lai_kh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="la_ban_phong_thuy" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lich_lam_viec_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="linh_vuc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="loi_ket_noi_den_server" xml:space="preserve">
+    <value />
+  </data>
+  <data name="mat_khach_hang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="mat_khau" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="mat_khau_cu_khong_dung" xml:space="preserve">
+    <value />
+  </data>
+  <data name="mat_khau_khong_dung" xml:space="preserve">
+    <value />
+  </data>
+  <data name="mat_khau_khong_duoc_de_trong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ma_sic" xml:space="preserve">
+    <value />
+  </data>
+  <data name="mo_ta" xml:space="preserve">
+    <value />
+  </data>
+  <data name="nam_sinh_am_lich" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ngay_cap" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ngay_cuoi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ngay_sinh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="nguon_khach_hang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ngu_hanh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="nhan_tin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="noi_cap" xml:space="preserve">
+    <value />
+  </data>
+  <data name="password_khong_duoc_chua_ky_tu_khoang_trang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="phan_hoi_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="phong_thuy" xml:space="preserve">
+    <value />
+  </data>
+  <data name="qualify_account_thanh_cong_qualify_contact_that_bai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="qualify_contact_thanh_cong_qualify_account_that_bai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="que_menh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="quoc_tich" xml:space="preserve">
+    <value />
+  </data>
+  <data name="sdt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="sdt_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="sdt_cong_ty" xml:space="preserve">
+    <value />
+  </data>
+  <data name="sdt_kinh_doanh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="sdt_sai_dinh_dang_vui_long_kiem_tra_lai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="so_cmnd" xml:space="preserve">
+    <value />
+  </data>
+  <data name="so_luong_nhan_vien" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tai_lieu_kinh_doanh_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ten_cong_ty" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ten_dang_nhap" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="ten_dang_nhap_khong_dung" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ten_dang_nhap_khong_duoc_de_trong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thanh_cong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="that_bai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thoi_gian_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_bao" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_tin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_tin_cmnd_ho_chieu" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_tin_cong_ty" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_tin_co_ban" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_tin_gia_chu" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thong_tin_khach_hang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="thu_vien" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tiem_nang" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tinh_trang_" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tong_tien" xml:space="preserve">
+    <value />
+  </data>
+  <data name="trang_chu_appshell" xml:space="preserve">
+    <value />
+  </data>
+  <data name="tuy_chon" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_chon_gioi_tinh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_chon_ngay_sinh" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_nhap_mat_khau_cu" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_nhap_mat_khau_moi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_nhap_password_nhieu_hon_6_ky_tu" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_nhap_so_dien_thoai" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_nhap_so_nha_duong_phuong" xml:space="preserve">
+    <value />
+  </data>
+  <data name="vui_long_nhap_xac_nhan_mat_khau_moi" xml:space="preserve">
+    <value />
+  </data>
+  <data name="website" xml:space="preserve">
+    <value>Website:</value>
+  </data>
+  <data name="xac_nhan_mat_khau_khong_dung" xml:space="preserve">
+    <value />
+  </data>
+  <data name="xem_them" xml:space="preserve">
+    <value />
+  </data>
+</root>

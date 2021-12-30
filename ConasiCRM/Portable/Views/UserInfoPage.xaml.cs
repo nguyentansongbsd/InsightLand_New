@@ -149,7 +149,7 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.OldPassword == viewModel.NewPassword)
             {
-                ToastMessageHelper.LongMessage("Bạn đang sử dụng mật khẩu cũ. Vui lòng nhập lại.");
+                ToastMessageHelper.LongMessage("Bạn đang sử dụng mật khẩu cũ. Vui lòng nhập lại");
                 return;
             }
 

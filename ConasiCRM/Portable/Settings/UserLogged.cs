@@ -84,5 +84,11 @@ namespace ConasiCRM.Portable.Settings
             get => AppSettings.GetValueOrDefault(nameof(IsSaveInforUser), false);
             set => AppSettings.AddOrUpdateValue(nameof(IsSaveInforUser), value);
         }
+
+        public static string Language
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Language), "vi"); //en
+            set => AppSettings.AddOrUpdateValue(nameof(Language), value);
+        }
     }
 }

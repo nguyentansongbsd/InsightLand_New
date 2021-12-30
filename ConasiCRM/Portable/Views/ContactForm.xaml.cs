@@ -12,6 +12,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Text.RegularExpressions;
 using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -48,8 +49,8 @@ namespace ConasiCRM.Portable.Views
 
         private void Create()
         {
-            this.Title = "Tạo Mới Khách Hàng Cá Nhân";
-            btn_save_contact.Text = "Tạo Mới";
+            this.Title = Language.tao_moi_khach_hang_ca_nhan_title;
+            btn_save_contact.Text = Language.tao_khach_hang;
             datePickerNgayCap.DefaultDisplay = DateTime.Now;
             datePickerNgayCapHoChieu.DefaultDisplay = DateTime.Now;
             datePikerNgayCapTheCanCuoc.DefaultDisplay = DateTime.Now;
@@ -64,8 +65,8 @@ namespace ConasiCRM.Portable.Views
         private async void Update()
         {
             await loadData(this.Id.ToString());
-            this.Title = "Cập Nhật Khách Hàng Cá Nhân";
-            btn_save_contact.Text = "Cập Nhật";
+            this.Title = Language.cap_nhat_khach_hang_ca_nhan_title;
+            btn_save_contact.Text = Language.cap_nhat_khach_hang;
             btn_save_contact.Clicked += UpdateContact_Clicked;
             if (viewModel.singleContact.contactid != Guid.Empty)
                 OnCompleted?.Invoke(true);
@@ -110,27 +111,33 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_fullname))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_ho_ten);
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");               
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt);               
                 return;
             }
             if (viewModel.singleGender == null || viewModel.singleGender.Val == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn giới tính");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_gioi_tinh);
                 return;
             }
+            if (viewModel.singleLocalization == null || viewModel.singleLocalization.Val == null)
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_gioi_tinh);
+                return;
+            }
+
             if (viewModel.singleContact.birthdate == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn ngày sinh");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_ngay_sinh);
                 return;
             }
             if (DateTime.Now.Year - DateTime.Parse(viewModel.singleContact.birthdate.ToString()).Year < 18)
             {
-                ToastMessageHelper.ShortMessage("Khách hàng phải từ 18 tuổi");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_phai_tu_18_tuoi);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.emailaddress1))
@@ -139,39 +146,39 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleContact.emailaddress1);
                 if (!match.Success)
                 {
-                    ToastMessageHelper.ShortMessage("Email sai định dạng");
+                    ToastMessageHelper.ShortMessage(Language.email_sai_dinh_dang);
                     return;
                 }
 
                 if (!await viewModel.CheckEmail(viewModel.singleContact.emailaddress1, id))
                 {
-                    ToastMessageHelper.ShortMessage("Email đã được sử dụng");
+                    ToastMessageHelper.ShortMessage(Language.email_da_duoc_su_dung);
                     return;
                 }
             }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_contactaddress))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn địa chỉ liên lạc");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_lien_lac);
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_permanentaddress1))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn địa chỉ thường trú");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_thuong_tru);
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số CMND");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_cmnd);
                 return;
             }
             if (!await viewModel.CheckCMND(viewModel.singleContact.bsd_identitycardnumber, id))
             {
-                ToastMessageHelper.ShortMessage("Số CMNND đã được sử dụng");
+                ToastMessageHelper.ShortMessage(Language.so_cmnd_da_duoc_su_dung);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber) && !await viewModel.CheckPassport(viewModel.singleContact.bsd_passport, id))
             {
-                ToastMessageHelper.ShortMessage("Số hộ chiếu đã được sử dụng");
+                ToastMessageHelper.ShortMessage(Language.so_ho_chieu_da_duoc_su_dung);
                 return;
             }
 
@@ -190,13 +197,13 @@ namespace ConasiCRM.Portable.Views
                     if (QueueForm.NeedToRefresh.HasValue) QueueForm.NeedToRefresh = true;
 
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo khách hàng cá nhân thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_them_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
             else
@@ -221,12 +228,12 @@ namespace ConasiCRM.Portable.Views
                        await viewModel.UpLoadCMNDBehind();
                     }
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
         }
@@ -535,10 +542,10 @@ namespace ConasiCRM.Portable.Views
             List<OptionSet> menuItem = new List<OptionSet>();
             if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
             {
-                menuItem.Add(new OptionSet { Label = "Xem ảnh mặt trước cmnd", Val = "Front" });
+                menuItem.Add(new OptionSet { Label = Language.xem_anh_mat_truoc_cmnd, Val = "Front" });
             }
-            menuItem.Add(new OptionSet { Label = "Chụp ảnh", Val = "Front" });
-            menuItem.Add(new OptionSet { Label = "Chọn ảnh từ thư viện", Val = "Front" });
+            menuItem.Add(new OptionSet { Label = Language.chup_hinh, Val = "Front" });
+            menuItem.Add(new OptionSet { Label = Language.chon_anh_tu_thu_vien, Val = "Front" });
             this.showMenuImageCMND(menuItem);
         }
 
@@ -547,10 +554,10 @@ namespace ConasiCRM.Portable.Views
             List<OptionSet> menuItem = new List<OptionSet>();
             if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
             {
-                menuItem.Add(new OptionSet { Label = "Xem ảnh mặt sau cmnd", Val = "Behind" });
+                menuItem.Add(new OptionSet { Label = Language.xem_anh_mat_sau_cmnd, Val = "Behind" });
             }
-            menuItem.Add(new OptionSet { Label = "Chụp ảnh", Val = "Behind" });
-            menuItem.Add(new OptionSet { Label = "Chọn ảnh từ thư viện", Val = "Behind" });
+            menuItem.Add(new OptionSet { Label = Language.chup_hinh, Val = "Behind" });
+            menuItem.Add(new OptionSet { Label = Language.chon_anh_tu_thu_vien, Val = "Behind" });
             this.showMenuImageCMND(menuItem);
         }
 
@@ -572,7 +579,7 @@ namespace ConasiCRM.Portable.Views
 
             switch (item.Label)
             {
-                case "Chụp ảnh":
+                case "Chụp hình":
                     
                     PermissionStatus cameraStatus = await PermissionHelper.RequestCameraPermission();
                     if (cameraStatus == PermissionStatus.Granted)

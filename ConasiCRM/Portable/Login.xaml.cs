@@ -3,13 +3,16 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable
@@ -73,9 +76,9 @@ namespace ConasiCRM.Portable
             {
                 Grid.SetRow(lblUserName, 0);
                 Grid.SetRow(entryUserName, 0);
-                Grid.SetRowSpan(entryUserName, 2);             
-                
-                entryUserName.Placeholder = "Tên đăng nhập";               
+                Grid.SetRowSpan(entryUserName, 2);
+
+                entryUserName.Placeholder = Language.ten_dang_nhap;
             }
         }
 
@@ -110,7 +113,7 @@ namespace ConasiCRM.Portable
                 }
 
                 EyePass = false;
-                entryPassword.Placeholder = "Mật khẩu";
+                entryPassword.Placeholder = Language.mat_khau;
             }
         }
 
@@ -146,12 +149,12 @@ namespace ConasiCRM.Portable
         {
             if (string.IsNullOrWhiteSpace(UserName))
             {
-                ToastMessageHelper.ShortMessage("Tên đăng nhập không được để trống");
+                ToastMessageHelper.ShortMessage(Language.ten_dang_nhap_khong_duoc_de_trong);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ToastMessageHelper.ShortMessage("Mật khẩu không được để trống");
+                ToastMessageHelper.ShortMessage(Language.mat_khau_khong_duoc_de_trong);
                 return;
             }
             try
@@ -174,14 +177,14 @@ namespace ConasiCRM.Portable
                         if (employeeModel.bsd_name != UserName)
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Tên đăng nhập không đúng");
+                            ToastMessageHelper.ShortMessage(Language.ten_dang_nhap_khong_dung);
                             return;
                         }
 
                         if (employeeModel.bsd_password != Password)
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Mật khẩu không đúng");
+                            ToastMessageHelper.ShortMessage(Language.mat_khau_khong_dung);
                             return;
                         }
 
@@ -216,14 +219,14 @@ namespace ConasiCRM.Portable
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy user");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_user);
                     }
                 }
             }
             catch (Exception ex)
             {
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông báo", "Lỗi kết nối đến Server. \n" + ex.Message, "Đóng");
+                await DisplayAlert(Language.thong_bao, Language.loi_ket_noi_den_server + "\n" + ex.Message,Language.dong);
             }
         }
 
@@ -264,6 +267,7 @@ namespace ConasiCRM.Portable
             }
         }
 
+
         public async Task UpdateImei(string employeeId)
         {
             string path = $"/bsd_employees({employeeId})";
@@ -272,7 +276,7 @@ namespace ConasiCRM.Portable
             if (!crmApiResponse.IsSuccess)
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Không cập nhật được thông tin Imei");
+                ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_thong_tin_imei);
                 return;
             }
         }
@@ -282,6 +286,28 @@ namespace ConasiCRM.Portable
             Dictionary<string, object> data = new Dictionary<string, object>();
             data["bsd_imeinumber"] = ImeiNum;
             return data;
+        }
+
+        private void Flag_Tapped(object sender, EventArgs e)
+        {
+            string code = (string)((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (code == UserLogged.Language) return;
+            LoadingHelper.Show();
+            UserLogged.Language = code;
+            CultureInfo cultureInfo = new CultureInfo(UserLogged.Language);
+            Language.Culture = cultureInfo;
+            if (code == "vi")
+            {
+                flagVN.BorderColor = Color.FromHex("2196F3");
+                flagEN.BorderColor = Color.FromHex("eeeeee");
+            }
+            else if (code == "en")
+            {
+                flagVN.BorderColor = Color.FromHex("EEEEEE");
+                flagEN.BorderColor = Color.FromHex("2196F3");
+            }
+            Application.Current.MainPage = new Login();
+            LoadingHelper.Hide();
         }
     }
 }

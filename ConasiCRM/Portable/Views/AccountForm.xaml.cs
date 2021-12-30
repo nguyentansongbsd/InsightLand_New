@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -47,8 +48,8 @@ namespace ConasiCRM.Portable.Views
 
         private void Create()
         {
-            this.Title = "Tạo Mới Khách Hàng Doanh Nghiệp";
-            btnSave.Text = "Tạo Mới";
+            this.Title = Language.tao_moi_khach_hang_doanh_nghiep_title;
+            btnSave.Text = Language.tao_khach_hang;
             datePickerNgayCap.DefaultDisplay = DateTime.Now;
             btnSave.Clicked += CreateContact_Clicked;
             viewModel.LoadBusinessTypeForLookup();
@@ -63,8 +64,8 @@ namespace ConasiCRM.Portable.Views
         private async void Update()
         {
             viewModel.singleAccount = new AccountFormModel();
-            this.Title = "Cập Nhật Khách Hàng Doanh Nghiệp";
-            btnSave.Text = "Cập Nhật";
+            this.Title = Language.cap_nhat_khach_hang_doanh_nghiep_title;
+            btnSave.Text = Language.cap_nhat_khach_hang;
             btnSave.Clicked += UpdateContact_Clicked;
 
             await viewModel.LoadOneAccount(this.AccountId);
@@ -171,22 +172,22 @@ namespace ConasiCRM.Portable.Views
         {
             if (viewModel.Localization == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại khách hàng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_loai_khach_hang);
                 return;
             }
             if (viewModel.singleAccount.bsd_name == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tên công ty");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_ten_cong_ty);
                 return;
             }
             if (viewModel.PrimaryContact == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người đại diện");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_nguoi_dai_dien);
                 return;
             }
             if (viewModel.singleAccount.telephone1 == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại công ty");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt_cong_ty);
                 return;
             }
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -195,7 +196,7 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleAccount.emailaddress1);
                 if (!match.Success)
                 {
-                    ToastMessageHelper.ShortMessage("Email sai địng dạng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.email_sai_dinh_dang);
                     return;
                 }
             }
@@ -204,25 +205,25 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleAccount.bsd_email2);
                 if (!match.Success)
                 {
-                    ToastMessageHelper.ShortMessage("Email 2 sai địng dạng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.email_2_sai_dinh_dang);
                     return;
                 }
             }
             if (viewModel.singleAccount.bsd_registrationcode == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số giấy phép kinh doanh");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_giay_phep_kinh_doanh);
                 return;
             }
             if (!await viewModel.Check_form_keydata(null, viewModel.singleAccount.bsd_registrationcode, viewModel.singleAccount.accountid.ToString()))
             {
-                ToastMessageHelper.ShortMessage("Số giấy phép kinh doanh đã tạo trong dữ liệu doanh nghiệp");
+                ToastMessageHelper.ShortMessage(Language.so_giay_phep_kinh_doanh_da_tao_trong_du_lieu_doanh_nghiep);
                 return;
             }
             if (viewModel.singleAccount.bsd_vatregistrationnumber != null)
             {
                 if (!await viewModel.Check_form_keydata(viewModel.singleAccount.bsd_vatregistrationnumber, null, viewModel.singleAccount.accountid.ToString()))
                 {
-                    ToastMessageHelper.ShortMessage("Mã số thuế đã tạo trong dữ liệu doanh nghiệp");
+                    ToastMessageHelper.ShortMessage(Language.ma_so_thue_da_tao_trong_du_lieu_doanh_nghiep);
                     return;
                 }
             }
@@ -247,14 +248,14 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (QueueForm.NeedToRefresh.HasValue) QueueForm.NeedToRefresh = true;
                     if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
-                    ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_them_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
             else
@@ -265,13 +266,13 @@ namespace ConasiCRM.Portable.Views
                     if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
                     if (AccountDetailPage.NeedToRefreshAccount.HasValue) AccountDetailPage.NeedToRefreshAccount = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
         }

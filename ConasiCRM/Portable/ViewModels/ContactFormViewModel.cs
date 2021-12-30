@@ -128,6 +128,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private string checkCMND;
 
+        private AddressModel _address1;
+        public AddressModel Address1 { get => _address1; set { _address1 = value; OnPropertyChanged(nameof(Address1)); } }
+
         public ContactFormViewModel()
         {
             singleContact = new ContactFormModel();
@@ -553,8 +556,8 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task GetImageCMND()
         {
-            frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
+            frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg"; //bsd_etag_front
+            behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg"; //bsd_etag_behind
 
             string token = (await CrmHelper.getSharePointToken()).access_token;
             var client = BsdHttpClient.Instance();
@@ -580,7 +583,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> UpLoadCMNDFront()
         {
-            frontImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
+            frontImage_name =  this.singleContact.contactid.ToString() + "_front.jpg";
 
             string token = (await CrmHelper.getSharePointToken()).access_token;
 
@@ -590,8 +593,14 @@ namespace ConasiCRM.Portable.ViewModels
 
                 if (singleContact.bsd_mattruoccmnd_base64 != null)
                 {
+                   // string test = $"{OrgConfig.GraphApi}{OrgConfig.SharepointSiteId}/lists/"+ $"{Config.OrgConfig.SharePointContact_CMNDId}/items";
+
                     byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
 
+                    //using (var response = client.PostAsync(test, new StreamContent(new MemoryStream(arrByteFront))).Result)
+                    //{
+                    //    return response.IsSuccessStatusCode;
+                    //}
                     using (var response = client.PostAsync
                     (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + frontImage_name + "',overwrite=true)")
                     , new StreamContent(new MemoryStream(arrByteFront))).Result)
@@ -608,7 +617,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> UpLoadCMNDBehind()
         {
-            behindImage_name = this.singleContact.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
+            behindImage_name = this.singleContact.contactid.ToString() + "_behind.jpg";
 
             string token = (await CrmHelper.getSharePointToken()).access_token;
 

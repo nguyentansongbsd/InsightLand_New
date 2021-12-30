@@ -154,7 +154,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.CreateTask();
                 if (isSuccess)
                 {
-                    if (Dashboard.NeedToRefreshTask.HasValue) Dashboard.NeedToRefreshTask = true;
+                    if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
                     if (ActivityList.NeedToRefreshTask.HasValue) ActivityList.NeedToRefreshTask = true;
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
@@ -176,7 +176,7 @@ namespace ConasiCRM.Portable.Views
                 bool isSuccess = await viewModel.UpdateTask();
                 if (isSuccess)
                 {
-                    if (Dashboard.NeedToRefreshTask.HasValue) Dashboard.NeedToRefreshTask = true;
+                    if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
                     if (ActivityList.NeedToRefreshTask.HasValue) ActivityList.NeedToRefreshTask = true;
                     if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
                     if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;

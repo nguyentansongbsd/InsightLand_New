@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -116,17 +117,17 @@ namespace ConasiCRM.Portable.Views
         private async void NewActivity_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            string[] options = new string[] { "Tạo Công Việc", "Tạo Cuộc Họp", "Tạo Cuộc Gọi" };
-            string asw = await DisplayActionSheet("Tuỳ chọn", "Hủy", null, options);
-            if (asw == "Tạo Công Việc")
+            string[] options = new string[] { Language.them_cong_viec, Language.them_cuoc_hop, Language.them_cuoc_goi };
+            string asw = await DisplayActionSheet(Language.tuy_chon, Language.huy, null, options);
+            if (asw == Language.them_cong_viec)
             {
                 await Navigation.PushAsync(new TaskForm());
             }
-            else if (asw == "Tạo Cuộc Gọi")
+            else if (asw == Language.them_cuoc_goi)
             {
                 await Navigation.PushAsync(new PhoneCallForm());
             }
-            else if (asw == "Tạo Cuộc Họp")
+            else if (asw == Language.them_cuoc_hop)
             {
                 await Navigation.PushAsync(new MeetingForm());
             }

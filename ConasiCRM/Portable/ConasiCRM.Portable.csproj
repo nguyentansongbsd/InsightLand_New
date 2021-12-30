@@ -36,6 +36,11 @@
         <Compile Update="Login.xaml.cs">
           <DependentUpon>Login.xaml</DependentUpon>
         </Compile>
+        <Compile Update="Resources\Language.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Language.resx</DependentUpon>
+        </Compile>
         <Compile Update="Views\DirectSaleContentView - Copy.xaml.cs">
           <DependentUpon>%(Filename)</DependentUpon>
         </Compile>
@@ -67,6 +72,9 @@
       <EmbeddedResource Update="Controls\ListViewMultiTabs.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Controls\LookUpAddress.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Controls\LookUpMultipleTabs.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
@@ -78,6 +86,10 @@
       </EmbeddedResource>
       <EmbeddedResource Update="MasterDetailPage1Master.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Language.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Language.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="ShowMedia.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
