@@ -73,7 +73,7 @@
     </Shell.FlyoutHeaderTemplate>
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="{x:Static language:Language.trang_chu}" ContentTemplate="{DataTemplate views:Dashboard}">
+        <ShellContent Title="{x:Static language:Language.trang_chu_appshell}" ContentTemplate="{DataTemplate views:Dashboard}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf015;" Size="18"/>
             </ShellContent.Icon>
@@ -83,14 +83,14 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0c0;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="{x:Static language:Language.dong_bo_danh_ba}" ContentTemplate="{DataTemplate views:DanhBa}">
+        <ShellContent Title="{x:Static language:Language.dong_bo_danh_ba_appshell}" ContentTemplate="{DataTemplate views:DanhBa}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf2c1;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
     </FlyoutItem>
 
-    <ShellContent Title="{x:Static language:Language.gio_hang}" ContentTemplate="{DataTemplate views:DirectSale}">
+    <ShellContent Title="{x:Static language:Language.gio_hang_appshell}" ContentTemplate="{DataTemplate views:DirectSale}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07a;" Size="18"/>
         </ShellContent.Icon>
@@ -100,7 +100,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf02d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="{x:Static language:Language.bang_tinh_gia}" ContentTemplate="{DataTemplate views:ReservationList}" >
+    <ShellContent Title="{x:Static language:Language.bang_tinh_gia_appshell}" ContentTemplate="{DataTemplate views:ReservationList}" >
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
@@ -115,7 +115,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="{x:Static language:Language.tai_lieu_kinh_doanh}" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
+    <ShellContent Title="{x:Static language:Language.tai_lieu_kinh_doanh_appshell}" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07c;" Size="18"/>
         </ShellContent.Icon>
@@ -127,17 +127,17 @@
     </ShellContent>
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <ShellContent Title="{x:Static language:Language.phan_hoi}" ContentTemplate="{DataTemplate views:ListPhanHoi}">
+        <ShellContent Title="{x:Static language:Language.phan_hoi_appshell}" ContentTemplate="{DataTemplate views:ListPhanHoi}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeRegular" Color="#7D7D7D" Glyph="&#xf086;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="{x:Static language:Language.lich_lam_viec}" ContentTemplate="{DataTemplate views:LichLamViec}">
+        <ShellContent Title="{x:Static language:Language.lich_lam_viec_appshell}" ContentTemplate="{DataTemplate views:LichLamViec}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf073;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="{x:Static language:Language.hoat_dong}" Route="HoatDong" ContentTemplate="{DataTemplate views:ActivityList}">
+        <ShellContent Title="{x:Static language:Language.hoat_dong_appshell}" Route="HoatDong" ContentTemplate="{DataTemplate views:ActivityList}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ae;" Size="18"/>
             </ShellContent.Icon>
