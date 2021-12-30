@@ -45,7 +45,8 @@ namespace ConasiCRM.Portable.Views
                 viewModel.LoadThongKe(),
                 viewModel.LoadThongKeGiuCho(),
                 viewModel.LoadThongKeHopDong(),
-                viewModel.LoadThongKeBangTinhGia()
+                viewModel.LoadThongKeBangTinhGia(),
+                viewModel.LoadDataEvent()
             ) ;
 
             if (viewModel.Project != null)
@@ -233,6 +234,16 @@ namespace ConasiCRM.Portable.Views
         {
             var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
             carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
+
+        private void CloseContentEvent_Tapped(object sender, EventArgs e)
+        {
+            ContentEvent.IsVisible = false;
+        }
+
+        private void OpenEvent_Tapped(object sender, EventArgs e)
+        {
+            ContentEvent.IsVisible = true;
         }
     }
 }

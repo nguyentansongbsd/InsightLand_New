@@ -298,13 +298,13 @@ namespace ConasiCRM.Portable
             Language.Culture = cultureInfo;
             if (code == "vi")
             {
-                flagVN.BorderColor = Color.FromHex("2196F3");
-                flagEN.BorderColor = Color.FromHex("eeeeee");
+               //flagVN.BorderColor = Color.FromHex("2196F3");
+               // flagEN.BorderColor = Color.FromHex("eeeeee");
             }
             else if (code == "en")
             {
-                flagVN.BorderColor = Color.FromHex("EEEEEE");
-                flagEN.BorderColor = Color.FromHex("2196F3");
+              //  flagVN.BorderColor = Color.FromHex("EEEEEE");
+              //  flagEN.BorderColor = Color.FromHex("2196F3");
             }
             Application.Current.MainPage = new Login();
             LoadingHelper.Hide();
