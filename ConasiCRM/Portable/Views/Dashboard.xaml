@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="{x:Static language:Language.trang_chu_appshell}"
+             Title="{x:Static language:Language.trang_chu_title}"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
@@ -69,19 +69,19 @@
                             <controls:ExtendedFrame Grid.Column="0" Padding="0">
                                 <StackLayout Margin="6,18" VerticalOptions="Center" >
                                     <Label Text="{Binding numQueue}" FontSize="18" FontAttributes="Bold" TextColor="#2196F3" HorizontalTextAlignment="Center"/>
-                                    <Label Text="{x:Static language:Language.giu_cho}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.giu_cho_title}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
                                 </StackLayout>
                             </controls:ExtendedFrame>
                             <controls:ExtendedFrame Grid.Column="1" Padding="0">
                                 <StackLayout Margin="6,18" VerticalOptions="Center" >
                                     <Label Text="{Binding numQuote}" FontSize="18" FontAttributes="Bold" TextColor="#FA7803" HorizontalTextAlignment="Center"/>
-                                    <Label Text="{x:Static language:Language.dat_coc}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.dat_coc_home}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
                                 </StackLayout>
                             </controls:ExtendedFrame>
                             <controls:ExtendedFrame Grid.Column="2" Padding="0">
                                 <StackLayout Margin="2,18" VerticalOptions="Center" >
                                     <Label Text="{Binding numOptionEntry}" FontSize="18" FontAttributes="Bold" TextColor="#0DB302" HorizontalTextAlignment="Center"/>
-                                    <Label Text="{x:Static language:Language.hop_dong}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.hop_dong_title}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
                                 </StackLayout>
                             </controls:ExtendedFrame>
                             <controls:ExtendedFrame Grid.Column="3" Padding="0">
@@ -111,7 +111,7 @@
                             </telerikChart:RadCartesianChart>
                         </controls:ExtendedFrame>
 
-                        <Label Text="{x:Static language:Language.khach_hang_tiem_nang}" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8"/>
+                        <Label Text="{x:Static language:Language.khach_hang_tiem_nang_home}" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8"/>
                         <controls:ExtendedFrame Padding="0" Margin="14,6">
                             <Grid ColumnDefinitions="*,*" RowDefinitions="200" Padding="8">
                                 <telerikChart:RadPieChart Grid.Column="0">
@@ -174,7 +174,7 @@
                                             <Label FontSize="15" TextColor="#333333">
                                                 <Label.FormattedText>
                                                     <FormattedString>
-                                                        <Span Text="{x:Static language:Language.khach_hang_}" />
+                                                        <Span Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" />
                                                         <Span Text="{Binding customer}"/>
                                                     </FormattedString>
                                                 </Label.FormattedText>
@@ -182,7 +182,7 @@
                                             <Label FontSize="15" TextColor="#333333">
                                                 <Label.FormattedText>
                                                     <FormattedString>
-                                                        <Span Text="{x:Static language:Language.thoi_gian_}" />
+                                                        <Span Text="{x:Static language:Language.thoi_gian}" />
                                                         <Span Text="{Binding scheduledstart,StringFormat='{0:h:mm tt}'}"/>
                                                         <Span Text=" - " />
                                                         <Span Text="{Binding scheduledend,StringFormat='{0:h:mm tt}'}"/>

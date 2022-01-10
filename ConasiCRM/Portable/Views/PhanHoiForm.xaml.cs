@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,8 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadCase();
             if (viewModel.singlePhanHoi != null)
             {
-                this.Title = "CẬP NHẬT PHẢN HỒI";
-                buttonSave.Text = "Cập nhật phản hồi";
+                this.Title = Language.cap_nhat_phan_hoi_title;
+                buttonSave.Text = Language.cap_nhat_phan_hoi;
                 CheckPhanHoi?.Invoke(true);
             }
             else
@@ -100,7 +101,7 @@ namespace ConasiCRM.Portable.Views
             lookupUnits.PreOpen = async () => {
                 if (viewModel.Project == null)
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn dự án");
+                    ToastMessageHelper.ShortMessage(Language.vui_long_chon_du_an);
                 }
             };
 
@@ -152,19 +153,19 @@ namespace ConasiCRM.Portable.Views
         {
             if (viewModel.CaseType == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại phản hồi");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_loai_phan_hoi);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.singlePhanHoi.title))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_tieu_de);
                 return;
             }
 
             if (viewModel.Customer == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_khach_hang);
                 return;
             }
 
@@ -176,13 +177,13 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (ListPhanHoi.NeedToRefresh.HasValue) ListPhanHoi.NeedToRefresh = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Tạo phản hồi thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_phan_hoi_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo phản hồi thất bại");
+                    ToastMessageHelper.ShortMessage(Language.tao_phan_hoi_that_bai);
                 }
             }
             else
@@ -192,13 +193,13 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (PhanHoiDetailPage.NeedToRefresh.HasValue) PhanHoiDetailPage.NeedToRefresh = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Cập nhật phản hồi thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_phan_hoi_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật phản hồi thất bại");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_phan_hoi_that_bai);
                 }
             }
         }

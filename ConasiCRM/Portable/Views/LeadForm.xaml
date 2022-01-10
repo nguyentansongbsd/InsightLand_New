@@ -29,7 +29,7 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Text="{x:Static language:Language.thong_tin_co_ban}" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
+                                <Label Text="{x:Static language:Language.thong_tin_co_ban_title}" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
@@ -70,7 +70,7 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Text="{x:Static language:Language.thong_tin_cong_ty}" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
+                                <Label Text="{x:Static language:Language.thong_tin_cong_ty_title}" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>

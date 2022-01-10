@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.FollowUpListForm">
     <ContentPage.Resources>
         <!--header-->
@@ -31,17 +32,17 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thông Tin Chi Tiết"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_chi_tiet_title}"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="White" Padding="10">
-                                <controls:FormLabel Text="Mã DSTD" FontSize="15"/>
+                                <controls:FormLabel Text="{x:Static language:Language.ma_dstd}" FontSize="15"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_followuplistcode}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabel Text="Tên" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:FormLabel Text="{x:Static language:Language.ten}" FontSize="15" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_name}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
@@ -49,31 +50,31 @@
                                 <!--<controls:FormLabelRequired Text="Date ???" Margin="0,10,0,0"/>
                                 <controls:MainEntry Placeholder="Nhập date" Text="{Binding FULDetail.bsd_name}" FontSize="15"/>-->
 
-                                <controls:FormLabelRequired Text="Loại" Margin="0,10,0,0"/>
-                                <controls:LookUp x:Name="Lookup_Type" Placeholder="Chọn loại" ItemsSource="{Binding ListType}" SelectedItem="{Binding Type}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.loai}" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_Type" Placeholder="{x:Static language:Language.chon_loai}" ItemsSource="{Binding ListType}" SelectedItem="{Binding Type}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                                <controls:FormLabelRequired Text="Loại thanh lý" Margin="0,10,0,0"/>
-                                <controls:LookUp x:Name="Lookup_TypeTerminateletter" Placeholder="Chọn loại thanh lý" ItemsSource="{Binding ListTypeTerminateletter}" SelectedItem="{Binding TypeTerminateletter}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.loai_thanh_ly}" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_TypeTerminateletter" Placeholder="{x:Static language:Language.chon_loai_thanh_ly}" ItemsSource="{Binding ListTypeTerminateletter}" SelectedItem="{Binding TypeTerminateletter}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                                <controls:FormLabel Text="Nhóm" FontSize="15" Margin="0,10,0,0"/>
-                                <controls:LookUp x:Name="Lookup_Group" Placeholder="Chọn nhóm" ItemsSource="{Binding ListGroup}" SelectedItem="{Binding Group}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
+                                <controls:FormLabel Text="{x:Static language:Language.nhom}" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_Group" Placeholder="{x:Static language:Language.chon_nhom}" ItemsSource="{Binding ListGroup}" SelectedItem="{Binding Group}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                                <controls:FormLabelRequired Text="Dự án" Margin="0,10,0,0"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.du_an}" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.project_name}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabelRequired Text="Sản phẩm" Margin="0,10,0,0"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.san_pham}" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_units}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabel Text="Giá bán" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:FormLabel Text="{x:Static language:Language.gia_ban}" FontSize="15" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_sellingprice, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabelRequired Text="Đặt cọc" Margin="0,10,0,0"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.dat_coc}" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.name_reservation}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
@@ -84,28 +85,28 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Giá Trị Thanh Lý"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.gia_tri_thanh_ly_title}"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="White" Padding="10">
-                                <controls:FormLabel Text="Tổng tiền" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:FormLabel Text="{x:Static language:Language.tong_tien}" FontSize="15" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_totalamount, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabel Text="Tổng tiền thanh toán" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:FormLabel Text="{x:Static language:Language.tong_tien_thanh_toan}" FontSize="15" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_totalamountpaid, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
 
-                                <controls:FormLabelRequired Text="Phương thức phạt TL" Margin="0,10,0,0"/>
-                                <controls:LookUp x:Name="Lookup_TakeOut" Placeholder="Chọn phương thức phạt" ItemsSource="{Binding ListTakeOutMoney}" SelectedItem="{Binding TakeOutMoney}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.phuong_thuc_phat_TL}" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_TakeOut" Placeholder="{x:Static language:Language.vui_long_chon_phuong_thuc_phat}" ItemsSource="{Binding ListTakeOutMoney}" SelectedItem="{Binding TakeOutMoney}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                                <controls:FormLabelRequired Text="Hoàn tiền" Margin="0,10,0,0"/>
-                                <controls:MainEntry Placeholder="Nhập số tiền" Text="{Binding Refund, StringFormat='{0:#,0.##}'}" FontSize="15"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.hoan_tien}" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="{x:Static language:Language.nhap_so_tien}" Text="{Binding Refund, StringFormat='{0:#,0.##}'}" FontSize="15"/>
 
-                                <controls:FormLabel Text="Tổng tiền phạt" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:FormLabel Text="{x:Static language:Language.tong_tien_phat}" FontSize="15" Margin="0,10,0,0"/>
                                 <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
                                     <Label Text="{Binding FULDetail.bsd_totalforfeitureamount_calculator, StringFormat='{0:#,0} đ'}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0"/>
                                 </telerikPrimitives:RadBorder>
@@ -117,29 +118,29 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Thanh Lý"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thanh_ly_title}"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="White" Padding="10">
                                 <Grid ColumnDefinitions="3*,7*" Margin="0,10,0,0">
-                                    <controls:FormLabel Text="Thư thanh lý"  Grid.Column="0"/>
+                                    <controls:FormLabel Text="{x:Static language:Language.thu_thanh_ly}"  Grid.Column="0"/>
                                     <controls:MyNewCheckBox CheckedColor="{StaticResource NavigationPrimary}" HorizontalOptions="EndAndExpand" Grid.Column="1" IsChecked="{Binding FULDetail.bsd_terminateletter}"/>
                                 </Grid>
 
                                 <Grid ColumnDefinitions="3*,7*" RowDefinitions="Auto,Auto" Margin="0,10,0,0">
-                                    <controls:FormLabel Text="Thanh lý" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand"/>
+                                    <controls:FormLabel Text="{x:Static language:Language.thanh_ly}" Grid.Column="0" Grid.Row="0" VerticalOptions="CenterAndExpand"/>
                                     <controls:MyNewCheckBox CheckedColor="{StaticResource NavigationPrimary}" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" Grid.Column="1" IsChecked="{Binding FULDetail.bsd_termination}"/>
 
                                     <Grid RowDefinitions="Auto,Auto" IsVisible="{Binding FULDetail.bsd_termination}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                                         <Grid ColumnDefinitions="3*,7*" Margin="0,10,0,0" Grid.Row="0">
-                                            <controls:FormLabel Text="Bán lại" Grid.Column="0"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.ban_lai}" Grid.Column="0"/>
                                             <controls:MyNewCheckBox CheckedColor="{StaticResource NavigationPrimary}" HorizontalOptions="End" Grid.Column="1" IsChecked="{Binding FULDetail.bsd_resell}"/>
                                         </Grid>
 
                                         <StackLayout Grid.Row="1" IsVisible="{Binding FULDetail.bsd_resell}">
-                                            <controls:FormLabelRequired Text="Đợt mở bán" Margin="0,10,0,0"/>
-                                            <controls:LookUp x:Name="Lookup_PhaseLaunch" Placeholder="Chọn đợt mở bán" ItemsSource="{Binding ListPhaseLaunch}" SelectedItem="{Binding PhaseLaunch}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
+                                            <controls:FormLabelRequired Text="{x:Static language:Language.dot_mo_ban}" Margin="0,10,0,0"/>
+                                            <controls:LookUp x:Name="Lookup_PhaseLaunch" Placeholder="{x:Static language:Language.chon_dot_mo_ban}" ItemsSource="{Binding ListPhaseLaunch}" SelectedItem="{Binding PhaseLaunch}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
                                         </StackLayout>
                                     </Grid>
                                 </Grid>
@@ -151,23 +152,23 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="Bình Luận - Quyết Định"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.binh_luan_quyet_dinh_title}"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="White" Padding="10">
-                                <controls:FormLabel Text="Họp định kỳ" FontSize="15" Margin="0,10,0,0"/>
-                                <controls:LookUp x:Name="Lookup_Meeting" Placeholder="Chọn cuộc họp định kỳ" ItemsSource="{Binding ListMeeting}" SelectedItem="{Binding Meeting}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
+                                <controls:FormLabel Text="{x:Static language:Language.hop_dinh_ky}" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:LookUp x:Name="Lookup_Meeting" Placeholder="{x:Static language:Language.chon_cuoc_hop_dinh_ky}" ItemsSource="{Binding ListMeeting}" SelectedItem="{Binding Meeting}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
 
-                                <controls:FormLabel Text="Nội dung" FontSize="15" Margin="0,10,0,0"/>
-                                <controls:MainEntry Placeholder="Nhập nội dung" Text="{Binding FULDetail.bsd_description}" FontSize="15"/>
+                                <controls:FormLabel Text="{x:Static language:Language.noi_dung}" FontSize="15" Margin="0,10,0,0"/>
+                                <controls:MainEntry Placeholder="{x:Static language:Language.nhap_noi_dung}" Text="{Binding FULDetail.bsd_description}" FontSize="15"/>
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>
                 </StackLayout>
             </ScrollView>
             <Grid AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White" VerticalOptions="EndAndExpand">
-                <Button x:Name="btnSave" Clicked="btnSave_Clicked" Text="Cập Nhật" Margin="10,5,10,10" Padding="10,5" HeightRequest="40" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="16" BackgroundColor="#2196F3" BorderWidth="1" BorderColor="#2196F3" />
+                <Button x:Name="btnSave" Clicked="btnSave_Clicked" Text="{x:Static language:Language.cap_nhat}" Margin="10,5,10,10" Padding="10,5" HeightRequest="40" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="16" BackgroundColor="#2196F3" BorderWidth="1" BorderColor="#2196F3" />
             </Grid>
             <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>

@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -53,8 +54,8 @@ namespace ConasiCRM.Portable.Views
 
         private void Create()
         {
-            this.Title = "Tạo mới cuộc họp";
-            BtnSave.Text = "Tạo cuộc họp";
+            this.Title = Language.tao_moi_cuoc_hop_title;
+            BtnSave.Text = Language.tao_cuoc_hop;
             IsInit = true;
             BtnSave.Clicked += Create_Clicked;
         }
@@ -66,8 +67,8 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
-            this.Title = "Cập nhật cuộc họp";
-            BtnSave.Text = "Cập nhật";
+            this.Title = Language.cap_nhat_cuoc_hop_title;
+            BtnSave.Text = Language.cap_nhat_cuoc_hop;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadDataMeet(this.MeetId);
 
@@ -129,27 +130,32 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.MeetingModel.subject))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập chủ đề cuộc họp");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_chu_de);
                 return;
             }
             if (viewModel.CustomerMapping == null)
             {
                 if (viewModel.Required == null || viewModel.Required.Count <= 0)
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn người tham dự bắt buộc");
+                    ToastMessageHelper.ShortMessage(Language.vui_long_chon_nguoi_tham_du_bat_buoc);
                     return;
                 }
             }
-            if (viewModel.MeetingModel.scheduledstart == null || viewModel.MeetingModel.scheduledend == null)
+            if (viewModel.MeetingModel.scheduledstart == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc và thời gian bắt đầu");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
+                return;
+            }
+            if (viewModel.MeetingModel.scheduledend == null)
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_ket_thuc);
                 return;
             }
             if (viewModel.MeetingModel.scheduledstart != null && viewModel.MeetingModel.scheduledend != null)
             {
                 if (this.compareDateTime(viewModel.MeetingModel.scheduledstart, viewModel.MeetingModel.scheduledend) != -1)
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                    ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                     return;
                 }
             }
@@ -167,14 +173,14 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
-                    ToastMessageHelper.ShortMessage("Đã thêm cuộc họp");
+                    ToastMessageHelper.ShortMessage(Language.tao_cuoc_hop_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Thêm cuộc họp thất bại");
+                    ToastMessageHelper.ShortMessage(Language.tao_cuoc_hop_that_bai);
                 }
             }
             else
@@ -188,14 +194,14 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
-                    ToastMessageHelper.ShortMessage("Cập nhật thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_cuoc_hop_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật cuộc họp thất bại");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_cuoc_hop_that_bai);
                 }
             }
         }
@@ -227,7 +233,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (this.compareDateTime(viewModel.MeetingModel.scheduledstart, viewModel.MeetingModel.scheduledend) != -1)
                     {
-                        ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                        ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                         viewModel.MeetingModel.scheduledstart = viewModel.MeetingModel.scheduledend;
                     }
                 }
@@ -242,13 +248,13 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (this.compareDateTime(viewModel.MeetingModel.scheduledstart, viewModel.MeetingModel.scheduledend) != -1)
                     {
-                        ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                        ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                         viewModel.MeetingModel.scheduledend = viewModel.MeetingModel.scheduledstart;
                     }
                 }
                 else
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                    ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
                 }
             }
         }
@@ -286,7 +292,7 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 viewModel.MeetingModel.isalldayevent = false;
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
             }    
         }
     }

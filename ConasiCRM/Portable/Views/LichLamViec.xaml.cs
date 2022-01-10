@@ -1,4 +1,5 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Resources;
 using System;
 using System.Collections.Generic;
 
@@ -31,7 +32,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
+                        await DisplayAlert(Language.thong_bao, Language.khong_tim_thay_lich_lam_viec, Language.dong);
                     }
                 };
             } else if (item.Contains("tuần"))
@@ -48,7 +49,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
+                        await DisplayAlert(Language.thong_bao, Language.khong_tim_thay_lich_lam_viec, Language.dong);
                     }
                 };               
             }else if (item.Contains("ngày"))
@@ -65,7 +66,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        await DisplayAlert("Thông Báo", "Không tìm thấy lịch làm việc", "Đóng");
+                        await DisplayAlert(Language.thong_bao, Language.khong_tim_thay_lich_lam_viec, Language.dong);
                     }
                 };              
             }         

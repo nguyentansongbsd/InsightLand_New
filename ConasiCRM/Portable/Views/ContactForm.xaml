@@ -42,7 +42,7 @@
 
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_co_ban}"/>
+                                <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_co_ban_title}"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>

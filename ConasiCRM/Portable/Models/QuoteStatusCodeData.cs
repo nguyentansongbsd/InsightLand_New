@@ -17,6 +17,7 @@ namespace ConasiCRM.Portable.Models
                 new StatusCodeModel("100000000","Đặt cọc","#ffc43d"), // ~đặt cọc
                 new StatusCodeModel("100000009","Hết hạn","#B3B3B3"), // ~ Het han 
                 new StatusCodeModel("3","Thanh lý","#FF8F4F"),
+                new StatusCodeModel("0","","#FFFFFF"),
             };
         }
 

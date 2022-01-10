@@ -8,6 +8,7 @@ using Xamarin.Forms.Xaml;
 using ConasiCRM.Portable.Helpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -96,8 +97,8 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadQuote();
             if (viewModel.Quote != null)
             {
-                this.Title = "CẬP NHẬT BẢNG TÍNH GIÁ";
-                buttonSave.Text = "CẬP NHẬT BẢNG TÍNH GIÁ";
+                this.Title = Language.cap_nhat_bang_tinh_gia_title;
+                buttonSave.Text = Language.cap_nhat_bang_tinh_gia;
                 lookupNguoiMua.IsEnabled = false;
                 lookupGiuCho.IsEnabled = false;
                 lookupDaiLySanGiaoDich.IsEnabled = false;
@@ -164,17 +165,17 @@ namespace ConasiCRM.Portable.Views
 
                 lookupDieuKienBanGiao.PreOpen = () =>
                 {
-                    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                    ToastMessageHelper.ShortMessage(Language.da_co_lich_thanh_toan_khong_duoc_chinh_sua);
                 };
 
                 lookupPhuongThucThanhToan.PreOpen = () =>
                 {
-                    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                    ToastMessageHelper.ShortMessage(Language.da_co_lich_thanh_toan_khong_duoc_chinh_sua);
                 };
 
                 lookupChieuKhau.PreOpen = () =>
                 {
-                    ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                    ToastMessageHelper.ShortMessage(Language.da_co_lich_thanh_toan_khong_duoc_chinh_sua);
                 };
             }
             else
@@ -203,7 +204,7 @@ namespace ConasiCRM.Portable.Views
 
                     if (viewModel.DiscountLists == null) // dot mo ban khong co chieu khau
                     {
-                        ToastMessageHelper.ShortMessage("Không có chiết khấu");
+                        ToastMessageHelper.ShortMessage(Language.khong_co_chiet_khau);
                     }
                     LoadingHelper.Hide();
                 };
@@ -281,7 +282,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (viewModel.IsHadLichThanhToan == true)
             {
-                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                ToastMessageHelper.ShortMessage(Language.da_co_lich_thanh_toan_khong_duoc_chinh_sua);
                 return;
             }
             if (viewModel.HandoverCondition == null)
@@ -295,7 +296,7 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.HandoverCondition.bsd_byunittype == true && (viewModel.HandoverCondition._bsd_unittype_value != viewModel.UnitType))
             {
-                ToastMessageHelper.ShortMessage("Không thể thêm điều kiện bàn giao");
+                ToastMessageHelper.ShortMessage(Language.khong_the_them_dieu_kien_ban_giao); //Không thể thêm điều kiện bàn giao
                 viewModel.HandoverCondition = null;
                 return;
             }
@@ -330,7 +331,7 @@ namespace ConasiCRM.Portable.Views
             if (_isEnableCheck) return;
             if (viewModel.IsHadLichThanhToan == true)
             {
-                ToastMessageHelper.ShortMessage("Đã có lịch thanh toán, không được chỉnh sửa");
+                ToastMessageHelper.ShortMessage(Language.da_co_lich_thanh_toan_khong_duoc_chinh_sua);
                 return;
             }
             await viewModel.SetTotalDiscount();
@@ -459,11 +460,11 @@ namespace ConasiCRM.Portable.Views
                             }
                         }
                         if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
-                        ToastMessageHelper.ShortMessage("Thêm khuyến mãi thành công");
+                        ToastMessageHelper.ShortMessage(Language.them_khuyen_mai_thanh_cong);
                     }
                     else
                     {
-                        ToastMessageHelper.ShortMessage("Thêm khuyến mãi thất bại");
+                        ToastMessageHelper.ShortMessage(Language.them_khuyen_mai_that_bai);
                     }
                 }
             }
@@ -507,7 +508,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void DeletedPromotion(OptionSet item)
         {
-            var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa khuyến mãi không ?", "Đồng ý", "Hủy");
+            var conform = await DisplayAlert(Language.xac_nhan, Language.ban_co_muon_xoa_khuyen_mai_khong, Language.dong_y, Language.huy);
             if (conform == false) return;
             LoadingHelper.Show();
             var deleteResponse = await CrmHelper.DeleteRecord($"/quotes({viewModel.QuoteId})/bsd_quote_bsd_promotion({item.Val})/$ref");
@@ -516,13 +517,13 @@ namespace ConasiCRM.Portable.Views
                 if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                 viewModel.PromotionsSelected.Remove(item);
                 viewModel.SelectedPromotionIds.Remove(item.Val);
-                ToastMessageHelper.ShortMessage("Xóa khuyến mãi thành công");
+                ToastMessageHelper.ShortMessage(Language.xoa_khuyen_mai_thanh_cong);
                 LoadingHelper.Hide();
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Xóa khuyến mãi thất bại");
+                ToastMessageHelper.ShortMessage(Language.xoa_khuyen_mai_that_bai);
             }
             LoadingHelper.Hide();
         }
@@ -570,7 +571,7 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.QuoteId != Guid.Empty)
             {
-                var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa người đồng sở hữu này không ?", "Đồng ý", "Hủy");
+                var conform = await DisplayAlert(Language.xac_nhan, Language.ban_co_muon_xoa_nguoi_dong_so_huu_nay_khong, Language.dong_y, Language.huy);
                 if (conform == false)
                 {
                     LoadingHelper.Hide();
@@ -580,12 +581,12 @@ namespace ConasiCRM.Portable.Views
                 if (deleteResponse.IsSuccess)
                 {
                     viewModel.CoOwnerList.Remove(item);
-                    ToastMessageHelper.ShortMessage("Xóa người đồng sở hữu thành công");
+                    ToastMessageHelper.ShortMessage(Language.xoa_nguoi_dong_so_huu_thanh_cong);
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Xóa người đồng sở hữu thất bại");
+                    ToastMessageHelper.ShortMessage(Language.xoa_nguoi_dong_so_huu_that_bai);
                     return;
                 }
             }
@@ -599,7 +600,7 @@ namespace ConasiCRM.Portable.Views
         private async void UpdateCoOwner_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            centerModalCoOwner.Title = "Cập nhật đồng sở hữu";
+            centerModalCoOwner.Title = Language.cap_nhat_dong_so_huu_title;
             var item = (CoOwnerFormModel)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             viewModel.CoOwner = new CoOwnerFormModel();
             viewModel.TitleCoOwner = null;
@@ -626,32 +627,32 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.TitleCoOwner))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_tieu_de);
                 return;
             }
 
             if (viewModel.CustomerCoOwner == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_khach_hang);
                 return;
             }
 
             if (viewModel.Relationship == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn quan hệ");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_quan_he);
                 return;
             }
 
             if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)
             {
-                ToastMessageHelper.ShortMessage("Khách hàng không được trùng với người mua");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_khong_duoc_trung_voi_nguoi_mua);
                 viewModel.CustomerCoOwner = null;
                 return;
             }
 
             if (viewModel.CoOwner.bsd_coownerid == Guid.Empty && viewModel.CoOwnerList.Any(x => x.contact_id == Guid.Parse(viewModel.CustomerCoOwner?.Val) || x.account_id == Guid.Parse(viewModel.CustomerCoOwner?.Val)))
             {
-                ToastMessageHelper.ShortMessage("Khách hàng đã được chọn");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_da_duoc_chon);
                 return;
             }
 
@@ -682,13 +683,13 @@ namespace ConasiCRM.Portable.Views
                     if (IsSuccess)
                     {
                         if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
-                        ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thành công");
+                        ToastMessageHelper.ShortMessage(Language.them_dong_so_huu_thanh_cong);
                         LoadingHelper.Hide();
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Thêm đồng sở hữu thất bại");
+                        ToastMessageHelper.ShortMessage(Language.them_dong_so_huu_that_bai);
                     }
                 }
                 await centerModalCoOwner.Hide();
@@ -726,13 +727,13 @@ namespace ConasiCRM.Portable.Views
                         viewModel.CoOwnerList.Clear();
                         await viewModel.LoadCoOwners();
                         await centerModalCoOwner.Hide();
-                        ToastMessageHelper.ShortMessage("Cập nhật đồng sở hữu thành công");
+                        ToastMessageHelper.ShortMessage(Language.cap_nhat_dong_so_huu_thanh_cong);
                         LoadingHelper.Hide();
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Cập nhật đồng sở hữu thất bại");
+                        ToastMessageHelper.ShortMessage(Language.cap_nhat_dong_so_huu_that_bai);
                     }
                 }
             }
@@ -744,7 +745,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             if (viewModel.SalesAgent != null && (viewModel.SalesAgent == viewModel.Buyer))
             {
-                ToastMessageHelper.LongMessage("Người mua không được trùng với Đại lý/Sàn giao dịch. Vui lòng chọn lại.");
+                ToastMessageHelper.LongMessage(Language.nguoi_mua_khong_duoc_trung_voi_dai_ly_san_giao_dich_vui_long_chon_lai);
                 viewModel.Buyer = null;
             }
             LoadingHelper.Hide();
@@ -755,7 +756,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             if (viewModel.SalesAgent == viewModel.Buyer)
             {
-                ToastMessageHelper.LongMessage("Đại lý/Sàn giao dịch không được trùng với Người mua. Vui lòng chọn lại.");
+                ToastMessageHelper.LongMessage(Language.dai_ly_san_giao_dich_khong_duoc_trung_voi_nguoi_mua_vui_long_chon_lai);
                 viewModel.SalesAgent = null;
             }
             LoadingHelper.Hide();
@@ -783,44 +784,44 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.PaymentScheme == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn phương thức thanh toán");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_phuong_thuc_thanh_toan);
                 return;
             }
             if (viewModel.HandoverCondition == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn điều kiện bàn giao");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dieu_kien_ban_giao);
                 return;
             }
             if (viewModel.Buyer == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_khach_hang);
                 return;
             }
             if (viewModel.ContractType == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại hợp đồng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_loai_hop_dong);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.Quote.name))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_tieu_de);
                 return;
             }
             if (viewModel.SalesAgent == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn Đại lý/Sàn giao dịch");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dai_ly_san_giao_dich);
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.Quote.bsd_waivermanafeemonth))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng điền số tháng miễn giảm phí quản lý");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_thang_mien_giam_phi_quan_ly);
                 return;
             }
 
             if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)
             {
-                ToastMessageHelper.ShortMessage("Khách hàng Co-Owner và khách hàng không được trùng.");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_co_owner_va_khach_hang_khong_duoc_trung);
                 return;
             }
 
@@ -843,13 +844,13 @@ namespace ConasiCRM.Portable.Views
                     if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Tạo bảng tính giá thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_bang_tinh_gia_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo bảng tính giá thất bại");
+                    ToastMessageHelper.ShortMessage(Language.tao_bang_tinh_gia_that_bai);
                 }
             }
             else
@@ -868,7 +869,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Cập nhật điều kiện bàn giao thất bại");
+                            ToastMessageHelper.ShortMessage(Language.cap_nhat_dieu_kien_ban_giao_that_bai);
                             return;
                         }
                     }
@@ -885,13 +886,13 @@ namespace ConasiCRM.Portable.Views
                     if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_bang_tinh_gia_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật bảng tính giá thất bại");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_bang_tinh_gia_that_bai);
                 }
             }
         }

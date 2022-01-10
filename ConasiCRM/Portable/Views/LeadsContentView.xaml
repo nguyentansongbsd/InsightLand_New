@@ -36,11 +36,11 @@
                                     </Grid>-->
                                     <Label Text="{Binding subject}" TextColor="#444444" Grid.Row="1" FontSize="15"/>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="{x:Static language:Language.sdt_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.sdt},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding mobilephone}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="{x:Static language:Language.tinh_trang_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.tinh_trang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding statuscode,Converter={StaticResource StatusCodeConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                 </Grid>

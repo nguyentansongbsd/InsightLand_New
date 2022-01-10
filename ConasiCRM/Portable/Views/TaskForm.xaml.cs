@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -59,7 +60,8 @@ namespace ConasiCRM.Portable.Views
 
         public void InitAdd()
         {
-            viewModel.Title = "Tạo Công Việc";
+            viewModel.Title = Language.tao_moi_cong_viec_title;
+            btnSave.Text = Language.tao_cong_viec;
             viewModel.TaskFormModel = new TaskFormModel();
             dateTimeTGBatDau.DefaultDisplay = DateTime.Now;
             dateTimeTGKetThuc.DefaultDisplay = DateTime.Now;
@@ -70,8 +72,8 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadTask();
             if (viewModel.TaskFormModel != null)
             {
-                viewModel.Title = "Cập Nhật Công Việc";
-                btnSave.Text = "Cập nhật công việc";
+                viewModel.Title = Language.cap_nhat_cong_viec_title;
+                btnSave.Text = Language.cap_nhat_cong_viec;
                 CheckTaskForm?.Invoke(true);
             }
             else
@@ -86,7 +88,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (viewModel.TaskFormModel.scheduledstart > viewModel.TaskFormModel.scheduledend || viewModel.TaskFormModel.scheduledstart == viewModel.TaskFormModel.scheduledend)
                 {
-                    ToastMessageHelper.ShortMessage("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+                    ToastMessageHelper.ShortMessage(Language.thoi_gian_bat_dau_phai_nho_hon_thoi_gian_ket_thuc);
                 }
             }
         }
@@ -97,7 +99,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if (viewModel.TaskFormModel.scheduledstart > viewModel.TaskFormModel.scheduledend || viewModel.TaskFormModel.scheduledstart == viewModel.TaskFormModel.scheduledend)
                 {
-                    ToastMessageHelper.ShortMessage("Thời gian kết thúc phải lớn hơn thời gian bắt đầu");
+                    ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                 }
             }
         }
@@ -111,7 +113,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (!viewModel.TaskFormModel.scheduledstart.HasValue)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
                 viewModel.IsEventAllDay = false;
                 return;
             }
@@ -126,25 +128,25 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.TaskFormModel.subject))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập chủ đề");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_chu_de);
                 return;
             }
 
             if (!viewModel.TaskFormModel.scheduledstart.HasValue)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
                 return;
             }
 
             if (!viewModel.TaskFormModel.scheduledend.HasValue)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_ket_thuc);
                 return;
             }
 
             if ((viewModel.TaskFormModel.scheduledstart.HasValue && viewModel.TaskFormModel.scheduledend.HasValue) && (viewModel.TaskFormModel.scheduledstart > viewModel.TaskFormModel.scheduledend))
             {
-                ToastMessageHelper.ShortMessage("Thời gian kết thúc phải lớn hơn thời gian bắt đầu");
+                ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                 return;
             }
 
@@ -161,14 +163,14 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
-                    ToastMessageHelper.ShortMessage("Tạo công việc thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_cong_viec_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo công việc thất bại");
+                    ToastMessageHelper.ShortMessage(Language.tao_cong_viec_that_bai);
                 }
             }
             else
@@ -183,14 +185,14 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
-                    ToastMessageHelper.ShortMessage("Cập nhật công việc thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_cong_viec_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật công việc thất bại");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_cong_viec_that_bai);
                 }
             }
         }

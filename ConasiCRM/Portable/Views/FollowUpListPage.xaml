@@ -5,7 +5,8 @@
     xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
     xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters" 
     xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
-    Title="Danh sách theo dõi"
+    Title="{x:Static language:Language.danh_sach_theo_doi_title}"
+    xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
     x:Class="ConasiCRM.Portable.Views.FollowUpListPage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -26,7 +27,7 @@
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
                                     <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
                                         <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Start" Grid.Column="0">
-                                            <Label Text="Mã:" TextColor="Gray" FontSize="14" Grid.Column="0"/>
+                                            <Label Text="{Binding Source={x:Static language:Language.ma},StringFormat='{0}:'}" TextColor="Gray" FontSize="14" Grid.Column="0"/>
                                             <Label Text="{Binding bsd_followuplistcode}" TextColor="Gray" FontSize="14" Grid.Column="1" LineBreakMode="TailTruncation" />
                                         </Grid>
                                         <Label Text="{Binding bsd_expiredate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="14" TextColor="Gray"/>
@@ -38,15 +39,15 @@
                                         <Label Grid.Column="1" Text="{Binding bsd_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding customer}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="Sản phẩm:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.san_pham},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding bsd_units}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="4">
-                                        <Label Text="Loại:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding bsd_type_format}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                 </Grid>
