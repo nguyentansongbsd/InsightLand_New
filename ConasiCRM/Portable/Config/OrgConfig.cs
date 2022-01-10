@@ -8,7 +8,7 @@ namespace ConasiCRM.Portable.Config
     public class OrgConfig
     {
         public static int RecordPerPage = 30;
-        public const string VerApp = "Insight Land - VerDemo - Ver 27.0 - Song ngữ";
+        public const string VerApp = "Conasi CRM - VerDemo - Ver 27.0 - Song ngữ";
         //public const string VerApp = "Insight Land";
         //public const string VerApp = "Conasi CRM - Version 0.1.0";
 

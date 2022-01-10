@@ -35,7 +35,8 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Distribution: BUSINESS SOFTWARE DEVELOPMENT SOLUTIONS COMPANY LIMITED (F9S643CM8L)</CodesignKey>
+    <CodesignProvision>Conasi Production Profile</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -114,12 +115,12 @@
     <BundleResource Include="Resources\user.png" />
     <BundleResource Include="Resources\image_placeholder.jpg" />
     <BundleResource Include="Resources\CNS_Logo_1024.png" />
-    <BundleResource Include="Resources\logo-conasi-new.png" />
     <BundleResource Include="Resources\Conasi_logo_02.jpeg" />
     <BundleResource Include="Resources\CNS_Logo_500.png" />
     <BundleResource Include="Resources\CNS_Logo_500_300.png" />
     <BundleResource Include="Resources\ic_english.png" />
     <BundleResource Include="Resources\ic_vietnam.jpg" />
+    <BundleResource Include="Resources\logo_conasi_new.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
