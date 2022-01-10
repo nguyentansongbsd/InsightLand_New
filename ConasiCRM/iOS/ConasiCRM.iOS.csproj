@@ -118,6 +118,8 @@
     <BundleResource Include="Resources\Conasi_logo_02.jpeg" />
     <BundleResource Include="Resources\CNS_Logo_500.png" />
     <BundleResource Include="Resources\CNS_Logo_500_300.png" />
+    <BundleResource Include="Resources\ic_english.png" />
+    <BundleResource Include="Resources\ic_vietnam.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
