@@ -141,7 +141,7 @@
                                 <Label Text="{Binding singleLead.bsd_topic_label}" Grid.Row="1" FontSize="15" TextColor="#444444"/>
                                 <Label Text="{Binding singleLead.mobilephone}" Grid.Row="2" FontSize="15" TextColor="#444444"/>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                    <Label Text="{x:Static language:Language.tinh_trang_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                    <Label Text="{Binding Source={x:Static language:Language.tinh_trang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                     <Label Text="{Binding singleLead.statuscode,Converter={StaticResource StatusCodeConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                 </Grid>
                             </Grid>
@@ -171,7 +171,7 @@
                             <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_co_ban}"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_co_ban_title}"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
@@ -185,7 +185,7 @@
                                             <controls:FormLabelValue Text="{Binding singleLead.telephone1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="2">
-                                            <controls:FormLabel Text="{x:Static language:Language.email_}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{Binding Source={x:Static language:Language.email}}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleLead.emailaddress1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="3">
@@ -214,13 +214,13 @@
                             <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_cong_ty}"/>
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.thong_tin_cong_ty_title}"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="1" BackgroundColor="#F1F1F1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="0">
-                                            <controls:FormLabel Text="{x:Static language:Language.ten_cong_ty_}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{Binding Source={x:Static language:Language.ten_cong_ty}}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleLead.companyname}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="1">
@@ -236,7 +236,7 @@
                                             <controls:FormLabelValue Text="{Binding singleLead.description}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="4">
-                                            <controls:FormLabel Text="Lĩnh vực:" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.linh_vuc}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleIndustrycode.Label}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="5">
@@ -273,7 +273,7 @@
                         </StackLayout>
                         <!-- Tab Phong Thuy-->
                         <StackLayout x:Name="TabPhongThuy" IsVisible="false" Margin="0,10,0,0">
-                            <Label Text="{x:Static language:Language.thong_tin_gia_chu}" Style="{StaticResource Lb_Title_PhongThuy}" Grid.Column="0"/>
+                            <Label Text="{x:Static language:Language.thong_tin_gia_chu_title}" Style="{StaticResource Lb_Title_PhongThuy}" Grid.Column="0"/>
                             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="1">
                                 <controls:FormLabel Text="{x:Static language:Language.gioi_tinh}" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_TenHuong_PhongThuy}"/>
                                 <controls:FormLabelValue Text="{Binding singleGender.Label}" Grid.Row="0" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_ChiTietHuong_PhongThuy}"/>
@@ -287,7 +287,7 @@
                                 <controls:FormLabel Text="{x:Static language:Language.ngu_hanh}" Grid.Row="6" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_TenHuong_PhongThuy}"/>
                                 <controls:FormLabelValue Text="{Binding PhongThuy.menh_label}" Grid.Row="6" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_ChiTietHuong_PhongThuy}"/>
                             </Grid>
-                            <Label Text="{x:Static language:Language.la_ban_phong_thuy}" Style="{StaticResource Lb_Title_PhongThuy}"/>
+                            <Label Text="{x:Static language:Language.la_ban_phong_thuy_title}" Style="{StaticResource Lb_Title_PhongThuy}"/>
                             <Image Source="{Binding PhongThuy.image}" Aspect="AspectFit" Margin="60,15,60,15">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ShowImage_Tapped"/>

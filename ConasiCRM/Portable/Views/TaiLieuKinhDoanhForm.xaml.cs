@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 using System.IO;
 using ConasiCRM.Portable.Controls;
 using Xamarin.Essentials;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -98,7 +99,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    await DisplayAlert("", "Lỗi. Vui lòng thử lại", "Ok");
+                    await DisplayAlert("", Language.da_xay_ra_loi_vui_long_thu_lai, Language.dong);
                 }
                 popup_dowload_file.isTapable = true;
                 viewModel.IsBusy = false;
@@ -118,7 +119,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 catch
                 {
-                    DisplayAlert("", "Ứng dụng không được hỗ trợ. Không thể mở file", "OK");
+                    DisplayAlert("", Language.ung_dung_khong_duoc_ho_tro_khong_the_mo_file, Language.dong);
                 }
             }
             else
@@ -167,7 +168,7 @@ namespace ConasiCRM.Portable.Views
             viewModel.IsBusy = true;
             if (viewModel.list_DownLoad.Count ==0)
             {
-                await DisplayAlert("", "Chưa có file nào đươc tải", "Ok");
+                await DisplayAlert("", Language.chua_co_file_nao_duoc_tai, Language.dong);
             }
             else
             {

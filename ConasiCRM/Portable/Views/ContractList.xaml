@@ -4,8 +4,9 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
              xmlns:converter="clr-namespace:ConasiCRM.Portable.Converters"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.ContractList"
-             Title="Danh Sách Hợp Đồng">
+             Title="{x:Static language:Language.hop_dong_title}">
     <ContentPage.Content>
         <AbsoluteLayout>
             <Grid RowDefinitions="Auto,*" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
@@ -24,19 +25,19 @@
                                         <Label Grid.Column="1" Text="{Binding ordernumber}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
-                                        <Label Text="Khách hàng:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding customer_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="Dự án:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.du_an},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding project_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="Sản phẩm:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.san_pham},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding unit_name}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="4">
-                                        <Label Text="Tổng tiền:" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.tong_tien},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding totalamount}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                 </Grid>

@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -305,7 +306,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -354,7 +355,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -372,12 +373,12 @@ namespace ConasiCRM.Portable.Views
                 else if (isSuccess == 1)
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Sản phẩm không thể tạo bảng tính giá");
+                    ToastMessageHelper.ShortMessage(Language.san_pham_khong_the_tao_bang_tinh_gia);
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -396,7 +397,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                 }
             };
         }

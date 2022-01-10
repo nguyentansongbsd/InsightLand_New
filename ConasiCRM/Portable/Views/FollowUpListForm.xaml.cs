@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.BindingContext = viewModel = new FollowUpListFormViewModel();
-            this.Title = "Cập Nhật Thông Tin";
+            this.Title = Language.cap_nhat_thong_tin_title;
             Init(fulid);
         }
 
@@ -102,32 +103,32 @@ namespace ConasiCRM.Portable.Views
         {
             if(viewModel.Type == null || string.IsNullOrWhiteSpace(viewModel.Type.Id))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_loai);
                 return;
             }
             if (viewModel.TypeTerminateletter == null || string.IsNullOrWhiteSpace(viewModel.TypeTerminateletter.Id))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại thanh lý");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_loai_thanh_ly);
                 return;
             }
             if (viewModel.Group == null || string.IsNullOrWhiteSpace(viewModel.Group.Id))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn nhóm");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_nhom);
                 return;
             }
             if (viewModel.TakeOutMoney == null || string.IsNullOrWhiteSpace(viewModel.TakeOutMoney.Id))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn phương thức phạt");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_phuong_thuc_phat);
                 return;
             }
             if (viewModel.Refund <=0 )
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số tiền hoàn lại");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_tien_hoan_lai);
                 return;
             }
             if (viewModel.TakeOutMoney.Id == "100000001")
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập giá trị từ 0 đến 100");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_gia_tri_tu_0_den_100);
                 return;
             }
 
@@ -135,7 +136,7 @@ namespace ConasiCRM.Portable.Views
             {
                 if(viewModel.PhaseLaunch == null || viewModel.PhaseLaunch.Id == Guid.Empty)
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn đợt mở bán");
+                    ToastMessageHelper.ShortMessage(Language.vui_long_chon_dot_mo_ban);
                     return;
                 }    
             }
@@ -146,13 +147,13 @@ namespace ConasiCRM.Portable.Views
             {
                 if (FollowDetailPage.NeedToRefresh.HasValue) FollowDetailPage.NeedToRefresh = true;
                 await Navigation.PopAsync();
-                ToastMessageHelper.ShortMessage("Cập nhật thông tin thành công");
+                ToastMessageHelper.ShortMessage(Language.cap_nhat_danh_sach_theo_doi_thanh_cong);
                 LoadingHelper.Hide();
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Cập nhật thông tin thất bại");
+                ToastMessageHelper.ShortMessage(Language.cap_nhat_danh_sach_theo_doi_that_bai);
             }
         }
     }

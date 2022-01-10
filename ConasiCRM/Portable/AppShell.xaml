@@ -78,7 +78,7 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf015;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="{x:Static language:Language.khach_hang}" ContentTemplate="{DataTemplate views:CustomerPage}">
+        <ShellContent Title="{x:Static language:Language.khach_hang_appshell}" ContentTemplate="{DataTemplate views:CustomerPage}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0c0;" Size="18"/>
             </ShellContent.Icon>
@@ -95,7 +95,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07a;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="{x:Static language:Language.giu_cho}" ContentTemplate="{DataTemplate views:QueueList}">
+    <ShellContent Title="{x:Static language:Language.giu_cho_title}" ContentTemplate="{DataTemplate views:QueueList}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf02d;" Size="18"/>
         </ShellContent.Icon>
@@ -110,7 +110,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf46d;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="{x:Static language:Language.hop_dong}" ContentTemplate="{DataTemplate views:ContractList}">
+    <ShellContent Title="{x:Static language:Language.hop_dong_title}" ContentTemplate="{DataTemplate views:ContractList}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>

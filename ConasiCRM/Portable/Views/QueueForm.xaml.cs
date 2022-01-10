@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -58,9 +59,9 @@ namespace ConasiCRM.Portable.Views
 
         public async void Create()
         {
-            btnSave.Text = "Tạo Giữ Chỗ";
+            btnSave.Text = Language.tao_moi_giu_cho_title;
             btnSave.Clicked += Create_Clicked; ;
-            this.Title = "Tạo Giữ Chỗ";
+            this.Title = Language.tao_giu_cho;
             if(from)
             {
                 await viewModel.LoadFromUnit(viewModel.UnitId);
@@ -86,7 +87,7 @@ namespace ConasiCRM.Portable.Views
         private async void Create_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            btnSave.Text = "Đang Tạo Giữ Chỗ...";
+            btnSave.Text = Language.dang_tao_giu_cho;
             await SaveData(null);
         }
 
@@ -94,40 +95,40 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.QueueFormModel.name))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề của giữ chỗ");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_tieu_de);
                 LoadingHelper.Hide();
-                btnSave.Text = "Tạo Giữ Chỗ";
+                btnSave.Text = Language.tao_giu_cho;
                 return;
             }
             if (viewModel.Customer == null || string.IsNullOrWhiteSpace(viewModel.Customer.Val))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn khách hàng tiềm năng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_khach_hang);
                 LoadingHelper.Hide();
-                btnSave.Text = "Tạo Giữ Chỗ";
+                btnSave.Text = Language.tao_giu_cho;
                 return;
             }
             if (viewModel.DailyOption == null || viewModel.DailyOption.Id == null || viewModel.DailyOption.Id == Guid.Empty)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn đại lý bán hàng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dai_ly_ban_hang);
                 LoadingHelper.Hide();
-                btnSave.Text = "Tạo Giữ Chỗ";
+                btnSave.Text = Language.tao_giu_cho;
                 return;
             }
             if (from)
             {
                 if (!await viewModel.SetQueueTime())
                 {
-                    ToastMessageHelper.ShortMessage("Khách hàng đã tham gia giữ chỗ cho dự án này");
+                    ToastMessageHelper.ShortMessage(Language.khach_hang_da_tham_gia_giu_cho_cho_du_an_nay);
                     LoadingHelper.Hide();
-                    btnSave.Text = "Tạo Giữ Chỗ";
+                    btnSave.Text = Language.tao_giu_cho;
                     return;
                 }
             }
             if (viewModel.Customer != null && !string.IsNullOrWhiteSpace(viewModel.Customer.Val) && viewModel.DailyOption != null && viewModel.DailyOption.Id != Guid.Empty && viewModel.DailyOption.Id == Guid.Parse(viewModel.Customer.Val))
             {
-                ToastMessageHelper.ShortMessage("Khách hàng phải khác Đại lý bán hàng");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_phai_khac_dai_ly_ban_hang);
                 LoadingHelper.Hide();
-                btnSave.Text = "Tạo Giữ Chỗ";
+                btnSave.Text = Language.tao_giu_cho;
                 return;
             }
             var created = await viewModel.UpdateQueue(viewModel.idQueueDraft);
@@ -138,14 +139,14 @@ namespace ConasiCRM.Portable.Views
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 if (Dashboard.NeedToRefreshQueue.HasValue) Dashboard.NeedToRefreshQueue = true;
                 await Navigation.PopAsync();       
-                ToastMessageHelper.ShortMessage("Tạo giữ chỗ thành công");
+                ToastMessageHelper.ShortMessage(Language.tao_giu_cho_thanh_cong);
                 LoadingHelper.Hide();
             }
             else
             {
                 LoadingHelper.Hide();
-                btnSave.Text = "Tạo Giữ Chỗ";
-                ToastMessageHelper.ShortMessage("Tạo giữ chỗ thất bại");
+                btnSave.Text = Language.tao_giu_cho;
+                ToastMessageHelper.ShortMessage(Language.tao_giu_cho_that_bai);
             }
         }
     }

@@ -159,16 +159,16 @@
                                         <Label Grid.Column="1" Text="{Binding subject}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
-                                        <Label Text="{x:Static language:Language.khach_hang_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding regarding_name}" IsVisible="{Binding regarding_name,Converter={StaticResource NullToHideConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                         <Label Text="{Binding customer}" IsVisible="{Binding customer,Converter={StaticResource NullToHideConverter}}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="{x:Static language:Language.thoi_gian_bat_dau_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.thoi_gian_bat_dau},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding scheduledstart_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="{x:Static language:Language.thoi_gian_ket_thuc_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.thoi_gian_ket_thuc},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding scheduledend_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                 </Grid>

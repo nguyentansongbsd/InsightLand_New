@@ -5,8 +5,10 @@
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
-             xmlns:viewmodels="clr-namespace:ConasiCRM.Portable.ViewModels" x:DataType="viewmodels:FollowDetailPageViewModel"
-             Title="Danh Sách Theo Dõi"
+             xmlns:viewmodels="clr-namespace:ConasiCRM.Portable.ViewModels" 
+             x:DataType="viewmodels:FollowDetailPageViewModel"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
+             Title="{x:Static language:Language.danh_sach_theo_doi_title}"
              x:Name="this">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -47,7 +49,7 @@
                         <StackLayout Margin="15">
                             <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
                                 <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Start" Grid.Column="0">
-                                    <Label Text="Mã:" TextColor="Gray" FontSize="14" Grid.Column="0"/>
+                                    <Label Text="{Binding Source={x:Static language:Language.ma},StringFormat='{0}: '}" TextColor="Gray" FontSize="14" Grid.Column="0"/>
                                     <Label Text="{Binding FollowDetail.bsd_followuplistcode}" TextColor="Gray" FontSize="14" Grid.Column="1" LineBreakMode="TailTruncation" />
                                 </Grid>
                                 <Label Text="{Binding FollowDetail.bsd_expiredate,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="14" TextColor="Gray"/>
@@ -59,7 +61,7 @@
                                 <Label Grid.Column="1" Text="{Binding FollowDetail.bsd_name}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
-                                <Label Text="Khách hàng:" Grid.Column="0" FontSize="15" TextColor="#444444"/>
+                                <Label Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}: '}" Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                 <Label Text="{Binding FollowDetail.customer}" Grid.Column="1" FontSize="15" TextColor="{StaticResource NavigationPrimary}">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Customer_Tapped"/>
@@ -67,11 +69,11 @@
                                 </Label>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
-                                <Label Text="Sản phẩm:" Grid.Column="0" FontSize="15" TextColor="#444444"/>
+                                <Label Text="{Binding Source={x:Static language:Language.san_pham},StringFormat='{0}: '}" Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                 <Label Text="{Binding FollowDetail.bsd_units}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
-                                <Label Text="Đặt cọc:" Grid.Column="0" FontSize="15" TextColor="#444444"/>
+                                <Label Text="{Binding Source={x:Static language:Language.dat_coc},StringFormat='{0}: '}" Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                 <Label Text="{Binding FollowDetail.name_reservation}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
                             </Grid>
                         </StackLayout>
@@ -82,25 +84,25 @@
                             <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Text="Chi Tiết" Style="{StaticResource ExpanderHeadingText}"/>
+                                        <Label Text="{x:Static language:Language.thong_tin_chi_tiet_title}" Style="{StaticResource ExpanderHeadingText}"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Loại" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.loai}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_type_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Loại thanh lý" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.loai_thanh_ly}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_terminationtype_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Nhóm" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.nhom}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_group_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Dự án" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.du_an}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.project_name}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Project_Tapped"/>
@@ -108,7 +110,7 @@
                                             </controls:FormLabelValue>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Sản phẩm" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.san_pham}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_units}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Unit_Tapped"/>
@@ -116,11 +118,11 @@
                                             </controls:FormLabelValue>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Giá bán" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.gia_ban}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_sellingprice, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Đặt cọc" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.dat_coc}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.name_reservation}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="#1C78C2" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Reservation_Tapped"/>
@@ -134,33 +136,33 @@
                             <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Text="Giá Trị Thanh Lý" Style="{StaticResource ExpanderHeadingText}"/>
+                                        <Label Text="{x:Static language:Language.gia_tri_thanh_ly_title}" Style="{StaticResource ExpanderHeadingText}"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Tổng tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.tong_tien}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_totalamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Tổng tiền thanh toán" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.tong_tien_thanh_toan}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_totalamountpaid, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Phương thức phạt TL" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.phuong_thuc_phat_TL}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_takeoutmoney_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding FollowDetail.isRefund}">
-                                            <controls:FormLabel Text="Hoàn tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.hoan_tien}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_forfeitureamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding FollowDetail.isForfeiture}">
-                                            <controls:FormLabel Text="Hoàn tiền" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.hoan_tien}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_forfeiturepercent, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Tổng tiền phạt" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.tong_tien_phat}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_totalforfeitureamount, StringFormat='{0:#,0} đ'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
@@ -170,25 +172,25 @@
                             <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Text="Thanh Lý" Style="{StaticResource ExpanderHeadingText}"/>
+                                        <Label Text="{x:Static language:Language.thanh_ly}" Style="{StaticResource ExpanderHeadingText}"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Thư thanh lý" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.thu_thanh_ly}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_terminateletter_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Thanh lý" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.thanh_ly}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_termination_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Bán lại" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.ban_lai}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_resell_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" IsVisible="{Binding FollowDetail.bsd_resell}">
-                                            <controls:FormLabel Text="Đợt mở bán" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.dot_mo_ban}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.phaseslaunch_name}" Grid.Column="1" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>
@@ -198,13 +200,13 @@
                             <telerikPrimitives:RadExpander IsExpanded="False" AutomationId="masterCardExpander" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                        <Label Text="Bình Luận - Quyết Định" Style="{StaticResource ExpanderHeadingText}"/>
+                                        <Label Text="{x:Static language:Language.binh_luan_quyet_dinh_title}" Style="{StaticResource ExpanderHeadingText}"/>
                                     </telerikPrimitives:ExpanderHeader>
                                 </telerikPrimitives:RadExpander.Header>
                                 <telerikPrimitives:RadExpander.Content>
                                     <StackLayout BackgroundColor="#eeeeee" Spacing="1">
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Họp định kỳ" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.hop_dinh_ky}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_collectionmeeting_subject}" Grid.Column="1" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource NavigationPrimary}" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End">
                                                 <controls:FormLabelValue.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CollectionMeeting_Tapped"/>
@@ -212,7 +214,7 @@
                                             </controls:FormLabelValue>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" >
-                                            <controls:FormLabel Text="Nội dung" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
+                                            <controls:FormLabel Text="{x:Static language:Language.noi_dung}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding FollowDetail.bsd_description}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}" HorizontalTextAlignment="End"/>
                                         </Grid>
                                     </StackLayout>

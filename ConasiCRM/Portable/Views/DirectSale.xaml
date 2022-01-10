@@ -1,57 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" BackgroundColor="White"
-             Title="GIỎ HÀNG"
+             Title="{x:Static language:Language.gio_hang_title}"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              x:Name="rootPage"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.DirectSale">
     <ContentPage.Content>
         <AbsoluteLayout>
             <ScrollView  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">
                 <StackLayout Padding="15">
-                    <controls:FormLabelRequired Text="Dự án" Margin="0,5,0,0"/>
+                    <controls:FormLabelRequired Text="{x:Static language:Language.du_an}" Margin="0,5,0,0"/>
                     <Grid>
-                        <controls:MainEntry ShowClearButton="False" Text="{Binding Project.bsd_name}" Placeholder="Chọn dự án" FontSize="15" TextColor="#333333"/>
+                        <controls:MainEntry ShowClearButton="False" Text="{Binding Project.bsd_name}" Placeholder="{x:Static language:Language.chon_du_an}" FontSize="15" TextColor="#333333"/>
                         <StackLayout>
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="LoadProject_Tapped"/>
                             </StackLayout.GestureRecognizers>
                         </StackLayout>
                     </Grid>
-                    
-                    <controls:FormLabel Text="Đợt mở bán" Margin="0,5,0,0"/>
-                    <controls:LookUp x:Name="lookupPhasesLaunch" Placeholder="Chọn đợt mở bán" Margin="0,0,0,5" BottomModal="{Reference LookupModal}" NameDisplay="Label" SelectedItem="{Binding PhasesLaunch}" ItemsSource="{Binding PhasesLaunchs}" SelectedItemChange="PhaseLaunchItem_SelectedChange" />
+
+                    <controls:FormLabel Text="{x:Static language:Language.dot_mo_ban}" Margin="0,5,0,0"/>
+                    <controls:LookUp x:Name="lookupPhasesLaunch" Placeholder="{x:Static language:Language.chon_dot_mo_ban}" Margin="0,0,0,5" BottomModal="{Reference LookupModal}" NameDisplay="Label" SelectedItem="{Binding PhasesLaunch}" ItemsSource="{Binding PhasesLaunchs}" SelectedItemChange="PhaseLaunchItem_SelectedChange" />
 
                     <StackLayout Orientation="Horizontal" Margin="0,5">
-                        <controls:FormLabel Text="Sự kiện"/>
+                        <controls:FormLabel Text="{x:Static language:Language.su_kien}"/>
                         <telerikPrimitives:RadCheckBox CheckedColor="{StaticResource NavigationPrimary}" x:Name="checkbox" IsChecked="{Binding IsEvent,Mode=TwoWay}" />
                     </StackLayout>
 
-                    <controls:FormLabel Text="Mã sản phẩm" Margin="0,5,0,0"/>
-                    <controls:MainEntry Text="{Binding UnitCode}" Placeholder="Mã sản phẩm" Margin="0,0,0,5"/>
+                    <controls:FormLabel Text="{x:Static language:Language.ma_san_pham}" Margin="0,5,0,0"/>
+                    <controls:MainEntry Text="{Binding UnitCode}" Placeholder="{x:Static language:Language.nhap_ma_san_pham}" Margin="0,0,0,5"/>
 
-                    <controls:FormLabel Text="Hướng" Margin="0,5,0,0"/>
-                    <controls:LookUpMultipleOptions x:Name="lookupMultipleDirection" Placeholder="Chọn hướng" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedDirections}" ItemsSource="{Binding DirectionOptions}" ShowClearButton="False" ShowCloseButton="False"/>
+                    <controls:FormLabel Text="{x:Static language:Language.huong}" Margin="0,5,0,0"/>
+                    <controls:LookUpMultipleOptions x:Name="lookupMultipleDirection" Placeholder="{x:Static language:Language.chon_huong}" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedDirections}" ItemsSource="{Binding DirectionOptions}" ShowClearButton="False" ShowCloseButton="False"/>
 
-                    <controls:FormLabel Text="Tình trạng sản phẩm" Margin="0,5,0,0"/>
-                    <controls:LookUpMultipleOptions x:Name="lookupMultipleUnitStatus" Placeholder="Chọn tình trạng sản phẩm" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedUnitStatus}" ItemsSource="{Binding UnitStatusOptions}" ShowClearButton="False" ShowCloseButton="False"/>
+                    <controls:FormLabel Text="{x:Static language:Language.tinh_trang_san_pham}" Margin="0,5,0,0"/>
+                    <controls:LookUpMultipleOptions x:Name="lookupMultipleUnitStatus" Placeholder="{x:Static language:Language.chon_tinh_trang_san_pham}" Margin="0,0,0,5" CenterModal="{Reference CenterModal}" SelectedIds="{Binding SelectedUnitStatus}" ItemsSource="{Binding UnitStatusOptions}" ShowClearButton="False" ShowCloseButton="False"/>
 
-                    <controls:FormLabel Text="Diện tích sử dụng (m²)" Margin="0,5,0,0"/>
-                    <controls:LookUp x:Name="lookupNetArea" Placeholder="Chọn diện tích sử dụng" Margin="0,0,0,5" BottomModal="{Reference LookupModal}" NameDisplay="Name" SelectedItem="{Binding NetArea}" ItemsSource="{Binding NetAreas}"/>
-                    
-                    <controls:FormLabel Text="Giá bán (VNĐ)" Margin="0,5,0,0"/>
-                    <controls:LookUp x:Name="lookupPrice" Placeholder="Chọn giá bán" Margin="0,0,0,5" BottomModal="{Reference LookupModal}" NameDisplay="Name" SelectedItem="{Binding Price}" ItemsSource="{Binding Prices}"/>
+                    <controls:FormLabel Text="{x:Static language:Language.dien_tich_su_dung}" Margin="0,5,0,0"/>
+                    <controls:LookUp x:Name="lookupNetArea" Placeholder="{x:Static language:Language.chon_dien_tich_su_dung}" Margin="0,0,0,5" BottomModal="{Reference LookupModal}" NameDisplay="Name" SelectedItem="{Binding NetArea}" ItemsSource="{Binding NetAreas}"/>
+
+                    <controls:FormLabel Text="{x:Static language:Language.gia_ban_vnd}" Margin="0,5,0,0"/>
+                    <controls:LookUp x:Name="lookupPrice" Placeholder="{x:Static language:Language.chon_gia_ban}" Margin="0,0,0,5" BottomModal="{Reference LookupModal}" NameDisplay="Name" SelectedItem="{Binding Price}" ItemsSource="{Binding Prices}"/>
                 </StackLayout>
             </ScrollView>
             <Grid AbsoluteLayout.LayoutBounds="0,1,1,60" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White" ColumnDefinitions="*,*" RowDefinitions="Auto" Padding="15,10">
-                <Button Grid.Column="0" Text="Thông tin dự án" FontAttributes="Bold" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White"  Clicked="ShowInfo" HeightRequest="40" Padding="10,5" CornerRadius="10"/>
-                <Button Grid.Column="1" Text="Tìm kiếm" FontAttributes="Bold" BackgroundColor="{StaticResource NavigationPrimary}" HeightRequest="40" Padding="10,5"  CornerRadius="10" TextColor="White" Clicked="SearchClicked"/>
+                <Button Grid.Column="0" Text="{x:Static language:Language.thong_tin_du_an}" FontAttributes="Bold" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White"  Clicked="ShowInfo" HeightRequest="40" Padding="10,5" CornerRadius="10"/>
+                <Button Grid.Column="1" Text="{x:Static language:Language.tim_kiem}" FontAttributes="Bold" BackgroundColor="{StaticResource NavigationPrimary}" HeightRequest="40" Padding="10,5"  CornerRadius="10" TextColor="White" Clicked="SearchClicked"/>
             </Grid>
 
-            <controls:BottomModal x:Name="bottomModalProject" Title="Chọn dự án" >
+            <controls:BottomModal x:Name="bottomModalProject" Title="{x:Static language:Language.chon_du_an}" >
                 <controls:BottomModal.ModalContent>
                     <Grid RowDefinitions="Auto,*">
                         <controls:SearchBarFrame x:Name="searchBar" Grid.Row="0" Margin="10,5">

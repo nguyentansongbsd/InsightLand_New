@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace ConasiCRM.Portable.Views
         {
             ReservationListModel val = e.Item as ReservationListModel;
             LoadingHelper.Show();
-            BangTinhGiaDetailPage newPage = new BangTinhGiaDetailPage(val.quoteid) { Title = "Đặt cọc" };
+            BangTinhGiaDetailPage newPage = new BangTinhGiaDetailPage(val.quoteid) { Title = Language.dat_coc_title };
             newPage.OnCompleted = async (OnCompleted) =>
             {
                 if (OnCompleted == true)

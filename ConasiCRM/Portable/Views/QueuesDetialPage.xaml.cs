@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -89,7 +90,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy dự án");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_du_an);
                 }
             };
         }
@@ -115,7 +116,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -134,7 +135,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy đại lý bán hàng ");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_dai_ly_ban_hang);
                 }
             };
         }
@@ -153,7 +154,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không có số điện thoại");
+                    ToastMessageHelper.ShortMessage(Language.khong_co_so_dien_thoai);
                 }
             }
             catch (Exception ex)
@@ -174,7 +175,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    ToastMessageHelper.ShortMessage("Không có số điện thoại");
+                    ToastMessageHelper.ShortMessage(Language.khong_co_so_dien_thoai);
                 }
                 LoadingHelper.Hide();
             }
@@ -187,7 +188,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void HuyGiuCho_Clicked(object sender, EventArgs e)
         {
-            bool confirm = await DisplayAlert("Xác nhận", "Bạn có muốn hủy giữ chỗ này không ?", "Đồng ý", "Hủy");
+            bool confirm = await DisplayAlert(Language.xac_nhan, Language.ban_co_muon_huy_giu_cho_nay_khong, Language.dong_y, Language.huy);
             if (confirm == false) return;
 
             LoadingHelper.Show();
@@ -203,13 +204,13 @@ namespace ConasiCRM.Portable.Views
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 if (AccountDetailPage.NeedToRefreshQueues.HasValue) AccountDetailPage.NeedToRefreshQueues = true;
                 if (ContactDetailPage.NeedToRefreshQueues.HasValue) ContactDetailPage.NeedToRefreshQueues = true;
-                ToastMessageHelper.ShortMessage("Hủy giữ chỗ thành công");
+                ToastMessageHelper.ShortMessage(Language.huy_giu_cho_thanh_cong);
                 LoadingHelper.Hide();
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Hủy giữ chỗ thất bại");
+                ToastMessageHelper.ShortMessage(Language.huy_giu_cho_that_bai);
             }
         }
 
@@ -231,12 +232,12 @@ namespace ConasiCRM.Portable.Views
                 else if (isSuccess == 1)
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Sản phẩm không thể tạo bảng tính giá");
+                    ToastMessageHelper.ShortMessage(Language.san_pham_khong_the_tao_bang_tinh_gia);
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -313,7 +314,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                 }
             };
         }
@@ -333,7 +334,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                 }
             };
         }
@@ -355,7 +356,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }
@@ -372,7 +373,7 @@ namespace ConasiCRM.Portable.Views
                         else
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại.");
+                            ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                         }
                     };
                 }

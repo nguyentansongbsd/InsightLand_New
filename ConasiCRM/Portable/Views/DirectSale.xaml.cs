@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -112,7 +113,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             if (viewModel.Project == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_du_an);
                 LoadingHelper.Hide();
             }
             else
@@ -133,12 +134,12 @@ namespace ConasiCRM.Portable.Views
                     else if (Success == 1)
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.LongMessage("Không có sản phẩm");
+                        ToastMessageHelper.LongMessage(Language.khong_co_san_pham);
                     }
                     else if (Success == 2)
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.LongMessage("Không có sản phẩm");
+                        ToastMessageHelper.LongMessage(Language.khong_co_san_pham);
                     }
                 };
             }
@@ -149,7 +150,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             if (viewModel.Project == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn Dự án");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_du_an);
                 LoadingHelper.Hide();
                 return;
             }
@@ -164,7 +165,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    await DisplayAlert("", "Không tìm thấy thông tin.", "Đóng");
+                    await DisplayAlert("", Language.khong_tim_thay_thong_tin_vui_long_thu_lai, Language.dong);
                     LoadingHelper.Hide();
                 }
             };

@@ -17,15 +17,15 @@
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
                                     <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="#026294" Grid.Row="0"/>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
-                                        <Label Text="{x:Static language:Language.dai_dien_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.dai_dien},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding primarycontact_name}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="{x:Static language:Language.sdt_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.sdt},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding telephone1}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="{x:Static language:Language.dia_chi_}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.dia_chi},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding bsd_address}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                 </Grid>

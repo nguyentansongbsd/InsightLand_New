@@ -6,7 +6,7 @@
     xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
     xmlns:contentViews="clr-namespace:ConasiCRM.Portable.Views"
     xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
-    Title="{x:Static language:Language.khach_hang}" BackgroundColor="White"
+    Title="{x:Static language:Language.khach_hang_title}" BackgroundColor="White"
     x:Class="ConasiCRM.Portable.Views.CustomerPage">
     <ContentPage.Resources>
         <Style TargetType="telerikPrimitives:RadBorder" x:Key="radBorder">
