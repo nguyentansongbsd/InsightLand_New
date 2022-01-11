@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="1046" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" image="insightland_logo.png">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="1046" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" image="logo_conasi_new.png">
                                 <rect key="frame" x="73" y="345" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -32,6 +32,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="insightland_logo.png" width="150" height="136"/>
+        <image name="logo_conasi_new.png" width="150" height="136"/>
     </resources>
 </document>

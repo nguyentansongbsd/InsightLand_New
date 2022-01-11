@@ -14,7 +14,7 @@ using ConasiCRM.Portable;
 
 namespace ConasiCRM.Android
 {
-    [Activity(Label = "Insight Land", Icon = "@drawable/conasi_logo", Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true)]
+    [Activity(Label = "ConasiCRM", Icon = "@drawable/CNS_Logo_1024", Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true)]
     public class SplashScreen : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

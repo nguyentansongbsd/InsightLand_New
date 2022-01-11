@@ -50,7 +50,7 @@
 
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
-            <StackLayout BackgroundColor="White" >
+            <StackLayout BackgroundColor="White" HeightRequest="130">
                 <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="0" HorizontalOptions="Start" Margin="18,34,18,18">
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UserInfor_Tapped"/>
@@ -142,11 +142,11 @@
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ae;" Size="18"/>
             </ShellContent.Icon>
         </ShellContent>
-        <ShellContent Title="Test" Route="Test" ContentTemplate="{DataTemplate viewapp:BlankPage}">
+        <!--<ShellContent Title="Test" Route="Test" ContentTemplate="{DataTemplate viewapp:BlankPage}">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf0ae;" Size="18"/>
             </ShellContent.Icon>
-        </ShellContent>
+        </ShellContent>-->
     </FlyoutItem>
 
     <MenuItem Text="{x:Static language:Language.dang_xuat_appshell}" Command="{Binding LogoutCommand}" >
