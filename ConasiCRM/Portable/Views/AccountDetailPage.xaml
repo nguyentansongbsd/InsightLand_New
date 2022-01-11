@@ -218,7 +218,7 @@
                                         <Label FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_lien_lac},StringFormat='{0}:'}"/>
+                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_lien_lac},StringFormat='{0}: '}"/>
                                                     <Span Text="{Binding singleAccount.bsd_address}"/>
                                                 </FormattedString>
                                             </Label.FormattedText>
@@ -226,7 +226,7 @@
                                         <Label FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_tru_so_chinh},StringFormat='{0}:'}"/>
+                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_tru_so_chinh},StringFormat='{0}: '}"/>
                                                     <Span Text="{Binding singleAccount.bsd_permanentaddress1}"/>
                                                 </FormattedString>
                                             </Label.FormattedText>

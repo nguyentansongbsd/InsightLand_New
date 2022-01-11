@@ -227,6 +227,11 @@ namespace ConasiCRM.Portable.Views
                     return;
                 }
             }
+            if (string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_address))
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_lien_lac);
+                return;
+            }
 
             LoadingHelper.Show();
             if (viewModel.Localization != null && viewModel.Localization.Val != null)

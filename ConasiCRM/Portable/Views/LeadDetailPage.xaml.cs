@@ -226,14 +226,26 @@ namespace ConasiCRM.Portable.Views
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleLead.mobilephone.Replace(" ", ""); // thêm sdt ở đây
-            if (phone != string.Empty)
-            {              
+            // string phone = viewModel.singleLead.mobilephone.Replace(" ", ""); // thêm sdt ở đây
+            if (viewModel.singleLead != null && !string.IsNullOrWhiteSpace(viewModel.singleLead.mobilephone))
+            {
+                string phone = viewModel.singleLead.mobilephone.Replace(" ", "");
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
                 if (checkVadate == true)
                 {
-                    SmsMessage sms = new SmsMessage(null, phone);
-                    await Sms.ComposeAsync(sms);                   
+                    try
+                    {
+                        var message = new SmsMessage(null, new[] { phone });
+                        await Sms.ComposeAsync(message);
+                    }
+                    catch (FeatureNotSupportedException ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.sms_khong_duoc_ho_tro_tren_thiet_bi);
+                    }
+                    catch (Exception ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+                    }
                 }
                 else
                 {
@@ -248,17 +260,24 @@ namespace ConasiCRM.Portable.Views
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleLead.mobilephone.Replace(" ",""); // thêm sdt ở đây
-            if (phone != string.Empty)
-            {              
-                var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-                if (checkVadate == true)
+            if (viewModel.singleLead != null && !string.IsNullOrWhiteSpace(viewModel.singleLead.mobilephone))
+            {
+                string phone = viewModel.singleLead.mobilephone.Replace(" ", ""); // thêm sdt ở đây
+                if (phone != string.Empty)
                 {
-                    await Launcher.OpenAsync($"tel:{phone}");                   
+                    var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
+                    if (checkVadate == true)
+                    {
+                        await Launcher.OpenAsync($"tel:{phone}");
+                    }
+                    else
+                    {
+                        ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    }
                 }
                 else
                 {
-                    ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
                 }
             }
             else

@@ -1536,6 +1536,9 @@
   <data name="sdt_sai_dinh_dang_vui_long_kiem_tra_lai" xml:space="preserve">
     <value>Số điện thoại sai định dạng. Vui lòng kiểm tra lại</value>
   </data>
+  <data name="sms_khong_duoc_ho_tro_tren_thiet_bi" xml:space="preserve">
+    <value>SMS không được hỗ trợ trên thiết bị</value>
+  </data>
   <data name="so_can_ho" xml:space="preserve">
     <value>Số căn hộ</value>
   </data>

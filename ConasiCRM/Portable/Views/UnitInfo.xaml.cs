@@ -338,5 +338,16 @@ namespace ConasiCRM.Portable.Views
             var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
             carouseView.ScrollTo(index, position: ScrollToPosition.End);
         }
+        private void CloseContentEvent_Tapped(object sender, EventArgs e)
+        {
+            ContentEvent.IsVisible = false;
+        }
+
+        private async void OpenEvent_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.Event == null)
+                await viewModel.LoadDataEvent();
+            ContentEvent.IsVisible = true;
+        }
     }
 }

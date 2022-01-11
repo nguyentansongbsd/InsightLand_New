@@ -61,7 +61,7 @@
                     <controls:FormLabel Text="{x:Static language:Language.ma_so_thue}" FontSize="15" Margin="0,10,0,0"/>
                     <controls:MainEntry Placeholder="{x:Static language:Language.nhap_ma_so_thue}" Text="{Binding singleAccount.bsd_vatregistrationnumber}" FontSize="15"/>
 
-                    <controls:FormLabel Text="{x:Static language:Language.dia_chi_lien_lac}" FontSize="15" Margin="0,10,0,0"/>
+                    <controls:FormLabelRequired Text="{x:Static language:Language.dia_chi_lien_lac}" Margin="0,10,0,0"/>
                     <Grid>
                         <controls:MainEntry Text="{Binding singleAccount.bsd_address}" Placeholder="{x:Static language:Language.chon_dia_chi_lien_lac}" FontSize="15"/>
                         <StackLayout>
