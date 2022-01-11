@@ -11,6 +11,7 @@ using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using FFImageLoading;

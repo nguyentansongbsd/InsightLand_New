@@ -4,11 +4,7 @@ using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -215,29 +211,31 @@ namespace ConasiCRM.Portable.Views
 
         private void SetUpButtonGroup()
         {
-            if (viewModel.Reservation.statuscode == 100000007 || viewModel.Reservation.statuscode == 100000000)
+            if (viewModel.Reservation.statuscode == 100000000)// show khi statuscode  == 1000000 (Reservation)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.huy_dat_coc, "FontAwesomeSolid", "\uf05e", null, CancelDeposit));
             }
-            if (viewModel.Reservation.statuscode == 3)
+            if (viewModel.Reservation.statuscode == 3)// show khi statuscode == 3(Deposited)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.de_nghi_thanh_ly, "FontAwesomeSolid", "\uf560", null, FULTerminate));
             }
+
             if (viewModel.Reservation.statuscode == 100000007)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.cap_nhat, "FontAwesomeRegular", "\uf044", null, EditQuotes));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.huy_bang_tinh_gia, "FontAwesomeRegular", "\uf273", null, CancelQuotes));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xac_nhan_in, "FontAwesomeSolid", "\uf02f", null, ConfirmSigning));
+                if (viewModel.InstallmentList.Count == 0)
+                {
+                    viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.tao_lich_thanh_toan, "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
+                }
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xoa_lich_thanh_toan, "FontAwesomeRegular", "\uf1c3", null, CancelInstallment));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xac_nhan_in, "FontAwesomeSolid", "\uf02f", null, ConfirmSigning));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.huy_bang_tinh_gia, "FontAwesomeRegular", "\uf273", null, CancelQuotes));
+                if (viewModel.InstallmentList.Count > 0 && viewModel.Reservation.bsd_quotationprinteddate != null)
+                {
+                    viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.ky_bang_tinh_gia, "FontAwesomeRegular", "\uf274", null, SignQuotationClicked));
+                }
             }
-            if (viewModel.Reservation.statuscode == 100000007 && viewModel.InstallmentList.Count == 0)
-            {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.tao_lich_thanh_toan, "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
-            }
-            if (viewModel.Reservation.statuscode == 100000007 && viewModel.InstallmentList.Count > 0)
-            {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.ky_bang_tinh_gia, "FontAwesomeRegular", "\uf274", null, SignQuotationClicked));
-            }
+
             if (viewModel.Reservation.bsd_reservationformstatus == 100000001 && viewModel.Reservation.bsd_reservationprinteddate != null && viewModel.Reservation.bsd_reservationuploadeddate == null && viewModel.Reservation.bsd_rfsigneddate == null)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xac_nhan_tai_pdc, "FontAwesomeRegular", "\uf15c", null, ConfirmReservation));
@@ -246,6 +244,7 @@ namespace ConasiCRM.Portable.Views
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.ky_phieu_dat_coc, "FontAwesomeRegular", "\uf274", null, CompletedReservation));
             }
+
             if (viewModel.ButtonCommandList.Count > 0)
             {
                 floatingButtonGroup.IsVisible = true;
@@ -292,6 +291,7 @@ namespace ConasiCRM.Portable.Views
         {
             if (viewModel.Reservation.quoteid != Guid.Empty)
             {
+                LoadingHelper.Show();
                 if (await viewModel.CancelDeposit())
                 {
                     NeedToRefresh = true;
@@ -348,6 +348,7 @@ namespace ConasiCRM.Portable.Views
             if (isSuccess)
             {
                 NeedToRefresh = true;
+                NeedToRefreshInstallment = true;
                 OnAppearing();
                 ToastMessageHelper.ShortMessage(Language.xac_nhan_in_thanh_cong);
             }
@@ -478,6 +479,7 @@ namespace ConasiCRM.Portable.Views
                     NeedToRefresh = true;
                     OnAppearing();
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
+                    this.Title = Language.dat_coc_title;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage(Language.bang_tinh_gia_da_duoc_ky);
                 }

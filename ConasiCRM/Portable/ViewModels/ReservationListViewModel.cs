@@ -32,7 +32,18 @@ namespace ConasiCRM.Portable.ViewModels
                               <condition attribute='name' operator='like' value='%25{Keyword}%25' />
                             </filter>
                             <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                            
+                            <filter type='or'>
+                              <condition attribute='statuscode' operator='in'>
+                                <value>100000007</value>
+                              </condition>
+                              <filter type='and'>
+                                 <condition attribute='statuscode' operator='in'>
+                                    <value>100000009</value>
+                                    <value>6</value>
+                                  </condition>
+                                  <condition attribute='bsd_quotationsigneddate' operator='null' />
+                              </filter>
+                            </filter>
                         </filter>
                         <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' visible='false' link-type='outer' alias='a'>
                             <attribute name='bsd_name' alias='bsd_project_name' />
