@@ -171,44 +171,36 @@ namespace ConasiCRM.Portable.Views
 
         private void CMNDFront_Tapped(object sender, EventArgs e)
         {
-            if(viewModel.singleContact.bsd_mattruoccmnd_source != null)
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_etag_front_url))
             {
-                photoShow.Show(this,0);
-            }    
-            //if (!string.IsNullOrWhiteSpace(viewModel.frontImage))
-            //{
-            //    photoBrowser = new PhotoBrowser
-            //    {
-            //        Photos = new List<Photo>
-            //    {
-            //        new Photo{
-            //            URL = viewModel.frontImage
-            //        }
-            //    }
-            //    };
-            //    photoBrowser.Show();
-            //}
+                photoBrowser = new PhotoBrowser
+                {
+                    Photos = new List<Photo>
+                {
+                    new Photo{
+                        URL = viewModel.singleContact.bsd_etag_front_url
+                    }
+                }
+                };
+                photoBrowser.Show();
+            }
         }
 
         private void CMNDBehind_Tapped(object sender, EventArgs e)
         {
-            if (viewModel.singleContact.bsd_matsaucmnd_source != null)
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_etag_behind_url))
             {
-                photoShow.Show(this, 1);
+                photoBrowser = new PhotoBrowser
+                {
+                    Photos = new List<Photo>
+                {
+                    new Photo{
+                        URL = viewModel.singleContact.bsd_etag_behind_url
+                    }
+                }
+                };
+                photoBrowser.Show();
             }
-            //if (!string.IsNullOrWhiteSpace(viewModel.behindImage))
-            //{
-            //    photoBrowser = new PhotoBrowser
-            //    {
-            //        Photos = new List<Photo>
-            //    {
-            //        new Photo{
-            //            URL = viewModel.behindImage
-            //        }
-            //    }
-            //    };
-            //    photoBrowser.Show();
-            //}
         }
 
         #region Tab giao dich
@@ -356,47 +348,63 @@ namespace ConasiCRM.Portable.Views
         #endregion
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
-        {           
-            string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
-            if (phone != string.Empty)
+        {
+            //string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                LoadingHelper.Show();
+                string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
                 if (checkVadate == true)
                 {
-                    SmsMessage sms = new SmsMessage(null, phone);
-                    await Sms.ComposeAsync(sms);
-                    LoadingHelper.Hide();
+                    try
+                    {
+                        var message = new SmsMessage(null, new[] { phone });
+                        await Sms.ComposeAsync(message);
+                    }
+                    catch (FeatureNotSupportedException ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.sms_khong_duoc_ho_tro_tren_thiet_bi);
+                    }
+                    catch (Exception ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+                    }
                 }
                 else
                 {
-                    LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
                 }
             }
             else
             {
-                LoadingHelper.Hide();
                 ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
             }
         }
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
-        {          
-            string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
-            if (phone != string.Empty)
+        {
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                LoadingHelper.Show();
-                var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-                if (checkVadate == true)
+                string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
+                if (phone != string.Empty)
                 {
-                   await Launcher.OpenAsync($"tel:{phone}");
-                    LoadingHelper.Hide();
+                    LoadingHelper.Show();
+                    var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
+                    if (checkVadate == true)
+                    {
+                        await Launcher.OpenAsync($"tel:{phone}");
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    }
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
                 }
             }
             else

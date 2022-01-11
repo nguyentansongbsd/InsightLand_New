@@ -271,7 +271,7 @@
     <value>Update Information</value>
   </data>
   <data name="ca_nhan" xml:space="preserve">
-    <value>Contact</value>
+    <value>Contacts</value>
   </data>
   <data name="cham_soc_khach_hang_title" xml:space="preserve">
     <value>Customer Care</value>
@@ -685,7 +685,7 @@
     <value>Handover condition</value>
   </data>
   <data name="doanh_nghiep" xml:space="preserve">
-    <value>Account</value>
+    <value>Accounts</value>
   </data>
   <data name="doanh_thu_moi_nam" xml:space="preserve">
     <value>Annual revenue</value>
@@ -922,7 +922,7 @@
     <value>Customer</value>
   </data>
   <data name="khach_hang_ca_nhan" xml:space="preserve">
-    <value>Contacts</value>
+    <value>Contact</value>
   </data>
   <data name="khach_hang_chua_chon_quoc_tich" xml:space="preserve">
     <value />
@@ -937,7 +937,7 @@
     <value />
   </data>
   <data name="khach_hang_doanh_nghiep" xml:space="preserve">
-    <value>Accounts</value>
+    <value>Account</value>
   </data>
   <data name="khach_hang_khong_co_sdt_vui_long_kiem_tra_lai" xml:space="preserve">
     <value />
@@ -955,7 +955,7 @@
     <value>Customer must be older than 18 years old</value>
   </data>
   <data name="khach_hang_tiem_nang" xml:space="preserve">
-    <value>Leads</value>
+    <value>Lead</value>
   </data>
   <data name="khach_hang_tiem_nang_home" xml:space="preserve">
     <value>LEAD</value>
@@ -1536,6 +1536,9 @@
   <data name="sdt_sai_dinh_dang_vui_long_kiem_tra_lai" xml:space="preserve">
     <value />
   </data>
+  <data name="sms_khong_duoc_ho_tro_tren_thiet_bi" xml:space="preserve">
+    <value>SMS is not supported on this device</value>
+  </data>
   <data name="so_can_ho" xml:space="preserve">
     <value>Units number</value>
   </data>
@@ -1888,7 +1891,7 @@
     <value />
   </data>
   <data name="tiem_nang" xml:space="preserve">
-    <value>Lead</value>
+    <value>Leads</value>
   </data>
   <data name="tien_dat_coc" xml:space="preserve">
     <value>Deposit amount</value>

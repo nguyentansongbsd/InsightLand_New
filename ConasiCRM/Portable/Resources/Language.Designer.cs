@@ -4390,6 +4390,15 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SMS không được hỗ trợ trên thiết bị.
+        /// </summary>
+        internal static string sms_khong_duoc_ho_tro_tren_thiet_bi {
+            get {
+                return ResourceManager.GetString("sms_khong_duoc_ho_tro_tren_thiet_bi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số căn hộ.
         /// </summary>
         internal static string so_can_ho {
