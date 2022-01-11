@@ -7,7 +7,6 @@ namespace ConasiCRM.Portable.Models
 {
     public class FloatButtonItem : BaseViewModel
     {
-
         private string _text;
         public string Text
         {
