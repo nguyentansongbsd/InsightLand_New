@@ -45,9 +45,9 @@ namespace ConasiCRM.Portable.Views
 
         protected async override void OnAppearing()
         {
-            if (NeedToRefreshLeadDetail==true)
+            if (NeedToRefreshLeadDetail == true)
             {
-                await viewModel.LoadOneLead(Id.ToString()) ;
+                await viewModel.LoadOneLead(Id.ToString());
                 if (viewModel.singleLead.new_gender != null) { await viewModel.loadOneGender(viewModel.singleLead.new_gender); }
                 if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
                 NeedToRefreshLeadDetail = false;
@@ -60,8 +60,18 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleLead.statuscode == "3") // qualified
             {
                 floatingButtonGroup.IsVisible = false;
+                if (viewModel.singleLead.account_id != Guid.Empty)
+                {
+                    viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.di_den_kh_doanh_nghiep, "FontAwesomeRegular", "\uf1ad", null, GoToAccount));
+                    floatingButtonGroup.IsVisible = true;
+                }
+                if (viewModel.singleLead.contact_id != Guid.Empty)
+                {
+                    viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.di_den_kh_ca_nhan, "FontAwesomeRegular", "\uf2c1", null, GoToContact));
+                    floatingButtonGroup.IsVisible = true;
+                }
             }
-            else if (viewModel.singleLead.statuscode == "4" || viewModel.singleLead.statuscode == "5" || viewModel.singleLead.statuscode == "6"|| viewModel.singleLead.statuscode == "7")
+            else if (viewModel.singleLead.statuscode == "4" || viewModel.singleLead.statuscode == "5" || viewModel.singleLead.statuscode == "6" || viewModel.singleLead.statuscode == "7")
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.kich_hoat_lai_kh, "FontAwesomeSolid", "\uf1b8", null, ReactivateLead));
             }
@@ -90,7 +100,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
                 }
             };
-            
         }
 
         private async void LeadQualify(object sender, EventArgs e)
@@ -104,7 +113,7 @@ namespace ConasiCRM.Portable.Views
                 if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                 if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                 await viewModel.CreateContact();
-                if(!string.IsNullOrWhiteSpace(viewModel.singleLead.companyname))
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead.companyname))
                 {
                     if (viewModel.IsSuccessContact == true && viewModel.IsSuccessAccount == true)
                     {
@@ -162,7 +171,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             string[] options = new string[] { Language.mat_khach_hang, Language.khong_lien_he_duoc, Language.khong_quan_tam, Language.da_huy };
-            
+
             string aws = await DisplayActionSheet(Language.tuy_chon, Language.huy, null, options);
 
             if (aws == Language.mat_khach_hang)
@@ -199,7 +208,7 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage(Language.that_bai);
                 }
             }
-            
+
             LoadingHelper.Hide();
         }
 
@@ -292,7 +301,7 @@ namespace ConasiCRM.Portable.Views
             {
                 await viewModel.LoadOneLead(leadid);
                 if (viewModel.singleLead.new_gender != null) { await viewModel.loadOneGender(viewModel.singleLead.new_gender); }
-                if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }                
+                if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
             }
         }
 
@@ -326,5 +335,56 @@ namespace ConasiCRM.Portable.Views
         }
 
         #endregion
+
+        private void GoToContact(object sender, EventArgs e)
+        {
+            if(viewModel.singleLead != null && viewModel.singleLead.contact_id != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                ContactDetailPage newPage = new ContactDetailPage(viewModel.singleLead.contact_id);
+                newPage.OnCompleted = async (IsSuccess) =>
+                {
+                    if (IsSuccess)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+                    }
+                };
+            }   
+            else
+            {
+                ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+            }    
+        }
+        private void GoToAccount(object sender, EventArgs e)
+        {
+            if (viewModel.singleLead != null && viewModel.singleLead.account_id != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                AccountDetailPage newPage = new AccountDetailPage(viewModel.singleLead.account_id);
+                newPage.OnCompleted = async (IsSuccess) =>
+                {
+                    if (IsSuccess)
+                    {
+                        await Navigation.PushAsync(newPage);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+                    }
+                };
+            }
+            else
+            {
+                ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+            }
+        }
     }
 }

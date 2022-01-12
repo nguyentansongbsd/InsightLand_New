@@ -684,6 +684,12 @@
   <data name="dieu_kien_ban_giao" xml:space="preserve">
     <value>Điều kiện bàn giao</value>
   </data>
+  <data name="di_den_kh_ca_nhan" xml:space="preserve">
+    <value>Đi đến KH Cá nhân</value>
+  </data>
+  <data name="di_den_kh_doanh_nghiep" xml:space="preserve">
+    <value>Đi đến KH Doanh nghiệp</value>
+  </data>
   <data name="doanh_nghiep" xml:space="preserve">
     <value>Doanh nghiệp</value>
   </data>
