@@ -2214,4 +2214,7 @@
   <data name="_tong_tien_thue_vat" xml:space="preserve">
     <value>(+) Tổng tiền thuế VAT</value>
   </data>
+  <data name="ma_hop_dong" xml:space="preserve">
+    <value>Contract number</value>
+  </data>
 </root>
