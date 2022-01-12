@@ -102,7 +102,7 @@ namespace ConasiCRM.Portable.Views
             if (NeedToRefreshActivity == true)
             {
                 LoadingHelper.Show();
-                viewModel.PageCase++;
+                viewModel.PageCase = 1;
                 viewModel.list_thongtincase.Clear();
                 await viewModel.LoadCaseForAccountForm();
                 ActivityPopup.Refresh();

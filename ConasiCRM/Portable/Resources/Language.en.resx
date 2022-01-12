@@ -684,6 +684,12 @@
   <data name="dieu_kien_ban_giao" xml:space="preserve">
     <value>Handover condition</value>
   </data>
+  <data name="di_den_kh_ca_nhan" xml:space="preserve">
+    <value>Go to Contact</value>
+  </data>
+  <data name="di_den_kh_doanh_nghiep" xml:space="preserve">
+    <value>Go to Account</value>
+  </data>
   <data name="doanh_nghiep" xml:space="preserve">
     <value>Accounts</value>
   </data>

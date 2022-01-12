@@ -29,7 +29,7 @@ namespace ConasiCRM.Portable.ViewModels
         public OptionSet singleIndustrycode { get => _singleIndustrycode; set { _singleIndustrycode = value; OnPropertyChanged(nameof(singleIndustrycode)); } }
 
         private PhongThuyModel _PhongThuy;
-        public PhongThuyModel PhongThuy { get => _PhongThuy; set { _PhongThuy = value; OnPropertyChanged(nameof(PhongThuy)); } }                
+        public PhongThuyModel PhongThuy { get => _PhongThuy; set { _PhongThuy = value; OnPropertyChanged(nameof(PhongThuy)); } }
         public ObservableCollection<OptionSet> list_gender_optionset { get; set; }
         public ObservableCollection<OptionSet> list_industrycode_optionset { get; set; }
         public ObservableCollection<HuongPhongThuy> list_HuongTot { set; get; }
@@ -52,17 +52,17 @@ namespace ConasiCRM.Portable.ViewModels
         public LeadDetailPageViewModel()
         {
             singleGender = new OptionSet();
-            singleIndustrycode = new OptionSet();                      
+            singleIndustrycode = new OptionSet();
 
             list_gender_optionset = new ObservableCollection<OptionSet>();
-            list_industrycode_optionset = new ObservableCollection<OptionSet>();           
+            list_industrycode_optionset = new ObservableCollection<OptionSet>();
 
             list_HuongTot = new ObservableCollection<HuongPhongThuy>();
             list_HuongXau = new ObservableCollection<HuongPhongThuy>();
 
             this.loadGender();
             this.loadIndustrycode();
-        }      
+        }
 
         public async Task LoadOneLead(String leadid)
         {
@@ -110,13 +110,19 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='and'>
                                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
                                     </filter>
+                                    <link-entity name='account' from='originatingleadid' to='leadid' link-type='outer'>
+                                       <attribute name='accountid' alias='account_id'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='originatingleadid' to='leadid' link-type='outer'>
+                                       <attribute name='contactid' alias='contact_id'/>
+                                    </link-entity>
                                 </entity>
                             </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LeadFormModel>>("leads", fetch);
-            if(result == null)
+            if (result == null)
             {
                 return;
-            }    
+            }
             var tmp = result.value.FirstOrDefault();
             this.singleLead = tmp;
             this.singleGender = list_gender_optionset.SingleOrDefault(x => x.Val == this.singleLead.new_gender);
@@ -127,7 +133,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> Qualify(Guid id)
         {
-            string path = "/leads(" + id + ")";            
+            string path = "/leads(" + id + ")";
             var content = await this.getContent();
             CrmApiResponse result = await CrmHelper.PatchData(path, content);
 
@@ -167,7 +173,7 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task CreateContact()
         {
             string path = "/contacts";
-            singleLead.contactid = Guid.NewGuid();
+            singleLead.contact_id = Guid.NewGuid();
             var content = await this.getContentContact();
             CrmApiResponse result = await CrmHelper.PostData(path, content);
             if (result.IsSuccess)
@@ -178,7 +184,7 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 IsSuccessContact = false;
-            }           
+            }
         }
         public async Task CreateAccount()
         {
@@ -195,7 +201,7 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     IsSuccessAccount = false;
                 }
-            }           
+            }
         }
 
         public void loadGender()
@@ -255,7 +261,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.singleIndustrycode = list_industrycode_optionset.FirstOrDefault(x => x.Val == id); ;
             return singleIndustrycode;
         }
-              
+
         public void LoadPhongThuy()
         {
             PhongThuy = new PhongThuyModel();
@@ -323,21 +329,22 @@ namespace ConasiCRM.Portable.ViewModels
                 address.Add(singleLead.address1_country);
             }
 
-            Address = string.Join(", ", address);       
+            Address = string.Join(", ", address);
         }
 
         private async Task<object> getContentContact()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
-            data["contactid"] = singleLead.contactid;
+            data["contactid"] = singleLead.contact_id;
             data["lastname"] = singleLead.lastname;
             data["bsd_fullname"] = singleLead.lastname;
             data["emailaddress1"] = singleLead.emailaddress1;
-            data["mobilephone"] = singleLead.mobilephone;          
+            data["mobilephone"] = singleLead.mobilephone;
             data["bsd_jobtitlevn"] = singleLead.jobtitle;
             data["telephone1"] = singleLead.telephone1;
-             data["birthdate"] = singleLead.new_birthday.HasValue ? (DateTime.Parse(singleLead.new_birthday.ToString()).ToUniversalTime()).ToString("yyyy-MM-dd") : null;
+            data["birthdate"] = singleLead.new_birthday.HasValue ? (DateTime.Parse(singleLead.new_birthday.ToString()).ToUniversalTime()).ToString("yyyy-MM-dd") : null;
             data["gendercode"] = singleLead.new_gender;
+            data["originatingleadid@odata.bind"] = "/leads(" + singleLead.leadid + ")";
 
             if (UserLogged.Id != null)
             {
@@ -356,8 +363,8 @@ namespace ConasiCRM.Portable.ViewModels
             IDictionary<string, object> data = new Dictionary<string, object>();
             Guid accountid = Guid.NewGuid();
             data["accountid"] = accountid;
-            data["bsd_name"] = singleLead.companyname;        
-            data["websiteurl"] = singleLead.websiteurl;          
+            data["bsd_name"] = singleLead.companyname;
+            data["websiteurl"] = singleLead.websiteurl;
             if (!string.IsNullOrWhiteSpace(singleLead.numberofemployees))
             {
                 data["numberofemployees"] = int.Parse(singleLead.numberofemployees);
@@ -366,13 +373,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["numberofemployees"] = null;
             }
-            if (singleLead.contactid == Guid.Empty)
+            if (singleLead.contact_id == Guid.Empty)
             {
                 await DeletLookup("accounts", "primarycontactid", accountid);
             }
             else
             {
-                data["primarycontactid@odata.bind"] = "/contacts(" + singleLead.contactid + ")"; /////Lookup Field
+                data["primarycontactid@odata.bind"] = "/contacts(" + singleLead.contact_id + ")"; /////Lookup Field
             }
             data["lastusedincampaign"] = singleLead.lastusedincampaign.HasValue ? (DateTime.Parse(singleLead.lastusedincampaign.ToString()).ToLocalTime()).ToString("yyyy-MM-dd\"T\"HH:mm:ss\"Z\"") : null;
             data["industrycode"] = singleLead.industrycode;
@@ -387,7 +394,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_postalcode"] = singleLead.address1_postalcode;
             if (singleLead._transactioncurrencyid_value == null)
             {
-                await DeletLookup("accounts","transactioncurrencyid", accountid);
+                await DeletLookup("accounts", "transactioncurrencyid", accountid);
             }
             else
             {
@@ -418,6 +425,8 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["bsd_district@odata.bind"] = "/new_districts(" + District.Id + ")"; /////Lookup Field
             }
+            data["originatingleadid@odata.bind"] = "/leads(" + singleLead.leadid + ")";
+
             if (UserLogged.Id != Guid.Empty)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
@@ -438,7 +447,7 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> getContent()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
-            data["statecode"] = "1";            
+            data["statecode"] = "1";
             return data;
         }
 
@@ -459,7 +468,7 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 Country = result.value.FirstOrDefault();
                 await LoadProvinceByName();
-            }        
+            }
         }
 
         public async Task LoadProvinceByName()
@@ -480,10 +489,10 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 this.Province = result.value.FirstOrDefault();
                 await LoadDistrictByName();
-            }          
+            }
         }
 
-       
+
         public async Task LoadDistrictByName()
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -502,7 +511,7 @@ namespace ConasiCRM.Portable.ViewModels
             if (result != null && result.value.Count > 0)
             {
                 this.District = result.value.FirstOrDefault();
-            }        
+            }
         }
     }
 }
