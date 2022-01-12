@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls" 
              xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
-             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
              ios:Page.UseSafeArea="true"
              x:Name="this">
     <ContentPage.Resources>
@@ -270,6 +270,58 @@
                                     </Grid>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
+                            <telerikPrimitives:RadExpander x:Name="RadExpanderCase" IsExpanded="False" BorderColor="Transparent" IsVisible="false">
+                                <telerikPrimitives:RadExpander.Header>
+                                    <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
+                                        <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.cham_soc_khach_hang_title}"/>
+                                    </telerikPrimitives:ExpanderHeader>
+                                </telerikPrimitives:RadExpander.Header>
+                                <telerikPrimitives:RadExpander.Content>
+                                    <StackLayout>
+                                        <StackLayout  BindableLayout.ItemsSource="{Binding list_case}" BindableLayout.EmptyView="{x:Static language:Language.khong_co_du_lieu}" BackgroundColor="#eeeeee" Spacing="1">
+                                            <BindableLayout.EmptyViewTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="{x:Static language:Language.khong_co_du_lieu}" TextColor="Black" HorizontalTextAlignment="Center" BackgroundColor="White" Padding="0,15"/>
+                                                </DataTemplate>
+                                            </BindableLayout.EmptyViewTemplate>
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackLayout BackgroundColor ="White" Padding="15,10" Margin="0,1" Spacing="10">
+                                                        <StackLayout.GestureRecognizers>
+                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="CaseItem_Tapped" CommandParameter="{Binding .}"/>
+                                                        </StackLayout.GestureRecognizers>
+                                                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" Grid.Row="0" Grid.Column="0">
+                                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statecode_color}" VerticalOptions="Start">
+                                                                <Label Grid.Column="0" Text="{Binding statecode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                            </telerikPrimitives:RadBorder>
+                                                            <Label Grid.Column="1" Text="{Binding subject}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                                        </Grid>
+
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}" FontSize="15" TextColor="#444444"/>
+                                                            <Label Grid.Column="1" Text="{Binding activitytypecode_format}" TextColor="#444444" FontSize="15"/>
+                                                        </Grid>
+
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" FontSize="15" TextColor="#444444"/>
+                                                            <Label Grid.Column="1" Text="{Binding customer}" TextColor="#444444" FontSize="15"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Text="{Binding Source={x:Static language:Language.thoi_gian_bat_dau},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding scheduledstart_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                        </Grid>
+                                                        <Grid ColumnDefinitions="Auto,*">
+                                                            <Label Text="{Binding Source={x:Static language:Language.thoi_gian_ket_thuc},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                            <Label Text="{Binding scheduledend_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                        </Grid>
+                                                    </StackLayout>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                        <Button Clicked="ShowMoreCase_Clicked" IsVisible="{Binding ShowMoreCase}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="{x:Static language:Language.xem_them}" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                                    </StackLayout>
+                                </telerikPrimitives:RadExpander.Content>
+                            </telerikPrimitives:RadExpander>
                         </StackLayout>
                         <!-- Tab Phong Thuy-->
                         <StackLayout x:Name="TabPhongThuy" IsVisible="false" Margin="0,10,0,0">
@@ -339,6 +391,7 @@
                 </controls:PinchToZoomContainer>
                 <Button Clicked="Close_LookUpImagePhongThuy_Clicked" FontFamily="FontAwesomeSolid" TextColor="#444444" Text="&#xf00d;" FontSize="Large" WidthRequest="20" HeightRequest="20" VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="Transparent" Margin="0,10,10,0"/>
             </Grid>
+            <views:ActivityPopupContentView x:Name="ActivityPopup" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
