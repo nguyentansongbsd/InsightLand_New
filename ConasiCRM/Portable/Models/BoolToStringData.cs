@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,11 @@ namespace ConasiCRM.Portable.Models
         {
             if(_bool)
             {
-                return "Có";
+                return Language.string_co_sts;
             }   
             else
             {
-                return "Không";
+                return Language.string_khong_sts;
             }    
         }
     }
