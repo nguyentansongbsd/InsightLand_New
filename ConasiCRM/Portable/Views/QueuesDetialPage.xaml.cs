@@ -17,6 +17,7 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshBTG = null;
+        public static bool? NeedToRefreshDC = null;
         public QueuesDetialPageViewModel viewModel;
         public QueuesDetialPage(Guid queueId)
         {
@@ -24,14 +25,14 @@ namespace ConasiCRM.Portable.Views
             this.BindingContext = viewModel = new QueuesDetialPageViewModel();
             viewModel.QueueId = queueId;
             NeedToRefreshBTG = false;
+            NeedToRefreshDC = false;
             Init();
         }
 
         public async void Init()
         {
             await viewModel.LoadQueue();
-            SetButtons();
-
+            
             VisualStateManager.GoToState(radBorderThongTin, "Active");
             VisualStateManager.GoToState(radBorderGiaoDich, "InActive");
             VisualStateManager.GoToState(lbThongTin, "Active");
@@ -39,6 +40,8 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.Queue != null)
             {
+                viewModel.ShowBtnBangTinhGia = await viewModel.CheckReserve();// co dat co thi an nut btg
+                SetButtons();
                 OnCompleted?.Invoke(true);
             }
             else
@@ -57,6 +60,17 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageBangTinhGia = 1;
                 await viewModel.LoadDanhSachBangTinhGia();
                 NeedToRefreshBTG = false;
+                LoadingHelper.Hide();
+            }
+            if (viewModel.DatCocList != null && NeedToRefreshDC == true)
+            {
+                LoadingHelper.Show();
+                viewModel.DatCocList.Clear();
+                viewModel.PageDatCoc = 1;
+                await viewModel.LoadDanhSachDatCoc();
+                viewModel.ShowBtnBangTinhGia = await viewModel.CheckReserve();
+                SetButtons();
+                NeedToRefreshDC = false;
                 LoadingHelper.Hide();
             }
         }
@@ -145,10 +159,11 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             try
             {
-                if (!string.IsNullOrWhiteSpace(viewModel.NumPhone))
+                string phone = viewModel.NumPhone.Replace(" ", "");
+                if (!string.IsNullOrWhiteSpace(phone))
                 {
                     LoadingHelper.Hide();
-                    SmsMessage sms = new SmsMessage(null, viewModel.NumPhone);
+                    SmsMessage sms = new SmsMessage(null, phone);
                     await Sms.ComposeAsync(sms);
                 }
                 else
@@ -169,9 +184,10 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             try
             {
-                if (!string.IsNullOrWhiteSpace(viewModel.NumPhone))
+                string phone = viewModel.NumPhone.Replace(" ", "");
+                if (!string.IsNullOrWhiteSpace(phone))
                 {
-                    await Launcher.OpenAsync($"tel:{viewModel.NumPhone}");
+                    await Launcher.OpenAsync($"tel:{phone}");
                 }
                 else
                 {
@@ -299,11 +315,31 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
+        private void ItemQuatation_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId) { Title = Language.bang_tinh_gia_title };
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
+                }
+            };
+        }
+
         private void ItemReservation_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId) { Title = Language.dat_coc_title};
             bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
             {
                 if (isSuccess)
