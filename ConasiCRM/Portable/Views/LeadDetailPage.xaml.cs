@@ -16,6 +16,7 @@ namespace ConasiCRM.Portable.Views
     public partial class LeadDetailPage : ContentPage
     {
         public static bool? NeedToRefreshLeadDetail = null;
+        public static bool? NeedToRefreshActivity = null;
         public Action<bool> OnCompleted;
         private LeadDetailPageViewModel viewModel;
         private Guid Id;
@@ -26,6 +27,7 @@ namespace ConasiCRM.Portable.Views
             this.Id = id;
             this.BindingContext = viewModel = new LeadDetailPageViewModel();
             LoadingHelper.Show();
+            NeedToRefreshActivity = false;
             NeedToRefreshLeadDetail = false;
             Init();
         }
@@ -33,7 +35,6 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await LoadDataThongTin(Id.ToString());
-
             SetButtonFloatingButton();
 
             if (viewModel.singleLead.leadid != Guid.Empty)
@@ -45,6 +46,7 @@ namespace ConasiCRM.Portable.Views
 
         protected async override void OnAppearing()
         {
+            base.OnAppearing();
             if (NeedToRefreshLeadDetail == true)
             {
                 await viewModel.LoadOneLead(Id.ToString());
@@ -52,9 +54,17 @@ namespace ConasiCRM.Portable.Views
                 if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
                 NeedToRefreshLeadDetail = false;
             }
-            base.OnAppearing();
+            if (NeedToRefreshActivity == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageCase = 1;
+                viewModel.list_case.Clear();
+                await viewModel.LoadCase(Id.ToString());
+                ActivityPopup.Refresh();
+                NeedToRefreshActivity = false;
+                LoadingHelper.Hide();
+            }
         }
-
         private void SetButtonFloatingButton()
         {
             if (viewModel.singleLead.statuscode == "3") // qualified
@@ -77,12 +87,15 @@ namespace ConasiCRM.Portable.Views
             }
             else
             {
+                RadExpanderCase.IsVisible = true;
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_hop, "FontAwesomeRegular", "\uf274", null, NewMeet));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_goi, "FontAwesomeSolid", "\uf095", null, NewPhoneCall));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cong_viec, "FontAwesomeSolid", "\uf073", null, NewTask));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.chuyen_doi_khach_hang, "FontAwesomeSolid", "\uf542", null, LeadQualify));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.khong_chuyen_doi, "FontAwesomeSolid", "\uf05e", null, LeadDisQualify));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.chinh_sua, "FontAwesomeRegular", "\uf044", null, Update));
             }
         }
-
         private async void Update(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -101,7 +114,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private async void LeadQualify(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -166,7 +178,6 @@ namespace ConasiCRM.Portable.Views
             }
 
         }
-
         private async void LeadDisQualify(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -211,7 +222,6 @@ namespace ConasiCRM.Portable.Views
 
             LoadingHelper.Hide();
         }
-
         private async void ReactivateLead(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -232,7 +242,6 @@ namespace ConasiCRM.Portable.Views
             }
             LoadingHelper.Hide();
         }
-
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
             // string phone = viewModel.singleLead.mobilephone.Replace(" ", ""); // thêm sdt ở đây
@@ -266,7 +275,6 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
             }
         }
-
         private async void GoiDien_Tapped(object sender, EventArgs e)
         {
             if (viewModel.singleLead != null && !string.IsNullOrWhiteSpace(viewModel.singleLead.mobilephone))
@@ -300,11 +308,11 @@ namespace ConasiCRM.Portable.Views
             if (leadid != null && viewModel.singleLead == null)
             {
                 await viewModel.LoadOneLead(leadid);
+                await viewModel.LoadCase(leadid);
                 if (viewModel.singleLead.new_gender != null) { await viewModel.loadOneGender(viewModel.singleLead.new_gender); }
                 if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
             }
         }
-
         #region TabPhongThuy
         private void LoadDataPhongThuy()
         {
@@ -386,5 +394,50 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
             }
         }
+
+        #region Chăm sóc khách hàng
+        private async void ShowMoreCase_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageCase++;
+            await viewModel.LoadCase(Id.ToString());
+            LoadingHelper.Hide();
+        }
+        private void CaseItem_Tapped(object sender, EventArgs e)
+        {
+            var item = (HoatDongListModel)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item != null && item.activityid != Guid.Empty)
+            {
+                ActivityPopup.ShowActivityPopup(item.activityid, item.activitytypecode);
+            }
+        }
+        private async void NewMeet(object sender, EventArgs e)
+        {
+            if (viewModel.singleLead != null && viewModel.singleLead.leadid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new MeetingForm(viewModel.singleLead.leadid, viewModel.singleLead.lastname, viewModel.CodeLead));
+                LoadingHelper.Hide();
+            }
+        }
+        private async void NewPhoneCall(object sender, EventArgs e)
+        {
+            if (viewModel.singleLead != null && viewModel.singleLead.leadid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new PhoneCallForm(viewModel.singleLead.leadid, viewModel.singleLead.lastname, viewModel.CodeLead));
+                LoadingHelper.Hide();
+            }
+        }
+        private async void NewTask(object sender, EventArgs e)
+        {
+            if (viewModel.singleLead != null && viewModel.singleLead.leadid != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new TaskForm(viewModel.singleLead.leadid, viewModel.singleLead.lastname, viewModel.CodeLead));
+                LoadingHelper.Hide();
+            }
+        }
+        #endregion
     }
 }

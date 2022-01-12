@@ -554,7 +554,6 @@ namespace ConasiCRM.Portable.Views
                 ListMandatory.IsVisible = true;
             }
         }
-
         private async void NewMeet(object sender, EventArgs e)
         {
             if (viewModel.singleAccount != null)
@@ -564,7 +563,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
-
         private async void NewPhoneCall(object sender, EventArgs e)
         {
             if (viewModel.singleAccount != null)
@@ -574,7 +572,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
-
         private async void NewTask(object sender, EventArgs e)
         {
             if (viewModel.singleAccount != null)

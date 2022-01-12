@@ -163,6 +163,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
+                    if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage(Language.tao_cong_viec_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -185,6 +186,7 @@ namespace ConasiCRM.Portable.Views
                     if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
+                    if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage(Language.cap_nhat_cong_viec_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();

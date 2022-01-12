@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,8 +11,8 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("5", "Problem Solved"),
-                new OptionSet("1000", "Information Provided"),
+                new OptionSet("5", Language.case_problemsolved_sts),
+                new OptionSet("1000", Language.case_informationprovided_sts),
             };
         }
     }

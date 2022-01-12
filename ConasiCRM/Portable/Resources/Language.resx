@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="account_nuoc_ngoai_sts" xml:space="preserve">
+    <value>Nước ngoài</value>
+  </data>
+  <data name="account_trong_nuoc_sts" xml:space="preserve">
+    <value>Trong nước</value>
+  </data>
   <data name="bang_gia_goc_ap_dung" xml:space="preserve">
     <value>Bảng giá gốc (Áp dụng)</value>
   </data>
@@ -269,6 +275,21 @@
   </data>
   <data name="cap_nhat_thong_tin_title" xml:space="preserve">
     <value>Cập Nhật Thông Tin</value>
+  </data>
+  <data name="case_gio_sts" xml:space="preserve">
+    <value>giờ</value>
+  </data>
+  <data name="case_informationprovided_sts" xml:space="preserve">
+    <value>Cung cấp thông tin</value>
+  </data>
+  <data name="case_ngay_sts" xml:space="preserve">
+    <value>ngày</value>
+  </data>
+  <data name="case_phut_sts" xml:space="preserve">
+    <value>phút</value>
+  </data>
+  <data name="case_problemsolved_sts" xml:space="preserve">
+    <value>Vấn đề đã được giải quyết</value>
   </data>
   <data name="ca_nhan" xml:space="preserve">
     <value>Cá nhân</value>
@@ -1381,7 +1402,7 @@
     <value>Nhập nội dung</value>
   </data>
   <data name="nhap_phuong_an" xml:space="preserve">
-    <value>Nhập phướng án</value>
+    <value>Nhập phương án</value>
   </data>
   <data name="nhap_sdt" xml:space="preserve">
     <value>Nhập số điện thoại</value>
@@ -1577,6 +1598,12 @@
   </data>
   <data name="so_the_can_cuoc" xml:space="preserve">
     <value>Số thẻ căn cước</value>
+  </data>
+  <data name="string_co_sts" xml:space="preserve">
+    <value>Có</value>
+  </data>
+  <data name="string_khong_sts" xml:space="preserve">
+    <value>Không</value>
   </data>
   <data name="su_kien" xml:space="preserve">
     <value>Sự kiện</value>

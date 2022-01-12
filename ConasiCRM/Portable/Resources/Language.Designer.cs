@@ -116,6 +116,27 @@ namespace ConasiCRM.Portable.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Nước ngoài.
+        /// </summary>
+        internal static string account_nuoc_ngoai_sts {
+            get {
+                return ResourceManager.GetString("account_nuoc_ngoai_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trong nước.
+        /// </summary>
+        internal static string account_trong_nuoc_sts {
+            get {
+                return ResourceManager.GetString("account_trong_nuoc_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bạn có muốn hủy giữ chỗ này không ?.
+        /// </summary>
         internal static string ban_co_muon_huy_giu_cho_nay_khong {
             get {
                 return ResourceManager.GetString("ban_co_muon_huy_giu_cho_nay_khong", resourceCulture);
@@ -455,6 +476,54 @@ namespace ConasiCRM.Portable.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to giờ.
+        /// </summary>
+        internal static string case_gio_sts {
+            get {
+                return ResourceManager.GetString("case_gio_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cung cấp thông tin.
+        /// </summary>
+        internal static string case_informationprovided_sts {
+            get {
+                return ResourceManager.GetString("case_informationprovided_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ngày.
+        /// </summary>
+        internal static string case_ngay_sts {
+            get {
+                return ResourceManager.GetString("case_ngay_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to phút.
+        /// </summary>
+        internal static string case_phut_sts {
+            get {
+                return ResourceManager.GetString("case_phut_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vấn đề đã được giải quyết.
+        /// </summary>
+        internal static string case_problemsolved_sts {
+            get {
+                return ResourceManager.GetString("case_problemsolved_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chăm Sóc Khách Hàng.
+        /// </summary>
         internal static string ca_nhan {
             get {
                 return ResourceManager.GetString("ca_nhan", resourceCulture);
@@ -2684,6 +2753,9 @@ namespace ConasiCRM.Portable.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Nhập phương án.
+        /// </summary>
         internal static string nhap_phuong_an {
             get {
                 return ResourceManager.GetString("nhap_phuong_an", resourceCulture);
@@ -3080,6 +3152,27 @@ namespace ConasiCRM.Portable.Resources {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Có.
+        /// </summary>
+        internal static string string_co_sts {
+            get {
+                return ResourceManager.GetString("string_co_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không.
+        /// </summary>
+        internal static string string_khong_sts {
+            get {
+                return ResourceManager.GetString("string_khong_sts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sự kiện.
+        /// </summary>
         internal static string su_kien {
             get {
                 return ResourceManager.GetString("su_kien", resourceCulture);
