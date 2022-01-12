@@ -250,9 +250,7 @@ namespace ConasiCRM.Portable.Views
                 btnGiuCho.IsVisible = false;
                 viewModel.IsShowBtnBangTinhGia = false;
             }
-
             SetButton();
-            
             contentUnitInfor.IsVisible = true;
             LoadingHelper.Hide();
         }
