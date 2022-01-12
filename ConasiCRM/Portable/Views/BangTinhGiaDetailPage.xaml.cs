@@ -296,8 +296,10 @@ namespace ConasiCRM.Portable.Views
                 {
                     NeedToRefresh = true;
                     OnAppearing();
+                    if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     if (DatCocList.NeedToRefresh.HasValue) DatCocList.NeedToRefresh = true;
+                    if (QueuesDetialPage.NeedToRefreshDC.HasValue) QueuesDetialPage.NeedToRefreshDC = true;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage(Language.da_huy_dat_coc);
                 }
@@ -349,6 +351,7 @@ namespace ConasiCRM.Portable.Views
             {
                 NeedToRefresh = true;
                 NeedToRefreshInstallment = true;
+                if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                 OnAppearing();
                 ToastMessageHelper.ShortMessage(Language.xac_nhan_in_thanh_cong);
             }
@@ -478,6 +481,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     NeedToRefresh = true;
                     OnAppearing();
+                    if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     this.Title = Language.dat_coc_title;
                     LoadingHelper.Hide();
@@ -503,6 +507,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     NeedToRefresh = true;
                     OnAppearing();
+                    if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage(Language.da_huy_bang_tinh_gia);
