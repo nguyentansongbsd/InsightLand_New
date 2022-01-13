@@ -276,20 +276,47 @@
   <data name="cap_nhat_thong_tin_title" xml:space="preserve">
     <value>Cập Nhật Thông Tin</value>
   </data>
+  <data name="case_cancelled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
   <data name="case_gio_sts" xml:space="preserve">
     <value>giờ</value>
   </data>
-  <data name="case_informationprovided_sts" xml:space="preserve">
+  <data name="case_information_provided_sts" xml:space="preserve">
     <value>Cung cấp thông tin</value>
+  </data>
+  <data name="case_in_progress_sts" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="case_merged_sts" xml:space="preserve">
+    <value>Hợp nhất</value>
   </data>
   <data name="case_ngay_sts" xml:space="preserve">
     <value>ngày</value>
   </data>
+  <data name="case_on_hold_sts" xml:space="preserve">
+    <value>Đang chờ</value>
+  </data>
   <data name="case_phut_sts" xml:space="preserve">
     <value>phút</value>
   </data>
-  <data name="case_problemsolved_sts" xml:space="preserve">
+  <data name="case_problem_solved_sts" xml:space="preserve">
     <value>Vấn đề đã được giải quyết</value>
+  </data>
+  <data name="case_problem_type" xml:space="preserve">
+    <value>Vấn đề</value>
+  </data>
+  <data name="case_question_type" xml:space="preserve">
+    <value>Câu hỏi</value>
+  </data>
+  <data name="case_request_type" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="case_researching_sts" xml:space="preserve">
+    <value>Nghiên cứu</value>
+  </data>
+  <data name="case_waiting_for_details_sts" xml:space="preserve">
+    <value>Đang chờ thông tin chi tiết</value>
   </data>
   <data name="ca_nhan" xml:space="preserve">
     <value>Cá nhân</value>
@@ -530,6 +557,51 @@
   </data>
   <data name="cong_viec_title" xml:space="preserve">
     <value>Công Việc</value>
+  </data>
+  <data name="contract_1st_installment_sts" xml:space="preserve">
+    <value>TT Đủ Đợt 1</value>
+  </data>
+  <data name="contract_being_payment_sts" xml:space="preserve">
+    <value>Đang thanh toán</value>
+  </data>
+  <data name="contract_canceled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
+  <data name="contract_complete_payment_sts" xml:space="preserve">
+    <value>TT Hoàn tất</value>
+  </data>
+  <data name="contract_complete_sts" xml:space="preserve">
+    <value>Đã hoàn thành</value>
+  </data>
+  <data name="contract_converted_sts" xml:space="preserve">
+    <value>Converted</value>
+  </data>
+  <data name="contract_handover_sts" xml:space="preserve">
+    <value>Bàn giao</value>
+  </data>
+  <data name="contract_invoiced_sts" xml:space="preserve">
+    <value>Invoiced</value>
+  </data>
+  <data name="contract_in_progress_sts" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="contract_open_sts" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="contract_option_sts" xml:space="preserve">
+    <value>Hoàn tất đặt cọc</value>
+  </data>
+  <data name="contract_partial_sts" xml:space="preserve">
+    <value>Partial</value>
+  </data>
+  <data name="contract_pending_sts" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="contract_signed_contract_sts" xml:space="preserve">
+    <value>Đã ký HĐMB</value>
+  </data>
+  <data name="contract_terminated_sts" xml:space="preserve">
+    <value>Đã thanh lý</value>
   </data>
   <data name="cuoc_goi_da_duoc_huy" xml:space="preserve">
     <value>Cuộc gọi đã được hủy</value>
@@ -779,6 +851,15 @@
   </data>
   <data name="fax" xml:space="preserve">
     <value>Fax</value>
+  </data>
+  <data name="gender_female_sts" xml:space="preserve">
+    <value>Nữ</value>
+  </data>
+  <data name="gender_male_sts" xml:space="preserve">
+    <value>Nam</value>
+  </data>
+  <data name="gender_other_sts" xml:space="preserve">
+    <value>Khác</value>
   </data>
   <data name="ghi_nho_dang_nhap" xml:space="preserve">
     <value>Ghi nhớ đăng nhập</value>

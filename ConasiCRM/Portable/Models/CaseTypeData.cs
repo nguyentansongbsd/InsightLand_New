@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,9 +11,9 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("1","Câu hỏi"),
-                new OptionSet("2","Vấn đề"),
-                new OptionSet("3","Yêu cầu"),
+                new OptionSet("1",Language.case_question_type), // case_question_type
+                new OptionSet("2",Language.case_problem_type), // case_problem_type
+                new OptionSet("3",Language.case_request_type), // case_request_type
                  new OptionSet("0",""),
             };
         }
