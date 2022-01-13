@@ -27,6 +27,7 @@ namespace ConasiCRM.Portable.Controls
             entry.SetBinding(MainEntry.PlaceholderProperty, new Binding("Placeholder") { Source = this });
             entry.SetBinding(MainEntry.IsVisibleProperty, new Binding("ShowEntry") { Source = this });
             ShowEntry = Date.HasValue ? false : true;
+            btnClear.IsVisible = !ShowEntry;
         }
         private static void HadValueChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -35,7 +36,25 @@ namespace ConasiCRM.Portable.Controls
             if (oldValue == null && newValue != null && control.ShowEntry == true)
             {
                 control.ShowEntry = false;
+                control.btnClear.IsVisible = !control.ShowEntry;
             }
+        }
+
+        private void datePicker_DateSelected(object sender, EventArgs e)
+        {
+            ShowEntry = false;
+            if (!Date.HasValue)
+            {
+                this.Date = DateTime.Now;
+            }
+            btnClear.IsVisible = !ShowEntry;
+        }
+
+        private void ClearDate_Tapped(object sender, EventArgs e)
+        {
+            this.Date = null;
+            this.ShowEntry = true;
+            btnClear.IsVisible = !ShowEntry;
         }
     }
 }

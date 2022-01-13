@@ -107,6 +107,7 @@
     <Compile Include="Renderers\MainSearchBarRenderer.cs" />
     <Compile Include="Renderers\DatePickerBorderRenderer.cs" />
     <Compile Include="Services\ThumbnailService.cs" />
+    <Compile Include="Renderers\EntryNoneBorderRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

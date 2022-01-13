@@ -90,6 +90,7 @@
     <Compile Include="Services\ThumbnailService.cs" />
     <Compile Include="Renderers\ImageCustomRenderer.cs" />
     <Compile Include="Renderers\ShellCustomRenderer.cs" />
+    <Compile Include="Renderers\EntryNoneBorderRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon-60%402x.png" />

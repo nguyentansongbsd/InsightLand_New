@@ -41,10 +41,13 @@ namespace ConasiCRM.Portable
             request.Headers.Add("Authorization", "Bearer " + _getToken);
             return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
         }
+
+        
     }
 
     public partial class BlankPage : ContentPage
     {
+        public DateTime? date { get; set; }
 
         public BlankPage()
         {
@@ -63,6 +66,8 @@ namespace ConasiCRM.Portable
         public async void Init()
         {
 
+            this.BindingContext = this;
+            
 
             //string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
             //                      <entity name='sharepointdocument'>
@@ -139,6 +144,12 @@ namespace ConasiCRM.Portable
             //string url = "https://conasivn.sharepoint.com/sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/bsd_project/THẢO ĐIỀN GREEN_1F0E1C763DE5EB11BACB00224816626E/Condotel Ariyana Da Nang.mp4&access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCIsImtpZCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCJ9.eyJhdWQiOiJodHRwczovL2NvbmFzaXZuLnNoYXJlcG9pbnQuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvYjhmZjFkMmUtMjhiYS00NGU2LWJmNWItYzk2MTg4MTk2NzExLyIsImlhdCI6MTYzNjQyNDcwMiwibmJmIjoxNjM2NDI0NzAyLCJleHAiOjE2MzY0Mjg2MDIsImFjciI6IjEiLCJhaW8iOiJFMlpnWUpBcjhEUjdxU21lcmZ0dmhwM3lMaVhQYXcvak9MY0gzOUQ4L2VtcFFyckk1YThBIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJEeW5hbWljcyAzNjUgRGV2ZWxvcG1lbnQgVG9vbHMiLCJhcHBpZCI6IjJhZDg4Mzk1LWI3N2QtNDU2MS05NDQxLWQwZTQwODI0ZjliYyIsImFwcGlkYWNyIjoiMCIsImdpdmVuX25hbWUiOiJic2QiLCJpZHR5cCI6InVzZXIiLCJpcGFkZHIiOiIxMTYuOTkuMTQwLjk3IiwibmFtZSI6IkNvbmcgdHkgQlNEIiwib2lkIjoiNTkwOWUzZGItZjhhMy00NTA2LWI1OGYtZGE0ODdmZjAxZDBhIiwicHVpZCI6IjEwMDMyMDAwMzcwMDcxMDUiLCJyaCI6IjAuQVQ0QUxoM191TG9vNWtTX1c4bGhpQmxuRVpXRDJDcDl0MkZGbEVIUTVBZ2stYnctQUlRLiIsInNjcCI6InVzZXJfaW1wZXJzb25hdGlvbiIsInNpZCI6IjExMTNkYmM3LTllYzAtNDUxNC05OWZhLWE4YmY3ZjczNTRhZSIsInN1YiI6IkZzaUJTZTFLelhUNmpNTkhScHQ0aGNFczhkZjExNE95MjdzZTdYTDM1SUEiLCJ0aWQiOiJiOGZmMWQyZS0yOGJhLTQ0ZTYtYmY1Yi1jOTYxODgxOTY3MTEiLCJ1bmlxdWVfbmFtZSI6ImJzZGRldkBjb25hc2kudm4iLCJ1cG4iOiJic2RkZXZAY29uYXNpLnZuIiwidXRpIjoiWWJ0VzVPbi1FazJvQm5uZDFVTUVBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il19.pYOUAXeWsVBOsmxQgiam2R3P_0N5L6hrmZOC1lXNm9seToWSQVtKZC4wx2HEqD5ocDGLf3mUp73CZgFCT7XFV4XEhDIeu8Cuh941BspT8iaJqAxIIQV9vsWaTsJVrd5jR9v2I09TmHQr5AQTCeio_86njG6jjmjU7qGLBdo-FTdhoeAiZ8ei4kM5JcXvjAD3h1f4olfdhXkMfdMyS-fqIT62-O15r0bJiPrehs_LYehdggTdJSA13wqY-Q3xCETTz9r7JHNCiK0gh_L54rTX6eQe6FmgmC7zY_kxSLccK4pqdJN8HNTxhgzIbksakkn_b1yZbAOh092Fs3dH6G9JQA";
             //ImageSource imageSource = await DependencyService.Get<IThumbnailService>().GetImageSourceAsync(url);
 
+        }
+
+        async void Button_Clicked_2(System.Object sender, System.EventArgs e)
+        {
+            //await DisplayAlert("", date.ToString(), "ok");
+            
         }
 
         private async void Meida_Tapped(object sender, EventArgs e)

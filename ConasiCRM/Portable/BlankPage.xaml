@@ -18,8 +18,11 @@
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-                <xct:MediaElement x:Name="media" Source="https://sec.ch9.ms/ch9/5d93/a1eab4bf-3288-4faf-81c4-294402a85d93/XamarinShow_mid.mp4"
-              ShowsPlaybackControls="True" />
+                <!--<xct:MediaElement x:Name="media" Source="https://sec.ch9.ms/ch9/5d93/a1eab4bf-3288-4faf-81c4-294402a85d93/XamarinShow_mid.mp4"
+              ShowsPlaybackControls="True" />-->
+                <controls:DatePickerBoderControl Date="{Binding date}" Placeholder="ngay" Margin="20,50" />
+                
+                <Button Text="test" Clicked="Button_Clicked_2"/>
             </StackLayout>
             <!--<StackLayout Margin="0,200,0,0">
                 <ffimageloading:CachedImage x:Name="test" HeightRequest="100" WidthRequest="100" LoadingPlaceholder="image_placeholder.jpg"/>
