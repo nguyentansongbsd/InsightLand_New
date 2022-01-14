@@ -123,6 +123,18 @@
   <data name="account_trong_nuoc_sts" xml:space="preserve">
     <value>Trong nước</value>
   </data>
+  <data name="activity_cancelled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
+  <data name="activity_completed_sts" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="activity_open_sts" xml:space="preserve">
+    <value>Đang mở</value>
+  </data>
+  <data name="activity_scheduled_sts" xml:space="preserve">
+    <value>Scheduled</value>
+  </data>
   <data name="bang_gia_goc_ap_dung" xml:space="preserve">
     <value>Bảng giá gốc (Áp dụng)</value>
   </data>
@@ -276,20 +288,47 @@
   <data name="cap_nhat_thong_tin_title" xml:space="preserve">
     <value>Cập Nhật Thông Tin</value>
   </data>
+  <data name="case_cancelled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
   <data name="case_gio_sts" xml:space="preserve">
     <value>giờ</value>
   </data>
-  <data name="case_informationprovided_sts" xml:space="preserve">
+  <data name="case_information_provided_sts" xml:space="preserve">
     <value>Cung cấp thông tin</value>
+  </data>
+  <data name="case_in_progress_sts" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="case_merged_sts" xml:space="preserve">
+    <value>Hợp nhất</value>
   </data>
   <data name="case_ngay_sts" xml:space="preserve">
     <value>ngày</value>
   </data>
+  <data name="case_on_hold_sts" xml:space="preserve">
+    <value>Đang chờ</value>
+  </data>
   <data name="case_phut_sts" xml:space="preserve">
     <value>phút</value>
   </data>
-  <data name="case_problemsolved_sts" xml:space="preserve">
+  <data name="case_problem_solved_sts" xml:space="preserve">
     <value>Vấn đề đã được giải quyết</value>
+  </data>
+  <data name="case_problem_type" xml:space="preserve">
+    <value>Vấn đề</value>
+  </data>
+  <data name="case_question_type" xml:space="preserve">
+    <value>Câu hỏi</value>
+  </data>
+  <data name="case_request_type" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="case_researching_sts" xml:space="preserve">
+    <value>Nghiên cứu</value>
+  </data>
+  <data name="case_waiting_for_details_sts" xml:space="preserve">
+    <value>Đang chờ thông tin chi tiết</value>
   </data>
   <data name="ca_nhan" xml:space="preserve">
     <value>Cá nhân</value>
@@ -531,6 +570,60 @@
   <data name="cong_viec_title" xml:space="preserve">
     <value>Công Việc</value>
   </data>
+  <data name="contract_1st_installment_sts" xml:space="preserve">
+    <value>TT Đủ Đợt 1</value>
+  </data>
+  <data name="contract_being_payment_sts" xml:space="preserve">
+    <value>Đang thanh toán</value>
+  </data>
+  <data name="contract_canceled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
+  <data name="contract_complete_payment_sts" xml:space="preserve">
+    <value>TT Hoàn tất</value>
+  </data>
+  <data name="contract_complete_sts" xml:space="preserve">
+    <value>Đã hoàn thành</value>
+  </data>
+  <data name="contract_converted_sts" xml:space="preserve">
+    <value>Converted</value>
+  </data>
+  <data name="contract_foreigner_SPA_type" xml:space="preserve">
+    <value>HĐMB nước ngoài</value>
+  </data>
+  <data name="contract_handover_sts" xml:space="preserve">
+    <value>Bàn giao</value>
+  </data>
+  <data name="contract_invoiced_sts" xml:space="preserve">
+    <value>Invoiced</value>
+  </data>
+  <data name="contract_in_progress_sts" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="contract_local_SPA_type" xml:space="preserve">
+    <value>HĐMB trong nước</value>
+  </data>
+  <data name="contract_long_term_lease_type" xml:space="preserve">
+    <value>Cho thuê dài hạn</value>
+  </data>
+  <data name="contract_open_sts" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="contract_option_sts" xml:space="preserve">
+    <value>Hoàn tất đặt cọc</value>
+  </data>
+  <data name="contract_partial_sts" xml:space="preserve">
+    <value>Partial</value>
+  </data>
+  <data name="contract_pending_sts" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="contract_signed_contract_sts" xml:space="preserve">
+    <value>Đã ký HĐMB</value>
+  </data>
+  <data name="contract_terminated_sts" xml:space="preserve">
+    <value>Đã thanh lý</value>
+  </data>
   <data name="cuoc_goi_da_duoc_huy" xml:space="preserve">
     <value>Cuộc gọi đã được hủy</value>
   </data>
@@ -705,6 +798,30 @@
   <data name="dieu_kien_ban_giao" xml:space="preserve">
     <value>Điều kiện bàn giao</value>
   </data>
+  <data name="direction_east_sts" xml:space="preserve">
+    <value>Đông</value>
+  </data>
+  <data name="direction_north_east_sts" xml:space="preserve">
+    <value>Đông bắc</value>
+  </data>
+  <data name="direction_north_sts" xml:space="preserve">
+    <value>Bắc</value>
+  </data>
+  <data name="direction_north_west_sts" xml:space="preserve">
+    <value>Tây bắc</value>
+  </data>
+  <data name="direction_south_east_sts" xml:space="preserve">
+    <value>Đông nam</value>
+  </data>
+  <data name="direction_south_sts" xml:space="preserve">
+    <value>Nam</value>
+  </data>
+  <data name="direction_south_west_sts" xml:space="preserve">
+    <value>Tây nam</value>
+  </data>
+  <data name="direction_west_sts" xml:space="preserve">
+    <value>Tây</value>
+  </data>
   <data name="di_den_kh_ca_nhan" xml:space="preserve">
     <value>Đi đến KH Cá nhân</value>
   </data>
@@ -779,6 +896,63 @@
   </data>
   <data name="fax" xml:space="preserve">
     <value>Fax</value>
+  </data>
+  <data name="ful_active_sts" xml:space="preserve">
+    <value>Nháp</value>
+  </data>
+  <data name="ful_ccr_group" xml:space="preserve">
+    <value>CCR</value>
+  </data>
+  <data name="ful_complete_sts" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="ful_fin_group" xml:space="preserve">
+    <value>FIN</value>
+  </data>
+  <data name="ful_forfeiture_takeoutmoney" xml:space="preserve">
+    <value>Tịch thu</value>
+  </data>
+  <data name="ful_inactive_sts" xml:space="preserve">
+    <value>Vô hiệu lực</value>
+  </data>
+  <data name="ful_option_entry_1st_installment_type" xml:space="preserve">
+    <value>Giao dịch - TT Đủ Đợt 1</value>
+  </data>
+  <data name="ful_option_entry_contract_type" xml:space="preserve">
+    <value>Giao dịch - Đã ký HĐMB</value>
+  </data>
+  <data name="ful_option_entry_installments_type" xml:space="preserve">
+    <value>Giao dịch - Đợt thanh toán</value>
+  </data>
+  <data name="ful_option_entry_terminate_type" xml:space="preserve">
+    <value>Giao dịch - Thanh lý hợp đồng</value>
+  </data>
+  <data name="ful_refund_takeoutmoney" xml:space="preserve">
+    <value>Hoàn tiền</value>
+  </data>
+  <data name="ful_reservation_deposited_type" xml:space="preserve">
+    <value>Đặt cọc - TT đủ tiền cọc</value>
+  </data>
+  <data name="ful_reservation_sign_off_RF_type" xml:space="preserve">
+    <value>Đặt cọc - Ký Phiếu đặt cọc</value>
+  </data>
+  <data name="ful_reservation_terminate_type" xml:space="preserve">
+    <value>Đặt cọc - Thanh lý đặt cọc</value>
+  </data>
+  <data name="ful_s_m_group" xml:space="preserve">
+    <value>S&amp;M</value>
+  </data>
+  <data name="ful_units_type" xml:space="preserve">
+    <value>Sản phẩm</value>
+  </data>
+  <data name="gender_female_sts" xml:space="preserve">
+    <value>Nữ</value>
+  </data>
+  <data name="gender_male_sts" xml:space="preserve">
+    <value>Nam</value>
+  </data>
+  <data name="gender_other_sts" xml:space="preserve">
+    <value>Khác</value>
   </data>
   <data name="ghi_nho_dang_nhap" xml:space="preserve">
     <value>Ghi nhớ đăng nhập</value>
@@ -942,6 +1116,18 @@
   <data name="huy_phan_hoi_that_bai_vui_long_thu_lai" xml:space="preserve">
     <value>Hủy phản hồi thất bại. Vui lòng thử lại</value>
   </data>
+  <data name="installments_active_sts" xml:space="preserve">
+    <value>Nháp</value>
+  </data>
+  <data name="installments_inactive_sts" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="installments_not_paid_sts" xml:space="preserve">
+    <value>Chưa thanh toán</value>
+  </data>
+  <data name="installments_paid_sts" xml:space="preserve">
+    <value>Đã thanh toán</value>
+  </data>
   <data name="khach_hang" xml:space="preserve">
     <value>Khách hàng</value>
   </data>
@@ -1103,6 +1289,36 @@
   </data>
   <data name="la_ban_phong_thuy_title" xml:space="preserve">
     <value>La Bàn Phong Thủy</value>
+  </data>
+  <data name="lead_advertisement_source" xml:space="preserve">
+    <value>Quảng cáo</value>
+  </data>
+  <data name="lead_employee_referral_source" xml:space="preserve">
+    <value>Nhân viên giới thiệu</value>
+  </data>
+  <data name="lead_external_referral_source" xml:space="preserve">
+    <value>Giới thiệu bên ngoài</value>
+  </data>
+  <data name="lead_other_source" xml:space="preserve">
+    <value>Khác</value>
+  </data>
+  <data name="lead_partner_source" xml:space="preserve">
+    <value>Đối tác</value>
+  </data>
+  <data name="lead_public_relations_source" xml:space="preserve">
+    <value>Quan hệ công chúng</value>
+  </data>
+  <data name="lead_seminar_source" xml:space="preserve">
+    <value>Hội thảo</value>
+  </data>
+  <data name="lead_trade_show_source" xml:space="preserve">
+    <value>Triển lãm thương mại</value>
+  </data>
+  <data name="lead_web_source" xml:space="preserve">
+    <value>Trang Web</value>
+  </data>
+  <data name="lead_word_of_mouth_source" xml:space="preserve">
+    <value>Truyền miệng</value>
   </data>
   <data name="lich_lam_viec_appshell" xml:space="preserve">
     <value>Lịch làm việc</value>
@@ -1532,6 +1748,36 @@
   </data>
   <data name="quan_he" xml:space="preserve">
     <value>Quan hệ</value>
+  </data>
+  <data name="queue_canceled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
+  <data name="queue_collected_queuing_fee_sts" xml:space="preserve">
+    <value>Collected queuing fee</value>
+  </data>
+  <data name="queue_completed_sts" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="queue_draft_sts" xml:space="preserve">
+    <value>Nháp</value>
+  </data>
+  <data name="queue_expired_sts" xml:space="preserve">
+    <value>Hết hạn</value>
+  </data>
+  <data name="queue_on_hold_sts" xml:space="preserve">
+    <value>On hold</value>
+  </data>
+  <data name="queue_out_sold_sts" xml:space="preserve">
+    <value>Out-Sold</value>
+  </data>
+  <data name="queue_queuing_sts" xml:space="preserve">
+    <value>Giữ chỗ</value>
+  </data>
+  <data name="queue_waiting_sts" xml:space="preserve">
+    <value>Đang đợi</value>
+  </data>
+  <data name="queue_won_sts" xml:space="preserve">
+    <value>Won</value>
   </data>
   <data name="que_menh" xml:space="preserve">
     <value>Quẻ mệnh</value>

@@ -1,5 +1,6 @@
 ﻿using System;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Resources;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Models
@@ -21,23 +22,23 @@ namespace ConasiCRM.Portable.Models
                 switch (statuscode)
                 {
                     case 1:
-                        return "Open";
+                        return Language.contract_open_sts;
                     case 2:
-                        return "Pending";
+                        return Language.contract_pending_sts;
                     case 100000000:
-                        return "Option";
+                        return Language.contract_option_sts;
                     case 100000001:
-                        return "1st Installment";
+                        return Language.contract_1st_installment_sts;
                     case 100000002:
-                        return "Signed Contract";
+                        return Language.contract_signed_contract_sts;
                     case 100000003:
-                        return "Being Payment";
+                        return Language.contract_being_payment_sts;
                     case 100000004:
-                        return "Complete Payment";
+                        return Language.contract_complete_payment_sts;
                     case 100000005:
-                        return "Handover";
+                        return Language.contract_handover_sts;
                     case 100000006:
-                        return "Terminated";
+                        return Language.contract_terminated_sts;
                     default:
                         return "";
                 }

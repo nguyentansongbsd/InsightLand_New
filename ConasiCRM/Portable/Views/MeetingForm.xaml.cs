@@ -71,7 +71,7 @@ namespace ConasiCRM.Portable.Views
             BtnSave.Text = Language.cap_nhat_cuoc_hop;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadDataMeet(this.MeetId);
-
+            await viewModel.LoadAllLookUp();
             var _data = await viewModel.loadDataParty(this.MeetId);
             if (_data.Any())
             {

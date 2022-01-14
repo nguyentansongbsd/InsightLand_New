@@ -11,8 +11,8 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("5", Language.case_problemsolved_sts),
-                new OptionSet("1000", Language.case_informationprovided_sts),
+                new OptionSet("5", Language.case_problem_solved_sts),
+                new OptionSet("1000", Language.case_information_provided_sts),
             };
         }
     }
