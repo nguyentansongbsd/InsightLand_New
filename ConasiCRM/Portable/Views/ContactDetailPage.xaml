@@ -573,17 +573,16 @@
             </ScrollView>
             <controls:FloatingButtonGroup x:Name="floatingButtonGroup" ItemsSource="{Binding BindingContext.ButtonCommandList,Source={x:Reference this}}"/>
             <Grid x:Name="LookUpImage" IsVisible="false" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White">
-                <controls:PinchZoomImage BackgroundColor="Red" >
+                <controls:PinchZoomImage VerticalOptions="CenterAndExpand" >
                     <controls:PinchZoomImage.Content>
                         <Image x:Name="ImageDetail"/>
                     </controls:PinchZoomImage.Content>
                 </controls:PinchZoomImage>
-                <telerikPrimitives:RadBorder VerticalOptions="Start" HorizontalOptions="End" BackgroundColor="Blue" Margin="0,10,10,0" BorderColor="#444444" BorderThickness="1" HeightRequest="25" WidthRequest="25" CornerRadius="13">
-                    <Label FontFamily="FontAwesomeSolid" Text="&#xf00d;" TextColor="#444444" FontSize="Small" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Close_LookUpImage_Tapped" NumberOfTapsRequired="1"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                <telerikPrimitives:RadBorder VerticalOptions="Start" HorizontalOptions="End" Margin="{OnPlatform Android='0,10,10,0',iOS='0,100,10,0'}" BorderColor="#444444" BorderThickness="1" HeightRequest="25" WidthRequest="25" CornerRadius="13">
+                    <telerikPrimitives:RadBorder.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_LookUpImage_Tapped" NumberOfTapsRequired="1"/>
+                    </telerikPrimitives:RadBorder.GestureRecognizers>
+                    <Label FontFamily="FontAwesomeSolid" Text="&#xf00d;" TextColor="#444444" FontSize="Small" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="White"/>
                 </telerikPrimitives:RadBorder>
             </Grid>
 

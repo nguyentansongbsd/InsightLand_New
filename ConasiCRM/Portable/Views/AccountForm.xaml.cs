@@ -50,7 +50,6 @@ namespace ConasiCRM.Portable.Views
         {
             this.Title = Language.tao_moi_khach_hang_doanh_nghiep_title;
             btnSave.Text = Language.tao_khach_hang;
-            datePickerNgayCap.DefaultDisplay = DateTime.Now;
             btnSave.Clicked += CreateContact_Clicked;
             viewModel.LoadBusinessTypeForLookup();
             viewModel.BusinessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == "100000000");

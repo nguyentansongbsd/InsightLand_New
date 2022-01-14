@@ -51,9 +51,6 @@ namespace ConasiCRM.Portable.Views
         {
             this.Title = Language.tao_moi_khach_hang_ca_nhan_title;
             btn_save_contact.Text = Language.tao_khach_hang;
-            datePickerNgayCap.DefaultDisplay = DateTime.Now;
-            datePickerNgayCapHoChieu.DefaultDisplay = DateTime.Now;
-            datePikerNgayCapTheCanCuoc.DefaultDisplay = DateTime.Now;
             btn_save_contact.Clicked += CreateContact_Clicked;
         }
 
