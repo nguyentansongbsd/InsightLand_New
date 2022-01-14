@@ -462,10 +462,6 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\CNS_Logo_500_300.png">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\CNS_Logo_500.png">
       <SubType></SubType>
       <Generator></Generator>
@@ -482,7 +478,15 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\Conasi_logo_210_200.png">
+    <AndroidResource Include="Resources\drawable\CNS_Logo_login.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\CNS_Logo_300.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\CNS_Logo_Icon_App.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

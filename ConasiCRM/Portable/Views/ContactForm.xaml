@@ -60,7 +60,7 @@
                                 <controls:LookUp x:Name="Lookup_LocalizationOptions" Placeholder="{x:Static language:Language.chon_quoc_tich}" ItemsSource="{Binding LocalizationOptions}" SelectedItem="{Binding singleLocalization}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label"/>
 
                                 <controls:FormLabelRequired Text="{x:Static language:Language.ngay_sinh}" Margin="0,10,0,0"/>
-                                <controls:DatePickerControl x:Name="datePickerNgaySinh" Date="{Binding singleContact.birthdate}" Placeholder="{x:Static language:Language.chon_ngay_sinh}" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
+                                <controls:DatePickerBoderControl x:Name="datePickerNgaySinh" Date="{Binding singleContact.birthdate}" Placeholder="{x:Static language:Language.chon_ngay_sinh}"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.email}" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Placeholder="{x:Static language:Language.nhap_email}" Text="{Binding singleContact.emailaddress1}" FontSize="15"/>
@@ -132,7 +132,7 @@
                                 <controls:MainEntry Placeholder="{x:Static language:Language.nhap_so_cmnd}" Text="{Binding singleContact.bsd_identitycardnumber}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.ngay_cap}" Margin="0,10,0,0"/>
-                                <controls:DatePickerControl x:Name="datePickerNgayCap" Date="{Binding singleContact.bsd_dategrant}" Placeholder="{x:Static language:Language.chon_ngay_cap}" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
+                                <controls:DatePickerBoderControl x:Name="datePickerNgayCap" Date="{Binding singleContact.bsd_dategrant}" Placeholder="{x:Static language:Language.chon_ngay_cap}" />
 
                                 <controls:FormLabel Text="{x:Static language:Language.noi_cap}" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissue}" Placeholder="{x:Static language:Language.nhap_noi_cap}" FontSize="15"/>
@@ -141,7 +141,7 @@
                                 <controls:MainEntry Placeholder="{x:Static language:Language.nhap_so_ho_chieu}" Text="{Binding singleContact.bsd_passport}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.ngay_cap}" Margin="0,10,0,0"/>
-                                <controls:DatePickerControl x:Name="datePickerNgayCapHoChieu" Date="{Binding singleContact.bsd_issuedonpassport}" Placeholder="{x:Static language:Language.chon_ngay_cap}" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
+                                <controls:DatePickerBoderControl x:Name="datePickerNgayCapHoChieu" Date="{Binding singleContact.bsd_issuedonpassport}" Placeholder="{x:Static language:Language.chon_ngay_cap}"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.noi_cap}" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissuepassport}" Placeholder="{x:Static language:Language.nhap_noi_cap}" FontSize="15"/>
@@ -150,7 +150,7 @@
                                 <controls:MainEntry Placeholder="{x:Static language:Language.nhap_so_the_can_cuoc}" Text="{Binding singleContact.bsd_idcard}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.ngay_cap}" Margin="0,10,0,0"/>
-                                <controls:DatePickerControl x:Name="datePikerNgayCapTheCanCuoc" Date="{Binding singleContact.bsd_issuedateidcard}" Placeholder="{x:Static language:Language.chon_ngay_cap}" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
+                                <controls:DatePickerBoderControl x:Name="datePikerNgayCapTheCanCuoc" Date="{Binding singleContact.bsd_issuedateidcard}" Placeholder="{x:Static language:Language.chon_ngay_cap}"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.noi_cap}" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissueidcar}" Placeholder="{x:Static language:Language.nhap_noi_cap}" FontSize="15"/>
