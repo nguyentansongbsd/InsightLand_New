@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 
 using Xamarin.Forms;
 
@@ -57,21 +58,21 @@ namespace ConasiCRM.Portable.Models
                 switch (statuscode)
                 {
                     case 1:
-                        return "In Progress";
+                        return Language.case_in_progress_sts;
                     case 2:
-                        return "On Hold";
+                        return Language.case_on_hold_sts;
                     case 3:
-                        return "Waiting for Details";
+                        return Language.case_waiting_for_details_sts;
                     case 4:
-                        return "Researching";
+                        return Language.case_researching_sts;
                     case 5:
-                        return "Problem Solved";
+                        return Language.case_problem_solved_sts;
                     case 1000:
-                        return "Information Provided";
+                        return Language.case_information_provided_sts;
                     case 6:
-                        return "Canceled";
+                        return Language.case_cancelled_sts;
                     case 2000:
-                        return "Merged";
+                        return Language.case_merged_sts;
                     default:
                         return "";
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 
 namespace ConasiCRM.Portable.Models
@@ -75,11 +76,11 @@ namespace ConasiCRM.Portable.Models
                 switch (activitytypecode)
                 {
                     case "task":
-                        return "Công Việc";
+                        return Language.cong_viec_title;
                     case "phonecall":
-                        return "Cuộc Gọi";
+                        return Language.cuoc_goi_title;
                     case "appointment":
-                        return "Cuộc Họp";
+                        return Language.cuoc_hop_title;
                     default:
                         return " ";
                 }
@@ -93,13 +94,13 @@ namespace ConasiCRM.Portable.Models
                 switch (this.statecode)
                 {
                     case 0:
-                        return "Đang Mở";
+                        return Language.activity_open_sts; // activity_open_sts  Open
                     case 1:
-                        return "Hoàn Thành";
+                        return Language.activity_completed_sts; // activity_completed_sts  Completed
                     case 2:
-                        return "Đã hủy";
+                        return Language.activity_cancelled_sts; // activity_canceled_sts Canceled
                     case 3:
-                        return "Scheduled";
+                        return Language.activity_scheduled_sts; // activity_scheduled_sts
                     default:
                         return " ";
                 }

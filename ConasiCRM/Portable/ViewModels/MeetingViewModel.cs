@@ -1,6 +1,7 @@
 using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
@@ -517,17 +518,96 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task LoadAllLookUp()
+        public async Task LoadAll()
         {
             if (LeadsLookUpRequired == null && ContactsLookUpRequired == null && AccountsLookUpRequired == null
                 && LeadsLookUpOptional == null && ContactsLookUpOptional == null && AccountsLookUpOptional == null)
             {
-                await Task.WhenAll(
-                    LoadLeadsLookUp(),
-                    LoadContactsLookUp(),
-                    LoadAccountsLookUp()
-                );
+                //await Task.WhenAll(
+                //    LoadLeadsLookUp(),
+                //    LoadContactsLookUp(),
+                //    LoadAccountsLookUp()
+                //);
+                LeadsLookUpRequired = new List<OptionSetFilter>();
+                LeadsLookUpOptional = new List<OptionSetFilter>();
+                ContactsLookUpRequired = new List<OptionSetFilter>();
+                ContactsLookUpOptional = new List<OptionSetFilter>();
+                AccountsLookUpRequired = new List<OptionSetFilter>();
+                AccountsLookUpOptional = new List<OptionSetFilter>();
+
+                string fetchlead = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='lead'>
+                                <attribute name='fullname' alias='Label' />
+                                <attribute name='leadid' alias='Val' />
+                                <attribute name='mobilephone' alias='SDT' /> 
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
+                              </entity>
+                            </fetch>";
+                var resultlead = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSetFilter>>("leads", fetchlead);
+                if (resultlead == null || resultlead.value == null)
+                    return;
+                var datalead = resultlead.value;
+                foreach (var item in datalead)
+                {
+                    item.Title = CodeLead;
+                    LeadsLookUpRequired.Add(item);
+                    LeadsLookUpOptional.Add(new OptionSetFilter { Val = item.Val, Label = item.Label, Title = CodeLead });
+                }
+
+                string fetchcontact = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                  <entity name='contact'>
+                    <attribute name='contactid' alias='Val' />
+                    <attribute name='fullname' alias='Label' />
+                    <attribute name='mobilephone' alias='SDT' />
+                    <attribute name='bsd_identitycardnumber' alias='CMND' />
+                    <attribute name='bsd_passport' alias='HC' />
+                    <order attribute='fullname' descending='false' />                   
+                    <filter type='and'>
+                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                    </filter>
+                  </entity>
+                </fetch>";
+                var resultcontact = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSetFilter>>("contacts", fetchcontact);
+                if (resultcontact == null || resultcontact.value == null)
+                    return;
+                var datacontact = resultcontact.value;
+                foreach (var item in datacontact)
+                {
+                    item.Title = CodeContac;
+                    ContactsLookUpRequired.Add(item);
+                    ContactsLookUpOptional.Add(new OptionSetFilter { Val = item.Val, Label = item.Label, Title = CodeContac });
+                }
+                string fetchacount = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='account'>
+                                <attribute name='name' alias='Label'/>
+                                <attribute name='accountid' alias='Val'/>
+                                <attribute name='telephone1' alias='SDT'/>
+                                <attribute name='bsd_registrationcode' alias='SoGPKD'/>
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                    <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                </filter>
+                              </entity>
+                            </fetch>";
+                var resultacount = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSetFilter>>("accounts", fetchacount);
+                if (resultacount == null || resultacount.value == null)
+                    return;
+                var dataacount = resultacount.value;
+                foreach (var item in dataacount)
+                {
+                    item.Title = CodeAccount;
+                    AccountsLookUpRequired.Add(item);
+                    AccountsLookUpOptional.Add(new OptionSetFilter { Val = item.Val, Label = item.Label, Title = CodeAccount });
+                }
             }
+        }
+
+        public async Task LoadAllLookUp()
+        {
+            await LoadAll();
             if (AllsLookUpRequired.Count <= 0)
             {
                 AllsLookUpRequired.Add(LeadsLookUpRequired);
@@ -546,9 +626,9 @@ namespace ConasiCRM.Portable.ViewModels
         {
             if (Tabs.Count <= 0)
             {
-                Tabs.Add("KH Tiềm Năng");
-                Tabs.Add("KH Cá Nhân");
-                Tabs.Add("KH Doanh Nghiệp");
+                Tabs.Add(Language.tiem_nang);
+                Tabs.Add(Language.ca_nhan);
+                Tabs.Add(Language.doanh_nghiep);
             }
         }
     }

@@ -35,7 +35,7 @@ namespace ConasiCRM.Portable.Controls
         public string Text { get => _text; set { _text = value; OnPropertyChanged(nameof(Text)); } }
 
         //edit
-        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSetFilter>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
+        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSetFilter>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
         public List<List<OptionSetFilter>> ListListView { get => (List<List<OptionSetFilter>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
 
         public static readonly BindableProperty ListTabProperty = BindableProperty.Create(nameof(ListTab), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);

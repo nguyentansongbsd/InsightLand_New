@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.ViewModels;
+﻿using ConasiCRM.Portable.Resources;
+using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,10 +28,10 @@ namespace ConasiCRM.Portable.Models
             {
                 if (bsd_resell == true)
                 {
-                    return "Có";
+                    return Language.string_co_sts;
                 }else if (bsd_resell == false)
                 {
-                    return "Không";
+                    return Language.string_khong_sts;
                 }
                 else
                 {
@@ -44,11 +45,11 @@ namespace ConasiCRM.Portable.Models
             {
                 if (bsd_takeoutmoney == 100000000)
                 {
-                    return "Hoàn tiền";
+                    return Language.ful_refund_takeoutmoney; //Refund // ful_refund_takeoutmoney
                 }
                 else if (bsd_takeoutmoney == 100000001)
                 {
-                    return "Tịch thu";
+                    return Language.ful_forfeiture_takeoutmoney; //Forfeiture //ful_forfeiture_takeoutmoney
                 }
                 else
                 {
@@ -65,35 +66,35 @@ namespace ConasiCRM.Portable.Models
             {
                 if (bsd_type == 100000007)
                 {
-                    return "Sản phẩm";
+                    return Language.ful_units_type; //Units ful_units_type
                 }
                 else if (bsd_type == 100000000)
                 {
-                    return "Ký Phiếu đặt cọc";
+                    return Language.ful_reservation_sign_off_RF_type; //Reservation - Sign off RF ful_reservation_sign_off_RF_type
                 }
                 else if (bsd_type == 100000001)
                 {
-                    return "Đặt cọc";
+                    return Language.ful_reservation_deposited_type; //Reservation - Deposited  ful_reservation_deposited_type
                 }
                 else if (bsd_type == 100000005)
                 {
-                    return "Thanh lý đặt cọc";
+                    return Language.ful_reservation_terminate_type; //Reservation - Terminate  ful_reservation_terminate_type
                 }
                 else if (bsd_type == 100000002)
                 {
-                    return "Thanh toán đợt 1";
+                    return Language.ful_option_entry_1st_installment_type; //Option Entry - 1st installment  ful_option_entry_1st_installment_type
                 }
                 else if (bsd_type == 100000003)
                 {
-                    return "Hợp đồng";
+                    return Language.ful_option_entry_contract_type; //Option Entry - Contract  ful_option_entry_contract_type
                 }
                 else if (bsd_type == 100000004)
                 {
-                    return "Đợt thanh toán";
+                    return Language.ful_option_entry_installments_type; //Option Entry - Installments  ful_option_entry_installments_type
                 }
                 else if (bsd_type == 100000006)
                 {
-                    return "Thanh lý hợp đồng";
+                    return Language.ful_option_entry_terminate_type; //Option Entry - Terminate  ful_option_entry_terminate_type
                 }
                 else { return null; }
             }

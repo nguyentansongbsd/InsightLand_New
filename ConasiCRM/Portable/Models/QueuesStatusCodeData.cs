@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,17 +25,27 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<QueuesStatusCodeModel>()
             {
-                new QueuesStatusCodeModel("1","Nháp","#808080"), // Draft
-                new QueuesStatusCodeModel("2","On Hold","#808080"), //?????
-                new QueuesStatusCodeModel("3","Won","#808080"), //?????
-                new QueuesStatusCodeModel("4","Đã hủy","#808080"),
-                new QueuesStatusCodeModel("5","Out-Sold","#808080"), //?????
-                new QueuesStatusCodeModel("100000000","Giữ chỗ","#00CF79"),
-                new QueuesStatusCodeModel("100000001","Collected Queuing Fee","#808080"), //?????
-                new QueuesStatusCodeModel("100000002","Đang đợi","#FDC206"),
-                new QueuesStatusCodeModel("100000003","Hết hạn","#B3B3B3"),
-                new QueuesStatusCodeModel("100000004","Hoàn thành","#C50147"),
+                new QueuesStatusCodeModel("1",Language.queue_draft_sts,"#808080"), // Draft
+                new QueuesStatusCodeModel("2",Language.queue_on_hold_sts,"#808080"), //On Hold
+                new QueuesStatusCodeModel("3",Language.queue_won_sts,"#808080"), //Won
+                new QueuesStatusCodeModel("4",Language.queue_canceled_sts,"#808080"), //Canceled
+                new QueuesStatusCodeModel("5",Language.queue_out_sold_sts,"#808080"), //Out-Sold
+                new QueuesStatusCodeModel("100000000",Language.queue_queuing_sts,"#00CF79"), //Queuing
+                new QueuesStatusCodeModel("100000001",Language.queue_collected_queuing_fee_sts,"#808080"), //Collected queuing fee
+                new QueuesStatusCodeModel("100000002",Language.queue_waiting_sts,"#FDC206"),//Waiting
+                new QueuesStatusCodeModel("100000003",Language.queue_expired_sts,"#B3B3B3"),//Expired
+                new QueuesStatusCodeModel("100000004",Language.queue_completed_sts,"#C50147"),//Completed
                 new QueuesStatusCodeModel("0","","#808080")
+                //queue_draft_sts
+                //queue_on_hold_sts
+                //queue_won_sts
+                //queue_canceled_sts
+                //queue_out_sold_sts
+                //queue_queuing_sts
+                //queue_collected_queuing_fee_sts
+                //queue_waiting_sts
+                //queue_expired_sts
+                //queue_completed_sts
             };
         }
     }
