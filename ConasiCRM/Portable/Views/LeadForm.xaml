@@ -59,7 +59,7 @@
                                 <controls:LookUp x:Name="lookUpGioiTinh" Placeholder="{x:Static language:Language.chon_gioi_tinh}" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.ngay_sinh}"/>
-                                <controls:DatePickerControl x:Name="datePickerNgaySinh" Date="{Binding singleLead.new_birthday}" Placeholder="{x:Static language:Language.chon_ngay_sinh}" DisplayFormat="dd/MM/yyyy" SpinnerFormat="dd/MM/yyyy"/>
+                                <controls:DatePickerBoderControl x:Name="datePickerNgaySinh" Date="{Binding singleLead.new_birthday}" Placeholder="{x:Static language:Language.chon_ngay_sinh}" />
 
                                 <controls:FormLabel Text="{x:Static language:Language.nguon_khach_hang}"/>
                                 <controls:LookUp x:Name="lookUpLeadSource" Placeholder="{x:Static language:Language.chon_nguon_khach_hang}" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding LeadSource}" ItemsSource="{Binding LeadSources}"/>

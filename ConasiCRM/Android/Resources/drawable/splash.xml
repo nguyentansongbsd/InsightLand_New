@@ -5,7 +5,7 @@
   </item>
   <item>
     <bitmap
-        android:src="@drawable/insightland_logo"
+        android:src="@drawable/Conasi_logo_210_200"
         android:tileMode="disabled"
         android:gravity="center" android:layout_gravity="center"/>
   </item>

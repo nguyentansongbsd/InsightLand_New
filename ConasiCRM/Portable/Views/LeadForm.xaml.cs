@@ -26,7 +26,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.Title = Language.tao_moi_khach_hang_tiem_nang_title;
             Init();
-            datePickerNgaySinh.DefaultDisplay = DateTime.Now;
+            //datePickerNgaySinh.DefaultDisplay = DateTime.Now;
             viewModel.Rating = RatingData.GetRatingById("2");//mac dinh la warm
         }
         public LeadForm(Guid Id)
@@ -68,11 +68,6 @@ namespace ConasiCRM.Portable.Views
                 if (!string.IsNullOrWhiteSpace(viewModel.singleLead.leadsourcecode))
                 {
                     viewModel.LeadSource = LeadSourcesData.GetLeadSourceById(viewModel.singleLead.leadsourcecode);
-                }
-
-                if (!viewModel.singleLead.new_birthday.HasValue)
-                {
-                    datePickerNgaySinh.DefaultDisplay = DateTime.Now;
                 }
 
                 if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
