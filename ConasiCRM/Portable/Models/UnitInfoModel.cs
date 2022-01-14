@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -40,7 +41,7 @@ namespace ConasiCRM.Portable.Models
         public bool bsd_vippriority { get; set; }
         public string bsd_vippriority_format
         {
-            get => bsd_vippriority == true ? "Yes" : "No";
+            get => bsd_vippriority == true ? Language.string_co_sts : Language.string_khong_sts;
         }
 
         // thong tin dien tich

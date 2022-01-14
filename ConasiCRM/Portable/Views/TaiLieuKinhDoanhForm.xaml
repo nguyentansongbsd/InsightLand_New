@@ -78,7 +78,7 @@
                                                     <Label.FormattedText>
                                                         <FormattedString>
                                                             <Span Text="{Binding Source={x:Static language:Language.tinh_trang},StringFormat='{0}: '}" TextColor="#555555"/>
-                                                            <Span Text="{Binding statuscodevalue}" TextColor="#333333"/>
+                                                            <!--<Span Text="{Binding statuscodevalue}" TextColor="#333333"/>-->
                                                         </FormattedString>
                                                     </Label.FormattedText>
                                                 </Label>

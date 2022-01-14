@@ -1,4 +1,5 @@
 ﻿using System;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 
 namespace ConasiCRM.Portable.Models
@@ -33,22 +34,22 @@ namespace ConasiCRM.Portable.Models
             {
                 switch (statuscode)
                 {
-                    case "2": return "Pending";
-                    case "1":return "Open";
-                    case "3":return "Submitted - In Progress";
-                    case "100000000":return "Option";
-                    case "100000006":return "Terminated";
-                    case "100000005":return "Handover";
-                    case "100000004":return "Complete Payment";
-                    case "100000003":return "Being Payment";
-                    case "100000002":return "Signed Contract";
-                    case "100000008":return "Đã ký TT/HĐ cọc";
-                    case "100000007":return "Đủ điều kiện";
-                    case "100000001":return "1st Installment";
-                    case "4":return "Canceled";
-                    case "100001":return "Complete";
-                    case "100002":return "Partial";
-                    case "100003":return "Invoiced";
+                    case "2": return Language.oe_pending_sts; // oe_pending_sts
+                    case "1":return Language.oe_open_sts; //Open oe_open_sts
+                    case "3":return Language.oe_submitted_in_progress_sts; //oe_submitted_in_progress_sts
+                    case "100000000":return Language.oe_option_sts;//oe_option_sts
+                    case "100000006":return Language.oe_terminated_sts;//oe_terminated_sts
+                    case "100000005":return Language.oe_handover_sts;//oe_handover_sts
+                    case "100000004":return Language.oe_complete_payment_sts;//oe_complete_payment_sts
+                    case "100000003":return Language.oe_being_payment_sts;//oe_being_payment_sts
+                    case "100000002":return Language.oe_signed_contract_sts;//oe_signed_contract_sts
+                    case "100000008":return "Đã ký TT/HĐ cọc"; ////oe_sts // không có
+                    case "100000007":return Language.oe_converted_sts; //Converted  //oe_converted_sts
+                    case "100000001":return Language.oe_1st_installment_sts; //oe_1st_installment_sts
+                    case "4":return Language.oe_canceled_sts;//oe_canceled_sts
+                    case "100001":return Language.oe_complete_sts;//oe_complete_sts
+                    case "100002":return Language.oe_partial_sts;//oe_partial_sts
+                    case "100003":return Language.oe_invoiced_sts;//oe_invoiced_sts
                     default: return null;
                 }
             }
