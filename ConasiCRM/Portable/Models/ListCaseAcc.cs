@@ -66,9 +66,9 @@ namespace ConasiCRM.Portable.Models
                     case 4:
                         return Language.case_researching_sts;
                     case 5:
-                        return Language.case_problem_solved_sts;
+                        return Language.case_problem_solved_sts; //Vấn đề đã được giải quyết
                     case 1000:
-                        return Language.case_information_provided_sts;
+                        return Language.case_information_provided_sts;  //Cung cấp thông tin
                     case 6:
                         return Language.case_cancelled_sts;
                     case 2000:

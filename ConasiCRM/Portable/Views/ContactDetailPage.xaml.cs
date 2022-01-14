@@ -268,7 +268,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId) { Title =Language.dat_coc_title};
             bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
             {
                 if (isSuccess)

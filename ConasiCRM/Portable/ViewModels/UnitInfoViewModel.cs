@@ -264,8 +264,10 @@ namespace ConasiCRM.Portable.ViewModels
                                     <filter type='or'>
                                        <condition attribute='statuscode' operator='in'>
                                            <value>100000000</value>
-                                           <value>100000001</value>
-                                           <value>4</value>
+                                            <value>100000001</value>
+                                            <value>100000006</value>
+                                            <value>3</value>
+                                            <value>4</value>
                                        </condition>
                                        <filter type='and'>
                                            <condition attribute='statuscode' operator='in'>
