@@ -6,6 +6,7 @@ using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -71,7 +72,8 @@ namespace ConasiCRM.Portable.Views
             BtnSave.Text = Language.cap_nhat_cuoc_hop;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadDataMeet(this.MeetId);
-            await viewModel.LoadAllLookUp();
+            await viewModel.LoadAllLookUp(); // load item soure
+            await Task.Delay(1000);
             var _data = await viewModel.loadDataParty(this.MeetId);
             if (_data.Any())
             {
@@ -81,11 +83,11 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (item.typemask == 5)
                     {
-                        requiredIds.Add(item.partyID.ToString());
+                        requiredIds.Add(item.partyID.ToString()); // load id bất buộc 
                     }
                     else if (item.typemask == 6)
                     {
-                        optionalIds.Add(item.partyID.ToString());
+                        optionalIds.Add(item.partyID.ToString()); // load id không bắt buộc
                     }
                 }
                 viewModel.Required = requiredIds;

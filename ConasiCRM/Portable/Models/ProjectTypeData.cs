@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,8 +15,8 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<OptionSet>()
             {
-                new OptionSet("false","Nhà ở"),
-                new OptionSet("true","Thương mại"),
+                new OptionSet("false",Language.project_residential_type), //Residential project_residential_type
+                new OptionSet("true",Language.project_commercial_type), //Commercial  project_commercial_type
             };
         }
     }

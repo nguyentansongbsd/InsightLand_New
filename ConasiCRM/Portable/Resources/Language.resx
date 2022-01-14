@@ -2463,4 +2463,184 @@
   <data name="ma_hop_dong" xml:space="preserve">
     <value>Mã hợp đồng</value>
   </data>
+  <data name="unit_1st_installment_sts" xml:space="preserve">
+    <value>Thanh toán đợt 1</value>
+  </data>
+  <data name="unit_available_sts" xml:space="preserve">
+    <value>Sẵn sàng</value>
+  </data>
+  <data name="unit_collected_sts" xml:space="preserve">
+    <value>Đồng ý chuyển cọc</value>
+  </data>
+  <data name="unit_deposited_sts" xml:space="preserve">
+    <value>Đã đủ tiền cọc</value>
+  </data>
+  <data name="unit_draft_sts" xml:space="preserve">
+    <value>Nháp</value>
+  </data>
+  <data name="unit_preparing_sts" xml:space="preserve">
+    <value>Chuẩn bị</value>
+  </data>
+  <data name="unit_queuing_sts" xml:space="preserve">
+    <value>Giữ chỗ</value>
+  </data>
+  <data name="unit_reserve_sts" xml:space="preserve">
+    <value>Đặt cọc</value>
+  </data>
+  <data name="unit_sold_sts" xml:space="preserve">
+    <value>Đã bán</value>
+  </data>
+  <data name="view_garden_sts" xml:space="preserve">
+    <value>Sân vườn</value>
+  </data>
+  <data name="view_outdoor_children_playground_sts" xml:space="preserve">
+    <value>Sân chơi trẻ em ngoài trời</value>
+  </data>
+  <data name="view_pool_sts" xml:space="preserve">
+    <value>Hồ bơi</value>
+  </data>
+  <data name="view_sea_sts" xml:space="preserve">
+    <value>Biển</value>
+  </data>
+  <data name="view_welcome_court_sts" xml:space="preserve">
+    <value>Tòa chào mừng</value>
+  </data>
+  <data name="co_owner_child_relationship" xml:space="preserve">
+    <value>Con</value>
+  </data>
+  <data name="co_owner_friend_relationship" xml:space="preserve">
+    <value>Bạn</value>
+  </data>
+  <data name="co_owner_other_relationship" xml:space="preserve">
+    <value>Khác</value>
+  </data>
+  <data name="co_owner_parent_relationship" xml:space="preserve">
+    <value>Cha mẹ</value>
+  </data>
+  <data name="co_owner_spouse_relationship" xml:space="preserve">
+    <value>Vợ chồng</value>
+  </data>
+  <data name="currency_billion" xml:space="preserve">
+    <value>tỷ</value>
+  </data>
+  <data name="dang_tai" xml:space="preserve">
+    <value>Đang tải</value>
+  </data>
+  <data name="oe_1st_installment_sts" xml:space="preserve">
+    <value>1st Installment</value>
+  </data>
+  <data name="oe_being_payment_sts" xml:space="preserve">
+    <value>Being Payment</value>
+  </data>
+  <data name="oe_canceled_sts" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="oe_complete_payment_sts" xml:space="preserve">
+    <value>Complete Payment</value>
+  </data>
+  <data name="oe_complete_sts" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="oe_converted_sts" xml:space="preserve">
+    <value>Đủ điều kiện</value>
+  </data>
+  <data name="oe_handover_sts" xml:space="preserve">
+    <value>Handover</value>
+  </data>
+  <data name="oe_invoiced_sts" xml:space="preserve">
+    <value>Invoiced</value>
+  </data>
+  <data name="oe_open_sts" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="oe_option_sts" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="oe_partial_sts" xml:space="preserve">
+    <value>Partial</value>
+  </data>
+  <data name="oe_pending_sts" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="oe_signed_contract_sts" xml:space="preserve">
+    <value>Signed Contract</value>
+  </data>
+  <data name="oe_submitted_in_progress_sts" xml:space="preserve">
+    <value>Submitted - In Progress</value>
+  </data>
+  <data name="oe_terminated_sts" xml:space="preserve">
+    <value>Terminated</value>
+  </data>
+  <data name="project_apartment_usagetype" xml:space="preserve">
+    <value>Chung cư</value>
+  </data>
+  <data name="project_commercial_type" xml:space="preserve">
+    <value>Thương mại</value>
+  </data>
+  <data name="project_condo_usagetype" xml:space="preserve">
+    <value>Condo</value>
+  </data>
+  <data name="project_residential_type" xml:space="preserve">
+    <value>Nhà ở</value>
+  </data>
+  <data name="project_townhouse_usagetype" xml:space="preserve">
+    <value>Nhà phố</value>
+  </data>
+  <data name="quote_canceled_sts" xml:space="preserve">
+    <value>Đã hủy</value>
+  </data>
+  <data name="quote_collected_sts" xml:space="preserve">
+    <value>Đồng ý chuyển cọc</value>
+  </data>
+  <data name="quote_deposited_sts" xml:space="preserve">
+    <value>Đã đủ tiền cọc</value>
+  </data>
+  <data name="quote_expired_of_signing_RF_sts" xml:space="preserve">
+    <value>Expired of signing RF</value>
+  </data>
+  <data name="quote_expired_quotation_sts" xml:space="preserve">
+    <value>Expired quotation</value>
+  </data>
+  <data name="quote_expired_sts" xml:space="preserve">
+    <value>Hết hạn</value>
+  </data>
+  <data name="quote_in_progress_active_sts" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="quote_in_progress_draf_sts" xml:space="preserve">
+    <value>Đang xử lý</value>
+  </data>
+  <data name="quote_lost_sts" xml:space="preserve">
+    <value>Mất khách hàng</value>
+  </data>
+  <data name="quote_pending_cancel_deposit_sts" xml:space="preserve">
+    <value>Đang chờ hủy bỏ tiền gửi</value>
+  </data>
+  <data name="quote_quotation_sts" xml:space="preserve">
+    <value>Báo giá</value>
+  </data>
+  <data name="quote_reject_sts" xml:space="preserve">
+    <value>Từ chối</value>
+  </data>
+  <data name="quote_reservation_sts" xml:space="preserve">
+    <value>Đặt cọc</value>
+  </data>
+  <data name="quote_revised_sts" xml:space="preserve">
+    <value>Revised</value>
+  </data>
+  <data name="quote_signed_RF_sts" xml:space="preserve">
+    <value>Signed RF</value>
+  </data>
+  <data name="quote_terminated_sts" xml:space="preserve">
+    <value>Đã thanh lý</value>
+  </data>
+  <data name="quote_won_sts" xml:space="preserve">
+    <value>Thành công</value>
+  </data>
+  <data name="string_more_than" xml:space="preserve">
+    <value>Trên</value>
+  </data>
+  <data name="string_under" xml:space="preserve">
+    <value>Dưới</value>
+  </data>
 </root>

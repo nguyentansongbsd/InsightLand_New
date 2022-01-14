@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 
 namespace ConasiCRM.Portable.Models
@@ -191,7 +192,7 @@ namespace ConasiCRM.Portable.Models
             lst_menh = new ObservableCollection<string>() {"Kim","Mộc","Thuỷ","Hoả","Thổ"};
 
             //Danh sach huong
-            lst_huong = new ObservableCollection<string>() { "Bắc","Nam","Đông","Tây","Đông Bắc","Tây Bắc","Đông Nam","Tây Nam"};
+            lst_huong = new ObservableCollection<string>() { Language.direction_north_sts, Language.direction_south_sts, Language.direction_east_sts, Language.direction_west_sts, Language.direction_north_east_sts, Language.direction_north_west_sts, Language.direction_south_east_sts, Language.direction_south_west_sts};
 
             ///Danh sách thứ tự mệnh của từng nhà giáp
             /// 3 nhà giáp (Tý-Ngọ,Thìn-Tuất,Dần-Thân)

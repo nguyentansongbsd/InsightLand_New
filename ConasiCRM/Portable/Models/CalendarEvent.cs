@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using Telerik.XamarinForms.Input;
 using Xamarin.Forms;
 
@@ -26,7 +27,7 @@ namespace ConasiCRM.Portable.Models
                         this.LeadBorderColor = Color.FromHex("#f79364"); //Light Orange
                         this.ItemBackgroundColor = Color.FromHex("#f79364"); 
                     }
-                    activitytype_label = "Công việc";
+                    activitytype_label = Language.cong_viec_title;
                     break;
                 case "phonecall":
                     if (activity.statecode == "0")
@@ -39,7 +40,7 @@ namespace ConasiCRM.Portable.Models
                         this.LeadBorderColor = Color.FromHex("#3aa8e3"); //Light Blue
                         this.ItemBackgroundColor = Color.FromHex("#3aa8e3");
                     }
-                    activitytype_label = "Cuộc gọi";
+                    activitytype_label = Language.cuoc_goi_title;
                     break;
                 case "appointment":
                     if (activity.statecode == "0")
@@ -52,22 +53,22 @@ namespace ConasiCRM.Portable.Models
                         this.LeadBorderColor = Color.FromHex("#d3ffce"); //Light Green
                         this.ItemBackgroundColor = Color.FromHex("#d3ffce");
                     }
-                    activitytype_label = "Cuộc họp";
+                    activitytype_label = Language.cuoc_hop_title;
                     break;
             }
             switch (activity.statecode)
             {
                 case "0":
-                    status_label = "Open";
+                    status_label = Language.activity_open_sts;
                     break;
                 case "1":
-                    status_label = "Completed";
+                    status_label = Language.activity_completed_sts;
                     break;
                 case "2":
-                    status_label = "Canceled";
+                    status_label = Language.activity_cancelled_sts;
                     break;
                 case "3":
-                    status_label = "Scheduled";
+                    status_label = Language.activity_scheduled_sts;
                     break;
             }
             this.Color = LeadBorderColor;
