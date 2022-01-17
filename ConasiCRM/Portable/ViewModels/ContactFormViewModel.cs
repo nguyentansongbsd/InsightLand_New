@@ -1,7 +1,10 @@
-﻿using ConasiCRM.Portable.Config;
+﻿using Azure.Identity;
+using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -617,6 +620,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task<bool> UpLoadCMNDBehind()
         {
+            await PostImage();
             behindImage_name = this.singleContact.contactid.ToString() + "_behind.jpg";
 
             string token = (await CrmHelper.getSharePointToken()).access_token;
@@ -729,6 +733,45 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 return true;
             }
+        }
+        public async Task<bool> PostImage()
+        {
+            var scopes = new string[] { "https://graph.microsoft.com/.default" };//new[] { "User.Read" };
+            var clientId = OrgConfig.ClientId;
+            var clientSecret = OrgConfig.ClientSecret;
+            var tenantId = "common";
+            var userName = OrgConfig.UserName;
+            var password = OrgConfig.Password;
+
+            // using Azure.Identity;
+            var options = new TokenCredentialOptions
+            {
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
+            };
+            var userNamePasswordCredential = new UsernamePasswordCredential(
+                userName, password, tenantId, clientId, options);
+
+            GraphServiceClient graphClient = new GraphServiceClient(userNamePasswordCredential, scopes);
+
+            var listItem = new ListItem
+            {
+                AdditionalData = new Dictionary<string, object>()
+                {
+                    {"Title", "Widget"},
+                    {"Color", "Purple"},
+                    {"Weight", "32"}
+                }
+            };
+
+            var result = await graphClient.Sites[OrgConfig.SharepointSiteId].Lists[OrgConfig.SharePointContact_CMNDId].Items
+                .Request()
+                .AddAsync(listItem);
+            if (result != null)
+            {
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
