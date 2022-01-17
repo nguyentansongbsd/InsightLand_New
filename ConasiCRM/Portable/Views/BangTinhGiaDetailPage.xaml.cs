@@ -483,6 +483,8 @@ namespace ConasiCRM.Portable.Views
                     OnAppearing();
                     if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
+                    if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
+                    if (QueuesDetialPage.NeedToRefreshDC.HasValue) QueuesDetialPage.NeedToRefreshDC = true;
                     this.Title = Language.dat_coc_title;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage(Language.bang_tinh_gia_da_duoc_ky);
@@ -509,6 +511,7 @@ namespace ConasiCRM.Portable.Views
                     OnAppearing();
                     if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
+                    if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     LoadingHelper.Hide();
                     ToastMessageHelper.ShortMessage(Language.da_huy_bang_tinh_gia);
                 }
