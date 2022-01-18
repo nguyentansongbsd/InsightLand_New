@@ -415,8 +415,7 @@ namespace ConasiCRM.Portable.Controls
         {
             LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;
             control.setData();            
-        }
-      
+        } 
         private void ItemSourceForTabs()
         {
             if (ItemsSource == null || ItemsSource.Count <= 0)
@@ -428,7 +427,6 @@ namespace ConasiCRM.Portable.Controls
                 }
             }
         }
-
         public async void SetUpModal()
         {
             if (PreShow != null)
@@ -459,7 +457,6 @@ namespace ConasiCRM.Portable.Controls
             CenterModal.Footer = gridButton;
             CenterModal.Body = gridMain;
         }
-
         public Grid SetUpTabs(List<string> tabs)
         {
             ListLabelTab = new List<Label>();
@@ -501,7 +498,6 @@ namespace ConasiCRM.Portable.Controls
             indexTab = ListRadBorderTab.IndexOf(ListRadBorderTab.FirstOrDefault(x => x.Children.Last() == button));
             IndexTab(indexTab);
         }
-
         private void IndexTab(int index)
         {
             if (ListRadBorderTab != null && ListRadBorderTab.Count>0)

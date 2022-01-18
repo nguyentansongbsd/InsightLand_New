@@ -123,7 +123,7 @@ namespace ConasiCRM.Portable.Views
             }
             if (viewModel.singleLocalization == null || viewModel.singleLocalization.Val == null)
             {
-                ToastMessageHelper.ShortMessage(Language.vui_long_chon_gioi_tinh);
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_quoc_tich);
                 return;
             }
 
@@ -192,7 +192,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (QueueForm.NeedToRefresh.HasValue) QueueForm.NeedToRefresh = true;
-
+                    await viewModel.UpLoadCMND();
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     LoadingHelper.Hide();
@@ -214,16 +214,7 @@ namespace ConasiCRM.Portable.Views
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (ContactDetailPage.NeedToRefresh.HasValue) ContactDetailPage.NeedToRefresh = true;
 
-                    if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
-                    {
-                        await viewModel.UpLoadCMNDFront();
-                      
-                    }
-
-                    if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
-                    {
-                       await viewModel.UpLoadCMNDBehind();
-                    }
+                    await viewModel.UpLoadCMND();
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                 }

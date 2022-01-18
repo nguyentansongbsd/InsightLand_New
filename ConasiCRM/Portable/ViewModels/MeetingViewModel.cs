@@ -46,11 +46,11 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
 
-        private List<string> _required;
-        public List<string> Required { get => _required; set { _required = value; OnPropertyChanged(nameof(Required)); } }
+        private List<OptionSetFilter> _required;
+        public List<OptionSetFilter> Required { get => _required; set { _required = value; OnPropertyChanged(nameof(Required)); } }
 
-        private List<string> _optional;
-        public List<string> Optional { get => _optional; set { _optional = value; OnPropertyChanged(nameof(Optional)); } }
+        private List<OptionSetFilter> _optional;
+        public List<OptionSetFilter> Optional { get => _optional; set { _optional = value; OnPropertyChanged(nameof(Optional)); } }
 
         public string CodeAccount = LookUpMultipleTabs.CodeAccount;
 
@@ -67,7 +67,6 @@ namespace ConasiCRM.Portable.ViewModels
 
         private OptionSet _customerMapping;
         public OptionSet CustomerMapping { get => _customerMapping; set { _customerMapping = value; OnPropertyChanged(nameof(CustomerMapping)); } }
-
         public MeetingViewModel()
         {
             MeetingModel = new MeetingModel();
@@ -203,24 +202,24 @@ namespace ConasiCRM.Portable.ViewModels
             if (_result == null || _result.value == null)
                 return;
             var _data = _result.value;
-            if (_data.Any())
-            {
-                List<string> requiredIds = new List<string>();
-                List<string> optionalIds = new List<string>();
-                foreach (var item in _data)
-                {
-                    if (item.typemask == 5)
-                    {
-                        requiredIds.Add(item.partyID.ToString());
-                    }
-                    else if (item.typemask == 6)
-                    {
-                        optionalIds.Add(item.partyID.ToString());
-                    }
-                }
-                Optional = optionalIds;
-                Required = requiredIds;
-            }
+            //if (_data.Any())
+            //{
+            //    List<OptionSetFilter> requiredIds = new List<OptionSetFilter>();
+            //    List<OptionSetFilter> optionalIds = new List<OptionSetFilter>();
+            //    foreach (var item in _data)
+            //    {
+            //        if (item.typemask == 5)
+            //        {
+            //            requiredIds.Add(new OptionSetFilter { Val=item.partyID.ToString(),Label = item.cutomer_name,Title = item.title_code,Selected = true });
+            //        }
+            //        else if (item.typemask == 6)
+            //        {
+            //            optionalIds.Add(new OptionSetFilter { Val = item.partyID.ToString(), Label = item.cutomer_name, Title = item.title_code, Selected = true });
+            //        }
+            //    }
+            //    Optional = optionalIds;
+            //    Required = requiredIds;
+            //}
         }
 
         public async Task<List<PartyModel>> loadDataParty(Guid id)
@@ -319,67 +318,61 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
 
-            foreach (var list in AllsLookUpRequired)
+            foreach (var item in Required)
             {
-                foreach (var item in list)
+                IDictionary<string, object> item_required = new Dictionary<string, object>();
+                if (item.Title == CodeContac)
                 {
-                    IDictionary<string, object> item_required = new Dictionary<string, object>();
-                    if (item.Title == CodeContac && item.Selected == true)
-                    {
-                        item_required["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
-                        item_required["participationtypemask"] = 5;
-                        arrayMeeting.Add(item_required);
-                    }
-                    else if (item.Title == CodeAccount && item.Selected == true)
-                    {
-                        item_required["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
-                        item_required["participationtypemask"] = 5;
-                        arrayMeeting.Add(item_required);
-                    }
-                    else if (item.Title == CodeLead && item.Selected == true)
-                    {
-                        item_required["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
-                        item_required["participationtypemask"] = 5;
-                        arrayMeeting.Add(item_required);
-                    }
-                    else if (item.Selected == true)
-                    {
-                        item_required["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
-                        item_required["participationtypemask"] = 5;
-                        arrayMeeting.Add(item_required);
-                    }
+                    item_required["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
+                    item_required["participationtypemask"] = 5;
+                    arrayMeeting.Add(item_required);
+                }
+                else if (item.Title == CodeAccount)
+                {
+                    item_required["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
+                    item_required["participationtypemask"] = 5;
+                    arrayMeeting.Add(item_required);
+                }
+                else if (item.Title == CodeLead)
+                {
+                    item_required["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
+                    item_required["participationtypemask"] = 5;
+                    arrayMeeting.Add(item_required);
+                }
+                else if (item.Selected == true)
+                {
+                    item_required["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
+                    item_required["participationtypemask"] = 5;
+                    arrayMeeting.Add(item_required);
                 }
             }
 
-            foreach (var list in AllsLookUpOptional)
+            foreach (var item in Optional)
             {
-                foreach (var item in list)
+                IDictionary<string, object> item_optional = new Dictionary<string, object>();
+                if (item.Title == CodeContac)
                 {
-                    IDictionary<string, object> item_optional = new Dictionary<string, object>();
-                    if (item.Title == CodeContac && item.Selected == true)
-                    {
-                        item_optional["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
-                        item_optional["participationtypemask"] = 6;
-                        arrayMeeting.Add(item_optional);
-                    }
-                    else if (item.Title == CodeAccount && item.Selected == true)
-                    {
-                        item_optional["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
-                        item_optional["participationtypemask"] = 6;
-                        arrayMeeting.Add(item_optional);
-                    }
-                    else if (item.Title == CodeLead && item.Selected == true)
-                    {
-                        item_optional["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
-                        item_optional["participationtypemask"] = 6;
-                        arrayMeeting.Add(item_optional);
-                    }
-                    else if (item.Selected == true)
-                    {
-                        item_optional["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
-                        item_optional["participationtypemask"] = 6;
-                        arrayMeeting.Add(item_optional);
-                    }
+                    item_optional["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
+                    item_optional["participationtypemask"] = 6;
+                    arrayMeeting.Add(item_optional);
+                }
+                else if (item.Title == CodeAccount)
+                {
+                    item_optional["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
+                    item_optional["participationtypemask"] = 6;
+                    arrayMeeting.Add(item_optional);
+                }
+                else if (item.Title == CodeLead)
+                {
+                    item_optional["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
+                    item_optional["participationtypemask"] = 6;
+                    arrayMeeting.Add(item_optional);
+                }
+                else if (item.Selected == true)
+                {
+                    item_optional["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
+                    item_optional["participationtypemask"] = 6;
+                    arrayMeeting.Add(item_optional);
                 }
             }
             data["appointment_activity_parties"] = arrayMeeting;

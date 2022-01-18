@@ -2643,4 +2643,7 @@
   <data name="string_under" xml:space="preserve">
     <value>Under</value>
   </data>
+  <data name="vui_long_chon_quoc_tich" xml:space="preserve">
+    <value>Vui lòng chọn quốc tịch</value>
+  </data>
 </root>

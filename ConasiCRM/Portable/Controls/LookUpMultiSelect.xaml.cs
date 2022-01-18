@@ -1,34 +1,35 @@
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
-using ConasiCRM.Portable.ViewModels;
 using ConasiCRM.Portable.Views;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
 namespace ConasiCRM.Portable.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LookUpMultipleTabs : Grid
+    public partial class LookUpMultiSelect : Grid
     {
-        public event EventHandler<LookUpChangeEvent> SelectedItemChange;
-        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
-        public object SelectedItem { get => (object)GetValue(SelectedItemProperty); set { SetValue(SelectedItemProperty, value); } }
-
-        public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleTabs), null, BindingMode.TwoWay);
+        public event EventHandler<LookUpChangeEvent> SelectedItemChange;       
+        public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultiSelect), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
+
+        public static readonly BindableProperty SelectedIdsProperty = BindableProperty.Create(nameof(SelectedIds), typeof(List<OptionSetFilter>), typeof(LookUpMultiSelect), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
+        public List<OptionSetFilter> SelectedIds { get => (List<OptionSetFilter>)GetValue(SelectedIdsProperty); set { SetValue(SelectedIdsProperty, value); } }
+
+        private string _text;
+        public string Text { get => _text; set { _text = value; OnPropertyChanged(nameof(Text)); } }
         public bool ShowLead { get; set; } = false;
         public bool LoadNewLead { get; set; } = false;
         public bool ShowContact { get; set; } = false;
         public bool ShowAccount { get; set; } = false;
-        public bool ShowAddButton { get; set; } = false;
 
         private RadBorder TabsLead;
 
@@ -55,23 +56,28 @@ namespace ConasiCRM.Portable.Controls
         public static string CodeContac = "2";
 
         public static string CodeLead = "1";
-        public LookUpMultipleTabs()
+        private List<OptionSetFilter> Lead_itemselecteds { get; set; } = new List<OptionSetFilter>();
+        private List<OptionSetFilter> Contact_itemselecteds { get; set; } = new List<OptionSetFilter>();
+        private List<OptionSetFilter> Account_itemselecteds { get; set; } = new List<OptionSetFilter>();
+        private bool onPreLead { get; set; }
+        private bool onPreContact { get; set; }
+        private bool onPreAccount { get; set; }
+        public LookUpMultiSelect()
         {
             InitializeComponent();
-            this.Entry.BindingContext = this;
-            this.Entry.SetBinding(EntryNoneBorder.PlaceholderProperty, "Placeholder");
-            this.Entry.SetBinding(EntryNoneBorder.TextProperty, "SelectedItem.Label");
-            this.BtnClear.SetBinding(Button.IsVisibleProperty, new Binding("SelectedItem") { Source = this, Converter = new Converters.NullToHideConverter() });
+            this.Entry.SetBinding(EntryNoneBorder.PlaceholderProperty, new Binding("Placeholder") { Source = this });
+            this.Entry.SetBinding(EntryNoneBorder.TextProperty, new Binding("Text") { Source = this });
+            onPreLead = true;
         }
-        public void Clear_Clicked(object sender, EventArgs e)
-        {
-            this.SelectedItem = null;
-            SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
-        }
-        public void HideClearButton()
-        {
-            BtnClear.IsVisible = false;
-        }
+        //public void Clear_Clicked(object sender, EventArgs e)
+        //{
+        //    this.SelectedItem = null;
+        //    SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
+        //}
+        //public void HideClearButton()
+        //{
+        //    BtnClear.IsVisible = false;
+        //}
         public async void OpenLookUp_Tapped(object sender, EventArgs e)
         {
             await OpenModal();
@@ -174,47 +180,44 @@ namespace ConasiCRM.Portable.Controls
                 }
                 numberTab++;
             }
-            if (ShowAddButton == true)
-            {
-                gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
-                Grid grid = new Grid();
-                grid.HeightRequest = 40;
-                grid.Margin = 5;
-                grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
-                Button btnNewContact = new Button();
-                btnNewContact.Padding = 5;
-                btnNewContact.CornerRadius = 10;
-                btnNewContact.FontSize = 16;
-                btnNewContact.TextColor = Color.White;
-                btnNewContact.TextTransform = TextTransform.None;
-                btnNewContact.BackgroundColor = (Color)Application.Current.Resources["NavigationPrimary"];
-                btnNewContact.Text = "Thêm KH Cá Nhân";
-                btnNewContact.Clicked += NewContact_Clicked;
-                grid.Children.Add(btnNewContact);
-                Grid.SetColumn(btnNewContact, 0);
-                Grid.SetRow(btnNewContact, 0);
+            Grid grid = new Grid();
+            grid.HeightRequest = 40;
+            grid.Margin = 5;
+            grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
-                Button btnNewAccount = new Button();
-                btnNewAccount.Padding = 5;
-                btnNewAccount.CornerRadius = 10;
-                btnNewAccount.FontSize = 16;
-                btnNewAccount.TextColor = Color.White;
-                btnNewAccount.TextTransform = TextTransform.None;
-                btnNewAccount.BackgroundColor = (Color)Application.Current.Resources["NavigationPrimary"];
-                btnNewAccount.Text = "Thêm KH Doanh Nghiệp";
-                btnNewAccount.Clicked += NewAccount_Clicked;
-                grid.Children.Add(btnNewAccount);
-                Grid.SetColumn(btnNewAccount, 1);
-                Grid.SetRow(btnNewAccount, 0);
+            //Button btnSave = new Button();
+            //btnSave.Padding = 5;
+            //btnSave.CornerRadius = 10;
+            //btnSave.FontSize = 16;
+            //btnSave.TextColor = Color.White;
+            //btnSave.TextTransform = TextTransform.None;
+            //btnSave.BackgroundColor = (Color)Application.Current.Resources["NavigationPrimary"];
+            //btnSave.Text = "Đóng";
+            //btnSave.Clicked += Clear_Clicked;
+            //grid.Children.Add(btnSave);
+            //Grid.SetColumn(btnSave, 0);
+            //Grid.SetRow(btnSave, 0);
 
-                gridMain.Children.Add(grid);
-                Grid.SetColumn(grid, 0);
-                Grid.SetRow(grid, 2);
-            }
+            Button btnClose = new Button();
+            btnClose.Padding = 5;
+            btnClose.CornerRadius = 10;
+            btnClose.FontSize = 16;
+            btnClose.TextColor = Color.White;
+            btnClose.TextTransform = TextTransform.None;
+            btnClose.BackgroundColor = (Color)Application.Current.Resources["NavigationPrimary"];
+            btnClose.Text = "Lưu";
+            btnClose.Clicked += SaveButton_Clicked;
+            grid.Children.Add(btnClose);
+            Grid.SetColumn(btnClose, 0);
+            Grid.SetRow(btnClose, 0);
+
+            gridMain.Children.Add(grid);
+            Grid.SetColumn(grid, 0);
+            Grid.SetRow(grid, 2);
 
             BoxView boxView = new BoxView();
             boxView.HeightRequest = 1;
@@ -230,18 +233,6 @@ namespace ConasiCRM.Portable.Controls
                 Grid.SetColumn(gridTabs, 0);
                 Grid.SetRow(gridTabs, 0);
             }
-        }
-        private async void NewAccount_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new AccountForm());
-            LoadingHelper.Hide();
-        }
-        private async void NewContact_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new ContactForm());
-            LoadingHelper.Hide();
         }
         private void Account_Tapped(object sender, EventArgs e)
         {
@@ -346,15 +337,39 @@ namespace ConasiCRM.Portable.Controls
                 </fetch>";
             string entity = "contacts";
 
-            ListContact = new ListViewMultiTabs(fetch, entity);
+            ListContact = new ListViewMultiTabs(fetch, entity, true,Contact_itemselecteds);
             ListContact.ItemTapped = async (item) =>
             {
                 if (item != null)
                 {
                     item.Title = CodeContac;
-                    SelectedItem = item;
+
+                    if (SelectedIds == null)
+                        SelectedIds = new List<OptionSetFilter>();
+                    else
+                    {
+                        if(onPreContact)
+                        {
+                            List<OptionSetFilter> list = new List<OptionSetFilter>(SelectedIds.Where(x => x.Title == CodeContac).ToList());
+                            SelectedIds = new List<OptionSetFilter>();
+                            foreach(var i in list)
+                            {
+                                SelectedIds.Add(i);
+                            }
+                            onPreContact = false;
+                        }    
+                    }
+
+                    if (item.Selected == true)
+                    {
+                        SelectedIds.Remove(item);
+                    }
+                    else
+                    {
+                        SelectedIds.Add(item);
+                    }
+                    item.Selected = !item.Selected;
                     SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
-                    await CenterModal.Hide();
                 }
             };
         }
@@ -383,15 +398,39 @@ namespace ConasiCRM.Portable.Controls
 
             string entity = "leads";
 
-            ListLead = new ListViewMultiTabs(fetch, entity);
+            ListLead = new ListViewMultiTabs(fetch, entity, true,Lead_itemselecteds);
             ListLead.ItemTapped = async (item) =>
             {
                 if (item != null)
                 {
                     item.Title = CodeLead;
-                    SelectedItem = item;
+
+                    if (SelectedIds == null)
+                        SelectedIds = new List<OptionSetFilter>();
+                    else
+                    {
+                        if (onPreLead)
+                        {
+                            List<OptionSetFilter> list = new List<OptionSetFilter>(SelectedIds.Where(x => x.Title == CodeLead).ToList());
+                            SelectedIds = new List<OptionSetFilter>();
+                            foreach (var i in list)
+                            {
+                                SelectedIds.Add(i);
+                            }
+                            onPreLead = false;
+                        }
+                    }
+
+                    if (item.Selected == true)
+                    {
+                        SelectedIds.Remove(item);
+                    }
+                    else
+                    {
+                        SelectedIds.Add(item);
+                    }
+                    item.Selected = !item.Selected;
                     SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
-                    await CenterModal.Hide();
                 }
             };
         }
@@ -412,15 +451,39 @@ namespace ConasiCRM.Portable.Controls
 
             string entity = "accounts";
 
-            ListAccount = new ListViewMultiTabs(fetch, entity);
+            ListAccount = new ListViewMultiTabs(fetch, entity, true,Account_itemselecteds);
             ListAccount.ItemTapped = async (item) =>
             {
                 if (item != null)
                 {
                     item.Title = CodeAccount;
-                    SelectedItem = item;
+
+                    if (SelectedIds == null)
+                        SelectedIds = new List<OptionSetFilter>();
+                    else
+                    {
+                        if (onPreAccount)
+                        {
+                            List<OptionSetFilter> list = new List<OptionSetFilter>(SelectedIds.Where(x => x.Title == CodeAccount).ToList());
+                            SelectedIds = new List<OptionSetFilter>();
+                            foreach (var i in list)
+                            {
+                                SelectedIds.Add(i);
+                            }
+                            onPreAccount = false;
+                        }
+                    }
+
+                    if (item.Selected == true)
+                    {
+                        SelectedIds.Remove(item);
+                    }
+                    else
+                    {
+                        SelectedIds.Add(item);
+                    }
+                    item.Selected = !item.Selected;
                     SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
-                    await CenterModal.Hide();
                 }
             };
         }
@@ -438,6 +501,85 @@ namespace ConasiCRM.Portable.Controls
             {
                 ListAccount.Refresh();
             }
+        }
+        public void SetFlexLayout(List<OptionSetFilter> selectedInSource)
+        {
+            if(selectedInSource != null && selectedInSource.Count>0)
+            {
+                Lead_itemselecteds = selectedInSource.Where(x => x.Title == CodeLead).ToList();
+                Contact_itemselecteds = selectedInSource.Where(x => x.Title == CodeContac).ToList();
+                Account_itemselecteds = selectedInSource.Where(x => x.Title == CodeAccount).ToList();
+            }
+            if (selectedInSource.Count > 0)
+            {
+                this.Entry.IsVisible = false;
+                this.flexLayout.IsVisible = true;
+            }
+            else
+            {
+                ClearFlexLayout();
+            }    
+            selectedInSource.Add(new OptionSetFilter()
+            {
+                Val = "0"
+            });
+
+            BindableLayout.SetItemsSource(flexLayout, selectedInSource);
+            var last = flexLayout.Children.Last() as StackLayout;
+            //var radBorder = flexLayout.Children.Last() as RadBorder;
+            var radBorder = last.Children[0] as RadBorder;
+            radBorder.BackgroundColor = Color.Gray;
+            (radBorder.Content as Label).Text = "\uf00d";
+            (radBorder.Content as Label).FontSize = Device.RuntimePlatform == Device.iOS ? 16 : 17;
+            (radBorder.Content as Label).HorizontalTextAlignment = TextAlignment.Center;
+            (radBorder.Content as Label).VerticalTextAlignment = TextAlignment.Center;
+            (radBorder.Content as Label).FontFamily = "FontAwesomeSolid";
+            (radBorder.Content as Label).TextColor = Color.White;
+
+            TapGestureRecognizer tap = new TapGestureRecognizer();
+            tap.Tapped += Clear_Clicked;
+
+            radBorder.GestureRecognizers.Add(tap);
+        }
+        public void ClearFlexLayout()
+        {
+            flexLayout.IsVisible = false;
+            Entry.IsVisible = true;
+        }
+        private void Clear_Clicked(object sender, EventArgs e) => ClearData();
+        public void ClearData()
+        {
+            if (SelectedIds == null || SelectedIds.Any() == false) return;
+            this.Text = null;
+            if(ListLead != null)
+                ListLead.viewModel.Data.ForEach(x => x.Selected = false);
+            if (ListContact != null)
+                ListContact.viewModel.Data.ForEach(x => x.Selected = false);
+            if (ListAccount != null)
+                ListAccount.viewModel.Data.ForEach(x => x.Selected = false);
+            SelectedIds = null;
+            ClearFlexLayout();
+        }
+        public async void SaveButton_Clicked(object sender, EventArgs e)
+        {
+            if (SelectedIds != null)
+                SetData();
+            await CenterModal.Hide();
+        }
+        private static void ItemSourceChange(BindableObject bindable, object oldValue, object value)
+        {
+            LookUpMultiSelect control = (LookUpMultiSelect)bindable;
+            if (control.SelectedIds != null)
+                control.SetData();
+        }
+
+        private void SetData()
+        {
+            if (SelectedIds != null)
+            {
+                List<OptionSetFilter> item = new List<OptionSetFilter>(SelectedIds);
+                SetFlexLayout(item);
+            }    
         }
     }
 }
