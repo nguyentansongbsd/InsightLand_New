@@ -50,7 +50,6 @@ namespace ConasiCRM.Portable.Views
             BindingContext = viewModel = new MeetingViewModel();
             DatePickerStart.DefaultDisplay = DateTime.Now;
             DatePickerEnd.DefaultDisplay = DateTime.Now;
-            SetPreOpen();
         }
 
         private void Create()
@@ -72,22 +71,21 @@ namespace ConasiCRM.Portable.Views
             BtnSave.Text = Language.cap_nhat_cuoc_hop;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadDataMeet(this.MeetId);
-            await viewModel.LoadAllLookUp(); // load item soure
-            await Task.Delay(1000);
+            await viewModel.LoadAllLookUp();
             var _data = await viewModel.loadDataParty(this.MeetId);
             if (_data.Any())
             {
-                List<string> requiredIds = new List<string>();
-                List<string> optionalIds = new List<string>();
+                List<OptionSetFilter> requiredIds = new List<OptionSetFilter>();
+                List<OptionSetFilter> optionalIds = new List<OptionSetFilter>();
                 foreach (var item in _data)
                 {
                     if (item.typemask == 5)
                     {
-                        requiredIds.Add(item.partyID.ToString()); // load id bất buộc 
+                        requiredIds.Add(new OptionSetFilter { Val = item.partyID.ToString(), Label = item.cutomer_name, Title = item.title_code, Selected = true });
                     }
                     else if (item.typemask == 6)
                     {
-                        optionalIds.Add(item.partyID.ToString()); // load id không bắt buộc
+                        optionalIds.Add(new OptionSetFilter { Val = item.partyID.ToString(), Label = item.cutomer_name, Title = item.title_code, Selected = true });
                     }
                 }
                 viewModel.Required = requiredIds;
@@ -107,27 +105,6 @@ namespace ConasiCRM.Portable.Views
         {
             SaveData(this.MeetId);
         }
-
-        public void SetPreOpen()
-        {
-            Lookup_Required.PreShow = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadAllLookUp();
-                viewModel.SetTabs();
-                LoadingHelper.Hide();
-            };
-
-            Lookup_Optional.PreShow = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadAllLookUp();
-                viewModel.SetTabs();
-                LoadingHelper.Hide();
-
-            };      
-        }
-
         private async void SaveData(Guid id)
         {
             if (string.IsNullOrWhiteSpace(viewModel.MeetingModel.subject))

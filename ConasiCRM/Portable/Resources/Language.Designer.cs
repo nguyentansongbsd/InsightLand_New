@@ -7252,6 +7252,15 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vui lòng chọn quốc tịch.
+        /// </summary>
+        internal static string vui_long_chon_quoc_tich {
+            get {
+                return ResourceManager.GetString("vui_long_chon_quoc_tich", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vui lòng chọn thời gian bắt đầu.
         /// </summary>
         internal static string vui_long_chon_thoi_gian_bat_dau {
