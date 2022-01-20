@@ -406,40 +406,26 @@ namespace ConasiCRM.Portable.Views
 
         private void SetItem()
         {
-            if(viewModel.MeetRequired != null && viewModel.MeetRequired.Count>0)
+            if (viewModel.MeetRequired != null && viewModel.MeetRequired.Count > 0)
             {
                 flexRequired.Children.Clear();
-                for (int i=0;i< viewModel.MeetRequired.Count;i++)
-                {
-                    Label label = new Label();
-                    if (i != 0 && i < viewModel.MeetRequired.Count)
-                    {
-                        string val = viewModel.MeetRequired[i].Label + ", ";
-                        label.Text = val;
-                    }
-                    else
-                        label.Text = viewModel.MeetRequired[i].Label;
-
-                    label.TextColor = (Color)Application.Current.Resources["NavigationPrimary"];
-                    label.FontSize = 15;
-                    var tap = new TapGestureRecognizer();
-                    tap.Tapped += FormToTapped;
-                    label.GestureRecognizers.Add(tap);
-                    flexRequired.Children.Add(label);
-                    meetRequired.Add(label);
-                }
+                BindableLayout.SetItemsSource(flexRequired, viewModel.MeetRequired);
             }
         }
-
-        private void FormToTapped(object sender, EventArgs e)
+        public void Refresh()
+        {
+            if (this.IsVisible && ActivityId != Guid.Empty && !string.IsNullOrWhiteSpace(activitytype))
+            {
+                ShowActivityPopup(ActivityId, activitytype);
+            }
+        }
+        private void Required_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            var button = sender as Label;
-            int index = meetRequired.IndexOf(meetRequired.FirstOrDefault(x => x == button));
-            var item = viewModel.MeetRequired[index];
+            var item = (OptionSet)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             if (item != null && !string.IsNullOrWhiteSpace(item.Val))
             {
-                if(item.Title == viewModel.CodeAccount)
+                if (item.Title == viewModel.CodeAccount)
                 {
                     AccountDetailPage newPage = new AccountDetailPage(Guid.Parse(item.Val));
                     newPage.OnCompleted = async (OnCompleted) =>
@@ -473,7 +459,7 @@ namespace ConasiCRM.Portable.Views
                         }
                     };
                 }
-                else if(item.Title == viewModel.CodeLead)
+                else if (item.Title == viewModel.CodeLead)
                 {
                     LeadDetailPage newPage = new LeadDetailPage(Guid.Parse(item.Val));
                     newPage.OnCompleted = async (OnCompleted) =>
@@ -490,13 +476,6 @@ namespace ConasiCRM.Portable.Views
                         }
                     };
                 }
-            }
-        }
-        public void Refresh()
-        {
-            if (this.IsVisible && ActivityId != Guid.Empty && !string.IsNullOrWhiteSpace(activitytype))
-            {
-                ShowActivityPopup(ActivityId, activitytype);
             }
         }
     }

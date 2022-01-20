@@ -58,26 +58,12 @@ namespace ConasiCRM.Portable.Controls
         public static string CodeLead = "1";
         private List<OptionSetFilter> Lead_itemselecteds { get; set; } = new List<OptionSetFilter>();
         private List<OptionSetFilter> Contact_itemselecteds { get; set; } = new List<OptionSetFilter>();
-        private List<OptionSetFilter> Account_itemselecteds { get; set; } = new List<OptionSetFilter>();
-        private bool onPreLead { get; set; }
-        private bool onPreContact { get; set; }
-        private bool onPreAccount { get; set; }
+        private List<OptionSetFilter> Account_itemselecteds { get; set; } = new List<OptionSetFilter>();       
         public LookUpMultiSelect()
         {
             InitializeComponent();
             this.Entry.SetBinding(EntryNoneBorder.PlaceholderProperty, new Binding("Placeholder") { Source = this });
-            this.Entry.SetBinding(EntryNoneBorder.TextProperty, new Binding("Text") { Source = this });
-            onPreLead = true;
         }
-        //public void Clear_Clicked(object sender, EventArgs e)
-        //{
-        //    this.SelectedItem = null;
-        //    SelectedItemChange?.Invoke(this, new LookUpChangeEvent());
-        //}
-        //public void HideClearButton()
-        //{
-        //    BtnClear.IsVisible = false;
-        //}
         public async void OpenLookUp_Tapped(object sender, EventArgs e)
         {
             await OpenModal();
@@ -92,7 +78,6 @@ namespace ConasiCRM.Portable.Controls
             {
                 SetUpModal();
             }
-
             CenterModal.Title = Placeholder;
             CenterModal.Body = gridMain;
             await CenterModal.Show();
@@ -346,23 +331,10 @@ namespace ConasiCRM.Portable.Controls
 
                     if (SelectedIds == null)
                         SelectedIds = new List<OptionSetFilter>();
-                    else
-                    {
-                        if(onPreContact)
-                        {
-                            List<OptionSetFilter> list = new List<OptionSetFilter>(SelectedIds.Where(x => x.Title == CodeContac).ToList());
-                            SelectedIds = new List<OptionSetFilter>();
-                            foreach(var i in list)
-                            {
-                                SelectedIds.Add(i);
-                            }
-                            onPreContact = false;
-                        }    
-                    }
-
+                    
                     if (item.Selected == true)
                     {
-                        SelectedIds.Remove(item);
+                        SelectedIds.Remove(SelectedIds.FirstOrDefault(x => x.Val == item.Val));
                     }
                     else
                     {
@@ -407,23 +379,10 @@ namespace ConasiCRM.Portable.Controls
 
                     if (SelectedIds == null)
                         SelectedIds = new List<OptionSetFilter>();
-                    else
-                    {
-                        if (onPreLead)
-                        {
-                            List<OptionSetFilter> list = new List<OptionSetFilter>(SelectedIds.Where(x => x.Title == CodeLead).ToList());
-                            SelectedIds = new List<OptionSetFilter>();
-                            foreach (var i in list)
-                            {
-                                SelectedIds.Add(i);
-                            }
-                            onPreLead = false;
-                        }
-                    }
-
+                    
                     if (item.Selected == true)
                     {
-                        SelectedIds.Remove(item);
+                        SelectedIds.Remove(SelectedIds.FirstOrDefault(x => x.Val == item.Val));
                     }
                     else
                     {
@@ -460,23 +419,10 @@ namespace ConasiCRM.Portable.Controls
 
                     if (SelectedIds == null)
                         SelectedIds = new List<OptionSetFilter>();
-                    else
-                    {
-                        if (onPreAccount)
-                        {
-                            List<OptionSetFilter> list = new List<OptionSetFilter>(SelectedIds.Where(x => x.Title == CodeAccount).ToList());
-                            SelectedIds = new List<OptionSetFilter>();
-                            foreach (var i in list)
-                            {
-                                SelectedIds.Add(i);
-                            }
-                            onPreAccount = false;
-                        }
-                    }
-
+                    
                     if (item.Selected == true)
                     {
-                        SelectedIds.Remove(item);
+                        SelectedIds.Remove(SelectedIds.FirstOrDefault(x => x.Val == item.Val));
                     }
                     else
                     {
@@ -572,7 +518,6 @@ namespace ConasiCRM.Portable.Controls
             if (control.SelectedIds != null)
                 control.SetData();
         }
-
         private void SetData()
         {
             if (SelectedIds != null)

@@ -20,7 +20,6 @@ namespace ConasiCRM.Portable.ViewModels
                 FetchXml = fetch.Replace("fetch version='1.0'", $"fetch version='1.0' count='15' page='{Page}'");
             });
         }
-
         public override async Task<List<Models.OptionSetFilter>> LoadItems()
         {
             PreLoadData.Execute(null);
