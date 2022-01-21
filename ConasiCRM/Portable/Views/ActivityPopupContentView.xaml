@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives" 
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
-             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
+             xmlns:lang="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.ActivityPopupContentView">
   <ContentView.Content>
         <AbsoluteLayout>
@@ -164,8 +164,8 @@
                             </StackLayout>
                         </StackLayout>
                         <Grid IsVisible="{Binding ShowGridButton}" Grid.Row="2" ColumnDefinitions="*,*" BackgroundColor="White" Padding="10,0,10,10">
-                            <Button Text="{x:Static language:Language.cap_nhat}" Grid.Column="0" Clicked="Update_Clicked" TextColor="White" FontSize="16" FontAttributes="Bold" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" TextTransform="None" VerticalOptions="Center"/>
-                            <Button Text="{x:Static language:Language.hoan_thanh}" Grid.Column="1" Clicked="Completed_Clicked" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" HeightRequest="40" BackgroundColor="White" CornerRadius="10" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" TextTransform="None" VerticalOptions="Center"/>
+                            <Button Text="{x:Static lang:Language.cap_nhat}" Grid.Column="0" Clicked="Update_Clicked" TextColor="White" FontSize="16" FontAttributes="Bold" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" CornerRadius="10" TextTransform="None" VerticalOptions="Center"/>
+                            <Button Text="{x:Static lang:Language.hoan_thanh}" Grid.Column="1" Clicked="Completed_Clicked" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" HeightRequest="40" BackgroundColor="White" CornerRadius="10" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" TextTransform="None" VerticalOptions="Center"/>
                         </Grid>
                     </Grid>
                 </telerikPrimitives:RadBorder>

@@ -2646,4 +2646,10 @@
   <data name="vui_long_chon_quoc_tich" xml:space="preserve">
     <value>Vui lòng chọn quốc tịch</value>
   </data>
+  <data name="so_dien_thoai" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="nguoi_tham_khong_du_bat_buoc">
+        <value>Người tham dự không bắt buộc</value>
+    </data>
 </root>
