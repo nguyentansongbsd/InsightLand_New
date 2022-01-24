@@ -131,7 +131,6 @@ namespace ConasiCRM.Portable.Views
                     {
                         await viewModel.LoadOneLead(Id.ToString());
                         LoadingHelper.Hide();
-                        floatingButtonGroup.IsVisible = false;
                         ToastMessageHelper.ShortMessage(Language.thanh_cong);
                     }
                     else
@@ -161,7 +160,6 @@ namespace ConasiCRM.Portable.Views
                     {
                         await viewModel.LoadOneLead(Id.ToString());
                         LoadingHelper.Hide();
-                        floatingButtonGroup.IsVisible = false;
                         ToastMessageHelper.ShortMessage(Language.thanh_cong);
                     }
                     else
@@ -170,6 +168,8 @@ namespace ConasiCRM.Portable.Views
                         ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
                     }
                 }
+                viewModel.ButtonCommandList.Clear();
+                SetButtonFloatingButton();
             }
             else
             {

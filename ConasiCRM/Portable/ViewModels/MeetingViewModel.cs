@@ -316,63 +316,74 @@ namespace ConasiCRM.Portable.ViewModels
                     item_required["participationtypemask"] = 5;
                     arrayMeeting.Add(item_required);
                 }
-            }
-
-            foreach (var item in Required)
-            {
-                IDictionary<string, object> item_required = new Dictionary<string, object>();
-                if (item.Title == CodeContac)
+                else if (CustomerMapping.Title == CodeLead)
                 {
-                    item_required["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
-                    item_required["participationtypemask"] = 5;
-                    arrayMeeting.Add(item_required);
-                }
-                else if (item.Title == CodeAccount)
-                {
-                    item_required["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
-                    item_required["participationtypemask"] = 5;
-                    arrayMeeting.Add(item_required);
-                }
-                else if (item.Title == CodeLead)
-                {
-                    item_required["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
-                    item_required["participationtypemask"] = 5;
-                    arrayMeeting.Add(item_required);
-                }
-                else if (item.Selected == true)
-                {
-                    item_required["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
+                    item_required["partyid_lead@odata.bind"] = "/leads(" + CustomerMapping.Val + ")";
                     item_required["participationtypemask"] = 5;
                     arrayMeeting.Add(item_required);
                 }
             }
 
-            foreach (var item in Optional)
+            if (Required != null)
             {
-                IDictionary<string, object> item_optional = new Dictionary<string, object>();
-                if (item.Title == CodeContac)
+                foreach (var item in Required)
                 {
-                    item_optional["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
-                    item_optional["participationtypemask"] = 6;
-                    arrayMeeting.Add(item_optional);
+                    IDictionary<string, object> item_required = new Dictionary<string, object>();
+                    if (item.Title == CodeContac)
+                    {
+                        item_required["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
+                        item_required["participationtypemask"] = 5;
+                        arrayMeeting.Add(item_required);
+                    }
+                    else if (item.Title == CodeAccount)
+                    {
+                        item_required["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
+                        item_required["participationtypemask"] = 5;
+                        arrayMeeting.Add(item_required);
+                    }
+                    else if (item.Title == CodeLead)
+                    {
+                        item_required["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
+                        item_required["participationtypemask"] = 5;
+                        arrayMeeting.Add(item_required);
+                    }
+                    else if (item.Selected == true)
+                    {
+                        item_required["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
+                        item_required["participationtypemask"] = 5;
+                        arrayMeeting.Add(item_required);
+                    }
                 }
-                else if (item.Title == CodeAccount)
+            }
+            if (Optional != null)
+            {
+                foreach (var item in Optional)
                 {
-                    item_optional["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
-                    item_optional["participationtypemask"] = 6;
-                    arrayMeeting.Add(item_optional);
-                }
-                else if (item.Title == CodeLead)
-                {
-                    item_optional["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
-                    item_optional["participationtypemask"] = 6;
-                    arrayMeeting.Add(item_optional);
-                }
-                else if (item.Selected == true)
-                {
-                    item_optional["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
-                    item_optional["participationtypemask"] = 6;
-                    arrayMeeting.Add(item_optional);
+                    IDictionary<string, object> item_optional = new Dictionary<string, object>();
+                    if (item.Title == CodeContac)
+                    {
+                        item_optional["partyid_contact@odata.bind"] = "/contacts(" + item.Val + ")";
+                        item_optional["participationtypemask"] = 6;
+                        arrayMeeting.Add(item_optional);
+                    }
+                    else if (item.Title == CodeAccount)
+                    {
+                        item_optional["partyid_account@odata.bind"] = "/accounts(" + item.Val + ")";
+                        item_optional["participationtypemask"] = 6;
+                        arrayMeeting.Add(item_optional);
+                    }
+                    else if (item.Title == CodeLead)
+                    {
+                        item_optional["partyid_lead@odata.bind"] = "/leads(" + item.Val + ")";
+                        item_optional["participationtypemask"] = 6;
+                        arrayMeeting.Add(item_optional);
+                    }
+                    else if (item.Selected == true)
+                    {
+                        item_optional["partyid_systemuser@odata.bind"] = "/systemusers(" + item.Val + ")";
+                        item_optional["participationtypemask"] = 6;
+                        arrayMeeting.Add(item_optional);
+                    }
                 }
             }
             data["appointment_activity_parties"] = arrayMeeting;

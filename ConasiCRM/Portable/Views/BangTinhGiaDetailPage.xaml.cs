@@ -56,6 +56,10 @@ namespace ConasiCRM.Portable.Views
                 viewModel.CoownerList.Clear();
                 viewModel.ListDiscount.Clear();
                 viewModel.ListPromotion.Clear();
+                // reload lịch
+                viewModel.ShowInstallmentList = false;
+                viewModel.NumberInstallment = 0;
+                viewModel.InstallmentList.Clear();
 
                 await Task.WhenAll(
                     LoadDataChinhSach(ReservationId),
@@ -223,11 +227,14 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.Reservation.statuscode == 100000007)
             {
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.cap_nhat, "FontAwesomeRegular", "\uf044", null, EditQuotes));
+                // chỉnh sửa menu
                 if (viewModel.InstallmentList.Count == 0)
                 {
                     viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.tao_lich_thanh_toan, "FontAwesomeRegular", "\uf271", null, CreatePaymentScheme));
                 }
-                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xoa_lich_thanh_toan, "FontAwesomeRegular", "\uf1c3", null, CancelInstallment));
+                else
+                { viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xoa_lich_thanh_toan, "FontAwesomeRegular", "\uf1c3", null, CancelInstallment)); 
+                }
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.xac_nhan_in, "FontAwesomeSolid", "\uf02f", null, ConfirmSigning));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.huy_bang_tinh_gia, "FontAwesomeRegular", "\uf273", null, CancelQuotes));
                 if (viewModel.InstallmentList.Count > 0 && viewModel.Reservation.bsd_quotationprinteddate != null)
