@@ -132,7 +132,6 @@ namespace ConasiCRM.Portable.ViewModels
             LoadAddress();
             await LoadCountryByName();
         }
-
         public async Task<bool> Qualify(Guid id)
         {
             string path = "/leads(" + id + ")";
@@ -148,7 +147,6 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             }
         }
-
         public async Task<bool> UpdateStatusCodeLead()
         {
             string path = "/leads(" + this.singleLead.leadid + ")";
@@ -163,7 +161,6 @@ namespace ConasiCRM.Portable.ViewModels
                 return false;
             }
         }
-
         private async Task<object> GetContentUpdateStatusCode()
         {
             Dictionary<string, string> data = new Dictionary<string, string>();
@@ -171,7 +168,6 @@ namespace ConasiCRM.Portable.ViewModels
             data["statecode"] = this.LeadStateCode.ToString();
             return data;
         }
-
         public async Task CreateContact()
         {
             string path = "/contacts";
@@ -205,14 +201,12 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
         }
-
         public void loadGender()
         {
             list_gender_optionset.Add(new OptionSet() { Val = ("1"), Label = "Nam", });
             list_gender_optionset.Add(new OptionSet() { Val = ("2"), Label = "Nữ", });
             list_gender_optionset.Add(new OptionSet() { Val = ("100000000"), Label = "Khác", });
         }
-
         public async Task<OptionSet> loadOneGender(string id)
         {
             this.singleGender = list_gender_optionset.FirstOrDefault(x => x.Val == id); ;
@@ -263,7 +257,6 @@ namespace ConasiCRM.Portable.ViewModels
             this.singleIndustrycode = list_industrycode_optionset.FirstOrDefault(x => x.Val == id); ;
             return singleIndustrycode;
         }
-
         public void LoadPhongThuy()
         {
             PhongThuy = new PhongThuyModel();
@@ -333,7 +326,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             Address = string.Join(", ", address);
         }
-
         private async Task<object> getContentContact()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
@@ -359,7 +351,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             return data;
         }
-
         private async Task<object> getContentAccount()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
@@ -439,13 +430,11 @@ namespace ConasiCRM.Portable.ViewModels
             }
             return data;
         }
-
         public async Task<Boolean> DeletLookup(string Entity, string fieldName, Guid Id)
         {
             var result = await CrmHelper.SetNullLookupField(Entity, Id, fieldName);
             return result.IsSuccess;
         }
-
         private async Task<object> getContent()
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
@@ -511,11 +500,9 @@ namespace ConasiCRM.Portable.ViewModels
                 this.District = result.value.FirstOrDefault();
             }
         }
-
         //
         // chăm sóc khách hàng
         //
-
         public async Task LoadCase(string leadid)
         {
             if (list_case != null && !string.IsNullOrWhiteSpace(leadid))

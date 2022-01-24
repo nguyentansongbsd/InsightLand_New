@@ -238,7 +238,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (result.IsSuccess)
             {
-                await UpLoadCMND();
+               // await UpLoadCMND();
                 return true;
             }
             else
@@ -257,7 +257,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (result.IsSuccess)
             {
-                await UpLoadCMND();
+               // await UpLoadCMND();
                 return contact.contactid;
             }
             else
@@ -526,7 +526,6 @@ namespace ConasiCRM.Portable.ViewModels
                 list_district_lookup.Add(x);
             }
         }
-
         public async Task<LookUp> LoadDistrictByName(string ProvinceId, string DistrictName)
         {
             string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -553,8 +552,6 @@ namespace ConasiCRM.Portable.ViewModels
                 return null;
             }
         }
-
-
         public async Task GetImageCMND()
         {
             if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_behind) || !string.IsNullOrWhiteSpace(singleContact.bsd_etag_front))
@@ -569,7 +566,6 @@ namespace ConasiCRM.Portable.ViewModels
                 singleContact.bsd_mattruoccmnd_source = urlVideo.value.SingleOrDefault().large.url;
             }
         }
-
         public async Task<bool> UpLoadCMNDFront()
         {
             var frontImage_name =  this.singleContact.contactid.ToString() + "_front.jpg";
@@ -601,7 +597,6 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
         }
-
         public async Task<bool> UpLoadCMNDBehind()
         {
             behindImage_name = this.singleContact.contactid.ToString() + "_behind.jpg";
@@ -630,7 +625,6 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
         }
-
         public async Task UpLoadCMND()
         {
             var frontImage_name = this.singleContact.contactid.ToString() + "_front.jpg";
