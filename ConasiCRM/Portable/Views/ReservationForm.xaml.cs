@@ -818,6 +818,11 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_thang_mien_giam_phi_quan_ly);
                 return;
             }
+            if (int.Parse(viewModel.Quote.bsd_waivermanafeemonth) > 100)
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_thang_mien_giam_phi_quan_ly_khong_qua_100);
+                return;
+            }
 
             if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)
             {
@@ -828,8 +833,7 @@ namespace ConasiCRM.Portable.Views
 
 
             LoadingHelper.Show();
-
-            if (viewModel.Quote.quoteid == Guid.Empty)
+            if (viewModel.QuoteId == Guid.Empty)
             {
                 await SetTotal();
                 bool isSuccess = await viewModel.CreateQuote();
@@ -879,8 +883,8 @@ namespace ConasiCRM.Portable.Views
                     }
                 }
 
-                bool isSuccess = await viewModel.UpdateQuote();
-                if (isSuccess)
+                var isSuccess = await viewModel.UpdateQuote();
+                if (isSuccess != null && isSuccess.IsSuccess)
                 {
                     if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
@@ -892,7 +896,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage(Language.cap_nhat_bang_tinh_gia_that_bai);
+                    ToastMessageHelper.ShortMessage(isSuccess.GetErrorMessage());
                 }
             }
         }

@@ -2652,4 +2652,7 @@
   <data name="nguoi_tham_khong_du_bat_buoc">
         <value>Người tham dự không bắt buộc</value>
     </data>
+	<data name="vui_long_nhap_so_thang_mien_giam_phi_quan_ly_khong_qua_100">
+		<value>Vui lòng nhập số tháng miễn giảm phí quản lý không quá 100</value>
+	</data>
 </root>

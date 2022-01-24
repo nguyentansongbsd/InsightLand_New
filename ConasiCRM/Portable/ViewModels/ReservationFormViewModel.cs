@@ -873,19 +873,12 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task<bool> UpdateQuote()
+        public async Task<CrmApiResponse> UpdateQuote()
         {
             string path = $"/quotes({this.Quote.quoteid})";
             var content = await GetContent();
             CrmApiResponse response = await CrmHelper.PatchData(path, content);
-            if (response.IsSuccess)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return response;
         }
 
         public async Task<object> GetContent()
