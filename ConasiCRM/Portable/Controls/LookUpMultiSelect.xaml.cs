@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.Views;
 using System;
@@ -91,7 +92,7 @@ namespace ConasiCRM.Portable.Controls
 
             if (ShowLead == true)
             {
-                TabsLead = CreateTabs("KH Tiềm Năng");
+                TabsLead = CreateTabs(Language.khach_hang_tiem_nang);
                 gridTabs.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 gridTabs.Children.Add(TabsLead);
                 Grid.SetColumn(TabsLead, numberTab);
@@ -117,7 +118,7 @@ namespace ConasiCRM.Portable.Controls
             }
             if (ShowContact == true)
             {
-                TabsContact = CreateTabs("KH Cá Nhân");
+                TabsContact = CreateTabs(Language.khach_hang_ca_nhan);
                 gridTabs.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 gridTabs.Children.Add(TabsContact);
                 Grid.SetColumn(TabsContact, numberTab);
@@ -142,7 +143,7 @@ namespace ConasiCRM.Portable.Controls
             }
             if (ShowAccount == true)
             {
-                TabsAccount = CreateTabs("KH Doanh Nghiệp");
+                TabsAccount = CreateTabs(Language.khach_hang_doanh_nghiep);
                 gridTabs.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 gridTabs.Children.Add(TabsAccount);
                 Grid.SetColumn(TabsAccount, numberTab);
@@ -194,7 +195,7 @@ namespace ConasiCRM.Portable.Controls
             btnClose.TextColor = Color.White;
             btnClose.TextTransform = TextTransform.None;
             btnClose.BackgroundColor = (Color)Application.Current.Resources["NavigationPrimary"];
-            btnClose.Text = "Lưu";
+            btnClose.Text = Language.luu;
             btnClose.Clicked += SaveButton_Clicked;
             grid.Children.Add(btnClose);
             Grid.SetColumn(btnClose, 0);

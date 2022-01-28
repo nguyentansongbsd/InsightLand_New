@@ -1,6 +1,8 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -100,8 +102,8 @@ namespace ConasiCRM.Portable.Controls
             stackLayoutMain = new StackLayout();
             stackLayoutMain.Padding = 10;
 
-            FormLabel lbCountry = new FormLabel();
-            lbCountry.Text = "Quốc gia";
+            FormLabel lbCountry = new FormLabel(); //Country
+            lbCountry.Text = Language.quoc_gia;
             stackLayoutMain.Children.Add(lbCountry);
 
             LookUp lookUpCountry = new LookUp();
@@ -109,7 +111,7 @@ namespace ConasiCRM.Portable.Controls
             lookUpCountry.SetBinding(LookUp.ItemsSourceProperty, "list_country_lookup");
             lookUpCountry.SetBinding(LookUp.SelectedItemProperty, "Country");
             lookUpCountry.BottomModal = BottomModal;
-            lookUpCountry.Placeholder = "Chọn quốc gia";
+            lookUpCountry.Placeholder = Language.chon_quoc_gia;
             // lookUpCountry.SetBinding(LookUp.NameDipslayProperty, "Name");
             lookUpCountry.NameDisplay = "Name";
             stackLayoutMain.Children.Add(lookUpCountry);
@@ -122,7 +124,7 @@ namespace ConasiCRM.Portable.Controls
             lookUpCountry.SelectedItemChange += LookUpCountry_SelectedItemChange;
 
             FormLabel lbProvince = new FormLabel();
-            lbProvince.Text = "Tỉnh thành";
+            lbProvince.Text = Language.tinh_thanh;
             stackLayoutMain.Children.Add(lbProvince);
 
             LookUp lookUpProvince = new LookUp();
@@ -130,14 +132,14 @@ namespace ConasiCRM.Portable.Controls
             lookUpProvince.SetBinding(LookUp.ItemsSourceProperty, "list_province_lookup");
             lookUpProvince.SetBinding(LookUp.SelectedItemProperty, "Province");
             lookUpProvince.BottomModal = BottomModal;
-            lookUpProvince.Placeholder = "Chọn tỉnh thành";
+            lookUpProvince.Placeholder = Language.chon_tinh_thanh;
             //    lookUpProvince.SetBinding(LookUp.NameDipslayProperty, "Name");
             lookUpProvince.NameDisplay = "Name";
             stackLayoutMain.Children.Add(lookUpProvince);
             lookUpProvince.SelectedItemChange += LookUpProvince_SelectedItemChange;
 
             FormLabel lbDistrict = new FormLabel();
-            lbDistrict.Text = "Quận huyện";
+            lbDistrict.Text = Language.quan_huyen;
             stackLayoutMain.Children.Add(lbDistrict);
 
             LookUp lookUpDistrict = new LookUp();
@@ -145,18 +147,18 @@ namespace ConasiCRM.Portable.Controls
             lookUpDistrict.SetBinding(LookUp.ItemsSourceProperty, "list_district_lookup");
             lookUpDistrict.SetBinding(LookUp.SelectedItemProperty, "District");
             lookUpDistrict.BottomModal = BottomModal;
-            lookUpDistrict.Placeholder = "Chọn quận huyện";
+            lookUpDistrict.Placeholder = Language.chon_quan_huyen;
             //  lookUpDistrict.SetBinding(LookUp.NameDipslayProperty, "Name");
             lookUpDistrict.NameDisplay = "Name";
             stackLayoutMain.Children.Add(lookUpDistrict);
 
             FormLabelRequired lbLineAddress = new FormLabelRequired();
-            lbLineAddress.Text = "Số nhà/Đường/Phường";
+            lbLineAddress.Text = Language.so_nha_duong_phuong;
             stackLayoutMain.Children.Add(lbLineAddress);
 
             MainEntry lineaddress = new MainEntry();
             lineaddress.BindingContext = this;
-            lineaddress.Placeholder = "Nhập số nhà/đường/phường";
+            lineaddress.Placeholder = Language.nhap_so_nha_duong_phuong;
             lineaddress.SetBinding(MainEntry.TextProperty, "LineAddress");
             stackLayoutMain.Children.Add(lineaddress);
         }
@@ -194,6 +196,8 @@ namespace ConasiCRM.Portable.Controls
             }
             foreach (var x in result.value)
             {
+                if (UserLogged.Language == "en")
+                    x.Name = x.Detail;
                 list_country_lookup.Add(x);
             }
         }
@@ -216,6 +220,8 @@ namespace ConasiCRM.Portable.Controls
                 if (result != null && result.value.Count > 0)
                 {
                     Country = result.value.FirstOrDefault();
+                    if (UserLogged.Language == "en")
+                        Country.Name = Country.Detail;
                     SelectedItem.country_name = Country.Name;
                     SelectedItem.country_id = Country.Id;
                 }
@@ -242,6 +248,8 @@ namespace ConasiCRM.Portable.Controls
             }
             foreach (var x in result.value)
             {
+                if (UserLogged.Language == "en")
+                    x.Name = x.Detail;
                 list_province_lookup.Add(x);
             }
         }
@@ -265,8 +273,10 @@ namespace ConasiCRM.Portable.Controls
                 if (result != null && result.value.Count > 0)
                 {
                     Province = result.value.FirstOrDefault();
-                    SelectedItem.province_name = Province.Name;
+                    if (UserLogged.Language == "en")
+                        Province.Name = Province.Detail;
                     SelectedItem.province_id = Province.Id;
+                    SelectedItem.province_name = Province.Name;
                 }
             }
         }
@@ -291,6 +301,8 @@ namespace ConasiCRM.Portable.Controls
             }
             foreach (var x in result.value)
             {
+                if (UserLogged.Language == "en")
+                    x.Name = x.Detail;
                 list_district_lookup.Add(x);
             }
         }
@@ -314,6 +326,8 @@ namespace ConasiCRM.Portable.Controls
                 if (result != null && result.value.Count > 0)
                 {
                     District = result.value.FirstOrDefault();
+                    if (UserLogged.Language == "en")
+                        District.Name = District.Detail;
                     SelectedItem.district_name = District.Name;
                     SelectedItem.district_id = District.Id;
                 }
@@ -350,7 +364,7 @@ namespace ConasiCRM.Portable.Controls
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             Button btnClose = new Button();
-            btnClose.Text = "Đóng";
+            btnClose.Text = Language.dong;
             btnClose.BackgroundColor = Color.White;
             btnClose.TextColor = (Color)App.Current.Resources["NavigationPrimary"];
             btnClose.BorderColor = (Color)App.Current.Resources["NavigationPrimary"];
@@ -363,7 +377,7 @@ namespace ConasiCRM.Portable.Controls
             Grid.SetRow(btnClose, 0);
 
             Button btnSave = new Button();
-            btnSave.Text = "Lưu";
+            btnSave.Text = Language.luu;
             btnSave.BackgroundColor = (Color)App.Current.Resources["NavigationPrimary"];
             btnSave.TextColor = Color.White;
             btnSave.BorderColor = (Color)App.Current.Resources["NavigationPrimary"];
@@ -388,7 +402,7 @@ namespace ConasiCRM.Portable.Controls
             List<string> _address_en = new List<string>();
             if (string.IsNullOrWhiteSpace(LineAddress))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_nha_duong_phuong);
                 return;
             }
             else

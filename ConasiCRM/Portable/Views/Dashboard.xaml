@@ -46,7 +46,7 @@
                                     <telerikChart:CategoricalAxis LabelFitMode="MultiLine" PlotMode="BetweenTicks" ShowLabels="True" MajorTickThickness="1" MajorTickBackgroundColor="#A9A9A9"/>
                                 </telerikChart:RadCartesianChart.HorizontalAxis>
                                 <telerikChart:RadCartesianChart.VerticalAxis>
-                                    <telerikChart:NumericalAxis Minimum="0" Maximum="300" MajorStep="50" LabelFormat="#,0 tr" LineColor="#A9A9A9"/>
+                                    <telerikChart:NumericalAxis Minimum="0" Maximum="300" MajorStep="50" LabelFormat="{x:Static language:Language.format_dashboard}" LineColor="#A9A9A9"/>
                                 </telerikChart:RadCartesianChart.VerticalAxis>
                                 <telerikChart:RadCartesianChart.Grid>
                                     <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>

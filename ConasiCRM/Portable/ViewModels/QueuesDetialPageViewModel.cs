@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 
 namespace ConasiCRM.Portable.ViewModels
@@ -136,11 +137,11 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (data.unit_name != null)
             {
-                QueueProject = "Không";
+                QueueProject = Language.khong;// "Không";
             }
             else
             {
-                QueueProject = "Có";
+                QueueProject = Language.co; //"Có";
             }
 
             ShowBtnHuyGiuCho = (data.statuscode == 100000000 || data.statuscode == 100000002) ? true : false;

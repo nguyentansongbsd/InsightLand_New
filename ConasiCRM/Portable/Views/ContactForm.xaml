@@ -146,14 +146,14 @@
                                 <controls:FormLabel Text="{x:Static language:Language.noi_cap}" FontSize="15" Margin="0,10,0,0"/>
                                 <controls:MainEntry Text="{Binding singleContact.bsd_placeofissuepassport}" Placeholder="{x:Static language:Language.nhap_noi_cap}" FontSize="15"/>
 
-                                <controls:FormLabel Text="{x:Static language:Language.so_the_can_cuoc}" Margin="0,10,0,0"/>
+                                <!--<controls:FormLabel Text="{x:Static language:Language.so_the_can_cuoc}" Margin="0,10,0,0"/>
                                 <controls:MainEntry Placeholder="{x:Static language:Language.nhap_so_the_can_cuoc}" Text="{Binding singleContact.bsd_idcard}" FontSize="15" Keyboard="Telephone"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.ngay_cap}" Margin="0,10,0,0"/>
                                 <controls:DatePickerBoderControl x:Name="datePikerNgayCapTheCanCuoc" Date="{Binding singleContact.bsd_issuedateidcard}" Placeholder="{x:Static language:Language.chon_ngay_cap}"/>
 
                                 <controls:FormLabel Text="{x:Static language:Language.noi_cap}" FontSize="15" Margin="0,10,0,0"/>
-                                <controls:MainEntry Text="{Binding singleContact.bsd_placeofissueidcar}" Placeholder="{x:Static language:Language.nhap_noi_cap}" FontSize="15"/>
+                                <controls:MainEntry Text="{Binding singleContact.bsd_placeofissueidcar}" Placeholder="{x:Static language:Language.nhap_noi_cap}" FontSize="15"/>-->
 
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>

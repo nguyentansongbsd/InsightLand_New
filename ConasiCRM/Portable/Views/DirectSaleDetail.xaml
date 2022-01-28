@@ -236,7 +236,7 @@
                                 <Label Grid.Column="1" Text="{Binding Unit.bsd_constructionarea}" FontSize="15" TextColor="#333333"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
-                                <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}'}" FontSize="15" TextColor="#333333"/>
+                                <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}" FontSize="15" TextColor="#333333"/>
                                 <Label Grid.Column="1" Text="{Binding Unit.bsd_unittype_name}" FontSize="15" TextColor="#333333"/>
                             </Grid>
 
@@ -290,7 +290,8 @@
                                                     <Label FontSize="15" TextColor="#333333">
                                                         <Label.FormattedText>
                                                             <FormattedString>
-                                                                <Span Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}: '}"/>
+                                                                <Span Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}"/>
+                                                                <Span Text=" "/>
                                                                 <Span Text="{Binding customername}"/>
                                                             </FormattedString>
                                                         </Label.FormattedText>
@@ -298,7 +299,8 @@
                                                     <Label FontSize="15" TextColor="#333333" >
                                                         <Label.FormattedText>
                                                             <FormattedString>
-                                                                <Span Text="{Binding Source={x:Static language:Language.thoi_gian_het_han},StringFormat='{0}: '}"/>
+                                                                <Span Text="{Binding Source={x:Static language:Language.thoi_gian_het_han},StringFormat='{0}:'}"/>
+                                                                <Span Text=" "/>
                                                                 <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
                                                                 <Span Text="{Binding bsd_queuingexpired ,StringFormat=' {0:h:mm tt}'}"/>
                                                             </FormattedString>

@@ -81,7 +81,7 @@
                                 <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.website}" FontSize="15" />
                                 <controls:MainEntry x:Name="websiteurl_text" Text="{Binding singleLead.websiteurl}" Placeholder="{x:Static language:Language.nhap_website}" FontSize="15"/>
 
-                                <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="{x:Static language:Language.chon_dia_chi_cong_ty}" FontSize="15" />
+                                <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="{x:Static language:Language.dia_chi_cong_ty}" FontSize="15" />
                                 <Grid ColumnDefinitions="*,Auto">
                                     <controls:MainEntry Grid.ColumnSpan="2"  Text="{Binding AddressComposite}" ShowClearButton="False" Placeholder="{x:Static language:Language.chon_dia_chi_cong_ty}" FontSize="15"/>
                                     <StackLayout Grid.Column="0">
