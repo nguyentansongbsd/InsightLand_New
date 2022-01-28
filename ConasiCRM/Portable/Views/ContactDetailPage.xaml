@@ -7,7 +7,7 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms" 
              xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
              x:Class="ConasiCRM.Portable.Views.ContactDetailPage"
-             Title="{x:Static language:Language.thong_tin_khach_hang_title}"
+             Title="{x:Static language:Language.khach_hang_ca_nhan}"
              x:Name="this"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources">
     <ContentPage.Resources>
@@ -288,7 +288,7 @@
                                             <controls:FormLabel Text="{x:Static language:Language.noi_cap}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.bsd_placeofissuepassport}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
-                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="7">
+                                        <!--<Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="7">
                                             <controls:FormLabel Text="{x:Static language:Language.so_the_can_cuoc}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.bsd_idcard}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
@@ -299,7 +299,7 @@
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="9">
                                             <controls:FormLabel Text="{x:Static language:Language.noi_cap}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact._bsd_placeofissueidcar}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
-                                        </Grid>
+                                        </Grid>-->
                                     </Grid>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>

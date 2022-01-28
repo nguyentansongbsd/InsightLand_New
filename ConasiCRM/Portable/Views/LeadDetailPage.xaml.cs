@@ -23,7 +23,7 @@ namespace ConasiCRM.Portable.Views
         public LeadDetailPage(Guid id)
         {
             InitializeComponent();
-            this.Title = Language.thong_tin_khach_hang_title;
+            this.Title = Language.khach_hang_tiem_nang;
             this.Id = id;
             this.BindingContext = viewModel = new LeadDetailPageViewModel();
             LoadingHelper.Show();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Controls
@@ -16,7 +17,7 @@ namespace ConasiCRM.Portable.Controls
             //}
             //this.BackgroundColor = Color.White;
             this.FontFamily = "Segoe";
-            this.Placeholder = "Từ khoá";
+            this.Placeholder = Language.tim_kiem;
         }
     }
 }

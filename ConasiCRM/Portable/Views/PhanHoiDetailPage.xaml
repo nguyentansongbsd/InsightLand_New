@@ -7,7 +7,7 @@
              x:Class="ConasiCRM.Portable.Views.PhanHoiDetailPage"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Name="this"
-             Title="{x:Static language:Language.thong_tin_phan_hoi_title}">
+             Title="{x:Static language:Language.phan_hoi_title}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:PhanHoiStatusCodeConvert x:Key="StatucToColor"/>

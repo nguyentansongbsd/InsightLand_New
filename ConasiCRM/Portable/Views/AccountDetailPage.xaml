@@ -8,7 +8,7 @@
              ios:Page.UseSafeArea="true"
              x:Class="ConasiCRM.Portable.Views.AccountDetailPage"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
-             Title="{x:Static language:Language.thong_tin_khach_hang_title}"
+             Title="{x:Static language:Language.khach_hang_doanh_nghiep}"
              x:Name="this">
     <ContentPage.Resources>
         <!--header-->
@@ -218,7 +218,7 @@
                                         <Label FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_lien_lac},StringFormat='{0}: '}"/>
+                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi},StringFormat='{0}: '}"/>
                                                     <Span Text=" "/>
                                                     <Span Text="{Binding singleAccount.bsd_address}"/>
                                                 </FormattedString>
@@ -227,7 +227,7 @@
                                         <Label FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
                                             <Label.FormattedText>
                                                 <FormattedString>
-                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_tru_so_chinh},StringFormat='{0}:'}"/>
+                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_thuong_tru},StringFormat='{0}:'}"/>
                                                     <Span Text=" "/>
                                                     <Span Text="{Binding singleAccount.bsd_permanentaddress1}"/>
                                                 </FormattedString>

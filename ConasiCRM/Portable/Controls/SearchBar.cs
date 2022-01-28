@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Controls
@@ -7,7 +8,7 @@ namespace ConasiCRM.Portable.Controls
     {
         public SearchBar()
         {
-            Placeholder = "Tìm kiếm";
+            Placeholder = Language.tim_kiem;
             FontSize = 15;
             TextColor = Color.FromHex("#444444");
             FontFamily = "Segoe";

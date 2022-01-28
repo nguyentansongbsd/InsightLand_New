@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 
@@ -78,7 +79,7 @@ namespace ConasiCRM.Portable.Controls
         public void setActive()
         {
             string name = this.SelectedItem.GetType().GetProperty(this.NameDisplay)?.GetValue(this.SelectedItem, null)?.ToString();
-            if (name != null && name != "Tất cả")
+            if (name != null && name != Language.tat_ca)
             {
                 lblText.Text = name;
                 lblText.FontFamily = "SegoeBold";
