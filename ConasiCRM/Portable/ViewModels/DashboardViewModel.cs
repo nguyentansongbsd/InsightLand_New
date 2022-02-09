@@ -145,7 +145,7 @@ namespace ConasiCRM.Portable.ViewModels
             foreach (var item in result.value.Where(x => x.Date.Month == fourthMonth.Month))
             {
                 countTotalCommissionFo = this.TotalCommissionAMonth += item.CommissionTotal;
-                if (item.CommissionStatus == "100000007")
+                if (item.CommissionStatus == "100000007")//Accountant Confirmed
                 {
                     this.TotalPaidCommissionAMonth += item.CommissionTotal;
                 }
