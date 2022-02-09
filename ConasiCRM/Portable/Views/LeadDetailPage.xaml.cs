@@ -439,5 +439,10 @@ namespace ConasiCRM.Portable.Views
             }
         }
         #endregion
+
+        private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
+        {
+            OnAppearing();
+        }
     }
 }

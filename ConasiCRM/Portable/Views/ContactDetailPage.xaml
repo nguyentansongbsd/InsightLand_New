@@ -214,23 +214,14 @@
                                             <controls:FormLabel Text="{x:Static language:Language.sdt_kinh_doanh}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
                                             <controls:FormLabelValue Text="{Binding singleContact.telephone1}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
-                                        <Label Grid.Row="6" FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_lien_lac},StringFormat='{0}:  '}"/>
-                                                    <Span Text="{Binding singleContact.bsd_contactaddress}"/>
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-
-                                        <Label Grid.Row="7" FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding Source={x:Static language:Language.dia_chi_thuong_tru},StringFormat='{0}:  '}"/>
-                                                    <Span Text="{Binding singleContact.bsd_permanentaddress1}"/>
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="6">
+                                            <Label Text="{Binding Source={x:Static language:Language.dia_chi_lien_lac},StringFormat='{0}:'}" FontSize="15" TextColor="#444444" Grid.Column="0" Padding="25,10,0,10"/>
+                                            <Label Text="{Binding singleContact.bsd_contactaddress}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10"/>
+                                        </Grid>
+                                        <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="7">
+                                            <Label Text="{Binding Source={x:Static language:Language.dia_chi_thuong_tru},StringFormat='{0}:'}" FontSize="15" TextColor="#444444" Grid.Column="0" Padding="25,10,0,10"/>
+                                            <Label Text="{Binding singleContact.bsd_permanentaddress1}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10"/>
+                                        </Grid>
                                     </Grid>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>
@@ -585,8 +576,8 @@
                     <Label FontFamily="FontAwesomeSolid" Text="&#xf00d;" TextColor="#444444" FontSize="Small" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" BackgroundColor="White"/>
                 </telerikPrimitives:RadBorder>
             </Grid>
-
-            <views:ActivityPopupContentView x:Name="ActivityPopup" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>
+ 
+            <views:ActivityPopupContentView x:Name="ActivityPopup" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" HidePopupActivity="ActivityPopup_HidePopupActivity"/>
 
         </AbsoluteLayout>
     </ContentPage.Content>

@@ -130,7 +130,6 @@ namespace ConasiCRM.Portable.Views
                 }
             }
         }
-
         private async Task<string> SetAddress()
         {
             List<string> listaddress = new List<string>();
@@ -159,7 +158,6 @@ namespace ConasiCRM.Portable.Views
 
             return address;
         }
-
         private async void Website_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -322,7 +320,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     try
                     {
-                        var message = new SmsMessage(null, new[] { phone });
+                        var message = new SmsMessage(null, phone);
                         await Sms.ComposeAsync(message);
                     }
                     catch (FeatureNotSupportedException ex)
@@ -580,6 +578,11 @@ namespace ConasiCRM.Portable.Views
                 await Navigation.PushAsync(new TaskForm(viewModel.singleAccount.accountid, viewModel.singleAccount.bsd_name, viewModel.CodeAccount));
                 LoadingHelper.Hide();
             }
+        }
+
+        private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
+        {
+            OnAppearing();
         }
     }
 }
