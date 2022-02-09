@@ -24,6 +24,7 @@ namespace ConasiCRM.Portable.Views
         private List<Label> meetRequired = new List<Label>();
         private Guid ActivityId;
         private string activitytype;
+        public event EventHandler HidePopupActivity;
 
         public ActivityPopupContentView()
         {
@@ -35,6 +36,7 @@ namespace ConasiCRM.Portable.Views
         private void CloseContentActivity_Tapped(object sender, EventArgs e)
         {
             this.IsVisible = false;
+            HidePopupActivity?.Invoke((object)this, EventArgs.Empty);
         }
 
         public async void ShowActivityPopup(Guid activityid,string activitytypecode)
@@ -193,6 +195,7 @@ namespace ConasiCRM.Portable.Views
                     if (await viewModel.UpdateStatusPhoneCall(viewModel.CodeCompleted))
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
+                        NeedRefresh();
                         LoadingHelper.Hide();
                         ToastMessageHelper.ShortMessage(Language.cuoc_goi_da_hoan_thanh);
                     }
@@ -208,6 +211,7 @@ namespace ConasiCRM.Portable.Views
                     if (await viewModel.UpdateStatusTask(viewModel.CodeCompleted))
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
+                        NeedRefresh();
                         LoadingHelper.Hide();
                         ToastMessageHelper.ShortMessage(Language.cong_viec_da_hoan_thanh);
                     }
@@ -223,6 +227,7 @@ namespace ConasiCRM.Portable.Views
                     if (await viewModel.UpdateStatusMeet(viewModel.CodeCompleted))
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
+                        NeedRefresh();
                         LoadingHelper.Hide();
                         ToastMessageHelper.ShortMessage(Language.cuoc_hop_da_hoan_thanh);
                     }
@@ -241,6 +246,7 @@ namespace ConasiCRM.Portable.Views
                     if (await viewModel.UpdateStatusPhoneCall(viewModel.CodeCancel))
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.PhoneCall.statecode.ToString());
+                        NeedRefresh();
                         LoadingHelper.Hide();
                         ToastMessageHelper.ShortMessage(Language.cuoc_goi_da_duoc_huy);
                     }
@@ -256,6 +262,7 @@ namespace ConasiCRM.Portable.Views
                     if (await viewModel.UpdateStatusTask(viewModel.CodeCancel))
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Task.statecode.ToString());
+                        NeedRefresh();
                         LoadingHelper.Hide();
                         ToastMessageHelper.ShortMessage(Language.cong_viec_da_duoc_huy);
                     }
@@ -271,6 +278,7 @@ namespace ConasiCRM.Portable.Views
                     if (await viewModel.UpdateStatusMeet(viewModel.CodeCancel))
                     {
                         viewModel.ActivityStatusCode = StatusCodeActivity.GetStatusCodeById(viewModel.Meet.statecode.ToString());
+                        NeedRefresh();
                         LoadingHelper.Hide();
                         ToastMessageHelper.ShortMessage(Language.cuoc_hop_da_duoc_huy);
                     }
@@ -477,6 +485,17 @@ namespace ConasiCRM.Portable.Views
                     };
                 }
             }
+        }
+        private void NeedRefresh()
+        {
+            if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
+            if (ActivityList.NeedToRefreshMeet.HasValue) ActivityList.NeedToRefreshMeet = true;
+            if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
+            if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
+            if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+            if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+            if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
+            if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
         }
     }
 }

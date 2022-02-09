@@ -137,7 +137,8 @@
                                     <Label FontSize="15" TextColor="#444444">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Source={x:Static language:Language.du_an},StringFormat='{0}: '}"/>
+                                                <Span Text="{Binding Source={x:Static language:Language.du_an},StringFormat='{0}:'}"/>
+                                                <Span Text=" "/>
                                                 <Span Text="{Binding UnitInfo.bsd_project_name}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
@@ -145,7 +146,8 @@
                                     <Label FontSize="15" TextColor="#444444">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Source={x:Static language:Language.dien_tich_su_dung},StringFormat='{0}: '}"/>
+                                                <Span Text="{Binding Source={x:Static language:Language.dien_tich_su_dung},StringFormat='{0}:'}"/>
+                                                <Span Text=" "/>
                                                 <Span Text="{Binding UnitInfo.bsd_constructionarea,StringFormat='{0:#,0.#0} m2'}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
@@ -153,7 +155,8 @@
                                     <Label FontSize="15" TextColor="#444444">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}: '}"/>
+                                                <Span Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}"/>
+                                                <Span Text=" "/>
                                                 <Span Text="{Binding UnitInfo.bsd_unittype_name}"/>
                                             </FormattedString>
                                         </Label.FormattedText>

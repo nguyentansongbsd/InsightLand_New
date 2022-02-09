@@ -22,6 +22,7 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshQueue = null;
+        public static bool? NeedToRefreshQuotation = null;
         private UnitInfoViewModel viewModel;
 
         public UnitInfo(Guid id)
@@ -29,6 +30,7 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             this.BindingContext = viewModel = new UnitInfoViewModel();
             NeedToRefreshQueue = false;
+            NeedToRefreshQuotation = false;
             viewModel.UnitId = id;
             Init();
         }
@@ -94,6 +96,15 @@ namespace ConasiCRM.Portable.Views
                 viewModel.list_danhsachdatcho.Clear();
                 await viewModel.LoadQueues();
                 NeedToRefreshQueue = false;
+                LoadingHelper.Hide();
+            }
+            if (NeedToRefreshQuotation == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageBangTinhGia = 1;
+                viewModel.BangTinhGiaList.Clear();
+                await viewModel.LoadDanhSachBangTinhGia();
+                NeedToRefreshQuotation = false;
                 LoadingHelper.Hide();
             }
             await CrossMediaManager.Current.Stop();

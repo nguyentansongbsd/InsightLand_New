@@ -847,6 +847,7 @@ namespace ConasiCRM.Portable.Views
                         );
                     if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
+                    if (UnitInfo.NeedToRefreshQuotation.HasValue) UnitInfo.NeedToRefreshQuotation = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage(Language.tao_bang_tinh_gia_thanh_cong);
                     LoadingHelper.Hide();
@@ -889,6 +890,7 @@ namespace ConasiCRM.Portable.Views
                     if (QueuesDetialPage.NeedToRefreshBTG.HasValue) QueuesDetialPage.NeedToRefreshBTG = true;
                     if (BangTinhGiaDetailPage.NeedToRefresh.HasValue) BangTinhGiaDetailPage.NeedToRefresh = true;
                     if (ReservationList.NeedToRefreshReservationList.HasValue) ReservationList.NeedToRefreshReservationList = true;
+                    if (UnitInfo.NeedToRefreshQuotation.HasValue) UnitInfo.NeedToRefreshQuotation = true;
                     await Navigation.PopAsync();
                     ToastMessageHelper.ShortMessage(Language.cap_nhat_bang_tinh_gia_thanh_cong);
                     LoadingHelper.Hide();

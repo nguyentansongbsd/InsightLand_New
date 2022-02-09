@@ -204,7 +204,7 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task<bool> CheckReserve()
+        public async Task CheckReserve()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='quote'>
@@ -223,12 +223,15 @@ namespace ConasiCRM.Portable.ViewModels
                       </entity>
                     </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("quotes", fetchXml);
-            if (result == null) return false;
+            if (result == null) return;
             if (result.value.Any() == false && this.Queue.statuscode == 100000000)
             {
-                return true;
+                ShowBtnBangTinhGia = true;
             }
-            return false;
+            else
+            {
+                ShowBtnBangTinhGia = false;
+            }
         }
 
         public async Task LoadDanhSachDatCoc()

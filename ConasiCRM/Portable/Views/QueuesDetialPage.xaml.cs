@@ -40,7 +40,8 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.Queue != null)
             {
-                viewModel.ShowBtnBangTinhGia = await viewModel.CheckReserve();// co dat co thi an nut btg
+                //viewModel.ShowBtnBangTinhGia = 
+                await viewModel.CheckReserve();// co dat co thi an nut btg
                 SetButtons();
                 OnCompleted?.Invoke(true);
             }
@@ -68,7 +69,8 @@ namespace ConasiCRM.Portable.Views
                 viewModel.DatCocList.Clear();
                 viewModel.PageDatCoc = 1;
                 await viewModel.LoadDanhSachDatCoc();
-                viewModel.ShowBtnBangTinhGia = await viewModel.CheckReserve();
+                /*viewModel.ShowBtnBangTinhGia = */
+                await viewModel.CheckReserve();
                 SetButtons();
                 NeedToRefreshDC = false;
                 LoadingHelper.Hide();
@@ -78,15 +80,33 @@ namespace ConasiCRM.Portable.Views
         private void SetButtons()
         {
             viewModel.ShowButtons = (viewModel.ShowBtnHuyGiuCho == false && viewModel.ShowBtnBangTinhGia == false) ? false : true;
-            gridButtons.ColumnDefinitions.Clear();
-            var btns = gridButtons.Children.Where(x => x.IsVisible == true).ToList();
-            for (int i = 0; i < btns.Count(); i++)
+            //gridButtons.ColumnDefinitions.Clear();
+            //var btns = gridButtons.Children.Where(x => x.IsVisible == true).ToList();
+            //for (int i = 0; i < btns.Count(); i++)
+            //{
+            //    gridButtons.ColumnDefinitions.Add(new ColumnDefinition()
+            //    {
+            //        Width = new GridLength(1, GridUnitType.Auto),
+            //    });
+            //    Grid.SetColumn(btns[i], i);
+            //}
+            gridButtons = new Grid();
+            gridButtons.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star),});
+            if(viewModel.ShowBtnHuyGiuCho == true && viewModel.ShowBtnBangTinhGia == true)
             {
-                gridButtons.ColumnDefinitions.Add(new ColumnDefinition()
-                {
-                    Width = new GridLength(1, GridUnitType.Star),
-                });
-                Grid.SetColumn(btns[i], i);
+                gridButtons.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star), });
+                Grid.SetColumn(btnHuyGiuCho, 0);
+                Grid.SetColumn(btnBangTinhGia, 1);
+            }
+            else if (viewModel.ShowBtnHuyGiuCho == true && viewModel.ShowBtnBangTinhGia == false)
+            {
+                Grid.SetColumn(btnHuyGiuCho, 0);
+                Grid.SetColumn(btnBangTinhGia, 0);
+            }
+            else if (viewModel.ShowBtnHuyGiuCho == false && viewModel.ShowBtnBangTinhGia == true)
+            {
+                Grid.SetColumn(btnBangTinhGia, 0);
+                Grid.SetColumn(btnHuyGiuCho, 0);
             }
         }
 
@@ -108,14 +128,12 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private void GoToPhaseLaunch_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
 
             LoadingHelper.Hide();
         }
-
         private void GoToUnit_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -134,7 +152,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private void GoToAcount_Tapped(System.Object sender, System.EventArgs e)
         {
             LoadingHelper.Show();
@@ -153,7 +170,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private async void NhanTin_Tapped(System.Object sender, System.EventArgs e)
         {
             LoadingHelper.Show();
@@ -178,7 +194,6 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(ex.Message);
             }
         }
-
         private async void GoiDien_Tapped(System.Object sender, System.EventArgs e)
         {
             LoadingHelper.Show();
@@ -201,7 +216,6 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(ex.Message);
             }
         }
-
         private async void HuyGiuCho_Clicked(object sender, EventArgs e)
         {
             bool confirm = await DisplayAlert(Language.xac_nhan, Language.ban_co_muon_huy_giu_cho_nay_khong, Language.dong_y, Language.huy);
@@ -229,7 +243,6 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(Language.huy_giu_cho_that_bai);
             }
         }
-
         private void CreateQuotation_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -257,7 +270,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private void ThongTin_Tapped(object sender, EventArgs e)
         {
             VisualStateManager.GoToState(radBorderThongTin, "Active");
@@ -267,7 +279,6 @@ namespace ConasiCRM.Portable.Views
             stThongTin.IsVisible = true;
             stGiaoDich.IsVisible = false;
         }
-
         private async void GiaoDich_Tapped(object sender, EventArgs e)
         {
             VisualStateManager.GoToState(radBorderThongTin, "InActive");
@@ -290,7 +301,6 @@ namespace ConasiCRM.Portable.Views
             }
             LoadingHelper.Hide();
         }
-
         private async void ShowMoreBangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -298,7 +308,6 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadDanhSachBangTinhGia();
             LoadingHelper.Hide();
         }
-
         private async void ShowMoreDatCoc_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -306,7 +315,6 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadDanhSachDatCoc();
             LoadingHelper.Hide();
         }
-
         private async void ShowMoreHopDong_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -314,7 +322,6 @@ namespace ConasiCRM.Portable.Views
             await viewModel.LoadDanhSachHopDong();
             LoadingHelper.Hide();
         }
-
         private void ItemQuatation_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -334,7 +341,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private void ItemReservation_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -354,7 +360,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private void ItemHopDong_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -374,7 +379,6 @@ namespace ConasiCRM.Portable.Views
                 }
             };
         }
-
         private void Customer_Tapped(object sender, EventArgs e)
         {
             if(viewModel.Customer!= null)
@@ -414,6 +418,6 @@ namespace ConasiCRM.Portable.Views
                     };
                 }
             }
-        }
+        }        
     }
 }
