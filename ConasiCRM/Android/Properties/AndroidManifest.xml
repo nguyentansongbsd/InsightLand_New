@@ -16,7 +16,7 @@
 	<queries>
 		<intent>
 			<action android:name="android.intent.action.VIEW" />
-			<data android:scheme="smsto"/>
+			<data android:scheme="smsto" />
 		</intent>
 	</queries>
 	<application android:icon="@drawable/cns_logo_icon_app" android:label="Insight Land" android:theme="@style/Theme.Splash">

@@ -309,60 +309,24 @@
     <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_120-1.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_40-1.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_58-1.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_40-2.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_80-1.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\CNS_Logo_1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_40.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_60.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_58.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_87.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_80.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_120-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_180.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_20.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_40-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_29.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_58-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_40-2.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_80-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_152-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon-Conasi.appiconset\Conasi_Logo_1024.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets.xcassets\AppIcon-InsightLand.appiconset\" />

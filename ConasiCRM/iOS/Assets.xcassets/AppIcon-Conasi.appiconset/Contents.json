@@ -1,109 +1,109 @@
 {
   "images": [
     {
-      "filename": "CNS_Logo_40.png",
+      "filename": "Conasi_Logo_40.png",
       "size": "20x20",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_60.png",
+      "filename": "Conasi_Logo_60.png",
       "size": "20x20",
       "scale": "3x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_58.png",
+      "filename": "Conasi_Logo_58.png",
       "size": "29x29",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_87.png",
+      "filename": "Conasi_Logo_87.png",
       "size": "29x29",
       "scale": "3x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_80.png",
+      "filename": "Conasi_Logo_80.png",
       "size": "40x40",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_120.png",
+      "filename": "Conasi_Logo_120.png",
       "size": "40x40",
       "scale": "3x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_120-1.png",
+      "filename": "Conasi_Logo_120-1.png",
       "size": "60x60",
       "scale": "2x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_180.png",
+      "filename": "Conasi_Logo_180.png",
       "size": "60x60",
       "scale": "3x",
       "idiom": "iphone"
     },
     {
-      "filename": "CNS_Logo_20.png",
+      "filename": "Conasi_Logo_20.png",
       "size": "20x20",
       "scale": "1x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_40-1.png",
+      "filename": "Conasi_Logo_40-1.png",
       "size": "20x20",
       "scale": "2x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_29.png",
+      "filename": "Conasi_Logo_29.png",
       "size": "29x29",
       "scale": "1x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_58-1.png",
+      "filename": "Conasi_Logo_58-1.png",
       "size": "29x29",
       "scale": "2x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_40-2.png",
+      "filename": "Conasi_Logo_40-2.png",
       "size": "40x40",
       "scale": "1x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_80-1.png",
+      "filename": "Conasi_Logo_80-1.png",
       "size": "40x40",
       "scale": "2x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_167.png",
+      "filename": "Conasi_Logo_167.png",
       "size": "83.5x83.5",
       "scale": "2x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_76.png",
+      "filename": "Conasi_Logo_76.png",
       "size": "76x76",
       "scale": "1x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_152.png",
+      "filename": "Conasi_Logo_152-1.png",
       "size": "76x76",
       "scale": "2x",
       "idiom": "ipad"
     },
     {
-      "filename": "CNS_Logo_1024.png",
+      "filename": "Conasi_Logo_1024.png",
       "size": "1024x1024",
       "scale": "1x",
       "idiom": "ios-marketing"
