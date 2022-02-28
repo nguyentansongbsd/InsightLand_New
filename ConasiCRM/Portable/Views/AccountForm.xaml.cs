@@ -40,8 +40,7 @@ namespace ConasiCRM.Portable.Views
 
         public void Init()
         {
-            this.BindingContext = viewModel = new AccountFormViewModel();
-            centerModalContacAddress.Body.BindingContext = viewModel;            
+            this.BindingContext = viewModel = new AccountFormViewModel();       
             //Lookup_BusinessType.BindingContext = viewModel;
             SetPreOpen();
         }
@@ -158,13 +157,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 await viewModel.LoadContactForLookup();
                 LoadingHelper.Hide();
-            };
-            lookUpContacAddressCountry.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadCountryForLookup();
-                LoadingHelper.Hide();
-            };          
+            };      
         }
 
         private async void SaveData(string id)
@@ -226,7 +219,7 @@ namespace ConasiCRM.Portable.Views
                     return;
                 }
             }
-            if (string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_address))
+            if (string.IsNullOrWhiteSpace(viewModel.Address1.address))
             {
                 ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_lien_lac);
                 return;
@@ -279,128 +272,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
-        }
-
-        private async void DiaChiLienLac_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();               
-            if (viewModel.AddressLine1Contac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_housenumberstreet))
-            {
-                viewModel.AddressLine1Contac = viewModel.singleAccount.bsd_housenumberstreet;
-            }
-
-            if (viewModel.AddressCountryContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.country_name))
-            {
-                viewModel.AddressCountryContac = await viewModel.LoadCountryByName(viewModel.singleAccount.country_name);
-                await viewModel.LoadProvincesForLookup(viewModel.AddressCountryContac);
-            }
-
-            if (viewModel.AddressStateProvinceContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.province_name))
-            {
-                viewModel.AddressStateProvinceContac = await viewModel.LoadProvinceByName(viewModel.singleAccount._bsd_country_value, viewModel.singleAccount.province_name); ;
-                await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
-            }
-
-            if (viewModel.AddressCityContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.district_name))
-            {
-                viewModel.AddressCityContac = await viewModel.LoadDistrictByName(viewModel.singleAccount._bsd_province_value, viewModel.singleAccount.district_name);
-            }
-
-            LoadingHelper.Hide();
-            await centerModalContacAddress.Show();
-        }      
-
-        private async void ContacAddressCountry_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadProvincesForLookup(viewModel.AddressCountryContac);
-        }
-
-        private async void ContacAddressProvince_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
-        }
-
-        private async void CloseContacAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalContacAddress.Hide();
-        }
-
-        private async void ConfirmContacAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
-            {
-                viewModel.singleAccount.bsd_housenumberstreet = viewModel.AddressLine1Contac;
-                address.Add(viewModel.AddressLine1Contac);
-            }
-            else
-            {
-                viewModel.singleAccount.bsd_housenumberstreet = null;
-            }         
-
-            if (viewModel.AddressCityContac != null)
-            {
-                viewModel.singleAccount.district_name = viewModel.AddressCityContac.Name;
-                viewModel.singleAccount._bsd_district_value = viewModel.AddressCityContac.Id.ToString();
-                address.Add(viewModel.AddressCityContac.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.district_name = null;
-                viewModel.singleAccount._bsd_district_value = null;
-            }
-            if (viewModel.AddressStateProvinceContac != null)
-            {
-                viewModel.singleAccount.province_name = viewModel.AddressStateProvinceContac.Name;
-                viewModel.singleAccount._bsd_province_value = viewModel.AddressStateProvinceContac.Id.ToString();
-                address.Add(viewModel.AddressStateProvinceContac.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.province_name = null;
-                viewModel.singleAccount._bsd_province_value = null;
-            }
-
-            if (viewModel.AddressCountryContac != null)
-            {
-                viewModel.singleAccount.country_name = viewModel.AddressCountryContac.Name;
-                viewModel.singleAccount._bsd_country_value = viewModel.AddressCountryContac.Id.ToString();
-                address.Add(viewModel.AddressCountryContac.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.country_name = null;
-                viewModel.singleAccount._bsd_country_value = null;
-            }
-            viewModel.singleAccount.bsd_address = viewModel.AddressCompositeContac = string.Join(", ", address);
-
-            //Address En
-            List<string> addressEn = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
-            {
-                addressEn.Add(viewModel.AddressLine1Contac);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressCityContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvinceContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressStateProvinceContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressCountryContac.Detail);
-            }
-            viewModel.singleAccount.bsd_diachi = string.Join(", ", addressEn);
-
-            await centerModalContacAddress.Hide();
-        }
+        }       
     }
 }

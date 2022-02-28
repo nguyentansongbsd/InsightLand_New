@@ -23,6 +23,7 @@ namespace ConasiCRM.Portable.Views
         public static bool? NeedToRefreshMandatory = null;
         public static bool? NeedToRefreshQueues = null;
         public static bool? NeedToRefreshActivity = null;
+        public static OptionSet FromCustomer = null;
         private AccountDetailPageViewModel viewModel;
 
         public AccountDetailPage(Guid accountId)
@@ -55,7 +56,10 @@ namespace ConasiCRM.Portable.Views
             }
 
             if (viewModel.singleAccount.accountid != Guid.Empty)
+            {
+                FromCustomer = new OptionSet { Val = viewModel.singleAccount.accountid.ToString(), Label = viewModel.singleAccount.bsd_name, Title = viewModel.CodeAccount };
                 OnCompleted?.Invoke(true);
+            }
             else
                 OnCompleted?.Invoke(false);
             LoadingHelper.Hide();
@@ -473,7 +477,7 @@ namespace ConasiCRM.Portable.Views
         private async void AddMandatorySecondary(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            MandatorySecondaryForm newPage = new MandatorySecondaryForm(viewModel.singleAccount.accountid);
+            MandatorySecondaryForm newPage = new MandatorySecondaryForm(new Models.LookUp { Id = viewModel.singleAccount.accountid, Name = viewModel.singleAccount.bsd_name });
             await Navigation.PushAsync(newPage);
             LoadingHelper.Hide();
         }
@@ -557,7 +561,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleAccount != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new MeetingForm(viewModel.singleAccount.accountid,viewModel.singleAccount.bsd_name,viewModel.CodeAccount));
+                await Navigation.PushAsync(new MeetingForm());
                 LoadingHelper.Hide();
             }
         }
@@ -566,7 +570,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleAccount != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new PhoneCallForm(viewModel.singleAccount.accountid, viewModel.singleAccount.bsd_name, viewModel.CodeAccount));
+                await Navigation.PushAsync(new PhoneCallForm());
                 LoadingHelper.Hide();
             }
         }
@@ -575,7 +579,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleAccount != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new TaskForm(viewModel.singleAccount.accountid, viewModel.singleAccount.bsd_name, viewModel.CodeAccount));
+                await Navigation.PushAsync(new TaskForm());
                 LoadingHelper.Hide();
             }
         }

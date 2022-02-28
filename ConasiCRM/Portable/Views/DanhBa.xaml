@@ -5,8 +5,9 @@
              xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              BackgroundColor="White"
-             Title="Danh Bạ"
+             Title="{x:Static language:Language.danh_ba_title}"
              x:Class="ConasiCRM.Portable.Views.DanhBa">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -38,7 +39,7 @@
                                     <Label Grid.Row="0" Grid.Column="0" FontSize="18" TextColor="Black" Text="{Binding Name}" />
                                     <Label Grid.Row="1" Grid.Column="0" FontSize="15" Text="{Binding numberFormated}" TextColor="#999999" />
                                     <telerikPrimitives:RadCheckBox Grid.RowSpan="2" Grid.Column="1" CheckedColor="DarkGreen" IsEnabled="False" VerticalOptions="Center" IsChecked="{Binding IsSelected, Mode=TwoWay}" IsVisible="{Binding numberFormated, Converter={StaticResource NotNullToBool}}" HorizontalOptions="Center"/>
-                                    <Label Grid.RowSpan="2" Grid.Column="1" Text="Đã Chuyển" FontSize="15" TextColor="#444444" BackgroundColor="White" HorizontalOptions="Center" IsVisible="{Binding IsConvertToLead}" VerticalOptions="Center" Padding="5"/>
+                                    <Label Grid.RowSpan="2" Grid.Column="1" Text="{x:Static language:Language.da_chuyen}" FontSize="15" TextColor="#444444" BackgroundColor="White" HorizontalOptions="Center" IsVisible="{Binding IsConvertToLead}" VerticalOptions="Center" Padding="5"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

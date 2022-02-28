@@ -197,7 +197,10 @@ namespace ConasiCRM.Portable.Controls
             foreach (var x in result.value)
             {
                 if (UserLogged.Language == "en")
-                    x.Name = x.Detail;
+                {
+                    if (!string.IsNullOrWhiteSpace(x.Detail))
+                        x.Name = x.Detail;
+                }
                 list_country_lookup.Add(x);
             }
         }
@@ -219,9 +222,13 @@ namespace ConasiCRM.Portable.Controls
                 var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Models.LookUp>>("bsd_countries", fetch);
                 if (result != null && result.value.Count > 0)
                 {
-                    Country = result.value.FirstOrDefault();
+                    var res = result.value.FirstOrDefault();
                     if (UserLogged.Language == "en")
-                        Country.Name = Country.Detail;
+                    {
+                        if (!string.IsNullOrWhiteSpace(res.Detail))
+                            res.Name = res.Detail;
+                    }
+                    Country = res;
                     SelectedItem.country_name = Country.Name;
                     SelectedItem.country_id = Country.Id;
                 }
@@ -249,7 +256,10 @@ namespace ConasiCRM.Portable.Controls
             foreach (var x in result.value)
             {
                 if (UserLogged.Language == "en")
-                    x.Name = x.Detail;
+                {
+                    if (!string.IsNullOrWhiteSpace(x.Detail))
+                        x.Name = x.Detail;
+                }
                 list_province_lookup.Add(x);
             }
         }
@@ -265,16 +275,23 @@ namespace ConasiCRM.Portable.Controls
                                     <order attribute='bsd_provincename' descending='false' />
                                     <filter type='and'>
                                         <condition attribute='bsd_country' operator='eq' value='" + SelectedItem.country_id + @"' />
-                                        <condition attribute='bsd_provincename' operator='eq' value='" + SelectedItem.province_name + @"' />
+                                        <filter type='or'>
+                                            <condition attribute='bsd_provincename' operator='eq' value='" + SelectedItem.province_name + @"' />
+                                            <condition attribute='bsd_nameen' operator='eq' value='" + SelectedItem.province_name + @"' />
+                                        </filter>
                                     </filter>
                                   </entity>
                                 </fetch>";
                 var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Models.LookUp>>("new_provinces", fetch);
                 if (result != null && result.value.Count > 0)
                 {
-                    Province = result.value.FirstOrDefault();
+                    var res = result.value.FirstOrDefault();
                     if (UserLogged.Language == "en")
-                        Province.Name = Province.Detail;
+                    {
+                        if (!string.IsNullOrWhiteSpace(res.Detail))
+                            res.Name = res.Detail;
+                    }
+                    Province = res;
                     SelectedItem.province_id = Province.Id;
                     SelectedItem.province_name = Province.Name;
                 }
@@ -302,7 +319,10 @@ namespace ConasiCRM.Portable.Controls
             foreach (var x in result.value)
             {
                 if (UserLogged.Language == "en")
-                    x.Name = x.Detail;
+                {   
+                    if(!string.IsNullOrWhiteSpace(x.Detail))
+                        x.Name = x.Detail; 
+                }
                 list_district_lookup.Add(x);
             }
         }
@@ -318,16 +338,23 @@ namespace ConasiCRM.Portable.Controls
                                 <order attribute='new_name' descending='false' />
                                 <filter type='and'>
                                     <condition attribute='new_province' operator='eq' value='" + SelectedItem.province_id + @"' />
-                                    <condition attribute='new_name' operator='eq' value='" + SelectedItem.district_name + @"' />
+                                    <filter type='or'>
+                                        <condition attribute='bsd_nameen' operator='eq' value='" + SelectedItem.district_name + @"' />
+                                        <condition attribute='new_name' operator='eq' value='" + SelectedItem.district_name + @"' />
+                                    </filter>
                                 </filter>
                               </entity>
                             </fetch>";
                 var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<Models.LookUp>>("new_districts", fetch);
                 if (result != null && result.value.Count > 0)
                 {
-                    District = result.value.FirstOrDefault();
+                    var res = result.value.FirstOrDefault();
                     if (UserLogged.Language == "en")
-                        District.Name = District.Detail;
+                    {
+                        if (!string.IsNullOrWhiteSpace(res.Detail))
+                            res.Name = res.Detail;
+                    }
+                    District = res;
                     SelectedItem.district_name = District.Name;
                     SelectedItem.district_id = District.Id;
                 }

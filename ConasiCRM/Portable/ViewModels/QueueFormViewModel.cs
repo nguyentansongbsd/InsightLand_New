@@ -83,8 +83,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='product'>
-                                    <attribute name='name' alias='bsd_units_name' />                                   
-                                    <attribute name='description' />                                
+                                    <attribute name='name' alias='bsd_units_name' />                                 
                                     <attribute name='statuscode' alias='UnitStatusCode'/>
                                     <attribute name='bsd_projectcode' />                                 
                                     <attribute name='productid' alias='bsd_units_id' />
@@ -586,7 +585,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         //}
 
-        public async void createQueueDraft(bool isQueueProject, Guid id)
+        public async Task<string> createQueueDraft(bool isQueueProject, Guid id)
         {
             if(isQueueProject)
             {
@@ -606,16 +605,23 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
-                                this.idQueueDraft = Guid.Parse(itemformat);
+                            { this.idQueueDraft = Guid.Parse(itemformat);
+                                return null;
+                            }
                             else
+                            {
                                 this.idQueueDraft = Guid.Empty;
+                                return res.ErrorResponse?.error.message;
+                            }
                         }
                     }
                 }
                 else
                 {
                     this.idQueueDraft = Guid.Empty;
+                    return res.ErrorResponse?.error.message;
                 }
+                return res.ErrorResponse?.error.message;
             }   
             else
             {
@@ -636,16 +642,24 @@ namespace ConasiCRM.Portable.ViewModels
                         {
                             var itemformat = item.Replace("content", "").Replace(":", "").Replace("'", "").Replace("}", "").Replace('"', ' ').Trim();
                             if (Guid.Parse(itemformat) != Guid.Empty)
+                            {
                                 this.idQueueDraft = Guid.Parse(itemformat);
+                                return null;
+                            }
                             else
+                            {
                                 this.idQueueDraft = Guid.Empty;
+                                return res.ErrorResponse?.error.message;
+                            }
                         }
                     }
                 }
                 else
                 {
                     this.idQueueDraft = Guid.Empty;
+                    return res.ErrorResponse?.error.message;
                 }
+                return res.ErrorResponse?.error.message;
             }    
         }
 

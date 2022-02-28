@@ -5,6 +5,7 @@ using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -23,8 +24,6 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
             Init();
             InitAdd();
-            Lookup_NguoiLienQuan.IsVisible = true;
-            ContactMapping.IsVisible = false;
         }
 
         public TaskForm(Guid taskId)
@@ -33,29 +32,50 @@ namespace ConasiCRM.Portable.Views
             Init();
             viewModel.TaskId = taskId;
             InitUpdate();
-            Lookup_NguoiLienQuan.IsVisible = true;
-            ContactMapping.IsVisible = false;
         }
 
         public TaskForm(DateTime dateTimeNew)
         {
             InitializeComponent();
 
-        }
-
-        public TaskForm(Guid idCustomer, string nameCustomer, string codeCustomer)
-        {
-            InitializeComponent();
-            Init();
-            InitAdd();
-            viewModel.Customer = new OptionSet { Val= idCustomer.ToString(), Label = nameCustomer, Title = codeCustomer};
-            Lookup_NguoiLienQuan.IsVisible = false;
-            ContactMapping.IsVisible = true;
-        }
+        }      
 
         public void Init()
         {
             this.BindingContext = viewModel = new TaskFormViewModel();
+            // kiểm tra page trước là page nào
+            var page_before = App.Current.MainPage.Navigation.NavigationStack.Last()?.GetType().Name;
+            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage" || page_before == "LeadDetailPage")
+            {
+                if (page_before == "ContactDetailPage" && ContactDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(ContactDetailPage.FromCustomer.Val))
+                {
+                    viewModel.Customer = ContactDetailPage.FromCustomer;
+                    Lookup_NguoiLienQuan.IsVisible = false;
+                    ContactMapping.IsVisible = true;
+                }
+                else if (page_before == "AccountDetailPage" && AccountDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(AccountDetailPage.FromCustomer.Val))
+                {
+                    viewModel.Customer = AccountDetailPage.FromCustomer;
+                    Lookup_NguoiLienQuan.IsVisible = false;
+                    ContactMapping.IsVisible = true;
+                }
+                else if (page_before == "LeadDetailPage" && LeadDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(LeadDetailPage.FromCustomer.Val))
+                {
+                    viewModel.Customer = LeadDetailPage.FromCustomer;
+                    Lookup_NguoiLienQuan.IsVisible = false;
+                    ContactMapping.IsVisible = true;
+                }
+                else
+                {
+                    Lookup_NguoiLienQuan.IsVisible = true;
+                    ContactMapping.IsVisible = false;
+                }
+            }
+            else
+            {
+                Lookup_NguoiLienQuan.IsVisible = true;
+                ContactMapping.IsVisible = false;
+            }
         }
 
         public void InitAdd()

@@ -20,6 +20,7 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnCompleted;
         private LeadDetailPageViewModel viewModel;
         private Guid Id;
+        public static OptionSet FromCustomer = null;
         public LeadDetailPage(Guid id)
         {
             InitializeComponent();
@@ -38,7 +39,10 @@ namespace ConasiCRM.Portable.Views
             SetButtonFloatingButton();
 
             if (viewModel.singleLead.leadid != Guid.Empty)
+            {
+                FromCustomer = new OptionSet { Val = viewModel.singleLead.leadid.ToString(), Label = viewModel.singleLead.lastname, Title = viewModel.CodeLead };
                 OnCompleted?.Invoke(true);
+            }
             else
                 OnCompleted?.Invoke(false);
             LoadingHelper.Hide();
@@ -416,7 +420,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleLead != null && viewModel.singleLead.leadid != Guid.Empty)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new MeetingForm(viewModel.singleLead.leadid, viewModel.singleLead.lastname, viewModel.CodeLead));
+                await Navigation.PushAsync(new MeetingForm());
                 LoadingHelper.Hide();
             }
         }
@@ -425,7 +429,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleLead != null && viewModel.singleLead.leadid != Guid.Empty)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new PhoneCallForm(viewModel.singleLead.leadid, viewModel.singleLead.lastname, viewModel.CodeLead));
+                await Navigation.PushAsync(new PhoneCallForm());
                 LoadingHelper.Hide();
             }
         }
@@ -434,7 +438,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleLead != null && viewModel.singleLead.leadid != Guid.Empty)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new TaskForm(viewModel.singleLead.leadid, viewModel.singleLead.lastname, viewModel.CodeLead));
+                await Navigation.PushAsync(new TaskForm());
                 LoadingHelper.Hide();
             }
         }

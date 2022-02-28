@@ -225,7 +225,7 @@
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="{Binding Queue.createdon,StringFormat='{0:dd/MM/yyyy} - '}" />
-                                                        <Span Text="{Binding Queue.createdon,StringFormat=' {0:hh:mm tt}'}"/>
+                                                        <Span Text="{Binding Queue.createdon,StringFormat=' {0:HH:mm}'}"/>
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
@@ -237,7 +237,7 @@
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="{Binding Queue.bsd_bookingtime,StringFormat='{0:dd/MM/yyyy} - '}" />
-                                                        <Span Text="{Binding Queue.bsd_bookingtime,StringFormat=' {0:hh:mm tt}'}"/>
+                                                        <Span Text="{Binding Queue.bsd_bookingtime,StringFormat=' {0:HH:mm}'}"/>
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
@@ -249,7 +249,7 @@
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" />
-                                                        <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat=' {0:hh:mm tt}'}"/>
+                                                        <Span Text="{Binding Queue.bsd_queuingexpired,StringFormat=' {0:HH:mm}'}"/>
 
                                                     </FormattedString>
                                                 </Label.FormattedText>

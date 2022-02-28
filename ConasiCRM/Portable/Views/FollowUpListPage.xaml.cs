@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
 
@@ -38,7 +39,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    await DisplayAlert("", "Không tìm thấy dữ liệu", "Đóng");
+                    await DisplayAlert("", Language.khong_tim_thay_thong_tin, Language.dong);                   
                     LoadingHelper.Hide();
                 }
             };

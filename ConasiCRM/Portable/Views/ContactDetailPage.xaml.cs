@@ -29,6 +29,7 @@ namespace ConasiCRM.Portable.Views
         private Guid Id;
         private PhotoBrowser photoBrowser;
         PhotoShow photoShow;
+        public static OptionSet FromCustomer = null;
         public ContactDetailPage(Guid contactId)
         {
             InitializeComponent();
@@ -55,7 +56,10 @@ namespace ConasiCRM.Portable.Views
             }
 
             if (viewModel.singleContact.contactid != Guid.Empty)
+            {
+                FromCustomer = new OptionSet { Val = viewModel.singleContact.contactid.ToString(), Label = viewModel.singleContact.bsd_fullname, Title = viewModel.CodeContac };
                 OnCompleted(true);
+            }
             else
                 OnCompleted(false);
             LoadingHelper.Hide();
@@ -66,7 +70,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleContact != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new MeetingForm(viewModel.singleContact.contactid, viewModel.singleContact.bsd_fullname, viewModel.CodeContac));
+                await Navigation.PushAsync(new MeetingForm());
                 LoadingHelper.Hide();
             }
         }
@@ -76,7 +80,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleContact != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new PhoneCallForm(viewModel.singleContact.contactid, viewModel.singleContact.bsd_fullname, viewModel.CodeContac));
+                await Navigation.PushAsync(new PhoneCallForm());
                 LoadingHelper.Hide();
             }
         }
@@ -86,7 +90,7 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.singleContact != null)
             {
                 LoadingHelper.Show();
-                await Navigation.PushAsync(new TaskForm(viewModel.singleContact.contactid, viewModel.singleContact.bsd_fullname, viewModel.CodeContac));
+                await Navigation.PushAsync(new TaskForm());
                 LoadingHelper.Hide();
             }
         }

@@ -32,17 +32,7 @@ namespace ConasiCRM.Portable.Views
             Init();
             MeetId = id;
             Update();
-        }
-
-        public MeetingForm(Guid idCustomer, string nameCustomer, string codeCustomer)
-        {
-            InitializeComponent();
-            Init();
-            Create();
-            viewModel.CustomerMapping = new OptionSet { Val = idCustomer.ToString(), Label = nameCustomer, Title = codeCustomer };
-            Lookup_Required.IsVisible = false;
-            CustomerMapping.IsVisible = true;
-        }
+        }      
 
         private void Init()
         {
@@ -50,6 +40,52 @@ namespace ConasiCRM.Portable.Views
             BindingContext = viewModel = new MeetingViewModel();
             DatePickerStart.DefaultDisplay = DateTime.Now;
             DatePickerEnd.DefaultDisplay = DateTime.Now;
+            // kiểm tra page trước là page nào
+            var page_before = App.Current.MainPage.Navigation.NavigationStack.Last()?.GetType().Name;
+            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage")
+            {
+                if (page_before == "ContactDetailPage" && ContactDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(ContactDetailPage.FromCustomer.Val))
+                {
+                    viewModel.CustomerMapping = ContactDetailPage.FromCustomer;
+                    Lookup_Required.IsVisible = false;
+                    CustomerMapping.IsVisible = true;
+                    Lookup_Customer.IsVisible = false;
+                    RegardingMapping.IsVisible = true;
+                    Lookup_Option.ne_customer = Guid.Parse(viewModel.CustomerMapping.Val);
+                }
+                else if (page_before == "AccountDetailPage" && AccountDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(AccountDetailPage.FromCustomer.Val))
+                {
+                    viewModel.CustomerMapping = AccountDetailPage.FromCustomer;
+                    Lookup_Required.IsVisible = false;
+                    CustomerMapping.IsVisible = true;
+                    Lookup_Customer.IsVisible = false;
+                    RegardingMapping.IsVisible = true;
+                    Lookup_Option.ne_customer = Guid.Parse(viewModel.CustomerMapping.Val);
+                }
+                else if (page_before == "LeadDetailPage" && LeadDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(LeadDetailPage.FromCustomer.Val))
+                {
+                    viewModel.CustomerMapping = LeadDetailPage.FromCustomer;
+                    Lookup_Required.IsVisible = false;
+                    CustomerMapping.IsVisible = true;
+                    Lookup_Customer.IsVisible = false;
+                    RegardingMapping.IsVisible = true;
+                    Lookup_Option.ne_customer = Guid.Parse(viewModel.CustomerMapping.Val);
+                }
+                else
+                {
+                    Lookup_Required.IsVisible = true;
+                    CustomerMapping.IsVisible = false;
+                    Lookup_Customer.IsVisible = true;
+                    RegardingMapping.IsVisible = false;
+                }
+            }
+            else
+            {
+                Lookup_Required.IsVisible = true;
+                CustomerMapping.IsVisible = false;
+                Lookup_Customer.IsVisible = true;
+                RegardingMapping.IsVisible = false;
+            }
         }
 
         private void Create()
@@ -136,6 +172,28 @@ namespace ConasiCRM.Portable.Views
                 {
                     ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                     return;
+                }
+            }
+            if (viewModel.CustomerMapping == null)
+            {
+                if (viewModel.Optional != null && viewModel.Optional.Count > 0)
+                {
+                    if (!CheckCusomer(viewModel.Required, viewModel.Optional))
+                    {
+                        ToastMessageHelper.ShortMessage(Language.nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (viewModel.Optional != null && viewModel.Optional.Count > 0)
+                {
+                    if (!CheckCusomer(null, viewModel.Optional, viewModel.CustomerMapping))
+                    {
+                        ToastMessageHelper.ShortMessage(Language.nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc);
+                        return;
+                    }
                 }
             }
 
@@ -275,6 +333,33 @@ namespace ConasiCRM.Portable.Views
                 viewModel.MeetingModel.isalldayevent = false;
                 ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
             }    
+        }
+        private bool CheckCusomer(List<OptionSetFilter> required = null, List<OptionSetFilter> option = null, OptionSet customer = null)
+        {
+            // kiểm tra từ kh hàng- kh liên quan k check
+            if (required != null && option != null)
+            {
+                if (required.Where(x => option.Any(s => s == x)).ToList().Count > 0)
+                    return false;
+                else
+                    return true;
+            }
+            else if (required != null && customer != null)
+            {
+                if (required.Where(x => x.Val == customer.Val).ToList().Count > 0)
+                    return false;
+                else
+                    return true;
+            }
+            else if (option != null && customer != null)
+            {
+                if (option.Where(x => x.Val == customer.Val).ToList().Count > 0)
+                    return false;
+                else
+                    return true;
+            }
+            else
+                return false;
         }
     }
 }

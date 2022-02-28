@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -115,7 +116,7 @@ namespace ConasiCRM.Portable.ViewModels
         public LeadFormViewModel()
         {
             singleLead = new LeadFormModel();
-            this.Genders = new List<OptionSet>() { new OptionSet("1","Nam"), new OptionSet("2", "Nữ") };
+            this.Genders = new List<OptionSet>() { new OptionSet("1",Language.gender_male_sts), new OptionSet("2", Language.gender_female_sts), new OptionSet("100000000", Language.gender_other_sts) };
             this.loadIndustrycode();
         }
 

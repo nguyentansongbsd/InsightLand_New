@@ -33,7 +33,7 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new PhanHoiFormViewModel();
-            viewModel.TabsDoiTuong = new List<string>() { "Giữ chỗ,", "Bảng Tính Giá", "Hợp đồng" };
+            viewModel.TabsDoiTuong = new List<string>() { Language.giu_cho, Language.bang_tinh_gia, Language.hop_dong };
             SerPreOpen();
         }
 
