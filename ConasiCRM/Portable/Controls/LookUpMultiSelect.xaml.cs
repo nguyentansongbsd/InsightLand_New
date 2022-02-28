@@ -59,7 +59,8 @@ namespace ConasiCRM.Portable.Controls
         public static string CodeLead = "1";
         private List<OptionSetFilter> Lead_itemselecteds { get; set; } = new List<OptionSetFilter>();
         private List<OptionSetFilter> Contact_itemselecteds { get; set; } = new List<OptionSetFilter>();
-        private List<OptionSetFilter> Account_itemselecteds { get; set; } = new List<OptionSetFilter>();       
+        private List<OptionSetFilter> Account_itemselecteds { get; set; } = new List<OptionSetFilter>();
+        public Guid ne_customer { get; set; }
         public LookUpMultiSelect()
         {
             InitializeComponent();
@@ -308,6 +309,11 @@ namespace ConasiCRM.Portable.Controls
         }
         private void SetUpContact()
         {
+            string ne_cus = null;
+            if (ne_customer != Guid.Empty)
+            {
+                ne_cus = "<condition attribute='contactid' operator='ne' value='" + ne_customer + @"' />";
+            }
             string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                   <entity name='contact'>
                     <attribute name='contactid' alias='Val' />
@@ -318,6 +324,7 @@ namespace ConasiCRM.Portable.Controls
                     <order attribute='fullname' descending='false' />                   
                     <filter type='and'>
                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                    " + ne_cus + @"
                     </filter>
                   </entity>
                 </fetch>";
@@ -355,6 +362,11 @@ namespace ConasiCRM.Portable.Controls
                                     <value>0</value>
                                   </condition>";
             }
+            string ne_cus = null;
+            if (ne_customer != Guid.Empty)
+            {
+                ne_cus = "<condition attribute='leadid' operator='ne' value='" + ne_customer + @"' />";
+            }
 
             string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='lead'>
@@ -365,6 +377,7 @@ namespace ConasiCRM.Portable.Controls
                                 <filter type='and'>
                                     " + loadNewLead + @"
                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                    " + ne_cus + @"
                                 </filter>
                               </entity>
                             </fetch>";
@@ -396,6 +409,11 @@ namespace ConasiCRM.Portable.Controls
         }
         private void SetUpAccount()
         {
+            string ne_cus = null;
+            if (ne_customer != Guid.Empty)
+            {
+                ne_cus = "<condition attribute='accountid' operator='ne' value='" + ne_customer + @"' />";
+            }
             string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='account'>
                                 <attribute name='name' alias='Label'/>
@@ -405,6 +423,7 @@ namespace ConasiCRM.Portable.Controls
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
                                     <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                " + ne_cus + @"
                                 </filter>
                               </entity>
                             </fetch>";

@@ -166,7 +166,7 @@
     <value>Do you want to delete this mandatory secondary?</value>
   </data>
   <data name="ban_dang_su_dung_mat_khau_cu_vui_long_nhap_lai" xml:space="preserve">
-    <value>You are using the old password. Please re-enter</value>
+    <value>You are using the old password. Please re-enter.</value>
   </data>
   <data name="ban_giao_title" xml:space="preserve">
     <value>Handover</value>
@@ -184,16 +184,16 @@
     <value>Comment - Decision</value>
   </data>
   <data name="cap_nhat" xml:space="preserve">
-    <value>Edit</value>
+    <value>Update</value>
   </data>
   <data name="cap_nhat_bang_tinh_gia" xml:space="preserve">
     <value>Update quotation</value>
   </data>
   <data name="cap_nhat_bang_tinh_gia_thanh_cong" xml:space="preserve">
-    <value>Quotation has been updated successfully</value>
+    <value>Quotation has been updated successfully.</value>
   </data>
   <data name="cap_nhat_bang_tinh_gia_that_bai" xml:space="preserve">
-    <value>Failed to update quotation</value>
+    <value>Failed to update quotation.</value>
   </data>
   <data name="cap_nhat_bang_tinh_gia_title" xml:space="preserve">
     <value>Update Quotation</value>
@@ -202,10 +202,10 @@
     <value>Update task</value>
   </data>
   <data name="cap_nhat_cong_viec_thanh_cong" xml:space="preserve">
-    <value>Task has been updated successfully</value>
+    <value>Task has been updated successfully.</value>
   </data>
   <data name="cap_nhat_cong_viec_that_bai" xml:space="preserve">
-    <value>Failed to update task</value>
+    <value>Failed to update task.</value>
   </data>
   <data name="cap_nhat_cong_viec_title" xml:space="preserve">
     <value>Update Task</value>
@@ -214,10 +214,10 @@
     <value>Update phone call</value>
   </data>
   <data name="cap_nhat_cuoc_goi_thanh_cong" xml:space="preserve">
-    <value>Phone call has been updated successfully</value>
+    <value>Phone call has been updated successfully.</value>
   </data>
   <data name="cap_nhat_cuoc_goi_that_bai" xml:space="preserve">
-    <value>Failed to update phone call</value>
+    <value>Failed to update phone call.</value>
   </data>
   <data name="cap_nhat_cuoc_goi_title" xml:space="preserve">
     <value>Update Phone Call</value>
@@ -226,28 +226,28 @@
     <value>Update appointment</value>
   </data>
   <data name="cap_nhat_cuoc_hop_thanh_cong" xml:space="preserve">
-    <value>Appointment has been updated successfully</value>
+    <value>Appointment has been updated successfully.</value>
   </data>
   <data name="cap_nhat_cuoc_hop_that_bai" xml:space="preserve">
-    <value>Failed to update appointment</value>
+    <value>Failed to update appointment.</value>
   </data>
   <data name="cap_nhat_cuoc_hop_title" xml:space="preserve">
     <value>Update Appointment</value>
   </data>
   <data name="cap_nhat_danh_sach_theo_doi_thanh_cong" xml:space="preserve">
-    <value>Follow up list has been updated successfully</value>
+    <value>Follow up list has been updated successfully.</value>
   </data>
   <data name="cap_nhat_danh_sach_theo_doi_that_bai" xml:space="preserve">
-    <value>Failed to update follow up list</value>
+    <value>Failed to update follow up list.</value>
   </data>
   <data name="cap_nhat_dieu_kien_ban_giao_that_bai" xml:space="preserve">
-    <value>Failed to update handover condition</value>
+    <value>Failed to update handover condition.</value>
   </data>
   <data name="cap_nhat_dong_so_huu_thanh_cong" xml:space="preserve">
-    <value>Co-owner has been updated successfully</value>
+    <value>Co-owner has been updated successfully.</value>
   </data>
   <data name="cap_nhat_dong_so_huu_that_bai" xml:space="preserve">
-    <value>Failed to update Co-owner</value>
+    <value>Failed to update Co-owner.</value>
   </data>
   <data name="cap_nhat_dong_so_huu_title" xml:space="preserve">
     <value>Update Co-owner</value>
@@ -271,19 +271,19 @@
     <value>Update cases</value>
   </data>
   <data name="cap_nhat_phan_hoi_thanh_cong" xml:space="preserve">
-    <value>Case has been updated successfully</value>
+    <value>Case has been updated successfully.</value>
   </data>
   <data name="cap_nhat_phan_hoi_that_bai" xml:space="preserve">
-    <value>Failed to update cases</value>
+    <value>Failed to update cases.</value>
   </data>
   <data name="cap_nhat_phan_hoi_title" xml:space="preserve">
     <value>Update Cases</value>
   </data>
   <data name="cap_nhat_thanh_cong" xml:space="preserve">
-    <value>Updated successfully</value>
+    <value>Updated successfully.</value>
   </data>
   <data name="cap_nhat_that_bai" xml:space="preserve">
-    <value>Failed to update</value>
+    <value>Failed to update.</value>
   </data>
   <data name="cap_nhat_thong_tin_title" xml:space="preserve">
     <value>Update Information</value>
@@ -349,7 +349,7 @@
     <value>Policy</value>
   </data>
   <data name="chinh_sua" xml:space="preserve">
-    <value>Edit</value>
+    <value>Update</value>
   </data>
   <data name="chi_tiet_title" xml:space="preserve">
     <value>Details</value>
@@ -511,19 +511,19 @@
     <value>Preparing</value>
   </data>
   <data name="chua_chon_billable_time" xml:space="preserve">
-    <value>Billable time is empty</value>
+    <value>Billable time is empty.</value>
   </data>
   <data name="chua_chon_huong_giai_quyet" xml:space="preserve">
-    <value>Resolution type  is empty</value>
+    <value>Resolution type  is empty.</value>
   </data>
   <data name="chua_co_contact_khong_the_chinh_sua_thong_tin" xml:space="preserve">
-    <value>Contact is empty, can not edit info</value>
+    <value>Contact is empty, can not edit info.</value>
   </data>
   <data name="chua_co_file_nao_duoc_tai" xml:space="preserve">
-    <value>This list is empty</value>
+    <value>This list is empty.</value>
   </data>
   <data name="chua_duoc_cap_quyen_danh_ba" xml:space="preserve">
-    <value>Missing [read contact] permission</value>
+    <value>Missing [read contact] permission.</value>
   </data>
   <data name="chua_nhap_phuong_an" xml:space="preserve">
     <value>Resolution is empty</value>
@@ -544,7 +544,7 @@
     <value>Do you want to convert selected contacts into leads?</value>
   </data>
   <data name="chuyen_thanh_cong" xml:space="preserve">
-    <value>Successfully transferred</value>
+    <value>Successfully transferred.</value>
   </data>
   <data name="chu_dau_tu" xml:space="preserve">
     <value>Developer</value>
@@ -559,10 +559,10 @@
     <value>Company</value>
   </data>
   <data name="cong_viec_da_duoc_huy" xml:space="preserve">
-    <value>Task has been canceled</value>
+    <value>Task has been canceled.</value>
   </data>
   <data name="cong_viec_da_hoan_thanh" xml:space="preserve">
-    <value>Task has been completed</value>
+    <value>Task has been completed.</value>
   </data>
   <data name="cong_viec_hom_nay" xml:space="preserve">
     <value>TODAY'S WORK</value>
@@ -625,19 +625,19 @@
     <value>Terminated</value>
   </data>
   <data name="cuoc_goi_da_duoc_huy" xml:space="preserve">
-    <value>Phone call has been canceled</value>
+    <value>Phone call has been canceled.</value>
   </data>
   <data name="cuoc_goi_da_hoan_thanh" xml:space="preserve">
-    <value>Phone call has been completed</value>
+    <value>Phone call has been completed.</value>
   </data>
   <data name="cuoc_goi_title" xml:space="preserve">
     <value>Phone Call</value>
   </data>
   <data name="cuoc_hop_da_duoc_huy" xml:space="preserve">
-    <value>Appointment has been canceled</value>
+    <value>Appointment has been canceled.</value>
   </data>
   <data name="cuoc_hop_da_hoan_thanh" xml:space="preserve">
-    <value>Appointment has been completed</value>
+    <value>Appointment has been completed.</value>
   </data>
   <data name="cuoc_hop_title" xml:space="preserve">
     <value>Appointment</value>
@@ -658,7 +658,7 @@
     <value>Sales agent company</value>
   </data>
   <data name="dai_ly_san_giao_dich_khong_duoc_trung_voi_nguoi_mua_vui_long_chon_lai" xml:space="preserve">
-    <value>Sales agent company and Customer are duplicated. Please check again</value>
+    <value>Sales agent company and Customer are duplicated. Please check again.</value>
   </data>
   <data name="dang_nhap" xml:space="preserve">
     <value>Login</value>
@@ -712,7 +712,7 @@
     <value>Qualify</value>
   </data>
   <data name="da_co_lich_thanh_toan_khong_duoc_chinh_sua" xml:space="preserve">
-    <value>Editing that changes the transaction value is not allowed because the transaction has been created with a Payment Schedule</value>
+    <value>Editing that changes the transaction value is not allowed because the transaction has been created with a Payment Schedule.</value>
   </data>
   <data name="da_du_tien_coc_sts" xml:space="preserve">
     <value>Deposited</value>
@@ -721,22 +721,22 @@
     <value>Cancelled</value>
   </data>
   <data name="da_huy_bang_tinh_gia" xml:space="preserve">
-    <value>Quotation has been canceled</value>
+    <value>Quotation has been canceled.</value>
   </data>
   <data name="da_huy_dat_coc" xml:space="preserve">
-    <value>Reservation has been canceled</value>
+    <value>Reservation has been canceled.</value>
   </data>
   <data name="da_huy_phan_hoi" xml:space="preserve">
-    <value>Case has been canceled</value>
+    <value>Case has been canceled.</value>
   </data>
   <data name="da_mo_lai_phan_hoi" xml:space="preserve">
-    <value>Case has been reactivated</value>
+    <value>Case has been reactivated.</value>
   </data>
   <data name="da_nhan" xml:space="preserve">
     <value>Received</value>
   </data>
   <data name="da_tao_danh_sach_theo_doi" xml:space="preserve">
-    <value>Follow up list created successfully</value>
+    <value>Follow up list created successfully.</value>
   </data>
   <data name="da_thanh_toan" xml:space="preserve">
     <value>Amount was paid</value>
@@ -745,16 +745,16 @@
     <value>Confirmed</value>
   </data>
   <data name="da_xac_nhan_tai_phieu_dat_coc" xml:space="preserve">
-    <value>Reservation Form upload confirmed</value>
+    <value>Reservation Form upload confirmed.</value>
   </data>
   <data name="da_xay_ra_loi_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="da_xoa_lich_thanh_toan" xml:space="preserve">
-    <value>Payment schedule has been deleted</value>
+    <value>Payment schedule has been deleted.</value>
   </data>
   <data name="da_xoa_nguoi_uy_quyen_duoc_chon" xml:space="preserve">
-    <value>Mandatory secondary has been deleted</value>
+    <value>Mandatory secondary has been deleted.</value>
   </data>
   <data name="den" xml:space="preserve">
     <value>To</value>
@@ -763,7 +763,7 @@
     <value>FUL (Terminate)</value>
   </data>
   <data name="de_nghi_thanh_ly_that_bai" xml:space="preserve">
-    <value>Failed to FUL (Terminate)</value>
+    <value>Failed to FUL (Terminate).</value>
   </data>
   <data name="dia_chi" xml:space="preserve">
     <value>Address</value>
@@ -838,10 +838,10 @@
     <value>Change password</value>
   </data>
   <data name="doi_mat_khau_thanh_cong" xml:space="preserve">
-    <value>Password has been changed</value>
+    <value>Password has been changed.</value>
   </data>
   <data name="doi_mat_khau_that_bai" xml:space="preserve">
-    <value>Failed to change password</value>
+    <value>Failed to change password.</value>
   </data>
   <data name="doi_tuong" xml:space="preserve">
     <value>Object/ Subject</value>
@@ -886,13 +886,13 @@
     <value>Email 2</value>
   </data>
   <data name="email_2_sai_dinh_dang" xml:space="preserve">
-    <value>Invalid email 2</value>
+    <value>Invalid email 2.</value>
   </data>
   <data name="email_da_duoc_su_dung" xml:space="preserve">
-    <value>Email has been used</value>
+    <value>Email has been used.</value>
   </data>
   <data name="email_sai_dinh_dang" xml:space="preserve">
-    <value>Invalid email </value>
+    <value>Invalid email.</value>
   </data>
   <data name="fax" xml:space="preserve">
     <value>Fax</value>
@@ -961,7 +961,7 @@
     <value>Resolve case</value>
   </data>
   <data name="giai_quyet_phan_hoi_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to resolve case. Please try again</value>
+    <value>Failed to resolve case. Please try again.</value>
   </data>
   <data name="giao_dich_home" xml:space="preserve">
     <value>TRANSACTION</value>
@@ -1093,28 +1093,28 @@
     <value>Cancel quotation</value>
   </data>
   <data name="huy_bang_tinh_gia_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to cancel quotation. Please try again</value>
+    <value>Failed to cancel quotation. Please try again.</value>
   </data>
   <data name="huy_dat_coc" xml:space="preserve">
     <value>Cancel reservation</value>
   </data>
   <data name="huy_dat_coc_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to cancel reservation. Please try again</value>
+    <value>Failed to cancel reservation. Please try again.</value>
   </data>
   <data name="huy_giu_cho" xml:space="preserve">
     <value>Cancel queue</value>
   </data>
   <data name="huy_giu_cho_thanh_cong" xml:space="preserve">
-    <value>Queue has been canceled</value>
+    <value>Queue has been canceled.</value>
   </data>
   <data name="huy_giu_cho_that_bai" xml:space="preserve">
-    <value>Failed to cancel queue</value>
+    <value>Failed to cancel queue.</value>
   </data>
   <data name="huy_phan_hoi" xml:space="preserve">
     <value>Cancel case</value>
   </data>
   <data name="huy_phan_hoi_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to cancel case. Please try again</value>
+    <value>Failed to cancel case. Please try again.</value>
   </data>
   <data name="installments_active_sts" xml:space="preserve">
     <value>Active</value>
@@ -1138,34 +1138,34 @@
     <value>Contact</value>
   </data>
   <data name="khach_hang_chua_chon_quoc_tich" xml:space="preserve">
-    <value>Citizenship of customer is empty</value>
+    <value>Citizenship of customer is empty.</value>
   </data>
   <data name="khach_hang_co_owner_va_khach_hang_khong_duoc_trung" xml:space="preserve">
-    <value>Co-Owner and Customer are duplicated. Please check again</value>
+    <value>Co-Owner and Customer are duplicated. Please check again.</value>
   </data>
   <data name="khach_hang_da_duoc_chon" xml:space="preserve">
-    <value>Customer has been seleted</value>
+    <value>Customer has been seleted.</value>
   </data>
   <data name="khach_hang_da_tham_gia_giu_cho_cho_du_an_nay" xml:space="preserve">
-    <value>This customer has already queued this unit</value>
+    <value>This customer has already queued this unit.</value>
   </data>
   <data name="khach_hang_doanh_nghiep" xml:space="preserve">
     <value>Account</value>
   </data>
   <data name="khach_hang_khong_co_sdt_vui_long_kiem_tra_lai" xml:space="preserve">
-    <value>Phone number of customer is empty. Please check again</value>
+    <value>Phone number of customer is empty. Please check again.</value>
   </data>
   <data name="khach_hang_khong_duoc_trung_voi_nguoi_mua" xml:space="preserve">
-    <value>Customer and Purchaser are duplicated. Please check again</value>
+    <value>Customer and Purchaser are duplicated. Please check again.</value>
   </data>
   <data name="khach_hang_moi" xml:space="preserve">
     <value>New customer</value>
   </data>
   <data name="khach_hang_phai_khac_dai_ly_ban_hang" xml:space="preserve">
-    <value>Customer and Sales agent company are duplicated. Please check again</value>
+    <value>Customer and Sales agent company are duplicated. Please check again.</value>
   </data>
   <data name="khach_hang_phai_tu_18_tuoi" xml:space="preserve">
-    <value>Customer must be older than 18 years old</value>
+    <value>Customer must be older than 18 years old.</value>
   </data>
   <data name="khach_hang_tiem_nang" xml:space="preserve">
     <value>Lead</value>
@@ -1174,7 +1174,7 @@
     <value>LEAD</value>
   </data>
   <data name="khach_hang_tiem_nang_tu_danh_ba" xml:space="preserve">
-    <value>The Lead is transferred from the contacts sync feature</value>
+    <value>The Lead is transferred from the contacts sync feature.</value>
   </data>
   <data name="khach_hang_title" xml:space="preserve">
     <value>Customer</value>
@@ -1186,85 +1186,85 @@
     <value>(not apply)</value>
   </data>
   <data name="khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to update customer. Please check again</value>
+    <value>Failed to update customer. Please check again.</value>
   </data>
   <data name="khong_cap_nhat_duoc_thong_tin_imei" xml:space="preserve">
-    <value>Unable to update information Imei</value>
+    <value>Unable to update information Imei.</value>
   </data>
   <data name="khong_chuyen_doi" xml:space="preserve">
     <value>Disqualify</value>
   </data>
   <data name="khong_co_chiet_khau" xml:space="preserve">
-    <value>Discount is empty</value>
+    <value>Discount is empty.</value>
   </data>
   <data name="khong_co_du_lieu" xml:space="preserve">
     <value>No data</value>
   </data>
   <data name="khong_co_san_pham" xml:space="preserve">
-    <value>Units is empty</value>
+    <value>Units is empty.</value>
   </data>
   <data name="khong_co_so_dien_thoai" xml:space="preserve">
-    <value>Phone number is empty</value>
+    <value>Phone number is empty.</value>
   </data>
   <data name="khong_co_thong_tin_bang_tinh_gia" xml:space="preserve">
-    <value>Quotation information is empty</value>
+    <value>Quotation information is empty.</value>
   </data>
   <data name="khong_lay_duoc_video" xml:space="preserve">
-    <value>Failed to load video</value>
+    <value>Failed to load video.</value>
   </data>
   <data name="khong_lien_he_duoc" xml:space="preserve">
     <value>Cannot contact</value>
   </data>
   <data name="khong_load_duoc_chien_dich" xml:space="preserve">
-    <value>Failed to load source campaign</value>
+    <value>Failed to load source campaign.</value>
   </data>
   <data name="khong_load_duoc_quan_huyen" xml:space="preserve">
-    <value>Failed to load district</value>
+    <value>Failed to load district.</value>
   </data>
   <data name="khong_load_duoc_quoc_gia" xml:space="preserve">
-    <value>Failed to load country</value>
+    <value>Failed to load country.</value>
   </data>
   <data name="khong_load_duoc_tinh_thanh" xml:space="preserve">
-    <value>Failed to load province</value>
+    <value>Failed to load province.</value>
   </data>
   <data name="khong_quan_tam" xml:space="preserve">
     <value>No Longer Interested</value>
   </data>
   <data name="khong_them_duoc_khach_hang_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to create Customer. Please try again</value>
+    <value>Failed to create Customer. Please try again.</value>
   </data>
   <data name="khong_the_qualify" xml:space="preserve">
     <value>Cannot qualify</value>
   </data>
   <data name="khong_the_them_dieu_kien_ban_giao" xml:space="preserve">
-    <value>Failed to create Handover condition</value>
+    <value>Failed to create Handover condition.</value>
   </data>
   <data name="khong_tim_thay_dai_ly_ban_hang" xml:space="preserve">
-    <value>couldn't find Sales agent company</value>
+    <value>Couldn't find Sales agent company.</value>
   </data>
   <data name="khong_tim_thay_du_an" xml:space="preserve">
-    <value>Couldn't find Work schedule</value>
+    <value>Couldn't find Project.</value>
   </data>
   <data name="khong_tim_thay_lich_lam_viec" xml:space="preserve">
-    <value>Couldn't find Project</value>
+    <value>Couldn't find Work schedule.</value>
   </data>
   <data name="khong_tim_thay_san_pham" xml:space="preserve">
-    <value>Couldn't find Unit</value>
+    <value>Couldn't find Unit.</value>
   </data>
   <data name="khong_tim_thay_thong_tin" xml:space="preserve">
-    <value>Couldn't find information</value>
+    <value>Couldn't find information.</value>
   </data>
   <data name="khong_tim_thay_thong_tin_bang_tinh_gia" xml:space="preserve">
-    <value>Couldn't find Quotation information</value>
+    <value>Couldn't find Quotation information.</value>
   </data>
   <data name="khong_tim_thay_thong_tin_cong_ty" xml:space="preserve">
-    <value>Couldn't find Company information</value>
+    <value>Couldn't find Company information.</value>
   </data>
   <data name="khong_tim_thay_thong_tin_khach_hang" xml:space="preserve">
-    <value>Couldn't find Customer information</value>
+    <value>Couldn't find Customer information.</value>
   </data>
   <data name="khong_tim_thay_thong_tin_vui_long_thu_lai" xml:space="preserve">
-    <value>Couldn't find information. Please try again</value>
+    <value>Couldn't find information. Please try again.</value>
   </data>
   <data name="khong_tim_thay_user" xml:space="preserve">
     <value>User not found</value>
@@ -1279,13 +1279,13 @@
     <value>Sign quotation</value>
   </data>
   <data name="ky_bang_tinh_gia_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to sign quotation. Please try again</value>
+    <value>Failed to sign quotation. Please try again.</value>
   </data>
   <data name="ky_phieu_dat_coc" xml:space="preserve">
     <value>Sign reservation form</value>
   </data>
   <data name="ky_phieu_dat_coc_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to sign reservation form. Please try again</value>
+    <value>Failed to sign reservation form. Please try again.</value>
   </data>
   <data name="la_ban_phong_thuy_title" xml:space="preserve">
     <value>La Bàn Phong Thủy</value>
@@ -1363,25 +1363,25 @@
     <value>Termination type</value>
   </data>
   <data name="loi_ket_noi_den_server" xml:space="preserve">
-    <value>Error connecting to server</value>
+    <value>Error connecting to server.</value>
   </data>
   <data name="loi_khi_hoan_thanh_cong_viec_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="loi_khi_hoan_thanh_cuoc_goi_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="loi_khi_hoan_thanh_cuoc_hop_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="loi_khi_huy_cong_viec_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="loi_khi_huy_cuoc_goi_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="loi_khi_huy_cuoc_hop_vui_long_thu_lai" xml:space="preserve">
-    <value>Error. Please try again</value>
+    <value>Error. Please try again.</value>
   </data>
   <data name="luu" xml:space="preserve">
     <value>Save</value>
@@ -1399,13 +1399,13 @@
     <value>Old password</value>
   </data>
   <data name="mat_khau_cu_khong_dung" xml:space="preserve">
-    <value>Old password is incorrect</value>
+    <value>Old password is incorrect.</value>
   </data>
   <data name="mat_khau_khong_dung" xml:space="preserve">
-    <value>Password is incorrect</value>
+    <value>Password is incorrect.</value>
   </data>
   <data name="mat_khau_khong_duoc_de_trong" xml:space="preserve">
-    <value>Please enter password</value>
+    <value>Please enter password.</value>
   </data>
   <data name="mat_khau_moi" xml:space="preserve">
     <value>New password</value>
@@ -1435,7 +1435,7 @@
     <value>Tax code</value>
   </data>
   <data name="ma_so_thue_da_tao_trong_du_lieu_doanh_nghiep" xml:space="preserve">
-    <value>Registration code not allow duplicate</value>
+    <value>Registration code not allow duplicate.</value>
   </data>
   <data name="ma_su_kien" xml:space="preserve">
     <value>Event code</value>
@@ -1453,7 +1453,7 @@
     <value>Reactivate case</value>
   </data>
   <data name="mo_lai_phan_hoi_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to reactivate case. Please try again</value>
+    <value>Failed to reactivate case. Please try again.</value>
   </data>
   <data name="mo_ta" xml:space="preserve">
     <value>Description</value>
@@ -1489,7 +1489,7 @@
     <value>Effective date to</value>
   </data>
   <data name="ngay_het_hieu_luc_phai_lon_hon_ngay_bat_dau" xml:space="preserve">
-    <value>The end date must be greater than the start date</value>
+    <value>The end date must be greater than the start date.</value>
   </data>
   <data name="ngay_in" xml:space="preserve">
     <value>Printed date</value>
@@ -1525,7 +1525,7 @@
     <value>Regarding</value>
   </data>
   <data name="nguoi_mua_khong_duoc_trung_voi_dai_ly_san_giao_dich_vui_long_chon_lai" xml:space="preserve">
-    <value>Purchaser and Sales agent company are duplicated. Please check again</value>
+    <value>Purchaser and Sales agent company are duplicated. Please check again.</value>
   </data>
   <data name="nguoi_tham_du_bat_buoc" xml:space="preserve">
     <value>Required</value>
@@ -1666,7 +1666,7 @@
     <value>Enter website</value>
   </data>
   <data name="nhap_xac_nhan_mat_khau_moi" xml:space="preserve">
-    <value>Enter confirm new password</value>
+    <value>Enter confirm new password.</value>
   </data>
   <data name="nhom" xml:space="preserve">
     <value>Group</value>
@@ -1681,7 +1681,7 @@
     <value>Comment and decision</value>
   </data>
   <data name="password_khong_duoc_chua_ky_tu_khoang_trang" xml:space="preserve">
-    <value>Password must not contain spaces</value>
+    <value>Password must not contain spaces.</value>
   </data>
   <data name="phan_hoi_appshell" xml:space="preserve">
     <value>Cases</value>
@@ -1705,7 +1705,7 @@
     <value>Deposit percent (%)</value>
   </data>
   <data name="phieu_dat_coc_da_duoc_ky" xml:space="preserve">
-    <value>Reservation form has been signed</value>
+    <value>Reservation form has been signed.</value>
   </data>
   <data name="phi_bao_tri" xml:space="preserve">
     <value>Maintenance fees</value>
@@ -1741,10 +1741,10 @@
     <value>Payment scheme</value>
   </data>
   <data name="qualify_account_thanh_cong_qualify_contact_that_bai" xml:space="preserve">
-    <value>Account has been converted, Failed to convert Contact</value>
+    <value>Account has been converted, Failed to convert Contact.</value>
   </data>
   <data name="qualify_contact_thanh_cong_qualify_account_that_bai" xml:space="preserve">
-    <value>Contact has been converted, Failed to convert Account</value>
+    <value>Contact has been converted, Failed to convert Account.</value>
   </data>
   <data name="quan_he" xml:space="preserve">
     <value>Relationship</value>
@@ -1789,10 +1789,10 @@
     <value>Unit</value>
   </data>
   <data name="san_pham_dang_o_trang_thai_reserve_khong_the_tao_bang_tinh_gia" xml:space="preserve">
-    <value>The Units is in the "Reserve" stage. Failed to create a Quotation</value>
+    <value>The Units is in the "Reserve" stage. Failed to create a Quotation.</value>
   </data>
   <data name="san_pham_khong_the_tao_bang_tinh_gia" xml:space="preserve">
-    <value>The Units cannot create Quotation</value>
+    <value>The Units cannot create Quotation.</value>
   </data>
   <data name="san_sang_sts" xml:space="preserve">
     <value>Available</value>
@@ -1807,10 +1807,10 @@
     <value>Business phone</value>
   </data>
   <data name="sdt_sai_dinh_dang_vui_long_kiem_tra_lai" xml:space="preserve">
-    <value>Invalid phone number. Please check again</value>
+    <value>Invalid phone number. Please check again.</value>
   </data>
   <data name="sms_khong_duoc_ho_tro_tren_thiet_bi" xml:space="preserve">
-    <value>SMS is not supported on this device</value>
+    <value>SMS is not supported on this device.</value>
   </data>
   <data name="so_can_ho" xml:space="preserve">
     <value>Units number</value>
@@ -1819,10 +1819,10 @@
     <value>Identity card number (ID)</value>
   </data>
   <data name="so_cmnd_da_duoc_su_dung" xml:space="preserve">
-    <value>Identity card number has been used</value>
+    <value>Identity card number has been used.</value>
   </data>
   <data name="so_giay_phep_kinh_doanh_da_tao_trong_du_lieu_doanh_nghiep" xml:space="preserve">
-    <value>Registration code has been used</value>
+    <value>Registration code has been used.</value>
   </data>
   <data name="so_hop_dong" xml:space="preserve">
     <value>Contract number</value>
@@ -1831,7 +1831,7 @@
     <value>Passport</value>
   </data>
   <data name="so_ho_chieu_da_duoc_su_dung" xml:space="preserve">
-    <value>Passport has been used</value>
+    <value>Passport has been used.</value>
   </data>
   <data name="so_luong_nhan_vien" xml:space="preserve">
     <value>No. of employees</value>
@@ -1876,46 +1876,46 @@
     <value>Create quotation</value>
   </data>
   <data name="tao_bang_tinh_gia_thanh_cong" xml:space="preserve">
-    <value>Quotation created successfully</value>
+    <value>Quotation created successfully.</value>
   </data>
   <data name="tao_bang_tinh_gia_that_bai" xml:space="preserve">
-    <value>Failed to create quotation</value>
+    <value>Failed to create quotation.</value>
   </data>
   <data name="tao_cong_viec" xml:space="preserve">
     <value>Create task</value>
   </data>
   <data name="tao_cong_viec_thanh_cong" xml:space="preserve">
-    <value>Task created successfully</value>
+    <value>Task created successfully.</value>
   </data>
   <data name="tao_cong_viec_that_bai" xml:space="preserve">
-    <value>Failed to create task</value>
+    <value>Failed to create task.</value>
   </data>
   <data name="tao_cuoc_goi" xml:space="preserve">
     <value>Create phone call</value>
   </data>
   <data name="tao_cuoc_goi_thanh_cong" xml:space="preserve">
-    <value>Phone call created successfully</value>
+    <value>Phone call created successfully.</value>
   </data>
   <data name="tao_cuoc_goi_that_bai" xml:space="preserve">
-    <value>Failed to create phone call</value>
+    <value>Failed to create phone call.</value>
   </data>
   <data name="tao_cuoc_hop" xml:space="preserve">
     <value>Create appointment</value>
   </data>
   <data name="tao_cuoc_hop_thanh_cong" xml:space="preserve">
-    <value>Appointment created successfully</value>
+    <value>Appointment created successfully.</value>
   </data>
   <data name="tao_cuoc_hop_that_bai" xml:space="preserve">
-    <value>Failed to create appointment</value>
+    <value>Failed to create appointment.</value>
   </data>
   <data name="tao_giu_cho" xml:space="preserve">
     <value>Create queue</value>
   </data>
   <data name="tao_giu_cho_thanh_cong" xml:space="preserve">
-    <value>Queue created successfully</value>
+    <value>Queue created successfully.</value>
   </data>
   <data name="tao_giu_cho_that_bai" xml:space="preserve">
-    <value>Failed to create queue</value>
+    <value>Failed to create queue.</value>
   </data>
   <data name="tao_khach_hang" xml:space="preserve">
     <value>Create customer</value>
@@ -1924,10 +1924,10 @@
     <value>PS generate</value>
   </data>
   <data name="tao_lich_thanh_toan_thanh_cong" xml:space="preserve">
-    <value>Payment schedule created successfully</value>
+    <value>Payment schedule created successfully.</value>
   </data>
   <data name="tao_lich_thanh_toan_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to create payment schedule. Please try again</value>
+    <value>Failed to create payment schedule. Please try again.</value>
   </data>
   <data name="tao_moi_bang_tinh_gia_title" xml:space="preserve">
     <value>Create Quotation</value>
@@ -1960,25 +1960,25 @@
     <value>Create Case</value>
   </data>
   <data name="tao_moi_thanh_cong" xml:space="preserve">
-    <value>Create successfully</value>
+    <value>Create successfully.</value>
   </data>
   <data name="tao_nguoi_uy_quyen" xml:space="preserve">
     <value>Create mandatory secondary</value>
   </data>
   <data name="tao_nguoi_uy_quyen_thanh_cong" xml:space="preserve">
-    <value>Mandatory secondary created successfully</value>
+    <value>Mandatory secondary created successfully.</value>
   </data>
   <data name="tao_nguoi_uy_quyen_that_bai" xml:space="preserve">
-    <value>Failed to create mandatory secondary</value>
+    <value>Failed to create mandatory secondary.</value>
   </data>
   <data name="tao_phan_hoi" xml:space="preserve">
     <value>Create case</value>
   </data>
   <data name="tao_phan_hoi_thanh_cong" xml:space="preserve">
-    <value>Case created successfully</value>
+    <value>Case created successfully.</value>
   </data>
   <data name="tao_phan_hoi_that_bai" xml:space="preserve">
-    <value>Failed to create case</value>
+    <value>Failed to create case.</value>
   </data>
   <data name="ten" xml:space="preserve">
     <value>Name</value>
@@ -1993,10 +1993,10 @@
     <value>User Name</value>
   </data>
   <data name="ten_dang_nhap_khong_dung" xml:space="preserve">
-    <value>Username is incorrect</value>
+    <value>Username is incorrect.</value>
   </data>
   <data name="ten_dang_nhap_khong_duoc_de_trong" xml:space="preserve">
-    <value>Please enter user name</value>
+    <value>Please enter user name.</value>
   </data>
   <data name="ten_tep" xml:space="preserve">
     <value>File name</value>
@@ -2023,37 +2023,37 @@
     <value>Allow Change Units Spec</value>
   </data>
   <data name="them_cong_viec" xml:space="preserve">
-    <value>Add task</value>
+    <value>Create task</value>
   </data>
   <data name="them_cuoc_goi" xml:space="preserve">
-    <value>Add phone call</value>
+    <value>Create phone call</value>
   </data>
   <data name="them_cuoc_hop" xml:space="preserve">
-    <value>Add appointment</value>
+    <value>Create appointment</value>
   </data>
   <data name="them_dong_so_huu" xml:space="preserve">
-    <value>Add co-owner</value>
+    <value>Create co-owner</value>
   </data>
   <data name="them_dong_so_huu_thanh_cong" xml:space="preserve">
-    <value>Co-owner created successfully</value>
+    <value>Co-owner created successfully.</value>
   </data>
   <data name="them_dong_so_huu_that_bai" xml:space="preserve">
-    <value>Failed to create co-owner</value>
+    <value>Failed to create co-owner.</value>
   </data>
   <data name="them_khuyen_mai" xml:space="preserve">
-    <value>Add promotions</value>
+    <value>Create promotions</value>
   </data>
   <data name="them_khuyen_mai_thanh_cong" xml:space="preserve">
-    <value>Promotions created successfully</value>
+    <value>Promotions created successfully.</value>
   </data>
   <data name="them_khuyen_mai_that_bai" xml:space="preserve">
-    <value>Failed to create promotions</value>
+    <value>Failed to create promotions.</value>
   </data>
   <data name="them_nguoi_dong_so_huu" xml:space="preserve">
-    <value>Add co-owner</value>
+    <value>Create co-owner</value>
   </data>
   <data name="them_nguoi_uy_quyen" xml:space="preserve">
-    <value>Add mandatory secondary</value>
+    <value>Create mandatory secondary</value>
   </data>
   <data name="them_quoc_tich" xml:space="preserve">
     <value>Create citizenship</value>
@@ -2065,7 +2065,7 @@
     <value>Start date</value>
   </data>
   <data name="thoi_gian_bat_dau_phai_nho_hon_thoi_gian_ket_thuc" xml:space="preserve">
-    <value>The end time must be greater than the start time </value>
+    <value>The end time must be greater than the start time.</value>
   </data>
   <data name="thoi_gian_giu_cho" xml:space="preserve">
     <value>Queuing time</value>
@@ -2080,7 +2080,7 @@
     <value>End date</value>
   </data>
   <data name="thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau" xml:space="preserve">
-    <value>The end time must be greater than the start time</value>
+    <value>The end time must be greater than the start time.</value>
   </data>
   <data name="thong_bao" xml:space="preserve">
     <value>Notify</value>
@@ -2233,145 +2233,145 @@
     <value>Applying exchange rate</value>
   </data>
   <data name="ung_dung_khong_duoc_ho_tro_khong_the_mo_file" xml:space="preserve">
-    <value>File is not supported on this device</value>
+    <value>File is not supported on this device.</value>
   </data>
   <data name="vui_long_chon_contact_de_chuyen_sang_khach_hang_tiem_nang" xml:space="preserve">
-    <value>Please choose contact to convert</value>
+    <value>Please choose contact to convert.</value>
   </data>
   <data name="vui_long_chon_dai_ly_ban_hang" xml:space="preserve">
-    <value>Please choose sales agent company</value>
+    <value>Please choose sales agent company.</value>
   </data>
   <data name="vui_long_chon_dai_ly_san_giao_dich" xml:space="preserve">
-    <value>Please choose sales agent company</value>
+    <value>Please choose sales agent company.</value>
   </data>
   <data name="vui_long_chon_dia_chi_lien_lac" xml:space="preserve">
-    <value>Please choose contact address</value>
+    <value>Please choose contact address.</value>
   </data>
   <data name="vui_long_chon_dia_chi_thuong_tru" xml:space="preserve">
-    <value>Please choose permanent address</value>
+    <value>Please choose permanent address.</value>
   </data>
   <data name="vui_long_chon_dieu_kien_ban_giao" xml:space="preserve">
-    <value>Please choose handover condition</value>
+    <value>Please choose handover condition.</value>
   </data>
   <data name="vui_long_chon_dot_mo_ban" xml:space="preserve">
-    <value>Please choose phase launch</value>
+    <value>Please choose phase launch.</value>
   </data>
   <data name="vui_long_chon_du_an" xml:space="preserve">
-    <value>Please choose project</value>
+    <value>Please choose project.</value>
   </data>
   <data name="vui_long_chon_gioi_tinh" xml:space="preserve">
-    <value>Please choose gender</value>
+    <value>Please choose gender.</value>
   </data>
   <data name="vui_long_chon_khach_hang" xml:space="preserve">
-    <value>Please choose customer</value>
+    <value>Please choose customer.</value>
   </data>
   <data name="vui_long_chon_loai" xml:space="preserve">
-    <value>Please choose type</value>
+    <value>Please choose type.</value>
   </data>
   <data name="vui_long_chon_loai_hop_dong" xml:space="preserve">
-    <value>Please choose contract type descripton</value>
+    <value>Please choose contract type descripton.</value>
   </data>
   <data name="vui_long_chon_loai_khach_hang" xml:space="preserve">
-    <value>Please choose localization</value>
+    <value>Please choose localization.</value>
   </data>
   <data name="vui_long_chon_loai_phan_hoi" xml:space="preserve">
-    <value>Please choose cases type</value>
+    <value>Please choose cases type.</value>
   </data>
   <data name="vui_long_chon_loai_thanh_ly" xml:space="preserve">
-    <value>Please choose termination type</value>
+    <value>Please choose termination type.</value>
   </data>
   <data name="vui_long_chon_ngay_sinh" xml:space="preserve">
-    <value>Please choose birthday</value>
+    <value>Please choose birthday.</value>
   </data>
   <data name="vui_long_chon_nguoi_dai_dien" xml:space="preserve">
-    <value>Please choose representative</value>
+    <value>Please choose representative.</value>
   </data>
   <data name="vui_long_chon_nguoi_nhan_cuoc_goi" xml:space="preserve">
-    <value>Please choose call to</value>
+    <value>Please choose call to.</value>
   </data>
   <data name="vui_long_chon_nguoi_tham_du_bat_buoc" xml:space="preserve">
-    <value>Please choose required</value>
+    <value>Please choose required.</value>
   </data>
   <data name="vui_long_chon_nguoi_uy_quyen" xml:space="preserve">
-    <value>Please choose mandatory secondary</value>
+    <value>Please choose mandatory secondary.</value>
   </data>
   <data name="vui_long_chon_nhom" xml:space="preserve">
-    <value>Please choose group</value>
+    <value>Please choose group.</value>
   </data>
   <data name="vui_long_chon_phuong_thuc_phat" xml:space="preserve">
-    <value>Please choose take out money</value>
+    <value>Please choose take out money.</value>
   </data>
   <data name="vui_long_chon_phuong_thuc_thanh_toan" xml:space="preserve">
-    <value>Please choose payment scheme</value>
+    <value>Please choose payment scheme.</value>
   </data>
   <data name="vui_long_chon_quan_he" xml:space="preserve">
-    <value>Please choose relationship</value>
+    <value>Please choose relationship.</value>
   </data>
   <data name="vui_long_chon_thoi_gian_bat_dau" xml:space="preserve">
-    <value>Please choose start date</value>
+    <value>Please choose start date.</value>
   </data>
   <data name="vui_long_chon_thoi_gian_hieu_luc" xml:space="preserve">
-    <value>Please choose effective date</value>
+    <value>Please choose effective date.</value>
   </data>
   <data name="vui_long_chon_thoi_gian_ket_thuc" xml:space="preserve">
-    <value>Please choose end date</value>
+    <value>Please choose end date.</value>
   </data>
   <data name="vui_long_nhap_chu_de" xml:space="preserve">
-    <value>Please enter subject</value>
+    <value>Please enter subject.</value>
   </data>
   <data name="vui_long_nhap_gia_tri_tu_0_den_100" xml:space="preserve">
-    <value>Please enter take out money between 0 and 100</value>
+    <value>Please enter take out money between 0 and 100.</value>
   </data>
   <data name="vui_long_nhap_ho_ten" xml:space="preserve">
-    <value>Please enter full name</value>
+    <value>Please enter full name.</value>
   </data>
   <data name="vui_long_nhap_mat_khau_cu" xml:space="preserve">
-    <value>Please enter old password</value>
+    <value>Please enter old password.</value>
   </data>
   <data name="vui_long_nhap_mat_khau_moi" xml:space="preserve">
-    <value>Please enter new password</value>
+    <value>Please enter new password.</value>
   </data>
   <data name="vui_long_nhap_mo_ta_en" xml:space="preserve">
-    <value>Please enter description (EN)</value>
+    <value>Please enter description (EN).</value>
   </data>
   <data name="vui_long_nhap_mo_ta_vn" xml:space="preserve">
-    <value>Please enter description (VN)</value>
+    <value>Please enter description (VN).</value>
   </data>
   <data name="vui_long_nhap_password_nhieu_hon_6_ky_tu" xml:space="preserve">
-    <value>Password must be at least 6 characters</value>
+    <value>Password must be at least 6 characters.</value>
   </data>
   <data name="vui_long_nhap_sdt" xml:space="preserve">
-    <value>Please enter phone number</value>
+    <value>Please enter phone number.</value>
   </data>
   <data name="vui_long_nhap_sdt_cong_ty" xml:space="preserve">
-    <value>Please enter company phone</value>
+    <value>Please enter company phone.</value>
   </data>
   <data name="vui_long_nhap_so_cmnd" xml:space="preserve">
-    <value>Please enter identity card number (ID)</value>
+    <value>Please enter identity card number (ID).</value>
   </data>
   <data name="vui_long_nhap_so_giay_phep_kinh_doanh" xml:space="preserve">
-    <value>Please enter registration code</value>
+    <value>Please enter registration code.</value>
   </data>
   <data name="vui_long_nhap_so_nha_duong_phuong" xml:space="preserve">
-    <value>Please enter house number/street/ward</value>
+    <value>Please enter house number/street/ward.</value>
   </data>
   <data name="vui_long_nhap_so_thang_mien_giam_phi_quan_ly" xml:space="preserve">
-    <value>Please enter waiver mana fee</value>
+    <value>Please enter waiver mana fee.</value>
   </data>
   <data name="vui_long_nhap_so_tien_hoan_lai" xml:space="preserve">
-    <value>Please enter refund amount</value>
+    <value>Please enter refund amount.</value>
   </data>
   <data name="vui_long_nhap_ten_cong_ty" xml:space="preserve">
-    <value>Please enter account name</value>
+    <value>Please enter account name.</value>
   </data>
   <data name="vui_long_nhap_tieu_de" xml:space="preserve">
-    <value>Please enter topic</value>
+    <value>Please enter topic.</value>
   </data>
   <data name="vui_long_nhap_xac_nhan_mat_khau_moi" xml:space="preserve">
-    <value>Please enter confirm new password</value>
+    <value>Please enter confirm new password.</value>
   </data>
   <data name="vui_long_tao_lich_thanh_toan" xml:space="preserve">
-    <value>Please PS generate</value>
+    <value>Please PS generate.</value>
   </data>
   <data name="website" xml:space="preserve">
     <value>Website</value>
@@ -2386,13 +2386,13 @@
     <value>Print confirmation</value>
   </data>
   <data name="xac_nhan_in_thanh_cong" xml:space="preserve">
-    <value>Print confirmation successfully</value>
+    <value>Print confirmation successfully.</value>
   </data>
   <data name="xac_nhan_in_that_bai" xml:space="preserve">
-    <value>Print confirmation failed</value>
+    <value>Print confirmation failed.</value>
   </data>
   <data name="xac_nhan_mat_khau_khong_dung" xml:space="preserve">
-    <value>Confirm password is incorrect</value>
+    <value>Confirm password is incorrect.</value>
   </data>
   <data name="xac_nhan_mat_khau_moi" xml:space="preserve">
     <value>Confirm new password</value>
@@ -2401,7 +2401,7 @@
     <value>Confirm upload quotation</value>
   </data>
   <data name="xac_nhan_tai_phieu_dat_coc_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Reservation Form upload confirmation failed. Please try again</value>
+    <value>Reservation Form upload confirmation failed. Please try again.</value>
   </data>
   <data name="xem_anh_mat_sau_cmnd" xml:space="preserve">
     <value>View photo</value>
@@ -2416,25 +2416,25 @@
     <value>View information</value>
   </data>
   <data name="xoa_khuyen_mai_thanh_cong" xml:space="preserve">
-    <value>Promotions has been deleted</value>
+    <value>Promotions has been deleted.</value>
   </data>
   <data name="xoa_khuyen_mai_that_bai" xml:space="preserve">
-    <value>Failed to delete promotions</value>
+    <value>Failed to delete promotions.</value>
   </data>
   <data name="xoa_lich_thanh_toan" xml:space="preserve">
     <value>Clear Installment</value>
   </data>
   <data name="xoa_lich_thanh_toan_that_bai_vui_long_thu_lai" xml:space="preserve">
-    <value>Failed to delete payment schedule. Please try again</value>
+    <value>Failed to delete payment schedule. Please try again.</value>
   </data>
   <data name="xoa_nguoi_dong_so_huu_thanh_cong" xml:space="preserve">
-    <value>Co-owners has been deleted</value>
+    <value>Co-owners has been deleted.</value>
   </data>
   <data name="xoa_nguoi_dong_so_huu_that_bai" xml:space="preserve">
-    <value>Failed to delete co-owners</value>
+    <value>Failed to delete co-owners.</value>
   </data>
   <data name="xoa_nguoi_uy_quyen_that_bai" xml:space="preserve">
-    <value>Failed to delete mandatory secondary</value>
+    <value>Failed to delete mandatory secondary.</value>
   </data>
   <data name="_bien_do_dien_tich_DT" xml:space="preserve">
     <value>% Area variance (+/-)</value>
@@ -2644,7 +2644,7 @@
     <value>Under</value>
   </data>
   <data name="vui_long_chon_quoc_tich" xml:space="preserve">
-    <value>Please choose citizenship</value>
+    <value>Please choose citizenship.</value>
   </data>
   <data name="so_dien_thoai" xml:space="preserve">
     <value>Phone number</value>
@@ -2653,7 +2653,7 @@
     <value>Optional</value>
   </data>
   <data name="vui_long_nhap_so_thang_mien_giam_phi_quan_ly_khong_qua_100" xml:space="preserve">
-    <value>Please enter waiver mana fee less than 100</value>
+    <value>Please enter waiver mana fee less than 100.</value>
   </data>
   <data name="chon_dia_chi" xml:space="preserve">
     <value>Choose address</value>
@@ -2726,5 +2726,23 @@
   </data>
   <data name="xoa" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="danh_ba_title" xml:space="preserve">
+    <value>Phonebook</value>
+  </data>
+  <data name="da_chuyen" xml:space="preserve">
+    <value>Converted</value>
+  </data>
+  <data name="dot" xml:space="preserve">
+    <value>Installment</value>
+  </data>
+  <data name="gui" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="khong_gui" xml:space="preserve">
+    <value>Don't send</value>
+  </data>
+  <data name="nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc" xml:space="preserve">
+    <value>Required and Optional are duplicated. Please check again.</value>
   </data>
 </root>

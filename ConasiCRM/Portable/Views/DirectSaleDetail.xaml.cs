@@ -251,6 +251,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.IsShowBtnBangTinhGia = false;
             }
             SetButton();
+            gridButton.IsVisible = !viewModel.Unit.bsd_vippriority;
             contentUnitInfor.IsVisible = true;
             LoadingHelper.Hide();
         }
@@ -353,7 +354,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
+                  //  ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }

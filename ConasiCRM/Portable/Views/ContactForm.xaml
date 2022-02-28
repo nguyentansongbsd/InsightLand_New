@@ -75,25 +75,11 @@
                                 <controls:MainEntry Placeholder="{x:Static language:Language.nhap_sdt_kinh_doanh}" Text="{Binding singleContact.telephone1}" FontSize="15" Keyboard="Numeric"/>
 
                                 <controls:FormLabelRequired Text="{x:Static language:Language.dia_chi_lien_lac}" Margin="0,10,0,0"/>
-                                <Grid>
-                                    <controls:MainEntry Text="{Binding singleContact.bsd_contactaddress}" Placeholder="{x:Static language:Language.chon_dia_chi_lien_lac}" FontSize="15"/>
-                                    <StackLayout>
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiLienLac_Tapped" />
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                </Grid>
-                                <!--<controls:LookUpAddress Placeholder="{x:Static language:Language.chon_dia_chi_lien_lac}" BottomModal="{Reference BottomModal}" SelectedItem="{Binding Address1}" CenterModal="{Reference CenterModal}"/>-->
+                                <controls:LookUpAddress Placeholder="{x:Static language:Language.chon_dia_chi_lien_lac}" BottomModal="{Reference BottomModal}" SelectedItem="{Binding ContactAddress}" CenterModal="{Reference CenterModal}"/>
 
                                 <controls:FormLabelRequired Text="{x:Static language:Language.dia_chi_thuong_tru}" Margin="0,10,0,0"/>
-                                <Grid>
-                                    <controls:MainEntry Text="{Binding singleContact.bsd_permanentaddress1}" Placeholder="{x:Static language:Language.chon_dia_chi_thuong_tru}" FontSize="15"/>
-                                    <StackLayout>
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiaChiThuongTru_Tapped"/>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                </Grid>
+                                <controls:LookUpAddress Placeholder="{x:Static language:Language.chon_dia_chi_thuong_tru}" BottomModal="{Reference BottomModal}" SelectedItem="{Binding PermanentAddress}" CenterModal="{Reference CenterModal}"/>
+                                
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>
@@ -198,57 +184,7 @@
                                  AbsoluteLayout.LayoutFlags="All"/>
                 </AbsoluteLayout>
             </controls:ModalContentView>
-
-            <controls:CenterModal x:Name="centerModalContacAddress" Title="Địa chỉ liên lạc">
-                <controls:CenterModal.Body>
-                    <ScrollView>
-                        <StackLayout Margin="10">
-                            <controls:FormLabel Text="Quốc gia"/>
-                            <controls:LookUp x:Name="lookUpContacAddressCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountryContac}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="ContacAddressCountry_Changed"/>
-
-                            <controls:FormLabel Text="Tỉnh thành"/>
-                            <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvinceContac}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="ContacAddressProvince_Changed"/>
-
-                            <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityContac}" ItemsSource="{Binding list_district_lookup}"/>
-
-                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
-                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Contact}"/>
-                        </StackLayout>
-                    </ScrollView>
-                </controls:CenterModal.Body>
-                <controls:CenterModal.Footer>
-                    <Grid ColumnDefinitions="*,*" Margin="10">
-                        <Button Grid.Column="0" Text="Đóng" Clicked="CloseContacAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmContacAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="0" CornerRadius="10"/>
-                    </Grid>
-                </controls:CenterModal.Footer>
-            </controls:CenterModal>
-            <controls:CenterModal x:Name="centerModalPermanentAddress" Title="Địa chỉ thường trú">
-                <controls:CenterModal.Body>
-                    <ScrollView>
-                        <StackLayout Margin="10">
-                            <controls:FormLabel Text="Quốc gia"/>
-                            <controls:LookUp x:Name="lookUpPermanentAddressCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountryPermanent}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="PermanentAddressCountry_Changed"/>
-
-                            <controls:FormLabel Text="Tỉnh thành"/>
-                            <controls:LookUp Placeholder="Chọn tỉnh thành" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvincePermanent}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="PermanentAddressProvince_Changed"/>
-
-                            <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp Placeholder="Chọn quận/huyện" BottomModal="{Reference BottomModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityPermanent}" ItemsSource="{Binding list_district_lookup}" />
-
-                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
-                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Permanent}"/>
-                        </StackLayout>
-                    </ScrollView>
-                </controls:CenterModal.Body>
-                <controls:CenterModal.Footer>
-                    <Grid ColumnDefinitions="*,*" Margin="10">
-                        <Button Grid.Column="0" Text="Đóng" Clicked="ClosePermanentAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmPermanentAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="0" CornerRadius="10"/>
-                    </Grid>
-                </controls:CenterModal.Footer>
-            </controls:CenterModal>
+            
             <controls:CenterModal x:Name="CenterModal" />
             <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>

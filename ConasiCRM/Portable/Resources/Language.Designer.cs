@@ -133,15 +133,6 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string a {
-            get {
-                return ResourceManager.GetString("a", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Nước ngoài.
         /// </summary>
         internal static string account_nuoc_ngoai_sts {
@@ -232,7 +223,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bạn đang sử dụng mật khẩu cũ. Vui lòng nhập lại.
+        ///   Looks up a localized string similar to Bạn đang sử dụng mật khẩu cũ. Vui lòng nhập lại..
         /// </summary>
         internal static string ban_dang_su_dung_mat_khau_cu_vui_long_nhap_lai {
             get {
@@ -304,7 +295,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bảng tính giá đã được ký.
+        ///   Looks up a localized string similar to Bảng tính giá đã được ký..
         /// </summary>
         internal static string bang_tinh_gia_da_duoc_ky {
             get {
@@ -349,7 +340,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chỉnh sửa.
+        ///   Looks up a localized string similar to Cập nhật.
         /// </summary>
         internal static string cap_nhat {
             get {
@@ -367,7 +358,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật bảng tính giá thành công.
+        ///   Looks up a localized string similar to Cập nhật bảng tính giá thành công..
         /// </summary>
         internal static string cap_nhat_bang_tinh_gia_thanh_cong {
             get {
@@ -376,7 +367,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật bảng tính giá thất bại.
+        ///   Looks up a localized string similar to Cập nhật bảng tính giá thất bại..
         /// </summary>
         internal static string cap_nhat_bang_tinh_gia_that_bai {
             get {
@@ -403,7 +394,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật công việc thành công.
+        ///   Looks up a localized string similar to Cập nhật công việc thành công..
         /// </summary>
         internal static string cap_nhat_cong_viec_thanh_cong {
             get {
@@ -412,7 +403,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật công việc thất bại.
+        ///   Looks up a localized string similar to Cập nhật công việc thất bại..
         /// </summary>
         internal static string cap_nhat_cong_viec_that_bai {
             get {
@@ -439,7 +430,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật cuộc gọi thành công.
+        ///   Looks up a localized string similar to Cập nhật cuộc gọi thành công..
         /// </summary>
         internal static string cap_nhat_cuoc_goi_thanh_cong {
             get {
@@ -448,7 +439,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật cuộc gọi thất bại.
+        ///   Looks up a localized string similar to Cập nhật cuộc gọi thất bại..
         /// </summary>
         internal static string cap_nhat_cuoc_goi_that_bai {
             get {
@@ -475,7 +466,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật cuộn họp thành công.
+        ///   Looks up a localized string similar to Cập nhật cuộn họp thành công..
         /// </summary>
         internal static string cap_nhat_cuoc_hop_thanh_cong {
             get {
@@ -484,7 +475,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật cuộc họp thất bại.
+        ///   Looks up a localized string similar to Cập nhật cuộc họp thất bại..
         /// </summary>
         internal static string cap_nhat_cuoc_hop_that_bai {
             get {
@@ -502,7 +493,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật danh sách theo dõi thành công.
+        ///   Looks up a localized string similar to Cập nhật danh sách theo dõi thành công..
         /// </summary>
         internal static string cap_nhat_danh_sach_theo_doi_thanh_cong {
             get {
@@ -511,7 +502,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật danh sách theo dõi thành công.
+        ///   Looks up a localized string similar to Cập nhật danh sách theo dõi thất bại..
         /// </summary>
         internal static string cap_nhat_danh_sach_theo_doi_that_bai {
             get {
@@ -520,7 +511,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật điều kiện bàn giao thất bại.
+        ///   Looks up a localized string similar to Cập nhật điều kiện bàn giao thất bại..
         /// </summary>
         internal static string cap_nhat_dieu_kien_ban_giao_that_bai {
             get {
@@ -529,7 +520,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật đồng sở hữu thành công.
+        ///   Looks up a localized string similar to Cập nhật đồng sở hữu thành công..
         /// </summary>
         internal static string cap_nhat_dong_so_huu_thanh_cong {
             get {
@@ -538,7 +529,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật đồng sở hữu thất bại.
+        ///   Looks up a localized string similar to Cập nhật đồng sở hữu thất bại..
         /// </summary>
         internal static string cap_nhat_dong_so_huu_that_bai {
             get {
@@ -610,7 +601,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật phản hồi thành công.
+        ///   Looks up a localized string similar to Cập nhật phản hồi thành công..
         /// </summary>
         internal static string cap_nhat_phan_hoi_thanh_cong {
             get {
@@ -619,7 +610,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật phản hồi thất bại.
+        ///   Looks up a localized string similar to Cập nhật phản hồi thất bại..
         /// </summary>
         internal static string cap_nhat_phan_hoi_that_bai {
             get {
@@ -637,7 +628,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật thành công.
+        ///   Looks up a localized string similar to Cập nhật thành công..
         /// </summary>
         internal static string cap_nhat_thanh_cong {
             get {
@@ -646,7 +637,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cập nhật thất bại.
+        ///   Looks up a localized string similar to Cập nhật thất bại..
         /// </summary>
         internal static string cap_nhat_that_bai {
             get {
@@ -844,7 +835,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chỉnh sửa.
+        ///   Looks up a localized string similar to Cập nhật.
         /// </summary>
         internal static string chinh_sua {
             get {
@@ -1366,7 +1357,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chưa chọn billable time.
+        ///   Looks up a localized string similar to Chưa chọn billable time..
         /// </summary>
         internal static string chua_chon_billable_time {
             get {
@@ -1375,7 +1366,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chưa chọn hướng giải quyết.
+        ///   Looks up a localized string similar to Chưa chọn hướng giải quyết..
         /// </summary>
         internal static string chua_chon_huong_giai_quyet {
             get {
@@ -1384,7 +1375,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chưa có contact, không thể chỉnh sửa thông tin.
+        ///   Looks up a localized string similar to Chưa có contact, không thể chỉnh sửa thông tin..
         /// </summary>
         internal static string chua_co_contact_khong_the_chinh_sua_thong_tin {
             get {
@@ -1393,7 +1384,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chưa có file nào đươc tải.
+        ///   Looks up a localized string similar to Chưa có file nào đươc tải..
         /// </summary>
         internal static string chua_co_file_nao_duoc_tai {
             get {
@@ -1402,7 +1393,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chưa được cấp quyền danh bạ.
+        ///   Looks up a localized string similar to Chưa được cấp quyền danh bạ..
         /// </summary>
         internal static string chua_duoc_cap_quyen_danh_ba {
             get {
@@ -1411,7 +1402,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chưa nhập phương án.
+        ///   Looks up a localized string similar to Chưa nhập phương án..
         /// </summary>
         internal static string chua_nhap_phuong_an {
             get {
@@ -1546,7 +1537,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Công việc đã được hủy.
+        ///   Looks up a localized string similar to Công việc đã được hủy..
         /// </summary>
         internal static string cong_viec_da_duoc_huy {
             get {
@@ -1555,7 +1546,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Công việc đã hoàn thành.
+        ///   Looks up a localized string similar to Công việc đã hoàn thành..
         /// </summary>
         internal static string cong_viec_da_hoan_thanh {
             get {
@@ -1744,7 +1735,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cuộc gọi đã được hủy.
+        ///   Looks up a localized string similar to Cuộc gọi đã được hủy..
         /// </summary>
         internal static string cuoc_goi_da_duoc_huy {
             get {
@@ -1753,7 +1744,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cuộc gọi đã hoàn thành.
+        ///   Looks up a localized string similar to Cuộc gọi đã hoàn thành..
         /// </summary>
         internal static string cuoc_goi_da_hoan_thanh {
             get {
@@ -1771,7 +1762,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cuộc họp đã được hủy.
+        ///   Looks up a localized string similar to Cuộc họp đã được hủy..
         /// </summary>
         internal static string cuoc_hop_da_duoc_huy {
             get {
@@ -1780,7 +1771,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cuộc họp đã hoàn thành.
+        ///   Looks up a localized string similar to Cuộc họp đã hoàn thành..
         /// </summary>
         internal static string cuoc_hop_da_hoan_thanh {
             get {
@@ -1834,6 +1825,15 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đã chuyển.
+        /// </summary>
+        internal static string da_chuyen {
+            get {
+                return ResourceManager.GetString("da_chuyen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Đã chuyển đổi.
         /// </summary>
         internal static string da_chuyen_doi {
@@ -1843,7 +1843,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã có lịch thanh toán, không được chỉnh sửa.
+        ///   Looks up a localized string similar to Đã có lịch thanh toán, không được chỉnh sửa..
         /// </summary>
         internal static string da_co_lich_thanh_toan_khong_duoc_chinh_sua {
             get {
@@ -1861,7 +1861,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã hủy.
+        ///   Looks up a localized string similar to Đã hủy..
         /// </summary>
         internal static string da_huy {
             get {
@@ -1870,7 +1870,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã hủy bảng tính giá.
+        ///   Looks up a localized string similar to Đã hủy bảng tính giá..
         /// </summary>
         internal static string da_huy_bang_tinh_gia {
             get {
@@ -1879,7 +1879,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã hủy đặt cọc.
+        ///   Looks up a localized string similar to Đã hủy đặt cọc..
         /// </summary>
         internal static string da_huy_dat_coc {
             get {
@@ -1888,7 +1888,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã hủy phản hồi.
+        ///   Looks up a localized string similar to Đã hủy phản hồi..
         /// </summary>
         internal static string da_huy_phan_hoi {
             get {
@@ -1897,7 +1897,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã mở lại phản hồi.
+        ///   Looks up a localized string similar to Đã mở lại phản hồi..
         /// </summary>
         internal static string da_mo_lai_phan_hoi {
             get {
@@ -1915,7 +1915,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã tạo danh sách theo dõi.
+        ///   Looks up a localized string similar to Đã tạo danh sách theo dõi..
         /// </summary>
         internal static string da_tao_danh_sach_theo_doi {
             get {
@@ -1933,7 +1933,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã xác nhận in.
+        ///   Looks up a localized string similar to Đã xác nhận in..
         /// </summary>
         internal static string da_xac_nhan_in {
             get {
@@ -1942,7 +1942,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã xác nhận tải phiếu đặt cọc.
+        ///   Looks up a localized string similar to Đã xác nhận tải phiếu đặt cọc..
         /// </summary>
         internal static string da_xac_nhan_tai_phieu_dat_coc {
             get {
@@ -1951,7 +1951,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã xảy ra lỗi. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Đã xảy ra lỗi. Vui lòng thử lại..
         /// </summary>
         internal static string da_xay_ra_loi_vui_long_thu_lai {
             get {
@@ -1960,7 +1960,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã xóa lịch thanh toán.
+        ///   Looks up a localized string similar to Đã xóa lịch thanh toán..
         /// </summary>
         internal static string da_xoa_lich_thanh_toan {
             get {
@@ -1969,7 +1969,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã xóa người ủy quyền được chọn.
+        ///   Looks up a localized string similar to Đã xóa người ủy quyền được chọn..
         /// </summary>
         internal static string da_xoa_nguoi_uy_quyen_duoc_chon {
             get {
@@ -2023,7 +2023,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đại lý/Sàn giao dịch không được trùng với Người mua. Vui lòng chọn lại.
+        ///   Looks up a localized string similar to Đại lý/Sàn giao dịch không được trùng với Người mua. Vui lòng chọn lại..
         /// </summary>
         internal static string dai_ly_san_giao_dich_khong_duoc_trung_voi_nguoi_mua_vui_long_chon_lai {
             get {
@@ -2064,6 +2064,15 @@ namespace ConasiCRM.Portable.Resources {
         internal static string dang_xuat_appshell {
             get {
                 return ResourceManager.GetString("dang_xuat_appshell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Danh Bạ.
+        /// </summary>
+        internal static string danh_ba_title {
+            get {
+                return ResourceManager.GetString("danh_ba_title", resourceCulture);
             }
         }
         
@@ -2167,7 +2176,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đề nghị thanh lý thất bại.
+        ///   Looks up a localized string similar to Đề nghị thanh lý thất bại..
         /// </summary>
         internal static string de_nghi_thanh_ly_that_bai {
             get {
@@ -2410,7 +2419,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đổi mật khẩu thành công.
+        ///   Looks up a localized string similar to Đổi mật khẩu thành công..
         /// </summary>
         internal static string doi_mat_khau_thanh_cong {
             get {
@@ -2419,7 +2428,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đổi mật khẩu thất bại.
+        ///   Looks up a localized string similar to Đổi mật khẩu thất bại..
         /// </summary>
         internal static string doi_mat_khau_that_bai {
             get {
@@ -2509,6 +2518,15 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đợt.
+        /// </summary>
+        internal static string dot {
+            get {
+                return ResourceManager.GetString("dot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Đợt mở bán.
         /// </summary>
         internal static string dot_mo_ban {
@@ -2554,7 +2572,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email 2 sai địng dạng.
+        ///   Looks up a localized string similar to Email 2 sai địng dạng..
         /// </summary>
         internal static string email_2_sai_dinh_dang {
             get {
@@ -2563,7 +2581,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email đã được sử dụng.
+        ///   Looks up a localized string similar to Email đã được sử dụng..
         /// </summary>
         internal static string email_da_duoc_su_dung {
             get {
@@ -2572,7 +2590,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email sai định dạng.
+        ///   Looks up a localized string similar to Email sai định dạng..
         /// </summary>
         internal static string email_sai_dinh_dang {
             get {
@@ -2851,7 +2869,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Giải quyết phản hồi thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Giải quyết phản hồi thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string giai_quyet_phan_hoi_that_bai_vui_long_thu_lai {
             get {
@@ -2986,6 +3004,15 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gửi.
+        /// </summary>
+        internal static string gui {
+            get {
+                return ResourceManager.GetString("gui", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gửi tài liệu tiếp thị.
         /// </summary>
         internal static string gui_tai_lieu_tiep_thi {
@@ -3076,7 +3103,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hôm nay không có công việc.
+        ///   Looks up a localized string similar to Hôm nay không có công việc..
         /// </summary>
         internal static string hom_nay_khong_co_cong_viec {
             get {
@@ -3184,7 +3211,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hủy bảng tính giá thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Hủy bảng tính giá thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string huy_bang_tinh_gia_that_bai_vui_long_thu_lai {
             get {
@@ -3202,7 +3229,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hủy đặt cọc thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Hủy đặt cọc thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string huy_dat_coc_that_bai_vui_long_thu_lai {
             get {
@@ -3220,7 +3247,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hủy giữ chỗ thành công.
+        ///   Looks up a localized string similar to Hủy giữ chỗ thành công..
         /// </summary>
         internal static string huy_giu_cho_thanh_cong {
             get {
@@ -3229,7 +3256,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hủy giữ chỗ thất bại.
+        ///   Looks up a localized string similar to Hủy giữ chỗ thất bại..
         /// </summary>
         internal static string huy_giu_cho_that_bai {
             get {
@@ -3247,7 +3274,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hủy phản hồi thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Hủy phản hồi thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string huy_phan_hoi_that_bai_vui_long_thu_lai {
             get {
@@ -3319,7 +3346,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng chưa chọn quốc tịch.
+        ///   Looks up a localized string similar to Khách hàng chưa chọn quốc tịch..
         /// </summary>
         internal static string khach_hang_chua_chon_quoc_tich {
             get {
@@ -3328,7 +3355,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng Co-Owner và khách hàng không được trùng.
+        ///   Looks up a localized string similar to Khách hàng Co-Owner và khách hàng không được trùng..
         /// </summary>
         internal static string khach_hang_co_owner_va_khach_hang_khong_duoc_trung {
             get {
@@ -3346,7 +3373,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng đã tham gia giữ chỗ cho dự án này.
+        ///   Looks up a localized string similar to Khách hàng đã tham gia giữ chỗ cho dự án này..
         /// </summary>
         internal static string khach_hang_da_tham_gia_giu_cho_cho_du_an_nay {
             get {
@@ -3364,7 +3391,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng không có số điện thoại. Vui lòng kiểm tra lại.
+        ///   Looks up a localized string similar to Khách hàng không có số điện thoại. Vui lòng kiểm tra lại..
         /// </summary>
         internal static string khach_hang_khong_co_sdt_vui_long_kiem_tra_lai {
             get {
@@ -3373,7 +3400,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng không được trùng với người mua.
+        ///   Looks up a localized string similar to Khách hàng không được trùng với người mua..
         /// </summary>
         internal static string khach_hang_khong_duoc_trung_voi_nguoi_mua {
             get {
@@ -3391,7 +3418,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng phải khác Đại lý bán hàng.
+        ///   Looks up a localized string similar to Khách hàng phải khác Đại lý bán hàng..
         /// </summary>
         internal static string khach_hang_phai_khac_dai_ly_ban_hang {
             get {
@@ -3400,7 +3427,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Khách hàng phải từ 18 tuổi.
+        ///   Looks up a localized string similar to Khách hàng phải từ 18 tuổi..
         /// </summary>
         internal static string khach_hang_phai_tu_18_tuoi {
             get {
@@ -3463,7 +3490,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không cập nhật được khách hàng. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Không cập nhật được khách hàng. Vui lòng thử lại..
         /// </summary>
         internal static string khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai {
             get {
@@ -3472,7 +3499,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không cập nhật được thông tin Imei.
+        ///   Looks up a localized string similar to Không cập nhật được thông tin Imei..
         /// </summary>
         internal static string khong_cap_nhat_duoc_thong_tin_imei {
             get {
@@ -3535,7 +3562,16 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không lấy được video.
+        ///   Looks up a localized string similar to Không gửi.
+        /// </summary>
+        internal static string khong_gui {
+            get {
+                return ResourceManager.GetString("khong_gui", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không lấy được video..
         /// </summary>
         internal static string khong_lay_duoc_video {
             get {
@@ -3553,7 +3589,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không load được chiến dịch.
+        ///   Looks up a localized string similar to Không load được chiến dịch..
         /// </summary>
         internal static string khong_load_duoc_chien_dich {
             get {
@@ -3562,7 +3598,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không load được quận/huyện.
+        ///   Looks up a localized string similar to Không load được quận/huyện..
         /// </summary>
         internal static string khong_load_duoc_quan_huyen {
             get {
@@ -3571,7 +3607,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không load được quốc gia.
+        ///   Looks up a localized string similar to Không load được quốc gia..
         /// </summary>
         internal static string khong_load_duoc_quoc_gia {
             get {
@@ -3580,7 +3616,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không load được tỉnh thành.
+        ///   Looks up a localized string similar to Không load được tỉnh thành..
         /// </summary>
         internal static string khong_load_duoc_tinh_thanh {
             get {
@@ -3607,7 +3643,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không thể thêm điều kiện bàn giao.
+        ///   Looks up a localized string similar to Không thể thêm điều kiện bàn giao..
         /// </summary>
         internal static string khong_the_them_dieu_kien_ban_giao {
             get {
@@ -3616,7 +3652,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không thêm được khách hàng. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Không thêm được khách hàng. Vui lòng thử lại..
         /// </summary>
         internal static string khong_them_duoc_khach_hang_vui_long_thu_lai {
             get {
@@ -3625,7 +3661,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy đại lý bán hàng.
+        ///   Looks up a localized string similar to Không tìm thấy đại lý bán hàng..
         /// </summary>
         internal static string khong_tim_thay_dai_ly_ban_hang {
             get {
@@ -3634,7 +3670,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy dự án.
+        ///   Looks up a localized string similar to Không tìm thấy dự án..
         /// </summary>
         internal static string khong_tim_thay_du_an {
             get {
@@ -3643,7 +3679,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy lịch làm việc.
+        ///   Looks up a localized string similar to Không tìm thấy lịch làm việc..
         /// </summary>
         internal static string khong_tim_thay_lich_lam_viec {
             get {
@@ -3652,7 +3688,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy sản phẩm.
+        ///   Looks up a localized string similar to Không tìm thấy sản phẩm..
         /// </summary>
         internal static string khong_tim_thay_san_pham {
             get {
@@ -3661,7 +3697,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy thông tin.
+        ///   Looks up a localized string similar to Không tìm thấy thông tin..
         /// </summary>
         internal static string khong_tim_thay_thong_tin {
             get {
@@ -3670,7 +3706,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy thông tin bảng tính giá.
+        ///   Looks up a localized string similar to Không tìm thấy thông tin bảng tính giá..
         /// </summary>
         internal static string khong_tim_thay_thong_tin_bang_tinh_gia {
             get {
@@ -3679,7 +3715,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy thông tin công ty.
+        ///   Looks up a localized string similar to Không tìm thấy thông tin công ty..
         /// </summary>
         internal static string khong_tim_thay_thong_tin_cong_ty {
             get {
@@ -3688,7 +3724,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy thông tin khách hàng.
+        ///   Looks up a localized string similar to Không tìm thấy thông tin khách hàng..
         /// </summary>
         internal static string khong_tim_thay_thong_tin_khach_hang {
             get {
@@ -3697,7 +3733,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy thông tin. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Không tìm thấy thông tin. Vui lòng thử lại..
         /// </summary>
         internal static string khong_tim_thay_thong_tin_vui_long_thu_lai {
             get {
@@ -3706,7 +3742,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Không tìm thấy user.
+        ///   Looks up a localized string similar to Không tìm thấy user..
         /// </summary>
         internal static string khong_tim_thay_user {
             get {
@@ -3742,7 +3778,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ký bảng tính giá thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Ký bảng tính giá thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string ky_bang_tinh_gia_that_bai_vui_long_thu_lai {
             get {
@@ -3760,7 +3796,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ký phiếu đặt cọc thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Ký phiếu đặt cọc thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string ky_phieu_dat_coc_that_bai_vui_long_thu_lai {
             get {
@@ -4057,7 +4093,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi kết nối đến Server.
+        ///   Looks up a localized string similar to Lỗi kết nối đến Server..
         /// </summary>
         internal static string loi_ket_noi_den_server {
             get {
@@ -4066,7 +4102,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi khi hoàn thành công việc. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Lỗi khi hoàn thành công việc. Vui lòng thử lại..
         /// </summary>
         internal static string loi_khi_hoan_thanh_cong_viec_vui_long_thu_lai {
             get {
@@ -4075,7 +4111,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi khi hoàn thành cuộc gọi. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Lỗi khi hoàn thành cuộc gọi. Vui lòng thử lại..
         /// </summary>
         internal static string loi_khi_hoan_thanh_cuoc_goi_vui_long_thu_lai {
             get {
@@ -4084,7 +4120,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi khi hoàn thành cuộc họp. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Lỗi khi hoàn thành cuộc họp. Vui lòng thử lại..
         /// </summary>
         internal static string loi_khi_hoan_thanh_cuoc_hop_vui_long_thu_lai {
             get {
@@ -4093,7 +4129,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi khi hủy công việc. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Lỗi khi hủy công việc. Vui lòng thử lại..
         /// </summary>
         internal static string loi_khi_huy_cong_viec_vui_long_thu_lai {
             get {
@@ -4102,7 +4138,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi khi hủy cuộc gọi. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Lỗi khi hủy cuộc gọi. Vui lòng thử lại..
         /// </summary>
         internal static string loi_khi_huy_cuoc_goi_vui_long_thu_lai {
             get {
@@ -4111,7 +4147,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lỗi khi hủy cuộc họp. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Lỗi khi hủy cuộc họp. Vui lòng thử lại..
         /// </summary>
         internal static string loi_khi_huy_cuoc_hop_vui_long_thu_lai {
             get {
@@ -4201,7 +4237,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mã số thuế đã tạo trong dữ liệu doanh nghiệp.
+        ///   Looks up a localized string similar to Mã số thuế đã tạo trong dữ liệu doanh nghiệp..
         /// </summary>
         internal static string ma_so_thue_da_tao_trong_du_lieu_doanh_nghiep {
             get {
@@ -4264,7 +4300,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mật khẩu cũ không đúng.
+        ///   Looks up a localized string similar to Mật khẩu cũ không đúng..
         /// </summary>
         internal static string mat_khau_cu_khong_dung {
             get {
@@ -4273,7 +4309,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mật khẩu không đúng.
+        ///   Looks up a localized string similar to Mật khẩu không đúng..
         /// </summary>
         internal static string mat_khau_khong_dung {
             get {
@@ -4282,7 +4318,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mật khẩu không được để trống.
+        ///   Looks up a localized string similar to Mật khẩu không được để trống..
         /// </summary>
         internal static string mat_khau_khong_duoc_de_trong {
             get {
@@ -4336,7 +4372,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mở lại phản hồi thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Mở lại phản hồi thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string mo_lai_phan_hoi_that_bai_vui_long_thu_lai {
             get {
@@ -4444,7 +4480,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ngày hết hiệu lực phải lớn hơn ngày bắt đầu.
+        ///   Looks up a localized string similar to Ngày hết hiệu lực phải lớn hơn ngày bắt đầu..
         /// </summary>
         internal static string ngay_het_hieu_luc_phai_lon_hon_ngay_bat_dau {
             get {
@@ -4561,7 +4597,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Người mua không được trùng với Đại lý/Sàn giao dịch. Vui lòng chọn lại.
+        ///   Looks up a localized string similar to Người mua không được trùng với Đại lý/Sàn giao dịch. Vui lòng chọn lại..
         /// </summary>
         internal static string nguoi_mua_khong_duoc_trung_voi_dai_ly_san_giao_dich_vui_long_chon_lai {
             get {
@@ -4575,6 +4611,15 @@ namespace ConasiCRM.Portable.Resources {
         internal static string nguoi_tham_du_bat_buoc {
             get {
                 return ResourceManager.GetString("nguoi_tham_du_bat_buoc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Người tham dự bắt buộc phải khác người tham dự không bắt buộc..
+        /// </summary>
+        internal static string nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc {
+            get {
+                return ResourceManager.GetString("nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc", resourceCulture);
             }
         }
         
@@ -5182,7 +5227,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password không được chứa ký tự khoảng trắng.
+        ///   Looks up a localized string similar to Password không được chứa ký tự khoảng trắng..
         /// </summary>
         internal static string password_khong_duoc_chua_ky_tu_khoang_trang {
             get {
@@ -5209,7 +5254,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phản hồi đã được giải quyết.
+        ///   Looks up a localized string similar to Phản hồi đã được giải quyết..
         /// </summary>
         internal static string phan_hoi_da_duoc_giai_quyet {
             get {
@@ -5407,7 +5452,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Qualify Account thành công, Qualify Contact thất bại.
+        ///   Looks up a localized string similar to Qualify Account thành công, Qualify Contact thất bại..
         /// </summary>
         internal static string qualify_account_thanh_cong_qualify_contact_that_bai {
             get {
@@ -5416,7 +5461,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Qualify Contact thành công, Qualify Account thất bại.
+        ///   Looks up a localized string similar to Qualify Contact thành công, Qualify Account thất bại..
         /// </summary>
         internal static string qualify_contact_thanh_cong_qualify_account_that_bai {
             get {
@@ -5722,7 +5767,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sản phẩm đang ở trạng thái Reserve không thể tạo bảng tính giá.
+        ///   Looks up a localized string similar to Sản phẩm đang ở trạng thái Reserve không thể tạo bảng tính giá..
         /// </summary>
         internal static string san_pham_dang_o_trang_thai_reserve_khong_the_tao_bang_tinh_gia {
             get {
@@ -5731,7 +5776,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sản phẩm không thể tạo bảng tính giá.
+        ///   Looks up a localized string similar to Sản phẩm không thể tạo bảng tính giá..
         /// </summary>
         internal static string san_pham_khong_the_tao_bang_tinh_gia {
             get {
@@ -5776,7 +5821,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Số điện thoại sai định dạng. Vui lòng kiểm tra lại.
+        ///   Looks up a localized string similar to Số điện thoại sai định dạng. Vui lòng kiểm tra lại..
         /// </summary>
         internal static string sdt_sai_dinh_dang_vui_long_kiem_tra_lai {
             get {
@@ -5785,7 +5830,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SMS không được hỗ trợ trên thiết bị.
+        ///   Looks up a localized string similar to SMS không được hỗ trợ trên thiết bị..
         /// </summary>
         internal static string sms_khong_duoc_ho_tro_tren_thiet_bi {
             get {
@@ -5812,7 +5857,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Số CMND đã được sử dụng.
+        ///   Looks up a localized string similar to Số CMND đã được sử dụng..
         /// </summary>
         internal static string so_cmnd_da_duoc_su_dung {
             get {
@@ -5830,7 +5875,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Số giấy phép kinh doanh đã tạo trong dữ liệu doanh nghiệp.
+        ///   Looks up a localized string similar to Số giấy phép kinh doanh đã tạo trong dữ liệu doanh nghiệp..
         /// </summary>
         internal static string so_giay_phep_kinh_doanh_da_tao_trong_du_lieu_doanh_nghiep {
             get {
@@ -5848,7 +5893,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Số hộ chiếu đã được sử dụng.
+        ///   Looks up a localized string similar to Số hộ chiếu đã được sử dụng..
         /// </summary>
         internal static string so_ho_chieu_da_duoc_su_dung {
             get {
@@ -6028,7 +6073,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo bảng tính giá thành công.
+        ///   Looks up a localized string similar to Tạo bảng tính giá thành công..
         /// </summary>
         internal static string tao_bang_tinh_gia_thanh_cong {
             get {
@@ -6037,7 +6082,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo bảng tính giá thất bại.
+        ///   Looks up a localized string similar to Tạo bảng tính giá thất bại..
         /// </summary>
         internal static string tao_bang_tinh_gia_that_bai {
             get {
@@ -6055,7 +6100,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo công việc thành công.
+        ///   Looks up a localized string similar to Tạo công việc thành công..
         /// </summary>
         internal static string tao_cong_viec_thanh_cong {
             get {
@@ -6064,7 +6109,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo công việc thất bại.
+        ///   Looks up a localized string similar to Tạo công việc thất bại..
         /// </summary>
         internal static string tao_cong_viec_that_bai {
             get {
@@ -6082,7 +6127,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo cuộc gọi thành công.
+        ///   Looks up a localized string similar to Tạo cuộc gọi thành công..
         /// </summary>
         internal static string tao_cuoc_goi_thanh_cong {
             get {
@@ -6091,7 +6136,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo cuộc gọi thất bại.
+        ///   Looks up a localized string similar to Tạo cuộc gọi thất bại..
         /// </summary>
         internal static string tao_cuoc_goi_that_bai {
             get {
@@ -6109,7 +6154,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo cuộc họp thành công.
+        ///   Looks up a localized string similar to Tạo cuộc họp thành công..
         /// </summary>
         internal static string tao_cuoc_hop_thanh_cong {
             get {
@@ -6118,7 +6163,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo cuộc họp thất bại.
+        ///   Looks up a localized string similar to Tạo cuộc họp thất bại..
         /// </summary>
         internal static string tao_cuoc_hop_that_bai {
             get {
@@ -6136,7 +6181,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo giữ chỗ thành công.
+        ///   Looks up a localized string similar to Tạo giữ chỗ thành công..
         /// </summary>
         internal static string tao_giu_cho_thanh_cong {
             get {
@@ -6145,7 +6190,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo giữ chỗ thất bại.
+        ///   Looks up a localized string similar to Tạo giữ chỗ thất bại..
         /// </summary>
         internal static string tao_giu_cho_that_bai {
             get {
@@ -6172,7 +6217,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo lịch thanh toán thành công.
+        ///   Looks up a localized string similar to Tạo lịch thanh toán thành công..
         /// </summary>
         internal static string tao_lich_thanh_toan_thanh_cong {
             get {
@@ -6181,7 +6226,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo lịch thanh toán thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Tạo lịch thanh toán thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string tao_lich_thanh_toan_that_bai_vui_long_thu_lai {
             get {
@@ -6298,7 +6343,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo người ủy quyền thành công.
+        ///   Looks up a localized string similar to Tạo người ủy quyền thành công..
         /// </summary>
         internal static string tao_nguoi_uy_quyen_thanh_cong {
             get {
@@ -6307,7 +6352,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo người ủy quyền thất bại.
+        ///   Looks up a localized string similar to Tạo người ủy quyền thất bại..
         /// </summary>
         internal static string tao_nguoi_uy_quyen_that_bai {
             get {
@@ -6325,7 +6370,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo phản hồi thành công.
+        ///   Looks up a localized string similar to Tạo phản hồi thành công..
         /// </summary>
         internal static string tao_phan_hoi_thanh_cong {
             get {
@@ -6334,7 +6379,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tạo phản hồi thất bại.
+        ///   Looks up a localized string similar to Tạo phản hồi thất bại..
         /// </summary>
         internal static string tao_phan_hoi_that_bai {
             get {
@@ -6388,7 +6433,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tên đăng nhập không đúng.
+        ///   Looks up a localized string similar to Tên đăng nhập không đúng..
         /// </summary>
         internal static string ten_dang_nhap_khong_dung {
             get {
@@ -6397,7 +6442,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tên đăng nhập không được để trống.
+        ///   Looks up a localized string similar to Tên đăng nhập không được để trống..
         /// </summary>
         internal static string ten_dang_nhap_khong_duoc_de_trong {
             get {
@@ -6424,7 +6469,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thành công.
+        ///   Looks up a localized string similar to Thành công..
         /// </summary>
         internal static string thanh_cong {
             get {
@@ -6460,7 +6505,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thất bại.
+        ///   Looks up a localized string similar to Thất bại..
         /// </summary>
         internal static string that_bai {
             get {
@@ -6514,7 +6559,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thêm đồng sở hữu thành công.
+        ///   Looks up a localized string similar to Thêm đồng sở hữu thành công..
         /// </summary>
         internal static string them_dong_so_huu_thanh_cong {
             get {
@@ -6523,7 +6568,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thêm đồng sở hữu thất bại.
+        ///   Looks up a localized string similar to Thêm đồng sở hữu thất bại..
         /// </summary>
         internal static string them_dong_so_huu_that_bai {
             get {
@@ -6559,7 +6604,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thêm khuyến mãi thành công.
+        ///   Looks up a localized string similar to Thêm khuyến mãi thành công..
         /// </summary>
         internal static string them_khuyen_mai_thanh_cong {
             get {
@@ -6568,7 +6613,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thêm khuyến mãi thất bại.
+        ///   Looks up a localized string similar to Thêm khuyến mãi thất bại..
         /// </summary>
         internal static string them_khuyen_mai_that_bai {
             get {
@@ -6622,7 +6667,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc.
+        ///   Looks up a localized string similar to Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc..
         /// </summary>
         internal static string thoi_gian_bat_dau_phai_nho_hon_thoi_gian_ket_thuc {
             get {
@@ -6667,7 +6712,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thời gian kết thúc phải lớn hơn thời gian bắt đầu.
+        ///   Looks up a localized string similar to Thời gian kết thúc phải lớn hơn thời gian bắt đầu..
         /// </summary>
         internal static string thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau {
             get {
@@ -7135,7 +7180,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ứng dụng không được hỗ trợ. Không thể mở file.
+        ///   Looks up a localized string similar to Ứng dụng không được hỗ trợ. Không thể mở file..
         /// </summary>
         internal static string ung_dung_khong_duoc_ho_tro_khong_the_mo_file {
             get {
@@ -7270,7 +7315,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn Contact để chuyển sang khách hàng tiềm năng.
+        ///   Looks up a localized string similar to Vui lòng chọn Contact để chuyển sang khách hàng tiềm năng..
         /// </summary>
         internal static string vui_long_chon_contact_de_chuyen_sang_khach_hang_tiem_nang {
             get {
@@ -7279,7 +7324,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn đại lý bán hàng.
+        ///   Looks up a localized string similar to Vui lòng chọn đại lý bán hàng..
         /// </summary>
         internal static string vui_long_chon_dai_ly_ban_hang {
             get {
@@ -7288,7 +7333,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn Đại lý/Sàn giao dịch.
+        ///   Looks up a localized string similar to Vui lòng chọn Đại lý/Sàn giao dịch..
         /// </summary>
         internal static string vui_long_chon_dai_ly_san_giao_dich {
             get {
@@ -7297,7 +7342,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn địa chỉ liên lạc.
+        ///   Looks up a localized string similar to Vui lòng chọn địa chỉ liên lạc..
         /// </summary>
         internal static string vui_long_chon_dia_chi_lien_lac {
             get {
@@ -7306,7 +7351,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn địa chỉ thường trú.
+        ///   Looks up a localized string similar to Vui lòng chọn địa chỉ thường trú..
         /// </summary>
         internal static string vui_long_chon_dia_chi_thuong_tru {
             get {
@@ -7315,7 +7360,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn điều kiện bàn giao.
+        ///   Looks up a localized string similar to Vui lòng chọn điều kiện bàn giao..
         /// </summary>
         internal static string vui_long_chon_dieu_kien_ban_giao {
             get {
@@ -7324,7 +7369,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn đợt mở bán.
+        ///   Looks up a localized string similar to Vui lòng chọn đợt mở bán..
         /// </summary>
         internal static string vui_long_chon_dot_mo_ban {
             get {
@@ -7333,7 +7378,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn Dự án.
+        ///   Looks up a localized string similar to Vui lòng chọn Dự án..
         /// </summary>
         internal static string vui_long_chon_du_an {
             get {
@@ -7342,7 +7387,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn giới tính.
+        ///   Looks up a localized string similar to Vui lòng chọn giới tính..
         /// </summary>
         internal static string vui_long_chon_gioi_tinh {
             get {
@@ -7351,7 +7396,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn khách hàng.
+        ///   Looks up a localized string similar to Vui lòng chọn khách hàng..
         /// </summary>
         internal static string vui_long_chon_khach_hang {
             get {
@@ -7360,7 +7405,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn loại.
+        ///   Looks up a localized string similar to Vui lòng chọn loại..
         /// </summary>
         internal static string vui_long_chon_loai {
             get {
@@ -7369,7 +7414,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn loại hợp đồng.
+        ///   Looks up a localized string similar to Vui lòng chọn loại hợp đồng..
         /// </summary>
         internal static string vui_long_chon_loai_hop_dong {
             get {
@@ -7378,7 +7423,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn loại khách hàng.
+        ///   Looks up a localized string similar to Vui lòng chọn loại khách hàng..
         /// </summary>
         internal static string vui_long_chon_loai_khach_hang {
             get {
@@ -7387,7 +7432,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn loại phản hồi.
+        ///   Looks up a localized string similar to Vui lòng chọn loại phản hồi..
         /// </summary>
         internal static string vui_long_chon_loai_phan_hoi {
             get {
@@ -7396,7 +7441,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn loại thanh lý.
+        ///   Looks up a localized string similar to Vui lòng chọn loại thanh lý..
         /// </summary>
         internal static string vui_long_chon_loai_thanh_ly {
             get {
@@ -7405,7 +7450,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn ngày sinh.
+        ///   Looks up a localized string similar to Vui lòng chọn ngày sinh..
         /// </summary>
         internal static string vui_long_chon_ngay_sinh {
             get {
@@ -7414,7 +7459,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn người đại diện.
+        ///   Looks up a localized string similar to Vui lòng chọn người đại diện..
         /// </summary>
         internal static string vui_long_chon_nguoi_dai_dien {
             get {
@@ -7423,7 +7468,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn người nhận cuộc gọi.
+        ///   Looks up a localized string similar to Vui lòng chọn người nhận cuộc gọi..
         /// </summary>
         internal static string vui_long_chon_nguoi_nhan_cuoc_goi {
             get {
@@ -7432,7 +7477,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn người tham dự bắt buộc.
+        ///   Looks up a localized string similar to Vui lòng chọn người tham dự bắt buộc..
         /// </summary>
         internal static string vui_long_chon_nguoi_tham_du_bat_buoc {
             get {
@@ -7441,7 +7486,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn người ủy quyền.
+        ///   Looks up a localized string similar to Vui lòng chọn người ủy quyền..
         /// </summary>
         internal static string vui_long_chon_nguoi_uy_quyen {
             get {
@@ -7450,7 +7495,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn nhóm.
+        ///   Looks up a localized string similar to Vui lòng chọn nhóm..
         /// </summary>
         internal static string vui_long_chon_nhom {
             get {
@@ -7459,7 +7504,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn phương thức phạt.
+        ///   Looks up a localized string similar to Vui lòng chọn phương thức phạt..
         /// </summary>
         internal static string vui_long_chon_phuong_thuc_phat {
             get {
@@ -7468,7 +7513,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn phương thức thanh toán.
+        ///   Looks up a localized string similar to Vui lòng chọn phương thức thanh toán..
         /// </summary>
         internal static string vui_long_chon_phuong_thuc_thanh_toan {
             get {
@@ -7477,7 +7522,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn quan hệ.
+        ///   Looks up a localized string similar to Vui lòng chọn quan hệ..
         /// </summary>
         internal static string vui_long_chon_quan_he {
             get {
@@ -7486,7 +7531,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn quốc tịch.
+        ///   Looks up a localized string similar to Vui lòng chọn quốc tịch..
         /// </summary>
         internal static string vui_long_chon_quoc_tich {
             get {
@@ -7495,7 +7540,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn thời gian bắt đầu.
+        ///   Looks up a localized string similar to Vui lòng chọn thời gian bắt đầu..
         /// </summary>
         internal static string vui_long_chon_thoi_gian_bat_dau {
             get {
@@ -7504,7 +7549,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn thời gian hiệu lực.
+        ///   Looks up a localized string similar to Vui lòng chọn thời gian hiệu lực..
         /// </summary>
         internal static string vui_long_chon_thoi_gian_hieu_luc {
             get {
@@ -7513,7 +7558,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng chọn thời gian kết thúc.
+        ///   Looks up a localized string similar to Vui lòng chọn thời gian kết thúc..
         /// </summary>
         internal static string vui_long_chon_thoi_gian_ket_thuc {
             get {
@@ -7522,7 +7567,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập chủ đề.
+        ///   Looks up a localized string similar to Vui lòng nhập chủ đề..
         /// </summary>
         internal static string vui_long_nhap_chu_de {
             get {
@@ -7531,7 +7576,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập giá trị từ 0 đến 100.
+        ///   Looks up a localized string similar to Vui lòng nhập giá trị từ 0 đến 100..
         /// </summary>
         internal static string vui_long_nhap_gia_tri_tu_0_den_100 {
             get {
@@ -7540,7 +7585,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập họ tên.
+        ///   Looks up a localized string similar to Vui lòng nhập họ tên..
         /// </summary>
         internal static string vui_long_nhap_ho_ten {
             get {
@@ -7549,7 +7594,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập mật khẩu cũ.
+        ///   Looks up a localized string similar to Vui lòng nhập mật khẩu cũ..
         /// </summary>
         internal static string vui_long_nhap_mat_khau_cu {
             get {
@@ -7558,7 +7603,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập mật khẩu mới.
+        ///   Looks up a localized string similar to Vui lòng nhập mật khẩu mới..
         /// </summary>
         internal static string vui_long_nhap_mat_khau_moi {
             get {
@@ -7567,7 +7612,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập mô tả (EN).
+        ///   Looks up a localized string similar to Vui lòng nhập mô tả (EN)..
         /// </summary>
         internal static string vui_long_nhap_mo_ta_en {
             get {
@@ -7576,7 +7621,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập mô tả (VN).
+        ///   Looks up a localized string similar to Vui lòng nhập mô tả (VN)..
         /// </summary>
         internal static string vui_long_nhap_mo_ta_vn {
             get {
@@ -7585,7 +7630,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập password nhiều hơn 6 ký tự.
+        ///   Looks up a localized string similar to Vui lòng nhập password nhiều hơn 6 ký tự..
         /// </summary>
         internal static string vui_long_nhap_password_nhieu_hon_6_ky_tu {
             get {
@@ -7594,7 +7639,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số điện thoại.
+        ///   Looks up a localized string similar to Vui lòng nhập số điện thoại..
         /// </summary>
         internal static string vui_long_nhap_sdt {
             get {
@@ -7603,7 +7648,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số điện thoại công ty.
+        ///   Looks up a localized string similar to Vui lòng nhập số điện thoại công ty..
         /// </summary>
         internal static string vui_long_nhap_sdt_cong_ty {
             get {
@@ -7612,7 +7657,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số CMND.
+        ///   Looks up a localized string similar to Vui lòng nhập số CMND..
         /// </summary>
         internal static string vui_long_nhap_so_cmnd {
             get {
@@ -7621,7 +7666,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số giấy phép kinh doanh.
+        ///   Looks up a localized string similar to Vui lòng nhập số giấy phép kinh doanh..
         /// </summary>
         internal static string vui_long_nhap_so_giay_phep_kinh_doanh {
             get {
@@ -7630,7 +7675,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số nhà/đường/phường.
+        ///   Looks up a localized string similar to Vui lòng nhập số nhà/đường/phường..
         /// </summary>
         internal static string vui_long_nhap_so_nha_duong_phuong {
             get {
@@ -7639,7 +7684,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số tháng miễn giảm phí quản lý.
+        ///   Looks up a localized string similar to Vui lòng nhập số tháng miễn giảm phí quản lý..
         /// </summary>
         internal static string vui_long_nhap_so_thang_mien_giam_phi_quan_ly {
             get {
@@ -7648,7 +7693,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số tháng miễn giảm phí quản lý không quá 100.
+        ///   Looks up a localized string similar to Vui lòng nhập số tháng miễn giảm phí quản lý không quá 100..
         /// </summary>
         internal static string vui_long_nhap_so_thang_mien_giam_phi_quan_ly_khong_qua_100 {
             get {
@@ -7657,7 +7702,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập số tiền hoàn lại.
+        ///   Looks up a localized string similar to Vui lòng nhập số tiền hoàn lại..
         /// </summary>
         internal static string vui_long_nhap_so_tien_hoan_lai {
             get {
@@ -7666,7 +7711,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập tên công ty.
+        ///   Looks up a localized string similar to Vui lòng nhập tên công ty..
         /// </summary>
         internal static string vui_long_nhap_ten_cong_ty {
             get {
@@ -7675,7 +7720,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập tiêu đề.
+        ///   Looks up a localized string similar to Vui lòng nhập tiêu đề..
         /// </summary>
         internal static string vui_long_nhap_tieu_de {
             get {
@@ -7684,7 +7729,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng nhập xác nhận mật khẩu mới.
+        ///   Looks up a localized string similar to Vui lòng nhập xác nhận mật khẩu mới..
         /// </summary>
         internal static string vui_long_nhap_xac_nhan_mat_khau_moi {
             get {
@@ -7693,7 +7738,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vui lòng tạo lịch thanh toán.
+        ///   Looks up a localized string similar to Vui lòng tạo lịch thanh toán..
         /// </summary>
         internal static string vui_long_tao_lich_thanh_toan {
             get {
@@ -7738,7 +7783,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xác nhận in thành công.
+        ///   Looks up a localized string similar to Xác nhận in thành công..
         /// </summary>
         internal static string xac_nhan_in_thanh_cong {
             get {
@@ -7747,7 +7792,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xác nhận in thất bại.
+        ///   Looks up a localized string similar to Xác nhận in thất bại..
         /// </summary>
         internal static string xac_nhan_in_that_bai {
             get {
@@ -7756,7 +7801,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xác nhận mật khẩu không đúng.
+        ///   Looks up a localized string similar to Xác nhận mật khẩu không đúng..
         /// </summary>
         internal static string xac_nhan_mat_khau_khong_dung {
             get {
@@ -7765,7 +7810,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xác nhận mật khẩu mới.
+        ///   Looks up a localized string similar to Xác nhận mật khẩu mới..
         /// </summary>
         internal static string xac_nhan_mat_khau_moi {
             get {
@@ -7783,7 +7828,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xác nhận tải phiếu đặt cọc thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Xác nhận tải phiếu đặt cọc thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string xac_nhan_tai_phieu_dat_coc_that_bai_vui_long_thu_lai {
             get {
@@ -7837,7 +7882,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xóa khuyến mãi thành công.
+        ///   Looks up a localized string similar to Xóa khuyến mãi thành công..
         /// </summary>
         internal static string xoa_khuyen_mai_thanh_cong {
             get {
@@ -7846,7 +7891,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xóa khuyến mãi thất bại.
+        ///   Looks up a localized string similar to Xóa khuyến mãi thất bại..
         /// </summary>
         internal static string xoa_khuyen_mai_that_bai {
             get {
@@ -7864,7 +7909,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xóa lịch thanh toán thất bại. Vui lòng thử lại.
+        ///   Looks up a localized string similar to Xóa lịch thanh toán thất bại. Vui lòng thử lại..
         /// </summary>
         internal static string xoa_lich_thanh_toan_that_bai_vui_long_thu_lai {
             get {
@@ -7873,7 +7918,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xóa người đồng sở hữu thành công.
+        ///   Looks up a localized string similar to Xóa người đồng sở hữu thành công..
         /// </summary>
         internal static string xoa_nguoi_dong_so_huu_thanh_cong {
             get {
@@ -7882,7 +7927,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xóa người đồng sở hữu thất bại.
+        ///   Looks up a localized string similar to Xóa người đồng sở hữu thất bại..
         /// </summary>
         internal static string xoa_nguoi_dong_so_huu_that_bai {
             get {
@@ -7891,7 +7936,7 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xóa người ủy quyền thất bại.
+        ///   Looks up a localized string similar to Xóa người ủy quyền thất bại..
         /// </summary>
         internal static string xoa_nguoi_uy_quyen_that_bai {
             get {

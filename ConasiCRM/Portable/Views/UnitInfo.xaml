@@ -114,18 +114,24 @@
                             </Grid>
                             <telerikPrimitives:RadBorder BorderColor="#808080" CornerRadius="10" BorderThickness="1" BackgroundColor="White" Margin="5" Grid.Row="1" VerticalOptions="EndAndExpand">
                                 <StackLayout Margin="15">
-                                    <StackLayout IsVisible="{Binding UnitInfo.bsd_vippriority}" HorizontalOptions="End" Orientation="Horizontal">
-                                        <Label Text="VIP" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
-                                        <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
-                                    </StackLayout>
-                                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto">
-                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding StatusCode.Background}">
-                                            <Label Grid.Column="0" Text="{Binding StatusCode.Name}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                    <Grid ColumnDefinitions="Auto,Auto,*,Auto" RowDefinitions="Auto">
+                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding StatusCode.Background}" Grid.Column="0">
+                                            <Label Text="{Binding StatusCode.Name}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                         </telerikPrimitives:RadBorder>
 
-                                        <Label Grid.Column="1" Text="{Binding UnitInfo.name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                        <StackLayout Grid.Column="1" IsVisible="{Binding Unit.bsd_vippriority}" Orientation="Horizontal">
+                                            <BoxView WidthRequest="1" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray"/>
+                                            <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#FEC93D">
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" FontSize="13" TextColor="White" Margin="5,0,0,0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                                    <Label Text="VIP" FontSize="14" TextColor="White" Margin="0,5,5,5"/>
+                                                </StackLayout>
+                                            </telerikPrimitives:RadBorder>
+                                        </StackLayout>
+
+                                        <Label Grid.Column="2" Text="{Binding UnitInfo.name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                         
-                                        <StackLayout Grid.Column="2" IsVisible="{Binding UnitInfo.is_event}" HorizontalOptions="End" Orientation="Horizontal">
+                                        <StackLayout Grid.Column="3" IsVisible="{Binding UnitInfo.is_event}" HorizontalOptions="End" Orientation="Horizontal">
                                             <Label Text="{x:Static language:Language.su_kien}" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
                                             <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
                                             <StackLayout.GestureRecognizers>
@@ -148,7 +154,9 @@
                                             <FormattedString>
                                                 <Span Text="{Binding Source={x:Static language:Language.dien_tich_su_dung},StringFormat='{0}:'}"/>
                                                 <Span Text=" "/>
-                                                <Span Text="{Binding UnitInfo.bsd_constructionarea,StringFormat='{0:#,0.#0} m2'}"/>
+                                                <Span Text="{Binding UnitInfo.bsd_constructionarea,StringFormat='{0:#,0.#0}'}"/>
+                                                <Span Text=" "/>
+                                                <Span Text="{x:Static language:Language.sqm}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>

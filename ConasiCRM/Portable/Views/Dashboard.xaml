@@ -183,9 +183,9 @@
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="{x:Static language:Language.thoi_gian}" />
-                                                        <Span Text="{Binding scheduledstart,StringFormat='{0:h:mm tt}'}"/>
+                                                        <Span Text="{Binding scheduledstart,StringFormat='{0:HH:mm}'}"/>
                                                         <Span Text=" - " />
-                                                        <Span Text="{Binding scheduledend,StringFormat='{0:h:mm tt}'}"/>
+                                                        <Span Text="{Binding scheduledend,StringFormat='{0:HH:mm}'}"/>
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                                 <!--<Label.Text>

@@ -37,7 +37,10 @@
                     <controls:MainEntry Placeholder="{x:Static language:Language.nhap_tieu_de}" Text="{Binding mandatorySecondary.bsd_name}" FontSize="15"/>
 
                     <controls:FormLabelRequired Text="{x:Static language:Language.cong_ty}" Margin="0,10,0,0"/>
-                    <controls:MainEntry Text="{Binding mandatorySecondary.bsd_developeraccount}" FontSize="15" IsEnabled="False"/>
+                    <telerikPrimitives:RadBorder BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1">
+                        <Label Text="{Binding mandatorySecondary.bsd_developeraccount}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0" />
+                    </telerikPrimitives:RadBorder>
+                    <!--<controls:MainEntry Text="{Binding mandatorySecondary.bsd_developeraccount}" FontSize="15" IsEnabled="False"/>-->
 
                     <controls:FormLabelRequired Text="{x:Static language:Language.nguoi_uy_quyen}" Margin="0,10,0,0"/>
                     <controls:LookUp x:Name="Lookup_Account" Placeholder="{x:Static language:Language.chon_nguoi_uy_quyen}" ItemsSource="{Binding list_contact_lookup}" SelectedItem="{Binding Contact}" BottomModal="{x:Reference BottomModal}" NameDisplay="Name"/>
@@ -65,6 +68,7 @@
 
                     <controls:FormLabelRequired Text="{Binding Source={x:Static language:Language.mo_ta},StringFormat='{0} (EN)'}" Margin="0,10,0,0"/>
                     <controls:MainEntry Placeholder="{Binding Source={x:Static language:Language.nhap_mo_ta},StringFormat='{0} (EN)'}" Text="{Binding mandatorySecondary.bsd_descriptionsen}" FontSize="15"/>
+                    
                 </StackLayout>
             </ScrollView>
             <Grid Padding="20,10" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" VerticalOptions="EndAndExpand" BackgroundColor="White">

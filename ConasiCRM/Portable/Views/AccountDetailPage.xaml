@@ -217,11 +217,11 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <Label Text="{Binding Source={x:Static language:Language.dia_chi},StringFormat='{0}:'}" FontSize="15" TextColor="#444444" Grid.Column="0" Padding="25,10,0,10"/>
-                                            <Label Text="{Binding singleAccount.bsd_address}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10"/>
+                                            <Label Text="{Binding singleAccount.bsd_address}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White">
                                             <Label Text="{Binding Source={x:Static language:Language.dia_chi_thuong_tru},StringFormat='{0}:'}" FontSize="15" TextColor="#444444" Grid.Column="0" Padding="25,10,0,10"/>
-                                            <Label Text="{Binding singleAccount.bsd_permanentaddress1}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10"/>
+                                            <Label Text="{Binding singleAccount.bsd_permanentaddress1}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <!--<Label FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
                                             <Label.FormattedText>
@@ -266,11 +266,11 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="2">
                                             <Label Text="{Binding Source={x:Static language:Language.dia_chi_lien_lac},StringFormat='{0}:'}" FontSize="15" TextColor="#444444" Grid.Column="0" Padding="25,10,0,10"/>
-                                            <Label Text="{Binding PrimaryContact.bsd_contactaddress}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10"/>
+                                            <Label Text="{Binding PrimaryContact.bsd_contactaddress}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="3">
                                             <Label Text="{Binding Source={x:Static language:Language.dia_chi_thuong_tru},StringFormat='{0}:'}" FontSize="15" TextColor="#444444" Grid.Column="0" Padding="25,10,0,10"/>
-                                            <Label Text="{Binding PrimaryContact.bsd_permanentaddress1}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10"/>
+                                            <Label Text="{Binding PrimaryContact.bsd_permanentaddress1}" FontSize="15" TextColor="#444444" Grid.Column="1" Padding="0,10,25,10" HorizontalTextAlignment="End"/>
                                         </Grid>
                                         <!--<Label Grid.Row="2" FontSize="15" TextColor="#444444" BackgroundColor="White" Padding="25,10">
                                             <Label.FormattedText>

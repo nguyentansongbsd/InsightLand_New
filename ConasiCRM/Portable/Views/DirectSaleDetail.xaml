@@ -172,7 +172,10 @@
                                                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="UnitItem_Tapped" CommandParameter="{Binding productid}"/>
                                                         </telerikPrimitives:RadBorder.GestureRecognizers>
                                                         <StackLayout>
-                                                            <Label Text="{Binding name}" TextColor="White" FontSize="23" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
+                                                            <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
+                                                                <Label Grid.Column="0" Text="{Binding name}" TextColor="White" FontSize="23" FontFamily="FontRobotoBold" HorizontalTextAlignment="Center"/>
+                                                                <Label Grid.Column="1" Text="&#xf005;" FontFamily="FontAwesomeSolid" FontSize="15" TextColor="White" IsVisible="{Binding has_event}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                                            </Grid>
                                                             <Grid ColumnDefinitions="Auto,Auto" HorizontalOptions="Center">
                                                                 <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.giu_cho},StringFormat='{0}:'}" FontSize="18" FontAttributes="Bold" TextColor="White" />
                                                                 <Label Grid.Column="1" Text="{Binding NumQueses}" FontSize="18" FontAttributes="Bold" TextColor="White" />
@@ -210,9 +213,13 @@
                                 </telerikPrimitives:RadBorder>
 
                                 <StackLayout Grid.Column="1" IsVisible="{Binding Unit.bsd_vippriority}" Orientation="Horizontal">
-                                    <BoxView WidthRequest="1" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Margin="5,0" BackgroundColor="Gray"/>
-                                    <Label Text="VIP" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
-                                    <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
+                                    <BoxView WidthRequest="1" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Gray"/>
+                                    <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="#FEC93D">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" FontSize="13" TextColor="White" Margin="5,0,0,0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                            <Label Text="VIP" FontSize="14" TextColor="White" Margin="0,5,5,5"/>
+                                        </StackLayout>
+                                    </telerikPrimitives:RadBorder>
                                 </StackLayout>
 
                                 <Label Grid.Column="2" Text="{Binding Unit.name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -302,7 +309,7 @@
                                                                 <Span Text="{Binding Source={x:Static language:Language.thoi_gian_het_han},StringFormat='{0}:'}"/>
                                                                 <Span Text=" "/>
                                                                 <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
-                                                                <Span Text="{Binding bsd_queuingexpired ,StringFormat=' {0:h:mm tt}'}"/>
+                                                                <Span Text="{Binding bsd_queuingexpired ,StringFormat=' {0:HH:mm}'}"/>
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>

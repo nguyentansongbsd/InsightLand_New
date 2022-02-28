@@ -17,17 +17,22 @@ namespace ConasiCRM.Portable.Views
     public partial class MandatorySecondaryForm : ContentPage
     {
         private MandatorySecondaryFormViewModel viewModel;
-        public MandatorySecondaryForm(Guid id)
+        public MandatorySecondaryForm(Models.LookUp account)
         {
             InitializeComponent();
-            Init(id.ToString());
+            Init(account);
         }
 
-        private async void Init(string id)
+        private async void Init(Models.LookUp account)
         {
             this.BindingContext = viewModel = new MandatorySecondaryFormViewModel();
             SetPreOpen();
-            await viewModel.GetOneAccountById(id);
+            // await viewModel.GetOneAccountById(id);
+            if (account != null && account.Id != Guid.Empty)
+            {
+                viewModel.mandatorySecondary.bsd_developeraccount = account.Name;
+                viewModel.mandatorySecondary._bsd_developeraccount_value = account.Id;
+            }
         }
 
         public void SetPreOpen()

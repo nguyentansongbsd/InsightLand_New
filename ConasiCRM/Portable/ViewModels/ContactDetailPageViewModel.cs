@@ -78,6 +78,12 @@ namespace ConasiCRM.Portable.ViewModels
 
         public string CodeContac = LookUpMultipleTabs.CodeContac;
 
+        private AddressModel _contactAddress;
+        public AddressModel ContactAddress { get => _contactAddress; set { _contactAddress = value; OnPropertyChanged(nameof(ContactAddress)); } }
+
+        private AddressModel _permanentAddress;
+        public AddressModel PermanentAddress { get => _permanentAddress; set { _permanentAddress = value; OnPropertyChanged(nameof(PermanentAddress)); } }
+
         public ContactDetailPageViewModel()
         {
             singleContact = new ContactFormModel();
