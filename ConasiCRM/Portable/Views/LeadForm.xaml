@@ -82,19 +82,7 @@
                                 <controls:MainEntry x:Name="websiteurl_text" Text="{Binding singleLead.websiteurl}" Placeholder="{x:Static language:Language.nhap_website}" FontSize="15"/>
 
                                 <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="{x:Static language:Language.dia_chi_cong_ty}" FontSize="15" />
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <controls:MainEntry Grid.ColumnSpan="2"  Text="{Binding AddressComposite}" ShowClearButton="False" Placeholder="{x:Static language:Language.chon_dia_chi_cong_ty}" FontSize="15"/>
-                                    <StackLayout Grid.Column="0">
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Address_Tapped"/>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                    <Label Grid.Column="1" Text="&#xf057;" IsVisible="{Binding IsShowbtnClearAddress}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#888888" VerticalOptions="Center" Padding="5">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ClearAddress_Tapped"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
+                                <controls:LookUpAddress Placeholder="{x:Static language:Language.chon_dia_chi_cong_ty}" BottomModal="{Reference BottomModal}" SelectedItem="{Binding Address}" CenterModal="{Reference CenterModal}"/>
 
                                 <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.mo_ta}" FontSize="15"/>
                                 <controls:MainEditor x:Name="description_text" Text="{Binding singleLead.description}" Placeholder="{x:Static language:Language.nhap_mo_ta}" FontSize="15" HeightRequest="100"/>
@@ -133,35 +121,8 @@
                 <Button x:Name="btn_save_lead" Text="{x:Static language:Language.tao_khach_hang}" Clicked="SaveLead_Clicked" Margin="10" Padding="10,5" HeightRequest="40" CornerRadius="10" BackgroundColor="#2196F3" TextColor="White"/>
             </StackLayout>
 
-            <controls:CenterModal x:Name="centerModalAddress" Title="Thiết lập địa chỉ">
-                <controls:CenterModal.Body>
-                    <ScrollView>
-                        <StackLayout Margin="10">
-                            <controls:FormLabel Text="Quốc gia"/>
-                            <controls:LookUp x:Name="lookUpCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountry}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="Country_Changed"/>
-
-                            <!--<controls:FormLabel Text="ZIP code"/>
-                            <controls:MainEntry Placeholder="Nhập ZIP code" Text="{Binding AddressPostalCode}"/>-->
-
-                            <controls:FormLabel Text="Tỉnh thành"/>
-                            <controls:LookUp x:Name="lookUpProvince" Placeholder="Chọn tỉnh thành" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvince}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="Province_Changed"/>
-
-                            <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp x:Name="lookUpDistrict" Placeholder="Chọn quận/huyện" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCity}" ItemsSource="{Binding list_district_lookup}" SelectedItemChange="District_Changed"/>
-
-                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
-                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1}"/>
-                        </StackLayout>
-                    </ScrollView>
-                </controls:CenterModal.Body>
-                <controls:CenterModal.Footer>
-                    <Grid ColumnDefinitions="*,*" Margin="10">
-                        <Button Grid.Column="0" Text="Đóng" Clicked="CloseAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                    </Grid>
-                </controls:CenterModal.Footer>
-            </controls:CenterModal>
-
+            <controls:CenterModal x:Name="CenterModal" />
+            <controls:BottomModal x:Name="BottomModal"/>
             <controls:BottomModal x:Name="LookUpModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>

@@ -42,7 +42,6 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new LeadFormViewModel();
-            centerModalAddress.Body.BindingContext = viewModel;
             SetPreOpen();
             lookUpDanhGia.HideClearButton();
             CheckSingleLead?.Invoke(true);
@@ -54,9 +53,6 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.singleLead.leadid != Guid.Empty)
             {
-                viewModel.AddressComposite = viewModel.singleLead.address1_composite;
-                viewModel.AddressLine1 = viewModel.singleLead.address1_line1;
-
                 viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
                 viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
 
@@ -123,40 +119,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 LoadingHelper.Hide();
             };
-
-            lookUpCountry.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadCountryForLookup();
-                if (viewModel.list_country_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_quoc_gia);
-                }
-                LoadingHelper.Hide();
-            };
-
-            lookUpProvince.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.loadProvincesForLookup();
-                if (viewModel.list_province_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_tinh_thanh);
-                }
-                LoadingHelper.Hide();
-            };
-
-            lookUpDistrict.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.loadDistrictForLookup();
-                if (viewModel.list_district_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_quan_huyen);
-                }
-                LoadingHelper.Hide();
-            };
-
+            
             lookUpLeadSource.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
@@ -211,97 +174,6 @@ namespace ConasiCRM.Portable.Views
         //}
 
         #endregion
-
-        private async void Address_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            if (viewModel.AddressCountry == null && !string.IsNullOrWhiteSpace(viewModel.singleLead.address1_country))
-            {
-                viewModel.AddressCountry = await viewModel.LoadCountryByName();
-            }
-
-            if (viewModel.AddressStateProvince == null && !string.IsNullOrWhiteSpace(viewModel.singleLead.address1_stateorprovince))
-            {
-                viewModel.AddressStateProvince = await viewModel.LoadProvinceByName(); ;
-            }
-
-            if (viewModel.AddressCity == null && !string.IsNullOrWhiteSpace(viewModel.singleLead.address1_city))
-            {
-                viewModel.AddressCity = await viewModel.LoadDistrictByName();
-            }
-
-            await centerModalAddress.Show();
-            LoadingHelper.Hide();
-        }
-
-        private async void CloseAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalAddress.Hide();
-        }
-
-        private async void Country_Changed(object sender, EventArgs e)
-        {
-            await viewModel.loadProvincesForLookup();
-        }
-
-        private async void Province_Changed(object sender, EventArgs e)
-        {
-            await viewModel.loadDistrictForLookup();
-        }
-
-        private async void District_Changed(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void ConfirmAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1))
-            {
-                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_nha_duong_phuong);
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1))
-            {
-                address.Add(viewModel.AddressLine1);
-            }
-
-            if (viewModel.AddressCity != null)
-            {
-                address.Add(viewModel.AddressCity.Name);
-            }
-
-            if (viewModel.AddressStateProvince != null)
-            {
-                address.Add(viewModel.AddressStateProvince.Name);
-            }           
-
-            if (viewModel.AddressCountry != null)
-            {
-                address.Add(viewModel.AddressCountry.Name);
-            }
-
-            viewModel.AddressComposite = string.Join(",", address);
-            await centerModalAddress.Hide();
-        }
-
-        private void ClearAddress_Tapped(object sender, EventArgs e)
-        {
-            viewModel.AddressComposite = null;
-            viewModel.AddressLine1 = null;
-            viewModel.AddressCity = null;
-            viewModel.AddressStateProvince = null;
-            viewModel.AddressCountry = null;
-
-            viewModel.singleLead.address1_line1 = null;
-            viewModel.singleLead.address1_city = null;
-            viewModel.singleLead.address1_stateorprovince = null;
-            viewModel.singleLead.address1_country = null;
-            viewModel.singleLead.address1_composite = null;
-        }
-
         private async void SaveLead_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.bsd_topic_label))
@@ -330,12 +202,12 @@ namespace ConasiCRM.Portable.Views
 
             LoadingHelper.Show();
 
-            viewModel.singleLead.address1_city = viewModel.AddressCity != null ? viewModel.AddressCity.Name : null;
-            viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ? viewModel.AddressStateProvince.Name : null;
-            viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
+            //viewModel.singleLead.address1_city = viewModel.AddressCity != null ? viewModel.AddressCity.Name : null;
+            //viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ? viewModel.AddressStateProvince.Name : null;
+            //viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
 
-            viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
-            viewModel.singleLead.address1_composite = viewModel.AddressComposite;
+            //viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
+            //viewModel.singleLead.address1_composite = viewModel.AddressComposite;
 
             viewModel.singleLead.industrycode = viewModel.IndustryCode != null ? viewModel.IndustryCode.Val : null;
             viewModel.singleLead._transactioncurrencyid_value = viewModel.SelectedCurrency != null ? viewModel.SelectedCurrency.Val : null;

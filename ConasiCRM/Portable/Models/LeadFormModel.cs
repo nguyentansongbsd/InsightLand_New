@@ -18,6 +18,8 @@ namespace ConasiCRM.Portable.Models
 
         private string _statuscode;
         public string statuscode { get { return _statuscode; } set { _statuscode = value; OnPropertyChanged(nameof(statecode)); } }
+        public string statuscode_format { get => LeadStatusCodeData.GetLeadStatusCodeById(statuscode)?.Name; }
+        public string statuscode_color { get => LeadStatusCodeData.GetLeadStatusCodeById(statuscode)?.Background; }
 
         private string _statecode;
         public string statecode { get { return _statecode; } set { _statecode = value; OnPropertyChanged(nameof(statecode)); } }

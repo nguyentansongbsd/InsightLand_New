@@ -47,38 +47,51 @@ namespace ConasiCRM.Portable.Views
             DatePickerEnd.DefaultDisplay = DateTime.Now;
             // kiểm tra page trước là page nào
             var page_before = App.Current.MainPage.Navigation.NavigationStack.Last()?.GetType().Name;
-            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage")
+            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage" || page_before == "LeadDetailPage")
             {
                 if (page_before == "ContactDetailPage" && ContactDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(ContactDetailPage.FromCustomer.Val))
                 {
                     viewModel.CallTo = ContactDetailPage.FromCustomer;
+                    viewModel.Customer = ContactDetailPage.FromCustomer;
                     Lookup_CallTo.IsVisible = false;
+                    CallToMapping.IsVisible = true;
+                    Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else if (page_before == "AccountDetailPage" && AccountDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(AccountDetailPage.FromCustomer.Val))
                 {
                     viewModel.CallTo = AccountDetailPage.FromCustomer;
+                    viewModel.Customer = AccountDetailPage.FromCustomer;
                     Lookup_CallTo.IsVisible = false;
+                    CallToMapping.IsVisible = true;
+                    Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else if (page_before == "LeadDetailPage" && LeadDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(LeadDetailPage.FromCustomer.Val))
                 {
                     viewModel.CallTo = LeadDetailPage.FromCustomer;
+                    viewModel.Customer = LeadDetailPage.FromCustomer;
                     Lookup_CallTo.IsVisible = false;
+                    CallToMapping.IsVisible = true;
+                    Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else
                 {
                     Lookup_CallTo.IsVisible = true;
+                    CallToMapping.IsVisible = false;
+                    Lookup_Customer.IsVisible = true;
                     CustomerMapping.IsVisible = false;
                 }
             }
             else
             {
                 Lookup_CallTo.IsVisible = true;
+                CallToMapping.IsVisible = false;
+                Lookup_Customer.IsVisible = true;
                 CustomerMapping.IsVisible = false;
             }
         }

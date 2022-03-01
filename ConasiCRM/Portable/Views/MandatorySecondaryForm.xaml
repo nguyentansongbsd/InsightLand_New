@@ -49,7 +49,7 @@
                     <Grid ColumnDefinitions="*,*">
                         <Grid ColumnDefinitions="Auto,*" Grid.Column="0">
                             <controls:FormLabel Text="{x:Static language:Language.tu}" FontSize="15" Grid.Column="0"/>
-                            <controls:DatePickerBoderControl x:Name="datePickerNgayHieuLucTu" Date="{Binding mandatorySecondary.bsd_effectivedateto}" Placeholder="{x:Static language:Language.chon_ngay}" Date_Selected="Effectivedateto_DateSelected"/> 
+                            <controls:DatePickerBoderControl x:Name="datePickerNgayHieuLucTu" Date="{Binding mandatorySecondary.bsd_effectivedateto}" Placeholder="{x:Static language:Language.chon_ngay}" Grid.Column="1" Date_Selected="Effectivedateto_DateSelected"/> 
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" Grid.Column="1">
                             <controls:FormLabel Text="{x:Static language:Language.den}" FontSize="15" Grid.Column="0"/>
