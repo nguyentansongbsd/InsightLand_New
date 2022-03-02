@@ -15,7 +15,11 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
-                                    <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="#026294" Grid.Row="0"/>
+                                    <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+                                        <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Column="0"/>
+                                        <Label Text="&#xf005;" Grid.Column="1" IsVisible="{Binding bsd_specialbuyer}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#FEC93D" HorizontalOptions="End"/>
+                                    </Grid>
+                                    <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Row="0"/>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                         <Label Text="{Binding Source={x:Static language:Language.dai_dien},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding primarycontact_name}" TextColor="#444444" FontSize="15" Grid.Column="1"/>

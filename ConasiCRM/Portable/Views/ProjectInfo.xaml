@@ -10,7 +10,7 @@
              ios:Page.UseSafeArea="true"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              BackgroundColor="White"
-             Title="Thông tin dự án"
+             Title="{x:Static language:Language.thong_tin_du_an_title}"
              x:Class="ConasiCRM.Portable.Views.ProjectInfo">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -326,7 +326,7 @@
                                             <Grid ColumnDefinitions="Auto,Auto,*" Grid.Row="2">
                                                 <Label Text="{Binding Source={x:Static language:Language.thoi_gian_het_han},StringFormat='{0}: '}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                                 <Label Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" TextColor="#444444" FontSize="15" Grid.Column="1" />
-                                                <Label Text="{Binding bsd_queuingexpired ,StringFormat=' {0:HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
+                                                <Label Text="{Binding bsd_queuingexpired ,StringFormat='{0:HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
                                             </Grid>
                                             <Grid.GestureRecognizers>
                                                 <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="GiuChoItem_Tapped" CommandParameter="{Binding opportunityid}"/>

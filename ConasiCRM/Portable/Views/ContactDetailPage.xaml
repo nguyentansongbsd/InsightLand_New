@@ -119,7 +119,11 @@
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto">
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,15" Grid.Row="0">
+                                <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+                                    <Label Text="{Binding singleContact.bsd_fullname}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Column="0"/>
+                                    <Label Text="&#xf005;" Grid.Column="1" IsVisible="{Binding singleContact.bsd_specialbuyer}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#FEC93D" HorizontalOptions="End"/>
+                                </Grid>
                                 <Label Text="{Binding singleContact.bsd_fullname}" FontAttributes="Bold" Grid.Row="0" Grid.Column="0" FontSize="16" TextColor="#2196F3" />
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                     <Label Text="{Binding Source={x:Static language:Language.email},StringFormat='{0}:'}" Grid.Column="0" FontSize="15" TextColor="#444444"/>

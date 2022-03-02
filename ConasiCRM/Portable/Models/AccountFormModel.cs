@@ -167,7 +167,7 @@ namespace ConasiCRM.Portable.Models
 
         public Guid employee_id { get; set; }
         public string employee_name { get; set; }
-
+        public string bsd_specialbuyer { get; set; }
     }
 }
 

@@ -82,8 +82,6 @@
             <Setter Property="Padding" Value="25,10"/>
             <Setter Property="HorizontalOptions" Value="EndAndExpand"/>
         </Style>
-        <converter:MandatorySecondaryStatusCodeConverter x:Key="MandatorySecondaryStatusCodeConverter"/>
-        <converter:MandatorySecondaryStatusCodeConverterColor x:Key="MandatorySecondaryStatusCodeConverterColor"/>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
@@ -91,8 +89,11 @@
                 <StackLayout>
                     <telerikPrimitives:RadBorder BorderThickness="1" CornerRadius="10" BorderColor="Gray" Margin="10,20,10,0">
                         <Grid RowDefinitions="Auto,1,Auto">
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,10" Grid.Row="0">
-                                <Label Text="{Binding singleAccount.bsd_name}" FontAttributes="Bold" Grid.Row="0" FontSize="16" TextColor="{StaticResource NavigationPrimary}"/>
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10" Padding="20,15" Grid.Row="0">
+                                <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+                                    <Label Text="{Binding singleAccount.bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Column="0"/>
+                                    <Label Text="&#xf005;" Grid.Column="1" IsVisible="{Binding singleAccount.bsd_specialbuyer}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#FEC93D" HorizontalOptions="End"/>
+                                </Grid>
                                 <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                     <Label Text="{Binding Source={x:Static language:Language.nhom},StringFormat='{0}:'}" Grid.Column="0" FontSize="15" TextColor="#444444"/>
                                     <Label Text="{Binding Localization.Label}" Grid.Column="1" FontSize="15" TextColor="#444444"/>
@@ -506,32 +507,28 @@
                         <!--tab nguoi uy quyen-->
                         <StackLayout x:Name="TabNguoiUyQuyen" IsVisible="false" Margin="0,10,0,0">
                             <Label x:Name="lb_ListMandatory" Text="{x:Static language:Language.khong_co_du_lieu}" HorizontalOptions="CenterAndExpand" FontSize="15" TextColor="#333333" IsVisible="false"/>
-                            <ListView x:Name="ListMandatory" ItemsSource="{Binding list_MandatorySecondary}" HasUnevenRows="True" ItemAppearing="ListMoreMandatory_ItemAppearing">
+                            <ListView x:Name="ListMandatory" ItemsSource="{Binding list_MandatorySecondary}" HasUnevenRows="True" ItemAppearing="ListMoreMandatory_ItemAppearing" SelectionMode="None">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="25,15" Margin="0,1" RowSpacing="10" HeightRequest="110">
+                                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
                                                 <Grid.GestureRecognizers>
                                                     <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ListMandatorySecondary_Tapped" CommandParameter="{Binding .}"/>
                                                 </Grid.GestureRecognizers>
-                                                <Label Text="{Binding bsd_contact_name}" FontSize="15" FontAttributes="Bold" TextColor="#2196F3" Grid.Column="0"/>
-                                                <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.ColumnSpan="2">
-                                                    <Label Text="{Binding Source={x:Static language:Language.tinh_trang},StringFormat='{0}:'}" FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                    <Label Text="{Binding statuscode,Converter={StaticResource MandatorySecondaryStatusCodeConverter}}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                <Grid ColumnDefinitions="Auto,*" Grid.Row="0">
+                                                    <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
+                                                        <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                                    </telerikPrimitives:RadBorder>
+                                                    <Label Grid.Column="1" Text="{Binding bsd_contact_name}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
                                                 </Grid>
-                                                <Grid ColumnDefinitions="Auto,*" Grid.Row="2" Grid.ColumnSpan="2">
-                                                    <Label Text="{Binding Source={x:Static language:Language.sdt},StringFormat='{0}:  '}" FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                    <Label Text="{Binding bsd_contacmobilephone}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
+                                                    <Label Text="{Binding Source={x:Static language:Language.sdt},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                    <Label Text="{Binding bsd_contacmobilephone}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                 </Grid>
-                                                <Grid ColumnDefinitions="Auto,*" Grid.Row="3" Grid.ColumnSpan="2">
-                                                    <Label Text="{Binding Source={x:Static language:Language.dia_chi},StringFormat='{0}:  '}" FontSize="14" TextColor="#333333" Grid.Column="0"/>
-                                                    <Label Text="{Binding bsd_contactaddress}" LineBreakMode="TailTruncation" FontSize="14" TextColor="#333333" Grid.Column="1"/>
+                                                <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
+                                                    <Label Text="{Binding Source={x:Static language:Language.thoi_gian_hieu_luc},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                                    <Label Text="{Binding bsd_effectivedateto,StringFormat='{0:dd/MM/yyyy - HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                 </Grid>
-                                                <Label Text="&#xf057;" TextColor="#333333" FontFamily="FontAwesomeRegular" FontSize="Medium" Grid.Row="0" Grid.Column="1" IsVisible="{Binding is_employee}">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Tapped="DeleteMandatory_Clicked" NumberOfTapsRequired="1" CommandParameter="{Binding .}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
                                             </Grid>
                                         </ViewCell>
                                     </DataTemplate>
@@ -564,8 +561,8 @@
                     <ScrollView>
                         <StackLayout>
                             <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto" Padding="10,10,10,5">
-                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding MandatorySecondary.statuscode,Converter={StaticResource MandatorySecondaryStatusCodeConverterColor}}">
-                                    <Label Grid.Column="0" Text="{Binding MandatorySecondary.statuscode,Converter={StaticResource MandatorySecondaryStatusCodeConverter}}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding MandatorySecondary.statuscode_color}">
+                                    <Label Grid.Column="0" Text="{Binding MandatorySecondary.statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                 </telerikPrimitives:RadBorder>
                                 <Label Grid.Column="1" Text="{Binding MandatorySecondary.bsd_name}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                 <Label Grid.Column="2" Text="&#xf057;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="20" Padding="5" TextColor="#666666">

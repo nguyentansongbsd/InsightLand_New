@@ -113,10 +113,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 country_id = singleAccount._bsd_country_value,
                 country_name = !string.IsNullOrWhiteSpace(singleAccount.country_name_en) && UserLogged.Language == "en" ? singleAccount.country_name_en : singleAccount.country_name,
+                country_name_en = singleAccount.country_name_en,
                 province_id = singleAccount._bsd_province_value,
                 province_name = !string.IsNullOrWhiteSpace(singleAccount.province_name_en) && UserLogged.Language == "en" ? singleAccount.province_name_en : singleAccount.province_name,
+                province_name_en = singleAccount.province_name_en,
                 district_id = singleAccount._bsd_district_value,
                 district_name = !string.IsNullOrWhiteSpace(singleAccount.district_name_en) && UserLogged.Language == "en" ? singleAccount.district_name_en : singleAccount.district_name,
+                district_name_en = singleAccount.district_name_en,
                 address = singleAccount.bsd_address,
                 lineaddress = singleAccount.bsd_housenumberstreet,
                 //address_en = singleAccount.bsd_diachi,

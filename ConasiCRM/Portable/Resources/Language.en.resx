@@ -2745,4 +2745,28 @@
   <data name="nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc" xml:space="preserve">
     <value>Required and Optional are duplicated. Please check again.</value>
   </data>
+  <data name="account_customer_type" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="account_developer_type" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="account_partner_type" xml:space="preserve">
+    <value>Partner</value>
+  </data>
+  <data name="account_sale_agents_type" xml:space="preserve">
+    <value>Sale agents</value>
+  </data>
+  <data name="ms_active_sts" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ms_applying_sts" xml:space="preserve">
+    <value>Applying</value>
+  </data>
+  <data name="ms_cancel_sts" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ms_inactive_sts" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
 </root>

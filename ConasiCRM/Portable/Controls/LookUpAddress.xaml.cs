@@ -370,12 +370,12 @@ namespace ConasiCRM.Portable.Controls
         {
             if (SelectedItem == null) return;
             if (SelectedItem.district_id != Guid.Empty || !string.IsNullOrWhiteSpace(SelectedItem.district_name))
-                District = new Models.LookUp { Id = SelectedItem.district_id, Name = SelectedItem.district_name };
+                District = new Models.LookUp { Id = SelectedItem.district_id, Name = SelectedItem.district_name, Detail = SelectedItem.district_name_en};
             if (SelectedItem.province_id != Guid.Empty || !string.IsNullOrWhiteSpace(SelectedItem.province_name))
-                Province = new Models.LookUp { Id = SelectedItem.province_id, Name = SelectedItem.province_name };
+                Province = new Models.LookUp { Id = SelectedItem.province_id, Name = SelectedItem.province_name, Detail = SelectedItem.province_name_en };
             if (SelectedItem.country_id != Guid.Empty || !string.IsNullOrWhiteSpace(SelectedItem.country_name))
             {
-                Country = new Models.LookUp { Id = SelectedItem.country_id, Name = SelectedItem.country_name };
+                Country = new Models.LookUp { Id = SelectedItem.country_id, Name = SelectedItem.country_name, Detail = SelectedItem.country_name_en };
                 await LoadProvincesForLookup();
             }
             if (!string.IsNullOrWhiteSpace(SelectedItem.lineaddress))
@@ -438,7 +438,8 @@ namespace ConasiCRM.Portable.Controls
                 SelectedItem.lineaddress = LineAddress;
                 SelectedItem.lineaddress_en = LineAddress;
                 _address.Add(SelectedItem.lineaddress);
-                _address_en.Add(SelectedItem.lineaddress_en);
+                if (!string.IsNullOrWhiteSpace(SelectedItem.lineaddress_en))
+                    _address_en.Add(SelectedItem.lineaddress_en);
             }
 
             if (District != null && District.Id != Guid.Empty)
@@ -446,7 +447,8 @@ namespace ConasiCRM.Portable.Controls
                 SelectedItem.district_name = District.Name;
                 SelectedItem.district_id = District.Id;
                 _address.Add(SelectedItem.district_name);
-                _address_en.Add(District.Detail);
+                if(!string.IsNullOrWhiteSpace(District.Detail))
+                    _address_en.Add(District.Detail);
             }
             else
             {
@@ -458,7 +460,8 @@ namespace ConasiCRM.Portable.Controls
                 SelectedItem.province_name = Province.Name;
                 SelectedItem.province_id = Province.Id;
                 _address.Add(SelectedItem.province_name);
-                _address_en.Add(Province.Detail);
+                if (!string.IsNullOrWhiteSpace(Province.Detail))
+                    _address_en.Add(Province.Detail);
             }
             else
             {
@@ -470,7 +473,8 @@ namespace ConasiCRM.Portable.Controls
                 SelectedItem.country_name = Country.Name;
                 SelectedItem.country_id = Country.Id;
                 _address.Add(SelectedItem.country_name);
-                _address_en.Add(Country.Detail);
+                if (!string.IsNullOrWhiteSpace(Country.Detail))
+                    _address_en.Add(Country.Detail);
             }
             else
             {

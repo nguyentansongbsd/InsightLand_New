@@ -18,7 +18,7 @@
                         <VisualState x:Name="Active">
                             <VisualState.Setters>
                                 <Setter Property="BorderThickness" Value="0,0,0,2"/>
-                                <Setter Property="BorderColor" Value="#026294"/>
+                                <Setter Property="BorderColor" Value="{StaticResource NavigationPrimary}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="InActive">
@@ -40,7 +40,7 @@
                     <VisualStateGroup>
                         <VisualState x:Name="Active">
                             <VisualState.Setters>
-                                <Setter Property="TextColor" Value="#026294"/>
+                                <Setter Property="TextColor" Value="{StaticResource NavigationPrimary}"/>
                                 <Setter Property="FontAttributes" Value="Bold"/>
                                 <Setter Property="FontSize" Value="16"/>
                             </VisualState.Setters>

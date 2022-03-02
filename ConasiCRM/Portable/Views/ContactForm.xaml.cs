@@ -264,29 +264,29 @@ namespace ConasiCRM.Portable.Views
 
         public void MatTruocCMND_Tapped(object sender, System.EventArgs e)
         {
-            List<OptionSet> menuItem = new List<OptionSet>();
+            List<OptionSetFilter> menuItem = new List<OptionSetFilter>();
             if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
             {
-                menuItem.Add(new OptionSet { Label = Language.xem_anh_mat_truoc_cmnd, Val = "Front" });
+                menuItem.Add(new OptionSetFilter { Label = Language.xem_anh_mat_truoc_cmnd, Val = "Front", Title = "Front" });
             }
-            menuItem.Add(new OptionSet { Label = Language.chup_hinh, Val = "Front" });
-            menuItem.Add(new OptionSet { Label = Language.chon_anh_tu_thu_vien, Val = "Front" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chup_hinh, Val = "Front", Title = "Take" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chon_anh_tu_thu_vien, Val = "Front", Title = "Select" });
             this.showMenuImageCMND(menuItem);
         }
 
         private void MatSauCMND_Tapped(object sender, System.EventArgs e)
         {
-            List<OptionSet> menuItem = new List<OptionSet>();
+            List<OptionSetFilter> menuItem = new List<OptionSetFilter>();
             if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
             {
-                menuItem.Add(new OptionSet { Label = Language.xem_anh_mat_sau_cmnd, Val = "Behind" });
+                menuItem.Add(new OptionSetFilter { Label = Language.xem_anh_mat_sau_cmnd, Val = "Behind", Title = "Behind" });
             }
-            menuItem.Add(new OptionSet { Label = Language.chup_hinh, Val = "Behind" });
-            menuItem.Add(new OptionSet { Label = Language.chon_anh_tu_thu_vien, Val = "Behind" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chup_hinh, Val = "Behind", Title = "Take" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chon_anh_tu_thu_vien, Val = "Behind" , Title="Select" });
             this.showMenuImageCMND(menuItem);
         }
 
-        private void showMenuImageCMND(List<OptionSet> listItem)
+        private void showMenuImageCMND(List<OptionSetFilter> listItem)
         {
             popup_menu_imageCMND.ItemSource = listItem;
 
@@ -295,16 +295,16 @@ namespace ConasiCRM.Portable.Views
 
         async void MenuItem_Tapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-            var item = e.Item as OptionSet;
+            var item = e.Item as OptionSetFilter;
             popup_menu_imageCMND.unFocus();
 
             Stream resultStream;
             byte[] arrByte;
             string base64String;
 
-            switch (item.Label)
+            switch (item.Title)
             {
-                case "Chụp hình":
+                case "Take":
                     
                     PermissionStatus cameraStatus = await PermissionHelper.RequestCameraPermission();
                     if (cameraStatus == PermissionStatus.Granted)
@@ -332,7 +332,7 @@ namespace ConasiCRM.Portable.Views
                     }
 
                     break;
-                case "Chọn ảnh từ thư viện":
+                case "Select":
 
                     PermissionStatus storageStatus = await PermissionHelper.RequestPhotosPermission();
                     if (storageStatus == PermissionStatus.Granted)

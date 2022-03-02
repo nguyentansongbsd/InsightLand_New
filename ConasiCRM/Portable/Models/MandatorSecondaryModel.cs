@@ -25,6 +25,8 @@ namespace ConasiCRM.Portable.Models
             }
         }
         public int statuscode { get; set; }
+        public string statuscode_format { get { return MandatorySecondaryStatusCodeData.GetMandatorySecondaryStatusById(statuscode.ToString())?.Name; } }
+        public string statuscode_color { get { return MandatorySecondaryStatusCodeData.GetMandatorySecondaryStatusById(statuscode.ToString())?.Background; } }
         public string ownerid { get; set; }
 
         public string _bsd_jobtitlevn;

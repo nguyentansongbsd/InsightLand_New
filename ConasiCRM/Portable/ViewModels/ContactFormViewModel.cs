@@ -153,10 +153,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 country_id = singleContact._bsd_country_value,
                 country_name = !string.IsNullOrWhiteSpace(singleContact.bsd_country_label_en) && UserLogged.Language == "en" ? singleContact.bsd_country_label_en : singleContact.bsd_country_label,
+                country_name_en = singleContact.bsd_country_label_en,
                 province_id = singleContact._bsd_province_value,
                 province_name = !string.IsNullOrWhiteSpace(singleContact.bsd_province_label_en) && UserLogged.Language == "en" ? singleContact.bsd_province_label_en : singleContact.bsd_province_label,
+                province_name_en = singleContact.bsd_province_label_en,
                 district_id = singleContact._bsd_district_value,
                 district_name = !string.IsNullOrWhiteSpace(singleContact.bsd_district_label_en) && UserLogged.Language == "en" ? singleContact.bsd_district_label_en : singleContact.bsd_district_label,
+                district_name_en = singleContact.bsd_district_label_en,
                 address = singleContact.bsd_contactaddress,
                 lineaddress = singleContact.bsd_housenumberstreet,
                 address_en = singleContact.bsd_diachi,
@@ -166,10 +169,13 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 country_id = singleContact._bsd_permanentcountry_value,
                 country_name = !string.IsNullOrWhiteSpace(singleContact.bsd_permanentcountry_label_en) && UserLogged.Language == "en" ? singleContact.bsd_permanentcountry_label_en : singleContact.bsd_permanentcountry_label,
+                country_name_en = singleContact.bsd_permanentcountry_label_en,
                 province_id = singleContact._bsd_permanentprovince_value,
                 province_name = !string.IsNullOrWhiteSpace(singleContact.bsd_permanentprovince_label_en) && UserLogged.Language == "en" ? singleContact.bsd_permanentprovince_label_en : singleContact.bsd_permanentprovince_label,
+                province_name_en = singleContact.bsd_permanentprovince_label_en,
                 district_id = singleContact._bsd_permanentdistrict_value,
                 district_name = !string.IsNullOrWhiteSpace(singleContact.bsd_permanentdistrict_label_en) && UserLogged.Language == "en" ? singleContact.bsd_permanentdistrict_label_en : singleContact.bsd_permanentdistrict_label,
+                district_name_en = singleContact.bsd_permanentdistrict_label_en,
                 address = singleContact.bsd_permanentaddress1,
                 lineaddress = singleContact.bsd_permanentaddress,
                 address_en = singleContact.bsd_diachithuongtru,
@@ -268,11 +274,14 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (ContactAddress != null && !string.IsNullOrWhiteSpace(ContactAddress.lineaddress))
             {
-                data["bsd_contactaddress"] = ContactAddress.address;
-                data["bsd_housenumberstreet"] = ContactAddress.lineaddress;
-
-                data["bsd_housenumber"] = ContactAddress.lineaddress_en;
-                data["bsd_diachi"] = ContactAddress.address_en;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.address))
+                    data["bsd_contactaddress"] = ContactAddress.address;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.lineaddress))
+                    data["bsd_housenumberstreet"] = ContactAddress.lineaddress;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.lineaddress_en))
+                    data["bsd_housenumber"] = ContactAddress.lineaddress_en;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.address_en))
+                    data["bsd_diachi"] = ContactAddress.address_en;
 
                 if (ContactAddress.country_id != Guid.Empty)
                     data["bsd_country@odata.bind"] = "/bsd_countries(" + ContactAddress.country_id + ")";
@@ -293,11 +302,14 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (PermanentAddress != null && !string.IsNullOrWhiteSpace(PermanentAddress.lineaddress))
             {
-                data["bsd_permanentaddress1"] = PermanentAddress.address;
-                data["bsd_permanentaddress"] = PermanentAddress.lineaddress;
-
-                data["bsd_permanenthousenumber"] = PermanentAddress.lineaddress_en;
-                data["bsd_diachithuongtru"] = PermanentAddress.address_en;
+                if (!string.IsNullOrWhiteSpace(PermanentAddress.address))
+                    data["bsd_permanentaddress1"] = PermanentAddress.address;
+                if (!string.IsNullOrWhiteSpace(PermanentAddress.lineaddress))
+                    data["bsd_permanentaddress"] = PermanentAddress.lineaddress;
+                if(!string.IsNullOrWhiteSpace(PermanentAddress.lineaddress_en))
+                    data["bsd_permanenthousenumber"] = PermanentAddress.lineaddress_en;
+                if (!string.IsNullOrWhiteSpace(PermanentAddress.address_en))
+                    data["bsd_diachithuongtru"] = PermanentAddress.address_en;
 
                 if (PermanentAddress.country_id != Guid.Empty)
                     data["bsd_permanentcountry@odata.bind"] = "/bsd_countries(" + PermanentAddress.country_id + ")";
@@ -334,6 +346,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <entity name='account'>
                                         <attribute name='name' alias='Name'/>
                                         <attribute name='accountid' alias='Id'/>
+                                        <filter type='and'>
+                                            <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                        </filter>
                                     </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("accounts", fetch);
