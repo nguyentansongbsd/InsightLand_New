@@ -23,7 +23,7 @@
                         </VisualState>
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
-                                <Setter Property="BorderColor" Value="#2196F3"/>
+                                <Setter Property="BorderColor" Value="{StaticResource NavigationPrimary}"/>
                                 <Setter Property="BorderThickness" Value="0,0,0,2"/>
                             </VisualState.Setters>
                         </VisualState>
@@ -46,7 +46,7 @@
                         </VisualState>
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
-                                <Setter Property="TextColor" Value="#2196F3"/>
+                                <Setter Property="TextColor" Value="{StaticResource NavigationPrimary}"/>
                                 <Setter Property="FontAttributes" Value="Bold"/>
                             </VisualState.Setters>
                         </VisualState>
@@ -101,7 +101,7 @@
             <Setter Property="FontAttributes" Value="Bold" />
             <Setter Property="VerticalTextAlignment" Value="Center" />
             <Setter Property="Padding" Value="25,9" />
-            <Setter Property="TextColor" Value="#145a92"/>
+            <Setter Property="TextColor" Value="{StaticResource NavigationPrimary}"/>
             <Setter Property="BackgroundColor" Value="#f4fafe"/>
         </Style>
         <Style x:Key="Lb_TenHuong_PhongThuy" TargetType="controls:FormLabel">
@@ -245,7 +245,7 @@
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="5">
                                             <controls:FormLabel Text="{x:Static language:Language.doanh_thu_moi_nam}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
-                                            <controls:FormLabelValue Text="{Binding singleLead.revenue, StringFormat='{0:#,0}'}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
+                                            <controls:FormLabelValue Text="{Binding singleLead.revenue_format}" Grid.Column="1" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_Content}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,*" BackgroundColor="White" Grid.Row="6">
                                             <controls:FormLabel Text="{x:Static language:Language.so_luong_nhan_vien}" Grid.Column="0" FontSize="15" TextColor="#444444" Style="{StaticResource Lb_Title_ThongTin}"/>
@@ -298,7 +298,7 @@
                                                             <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statecode_color}" VerticalOptions="Start">
                                                                 <Label Grid.Column="0" Text="{Binding statecode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                                             </telerikPrimitives:RadBorder>
-                                                            <Label Grid.Column="1" Text="{Binding subject}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                                            <Label Grid.Column="1" Text="{Binding subject}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                                         </Grid>
 
                                                         <Grid ColumnDefinitions="Auto,*">
@@ -312,17 +312,17 @@
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Text="{Binding Source={x:Static language:Language.thoi_gian_bat_dau},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding scheduledstart_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                            <Label Text="{Binding scheduledstart_format,StringFormat='{0:dd/MM/yyyy - HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Text="{Binding Source={x:Static language:Language.thoi_gian_ket_thuc},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding scheduledend_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                                            <Label Text="{Binding scheduledend_format,StringFormat='{0:dd/MM/yyyy - HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                                         </Grid>
                                                     </StackLayout>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </StackLayout>
-                                        <Button Clicked="ShowMoreCase_Clicked" IsVisible="{Binding ShowMoreCase}" BorderColor="#1399D5" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="{x:Static language:Language.xem_them}" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
+                                        <Button Clicked="ShowMoreCase_Clicked" IsVisible="{Binding ShowMoreCase}" BorderColor="{StaticResource NavigationPrimary}" CornerRadius="5" BorderWidth="1" BackgroundColor="Transparent" Text="{x:Static language:Language.xem_them}" TextTransform="None" TextColor="#1399D5" HeightRequest="30" HorizontalOptions="Center" Margin="0,5,0,10" Padding="30,0,30,0"/>
                                     </StackLayout>
                                 </telerikPrimitives:RadExpander.Content>
                             </telerikPrimitives:RadExpander>

@@ -59,9 +59,9 @@ namespace ConasiCRM.Portable.Views
 
         public async void Create()
         {
-            btnSave.Text = Language.tao_moi_giu_cho_title;
+            btnSave.Text = Language.tao_giu_cho;
             btnSave.Clicked += Create_Clicked; ;
-            this.Title = Language.tao_giu_cho;
+            this.Title = Language.tao_moi_giu_cho_title;
             if(from)
             {
                 await viewModel.LoadFromUnit(viewModel.UnitId);

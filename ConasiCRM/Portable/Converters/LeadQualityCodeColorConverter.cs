@@ -16,7 +16,7 @@ namespace ConasiCRM.Portable.Converters
             }
             else if ((int)value == 2)
             {
-                return Color.FromHex("F1C50D");
+                return Color.FromHex("ffc43d");
             }
             else if ((int)value == 3)
             {

@@ -2107,7 +2107,7 @@
     <value>Detail Information</value>
   </data>
   <data name="thong_tin_cmnd_ho_chieu" xml:space="preserve">
-    <value>Identity Card Number/Passport Information</value>
+    <value>Identity Card Number/ Passport Information</value>
   </data>
   <data name="thong_tin_cong_ty_title" xml:space="preserve">
     <value>Account Information</value>

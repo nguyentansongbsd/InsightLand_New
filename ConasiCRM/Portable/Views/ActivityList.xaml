@@ -156,7 +156,7 @@
                                         <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statecode_color}" VerticalOptions="Start">
                                             <Label Grid.Column="0" Text="{Binding statecode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
                                         </telerikPrimitives:RadBorder>
-                                        <Label Grid.Column="1" Text="{Binding subject}" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
+                                        <Label Grid.Column="1" Text="{Binding subject}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" VerticalOptions="Center"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
                                         <Label Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
@@ -165,11 +165,11 @@
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
                                         <Label Text="{Binding Source={x:Static language:Language.thoi_gian_bat_dau},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="{Binding scheduledstart_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                        <Label Text="{Binding scheduledstart_format,StringFormat='{0:dd/MM/yyyy - HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
                                         <Label Text="{Binding Source={x:Static language:Language.thoi_gian_ket_thuc},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="{Binding scheduledend_format}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
+                                        <Label Text="{Binding scheduledend_format,StringFormat='{0:dd/MM/yyyy - HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                 </Grid>
                             </ViewCell>

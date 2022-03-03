@@ -134,7 +134,6 @@ namespace ConasiCRM.Portable.ViewModels
             Project = result.value.FirstOrDefault();
             //await LoadAllCollection();
         }
-
         public async Task CheckEvent()
         {
             // ham check su kien hide/show cua du an (show khi du an dang trong thoi gian dien ra su kien, va trang thai la "Approved")
@@ -165,7 +164,6 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
         }
-
         public async Task LoadThongKe()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -232,7 +230,6 @@ namespace ConasiCRM.Portable.ViewModels
                 UnitChart.Add(item);
             }
         }
-
         public async Task LoadThongKeGiuCho()
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -253,7 +250,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             SoGiuCho = result.value.Count();
         }
-
         public async Task LoadThongKeHopDong()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -272,7 +268,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             SoHopDong = result.value.Count();
         }
-
         public async Task LoadThongKeBangTinhGia()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -293,7 +288,6 @@ namespace ConasiCRM.Portable.ViewModels
             if (result == null || result.value.Any() == false) return;
             SoBangTinhGia = result.value.Count();
         }
-
         public async Task LoadGiuCho()
         {
             IsLoadedGiuCho = true;
@@ -342,7 +336,6 @@ namespace ConasiCRM.Portable.ViewModels
                 ListGiuCho.Add(item);
             }
         }
-
         public async Task LoadAllCollection()
         {
             if (ProjectId != null)
@@ -393,7 +386,6 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
         }
-
         public async Task LoadDataEvent()
         {
             if (ProjectId == Guid.Empty) return;

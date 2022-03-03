@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ConasiCRM.Portable.Helper;
 
 namespace ConasiCRM.Portable.Models
 {
@@ -32,9 +33,9 @@ namespace ConasiCRM.Portable.Models
         public string pricelist_name { get; set; } // khong su dung trong form unit , su dung trong form queue
 
         public decimal bsd_depositamount { get; set; } // Deposit Amount
-
+        public string bsd_depositamount_format { get => StringFormatHelper.FormatCurrency(bsd_depositamount); }
         public decimal bsd_queuingfee { get; set; } // Queuing Amount
-
+        public string bsd_queuingfee_format { get => StringFormatHelper.FormatCurrency(bsd_queuingfee); }
         public Guid _bsd_unittype_value { get; set; }
         public string bsd_unittype_name { get; set; }
 
@@ -46,30 +47,27 @@ namespace ConasiCRM.Portable.Models
 
         // thong tin dien tich
         public decimal bsd_areavariance { get; set; } // Biên độ diện tích cho phép
+        public string bsd_areavariance_format { get => StringFormatHelper.FormatCurrency(bsd_areavariance); }
 
         public decimal bsd_constructionarea { get; set; } // diện tích xây dựng
-
+        public string bsd_constructionarea_format { get => StringFormatHelper.FormatCurrency(bsd_constructionarea); }
         public decimal bsd_netsaleablearea { get; set; } // diện tích sử dụng 
-
+       // public string bsd_netsaleablearea_format { get => StringFormatHelper.FormatCurrency(bsd_netsaleablearea); }
         // thong itn gia
         public decimal price { get; set; } // Giá bán
-        public string price_format
-        {
-            get => String.Format("{0:0,0.00 đ}", price);
-        }
-
+        public string price_format { get => StringFormatHelper.FormatCurrency(price); }
         public decimal bsd_landvalueofunit { get; set; } // đơn giá giá trị đất
-
+        public string bsd_landvalueofunit_format { get => StringFormatHelper.FormatCurrency(bsd_landvalueofunit); }
         public decimal bsd_landvalue { get; set; } // giá trị đất
-
+        public string bsd_landvalue_format { get => StringFormatHelper.FormatCurrency(bsd_landvalue); }
         public decimal bsd_maintenancefeespercent { get; set; } // phần trăm phí bảo trì
-
+        public string bsd_maintenancefeespercent_format { get => StringFormatHelper.FormatCurrency(bsd_maintenancefeespercent); }
         public decimal bsd_maintenancefees { get; set; } // tiền phí bảo trị
-
+        public string bsd_maintenancefees_format { get => StringFormatHelper.FormatCurrency(bsd_maintenancefees); }
         public decimal bsd_taxpercent { get; set; } // phằn trăm thuế
-
-        public decimal bsd_vat { get; set; } // tiền tuế
-
+        public string bsd_taxpercent_format { get => StringFormatHelper.FormatCurrency(bsd_taxpercent); }
+        public decimal bsd_vat { get; set; } // tiền thuế
+        public string bsd_vat_format { get => StringFormatHelper.FormatCurrency(bsd_vat); }
         public decimal bsd_totalprice { get; set; } // tiền tuế
 
         public string bsd_direction { get; set; }
@@ -77,14 +75,12 @@ namespace ConasiCRM.Portable.Models
 
 
         // bàn giao
-
         public DateTime bsd_estimatehandoverdate { get; set; } // ngày dự kiến bàn giao.
-
         public int bsd_numberofmonthspaidmf { get; set; } // số tháng tính phí quản lý.
-
         public decimal bsd_managementamountmonth { get; set; }// đơn giá tính phí quản lý (tháng/m2)
-
+        public string bsd_managementamountmonth_format { get => StringFormatHelper.FormatCurrency(bsd_managementamountmonth); }
         public decimal bsd_handovercondition { get; set; } // Điều kiện bàn giao %
+        public string bsd_handovercondition_format { get => StringFormatHelper.FormatCurrency(bsd_handovercondition); }
         public Guid event_id { get; set; }
         public bool is_event { get { if (event_id != Guid.Empty) return true; else return false; } }
     }

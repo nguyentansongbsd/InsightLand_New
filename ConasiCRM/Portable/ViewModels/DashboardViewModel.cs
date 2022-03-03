@@ -28,6 +28,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         private decimal _totalCommissionAMonth;
         public decimal TotalCommissionAMonth { get => _totalCommissionAMonth; set { _totalCommissionAMonth = value; OnPropertyChanged(nameof(TotalCommissionAMonth)); } }
+
         private decimal _totalPaidCommissionAMonth;
         public decimal TotalPaidCommissionAMonth { get => _totalPaidCommissionAMonth; set { _totalPaidCommissionAMonth = value; OnPropertyChanged(nameof(TotalPaidCommissionAMonth)); } }
 
@@ -72,11 +73,16 @@ namespace ConasiCRM.Portable.ViewModels
         private DateTime _dateBefor;
         public DateTime dateBefor { get => _dateBefor; set { _dateBefor = value; OnPropertyChanged(nameof(dateBefor)); } }
         public DateTime dateAfter { get; set; }
-
         public DateTime firstMonth { get; set; }
         public DateTime secondMonth { get; set; }
         public DateTime thirdMonth { get; set; }
         public DateTime fourthMonth { get; set; }
+        // tổng tiền hoa đồng format
+        private string _totalCommission;
+        public string TotalCommission { get => _totalCommission; set { _totalCommission = value; OnPropertyChanged(nameof(TotalCommission)); } }
+        // tổng tiền thanh toán format
+        private string _totalPaidCommission;
+        public string TotalPaidCommission { get => _totalPaidCommission; set { _totalPaidCommission = value; OnPropertyChanged(nameof(TotalPaidCommission)); } }
 
         public ICommand RefreshCommand => new Command(async () =>
         {
@@ -160,6 +166,9 @@ namespace ConasiCRM.Portable.ViewModels
             this.CommissionTransactionChart.Add(chartSecondMonth);
             this.CommissionTransactionChart.Add(chartThirdMonth);
             this.CommissionTransactionChart.Add(chartFourthMonth);
+            //format sau khi tính tổng
+            TotalCommission = StringFormatHelper.FormatCurrency(TotalCommissionAMonth);
+            TotalPaidCommission = StringFormatHelper.FormatCurrency(TotalPaidCommissionAMonth);
         }
 
         private async Task<double> TotalAMonth(decimal total)

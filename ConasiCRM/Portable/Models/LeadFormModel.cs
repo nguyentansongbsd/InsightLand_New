@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
@@ -109,12 +110,10 @@ namespace ConasiCRM.Portable.Models
         public string industrycode { get { return _industrycode; } set { _industrycode = value; industrycode_notnull = value == null ? false : true; OnPropertyChanged(nameof(industrycode)); } }
 
         private bool _industrycode_notnull;
-        public bool industrycode_notnull { get { return _industrycode_notnull; } set { _industrycode_notnull = value; OnPropertyChanged(nameof(industrycode_notnull)); } }
-
-        //private decimal? _revenue;
-        //public decimal? revenue { get { return _revenue; } set { _revenue = value; OnPropertyChanged(nameof(revenue)); } }
+        public bool industrycode_notnull { get { return _industrycode_notnull; } set { _industrycode_notnull = value; OnPropertyChanged(nameof(industrycode_notnull)); } }        
 
         public decimal? revenue { get; set; }
+        public string revenue_format { get => StringFormatHelper.FormatCurrency(revenue); }
         public string numberofemployees { get; set; }
 
         private string _sic;

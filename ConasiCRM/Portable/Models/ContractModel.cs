@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.ViewModels;
+﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,7 @@ namespace ConasiCRM.Portable.Models
         public Guid unit_id { get; set; }
         public string unit_name { get; set; }
         public decimal totalamount { get; set; } // tổng tiền
+        public string totalamount_format { get => StringFormatHelper.FormatCurrency(totalamount); }
         public int statuscode { get; set; }
         public string statuscode_format { get { return ContractStatusCodeData.GetContractStatusCodeById(statuscode.ToString()).Name; } }
         public string statuscode_color { get { return ContractStatusCodeData.GetContractStatusCodeById(statuscode.ToString()).Background; } }

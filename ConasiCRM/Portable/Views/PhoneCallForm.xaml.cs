@@ -111,11 +111,11 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
-            BtnSave.Text = Language.cap_nhat_cuoc_goi_title;
+            BtnSave.Text = Language.cap_nhat_cuoc_goi;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadPhoneCall(this.PhoneCallId);
             await viewModel.loadFromTo(this.PhoneCallId);
-            this.Title = Language.cap_nhat_cuoc_goi;
+            this.Title = Language.cap_nhat_cuoc_goi_title;
             if (viewModel.PhoneCellModel.activityid != Guid.Empty)
             {
                 OnCompleted?.Invoke(true);
