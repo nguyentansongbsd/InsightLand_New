@@ -53,8 +53,6 @@ namespace ConasiCRM.Portable.Views
                 {
                     viewModel.CallTo = ContactDetailPage.FromCustomer;
                     viewModel.Customer = ContactDetailPage.FromCustomer;
-                    Lookup_CallTo.IsVisible = false;
-                    CallToMapping.IsVisible = true;
                     Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
@@ -63,8 +61,6 @@ namespace ConasiCRM.Portable.Views
                 {
                     viewModel.CallTo = AccountDetailPage.FromCustomer;
                     viewModel.Customer = AccountDetailPage.FromCustomer;
-                    Lookup_CallTo.IsVisible = false;
-                    CallToMapping.IsVisible = true;
                     Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
@@ -73,24 +69,18 @@ namespace ConasiCRM.Portable.Views
                 {
                     viewModel.CallTo = LeadDetailPage.FromCustomer;
                     viewModel.Customer = LeadDetailPage.FromCustomer;
-                    Lookup_CallTo.IsVisible = false;
-                    CallToMapping.IsVisible = true;
                     Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else
                 {
-                    Lookup_CallTo.IsVisible = true;
-                    CallToMapping.IsVisible = false;
                     Lookup_Customer.IsVisible = true;
                     CustomerMapping.IsVisible = false;
                 }
             }
             else
             {
-                Lookup_CallTo.IsVisible = true;
-                CallToMapping.IsVisible = false;
                 Lookup_Customer.IsVisible = true;
                 CustomerMapping.IsVisible = false;
             }

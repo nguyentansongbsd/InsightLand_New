@@ -46,9 +46,6 @@
 
                         <controls:FormLabelRequired Text="{x:Static language:Language.goi_den}" Margin="0,10,0,0"/>
                         <controls:LookUpMultipleTabs x:Name="Lookup_CallTo" Placeholder="{x:Static language:Language.chon_nguoi_nhan_cuoc_goi}" ShowAccount="True" ShowContact="True" ShowLead="True" CenterModal="{x:Reference CenterModal}" SelectedItem="{Binding CallTo}" SelectedItemChange="Lookup_CallTo_SelectedItemChange" LoadNewLead="True"/>
-                        <telerikPrimitives:RadBorder x:Name="CallToMapping" BorderColor="#f1f1f1" CornerRadius="5" BorderThickness="1" HeightRequest="40" BackgroundColor="#f1f1f1" IsVisible="false">
-                            <Label Text="{Binding CallTo.Label}" TextColor="#444444" FontSize="15" VerticalOptions="Center" Padding="5,0,5,0" LineBreakMode="TailTruncation"/>
-                        </telerikPrimitives:RadBorder>
 
                         <controls:FormLabelRequired Text="{x:Static language:Language.sdt}" Margin="0,10,0,0"/>
                         <controls:MainEntry Placeholder="{x:Static language:Language.nhap_sdt}" Text="{Binding PhoneCellModel.phonenumber}" FontSize="15" Keyboard="Numeric"/>
@@ -60,10 +57,10 @@
                         </telerikPrimitives:RadBorder>
 
                         <controls:FormLabelRequired Text="{x:Static language:Language.thoi_gian_bat_dau}" Margin="0,10,0,0"/>
-                        <controls:DatePickerControl x:Name="DatePickerStart" Date="{Binding PhoneCellModel.scheduledstart}" Placeholder="{x:Static language:Language.chon_thoi_gian_bat_dau}" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DatePickerStart_DateSelected"/>
+                        <controls:DatePickerControl x:Name="DatePickerStart" Date="{Binding PhoneCellModel.scheduledstart}" Placeholder="{x:Static language:Language.chon_thoi_gian_bat_dau}" DisplayFormat="dd/MM/yyyy - HH:mm" SpinnerFormat="dd/MM/yyyy HH:mm" DateSelected="DatePickerStart_DateSelected"/>
 
                         <controls:FormLabelRequired Text="{x:Static language:Language.thoi_gian_ket_thuc}" Margin="0,10,0,0"/>
-                        <controls:DatePickerControl x:Name="DatePickerEnd" Date="{Binding PhoneCellModel.scheduledend}" Placeholder="{x:Static language:Language.chon_thoi_gian_ket_thuc}" DisplayFormat="dd/MM/yyyy - h:mm tt" SpinnerFormat="dd/MM/yyyy h:mm tt" DateSelected="DatePickerEnd_DateSelected"  />
+                        <controls:DatePickerControl x:Name="DatePickerEnd" Date="{Binding PhoneCellModel.scheduledend}" Placeholder="{x:Static language:Language.chon_thoi_gian_ket_thuc}" DisplayFormat="dd/MM/yyyy - HH:mm" SpinnerFormat="dd/MM/yyyy HH:mm" DateSelected="DatePickerEnd_DateSelected"  />
 
 
                         <controls:FormLabel Text="{x:Static language:Language.mo_ta}" FontSize="15" Margin="0,10,0,0"/>

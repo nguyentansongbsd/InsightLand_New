@@ -1,4 +1,5 @@
 ﻿using System;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.ViewModels;
 
 namespace ConasiCRM.Portable.Models
@@ -15,13 +16,15 @@ namespace ConasiCRM.Portable.Models
 
         private decimal _bsd_constructionarea;
         public decimal bsd_constructionarea { get=> _bsd_constructionarea; set { _bsd_constructionarea = value;OnPropertyChanged(nameof(bsd_constructionarea)); } }
+        public string bsd_constructionarea_format { get => StringFormatHelper.FormatCurrency(bsd_constructionarea); }
 
         private decimal _bsd_netusablearea;
         public decimal bsd_netusablearea { get=> _bsd_netusablearea; set { _bsd_netusablearea = value;OnPropertyChanged(nameof(bsd_netusablearea)); } }
+        public string bsd_netusablearea_format { get => StringFormatHelper.FormatCurrency(bsd_netusablearea); }
 
         private decimal _bsd_actualarea;
         public decimal bsd_actualarea { get=> _bsd_actualarea; set { _bsd_actualarea = value;OnPropertyChanged(nameof(bsd_actualarea)); } }
-
+        public string bsd_actualarea_format { get => StringFormatHelper.FormatCurrency(bsd_actualarea); }
         public string bsd_unitstatus { get; set; }
 
         public Guid discountlist_id { get; set; }
@@ -31,9 +34,11 @@ namespace ConasiCRM.Portable.Models
 
         private decimal _bsd_depositfee;
         public decimal bsd_depositfee { get=> _bsd_depositfee; set { _bsd_depositfee = value;OnPropertyChanged(nameof(bsd_depositfee)); } }
+        public string bsd_depositfee_format { get => StringFormatHelper.FormatCurrency(bsd_depositfee); }
 
         private decimal _bsd_bookingfee;
         public decimal bsd_bookingfee { get=> _bsd_bookingfee; set { _bsd_bookingfee = value;OnPropertyChanged(nameof(bsd_bookingfee)); } }
+        public string bsd_bookingfee_format { get => StringFormatHelper.FormatCurrency(bsd_bookingfee); }
 
         private string _bsd_nameofstaffagent;
         public string bsd_nameofstaffagent { get=>_bsd_nameofstaffagent; set { _bsd_nameofstaffagent = value;OnPropertyChanged(nameof(bsd_nameofstaffagent)); } }
@@ -41,12 +46,14 @@ namespace ConasiCRM.Portable.Models
 
         private decimal _bsd_detailamount;
         public decimal bsd_detailamount { get=> _bsd_detailamount; set { _bsd_detailamount = value;OnPropertyChanged(nameof(bsd_detailamount)); } }
+        public string bsd_detailamount_format { get => StringFormatHelper.FormatCurrency(bsd_detailamount); }
 
         private int _bsd_numberofmonthspaidmf;
         public int bsd_numberofmonthspaidmf { get=> _bsd_numberofmonthspaidmf; set { _bsd_numberofmonthspaidmf = value;OnPropertyChanged(nameof(bsd_numberofmonthspaidmf)); } }
 
         private decimal _bsd_managementfee;
         public decimal bsd_managementfee { get=> _bsd_managementfee; set { _bsd_managementfee = value; OnPropertyChanged(nameof(bsd_managementfee)); } }
+        public string bsd_managementfee_format { get => StringFormatHelper.FormatCurrency(bsd_managementfee); }
         public string bsd_waivermanafeemonth { get; set; }
 
         public decimal bsd_discount { get; set; }
