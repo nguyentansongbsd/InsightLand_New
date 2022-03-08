@@ -2769,4 +2769,7 @@
   <data name="ms_inactive_sts" xml:space="preserve">
     <value>Inactive</value>
   </data>
+  <data name="dieu_kien_ban_giao_khong_phu_hop_voi_unit_type" xml:space="preserve">
+    <value>Handover Condition is not suitable with Unit type. Please check again or choose another handover condition.</value>
+  </data>
 </root>

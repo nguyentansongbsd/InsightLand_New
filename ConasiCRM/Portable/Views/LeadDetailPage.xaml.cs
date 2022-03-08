@@ -121,6 +121,12 @@ namespace ConasiCRM.Portable.Views
         private async void LeadQualify(object sender, EventArgs e)
         {
             LoadingHelper.Show();
+            if(viewModel.singleLead.leadid == Guid.Empty)
+            {
+                LoadingHelper.Hide();
+                ToastMessageHelper.ShortMessage(Language.khong_the_qualify);
+                return;
+            }    
             bool IsSuccessQualify = await viewModel.Qualify(viewModel.singleLead.leadid);
             if (IsSuccessQualify == true)
             {

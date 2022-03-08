@@ -2769,4 +2769,7 @@
   <data name="ms_inactive_sts" xml:space="preserve">
     <value>Vô hiệu lực</value>
   </data>
+  <data name="dieu_kien_ban_giao_khong_phu_hop_voi_unit_type" xml:space="preserve">
+    <value>Điều kiện bàn giao đã chọn không phù hợp với Loại sản phẩm đang thực hiện giao dịch. Vui lòng kiểm tra lại thông tin hoặc chọn điều kiện bàn giao khác.</value>
+  </data>
 </root>
