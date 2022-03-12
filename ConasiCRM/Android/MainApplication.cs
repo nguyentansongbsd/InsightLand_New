@@ -3,7 +3,6 @@ using System;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
-using Plugin.CurrentActivity;
 
 namespace ConasiCRM.Android
 {
@@ -31,7 +30,7 @@ namespace ConasiCRM.Android
 
         public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
         {
-            CrossCurrentActivity.Current.Activity = activity;
+            //CrossCurrentActivity.Current.Activity = activity;
         }
 
         public void OnActivityDestroyed(Activity activity)
@@ -44,7 +43,7 @@ namespace ConasiCRM.Android
 
         public void OnActivityResumed(Activity activity)
         {
-            CrossCurrentActivity.Current.Activity = activity;
+           // CrossCurrentActivity.Current.Activity = activity;
         }
 
         public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
@@ -53,7 +52,7 @@ namespace ConasiCRM.Android
 
         public void OnActivityStarted(Activity activity)
         {
-            CrossCurrentActivity.Current.Activity = activity;
+          //  CrossCurrentActivity.Current.Activity = activity;
         }
 
         public void OnActivityStopped(Activity activity)

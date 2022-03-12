@@ -20,7 +20,7 @@ namespace ConasiCRM.Portable.Models
             get => this._scheduledstart;
             set
             {
-                if (_scheduledstart != value)
+                if (value.HasValue)
                 {
                     _scheduledstart = value;
                     OnPropertyChanged(nameof(scheduledstart));
@@ -46,7 +46,7 @@ namespace ConasiCRM.Portable.Models
             get => this._scheduledend;
             set
             {
-                if (_scheduledend != value)
+                if (value.HasValue)
                 {
                     _scheduledend = value;
                     OnPropertyChanged(nameof(scheduledend));
@@ -158,7 +158,7 @@ namespace ConasiCRM.Portable.Models
         public string location { get => _location; set { _location = value; OnPropertyChanged(nameof(location)); } }
 
         private bool _isalldayevent;
-        public bool isalldayevent { get => _isalldayevent; set { _isalldayevent = value; OnPropertyChanged(nameof(subject)); } }
+        public bool isalldayevent { get => _isalldayevent; set { _isalldayevent = value; OnPropertyChanged(nameof(isalldayevent)); } }
 
         public int statecode { get; set; }
         public int statuscode { get; set; }

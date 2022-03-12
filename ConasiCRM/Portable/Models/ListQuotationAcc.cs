@@ -1,5 +1,6 @@
 ﻿using System;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Resources;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Models
@@ -18,39 +19,39 @@ namespace ConasiCRM.Portable.Models
                 switch (statuscode)
                 {
                     case 1:
-                        return "In Progress";
+                        return Language.quote_in_progress_draf_sts;
                     case 100000007:
-                        return "Quotation";
+                        return Language.quote_quotation_sts;
                     case 100000000:
-                        return "Reservation";
+                        return Language.quote_reservation_sts;
                     case 100000006:
-                        return "Collected";
+                        return Language.quote_collected_sts;
                     case 2:
-                        return "In Progress";
+                        return Language.quote_in_progress_active_sts;
                     case 3:
-                        return "Deposited";
+                        return Language.quote_deposited_sts;
                     case 100000002:
-                        return "Pending Cancel Deposit";
+                        return Language.quote_pending_cancel_deposit_sts;
                     case 100000004:
-                        return "Signed RF";
+                        return Language.quote_signed_RF_sts;
                     case 100000009:
-                        return "Expired";
+                        return Language.quote_expired_sts;
                     case 4:
-                        return "Won";
+                        return Language.quote_won_sts;
                     case 100000001:
-                        return "Terminated";
+                        return Language.quote_terminated_sts;
                     case 100000003:
-                        return "Reject";
+                        return Language.quote_reject_sts;
                     case 5:
-                        return "Lost";
+                        return Language.quote_lost_sts;
                     case 6:
-                        return "Canceled";
+                        return Language.quote_canceled_sts;
                     case 7:
-                        return "Revised";
+                        return Language.quote_revised_sts;
                     case 100000005:
-                        return "Expired of signing RF";
+                        return Language.quote_expired_of_signing_RF_sts;
                     case 100000008:
-                        return "Expired Quotation";
+                        return Language.quote_expired_quotation_sts;
                     default:
                         return "";
                 }

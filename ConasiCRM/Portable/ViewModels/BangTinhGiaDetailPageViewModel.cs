@@ -1,5 +1,8 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,21 +29,26 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showInstallmentList;
         public bool ShowInstallmentList { get => _showInstallmentList; set { _showInstallmentList = value; OnPropertyChanged(nameof(ShowInstallmentList)); } }
 
-        public List<OptionSet> ListDiscount { get; set; }
-        public List<OptionSet> ListSpecialDiscount { get; set; }
-        public List<OptionSet> ListPromotion { get; set; }
+        private StatusCodeModel _quoteStatus;
+        public StatusCodeModel QuoteStatus { get=> _quoteStatus; set { _quoteStatus = value;OnPropertyChanged(nameof(QuoteStatus)); } }
 
+        public ObservableCollection<OptionSet> ListDiscount { get; set; } = new ObservableCollection<OptionSet>();
+        public ObservableCollection<OptionSet> ListPromotion { get; set; } = new ObservableCollection<OptionSet>();
+        public List<OptionSet> ListSpecialDiscount { get; set; }
+        
+        
         public string UpdateQuote = "1";
         public string UpdateQuotation = "2";
-        public string UpdateReservation = "3";
+        public string ConfirmReservation = "3";
+        public string UpdateReservation = "4";
+        public string CodeContact = LookUpMultipleTabs.CodeContac;
+        public string CodeAccount = LookUpMultipleTabs.CodeAccount;
         public BangTinhGiaDetailPageViewModel()
         {
             CoownerList = new ObservableCollection<ReservationCoownerModel>();
             InstallmentList = new ObservableCollection<ReservationInstallmentDetailPageModel>();
             Reservation = new ReservationDetailPageModel();
             Customer = new OptionSet();
-            ListDiscount = new List<OptionSet>();
-            ListPromotion = new List<OptionSet>();
             ListSpecialDiscount = new List<OptionSet>();
             ButtonCommandList = new ObservableCollection<FloatButtonItem>();
         }
@@ -54,7 +62,8 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='statecode' />
                                     <attribute name='statuscode' />
                                     <attribute name='quoteid' />
-                                    <attribute name='bsd_reservationno' />
+                                    <attribute name='bsd_reservationno' />  
+                                    <attribute name='bsd_quotationnumber' />
                                     <attribute name='quotenumber' />
                                     <attribute name='bsd_numberofmonthspaidmf' />
                                     <attribute name='bsd_waivermanafeemonth' />
@@ -108,6 +117,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='outer' alias='ac'>
                                         <attribute name='bsd_name' alias='project_name'/>
                                         <attribute name='bsd_projectid' alias='project_id' />
+                                        <attribute name='bsd_quotationvalidatetime' alias='quotationvalidate'/>
                                     </link-entity>
                                     <link-entity name='pricelevel' from='pricelevelid' to='pricelevelid' link-type='outer' alias='ad'>
                                         <attribute name='pricelevelid' alias='pricelevel_id_apply'/>
@@ -131,7 +141,7 @@ namespace ConasiCRM.Portable.ViewModels
                                     </link-entity>
                                     <link-entity name='opportunity' from='opportunityid' to='opportunityid' link-type='outer' alias='al'>
                                         <attribute name='name' alias='queue_name' />
-                                        <attribute name='opportunityid' alias='queue_id' />
+                                        <attribute name='opportunityid' alias='queue_id' /> 
                                     </link-entity>
                                     <link-entity name='product' from='productid' to='bsd_unitno' link-type='outer' alias='ap'>
                                         <attribute name='name' alias='unit_name' />
@@ -183,24 +193,25 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 Customer.Val = Reservation.purchaser_accountid.ToString();
                 Customer.Label = Reservation.purchaser_account_name;
+                Customer.Title = CodeAccount;
+
             }
             else
             {
                 Customer.Val = Reservation.purchaser_contactid.ToString();
                 Customer.Label = Reservation.purchaser_contact_name;
+                Customer.Title = CodeContact;
             }
-
-            await LoadHandoverCondition(ReservationId);
-            await LoadPromotions(ReservationId);
-            await LoadSpecialDiscount(ReservationId);
+            
+            this.QuoteStatus = QuoteStatusCodeData.GetQuoteStatusCodeById(this.Reservation.statuscode.ToString());
         }
 
         public async Task LoadHandoverCondition(Guid ReservationId)
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                     <entity name='bsd_packageselling'>
-                                        <attribute name='bsd_name' alias='handovercondition_name' />
-                                        <attribute name='bsd_packagesellingid' alias='handovercondition_id' />
+                                        <attribute name='bsd_name' alias='Label' />
+                                        <attribute name='bsd_packagesellingid' alias='Val' />
                                         <order attribute='bsd_name' descending='true' />
                                         <link-entity name='bsd_quote_bsd_packageselling' from='bsd_packagesellingid' to='bsd_packagesellingid' visible='false' intersect='true'>
                                             <link-entity name='quote' from='quoteid' to='quoteid' alias='ab'>
@@ -212,13 +223,11 @@ namespace ConasiCRM.Portable.ViewModels
                                     </entity>
                                 </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ReservationDetailPageModel>>("bsd_packagesellings", fetchXml);
-            if (result == null || result.value.Count == 0)
-            {
-                return;
-            }
-            Reservation.handovercondition_id = result.value.FirstOrDefault().handovercondition_id;
-            Reservation.handovercondition_name = result.value.FirstOrDefault().handovercondition_name;
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_packagesellings", fetchXml);
+            if (result == null || result.value.Count == 0) return;
+
+            Reservation.handovercondition_id = Guid.Parse(result.value.FirstOrDefault().Val);
+            Reservation.handovercondition_name = result.value.FirstOrDefault().Label ;
         }
 
         public async Task LoadSpecialDiscount(Guid ReservationId)
@@ -261,37 +270,43 @@ namespace ConasiCRM.Portable.ViewModels
                                 </fetch>";
 
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_promotions", fetchXml);
-            if (result == null || result.value.Count == 0)
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
             {
-                return;
+                this.ListPromotion.Add(item);
             }
-            ListPromotion = result.value;
         }
 
-        public async Task LoadDiscounts(Guid DiscountListId)
+        public async Task LoadDiscounts()
         {
-            string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
+            if (string.IsNullOrWhiteSpace(this.Reservation.bsd_discounts)) return;
+            string[] arrDiscounts = new string[] { };
+            string conditionValue = string.Empty;
+            arrDiscounts = this.Reservation.bsd_discounts.Split(',');
+            for (int i = 0; i < arrDiscounts.Count(); i++)
+            {
+                conditionValue += $"<value uitype='bsd_discount'>{arrDiscounts[i]}</value>";
+            }
+
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
                                 <entity name='bsd_discount'>
                                     <attribute name='bsd_discountid' alias='Val'/>
                                     <attribute name='bsd_name' alias='Label'/>
-                                    <attribute name='createdon' />
                                     <order attribute='bsd_name' descending='false' />
-                                       <link-entity name='bsd_bsd_discounttype_bsd_discount' from='bsd_discountid' to='bsd_discountid' visible='false' intersect='true'>
-                                      <link-entity name='bsd_discounttype' from='bsd_discounttypeid' to='bsd_discounttypeid' alias='ab'>
-                                        <filter type='and'>
-                                          <condition attribute='bsd_discounttypeid' operator='eq' uitype='bsd_discounttype' value='" + DiscountListId + @"' />
-                                        </filter>
-                                      </link-entity>
-                                    </link-entity>
+                                    <filter type='and'>
+                                      <condition attribute='bsd_discountid' operator='in'>
+                                        {conditionValue}
+                                      </condition>
+                                    </filter>
                                 </entity>
                             </fetch>";
             
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("bsd_discounts", fetchXml);
-            if (result == null || result.value.Count == 0)
+            if (result == null || result.value.Count == 0) return;
+            foreach (var item in result.value)
             {
-                return;
+                this.ListDiscount.Add(item);
             }
-            ListDiscount = result.value;
         }
 
         public async Task LoadCoOwners(Guid ReservationId)
@@ -345,8 +360,13 @@ namespace ConasiCRM.Portable.ViewModels
                 <attribute name='bsd_amountofthisphase' />
                 <attribute name='bsd_amountwaspaid' />
                 <attribute name='bsd_depositamount' />
+                <attribute name='bsd_ordernumber' />
+                <attribute name='bsd_amountpercent' />
+                <attribute name='bsd_managementamount' />
+                <attribute name='bsd_maintenanceamount' />
                 <order attribute='bsd_ordernumber' descending='false' />
                 <filter type='and'>
+                  <condition attribute='statecode' operator='eq' value='0' />
                   <condition attribute='bsd_reservation' operator='eq' uitype='quote' value='{ReservationId}' />
                 </filter>
               </entity>
@@ -356,7 +376,8 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
 
             foreach (var x in result.value)
-            { 
+            {
+                x.bsd_duedate = x.bsd_duedate.ToLocalTime();
                 InstallmentList.Add(x);
             }
             NumberInstallment = InstallmentList.Count();
@@ -371,6 +392,40 @@ namespace ConasiCRM.Portable.ViewModels
         }
         #endregion
 
+        public async Task<bool> ConfirmSinging()
+        {
+            string path = $"/quotes({Reservation.quoteid})";
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["bsd_quotationprinteddate"] = DateTime.Now.ToUniversalTime();
+            data["bsd_expireddateofsigningqf"] = DateTime.Now.AddDays(this.Reservation.quotationvalidate).ToUniversalTime();
+
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SignQuotation()
+        {
+            var data = new{};
+            var apiResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})//Microsoft.Dynamics.CRM.bsd_Action_QuotationReservation_ConvertToReservation", data);
+
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> UpdateQuotes(string option)
         {
             string path = $"/quotes({Reservation.quoteid})";
@@ -381,16 +436,16 @@ namespace ConasiCRM.Portable.ViewModels
                 data["statecode"] = Reservation.statecode;
                 data["statuscode"] = Reservation.statuscode;
             }
-            if (option == UpdateQuotation)
+            
+            if (option == ConfirmReservation)
             {
-                data["statecode"] = Reservation.statecode;
-                data["statuscode"] = Reservation.statuscode;
-                data["bsd_quotationsigneddate"] = Reservation.bsd_quotationsigneddate;
+                data["bsd_reservationuploadeddate"] = Reservation.bsd_reservationuploadeddate.Value.ToUniversalTime(); ;
             }
+
             if (option == UpdateReservation)
             {
                 data["bsd_reservationformstatus"] = Reservation.bsd_reservationformstatus;
-                data["bsd_rfsigneddate"] = Reservation.bsd_rfsigneddate;
+                data["bsd_rfsigneddate"] = Reservation.bsd_rfsigneddate.Value.ToUniversalTime(); ;
             }
 
             CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
@@ -404,24 +459,145 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task<bool> UpdatePaymentScheme()
+        public async Task<string> UpdatePaymentScheme()
         {
             if (Reservation.paymentscheme_id != Guid.Empty)
             {
-                CrmApiResponse update = await CrmHelper.PostData($"/quotes({Reservation.quoteid})/Microsoft.Dynamics.CRM.bsd_Action_Resv_Gene_PMS");
-                if (update.IsSuccess)
+                IDictionary<string, object> data = new Dictionary<string, object>();
+                CrmApiResponse updateResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})/Microsoft.Dynamics.CRM.bsd_Action_Resv_Gene_PMS", data);
+                if (updateResponse.IsSuccess)
                 {
-                    return true;
+                    return updateResponse.IsSuccess.ToString();
                 }
                 else
                 {
-                    return false;
+                    if (updateResponse.GetErrorMessage().Contains("Localization") == true)
+                    {
+                        return "Localization";
+                    }
+                    else
+                    {
+                        return updateResponse.IsSuccess.ToString();
+                    }
+                    
                 }
             }
             else
             {
+                return "False";
+            }
+        }
+
+        public async Task<bool> DeactiveInstallment()
+        {
+            if (InstallmentList == null || InstallmentList.Count == 0)
+                await LoadInstallmentList(Reservation.quoteid);
+
+            if (InstallmentList != null && InstallmentList.Count > 0)
+            {
+                int count = 0;
+                foreach (var item in InstallmentList)
+                {
+                    if (item.bsd_paymentschemedetailid != Guid.Empty && await Deactive(item.bsd_paymentschemedetailid))
+                        count++;
+                }
+                if (count == InstallmentList.Count)
+                    return true;
+                else
+                    return false;
+            } 
+            else
+            {
                 return false;
             }    
+        }
+
+        public async Task<bool> Deactive(Guid installmentid)
+        {
+            string path = $"/bsd_paymentschemedetails({installmentid})";
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["statecode"] = 1;
+            data["statuscode"] = 2;
+
+            CrmApiResponse apiResponse = await CrmHelper.PatchData(path, data);
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CancelDeposit()
+        {
+            var data = new { };
+            var apiResponse = await CrmHelper.PostData($"/quotes({Reservation.quoteid})//Microsoft.Dynamics.CRM.bsd_Action_Reservation_Cancel", data);
+
+            if (apiResponse.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<Guid> FULTerminate()
+        {
+            var fulid = Guid.NewGuid();
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            data["bsd_followuplistid"] = fulid;
+            if (Reservation.project_id != Guid.Empty)
+            {
+                data["bsd_project@odata.bind"] = "/bsd_projects(" + Reservation.project_id + ")";
+            }
+
+            data["bsd_group"] = 100000000;
+            // parameters["bsd_date"] = new Date().toISOString();
+
+            if (Reservation.statuscode == 3)
+                data["bsd_type"] = 100000005;
+            else if (Reservation.statuscode == 100000006 || Reservation.statuscode == 100000004)
+                data["bsd_type"] = 100000001;
+            else if (Reservation.bsd_reservationformstatus == 100000001)
+                data["bsd_type"] = 100000000;
+            else if (Reservation.statuscode == 100000000)
+                data["bsd_type"] = 100000000;
+
+            data["bsd_reservation@odata.bind"] = "/quotes(" + Reservation.quoteid + ")";
+            data["bsd_depositfee"] = Reservation.bsd_depositfee;
+            if (Reservation.unit_id != Guid.Empty)
+            {
+                data["bsd_Units@odata.bind"] = "/products(" + Reservation.unit_id + ")";
+            }
+            if (UserLogged.Id != Guid.Empty)
+            {
+                data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
+            }
+            if (UserLogged.ManagerId != Guid.Empty)
+            {
+                data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
+            }
+
+            data["bsd_sellingprice"] = Reservation.totalamount;
+            data["bsd_totalamount"] = Reservation.totalamount;
+            data["bsd_totalamountpaid"] = Reservation.bsd_totalamountpaid;
+
+            string path = "/bsd_followuplists";
+            CrmApiResponse result = await CrmHelper.PostData(path, data);
+            if (result.IsSuccess)
+            {
+                return fulid;
+            }
+            else
+            {
+                return Guid.Empty;
+            }
         }
     }
 }

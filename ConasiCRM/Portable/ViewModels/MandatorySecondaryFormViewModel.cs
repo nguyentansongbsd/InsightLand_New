@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ConasiCRM.Portable.ViewModels
 {
-    public class MandatorySecondaryFormViewModel : FormLookupViewModel
+    public class MandatorySecondaryFormViewModel : BaseViewModel
     {
         private MandatorySecondaryModel _mandatorySecondary;
         public MandatorySecondaryModel mandatorySecondary { get => _mandatorySecondary; set { _mandatorySecondary = value; OnPropertyChanged(nameof(mandatorySecondary)); } }
@@ -95,7 +95,7 @@ namespace ConasiCRM.Portable.ViewModels
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
             data["bsd_name"] = mandatorySecondary.bsd_name;
-            data["statuscode"] = mandatorySecondary.statuscode = "100000001";
+            data["statuscode"] = mandatorySecondary.statuscode = 1;
             data["bsd_descriptionsvn"] = mandatorySecondary.bsd_descriptionsvn;
             data["bsd_descriptionsen"] = mandatorySecondary.bsd_descriptionsen;
             data["bsd_jobtitlevn"] = mandatorySecondary.bsd_jobtitlevn;

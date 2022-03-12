@@ -10,42 +10,31 @@
     xmlns:telerikInput="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
     xmlns:telerikprim="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
     xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
-    xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    x:Class="ConasiCRM.Portable.BlankPage">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <DataTemplate x:Key="Media">
-                <Grid>
-                    <xct:MediaElement Source="{Binding MediaSource}" AutoPlay="False" Aspect="AspectFill" ShowsPlaybackControls="False" BackgroundColor="Transparent" MediaOpened="MediaElement_MediaOpened" MediaFailed="MediaElement_MediaFailed"/>
-                    <Label Text="&#xf144;" TextColor="#F1F1F1" FontSize="35" FontFamily="FontAwesomeRegular" VerticalOptions="Center" HorizontalOptions="Center"/>
-                    <Image Source="image_placeholder.png" Aspect="AspectFill" IsVisible="{Binding Path= BindingContext.OnComplate, Source={x:Reference carouselView}}"/>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Meida_Tapped" CommandParameter="{Binding .}"/>
-                    </Grid.GestureRecognizers>
-                </Grid>
-            </DataTemplate>
-            <DataTemplate x:Key="Image">
-                <ffimageloading:CachedImage Source="{Binding ImageSource}" Aspect="AspectFill" LoadingPlaceholder="image_placeholder.png">
-                    <ffimageloading:CachedImage.GestureRecognizers>
-                        <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Image_Tapped" CommandParameter="{Binding .}"/>
-                    </ffimageloading:CachedImage.GestureRecognizers>
-                </ffimageloading:CachedImage>
-            </DataTemplate>
-            <helper:CollectionDataTemplateSelector x:Key="ItemTemplate" Media="{StaticResource Media}" Image="{StaticResource Image}"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+    xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper" 
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
+    x:Class="ConasiCRM.Portable.BlankPage"
+    xmlns:language="clr-namespace:ConasiCRM.Portable.Resources">
+
     <ContentPage.Content>
         <AbsoluteLayout>
-            <CarouselView x:Name="carouselView" ItemsSource="{Binding Data}" ItemTemplate="{StaticResource ItemTemplate}" AbsoluteLayout.LayoutBounds="0,0,1,0.4" AbsoluteLayout.LayoutFlags="All"/>
-
-            <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Margin="0,100,0,0">
-                
-                <controls:DatePickerControl Date="{Binding mydate}" Placeholder="song song"/>
-                <Button Text="test" Clicked="Button_Clicked_1"/>
-            </StackLayout>-->
-            <!--<controls:DatePickerBorder Date="{Binding mydate}"  HorizontalOptions="Center" />-->
-
-            <!--<Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>-->
+            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+                <telerikChart:RadCartesianChart HeightRequest="250" >
+                    <telerikChart:RadCartesianChart.HorizontalAxis>
+                        <telerikChart:CategoricalAxis LabelFitMode="MultiLine" PlotMode="BetweenTicks" ShowLabels="True" MajorTickThickness="2" MajorTickBackgroundColor="#A9A9A9"/>
+                    </telerikChart:RadCartesianChart.HorizontalAxis>
+                    <telerikChart:RadCartesianChart.VerticalAxis>
+                        <telerikChart:NumericalAxis Minimum="0" Maximum="300" MajorStep="50" LabelFormat="{x:Static language:Language.format_dashboard}" LineColor="#A9A9A9"/>
+                    </telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:RadCartesianChart.Grid>
+                        <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>
+                    </telerikChart:RadCartesianChart.Grid>
+                    <telerikChart:RadCartesianChart.Series>
+                        <telerikChart:BarSeries ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding CommissionTransactionChart}" />
+                        <telerikChart:BarSeries ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding CommissionTransactionChart}" />
+                    </telerikChart:RadCartesianChart.Series>
+                </telerikChart:RadCartesianChart>
+            </StackLayout>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

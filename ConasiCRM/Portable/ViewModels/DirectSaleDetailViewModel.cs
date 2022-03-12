@@ -106,6 +106,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadUnitByFloor(Guid floorId)
         {
+            string now_date = string.Format("{0:yyyy-MM-dd}", DateTime.Now);
             string StatusReason_Condition = StatusReason == null ? "" : "<condition attribute='statuscode' operator='eq' value='" + StatusReason.Val + @"' />";
             string PhasesLaunch_Condition = (!string.IsNullOrWhiteSpace(Filter.Phase))
                 ? @"<condition attribute='bsd_phaseslaunchid' operator='eq' uitype='bsd_phaseslaunch' value='" + Filter.Phase + @"' />"
@@ -118,7 +119,7 @@ namespace ConasiCRM.Portable.ViewModels
                                           </link-entity>
                                         </link-entity>" : "";
 
-            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='name' operator='eq' value='" + Filter.Unit + "' />" : "";
+            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='name' operator='like' value='%25" + Filter.Unit + "%25' />" : "";
 
             string Direction_Condition = string.Empty;
             if (!string.IsNullOrWhiteSpace(Filter.Direction))
@@ -205,6 +206,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='name' />
                                 <attribute name='statuscode' />
                                 <attribute name='price' />
+                                <attribute name='bsd_phaseslaunchid' />
                                 <order attribute='name' descending='false' />
                                 <filter type='and'>
                                     <condition attribute='statuscode' operator='ne' value='0' />
@@ -222,6 +224,15 @@ namespace ConasiCRM.Portable.ViewModels
                                 </filter>
                                 <link-entity name='opportunity' from='bsd_units' to='productid' link-type='outer' alias='ag' >
                                     <attribute name='statuscode' alias='queses_statuscode'/>
+                                </link-entity>
+                                <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='outer' alias='asmn'>
+                                    <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='outer' alias='atmn'>
+                                        <attribute name='bsd_eventid' alias='event_id'/>
+                                        <filter type='and'>
+                                            <condition attribute='statuscode' operator='eq' value='100000000' />
+                                            <condition attribute='bsd_enddate' operator='on-or-after' value='{now_date}' />
+                                        </filter>
+                                    </link-entity>
                                 </link-entity>
                                 '{isEvent}'
                               </entity>
@@ -259,13 +270,23 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='bsd_constructionarea' />
                                     <attribute name='bsd_floor' alias='floorid'/>
                                     <attribute name='bsd_blocknumber' alias='blockid'/>
-                                    <attribute name='bsd_phaseslaunchid' />
+                                    <attribute name='bsd_phaseslaunchid' alias='_bsd_phaseslaunchid_value' />
+                                    <attribute name='bsd_vippriority' />
                                     <order attribute='bsd_constructionarea' descending='true' />
                                     <filter type='and'>
                                       <condition attribute='productid' operator='eq' uitype='product' value='{unitId}' />
                                     </filter>
                                     <link-entity name='bsd_unittype' from='bsd_unittypeid' to='bsd_unittype' visible='false' link-type='outer' alias='a_493690ec6ce2e811a94e000d3a1bc2d1'>
                                       <attribute name='bsd_name'  alias='bsd_unittype_name'/>
+                                    </link-entity>
+                                    <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunchid' link-type='outer' alias='ac'>
+                                      <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='outer' alias='ad'>
+                                        <attribute name='bsd_eventid' alias='event_id' />
+                                        <filter type='and'>
+                                            <condition attribute='statuscode' operator='eq' value='100000000' />
+                                            <condition attribute='bsd_eventid' operator='not-null' />
+                                        </filter>
+                                      </link-entity>
                                     </link-entity>
                                   </entity>
                                 </fetch>";
@@ -284,10 +305,14 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='bsd_project' />
                         <attribute name='opportunityid' />
                         <attribute name='bsd_queuingexpired' />
-                        <order attribute='statuscode' descending='true' />
+                        <order attribute='statuscode' descending='false' />
                         <filter type='and'>
-                          <condition attribute='bsd_units' operator='eq' value='{unitId}'/>
-                          <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                            <condition attribute='bsd_units' operator='eq' value='{unitId}'/>
+                            <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
+                            <condition attribute='statuscode' operator='in'>
+                                <value>100000002</value>
+                                <value>100000000</value>
+                            </condition>
                         </filter>
                         <link-entity name='contact' from='contactid' to='customerid' visible='false' link-type='outer'>
                            <attribute name='fullname'  alias='contact_name'/>
@@ -309,15 +334,14 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var x in data)
             {
-                x.statuscode_label = QueuesStatusCodeData.GetQueuesById(x.statuscode.ToString()).Name;
                 QueueList.Add(x);
             }
-            if (QueueList.Any(x=>x.statuscode == 100000000))
-            {
-                var item = QueueList.SingleOrDefault(x => x.statuscode == 100000000);
-                QueueList.Remove(item);
-                QueueList.Insert(0, item);
-            }
+            //if (QueueList.Any(x=>x.statuscode == 100000000))  // chỗ này đang bị lỗi khi có 2 giữ chỗ queue
+            //{
+            //    var item = QueueList.SingleOrDefault(x => x.statuscode == 100000000);
+            //    QueueList.Remove(item);
+            //    QueueList.Insert(0, item);
+            //}
         }
 
         public async Task CheckShowBtnBangTinhGia(Guid unitId)
@@ -334,6 +358,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <link-entity name='bsd_event' from='bsd_phaselaunch' to='bsd_phaseslaunchid' link-type='inner' alias='an' >
                                    <attribute name='bsd_startdate' alias='startdate_event' />
                                    <attribute name='bsd_enddate' alias='enddate_event'/>
+                                   <attribute name='statuscode' alias='statuscode_event'/>
                                 </link-entity>
                               </entity>
                             </fetch>";
@@ -343,7 +368,7 @@ namespace ConasiCRM.Portable.ViewModels
             var data = result.value;
             foreach (var item in data)
             {
-                if (item.startdate_event < DateTime.Now && item.enddate_event > DateTime.Now)
+                if (item.startdate_event < DateTime.Now && item.enddate_event > DateTime.Now && item.statuscode_event == "100000000")
                 {
                     IsShowBtnBangTinhGia = true;
                     return;

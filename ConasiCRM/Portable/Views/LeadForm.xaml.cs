@@ -8,6 +8,7 @@ using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -23,15 +24,16 @@ namespace ConasiCRM.Portable.Views
         public LeadForm()
         {
             InitializeComponent();
-            this.Title = "TẠO MỚI KHÁCH HÀNG";
+            this.Title = Language.tao_moi_khach_hang_tiem_nang_title;
             Init();
+            //datePickerNgaySinh.DefaultDisplay = DateTime.Now;
             viewModel.Rating = RatingData.GetRatingById("2");//mac dinh la warm
         }
         public LeadForm(Guid Id)
         {
             InitializeComponent();
-            this.Title = "CẬP NHẬT KHÁCH HÀNG";
-            btn_save_lead.Text = "CẬP NHẬT KHÁCH HÀNG";
+            this.Title = Language.cap_nhat_khach_hang_tiem_nang_title;
+            btn_save_lead.Text = Language.cap_nhat_khach_hang;
             Init();
             viewModel.LeadId = Id;
             InitUpdate();
@@ -40,7 +42,6 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new LeadFormViewModel();
-            centerModalAddress.Body.BindingContext = viewModel;
             SetPreOpen();
             lookUpDanhGia.HideClearButton();
             CheckSingleLead?.Invoke(true);
@@ -49,56 +50,57 @@ namespace ConasiCRM.Portable.Views
         public async void InitUpdate()
         {
             await viewModel.LoadOneLead();
-            viewModel.AddressComposite = viewModel.singleLead.address1_composite;
-            viewModel.AddressLine1 = viewModel.singleLead.address1_line1;
-            viewModel.AddressPostalCode = viewModel.singleLead.address1_postalcode;
-
-            viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
-            viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
-
-            if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
-            {
-                OptionSet currency = new OptionSet()
-                {
-                    Val = viewModel.singleLead._transactioncurrencyid_value,
-                    Label = viewModel.singleLead.transactioncurrencyid_label
-                };
-                viewModel.SelectedCurrency = currency;
-            }
-
-            if (!string.IsNullOrWhiteSpace(viewModel.singleLead._campaignid_value))
-            {
-                OptionSet campaign = new OptionSet()
-                {
-                    Val = viewModel.singleLead._campaignid_value,
-                    Label = viewModel.singleLead.campaignid_label
-                };
-                viewModel.SelectedCurrency = campaign;
-            }
 
             if (viewModel.singleLead.leadid != Guid.Empty)
+            {
+                viewModel.IndustryCode = viewModel.list_industrycode_optionset.SingleOrDefault(x => x.Val == viewModel.singleLead.industrycode);
+                viewModel.Rating = RatingData.GetRatingById(viewModel.singleLead.leadqualitycode.ToString());
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead.new_gender))
+                {
+                    viewModel.Gender = viewModel.Genders.SingleOrDefault(x => x.Val == viewModel.singleLead.new_gender);
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead.leadsourcecode))
+                {
+                    viewModel.LeadSource = LeadSourcesData.GetLeadSourceById(viewModel.singleLead.leadsourcecode);
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead._transactioncurrencyid_value))
+                {
+                    OptionSet currency = new OptionSet()
+                    {
+                        Val = viewModel.singleLead._transactioncurrencyid_value,
+                        Label = viewModel.singleLead.transactioncurrencyid_label
+                    };
+                    viewModel.SelectedCurrency = currency;
+                }
+
+                if (!string.IsNullOrWhiteSpace(viewModel.singleLead._campaignid_value))
+                {
+                    OptionSet campaign = new OptionSet()
+                    {
+                        Val = viewModel.singleLead._campaignid_value,
+                        Label = viewModel.singleLead.campaignid_label
+                    };
+                    viewModel.SelectedCurrency = campaign;
+                }
+
                 CheckSingleLead?.Invoke(true);
+            }
+
             else
                 CheckSingleLead?.Invoke(false);
         }
 
         public void SetPreOpen()
         {
-            lookUpDanhGia.PreOpenAsync =async () => {
+            lookUpDanhGia.PreOpenAsync = async () =>
+            {
                 LoadingHelper.Show();
                 viewModel.Ratings = RatingData.Ratings();
                 LoadingHelper.Hide();
-            };
-            lookUpCurrency.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadCurrenciesForLookup();
-                if (viewModel.list_currency_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage("Không load được đơn vị tiền tệ");
-                }
-                LoadingHelper.Hide();
-            };
+            };          
 
             lookUpLinhVuc.PreOpenAsync = async () =>
             {
@@ -113,41 +115,15 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadCampainsForLookup();
                 if (viewModel.list_campaign_lookup.Count == 0)
                 {
-                    ToastMessageHelper.ShortMessage("Không load được chiến dịch");
+                    ToastMessageHelper.ShortMessage(Language.khong_load_duoc_chien_dich);
                 }
                 LoadingHelper.Hide();
             };
-
-            lookUpCountry.PreOpenAsync = async () =>
+            
+            lookUpLeadSource.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadCountryForLookup();
-                if (viewModel.list_country_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage("Không load được quốc gia");
-                }
-                LoadingHelper.Hide();
-            };
-
-            lookUpProvince.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.loadProvincesForLookup();
-                if (viewModel.list_province_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage("Không load được tỉnh thành");
-                }
-                LoadingHelper.Hide();
-            };
-
-            lookUpDistrict.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.loadDistrictForLookup();
-                if (viewModel.list_district_lookup.Count == 0)
-                {
-                    ToastMessageHelper.ShortMessage("Không load được quận/huyện");
-                }
+                viewModel.LeadSources = LeadSourcesData.GetListSources();
                 LoadingHelper.Hide();
             };
         }
@@ -198,132 +174,40 @@ namespace ConasiCRM.Portable.Views
         //}
 
         #endregion
-
-        private async void Address_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            if (viewModel.AddressCountry == null && !string.IsNullOrWhiteSpace(viewModel.singleLead.address1_country))
-            {
-                viewModel.AddressCountry = await viewModel.LoadCountryByName();
-            }
-
-            if (viewModel.AddressStateProvince == null && !string.IsNullOrWhiteSpace(viewModel.singleLead.address1_stateorprovince))
-            {
-                viewModel.AddressStateProvince = await viewModel.LoadProvinceByName(); ;
-            }
-
-            if (viewModel.AddressCity == null && !string.IsNullOrWhiteSpace(viewModel.singleLead.address1_city))
-            {
-                viewModel.AddressCity = await viewModel.LoadDistrictByName();
-            }
-
-            await centerModalAddress.Show();
-            LoadingHelper.Hide();
-        }
-
-        private async void CloseAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalAddress.Hide();
-        }
-
-        private async void Country_Changed(object sender, EventArgs e)
-        {
-            await viewModel.loadProvincesForLookup();
-        }
-
-        private async void Province_Changed(object sender, EventArgs e)
-        {
-            await viewModel.loadDistrictForLookup();
-        }
-
-        private async void District_Changed(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void ConfirmAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1))
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1))
-            {
-                address.Add(viewModel.AddressLine1);
-            }
-
-            if (viewModel.AddressCity != null)
-            {
-                address.Add(viewModel.AddressCity.Name);
-            }
-
-            if (viewModel.AddressStateProvince != null)
-            {
-                address.Add(viewModel.AddressStateProvince.Name);
-            }
-            
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCode))
-            {
-                address.Add(viewModel.AddressPostalCode);
-            }
-            
-            if (viewModel.AddressCountry != null)
-            {
-                address.Add(viewModel.AddressCountry.Name);
-            }
-            
-            viewModel.AddressComposite = string.Join(",", address);
-            await centerModalAddress.Hide();
-        }
-
-        private void ClearAddress_Tapped(object sender, EventArgs e)
-        {
-            viewModel.AddressComposite = null;
-            viewModel.AddressLine1 = null;
-            viewModel.AddressCity = null;
-            viewModel.AddressPostalCode = null;
-            viewModel.AddressStateProvince = null;
-            viewModel.AddressCountry = null;
-
-            viewModel.singleLead.address1_line1 = null;
-            viewModel.singleLead.address1_city = null;
-            viewModel.singleLead.address1_postalcode = null;
-            viewModel.singleLead.address1_stateorprovince = null;
-            viewModel.singleLead.address1_country = null;
-            viewModel.singleLead.address1_composite = null;
-        }
-
         private async void SaveLead_Clicked(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.bsd_topic_label))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tiêu đề");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_tieu_de);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.lastname))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_ho_ten);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.singleLead.mobilephone))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt);
                 return;
             }
+
+            if (viewModel.singleLead.new_birthday != null && (DateTime.Now.Year - DateTime.Parse(viewModel.singleLead.new_birthday.ToString()).Year < 18))
+            {
+                ToastMessageHelper.ShortMessage(Language.khach_hang_phai_tu_18_tuoi);
+                return ;
+            }
+
             LoadingHelper.Show();
 
-            viewModel.singleLead.address1_city = viewModel.AddressCity != null ? viewModel.AddressCity.Name : null;
-            viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ?viewModel.AddressStateProvince.Name : null;
-            viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
+            //viewModel.singleLead.address1_city = viewModel.AddressCity != null ? viewModel.AddressCity.Name : null;
+            //viewModel.singleLead.address1_stateorprovince = viewModel.AddressStateProvince != null ? viewModel.AddressStateProvince.Name : null;
+            //viewModel.singleLead.address1_country = viewModel.AddressCountry != null ? viewModel.AddressCountry.Name : null;
 
-            viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
-            viewModel.singleLead.address1_postalcode = viewModel.AddressPostalCode;
-            viewModel.singleLead.address1_composite = viewModel.AddressComposite;
+            //viewModel.singleLead.address1_line1 = viewModel.AddressLine1;
+            //viewModel.singleLead.address1_composite = viewModel.AddressComposite;
 
             viewModel.singleLead.industrycode = viewModel.IndustryCode != null ? viewModel.IndustryCode.Val : null;
             viewModel.singleLead._transactioncurrencyid_value = viewModel.SelectedCurrency != null ? viewModel.SelectedCurrency.Val : null;
@@ -334,15 +218,16 @@ namespace ConasiCRM.Portable.Views
                 var result = await viewModel.createLead();
                 if (result.IsSuccess)
                 {
+                    if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
                     if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
-                    ToastMessageHelper.ShortMessage("Thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không thêm được khách hàng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.khong_them_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
             else
@@ -353,13 +238,13 @@ namespace ConasiCRM.Portable.Views
                     if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                     if (LeadDetailPage.NeedToRefreshLeadDetail.HasValue) LeadDetailPage.NeedToRefreshLeadDetail = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không cập nhật được khách hàng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
         }

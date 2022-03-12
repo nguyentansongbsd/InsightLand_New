@@ -1,30 +1,222 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             BackgroundColor="White"
-             Title="Điều hướng"
-             Padding="20"
+             Title="{x:Static language:Language.trang_chu_title}"
+             xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:telerikChart="clr-namespace:Telerik.XamarinForms.Chart;assembly=Telerik.XamarinForms.Chart"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             xmlns:convertes ="clr-namespace:ConasiCRM.Portable.Converters" xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
              x:Class="ConasiCRM.Portable.Views.Dashboard">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <convertes:CurrencyFormatConverter x:Key="CurrencyFormat"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="3*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <AbsoluteLayout>
+            <RefreshView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <ScrollView Padding="0,0,0,20">
+                    <StackLayout Spacing="0">
+                        <Label FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static language:Language.hoa_hong}"/>
+                                    <Span Text="{Binding dateBefor,StringFormat=' {0:MM/yyyy}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Grid ColumnDefinitions="*,*" Margin="14,6">
+                            <controls:ExtendedFrame Grid.Column="0" Padding="4,16" VerticalOptions="Center">
+                                <StackLayout Spacing="12">
+                                    <Label Text="{Binding TotalCommission,StringFormat='{0} đ'}" FontSize="18" TextColor="#7C0617" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.tong_tien}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </controls:ExtendedFrame>
+                            <controls:ExtendedFrame Grid.Column="1" Padding="4,16" VerticalOptions="Center">
+                                <StackLayout Spacing="12">
+                                    <Label Text="{Binding TotalPaidCommission,StringFormat='{0} đ'}" FontSize="18" TextColor="#017914" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.da_nhan}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </controls:ExtendedFrame>
+                        </Grid>
+                        <controls:ExtendedFrame Margin="14,6" Padding="8">
+                            <telerikChart:RadCartesianChart HeightRequest="250" >
+                                <telerikChart:RadCartesianChart.ChartBehaviors>
+                                    <telerikChart:ChartSelectionBehavior DataPointSelectionMode="None" SeriesSelectionMode="Single" />
+                                </telerikChart:RadCartesianChart.ChartBehaviors>
+                                <telerikChart:RadCartesianChart.HorizontalAxis>
+                                    <telerikChart:CategoricalAxis LineColor="#A9A9A9" MajorTickThickness="2" PlotMode="BetweenTicks" LabelFitMode="MultiLine" ShowLabels="True" MajorTickBackgroundColor="#A9A9A9" />
+                                </telerikChart:RadCartesianChart.HorizontalAxis>
+                                <telerikChart:RadCartesianChart.VerticalAxis>
+                                    <telerikChart:NumericalAxis LineColor="#A9A9A9" MajorTickBackgroundColor="#A9A9A9" Minimum="0" Maximum="300" MajorStep="50" LabelFormat="{x:Static language:Language.format_dashboard}"/>
+                                </telerikChart:RadCartesianChart.VerticalAxis>
+                                <telerikChart:RadCartesianChart.Grid>
+                                    <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1" />
+                                </telerikChart:RadCartesianChart.Grid>
+                                <telerikChart:RadCartesianChart.Series>
+                                    <telerikChart:BarSeries ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding CommissionTransactionChart}" CombineMode="Cluster"/>
+                                    <telerikChart:BarSeries ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding CommissionTransactionChart2}" CombineMode="Cluster"/>
+                                </telerikChart:RadCartesianChart.Series>
+                                <telerikChart:RadCartesianChart.Palette>
+                                    <telerikChart:ChartPalette>
+                                        <telerikChart:ChartPalette.Entries>
+                                            <telerikChart:PaletteEntry FillColor="#D42A16" StrokeColor="#4D4D4D" />
+                                            <telerikChart:PaletteEntry FillColor="#2196F3" StrokeColor="#4D4D4D" />
+                                        </telerikChart:ChartPalette.Entries>
+                                    </telerikChart:ChartPalette>
+                                </telerikChart:RadCartesianChart.Palette>
+                            </telerikChart:RadCartesianChart>
+                        </controls:ExtendedFrame>
 
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="KH Cá nhân" Grid.Column="0" Grid.Row="0" />
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="KH Doanh nghiệp" Grid.Column="1" Grid.Row="0" />
-            
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="KH Tiềm năng" Grid.Column="0" Grid.Row="1" />
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="Bán hàng" Grid.Column="1" Grid.Row="1" />
-            
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="Đặt chỗ" Grid.Column="0" Grid.Row="2" />
-            <Button BackgroundColor="#1abc9c" CornerRadius="0" TextColor="White" Text="Đặt cọc" Grid.Column="1" Grid.Row="2" />
-        </Grid>
+                        <Label FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static language:Language.giao_dich_home}"/>
+                                    <Span Text="{Binding dateBefor,StringFormat=' {0:MM/yyyy}'}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Grid ColumnDefinitions="*,*,*,*" Margin="14,6" ColumnSpacing="8">
+                            <controls:ExtendedFrame Grid.Column="0" Padding="0">
+                                <StackLayout Margin="6,18" VerticalOptions="Center" >
+                                    <Label Text="{Binding numQueue}" FontSize="18" FontAttributes="Bold" TextColor="#2196F3" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.giu_cho_title}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </controls:ExtendedFrame>
+                            <controls:ExtendedFrame Grid.Column="1" Padding="0">
+                                <StackLayout Margin="6,18" VerticalOptions="Center" >
+                                    <Label Text="{Binding numQuote}" FontSize="18" FontAttributes="Bold" TextColor="#FA7803" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.dat_coc_home}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </controls:ExtendedFrame>
+                            <controls:ExtendedFrame Grid.Column="2" Padding="0">
+                                <StackLayout Margin="2,18" VerticalOptions="Center" >
+                                    <Label Text="{Binding numOptionEntry}" FontSize="18" FontAttributes="Bold" TextColor="#0DB302" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.hop_dong_title}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </controls:ExtendedFrame>
+                            <controls:ExtendedFrame Grid.Column="3" Padding="0">
+                                <StackLayout Margin="6,18" VerticalOptions="Center" >
+                                    <Label Text="{Binding numUnit}" FontSize="18" FontAttributes="Bold" TextColor="#D42A16" HorizontalTextAlignment="Center"/>
+                                    <Label Text="{x:Static language:Language.da_ban}" FontSize="15" TextColor="#B3B3B3" HorizontalTextAlignment="Center"/>
+                                </StackLayout>
+                            </controls:ExtendedFrame>
+                        </Grid>
+                        <controls:ExtendedFrame Padding="8" Margin="14,6">
+                            <telerikChart:RadCartesianChart  HeightRequest="250">
+                                <telerikChart:RadCartesianChart.HorizontalAxis>
+                                    <telerikChart:CategoricalAxis LineColor="#A9A9A9" MajorTickThickness="2" PlotMode="BetweenTicks" LabelFitMode="MultiLine" ShowLabels="True" MajorTickBackgroundColor="#A9A9A9" />
+                                </telerikChart:RadCartesianChart.HorizontalAxis>
+                                <telerikChart:RadCartesianChart.VerticalAxis>
+                                    <telerikChart:NumericalAxis Minimum="0" Maximum="30" MajorStep="5" LineColor="#A9A9A9" />
+                                </telerikChart:RadCartesianChart.VerticalAxis>
+                                <telerikChart:RadCartesianChart.Grid>
+                                    <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>
+                                </telerikChart:RadCartesianChart.Grid>
+                                <telerikChart:RadCartesianChart.Series>
+                                    <telerikChart:LineSeries Stroke="#2196F3" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthQueue}" />
+                                    <telerikChart:LineSeries Stroke="#FA7803" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthQuote}" />
+                                    <telerikChart:LineSeries Stroke="#0DB302" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthOptionEntry}" />
+                                    <telerikChart:LineSeries Stroke="#D42A16" StrokeThickness="2" ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding DataMonthUnit}" />
+                                </telerikChart:RadCartesianChart.Series>
+                            </telerikChart:RadCartesianChart>
+                        </controls:ExtendedFrame>
+
+                        <Label Text="{x:Static language:Language.khach_hang_tiem_nang_home}" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold" Padding="14,14,14,8"/>
+                        <controls:ExtendedFrame Padding="0" Margin="14,6">
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="200" Padding="8">
+                                <telerikChart:RadPieChart Grid.Column="0">
+                                    <telerikChart:RadPieChart.Series>
+                                        <telerikChart:DonutSeries InnerRadiusFactor="0.7" ValueBinding="Value" ItemsSource="{Binding LeadsChart}" />
+                                    </telerikChart:RadPieChart.Series>
+                                    <telerikChart:RadPieChart.Palette>
+                                        <telerikChart:ChartPalette>
+                                            <telerikChart:ChartPalette.Entries>
+                                                <telerikChart:PaletteEntry FillColor="#2C95F6" StrokeColor="Transparent" />
+                                                <telerikChart:PaletteEntry FillColor="#F6E22D" StrokeColor="Transparent" />
+                                                <telerikChart:PaletteEntry FillColor="#932CF6" StrokeColor="Transparent" />
+                                            </telerikChart:ChartPalette.Entries>
+                                        </telerikChart:ChartPalette>
+                                    </telerikChart:RadPieChart.Palette>
+                                </telerikChart:RadPieChart>
+                                <StackLayout Grid.Column="1" Spacing="28" VerticalOptions="Center">
+                                    <StackLayout Orientation="Horizontal" Spacing="8" Padding="0,4">
+                                        <Label Text="{Binding numKHMoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#2C95F6" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                        <Label Text="{x:Static language:Language.khach_hang_moi}" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="8" >
+                                        <Label Text="{Binding numKHDaChuyenDoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#F6E22D" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                        <Label Text="{x:Static language:Language.da_chuyen_doi}" FontSize="15" TextColor="#333333" VerticalOptions="Center"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="8">
+                                        <Label Text="{Binding numKHKhongChuyenDoi}" WidthRequest="30" HeightRequest="30" FontSize="15" TextColor="White" BackgroundColor="#932CF6" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                                        <Label Text="{x:Static language:Language.khong_chuyen_doi}" FontSize="15" TextColor="#333333" VerticalTextAlignment="Center"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Grid>
+                        </controls:ExtendedFrame>
+
+                        <StackLayout Orientation="Horizontal" Padding="14,14,14,8">
+                            <Label Text="{x:Static language:Language.cong_viec_hom_nay}" FontSize="16" TextColor="{StaticResource NavigationPrimary}" FontAttributes="Bold"/>
+                            <Label  TextColor="{StaticResource NavigationPrimary}" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ShowMore_Tapped"/>
+                                </Label.GestureRecognizers>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{x:Static language:Language.xem_them}" FontSize="15"/>
+                                        <Span Text="&#xf054;" FontSize="13" FontFamily="FontAwesomeSolid"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                        <StackLayout x:Name="stTaskList" BindableLayout.ItemsSource="{Binding Activities}" Padding="14" Spacing="8">
+                            <BindableLayout.EmptyView>
+                                <Label Text="{x:Static language:Language.hom_nay_khong_co_cong_viec}" FontSize="16" TextColor="Gray" HorizontalOptions="Center"/>
+                            </BindableLayout.EmptyView>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:ExtendedFrame Padding="12,16" BackgroundColor="White">
+                                        <controls:ExtendedFrame.GestureRecognizers>
+                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ActivitiItem_Tapped" CommandParameter="{Binding .}"/>
+                                        </controls:ExtendedFrame.GestureRecognizers>
+                                        <StackLayout Spacing="8">
+                                            <Label Text="{Binding subject}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource NavigationPrimary}"/>
+                                            <Label FontSize="15" TextColor="#333333">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" />
+                                                        <Span Text="{Binding customer}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label FontSize="15" TextColor="#333333">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{x:Static language:Language.thoi_gian}" />
+                                                        <Span Text="{Binding scheduledstart,StringFormat='{0:HH:mm}'}"/>
+                                                        <Span Text=" - " />
+                                                        <Span Text="{Binding scheduledend,StringFormat='{0:HH:mm}'}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                                <!--<Label.Text>
+                                                    <MultiBinding StringFormat="Thời gian: {0:h:mm tt} - {1:h:mm tt}">
+                                                        <Binding Path="scheduledstart" />
+                                                        <Binding Path="scheduledend" />
+                                                    </MultiBinding>
+                                                </Label.Text>-->
+                                            </Label>
+                                        </StackLayout>
+                                    </controls:ExtendedFrame>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </RefreshView>
+
+            <views:ActivityPopupContentView x:Name="ActivityPopup" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -15,13 +15,13 @@ namespace ConasiCRM.Portable.Converters
                 switch ((int)value)
                 {
                     case 100000003:
-                        return "Expired RF";
+                        return "Expired RF"; // đã hết hạn ký phiếu đặt cọc
                     case 100000000:
-                        return "Not Print RF";
+                        return "Not Print RF"; // chưa in phiếu đặt cọc
                     case 100000001:
-                        return "Printed RF";
+                        return "Printed RF"; // đã in phiếu đặt cọc
                     case 100000002:
-                        return "Signed RF";
+                        return "Signed RF"; // đã ký phiếu đặt cọc
                     default:
                         return "";
                 }

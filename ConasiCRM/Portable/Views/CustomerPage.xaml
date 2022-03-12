@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
     xmlns:contentViews="clr-namespace:ConasiCRM.Portable.Views"
-    Title="KHÁCH HÀNG" BackgroundColor="White"
+    xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
+    Title="{x:Static language:Language.khach_hang_title}" BackgroundColor="White"
     x:Class="ConasiCRM.Portable.Views.CustomerPage">
     <ContentPage.Resources>
         <Style TargetType="telerikPrimitives:RadBorder" x:Key="radBorder">
@@ -17,7 +18,7 @@
                         <VisualState x:Name="Active">
                             <VisualState.Setters>
                                 <Setter Property="BorderThickness" Value="0,0,0,2"/>
-                                <Setter Property="BorderColor" Value="#026294"/>
+                                <Setter Property="BorderColor" Value="{StaticResource NavigationPrimary}"/>
                             </VisualState.Setters>
                         </VisualState>
                         <VisualState x:Name="InActive">
@@ -39,7 +40,7 @@
                     <VisualStateGroup>
                         <VisualState x:Name="Active">
                             <VisualState.Setters>
-                                <Setter Property="TextColor" Value="#026294"/>
+                                <Setter Property="TextColor" Value="{StaticResource NavigationPrimary}"/>
                                 <Setter Property="FontAttributes" Value="Bold"/>
                                 <Setter Property="FontSize" Value="16"/>
                             </VisualState.Setters>
@@ -64,19 +65,19 @@
                         <telerikPrimitives:RadBorder.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Lead_Tapped"/>
                         </telerikPrimitives:RadBorder.GestureRecognizers>
-                        <Label x:Name="lblLead" Text="Tiềm năng" Style="{StaticResource labelTap}"/>
+                        <Label x:Name="lblLead" Text="{x:Static language:Language.tiem_nang}" Style="{StaticResource labelTap}"/>
                     </telerikPrimitives:RadBorder>
                     <telerikPrimitives:RadBorder x:Name="radBorderContact" Grid.Column="1" Style="{StaticResource radBorder}">
                         <telerikPrimitives:RadBorder.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Contact_Tapped"/>
                         </telerikPrimitives:RadBorder.GestureRecognizers>
-                        <Label x:Name="lblContact" Text="Cá nhân" Style="{StaticResource labelTap}"/>
+                        <Label x:Name="lblContact" Text="{x:Static language:Language.ca_nhan}" Style="{StaticResource labelTap}"/>
                     </telerikPrimitives:RadBorder>
                     <telerikPrimitives:RadBorder x:Name="radBorderAccount" Grid.Column="2" Style="{StaticResource radBorder}">
                         <telerikPrimitives:RadBorder.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Account_Tapped"/>
                         </telerikPrimitives:RadBorder.GestureRecognizers>
-                        <Label x:Name="lblAccount" Text="Doanh nghiệp" Style="{StaticResource labelTap}"/>
+                        <Label x:Name="lblAccount" Text="{x:Static language:Language.doanh_nghiep}" Style="{StaticResource labelTap}"/>
                     </telerikPrimitives:RadBorder>
                 </Grid>
                 

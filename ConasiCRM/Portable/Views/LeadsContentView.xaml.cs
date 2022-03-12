@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using Xamarin.Forms;
@@ -48,7 +49,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                 }
             };
         }
@@ -62,12 +63,10 @@ namespace ConasiCRM.Portable.Views
 
         private async void Search_TextChanged(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
             if (string.IsNullOrEmpty(viewModel.Keyword))
             {
-                await viewModel.LoadOnRefreshCommandAsync();
+                Search_Pressed(null, EventArgs.Empty);
             }
-            LoadingHelper.Hide();
         }
     }
 }

@@ -3,13 +3,16 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable
@@ -25,12 +28,16 @@ namespace ConasiCRM.Portable
         private bool _issShowPass = true;
         public bool IsShowPass { get => _issShowPass; set { _issShowPass = value; OnPropertyChanged(nameof(IsShowPass)); } }
 
+        private string _verApp;
+        public string VerApp { get => _verApp; set { _verApp = value; OnPropertyChanged(nameof(VerApp)); } }
+
         public string ImeiNum { get; set; }
         public Login()
         {
             InitializeComponent();
             this.BindingContext = this;
 
+            VerApp = Config.OrgConfig.VerApp;
             if (UserLogged.IsLogged && UserLogged.IsSaveInforUser)
             {
                 checkboxRememberAcc.IsChecked = true;
@@ -69,9 +76,9 @@ namespace ConasiCRM.Portable
             {
                 Grid.SetRow(lblUserName, 0);
                 Grid.SetRow(entryUserName, 0);
-                Grid.SetRowSpan(entryUserName, 2);             
-                
-                entryUserName.Placeholder = "Tên đăng nhập";               
+                Grid.SetRowSpan(entryUserName, 2);
+
+                entryUserName.Placeholder = Language.ten_dang_nhap;
             }
         }
 
@@ -106,7 +113,7 @@ namespace ConasiCRM.Portable
                 }
 
                 EyePass = false;
-                entryPassword.Placeholder = "Mật khẩu";
+                entryPassword.Placeholder = Language.mat_khau;
             }
         }
 
@@ -142,12 +149,12 @@ namespace ConasiCRM.Portable
         {
             if (string.IsNullOrWhiteSpace(UserName))
             {
-                ToastMessageHelper.ShortMessage("Tên đăng nhập không được để trống");
+                ToastMessageHelper.ShortMessage(Language.ten_dang_nhap_khong_duoc_de_trong);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Password))
             {
-                ToastMessageHelper.ShortMessage("Mật khẩu không được để trống");
+                ToastMessageHelper.ShortMessage(Language.mat_khau_khong_duoc_de_trong);
                 return;
             }
             try
@@ -158,8 +165,11 @@ namespace ConasiCRM.Portable
                 {
                     var body = await response.Content.ReadAsStringAsync();
                     GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                    App.Current.Properties["Token"] = tokenData.access_token;
-                    App.Current.Properties["RefreshToken"] = tokenData.refresh_token;
+                    GetTokenResponse getTokenResponse = await LoginHelper.getSharePointToken();
+
+                    UserLogged.AccessToken = tokenData.access_token;
+                    UserLogged.RefreshToken = tokenData.refresh_token;
+                    UserLogged.AccessTokenSharePoint = getTokenResponse.access_token;
 
                     EmployeeModel employeeModel = await LoginUser();
                     if (employeeModel != null)
@@ -167,14 +177,14 @@ namespace ConasiCRM.Portable
                         if (employeeModel.bsd_name != UserName)
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Tên đăng nhập không đúng");
+                            ToastMessageHelper.ShortMessage(Language.ten_dang_nhap_khong_dung);
                             return;
                         }
 
                         if (employeeModel.bsd_password != Password)
                         {
                             LoadingHelper.Hide();
-                            ToastMessageHelper.ShortMessage("Mật khẩu không đúng");
+                            ToastMessageHelper.ShortMessage(Language.mat_khau_khong_dung);
                             return;
                         }
 
@@ -190,30 +200,33 @@ namespace ConasiCRM.Portable
                         //    ToastMessageHelper.ShortMessage("Tài khoản không thể đăng nhập trên thiết bị này");
                         //    return;
                         //}
-
+                        
                         UserLogged.Id = employeeModel.bsd_employeeid;
                         UserLogged.User = employeeModel.bsd_name;
+                        UserLogged.Avartar = employeeModel.bsd_avatar;
                         UserLogged.Password = employeeModel.bsd_password;
+                        UserLogged.ContactId = employeeModel.contact_id;
+                        UserLogged.ContactName = employeeModel.contact_name;
                         UserLogged.ManagerId = employeeModel.manager_id;
                         UserLogged.ManagerName = employeeModel.manager_name;
                         UserLogged.IsSaveInforUser = checkboxRememberAcc.IsChecked;
                         UserLogged.IsLogged = true;
-                        
-                        App.Current.MainPage = new AppShell();
+
+                        Application.Current.MainPage = new AppShell();
                         await Task.Delay(1);
                         LoadingHelper.Hide();
                     }
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy user");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_user);
                     }
                 }
             }
             catch (Exception ex)
             {
                 LoadingHelper.Hide();
-                await DisplayAlert("Thông báo", "Lỗi kết nối đến Server. \n" + ex.Message, "Đóng");
+                await DisplayAlert(Language.thong_bao, Language.loi_ket_noi_den_server + "\n" + ex.Message,Language.dong);
             }
         }
 
@@ -227,6 +240,7 @@ namespace ConasiCRM.Portable
                     <attribute name='bsd_password' />
                     <attribute name='bsd_imeinumber' />
                     <attribute name='bsd_manager' />
+                    <attribute name='bsd_avatar' />
                     <order attribute='bsd_name' descending='false' />
                     <filter type='and'>
                       <condition attribute='bsd_name' operator='eq' value='{UserName}' />
@@ -234,6 +248,10 @@ namespace ConasiCRM.Portable
                     <link-entity name='systemuser' from='systemuserid' to='bsd_manager' visible='false' link-type='outer' alias='a_548d21d0fee9eb11bacb002248163181'>
                       <attribute name='fullname' alias='manager_name'/>
                       <attribute name='systemuserid' alias='manager_id' />
+                    </link-entity>
+                    <link-entity name='contact' from='contactid' to='bsd_contact' visible='false' link-type='outer' alias='a_5b790f4631f4eb1194ef000d3a801090'>
+                      <attribute name='contactid' alias='contact_id'/>
+                      <attribute name='bsd_fullname' alias='contact_name'/>
                     </link-entity>
                   </entity>
                 </fetch>";
@@ -249,6 +267,7 @@ namespace ConasiCRM.Portable
             }
         }
 
+
         public async Task UpdateImei(string employeeId)
         {
             string path = $"/bsd_employees({employeeId})";
@@ -257,7 +276,7 @@ namespace ConasiCRM.Portable
             if (!crmApiResponse.IsSuccess)
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Không cập nhật được thông tin Imei");
+                ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_thong_tin_imei);
                 return;
             }
         }
@@ -267,6 +286,28 @@ namespace ConasiCRM.Portable
             Dictionary<string, object> data = new Dictionary<string, object>();
             data["bsd_imeinumber"] = ImeiNum;
             return data;
+        }
+
+        private void Flag_Tapped(object sender, EventArgs e)
+        {
+            string code = (string)((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (code == UserLogged.Language) return;
+            LoadingHelper.Show();
+            UserLogged.Language = code;
+            CultureInfo cultureInfo = new CultureInfo(UserLogged.Language);
+            Language.Culture = cultureInfo;
+            if (code == "vi")
+            {
+                flagVN.BorderColor = Color.FromHex("#2196F3");
+                flagEN.BorderColor = Color.FromHex("#eeeeee");
+            }
+            else if (code == "en")
+            {
+                flagVN.BorderColor = Color.FromHex("#EEEEEE");
+                flagEN.BorderColor = Color.FromHex("#2196F3");
+            }
+            Application.Current.MainPage = new Login();
+            LoadingHelper.Hide();
         }
     }
 }

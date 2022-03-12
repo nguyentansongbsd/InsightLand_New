@@ -1,10 +1,12 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -17,11 +19,13 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         private Guid AccountId;
-        public static bool? NeedToRefreshAccount= null;
+        public static bool? NeedToRefreshAccount = null;
         public static bool? NeedToRefreshMandatory = null;
         public static bool? NeedToRefreshQueues = null;
+        public static bool? NeedToRefreshActivity = null;
+        public static OptionSet FromCustomer = null;
         private AccountDetailPageViewModel viewModel;
-        
+
         public AccountDetailPage(Guid accountId)
         {
             InitializeComponent();
@@ -29,6 +33,7 @@ namespace ConasiCRM.Portable.Views
             this.BindingContext = viewModel = new AccountDetailPageViewModel();
             NeedToRefreshAccount = false;
             NeedToRefreshMandatory = false;
+            NeedToRefreshActivity = false;
             LoadingHelper.Show();
             Tab_Tapped(1);
             Init();
@@ -37,10 +42,12 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             await LoadDataThongTin(AccountId.ToString());
-            if ((viewModel.singleAccount.employee_id != Guid.Empty && !string.IsNullOrWhiteSpace(viewModel.singleAccount.employee_name))&& (viewModel.singleAccount.employee_id == UserLogged.Id && viewModel.singleAccount.employee_name == UserLogged.User))
+            if ((viewModel.singleAccount.employee_id != Guid.Empty && !string.IsNullOrWhiteSpace(viewModel.singleAccount.employee_name)) && (viewModel.singleAccount.employee_id == UserLogged.Id && viewModel.singleAccount.employee_name == UserLogged.User))
             {
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Thêm Người ủy quyền", "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem("Chỉnh sửa", "FontAwesomeRegular", "\uf044", null, Update));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_hop, "FontAwesomeRegular", "\uf274", null, NewMeet));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_goi, "FontAwesomeSolid", "\uf095", null, NewPhoneCall));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cong_viec, "FontAwesomeSolid", "\uf073", null, NewTask));
+                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.chinh_sua, "FontAwesomeRegular", "\uf044", null, Update));
             }
             else
             {
@@ -48,7 +55,10 @@ namespace ConasiCRM.Portable.Views
             }
 
             if (viewModel.singleAccount.accountid != Guid.Empty)
+            {
+                FromCustomer = new OptionSet { Val = viewModel.singleAccount.accountid.ToString(), Label = viewModel.singleAccount.bsd_name, Title = viewModel.CodeAccount };
                 OnCompleted?.Invoke(true);
+            }
             else
                 OnCompleted?.Invoke(false);
             LoadingHelper.Hide();
@@ -92,6 +102,16 @@ namespace ConasiCRM.Portable.Views
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
+            if (NeedToRefreshActivity == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageCase = 1;
+                viewModel.list_thongtincase.Clear();
+                await viewModel.LoadCaseForAccountForm();
+                ActivityPopup.Refresh();
+                NeedToRefreshActivity = false;
+                LoadingHelper.Hide();
+            }
         }
 
         // tab thong tin
@@ -113,7 +133,6 @@ namespace ConasiCRM.Portable.Views
                 }
             }
         }
-
         private async Task<string> SetAddress()
         {
             List<string> listaddress = new List<string>();
@@ -142,8 +161,7 @@ namespace ConasiCRM.Portable.Views
 
             return address;
         }
-
-        private async void Website_Tapped(object sender,EventArgs e)
+        private async void Website_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             await Xamarin.Essentials.Browser.OpenAsync(viewModel.singleAccount.websiteurl);
@@ -154,17 +172,22 @@ namespace ConasiCRM.Portable.Views
         // tab giao dich
         private async Task LoadDataGiaoDich(string Id)
         {
-            if(Id!= null)
+            if (Id != null)
             {
-                if (viewModel.list_thongtinqueing.Count <= 0) { await viewModel.LoadDSQueueingAccount(AccountId); }
-
-                if (viewModel.list_thongtinquotation.Count <= 0) { await viewModel.LoadDSQuotationAccount(AccountId); }
-
-                if (viewModel.list_thongtincontract.Count <= 0) { await viewModel.LoadDSContractAccount(AccountId); }
-
-                if (viewModel.list_thongtincase.Count <= 0) { await viewModel.LoadDSCaseAccount(AccountId); }
+                LoadingHelper.Show();
+                if (viewModel.list_thongtinqueing.Count == 0 && viewModel.list_thongtinquotation.Count == 0 && viewModel.list_thongtincontract.Count == 0 && viewModel.list_thongtincase.Count == 0)
+                {
+                    await Task.WhenAll(
+                        viewModel.LoadDSQueueingAccount(AccountId),
+                        viewModel.LoadDSQuotationAccount(AccountId),
+                        viewModel.LoadDSContractAccount(AccountId),
+                        viewModel.LoadCaseForAccountForm()
+                        ); 
+                }
+                LoadingHelper.Hide();
             }
         }
+
         private async void ShowMoreQueueing_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -193,43 +216,70 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageCase++;
-            await viewModel.LoadDSCaseAccount(AccountId);
+            await viewModel.LoadCaseForAccountForm();
             LoadingHelper.Hide();
+        }
+
+        private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId) { Title=Language.dat_coc_title};
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
+                }
+            };
+        }
+
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
+                }
+            };
+        }
+
+        private void CaseItem_Tapped(object sender, EventArgs e)
+        {
+            var item = (HoatDongListModel)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item != null && item.activityid != Guid.Empty)
+            {
+                ActivityPopup.ShowActivityPopup(item.activityid, item.activitytypecode);
+            }
         }
 
         #endregion
 
         #region tab nguoi uy quyyen 
-        
+
         private async Task LoadDataNguoiUyQuyen(string Id)
         {
-            if (Id != null && viewModel.list_MandatorySecondary.Count <= 0) 
+            if (Id != null && viewModel.list_MandatorySecondary.Count <= 0)
             {
-                await viewModel.Load_List_Mandatory_Secondary(Id); 
+                await viewModel.Load_List_Mandatory_Secondary(Id);
             }
-        }
-
-        private async void DeleteMandatory_Clicked(object sender, EventArgs e)
-        {
-            Label lblClicked = (Label)sender;
-            var a = (TapGestureRecognizer)lblClicked.GestureRecognizers[0];
-            MandatorySecondaryModel item = a.CommandParameter as MandatorySecondaryModel;
-            var conform = await DisplayAlert("Xác nhận", "Bạn có muốn xóa người ủy quyền không ?", "Đồng ý", "Hủy");
-            if (conform == false) return;            
-            LoadingHelper.Show();
-            var IsSuccess = await viewModel.DeleteMandatory_Secondary(item);
-            if(IsSuccess)
-            {
-                viewModel.list_MandatorySecondary.Remove(item);
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Đã xóa người ủy quyền được chọn");
-            }   
-            else
-            {
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Xóa người ủy quyền thất bại");
-            } 
-        }
+        }        
 
         private async void ShowMoreMandatory_Clicked(object sender, EventArgs e)
         {
@@ -243,44 +293,62 @@ namespace ConasiCRM.Portable.Views
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleAccount.telephone1.Trim();
-            if (phone != string.Empty)
+            if(viewModel.singleAccount != null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.telephone1))
             {
+                string phone = viewModel.singleAccount.telephone1.Replace(" ", "");
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
                 if (checkVadate == true)
                 {
-                    SmsMessage sms = new SmsMessage(null, phone);
-                    await Sms.ComposeAsync(sms);
+                    try
+                    {
+                        var message = new SmsMessage(null, phone);
+                        await Sms.ComposeAsync(message);
+                    }
+                    catch (FeatureNotSupportedException ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.sms_khong_duoc_ho_tro_tren_thiet_bi);
+                    }
+                    catch (Exception ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+                    }
                 }
                 else
                 {
-                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
+                    ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
                 }
             }
             else
             {
-                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
             }
         }
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
         {
-            string phone = viewModel.singleAccount.telephone1.Trim();
-            if (phone != string.Empty)
+            if (viewModel.singleAccount != null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.telephone1))
             {
-                var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-                if (checkVadate == true)
+                string phone = viewModel.singleAccount.telephone1.Replace(" ", "");
+                if (phone != string.Empty)
                 {
-                    await Launcher.OpenAsync($"tel:{phone}");
+                    var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
+                    if (checkVadate == true)
+                    {
+                        await Launcher.OpenAsync($"tel:{phone}");
+                    }
+                    else
+                    {
+                        ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    }
                 }
                 else
                 {
-                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
+                    ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
                 }
             }
             else
             {
-                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
             }
         }
 
@@ -299,6 +367,7 @@ namespace ConasiCRM.Portable.Views
         {
             Tab_Tapped(3);
             await LoadDataNguoiUyQuyen(AccountId.ToString());
+            SetHeightListView();
         }
 
         private void Tab_Tapped(int tab)
@@ -343,9 +412,9 @@ namespace ConasiCRM.Portable.Views
 
         private void NguoiDaiDien_Tapped(object sender, EventArgs e)
         {
-            if(viewModel.PrimaryContact.contactid != null)
+            if (viewModel.PrimaryContact.contactid != null)
             {
-                LoadingHelper.Show();                
+                LoadingHelper.Show();
                 ContactDetailPage newPage = new ContactDetailPage(viewModel.PrimaryContact.contactid);
                 newPage.OnCompleted = async (OnCompleted) =>
                 {
@@ -357,7 +426,7 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                     }
                 };
             }
@@ -377,17 +446,9 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                 }
-            };    
-        }
-
-        private async void AddMandatorySecondary(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            MandatorySecondaryForm newPage = new MandatorySecondaryForm(viewModel.singleAccount.accountid);
-            await Navigation.PushAsync(newPage);
-            LoadingHelper.Hide();
+            };
         }
 
         private void GiuChoItem_Tapped(object sender, EventArgs e)
@@ -395,7 +456,8 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
-            queuesDetialPage.OnCompleted = async (IsSuccess) => {
+            queuesDetialPage.OnCompleted = async (IsSuccess) =>
+            {
                 if (IsSuccess)
                 {
                     await Navigation.PushAsync(queuesDetialPage);
@@ -404,9 +466,94 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                 }
             };
+        }
+
+        private void CloseContentMandatorySecondary_Tapped(object sender, EventArgs e)
+        {
+            ContentMandatorySecondary.IsVisible = false;
+        }
+
+        private void ListMandatorySecondary_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            Grid grid = (Grid)sender;
+            var item = (TapGestureRecognizer)grid.GestureRecognizers[0];
+            viewModel.MandatorySecondary = item.CommandParameter as MandatorySecondaryModel;
+            ContentMandatorySecondary.IsVisible = true;
+            LoadingHelper.Hide();
+        }
+        // loadmore
+        private async void ListMoreMandatory_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        {
+            if (e.Item != null)
+            {
+                var item = e.Item as MandatorySecondaryModel;
+                if (viewModel.list_MandatorySecondary.IndexOf(item) == viewModel.list_MandatorySecondary.Count() - 1)
+                {
+                    viewModel.isLoadMore = true;
+                    viewModel.PageMandatory++;
+                    await viewModel.Load_List_Mandatory_Secondary(this.AccountId.ToString());
+                    viewModel.isLoadMore = false;
+                    SetHeightListView();
+                }
+            }
+        }
+        private void SetHeightListView()
+        {
+            double height_item = (viewModel.list_MandatorySecondary.Count() * 110) + 50;
+            double height_mb = ((DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density) * 2 / 3) + 50;
+            if (height_item > height_mb)
+            {
+                ListMandatory.HeightRequest = height_mb;
+            }
+            else
+            {
+                ListMandatory.HeightRequest = height_item;
+            }
+            if (viewModel.list_MandatorySecondary.Count() == 0)
+            {
+                lb_ListMandatory.IsVisible = true;
+                ListMandatory.IsVisible = false;
+            }
+            else
+            {
+                lb_ListMandatory.IsVisible = false;
+                ListMandatory.IsVisible = true;
+            }
+        }
+        private async void NewMeet(object sender, EventArgs e)
+        {
+            if (viewModel.singleAccount != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new MeetingForm());
+                LoadingHelper.Hide();
+            }
+        }
+        private async void NewPhoneCall(object sender, EventArgs e)
+        {
+            if (viewModel.singleAccount != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new PhoneCallForm());
+                LoadingHelper.Hide();
+            }
+        }
+        private async void NewTask(object sender, EventArgs e)
+        {
+            if (viewModel.singleAccount != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new TaskForm());
+                LoadingHelper.Hide();
+            }
+        }
+        private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
+        {
+            OnAppearing();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.ViewModels;
+﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
 using System;
 namespace ConasiCRM.Portable.Models
 {
@@ -16,19 +17,21 @@ namespace ConasiCRM.Portable.Models
 
         public string bsd_queuenumber { get; set; }
 
+        public Guid contact_id { get; set; }
         public string contact_name { get; set; }
         public string PhoneContact { get; set; }
 
-        public Guid accountid { get; set; }
+        public Guid account_id { get; set; }
         public string account_name { get; set; }
         public string PhoneAccount { get; set; }
 
         public Guid _bsd_salesagentcompany_value { get; set; }
         public string salesagentcompany_name { get; set; }
 
-        public double? bsd_queuingfee { get; set; }
-        public double? budgetamount { get; set; }
-
+        public decimal? bsd_queuingfee { get; set; }
+        public string bsd_queuingfee_format { get => StringFormatHelper.FormatCurrency(bsd_queuingfee); }
+        public decimal? budgetamount { get; set; }
+        public string budgetamount_format { get => StringFormatHelper.FormatCurrency(budgetamount); }
         public Guid _bsd_phaselaunch_value { get; set; }
         public string phaselaunch_name { get; set; }
 

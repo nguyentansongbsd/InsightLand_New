@@ -1,10 +1,11 @@
 ﻿using System;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Resources;
 using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.Models
 {
-    public class ListActivitiesAcc : ContentView
+    public class ListActivitiesAcc 
     {
         public string subject { get; set; }
         public string description { get; set; }
@@ -16,11 +17,11 @@ namespace ConasiCRM.Portable.Models
                 switch (activitytypecode)
                 {
                     case "task":
-                        return "Task";
+                        return Language.cong_viec_title;
                     case "phonecall":
-                        return "Phone Call";
+                        return Language.cuoc_goi_title;
                     case "appointment":
-                        return "Collection Meeting";
+                        return Language.cuoc_hop_title;
                     default:
                         return "";
                 }

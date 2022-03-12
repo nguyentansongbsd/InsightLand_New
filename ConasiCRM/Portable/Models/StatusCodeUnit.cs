@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,15 +16,15 @@ namespace ConasiCRM.Portable.Models
         {
             return new List<StatusCodeModel>()
             {
-                new StatusCodeModel("0","Nháp","#333333"),
-                new StatusCodeModel("1","Chuẩn bị","#FDC206"),
-                new StatusCodeModel("100000000","Sẵn sàng","#06CF79"),
-                new StatusCodeModel("100000004","Giữ chỗ","#03ACF5"),
-                new StatusCodeModel("100000006","Đặt cọc","#04A388"),
-                new StatusCodeModel("100000005","Đồng ý chuyển cọc","#9A40AB"),
-                new StatusCodeModel("100000003","Đã đủ tiền cọc","#FA7901"),
-                new StatusCodeModel("100000001","Thanh toán đợt 1","#808080"),
-                new StatusCodeModel("100000002","Đã bán","#D42A16"),
+                new StatusCodeModel("0",Language.unit_draft_sts,"#333333"), //Draft unit_draft_sts
+                new StatusCodeModel("1",Language.unit_preparing_sts,"#FDC206"),//Preparing unit_preparing_sts
+                new StatusCodeModel("100000000",Language.unit_available_sts,"#06CF79"),//Available unit_available_sts
+                new StatusCodeModel("100000004",Language.unit_queuing_sts,"#03ACF5"),//Queuing unit_queuing_sts
+                new StatusCodeModel("100000006",Language.unit_reserve_sts,"#04A388"),//Reserve unit_reserve_sts
+                new StatusCodeModel("100000005",Language.unit_collected_sts,"#9A40AB"),//Collected unit_collected_sts
+                new StatusCodeModel("100000003",Language.unit_deposited_sts,"#FA7901"),//Deposited unit_deposited_sts
+                new StatusCodeModel("100000001",Language.unit_1st_installment_sts,"#808080"),//1st Installment unit_1st_installment_sts
+                new StatusCodeModel("100000002",Language.unit_sold_sts,"#D42A16"),//Sold unit_sold_sts
             };
         }
     }

@@ -120,20 +120,29 @@ namespace ConasiCRM.Portable.Models
         private string _country_name;
         public string country_name { get { return _country_name; } set { _country_name = value; OnPropertyChanged(nameof(country_name)); } }
 
-        private string __bsd_country_value;
-        public string _bsd_country_value { get { return __bsd_country_value; } set { __bsd_country_value = value; OnPropertyChanged(nameof(_bsd_country_value)); } }
+        private string _country_name_en;
+        public string country_name_en { get { return _country_name_en; } set { _country_name_en = value; OnPropertyChanged(nameof(country_name_en)); } }
+
+        private Guid __bsd_country_value;
+        public Guid _bsd_country_value { get { return __bsd_country_value; } set { __bsd_country_value = value; OnPropertyChanged(nameof(_bsd_country_value)); } }
 
         private string _province_name;
         public string province_name { get { return _province_name; } set { _province_name = value; OnPropertyChanged(nameof(province_name)); } }
 
-        private string __bsd_province_value;
-        public string _bsd_province_value { get { return __bsd_province_value; } set { __bsd_province_value = value; OnPropertyChanged(nameof(_bsd_province_value)); } }
+        private string _province_name_en;
+        public string province_name_en { get { return _province_name_en; } set { _province_name_en = value; OnPropertyChanged(nameof(province_name_en)); } }
+
+        private Guid __bsd_province_value;
+        public Guid _bsd_province_value { get { return __bsd_province_value; } set { __bsd_province_value = value; OnPropertyChanged(nameof(_bsd_province_value)); } }
 
         private string _district_name;
         public string district_name { get { return _district_name; } set { _district_name = value; OnPropertyChanged(nameof(district_name)); } }
 
-        private string __bsd_district_value;
-        public string _bsd_district_value { get { return __bsd_district_value; } set { __bsd_district_value = value; OnPropertyChanged(nameof(_bsd_district_value)); } }
+        private string _district_name_en;
+        public string district_name_en { get { return _district_name_en; } set { _district_name_en = value; OnPropertyChanged(nameof(district_name_en)); } }
+
+        private Guid __bsd_district_value;
+        public Guid _bsd_district_value { get { return __bsd_district_value; } set { __bsd_district_value = value; OnPropertyChanged(nameof(_bsd_district_value)); } }
 
         private string _permanentnation_name;
         public string permanentnation_name { get { return _permanentnation_name; } set { _permanentnation_name = value; OnPropertyChanged(nameof(permanentnation_name)); } }
@@ -158,7 +167,7 @@ namespace ConasiCRM.Portable.Models
 
         public Guid employee_id { get; set; }
         public string employee_name { get; set; }
-
+        public string bsd_specialbuyer { get; set; }
     }
 }
 

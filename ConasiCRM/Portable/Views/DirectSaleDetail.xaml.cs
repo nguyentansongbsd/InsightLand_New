@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,11 @@ namespace ConasiCRM.Portable.Views
             InitializeComponent();
         }
 
-        public DirectSaleDetail(DirectSaleSearchModel filter,List<Block> blocks)
+        public DirectSaleDetail(DirectSaleSearchModel filter) //,List<Block> blocks
         {
             InitializeComponent();
             this.BindingContext = viewModel = new DirectSaleDetailViewModel(filter);
-            viewModel.Blocks = blocks;
+            //viewModel.Blocks = blocks;
             NeedToRefreshDirectSale = false;
             Init();
         }
@@ -42,29 +43,19 @@ namespace ConasiCRM.Portable.Views
             // giu cho thanh cong hoac huy giu cho thanh cong
             if (NeedToRefreshDirectSale == true)
             {
-                LoadingHelper.Show();
-                
-                viewModel.QueueList.Clear();
-                viewModel.PageDanhSachDatCho = 1;
-
-                await viewModel.LoadQueues(viewModel.Unit.productid);
-                await viewModel.LoadUnitById(viewModel.Unit.productid);
-                
-                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
-
+                await LoadUnit(viewModel.Unit.productid);
                 RefreshDirectSale = true;
                 NeedToRefreshDirectSale = false;
-                LoadingHelper.Hide();
             }
         }
 
         public async void Init()
         {
-            viewModel.Filter.Block = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
+            //viewModel.Filter.Block = viewModel.Blocks.FirstOrDefault().bsd_blockid.ToString();
             await viewModel.LoadTotalDirectSale();
             if (viewModel.DirectSaleResult.Count != 0)
             {
-                //SetBlocks();
+                SetBlocks();
                 var firstBlock = viewModel.DirectSaleResult.FirstOrDefault();
                 viewModel.ResetDirectSale(firstBlock);
                 SaveLoadedBlock();
@@ -211,49 +202,9 @@ namespace ConasiCRM.Portable.Views
 
         private async void UnitItem_Tapped(object sender, EventArgs e)
         {
-            LoadingHelper.Show();
             var unitId = (Guid)((sender as RadBorder).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
-
-            viewModel.PageDanhSachDatCho = 1;
-            viewModel.QueueList.Clear();
-            await Task.WhenAll(
-                viewModel.LoadQueues(unitId),
-                viewModel.CheckShowBtnBangTinhGia(unitId),
-                viewModel.LoadUnitById(unitId)
-                );
-
-            viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
-            if (!string.IsNullOrWhiteSpace(viewModel.Unit.bsd_direction))
-            {
-                viewModel.UnitDirection = DirectionData.GetDiretionById(viewModel.Unit.bsd_direction);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.Unit.bsd_view))
-            {
-                viewModel.UnitView = ViewData.GetViewById(viewModel.Unit.bsd_view);
-            }
-
-            if (viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000" || viewModel.UnitStatusCode.Id == "100000004")
-            {
-                btnGiuCho.IsVisible = true;
-                if (viewModel.UnitStatusCode.Id != "1" && viewModel.IsShowBtnBangTinhGia == true)
-                {
-                    viewModel.IsShowBtnBangTinhGia = true;
-                }
-                else
-                {
-                    viewModel.IsShowBtnBangTinhGia = false;
-                }    
-            }
-            else
-            {
-                btnGiuCho.IsVisible = false;
-                viewModel.IsShowBtnBangTinhGia = false;
-            }
-
-            SetButton();
-            
+            await LoadUnit(unitId);
             contentUnitInfor.IsVisible = true;
-            LoadingHelper.Hide();
         }
 
         public void SetButton()
@@ -305,7 +256,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -341,39 +292,43 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Hide();
         }
 
-        private void GiuCho_Clicked(object sender, EventArgs e)
+        private async void GiuCho_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             QueueForm queue = new QueueForm(viewModel.Unit.productid, true);
             queue.OnCompleted = async (IsSuccess) => {
                 if (IsSuccess)
                 {
-                    await Navigation.PushAsync(queue);
+                    await Shell.Current.Navigation.PushAsync(queue);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                  //  ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
-            LoadingHelper.Hide();
         }
 
         private void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid);
+            ReservationForm reservationForm = new ReservationForm(viewModel.Unit.productid,null,null,null,null);
             reservationForm.CheckReservation = async (isSuccess) => {
-                if (isSuccess)
+                if (isSuccess == 0)
                 {
                     await Navigation.PushAsync(reservationForm);
                     LoadingHelper.Hide();
                 }
+                else if (isSuccess == 1)
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.san_pham_khong_the_tao_bang_tinh_gia);
+                }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
         }
@@ -392,7 +347,7 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                 }
             };
         }
@@ -405,6 +360,52 @@ namespace ConasiCRM.Portable.Views
         private void CloseQuestion_Tapped(object sender, EventArgs e)
         {
             stackQuestion.IsVisible = !stackQuestion.IsVisible;
+        }
+
+        private async Task LoadUnit(Guid unitId)
+        {
+            if (unitId != Guid.Empty)
+            {
+                LoadingHelper.Show();
+                viewModel.PageDanhSachDatCho = 1;
+                viewModel.QueueList.Clear();
+                await Task.WhenAll(
+                    viewModel.LoadQueues(unitId),
+                    viewModel.CheckShowBtnBangTinhGia(unitId),
+                    viewModel.LoadUnitById(unitId)
+                    );
+
+                viewModel.UnitStatusCode = StatusCodeUnit.GetStatusCodeById(viewModel.Unit.statuscode.ToString());
+                if (!string.IsNullOrWhiteSpace(viewModel.Unit.bsd_direction))
+                {
+                    viewModel.UnitDirection = DirectionData.GetDiretionById(viewModel.Unit.bsd_direction);
+                }
+                if (!string.IsNullOrWhiteSpace(viewModel.Unit.bsd_view))
+                {
+                    viewModel.UnitView = ViewData.GetViewById(viewModel.Unit.bsd_view);
+                }
+
+                if (viewModel.UnitStatusCode.Id == "1" || viewModel.UnitStatusCode.Id == "100000000" || viewModel.UnitStatusCode.Id == "100000004")
+                {
+                    btnGiuCho.IsVisible = viewModel.Unit.bsd_vippriority ? false : true;
+                    if (viewModel.UnitStatusCode.Id != "1" && viewModel.IsShowBtnBangTinhGia == true)
+                    {
+                        viewModel.IsShowBtnBangTinhGia = true;
+                    }
+                    else
+                    {
+                        viewModel.IsShowBtnBangTinhGia = false;
+                    }
+                }
+                else
+                {
+                    btnGiuCho.IsVisible = false;
+                    viewModel.IsShowBtnBangTinhGia = false;
+                }
+                SetButton();
+                gridButton.IsVisible = !viewModel.Unit.bsd_vippriority;
+                LoadingHelper.Hide();
+            }
         }
     }
 }

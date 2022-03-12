@@ -3,21 +3,14 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-using System.Collections.ObjectModel;
-using Telerik.XamarinForms.DataGrid;
-using ConasiCRM.Portable.Controls.BsdGrid;
 using System.IO;
 using ConasiCRM.Portable.Controls;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
+using Xamarin.Essentials;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -91,7 +84,7 @@ namespace ConasiCRM.Portable.Views
 
         private async void DownloadFileButton_Cliked(object sender, System.EventArgs e)
         {
-            if (await PermissionHelper.CheckPermissions(permissionType.Storage) == permissionStatus.Granted)
+            if (await Permissions.CheckStatusAsync<Permissions.StorageRead>() == PermissionStatus.Granted && await Permissions.CheckStatusAsync<Permissions.StorageWrite>() == PermissionStatus.Granted)
             {
                 viewModel.IsBusy = true;
                 var item = (SalesLiteratureItemListModel)((sender as Label).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
@@ -106,7 +99,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 else
                 {
-                    await DisplayAlert("", "Lỗi. Vui lòng thử lại", "Ok");
+                    await DisplayAlert("", Language.da_xay_ra_loi_vui_long_thu_lai, Language.dong);
                 }
                 popup_dowload_file.isTapable = true;
                 viewModel.IsBusy = false;
@@ -126,7 +119,7 @@ namespace ConasiCRM.Portable.Views
                 }
                 catch
                 {
-                    DisplayAlert("", "Ứng dụng không được hỗ trợ. Không thể mở file", "OK");
+                    DisplayAlert("", Language.ung_dung_khong_duoc_ho_tro_khong_the_mo_file, Language.dong);
                 }
             }
             else
@@ -175,7 +168,7 @@ namespace ConasiCRM.Portable.Views
             viewModel.IsBusy = true;
             if (viewModel.list_DownLoad.Count ==0)
             {
-                await DisplayAlert("", "Chưa có file nào đươc tải", "Ok");
+                await DisplayAlert("", Language.chua_co_file_nao_duoc_tai, Language.dong);
             }
             else
             {

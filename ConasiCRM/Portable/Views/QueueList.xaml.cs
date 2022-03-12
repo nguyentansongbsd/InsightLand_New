@@ -1,19 +1,9 @@
-﻿using ConasiCRM.Portable.Config;
-using ConasiCRM.Portable.Helper;
+﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Telerik.XamarinForms.Common;
-using Telerik.XamarinForms.DataGrid;
-using Telerik.XamarinForms.DataGrid.Commands;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -33,20 +23,17 @@ namespace ConasiCRM.Portable.Views
         }
         public async void Init()
         {
-            await viewModel.LoadData();
-            LoadingHelper.Hide();
-        }
-
-        private async void NewMenu_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            await Navigation.PushAsync(new AccountForm());
+            await Task.WhenAll(
+                  viewModel.LoadData(),
+                  viewModel.LoadProject()
+                  );
+            viewModel.LoadStatus();
             LoadingHelper.Hide();
         }
 
         private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            QueueListModel val = e.Item as QueueListModel;
+            QueuesModel val = e.Item as QueuesModel;
             LoadingHelper.Show();
             //QueueForm newPage = new QueueForm(val.opportunityid);
             //newPage.CheckQueueInfo = async (CheckQueueInfo) =>
@@ -74,6 +61,20 @@ namespace ConasiCRM.Portable.Views
             {
                 SearchBar_SearchButtonPressed(null, EventArgs.Empty);
             }
+        }        
+
+        private async void FiltersProject_SelectedItemChange(object sender, LookUpChangeEvent e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadOnRefreshCommandAsync();
+            LoadingHelper.Hide();
+        }
+
+        private async void FiltersStatus_SelectedItemChanged(object sender, LookUpChangeEvent e)
+        {
+            LoadingHelper.Show();
+            await viewModel.LoadOnRefreshCommandAsync();
+            LoadingHelper.Hide();
         }
     }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             Title="Phản Hồi"
+             Title="{x:Static language:Language.phan_hoi_title}"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converters="clr-namespace:ConasiCRM.Portable.Converters" 
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
@@ -30,20 +31,19 @@
                                     </Grid>
                                     
                                     <Grid ColumnDefinitions="Auto,*">
-                                        <Label Grid.Column="0" Text="Loại:" FontSize="15" TextColor="#444444"/>
+                                        <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}" FontSize="15" TextColor="#444444"/>
                                         <Label Grid.Column="1" Text="{Binding casetypecodevalue}" TextColor="#444444" FontSize="15"/>
                                     </Grid>
                                     
                                     <Grid ColumnDefinitions="Auto,*">
-                                        <Label Grid.Column="0" Text="Khách hàng:" FontSize="15" TextColor="#444444"/>
+                                        <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" FontSize="15" TextColor="#444444"/>
                                         <Label Grid.Column="1" Text="{Binding contactname}" TextColor="#444444" FontSize="15"/>
                                     </Grid>
 
                                     <Grid ColumnDefinitions="Auto,*">
-                                        <Label Grid.Column="0" Text="Nguồn:" FontSize="15" TextColor="#444444"/>
+                                        <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.nguon},StringFormat='{0}:'}" FontSize="15" TextColor="#444444"/>
                                         <Label Grid.Column="1" Text="{Binding caseorigincodevalue}" TextColor="#444444" FontSize="15"/>
                                     </Grid>
-
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>

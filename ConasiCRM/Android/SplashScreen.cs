@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using ConasiCRM.Portable;
 
 namespace ConasiCRM.Android
 {
-    [Activity(Label = "Insight Land", Icon = "@drawable/conasi_logo", Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true)]
+    [Activity(Label = "Conasi CRM", Icon = "@drawable/cns_logo_icon_app", Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true)] // ConasiCRM ------CNS_Logo_1024
     public class SplashScreen : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

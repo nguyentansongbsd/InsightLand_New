@@ -2,10 +2,9 @@
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.ViewModels;
-using FFImageLoading.Forms;
+using MediaManager;
 using Stormlion.PhotoBrowser;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -19,28 +18,19 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshQueue = null;
         public ProjectInfoViewModel viewModel;
-        //public List<Photo> GetPhotos = new List<Photo>();
 
-        public ProjectInfo(Guid Id)
+        public ProjectInfo(Guid projectId,string projectName = null)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ProjectInfoViewModel();
             NeedToRefreshQueue = false;
-            viewModel.ProjectId = Id;
+            viewModel.ProjectId = projectId;
+            viewModel.ProjectName = projectName;
             Init();
         }
 
         public async void Init()
         {
-            //GetPhotos.Add(new Photo() {URL= "duan1.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan2.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan3.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan4.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan5.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "duan6.jpg" });
-
-            //carouseView.ItemsSource = GetPhotos;
-
             VisualStateManager.GoToState(radborderThongKe, "Active");
             VisualStateManager.GoToState(radborderThongTin, "InActive");
             VisualStateManager.GoToState(radborderGiuCho, "InActive");
@@ -50,12 +40,14 @@ namespace ConasiCRM.Portable.Views
 
             await Task.WhenAll(
                 viewModel.LoadData(),
+                viewModel.LoadAllCollection(),
                 viewModel.CheckEvent(),
                 viewModel.LoadThongKe(),
                 viewModel.LoadThongKeGiuCho(),
                 viewModel.LoadThongKeHopDong(),
-                viewModel.LoadThongKeBangTinhGia()
-            );
+                viewModel.LoadThongKeBangTinhGia(),
+                viewModel.LoadDataEvent()
+            ) ;
 
             if (viewModel.Project != null)
             {
@@ -82,9 +74,11 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageListGiuCho = 1;
                 viewModel.ListGiuCho.Clear();
                 await viewModel.LoadGiuCho();
+                await viewModel.LoadThongKeGiuCho();
                 NeedToRefreshQueue = false;
                 LoadingHelper.Hide();
-            }    
+            }
+            await CrossMediaManager.Current.Stop();
         }
 
         private async void ThongKe_Tapped(object sender, EventArgs e)
@@ -148,7 +142,6 @@ namespace ConasiCRM.Portable.Views
                     ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
                 }
             };
-            LoadingHelper.Hide();
         }
 
         private async void ShowMoreListDatCho_Clicked(object sender, EventArgs e)
@@ -181,7 +174,7 @@ namespace ConasiCRM.Portable.Views
         private void GiuChoItem_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
             QueuesDetialPage queuesDetialPage = new QueuesDetialPage(itemId);
             queuesDetialPage.OnCompleted = async (IsSuccess) => {
                 if (IsSuccess)
@@ -197,62 +190,61 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        /// <summary>
-        /// ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //private async void Meida_Tapped(object sender, EventArgs e)
-        //{
-        //    LoadingHelper.Show();
-        //    Grid mediaElement = (Grid)sender;
-        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-        //    CollectionData item = a.CommandParameter as CollectionData;
-        //    if (item != null)
-        //    {
-        //        LoadingHelper.Show();
-        //        await Navigation.PushAsync(new ShowMedia(item.MediaSource));
-        //        LoadingHelper.Hide();
-        //    }
-        //}
-
-        private void Image_Tapped(object sender, EventArgs e)
+        private void ItemSlider_Tapped(object sender, EventArgs e)
         {
-            CachedImage image = (CachedImage)sender;
-            //string url = (image.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
-            //var img = GetPhotos.Where(x => x.URL == url).SingleOrDefault();
-            //var index = GetPhotos.IndexOf(img);
-            //new PhotoBrowser
-            //{
-            //    Photos = GetPhotos,
-            //    EnableGrid = true,
-            //    StartIndex = index,
-            //}.Show();
+            LoadingHelper.Show();
+            var item = (CollectionData)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item.SharePointType == SharePointType.Image)
+            {
+                var img = viewModel.Photos.SingleOrDefault(x => x.URL == item.ImageSource);
+                var index = viewModel.Photos.IndexOf(img);
 
-
-            //var a = (TapGestureRecognizer)image.GestureRecognizers[0];
-            //CollectionData item = a.CommandParameter as CollectionData;
-            //if (item != null)
-            //{
-            //    viewModel.photoBrowser.StartIndex = item.Index;
-            //    viewModel.photoBrowser.Show();
-            //}
+                new PhotoBrowser()
+                {
+                    Photos = viewModel.Photos,
+                    StartIndex = index,
+                    EnableGrid = true
+                }.Show();
+            }
+            else if (item.SharePointType == SharePointType.Video)
+            {
+                ShowMedia showMedia = new ShowMedia(Config.OrgConfig.SharePointProjectId, item.MediaSourceId);
+                showMedia.OnCompleted = async (isSuccess) => {
+                    if (isSuccess)
+                    {
+                        await Navigation.PushAsync(showMedia);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage("Không lấy được video");
+                    }
+                };
+            }
+            LoadingHelper.Hide();
         }
 
-        //private void MediaElement_MediaOpened(object sender, EventArgs e)
-        //{
-        //    viewModel.OnComplate = false;
-        //}
+        private void ScollTo_Video_Tapped(object sender, EventArgs e)
+        {
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Video));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
 
-        //private void MediaElement_MediaFailed(object sender, EventArgs e)
-        //{
-        //    Grid mediaElement = (Grid)sender;
-        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-        //    CollectionData item = a.CommandParameter as CollectionData;
-        //    if (item != null)
-        //    {
-        //        viewModel.Data.Remove(item);
-        //    }
-        //}
+        private void ScollTo_Image_Tapped(object sender, EventArgs e)
+        {
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
+
+        private void CloseContentEvent_Tapped(object sender, EventArgs e)
+        {
+            ContentEvent.IsVisible = false;
+        }
+
+        private void OpenEvent_Tapped(object sender, EventArgs e)
+        {
+            ContentEvent.IsVisible = true;
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using Xamarin.Forms;
@@ -11,13 +13,27 @@ namespace ConasiCRM.Portable.Views
     public partial class ReservationList : ContentPage
     {
         private readonly ReservationListViewModel viewModel;
+        public static bool? NeedToRefreshReservationList = null;
+
         public ReservationList()
         {
             InitializeComponent();
-            BindingContext = viewModel = new ReservationListViewModel();
             LoadingHelper.Show();
+            BindingContext = viewModel = new ReservationListViewModel();
+            NeedToRefreshReservationList = false;
             Init();
         }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (NeedToRefreshReservationList ==true)
+            {
+                await viewModel.LoadOnRefreshCommandAsync();
+                NeedToRefreshReservationList = false;
+            }
+        }
+
         public async void Init()
         {
             await viewModel.LoadData();
@@ -26,16 +42,22 @@ namespace ConasiCRM.Portable.Views
 
         private void listView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            ReservationListModel val = e.Item as ReservationListModel;
             LoadingHelper.Show();
-            BangTinhGiaDetailPage newPage = new BangTinhGiaDetailPage(val.quoteid);
-            newPage.OnCompleted = async (OnCompleted) =>
+            ReservationListModel item = e.Item as ReservationListModel;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(item.quoteid);
+            bangTinhGiaDetail.OnCompleted = async (OnCompleted) =>
             {
                 if (OnCompleted == true)
                 {
-                    await Navigation.PushAsync(newPage);
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
                 }
-                LoadingHelper.Hide();
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_bang_tinh_gia);
+                }
+                
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Resources;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -10,33 +11,33 @@ namespace ConasiCRM.Portable.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((string)value == "1")
+            if ((string)value == "1") //lead_new_sts
             {
-                return "New";
+                return Language.lead_new_sts; // New
             }
-            else if ((string)value == "2")
+            else if ((string)value == "2") //lead_contacted_sts
             {
-                return "Contacted";
+                return Language.lead_contacted_sts; // Contacted
             }
-            else if ((string)value == "3")
+            else if ((string)value == "3") //lead_qualified_sts
             {
-                return "Qualified";
+                return Language.lead_qualified_sts; //Qualified
             }
-            else if ((string)value == "4")
+            else if ((string)value == "4") //lead_lost_sts
             {
-                return "Lost";
+                return Language.lead_lost_sts; // Lost
             }
-            else if ((string)value == "5")
+            else if ((string)value == "5") //lead_cannot_contact_sts
             {
-                return "Cannot Contact";
+                return Language.lead_cannot_contact_sts; // Cannot Contact
             }
-            else if ((string)value == "6")
+            else if ((string)value == "6") //lead_no_longer_interested_sts
             {
-                return "No Longer Interested";
+                return Language.lead_no_longer_interested_sts;  //No Longer Interested
             }
-            else if ((string)value == "7")
+            else if ((string)value == "7") //lead_canceled_sts
             {
-                return "Canceled";
+                return Language.lead_canceled_sts; // Canceled
             }
             else
             {

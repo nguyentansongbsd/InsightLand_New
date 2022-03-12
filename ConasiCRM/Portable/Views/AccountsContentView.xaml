@@ -2,6 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.AccountsContentView">
   <ContentView.Content>
         <AbsoluteLayout>
@@ -14,17 +15,21 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
-                                    <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="#026294" Grid.Row="0"/>
+                                    <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+                                        <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Column="0"/>
+                                        <Label Text="&#xf005;" Grid.Column="1" IsVisible="{Binding bsd_specialbuyer}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#FEC93D" HorizontalOptions="End"/>
+                                    </Grid>
+                                    <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Row="0"/>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">
-                                        <Label Text="Đại diện: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.dai_dien},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding primarycontact_name}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
-                                        <Label Text="Số điện thoại: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.sdt},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding telephone1}" TextColor="#444444" FontSize="15" Grid.Column="1"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="3">
-                                        <Label Text="Địa chỉ: " TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding Source={x:Static language:Language.dia_chi},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
                                         <Label Text="{Binding bsd_address}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                     </Grid>
                                 </Grid>

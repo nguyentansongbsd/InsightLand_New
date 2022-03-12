@@ -10,10 +10,9 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
 using System.Text.RegularExpressions;
 using ConasiCRM.Portable.Helpers;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -28,7 +27,6 @@ namespace ConasiCRM.Portable.Views
         {
             InitializeComponent();
             this.Id = Guid.Empty;
-            datePickerNgaySinh.DefaultDisplay = DateTime.Now;
             Init();
             Create();
         }
@@ -44,15 +42,13 @@ namespace ConasiCRM.Portable.Views
         public async void Init()
         {
             this.BindingContext = viewModel = new ContactFormViewModel();
-            centerModalContacAddress.Body.BindingContext = viewModel;
-            centerModalPermanentAddress.Body.BindingContext = viewModel;
             SetPreOpen();
         }
 
         private void Create()
         {
-            this.Title = "Tạo Mới Khách Hàng Cá Nhân";
-            btn_save_contact.Text = "Tạo Mới";
+            this.Title = Language.tao_moi_khach_hang_ca_nhan_title;
+            btn_save_contact.Text = Language.tao_khach_hang;
             btn_save_contact.Clicked += CreateContact_Clicked;
         }
 
@@ -64,8 +60,8 @@ namespace ConasiCRM.Portable.Views
         private async void Update()
         {
             await loadData(this.Id.ToString());
-            this.Title = "Cập Nhật Khách Hàng Cá Nhân";
-            btn_save_contact.Text = "Cập Nhật";
+            this.Title = Language.cap_nhat_khach_hang_ca_nhan_title;
+            btn_save_contact.Text = Language.cap_nhat_khach_hang;
             btn_save_contact.Clicked += UpdateContact_Clicked;
             if (viewModel.singleContact.contactid != Guid.Empty)
                 OnCompleted?.Invoke(true);
@@ -84,7 +80,8 @@ namespace ConasiCRM.Portable.Views
 
             if (contactId != null)
             {
-                await viewModel.LoadOneContact(contactId);                
+                await viewModel.LoadOneContact(contactId);
+                await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
                 {
                     viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode);
@@ -109,27 +106,33 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_fullname))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập họ tên");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_ho_ten);
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");               
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt);               
                 return;
             }
             if (viewModel.singleGender == null || viewModel.singleGender.Val == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn giới tính");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_gioi_tinh);
                 return;
             }
+            if (viewModel.singleLocalization == null || viewModel.singleLocalization.Val == null)
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_quoc_tich);
+                return;
+            }
+
             if (viewModel.singleContact.birthdate == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn ngày sinh");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_ngay_sinh);
                 return;
             }
             if (DateTime.Now.Year - DateTime.Parse(viewModel.singleContact.birthdate.ToString()).Year < 18)
             {
-                ToastMessageHelper.ShortMessage("Khách hàng phải từ 18 tuổi");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_phai_tu_18_tuoi);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.emailaddress1))
@@ -138,29 +141,39 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleContact.emailaddress1);
                 if (!match.Success)
                 {
-                    ToastMessageHelper.ShortMessage("Email sai định dạng");
+                    ToastMessageHelper.ShortMessage(Language.email_sai_dinh_dang);
                     return;
                 }
 
                 if (!await viewModel.CheckEmail(viewModel.singleContact.emailaddress1, id))
                 {
-                    ToastMessageHelper.ShortMessage("Email đã được sử dụng");
+                    ToastMessageHelper.ShortMessage(Language.email_da_duoc_su_dung);
                     return;
                 }
-            }          
+            }
+            if (string.IsNullOrWhiteSpace(viewModel.ContactAddress.address))
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_lien_lac);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(viewModel.PermanentAddress.address))
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_thuong_tru);
+                return;
+            }
             if (string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số CMND");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_cmnd);
                 return;
             }
             if (!await viewModel.CheckCMND(viewModel.singleContact.bsd_identitycardnumber, id))
             {
-                ToastMessageHelper.ShortMessage("Số CMNND đã được sử dụng");
+                ToastMessageHelper.ShortMessage(Language.so_cmnd_da_duoc_su_dung);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_identitycardnumber) && !await viewModel.CheckPassport(viewModel.singleContact.bsd_passport, id))
             {
-                ToastMessageHelper.ShortMessage("Số hộ chiếu đã được sử dụng");
+                ToastMessageHelper.ShortMessage(Language.so_ho_chieu_da_duoc_su_dung);
                 return;
             }
 
@@ -176,15 +189,16 @@ namespace ConasiCRM.Portable.Views
                 if (created != new Guid())
                 {
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
-                    if (QueueForm.NeedToRefreshContactList.HasValue) QueueForm.NeedToRefreshContactList = true;
+                    if (QueueForm.NeedToRefresh.HasValue) QueueForm.NeedToRefresh = true;
+                    await viewModel.UpLoadCMND();
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Đã tạo khách hàng cá nhân thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo khách hàng cá nhân thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_them_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
             else
@@ -197,13 +211,15 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                     if (CustomerPage.NeedToRefreshContact.HasValue) CustomerPage.NeedToRefreshContact = true;
                     if (ContactDetailPage.NeedToRefresh.HasValue) ContactDetailPage.NeedToRefresh = true;
+
+                    await viewModel.UpLoadCMND();
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Đã cập nhật thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
         }
@@ -230,24 +246,6 @@ namespace ConasiCRM.Portable.Views
                 }
                 LoadingHelper.Hide();                
             }; 
-            lookUpContacAddressCountry.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                if(viewModel.list_country_lookup.Count == 0)
-                {
-                    await viewModel.LoadCountryForLookup();
-                }
-                LoadingHelper.Hide();
-            };
-            lookUpPermanentAddressCountry.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                if (viewModel.list_country_lookup.Count == 0)
-                {
-                    await viewModel.LoadCountryForLookup();
-                }
-                LoadingHelper.Hide();
-            };
             Lookup_Account.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
@@ -256,299 +254,39 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private async void DiaChiLienLac_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            if (viewModel.AddressLine1Contact == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_housenumberstreet))
-            {
-                viewModel.AddressLine1Contact = viewModel.singleContact.bsd_housenumberstreet;
-            }
-
-            if (viewModel.AddressPostalCodeContac == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_postalcode))
-            {
-                viewModel.AddressPostalCodeContac = viewModel.singleContact.bsd_postalcode;
-            }
-
-            if (viewModel.AddressCountryContac == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_country_label))
-            {
-                viewModel.AddressCountryContac = await viewModel.LoadCountryByName(viewModel.singleContact.bsd_country_label);
-                await viewModel.LoadProvincesForLookup(viewModel.AddressCountryContac);
-            }
-
-            if (viewModel.AddressStateProvinceContac == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_province_label))
-            {
-                viewModel.AddressStateProvinceContac = await viewModel.LoadProvinceByName(viewModel.singleContact._bsd_country_value, viewModel.singleContact.bsd_province_label); ;
-                await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
-            }
-
-            if (viewModel.AddressCityContac == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_district_label))
-            {
-                viewModel.AddressCityContac = await viewModel.LoadDistrictByName(viewModel.singleContact._bsd_province_value, viewModel.singleContact.bsd_district_label);
-            }
-
-            LoadingHelper.Hide();
-            await centerModalContacAddress.Show();
-        }
-
-        private async void DiaChiThuongTru_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            if (viewModel.AddressLine1Permanent == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_permanentaddress))
-            {
-                viewModel.AddressLine1Permanent = viewModel.singleContact.bsd_permanentaddress;
-            }
-
-            if (viewModel.AddressCountryPermanent == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_permanentcountry_label))
-            {
-                viewModel.AddressCountryPermanent = await viewModel.LoadCountryByName(viewModel.singleContact.bsd_permanentcountry_label);
-                await viewModel.LoadProvincesForLookup(viewModel.AddressCountryPermanent);
-            }
-
-            if (viewModel.AddressStateProvincePermanent == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_permanentprovince_label))
-            {
-                viewModel.AddressStateProvincePermanent = await viewModel.LoadProvinceByName(viewModel.singleContact._bsd_permanentcountry_value, viewModel.singleContact.bsd_permanentprovince_label); ;
-                await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvincePermanent);
-            }
-
-            if (viewModel.AddressCityPermanent == null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_permanentdistrict_label))
-            {
-                viewModel.AddressCityPermanent = await viewModel.LoadDistrictByName(viewModel.singleContact._bsd_permanentprovince_value, viewModel.singleContact.bsd_permanentdistrict_label);
-            }
-
-            LoadingHelper.Hide();
-            await centerModalPermanentAddress.Show();
-        }
-
         private void Handle_LayoutChanged(object sender, System.EventArgs e)
         {
             var width = ((DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density) - 35) / 2;
             var tmpHeight = width * 2 / 3;
             MatTruocCMND.HeightRequest = tmpHeight;
             MatSauCMND.HeightRequest = tmpHeight;
-        }     
-
-        private async void ContacAddressCountry_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadProvincesForLookup(viewModel.AddressCountryContac);
-        }
-
-        private async void ContacAddressProvince_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
-        }
-
-        private async void CloseContacAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalContacAddress.Hide();
-        }
-
-        private async void ConfirmContacAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contact))
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contact))
-            {
-                viewModel.singleContact.bsd_housenumberstreet = viewModel.AddressLine1Contact;
-                address.Add(viewModel.AddressLine1Contact);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_housenumberstreet = null;
-            }
-            if (viewModel.AddressCityContac != null)
-            {
-                viewModel.singleContact.bsd_district_label = viewModel.AddressCityContac.Name;
-                viewModel.singleContact._bsd_district_value = viewModel.AddressCityContac.Id.ToString();
-                address.Add(viewModel.AddressCityContac.Name);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_district_label = null;
-                viewModel.singleContact._bsd_district_value = null;
-            }
-            if (viewModel.AddressStateProvinceContac != null)
-            {
-                viewModel.singleContact.bsd_province_label = viewModel.AddressStateProvinceContac.Name;
-                viewModel.singleContact._bsd_province_value = viewModel.AddressStateProvinceContac.Id.ToString();
-                address.Add(viewModel.AddressStateProvinceContac.Name);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_province_label = null;
-                viewModel.singleContact._bsd_province_value = null;
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                viewModel.singleContact.bsd_postalcode = viewModel.AddressPostalCodeContac;
-                address.Add(viewModel.AddressPostalCodeContac);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_postalcode = null;
-            }
-            if (viewModel.AddressCountryContac != null)
-            {
-                viewModel.singleContact.bsd_country_label = viewModel.AddressCountryContac.Name;
-                viewModel.singleContact._bsd_country_value = viewModel.AddressCountryContac.Id.ToString();
-                address.Add(viewModel.AddressCountryContac.Name);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_country_label = null;
-                viewModel.singleContact._bsd_country_value = null;
-            }
-            viewModel.singleContact.bsd_contactaddress = viewModel.AddressCompositeContac = string.Join(", ", address);
-
-            //Address En
-            List<string> addressEn = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contact))
-            {
-                addressEn.Add(viewModel.AddressLine1Contact);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressCityContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvinceContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressStateProvinceContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                addressEn.Add(viewModel.AddressPostalCodeContac);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressCountryContac.Detail);
-            }
-            viewModel.singleContact.bsd_diachi = string.Join(", ", addressEn);
-
-            await centerModalContacAddress.Hide();
-        }
-
-        private async void PermanentAddressCountry_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadProvincesForLookup(viewModel.AddressCountryPermanent);
-        }
-
-        private async void PermanentAddressProvince_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvincePermanent);
-        }       
-
-        private async void ClosePermanentAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalPermanentAddress.Hide();
-        }
-
-        private async void ConfirmPermanentAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
-            {
-                viewModel.singleContact.bsd_permanentaddress = viewModel.AddressLine1Permanent;
-                address.Add(viewModel.AddressLine1Permanent);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_permanentaddress = null;
-            }
-
-            if (viewModel.AddressCityPermanent != null)
-            {
-                viewModel.singleContact.bsd_permanentdistrict_label = viewModel.AddressCityPermanent.Name;
-                viewModel.singleContact._bsd_permanentdistrict_value = viewModel.AddressCityPermanent.Id.ToString();
-                address.Add(viewModel.AddressCityPermanent.Name);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_permanentdistrict_label = null;
-                viewModel.singleContact._bsd_permanentdistrict_value = null;
-            }
-            if (viewModel.AddressStateProvincePermanent != null)
-            {
-                viewModel.singleContact.bsd_permanentprovince_label = viewModel.AddressStateProvincePermanent.Name;
-                viewModel.singleContact._bsd_permanentprovince_value = viewModel.AddressStateProvincePermanent.Id.ToString();
-                address.Add(viewModel.AddressStateProvincePermanent.Name);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_permanentprovince_label = null;
-                viewModel.singleContact._bsd_permanentprovince_value = null;
-            }
-            if (viewModel.AddressCountryPermanent != null)
-            {
-                viewModel.singleContact.bsd_permanentcountry_label = viewModel.AddressCountryPermanent.Name;
-                viewModel.singleContact._bsd_permanentcountry_value = viewModel.AddressCountryPermanent.Id.ToString();
-                address.Add(viewModel.AddressCountryPermanent.Name);
-            }
-            else
-            {
-                viewModel.singleContact.bsd_permanentcountry_label = null;
-                viewModel.singleContact._bsd_permanentcountry_value = null;
-            }
-            viewModel.singleContact.bsd_permanentaddress1 = viewModel.AddressCompositePermanent = string.Join(", ", address);
-
-            //addres EN
-            List<string> addressPermanentEn = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Permanent))
-            {
-                addressPermanentEn.Add(viewModel.AddressLine1Permanent);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityPermanent?.Detail))
-            {
-                addressPermanentEn.Add(viewModel.AddressCityPermanent.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvincePermanent?.Detail))
-            {
-                addressPermanentEn.Add(viewModel.AddressStateProvincePermanent.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryPermanent?.Detail))
-            {
-                addressPermanentEn.Add(viewModel.AddressCountryPermanent.Detail);
-            }
-            
-            viewModel.singleContact.bsd_diachithuongtru = string.Join(", ", addressPermanentEn);
-
-            await centerModalPermanentAddress.Hide();
-        }
+        }    
 
         public void MatTruocCMND_Tapped(object sender, System.EventArgs e)
         {
-            List<OptionSet> menuItem = new List<OptionSet>();
+            List<OptionSetFilter> menuItem = new List<OptionSetFilter>();
             if (viewModel.singleContact.bsd_mattruoccmnd_base64 != null)
             {
-                menuItem.Add(new OptionSet { Label = "Xem ảnh mặt trước cmnd", Val = "Front" });
+                menuItem.Add(new OptionSetFilter { Label = Language.xem_anh_mat_truoc_cmnd, Val = "Front", Title = "Front" });
             }
-            menuItem.Add(new OptionSet { Label = "Chụp ảnh", Val = "Front" });
-            menuItem.Add(new OptionSet { Label = "Chọn ảnh từ thư viện", Val = "Front" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chup_hinh, Val = "Front", Title = "Take" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chon_anh_tu_thu_vien, Val = "Front", Title = "Select" });
             this.showMenuImageCMND(menuItem);
         }
 
         private void MatSauCMND_Tapped(object sender, System.EventArgs e)
         {
-            List<OptionSet> menuItem = new List<OptionSet>();
+            List<OptionSetFilter> menuItem = new List<OptionSetFilter>();
             if (viewModel.singleContact.bsd_matsaucmnd_base64 != null)
             {
-                menuItem.Add(new OptionSet { Label = "Xem ảnh mặt sau cmnd", Val = "Behind" });
+                menuItem.Add(new OptionSetFilter { Label = Language.xem_anh_mat_sau_cmnd, Val = "Behind", Title = "Behind" });
             }
-            menuItem.Add(new OptionSet { Label = "Chụp ảnh", Val = "Behind" });
-            menuItem.Add(new OptionSet { Label = "Chọn ảnh từ thư viện", Val = "Behind" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chup_hinh, Val = "Behind", Title = "Take" });
+            menuItem.Add(new OptionSetFilter { Label = Language.chon_anh_tu_thu_vien, Val = "Behind" , Title="Select" });
             this.showMenuImageCMND(menuItem);
         }
 
-        private void showMenuImageCMND(List<OptionSet> listItem)
+        private void showMenuImageCMND(List<OptionSetFilter> listItem)
         {
             popup_menu_imageCMND.ItemSource = listItem;
 
@@ -557,33 +295,25 @@ namespace ConasiCRM.Portable.Views
 
         async void MenuItem_Tapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
-            var item = e.Item as OptionSet;
+            var item = e.Item as OptionSetFilter;
             popup_menu_imageCMND.unFocus();
 
             Stream resultStream;
             byte[] arrByte;
             string base64String;
 
-            switch (item.Label)
+            switch (item.Title)
             {
-                case "Chụp ảnh":
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                    {
-                        await DisplayAlert("No Camera", ":( No camera available.", "OK");
-                        return;
-                    }
-                    if ((await PermissionHelper.CheckPermissions(permissionType.Camera)) == permissionStatus.Granted
-                        && await PermissionHelper.CheckPermissions(permissionType.Storage) == permissionStatus.Granted)
-                    {
+                case "Take":
+                    
+                    PermissionStatus cameraStatus = await PermissionHelper.RequestCameraPermission();
+                    if (cameraStatus == PermissionStatus.Granted)
+                    { 
                         var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
                         {
-                            Directory = "Inland",
-                            SaveToAlbum = true,
-                            //CompressionQuality = 75,
-                            CustomPhotoSize = 50,
-                            PhotoSize = PhotoSize.MaxWidthHeight,
-                            MaxWidthHeight = 2000,
-                            DefaultCamera = CameraDevice.Front
+                            SaveToAlbum = false,
+                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.MaxWidthHeight,
+                            MaxWidthHeight = 600,
                         });
 
                         if (file == null)
@@ -602,24 +332,16 @@ namespace ConasiCRM.Portable.Views
                     }
 
                     break;
-                case "Chọn ảnh từ thư viện":
-                    if (!CrossMedia.Current.IsPickPhotoSupported)
-                    {
-                        await DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
-                        return;
-                    }
-                    if (await PermissionHelper.CheckPermissions(permissionType.Storage) == permissionStatus.Granted)
-                    {
-                        var file2 = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new Plugin.Media.Abstractions.PickMediaOptions
-                        {
-                            PhotoSize = Plugin.Media.Abstractions.PhotoSize.Medium,
-                            //CompressionQuality = 50,
-                        });
+                case "Select":
 
-
+                    PermissionStatus storageStatus = await PermissionHelper.RequestPhotosPermission();
+                    if (storageStatus == PermissionStatus.Granted)
+                    {
+                        var file2 = await MediaPicker.PickPhotoAsync();
                         if (file2 == null)
                             return;
-                        Stream result = file2.GetStream();
+
+                        Stream result = await file2.OpenReadAsync();
                         if (result != null)
                         {
                             using (var memoryStream = new MemoryStream())

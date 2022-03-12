@@ -5,8 +5,9 @@
   </item>
   <item>
     <bitmap
-        android:src="@drawable/conasi_logo"
+        android:src="@drawable/CNS_Logo_300"
         android:tileMode="disabled"
         android:gravity="center" android:layout_gravity="center"/>
   </item>
 </layer-list>
+<!--Conasi_logo_210_200-->

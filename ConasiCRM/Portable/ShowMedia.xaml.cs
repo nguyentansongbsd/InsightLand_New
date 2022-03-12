@@ -1,10 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,19 +9,33 @@ namespace ConasiCRM.Portable
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShowMedia : ContentPage
     {
-        public ShowMedia( string MediaSource)
+        public Action<bool> OnCompleted;
+        private string mediaSourceId { get; set; }
+        private string folderId { get; set; }
+        public ShowMedia(string FolderId, string MediaSourceId)
         {
             InitializeComponent();
-            if(mediaShow!=null)
-            {
-                LoadingHelper.Show();
-                mediaShow.Source = MediaSource;
-            }    
+            folderId = FolderId;
+            mediaSourceId = MediaSourceId;
+            Init();
         }
 
-        private void mediaShow_MediaOpened(object sender, EventArgs e)
+        private async void Init()
         {
-            LoadingHelper.Hide();
+            if (videoView != null)
+            {
+                var result = await CrmHelper.RetrieveImagesSharePoint<GrapDownLoadUrlModel>($"{folderId}/items/{mediaSourceId}/driveItem");
+                if (result != null)
+                {
+                    string url = result.MicrosoftGraphDownloadUrl;
+                    videoView.Source = url;
+                    OnCompleted?.Invoke(true);
+                }
+                else
+                {
+                    OnCompleted?.Invoke(false);
+                }
+            }
         }
     }
 }

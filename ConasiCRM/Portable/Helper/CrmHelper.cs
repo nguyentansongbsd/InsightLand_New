@@ -27,7 +27,7 @@ namespace ConasiCRM.Portable.Helper
             try
             {
                 var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
+                string Token = UserLogged.AccessToken;
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{OrgConfig.ApiUrl}/{EntityName}?fetchXml={FetchXml}");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -46,7 +46,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await RetrieveMultiple<T>(EntityName, FetchXml);
                         return api_Response;
@@ -55,7 +55,6 @@ namespace ConasiCRM.Portable.Helper
                 else
                 {
                     var a = response.RequestMessage;
-                    
                 }
             }
             catch (Exception ex)
@@ -65,12 +64,50 @@ namespace ConasiCRM.Portable.Helper
             return null;
         }
 
+        public static async Task<T> RetrieveImagesSharePoint<T>(string url) where T : class
+        {
+            try
+            {
+                var client = BsdHttpClient.Instance();
+                string fileListUrl = $"{OrgConfig.GraphApi}{OrgConfig.SharepointSiteId}/lists/{url}";
+                var request = new HttpRequestMessage(HttpMethod.Get, fileListUrl);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserLogged.AccessTokenSharePoint);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                    var api_response = JsonConvert.DeserializeObject<T>(body);
+                    return api_response;
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    var loginSharePonit = await LoginHelper.getSharePointToken();
+                    if (loginSharePonit.access_token != null)
+                    {
+                        UserLogged.AccessTokenSharePoint = loginSharePonit.access_token;
+                        var api_response = await RetrieveImagesSharePoint<T>(url);
+                        return api_response;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception ex)
+            {
+            }
+            return null;
+        }
+
         public static async Task<T> Get<T>(string content) where T : class
         {
             try
             {
                 var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
+                string Token = UserLogged.AccessToken;
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{OrgConfig.ApiUrl}/{content}");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -80,7 +117,8 @@ namespace ConasiCRM.Portable.Helper
                 {
                     var body = await response.Content.ReadAsStringAsync();
                     var a = body.Replace(@"\", "");
-                    string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
+                    // string a1 = a.Replace(@"https://conasicrm.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
+                    string a1 = a.Replace(@"https://conasi-uat.api.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.bsd_GetTotalQtyDirectSaleResponse", "").Replace("@odata.context", "").Replace("output", "").Remove(0, 11);
                     string a2 = a1.Substring(0, a1.Length - 2);
                     var api_Response = JsonConvert.DeserializeObject<T>(a2);
                     return api_Response;
@@ -92,7 +130,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await Get<T>(content);
                         return api_Response;
@@ -122,7 +160,7 @@ namespace ConasiCRM.Portable.Helper
             try
             {
                 var client = BsdHttpClient.Instance();
-                string Token = App.Current.Properties["Token"] as string;
+                string Token = UserLogged.AccessToken;
                 var request = new HttpRequestMessage(HttpMethod.Delete, $"{OrgConfig.ApiUrl}/{EntityName}({Id})/{FieldName}/$ref");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -141,7 +179,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_response= await SetNullLookupField(EntityName, Id, FieldName);
                         return api_response;
@@ -192,7 +230,7 @@ namespace ConasiCRM.Portable.Helper
         /// <returns></returns>
         public static async Task<CrmApiResponse> PostData(string path, object formContent = null)
         {
-            string Token = App.Current.Properties["Token"] as string;
+            string Token = UserLogged.AccessToken;
             var client = BsdHttpClient.Instance();
             CrmApiResponse res = new CrmApiResponse();
             try
@@ -227,7 +265,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await PostData(path, formContent);
                         return api_Response;
@@ -268,7 +306,7 @@ namespace ConasiCRM.Portable.Helper
         /// <returns></returns>
         public static async Task<CrmApiResponse> PatchData(string path, object formContent)
         {
-            string Token = App.Current.Properties["Token"] as string;
+            string Token = UserLogged.AccessToken;
             var client = BsdHttpClient.Instance();
             CrmApiResponse res = new CrmApiResponse();
             try
@@ -297,7 +335,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await PatchData(path, formContent);
                         return api_Response;
@@ -327,7 +365,7 @@ namespace ConasiCRM.Portable.Helper
 
         public static async Task<CrmApiResponse> DeleteRecord(string path)
         {
-            string Token = App.Current.Properties["Token"] as string;
+            string Token = UserLogged.AccessToken;
             var client = BsdHttpClient.Instance();
             CrmApiResponse res = new CrmApiResponse();
             try
@@ -348,7 +386,7 @@ namespace ConasiCRM.Portable.Helper
                     {
                         var body = await reLoginResponse.Content.ReadAsStringAsync();
                         GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
-                        App.Current.Properties["Token"] = tokenData.access_token;
+                        UserLogged.AccessToken = tokenData.access_token;
 
                         var api_Response = await DeleteRecord(path);
                         return api_Response;
@@ -383,10 +421,10 @@ namespace ConasiCRM.Portable.Helper
             var formContent = new FormUrlEncodedContent(new[]
                 {
                         new KeyValuePair<string, string>("client_id", "2ad88395-b77d-4561-9441-d0e40824f9bc"),
-                        new KeyValuePair<string, string>("username", UserLogged.User),
-                        new KeyValuePair<string, string>("password", UserLogged.Password),
+                        new KeyValuePair<string, string>("username","bsddev@conasi.vn"), // UserLogged.User), sai thông tin login, là user app chứ không phải admin
+                        new KeyValuePair<string, string>("password", "admin123$5"), // UserLogged.Password),
                         new KeyValuePair<string, string>("grant_type", "password"),
-                        new KeyValuePair<string, string>("resource", OrgConfig.SharePointResource)
+                        new KeyValuePair<string, string>("resource", OrgConfig.SharePointResource) //
                     });
             request.Content = formContent;
             var response = await client.SendAsync(request);
@@ -394,5 +432,7 @@ namespace ConasiCRM.Portable.Helper
             GetTokenResponse tokenData = JsonConvert.DeserializeObject<GetTokenResponse>(body);
             return tokenData;
         }
+
+        
     }
 }

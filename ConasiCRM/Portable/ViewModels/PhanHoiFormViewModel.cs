@@ -49,10 +49,6 @@ namespace ConasiCRM.Portable.ViewModels
         private OptionSet _unit;
         public OptionSet Unit { get => _unit; set { _unit = value; OnPropertyChanged(nameof(Unit)); } }
 
-        private List<List<OptionSet>> _allItemSourceCustomer;
-        public List<List<OptionSet>> AllItemSourceCustomer { get => _allItemSourceCustomer; set { _allItemSourceCustomer = value; OnPropertyChanged(nameof(AllItemSourceCustomer)); } }
-        private List<string> _tabsCustomer;
-        public List<string> TabsCustomer { get => _tabsCustomer; set { _tabsCustomer = value; OnPropertyChanged(nameof(TabsCustomer)); } }
         private OptionSet _customer;
         public OptionSet Customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(Customer)); } }
 
@@ -132,11 +128,11 @@ namespace ConasiCRM.Portable.ViewModels
                 await DeletLookup("customerid_account", singlePhanHoi.incidentid);
                 await DeletLookup("customerid_contact", singlePhanHoi.incidentid);
             }
-            else if (Customer.Title == "2") // account
+            else if (Customer.Title == "3") // account
             {
                 data["customerid_account@odata.bind"] = "/accounts(" + Customer.Val + ")";
             }
-            else if (Customer.Title == "1") // contact
+            else if (Customer.Title == "2") // contact
             {
                 data["customerid_contact@odata.bind"] = "/contacts(" + Customer.Val + ")";
             }
@@ -214,7 +210,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (!string.IsNullOrWhiteSpace(singlePhanHoi.caseorigincode))
             {
-                this.CaseOrigin = OriginData.GetOriginById(singlePhanHoi.caseorigincode);
+                this.CaseOrigin = CaseOriginData.GetOriginById(singlePhanHoi.caseorigincode);
             }
 
             if (!string.IsNullOrWhiteSpace(singlePhanHoi.subjectId))
@@ -266,15 +262,16 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadCaseLienQuan(string notContantIncidentId = null)
         {
             string codition = string.Empty;
-            codition = !string.IsNullOrWhiteSpace(notContantIncidentId) ? $@"<filter type='and'>
-                                                                              <condition attribute='incidentid' operator='ne' uitype='incident' value='{notContantIncidentId}' />
-                                                                            </filter>" : null;
+            codition = !string.IsNullOrWhiteSpace(notContantIncidentId) ? $@"<condition attribute='incidentid' operator='ne' uitype='incident' value='{notContantIncidentId}' />" : null;
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='incident'>
                                     <attribute name='title' alias ='Label'/>
                                     <attribute name='incidentid' alias= 'Val'/>
                                     <order attribute='createdon' descending='false' />
-                                    {codition}
+                                    <filter type='and'>
+                                       {codition}
+                                       <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}' />
+                                    </filter>
                                   </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("incidents", fetchXml);

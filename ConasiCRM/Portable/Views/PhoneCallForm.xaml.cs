@@ -2,6 +2,7 @@ using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -42,12 +43,53 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             BindingContext = viewModel = new PhoneCallViewModel();
+            DatePickerStart.DefaultDisplay = DateTime.Now;
+            DatePickerEnd.DefaultDisplay = DateTime.Now;
+            // kiểm tra page trước là page nào
+            var page_before = App.Current.MainPage.Navigation.NavigationStack.Last()?.GetType().Name;
+            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage" || page_before == "LeadDetailPage")
+            {
+                if (page_before == "ContactDetailPage" && ContactDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(ContactDetailPage.FromCustomer.Val))
+                {
+                    viewModel.CallTo = ContactDetailPage.FromCustomer;
+                    viewModel.Customer = ContactDetailPage.FromCustomer;
+                    Lookup_Customer.IsVisible = false;
+                    CustomerMapping.IsVisible = true;
+                    Lookup_CallTo_SelectedItemChange(null, null);
+                }
+                else if (page_before == "AccountDetailPage" && AccountDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(AccountDetailPage.FromCustomer.Val))
+                {
+                    viewModel.CallTo = AccountDetailPage.FromCustomer;
+                    viewModel.Customer = AccountDetailPage.FromCustomer;
+                    Lookup_Customer.IsVisible = false;
+                    CustomerMapping.IsVisible = true;
+                    Lookup_CallTo_SelectedItemChange(null, null);
+                }
+                else if (page_before == "LeadDetailPage" && LeadDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(LeadDetailPage.FromCustomer.Val))
+                {
+                    viewModel.CallTo = LeadDetailPage.FromCustomer;
+                    viewModel.Customer = LeadDetailPage.FromCustomer;
+                    Lookup_Customer.IsVisible = false;
+                    CustomerMapping.IsVisible = true;
+                    Lookup_CallTo_SelectedItemChange(null, null);
+                }
+                else
+                {
+                    Lookup_Customer.IsVisible = true;
+                    CustomerMapping.IsVisible = false;
+                }
+            }
+            else
+            {
+                Lookup_Customer.IsVisible = true;
+                CustomerMapping.IsVisible = false;
+            }
         }
 
         private void Create()
         {
-            this.Title = "Tạo mới cuộc gọi";
-            BtnSave.Text = "Thêm cuộc gọi";
+            this.Title = Language.tao_moi_cuoc_gọi_title;
+            BtnSave.Text = Language.tao_cuoc_goi;
             IsInit = true;
             BtnSave.Clicked += Create_Clicked;
         }
@@ -59,11 +101,11 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
-            this.Title = "Cập nhật cuộc gọi";
-            BtnSave.Text = "Cập nhật";
+            BtnSave.Text = Language.cap_nhat_cuoc_goi;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadPhoneCall(this.PhoneCallId);
             await viewModel.loadFromTo(this.PhoneCallId);
+            this.Title = Language.cap_nhat_cuoc_goi_title;
             if (viewModel.PhoneCellModel.activityid != Guid.Empty)
             {
                 OnCompleted?.Invoke(true);
@@ -82,29 +124,34 @@ namespace ConasiCRM.Portable.Views
         {
             if (string.IsNullOrWhiteSpace(viewModel.PhoneCellModel.subject))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập chủ đề cuộc gọi");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_chu_de);
                 return;
             }         
             if (viewModel.CallTo == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người nhận cuộc gọi");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_nguoi_nhan_cuoc_goi);
                 return;
             }
             if (string.IsNullOrWhiteSpace(viewModel.PhoneCellModel.phonenumber))
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt);
                 return;
             }
-            if (viewModel.PhoneCellModel.scheduledstart == null || viewModel.PhoneCellModel.scheduledend == null)
+            if (viewModel.PhoneCellModel.scheduledstart == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc và thời gian bắt đầu");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
                     return;
+            }
+            if (viewModel.PhoneCellModel.scheduledend == null)
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_ket_thuc);
+                return;
             }
             if (viewModel.PhoneCellModel.scheduledstart != null && viewModel.PhoneCellModel.scheduledend != null)
             {
                 if (this.compareDateTime(viewModel.PhoneCellModel.scheduledstart, viewModel.PhoneCellModel.scheduledend) != -1)
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                    ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                     return;
                 }
             }
@@ -115,30 +162,44 @@ namespace ConasiCRM.Portable.Views
             {
                 if (await viewModel.createPhoneCall())
                 {
-                    if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;                   
-                    ToastMessageHelper.ShortMessage("Đã thêm cuộc gọi");                   
+                    if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
+                    if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;
+                    if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
+                    if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
+                    if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+                    if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+                    if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
+                    if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
+                    ToastMessageHelper.ShortMessage(Language.tao_cuoc_goi_thanh_cong);                   
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Thêm cuộc gọi thất bại");
+                    ToastMessageHelper.ShortMessage(Language.tao_cuoc_goi_that_bai);
                 }
             }
             else
             {
                 if (await viewModel.UpdatePhoneCall(id))
                 {
+                    if (Dashboard.NeedToRefreshActivity.HasValue) Dashboard.NeedToRefreshActivity = true;
                     if (ActivityList.NeedToRefreshPhoneCall.HasValue) ActivityList.NeedToRefreshPhoneCall = true;
-                    ToastMessageHelper.ShortMessage("Cập nhật thành công");
+                    if (LichLamViecTheoThang.NeedToRefresh.HasValue) LichLamViecTheoThang.NeedToRefresh = true;
+                    if (LichLamViecTheoTuan.NeedToRefresh.HasValue) LichLamViecTheoTuan.NeedToRefresh = true;
+                    if (LichLamViecTheoNgay.NeedToRefresh.HasValue) LichLamViecTheoNgay.NeedToRefresh = true;
+                    if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
+                    if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
+                    if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_cuoc_goi_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật cuộc gọi thất bại");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_cuoc_goi_that_bai);
                 }
             }
         }
@@ -147,7 +208,9 @@ namespace ConasiCRM.Portable.Views
         {
             if (date != null && date1 != null )
             {
-                int result = DateTime.Compare(date.Value, date1.Value);
+                DateTime timeStart = new DateTime(date.Value.Year, date.Value.Month,date.Value.Day,date.Value.Hour,date.Value.Minute,0);
+                DateTime timeEnd = new DateTime(date1.Value.Year, date1.Value.Month, date1.Value.Day, date1.Value.Hour, date1.Value.Minute, 0);
+                int result = DateTime.Compare(timeStart, timeEnd);
                 if (result < 0)
                     return -1;
                 else if (result == 0)
@@ -170,7 +233,7 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (this.compareDateTime(viewModel.PhoneCellModel.scheduledstart, viewModel.PhoneCellModel.scheduledend) != -1)
                     {
-                        ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                        ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                         viewModel.PhoneCellModel.scheduledstart = viewModel.PhoneCellModel.scheduledend;
                     }
                 }
@@ -185,13 +248,13 @@ namespace ConasiCRM.Portable.Views
                 {
                     if (this.compareDateTime(viewModel.PhoneCellModel.scheduledstart, viewModel.PhoneCellModel.scheduledend) != -1)
                     {
-                        ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                        ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                         viewModel.PhoneCellModel.scheduledend = viewModel.PhoneCellModel.scheduledstart;
                     }    
                 }
                 else
                 {
-                    ToastMessageHelper.ShortMessage("Vui lòng chọn thời gian bắt đầu");
+                    ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
                 }
             }
         }

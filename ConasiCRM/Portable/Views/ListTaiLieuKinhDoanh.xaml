@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             Title="Tài Liệu Kinh Doanh"
+             Title="{x:Static language:Language.tai_lieu_kinh_doanh_title}"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters"
              x:Class="ConasiCRM.Portable.Views.ListTaiLieuKinhDoanh">
@@ -19,7 +20,7 @@
                                     <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" LineBreakMode="TailTruncation">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="Dự Án: "/>
+                                                <Span Text="{Binding Source={x:Static language:Language.du_an},StringFormat='{0}:'}"/>
                                                 <Span Text="{Binding subjecttitle}" TextColor="Black"/>
                                             </FormattedString>
                                         </Label.FormattedText>
@@ -27,7 +28,7 @@
                                     <Label FontSize="16" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" LineBreakMode="TailTruncation">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="Loại: "/>
+                                                <Span Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}"/>
                                                 <Span Text="{Binding literaturetypecode_format}" TextColor="Black"/>
                                             </FormattedString>
                                         </Label.FormattedText>

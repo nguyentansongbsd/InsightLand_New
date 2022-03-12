@@ -34,5 +34,6 @@ namespace ConasiCRM.Portable.Models
                 return "";
             }
         }
+        public bool bsd_specialbuyer { get; set; }
     }
 }

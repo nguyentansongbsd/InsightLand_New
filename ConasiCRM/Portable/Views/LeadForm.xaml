@@ -4,6 +4,7 @@
              xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"
              BackgroundColor="White"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
              x:Class="ConasiCRM.Portable.Views.LeadForm">
@@ -28,34 +29,40 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Text="Thông Tin Cơ Bản" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
+                                <Label Text="{x:Static language:Language.thong_tin_co_ban_title}" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="White" Padding="10">
-                                <controls:FormLabelRequired Text="Tiêu đề"/>
-                                <controls:MainEntry Text="{Binding singleLead.bsd_topic_label}" FontSize="15" Placeholder="Nhập tiêu đề" />
+                                <controls:FormLabelRequired Text="{x:Static language:Language.tieu_de}"/>
+                                <controls:MainEntry Text="{Binding singleLead.bsd_topic_label}" FontSize="15" Placeholder="{x:Static language:Language.nhap_tieu_de}" />
 
-                                <controls:FormLabel Text="Đánh giá"/>
-                                <controls:LookUp x:Name="lookUpDanhGia" Placeholder="Chọn đánh giá" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Rating}" ItemsSource="{Binding Ratings}"/>
+                                <controls:FormLabel Text="{x:Static language:Language.danh_gia}"/>
+                                <controls:LookUp x:Name="lookUpDanhGia" Placeholder="{x:Static language:Language.chon_danh_gia}" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Rating}" ItemsSource="{Binding Ratings}"/>
 
-                                <controls:FormLabelRequired Text="Họ tên"/>
-                                <controls:MainEntry Text="{Binding singleLead.lastname}" FontSize="15"  Placeholder="Nhập họ tên"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.ho_ten}"/>
+                                <controls:MainEntry Text="{Binding singleLead.lastname}" FontSize="15"  Placeholder="{x:Static language:Language.nhap_ho_ten}"/>
 
-                                <controls:FormLabelRequired Text="Số điện thoại"/>
-                                <controls:MainEntry x:Name="mobilephone_text" Text="{Binding singleLead.mobilephone}" Keyboard="Telephone" FontSize="15" Placeholder="Nhập số điện thoại"/>
+                                <controls:FormLabelRequired Text="{x:Static language:Language.sdt}"/>
+                                <controls:MainEntry x:Name="mobilephone_text" Text="{Binding singleLead.mobilephone}" Keyboard="Numeric" FontSize="15" Placeholder="{x:Static language:Language.nhap_sdt}"/>
 
-                                <controls:FormLabel Text="Số điện thoại công ty"/>
-                                <controls:MainEntry x:Name="telephone1_text" Text="{Binding singleLead.telephone1}" Keyboard="Telephone" FontSize="15"  Placeholder="Nhập số điện thoại công ty"/>
+                                <controls:FormLabel Text="{x:Static language:Language.sdt_cong_ty}"/>
+                                <controls:MainEntry x:Name="telephone1_text" Text="{Binding singleLead.telephone1}" Keyboard="Telephone" FontSize="15"  Placeholder="{x:Static language:Language.nhap_sdt_cong_ty}"/>
 
-                                <controls:FormLabel Text="Chức vụ"/>
-                                <controls:MainEntry x:Name="jobtitle_text" Text="{Binding singleLead.jobtitle}" FontSize="15"  Placeholder="Nhập chức vụ"/>
+                                <controls:FormLabel Text="{x:Static language:Language.chuc_vu}"/>
+                                <controls:MainEntry x:Name="jobtitle_text" Text="{Binding singleLead.jobtitle}" FontSize="15"  Placeholder="{x:Static language:Language.nhap_chuc_vu}"/>
 
-                                <controls:FormLabel Text="Email"/>
-                                <controls:MainEntry x:Name="emailaddress1_text" Keyboard="Email" Text="{Binding singleLead.emailaddress1}" FontSize="15"  Placeholder="Nhập Email" Margin="0,0,0,5"/>
+                                <controls:FormLabel Text="{x:Static language:Language.email}"/>
+                                <controls:MainEntry x:Name="emailaddress1_text" Keyboard="Email" Text="{Binding singleLead.emailaddress1}" FontSize="15"  Placeholder="{x:Static language:Language.nhap_email}" Margin="0,0,0,5"/>
 
-                                <!--<controls:MyNewEntry Text="{Binding AddressVn}" HasClearButton="false"  Grid.Column="1" Grid.Row="9" OnClicked="DiaChiVN_Clicked"/>-->
+                                <controls:FormLabel Text="{x:Static language:Language.gioi_tinh}"/>
+                                <controls:LookUp x:Name="lookUpGioiTinh" Placeholder="{x:Static language:Language.chon_gioi_tinh}" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"/>
 
+                                <controls:FormLabel Text="{x:Static language:Language.ngay_sinh}"/>
+                                <controls:DatePickerBoderControl x:Name="datePickerNgaySinh" Date="{Binding singleLead.new_birthday}" Placeholder="{x:Static language:Language.chon_ngay_sinh}" />
+
+                                <controls:FormLabel Text="{x:Static language:Language.nguon_khach_hang}"/>
+                                <controls:LookUp x:Name="lookUpLeadSource" Placeholder="{x:Static language:Language.chon_nguon_khach_hang}" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding LeadSource}" ItemsSource="{Binding LeadSources}"/>
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>
@@ -63,98 +70,59 @@
                     <telerikPrimitives:RadExpander IsExpanded="True" AutomationId="masterCardExpander" BorderColor="Transparent">
                         <telerikPrimitives:RadExpander.Header>
                             <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
-                                <Label Text="Thông Tin Công Ty" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
+                                <Label Text="{x:Static language:Language.thong_tin_cong_ty_title}" FontSize="15" FontAttributes="Bold" TextColor="Black" Margin="0,5"/>
                             </telerikPrimitives:ExpanderHeader>
                         </telerikPrimitives:RadExpander.Header>
                         <telerikPrimitives:RadExpander.Content>
                             <StackLayout BackgroundColor="#ffffff" Padding="10" >
-                                <controls:FormLabel VerticalOptions="Center" Text="Tên công ty" FontSize="15" />
-                                <controls:MainEntry x:Name="companyname_text" Text="{Binding singleLead.companyname}" Placeholder="Nhập tên công ty" FontSize="15"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.ten_cong_ty}" FontSize="15" />
+                                <controls:MainEntry x:Name="companyname_text" Text="{Binding singleLead.companyname}" Placeholder="{x:Static language:Language.nhap_ten_cong_ty}" FontSize="15"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Website" FontSize="15" />
-                                <controls:MainEntry x:Name="websiteurl_text" Text="{Binding singleLead.websiteurl}" Placeholder="Nhập website công ty" FontSize="15"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.website}" FontSize="15" />
+                                <controls:MainEntry x:Name="websiteurl_text" Text="{Binding singleLead.websiteurl}" Placeholder="{x:Static language:Language.nhap_website}" FontSize="15"/>
 
-                                <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="Địa chỉ công ty" FontSize="15" />
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <controls:MainEntry Grid.ColumnSpan="2"  Text="{Binding AddressComposite}" ShowClearButton="False" Placeholder="Chọn địa chỉ công ty" FontSize="15"/>
-                                    <StackLayout Grid.Column="0">
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="Address_Tapped"/>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                    <Label Grid.Column="1" Text="&#xf057;" IsVisible="{Binding IsShowbtnClearAddress}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#888888" VerticalOptions="Center" Padding="5">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ClearAddress_Tapped"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </Grid>
+                                <controls:FormLabel VerticalOptions="Center" HorizontalOptions="Start" Text="{x:Static language:Language.dia_chi_cong_ty}" FontSize="15" />
+                                <controls:LookUpAddress Placeholder="{x:Static language:Language.chon_dia_chi_cong_ty}" BottomModal="{Reference BottomModal}" SelectedItem="{Binding Address}" CenterModal="{Reference CenterModal}"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Mô tả" FontSize="15"/>
-                                <controls:MainEditor x:Name="description_text" Text="{Binding singleLead.description}" Placeholder="Nhập mô tả" FontSize="15" HeightRequest="100"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.mo_ta}" FontSize="15"/>
+                                <controls:MainEditor x:Name="description_text" Text="{Binding singleLead.description}" Placeholder="{x:Static language:Language.nhap_mo_ta}" FontSize="15" HeightRequest="100"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Lĩnh vực" FontSize="15"/>
-                                <controls:LookUp x:Name="lookUpLinhVuc" Placeholder="Chọn lĩnh vực" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding IndustryCode}" ItemsSource="{Binding list_industrycode_optionset}"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.linh_vuc}" FontSize="15"/>
+                                <controls:LookUp x:Name="lookUpLinhVuc" Placeholder="{x:Static language:Language.chon_linh_vuc}" BottomModal="{Reference LookUpModal}" NameDisplay="Label" SelectedItem="{Binding IndustryCode}" ItemsSource="{Binding list_industrycode_optionset}"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Doanh thu mỗi năm" FontSize="15" />
-                                <controls:DecimalEntry x:Name="test" Price="{Binding singleLead.revenue}" Placeholder="Nhập doanh thu mỗi năm" />
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.doanh_thu_moi_nam}" FontSize="15" />
+                                <controls:DecimalEntry x:Name="test" Price="{Binding singleLead.revenue}" Placeholder="{x:Static language:Language.nhap_doanh_thu_moi_nam}" />
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Số lượng nhân viên" FontSize="15"/>
-                                <controls:MainEntry x:Name="numberofemployees_text" Text="{Binding singleLead.numberofemployees}" Placeholder="Nhập số lượng nhân viên" Keyboard="Numeric"  FontSize="16"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.so_luong_nhan_vien}" FontSize="15"/>
+                                <controls:MainEntry x:Name="numberofemployees_text" Text="{Binding singleLead.numberofemployees}" Placeholder="{x:Static language:Language.nhap_so_luong_nhan_vien}" Keyboard="Numeric"  FontSize="16"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Mã SIC" FontSize="15"/>
-                                <controls:MainEntry x:Name="sic_text" Text="{Binding singleLead.sic}" Placeholder="Nhập mã SIC" FontSize="15"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.ma_sic}" FontSize="15"/>
+                                <controls:MainEntry x:Name="sic_text" Text="{Binding singleLead.sic}" Placeholder="{x:Static language:Language.nhap_ma_sic}" FontSize="15"/>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Đơn vị tiền tệ" FontSize="15" />
-                                <controls:LookUp x:Name="lookUpCurrency" Placeholder="Chọn đơn vị tiền tệ" BottomModal="{Reference LookUpModal}" ItemsSource="{Binding list_currency_lookup}" SelectedItem="{Binding SelectedCurrency}" NameDisplay="Label"/>
+                                <!--<controls:FormLabel VerticalOptions="Center" Text="Đơn vị tiền tệ" FontSize="15" />
+                                <controls:LookUp x:Name="lookUpCurrency" Placeholder="Chọn đơn vị tiền tệ" BottomModal="{Reference LookUpModal}" ItemsSource="{Binding list_currency_lookup}" SelectedItem="{Binding SelectedCurrency}" NameDisplay="Label"/>-->
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Chiến dịch" FontSize="15"/>
-                                <controls:LookUp x:Name="lookUpChienDich" Placeholder="Chọn chiến dịch" NameDisplay="Label" BottomModal="{Reference LookUpModal}" SelectedItem="{Binding Campaign}" ItemsSource="{Binding list_campaign_lookup}"/>
+                                <controls:FormLabel VerticalOptions="Center" Text="{x:Static language:Language.chien_dich}" FontSize="15"/>
+                                <controls:LookUp x:Name="lookUpChienDich" Placeholder="{x:Static language:Language.chon_chien_dich}" NameDisplay="Label" BottomModal="{Reference LookUpModal}" SelectedItem="{Binding Campaign}" ItemsSource="{Binding list_campaign_lookup}"/>
 
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <controls:FormLabel Grid.Column="0" VerticalOptions="Center" Text="Tài liệu tiếp thị" FontSize="15"/>
+                                    <controls:FormLabel Grid.Column="0" VerticalOptions="Center" Text="{x:Static language:Language.gui_tai_lieu_tiep_thi}" FontSize="15"/>
                                     <CheckBox Grid.Column="1" IsChecked="{Binding singleLead.donotsendmm}" HorizontalOptions="End" Color="#1C78C2"/>
                                 </Grid>
 
-                                <controls:FormLabel VerticalOptions="Center" Text="Ngày cuối chiến dịch" FontSize="15"/>
-                                <controls:MainEntry Text="{Binding singleLead.lastusedincampaign,StringFormat='{0:dd/MM/yyy}'}" Placeholder="Ngày cuối chiến dịch" IsEnabled="False"/>
+                                <!--<controls:FormLabel VerticalOptions="Center" Text="Ngày cuối chiến dịch" FontSize="15"/>
+                                <controls:MainEntry Text="{Binding singleLead.lastusedincampaign,StringFormat='{0:dd/MM/yyy}'}" Placeholder="Ngày cuối chiến dịch" IsEnabled="False"/>-->
                             </StackLayout>
                         </telerikPrimitives:RadExpander.Content>
                     </telerikPrimitives:RadExpander>
                 </StackLayout>
             </ScrollView>
             <StackLayout AbsoluteLayout.LayoutBounds="0,1,1,60" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" BackgroundColor="White">
-                <Button x:Name="btn_save_lead" Text="Tạo khách hàng" Clicked="SaveLead_Clicked" Margin="10" Padding="10,5" HeightRequest="40" CornerRadius="10" BackgroundColor="#2196F3" TextColor="White"/>
+                <Button x:Name="btn_save_lead" Text="{x:Static language:Language.tao_khach_hang}" FontAttributes="Bold" Clicked="SaveLead_Clicked" Margin="10" Padding="10,5" HeightRequest="40" CornerRadius="10" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White"/>
             </StackLayout>
 
-            <controls:CenterModal x:Name="centerModalAddress" Title="Thiết lập địa chỉ">
-                <controls:CenterModal.Body>
-                    <ScrollView>
-                        <StackLayout Margin="10">
-                            <controls:FormLabel Text="Quốc gia"/>
-                            <controls:LookUp x:Name="lookUpCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountry}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="Country_Changed"/>
-
-                            <controls:FormLabel Text="ZIP code"/>
-                            <controls:MainEntry Placeholder="Nhập ZIP code" Text="{Binding AddressPostalCode}"/>
-
-                            <controls:FormLabel Text="Tỉnh thành"/>
-                            <controls:LookUp x:Name="lookUpProvince" Placeholder="Chọn tỉnh thành" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvince}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="Province_Changed"/>
-
-                            <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp x:Name="lookUpDistrict" Placeholder="Chọn quận/huyện" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCity}" ItemsSource="{Binding list_district_lookup}" SelectedItemChange="District_Changed"/>
-
-                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
-                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1}"/>
-                        </StackLayout>
-                    </ScrollView>
-                </controls:CenterModal.Body>
-                <controls:CenterModal.Footer>
-                    <Grid ColumnDefinitions="*,*" Margin="10">
-                        <Button Grid.Column="0" Text="Đóng" Clicked="CloseAddress_Clicked" HeightRequest="40" BackgroundColor="White" TextColor="{StaticResource NavigationPrimary}" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                        <Button Grid.Column="1" Text="Xác nhận" Clicked="ConfirmAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderColor="{StaticResource NavigationPrimary}" BorderWidth="1" CornerRadius="10"/>
-                    </Grid>
-                </controls:CenterModal.Footer>
-            </controls:CenterModal>
-
+            <controls:CenterModal x:Name="CenterModal" />
+            <controls:BottomModal x:Name="BottomModal"/>
             <controls:BottomModal x:Name="LookUpModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>

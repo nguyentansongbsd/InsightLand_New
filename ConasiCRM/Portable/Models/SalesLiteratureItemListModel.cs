@@ -1,4 +1,5 @@
 ﻿using System;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 
 namespace ConasiCRM.Portable.Models
@@ -19,13 +20,13 @@ namespace ConasiCRM.Portable.Models
             {
                 switch (value)
                 {
-                    case 0: statusLabel = "Đang tải...";
+                    case 0: statusLabel = Language.dang_tai; //downloading
                         statusColor = Xamarin.Forms.Color.Black;
                         break;
-                    case 1: statusLabel = "Thành công";
+                    case 1: statusLabel = Language.thanh_cong; //successed
                         statusColor = Xamarin.Forms.Color.Green;
                         break;
-                    case 2: statusLabel = "Thất bại";
+                    case 2: statusLabel = Language.that_bai; //Failed
                         statusColor = Xamarin.Forms.Color.Red;
                         break;
                 }
@@ -35,7 +36,7 @@ namespace ConasiCRM.Portable.Models
             } }
         
         private string _statusLabel;
-        public string statusLabel { get => _statusLabel == null ? "Đang tải..." : _statusLabel; set { _statusLabel = value; OnPropertyChanged(nameof(statusLabel)); } }
+        public string statusLabel { get => _statusLabel == null ? Language.dang_tai : _statusLabel; set { _statusLabel = value; OnPropertyChanged(nameof(statusLabel)); } }
 
         private Xamarin.Forms.Color _statusColor;
         public Xamarin.Forms.Color statusColor { get => _statusColor; set { _statusColor = value;  OnPropertyChanged(nameof(statusColor)); } }

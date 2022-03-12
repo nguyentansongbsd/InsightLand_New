@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              BackgroundColor="White"
-             Title="Đặt chỗ"
+             Title="{x:Static language:Language.giu_cho_title}"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ConasiCRM.Portable.Controls"           
-             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters" xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
-             x:Class="ConasiCRM.Portable.Views.QueueList">
+             xmlns:converter ="clr-namespace:ConasiCRM.Portable.Converters" 
+             xmlns:telerikPrimitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+             x:Class="ConasiCRM.Portable.Views.QueueList"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:InformationLabelConverter x:Key="InformationLabelConverter"/>
@@ -13,71 +15,51 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
-            <Grid RowDefinitions="Auto,*" RowSpacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+            <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+
                 <controls:SearchBarFrame  Grid.Row="0" Margin="10,5">
-                    <SearchBar Text="{Binding Keyword}" Placeholder="Từ khoá" FontSize="15" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
+                    <SearchBar Text="{Binding Keyword}" Placeholder="{x:Static language:Language.tim_kiem}" FontSize="15" SearchButtonPressed="SearchBar_SearchButtonPressed" TextChanged="SearchBar_TextChanged"/>
                 </controls:SearchBarFrame>
-                
-                <controls:BsdListView x:Name="listView" Grid.Row="1" ItemsSource="{Binding Data}" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
+
+                <Grid ColumnDefinitions="*,*" Grid.Row="1" Margin="10,5">
+                    <controls:Filter x:Name="FiltersStatus" Grid.Column="0" Placeholder="{x:Static language:Language.tinh_trang}" SelectedItemChanged="FiltersStatus_SelectedItemChanged" ItemsSource="{Binding FiltersStatus}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedIds="{Binding FilterStatus}" Multiple="True" SelectedDisplay="Selected"/>
+                    <controls:Filter x:Name="FiltersProject" Grid.Column="1" Placeholder="{x:Static language:Language.du_an}" SelectedItemChange="FiltersProject_SelectedItemChange" ItemsSource="{Binding FiltersProject}" BottomModal="{x:Reference BottomModal}" NameDisplay="Label" SelectedItem="{Binding FilterProject}" Multiple="False"/>
+                </Grid>
+
+                <controls:BsdListView x:Name="listView" Grid.Row="2" ItemsSource="{Binding Data}" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
                     <controls:BsdListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" BackgroundColor ="White" Padding="15,10" Margin="0,1">
-                                    <Label Grid.Row="0" Grid.Column="0" LineBreakMode="TailTruncation">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="{Binding name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource NavigationPrimary}"/>
-                                                <Span Text="{Binding statuscode_label,Converter={StaticResource InformationLabelConverter}}" FontSize="16"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <telerikPrimitives:RadBorder Grid.Row="0" Grid.Column="1" BorderThickness="1" HeightRequest="26" WidthRequest="26" CornerRadius="13" BackgroundColor="Green">
-                                        <Label Text="&#xf095;" FontSize="15" Padding="3" TextColor="White" FontFamily="FontAwesomeSolid" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" >
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path= BindingContext.PhoneCommand, Source={x:Reference listView}}" CommandParameter="{Binding telephone}"/>
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </telerikPrimitives:RadBorder>
-                                    <Label Grid.Row="1" Grid.Column="0" FontSize="15" Grid.ColumnSpan="2" LineBreakMode="TailTruncation">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Căn hộ: " TextColor="#444444"/>
-                                                <Span Text="{Binding unit_name}" TextColor="#333333"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label FontSize="15" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" LineBreakMode="TailTruncation">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Khách hàng: " TextColor="#444444"/>
-                                                <Span Text="{Binding customername}" TextColor="#333333"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label FontSize="15" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" LineBreakMode="TailTruncation">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Tiền đặt chỗ: " TextColor="#444444"/>
-                                                <Span Text="{Binding bsd_queuingfee_format}" TextColor="#333333"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label Grid.Row="4" Grid.Column="0" FontSize="15" Grid.ColumnSpan="2" LineBreakMode="TailTruncation">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Thời gian đặt chỗ: " TextColor="#444444"/>
-                                                <Span Text="{Binding createdon_format}" TextColor="#333333"/>
-                                                <Span Text=" - " TextColor="#444444"/>
-                                                <Span Text="{Binding bsd_queuingexpired_format}" TextColor="#333333"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
+                                    <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+                                        <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Start" Grid.Column="0">
+                                            <Label Text="{Binding Source={x:Static language:Language.ma},StringFormat='{0}:'}" TextColor="Gray" FontSize="14" Grid.Column="0"/>
+                                            <Label Text="{Binding bsd_queuenumber}" TextColor="Gray" FontSize="14" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                        </Grid>
+                                        <Label Text="{Binding createdon,StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="1" FontSize="14" TextColor="Gray"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="1" Grid.Column="0">
+                                        <telerikPrimitives:RadBorder CornerRadius="5" BackgroundColor="{Binding statuscode_color}" VerticalOptions="StartAndExpand">
+                                            <Label Grid.Column="0" Text="{Binding statuscode_format}" FontSize="14" TextColor="White" FontAttributes="Bold" Margin="5"/>
+                                        </telerikPrimitives:RadBorder>
+                                        <Label Grid.Column="1" Text="{Binding name}" TextColor="{StaticResource NavigationPrimary}" FontSize="16" FontAttributes="Bold" MaxLines="1" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" Grid.Row="2">
+                                        <Label Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding customername}" TextColor="#444444" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,Auto,*" Grid.Row="3">
+                                        <Label Text="{Binding Source={x:Static language:Language.thoi_gian_het_han},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
+                                        <Label Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}" TextColor="#444444" FontSize="15" Grid.Column="1" />
+                                        <Label Text="{Binding bsd_queuingexpired ,StringFormat=' {0:HH:mm}'}" TextColor="#444444" FontSize="15" Grid.Column="2" />
+                                    </Grid>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </controls:BsdListView.ItemTemplate>
                 </controls:BsdListView>
             </Grid>
+            <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -20,7 +20,6 @@ namespace ConasiCRM.Portable.Models
         public string district_name { get; set; }
         public string province_name { get; set; }
         public string country_name { get; set; }
-
         public string bsd_address
         {
             get
@@ -50,5 +49,6 @@ namespace ConasiCRM.Portable.Models
                 return string.Join(", ", address);
             }
         }
+        public bool bsd_specialbuyer { get; set; }
     }
 }

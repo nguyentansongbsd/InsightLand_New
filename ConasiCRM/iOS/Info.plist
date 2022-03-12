@@ -21,19 +21,15 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>12.1</string>
-	<key>CFBundleDisplayName</key>
-	<string>Insight Land</string>
+	<string>11.0</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.xamarin.recipe.CreateBundle</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>com.bsdsolutions.conasi</string>
 	<key>UILaunchStoryboardName</key>
-	<string>SplashScreen</string>
+	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>ConasiCRM.iOS</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera Permission</string>
+	<string>This app needs access to the camera to take photos.</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Library Permission</string>
 	<key>NSContactsUsageDescription</key>
@@ -41,10 +37,20 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendar Permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photos Permission</string>
-	<key>XSLaunchImageAssets</key>
-	<string>Assets.xcassets/LaunchImage.launchimage</string>
+	<string>This app needs access to photos.</string>
 	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<string>Assets.xcassets/AppIcon-Conasi.appiconset</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to microphone.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs access to the photo gallery.</string>
+	<key>CFBundleDisplayName</key>
+	<string>Conasi CRM</string>
+	<key>UIMainStoryboardFile</key>
+	<string>LaunchScreen</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>5</string>
 </dict>
 </plist>

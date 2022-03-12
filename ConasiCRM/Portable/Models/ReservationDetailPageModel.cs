@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.ViewModels;
+﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,9 +21,11 @@ namespace ConasiCRM.Portable.Models
         public Guid purchaser_contactid { get; set; } // id khach hang contact
         public string purchaser_contact_name { get; set; } // ten khach hang contact
         public string bsd_reservationno { get; set; } // đặt cọc trang đầu
-        public string quotenumber { get; set; } // bảng tính giá trang đầu
+        public string bsd_quotationnumber { get; set; } // bảng tính giá trang đầu
+        public string quotenumber { get; set; }
         public Guid unit_id { get; set; } // id unit trang đầu
         public string unit_name { get; set; } // tên unit trang đầu
+        public string bsd_projectcode { get; set; }
 
         // chính sách
         public Guid bsd_discounttypeid { get; set; } // id discount
@@ -40,20 +43,25 @@ namespace ConasiCRM.Portable.Models
         private string _paymentscheme_name; // tên phương thức thanh toán
         public string paymentscheme_name { get => _paymentscheme_name; set { _paymentscheme_name = value; OnPropertyChanged(nameof(paymentscheme_name)); } }
 
-        // thông tin bán hàng
+        // thông tin bán hàng 
         public Guid queue_id { get; set; } // id đặt chỗ
         public string queue_name { get; set; } // tên đặt chỗ
         public bool bsd_followuplist { get; set; } // danh sách theo dõi
-
+        public string bsd_followuplist_format { get { return BoolToStringData.GetStringByBool(bsd_followuplist); } }
         // thông tin sản phẩm
         public int bsd_unitstatus { get; set; } // tình trạng sản phẩm
+        public string bsd_unitstatus_format { get => StatusCodeUnit.GetStatusCodeById(bsd_unitstatus.ToString()).Name; }
         public decimal bsd_constructionarea { get; set; } // diện tích xây dựng
+        public string bsd_constructionarea_format { get => StringFormatHelper.FormatCurrency(bsd_constructionarea); }
         public decimal bsd_netusablearea { get; set; } // diện tích sử dụng
+        public string bsd_netusablearea_format { get => StringFormatHelper.FormatCurrency(bsd_netusablearea); }
         public decimal bsd_actualarea { get; set; } // diện tích thực
+        public string bsd_actualarea_format { get => StringFormatHelper.FormatCurrency(bsd_actualarea); }
 
         // thông tin chi tiết
         public Guid project_id { get; set; } // id dự án
         public string project_name { get; set; } // tên dự án
+        public int quotationvalidate { get; set; }
         public Guid phaseslaunch_id { get; set; } // id đợt mở bán
         public string phaseslaunch_name { get; set; } // tên đợt mở bán
         public Guid pricelevel_id_phaseslaunch { get; set; } // id bảng giá đmb
@@ -63,8 +71,21 @@ namespace ConasiCRM.Portable.Models
         public Guid taxcode_id { get; set; } // id thuế
         public string taxcode_name { get; set; } // tên thuế
         public decimal bsd_bookingfee { get; set; } // phí giữ chỗ
+        public string bsd_bookingfee_format { get => StringFormatHelper.FormatCurrency(bsd_bookingfee); }
         public decimal bsd_depositfee { get; set; } // phí đặt cọc 
-        public int bsd_contracttypedescripton { get; set; } // loại hợp đồng
+        public string bsd_depositfee_format { get => StringFormatHelper.FormatCurrency(bsd_depositfee); }
+        public int bsd_contracttypedescripton { get; set; } // loại hợp đồng 
+        public string bsd_contracttypedescripton_format
+        {
+            get
+            {
+                var type = ContractTypeData.GetContractTypeById(bsd_contracttypedescripton.ToString());
+                if (type != null)
+                    return type.Label;
+                else
+                    return "";
+            }
+        }
         public decimal bsd_totalamountpaid { get; set; } // tổng tiền thanh toán 
 
         // thông tin báo giá
@@ -257,21 +278,31 @@ namespace ConasiCRM.Portable.Models
 
         // thông tin giá
         public decimal bsd_detailamount { get; set; } // giá gốc
+        public string bsd_detailamount_format { get => StringFormatHelper.FormatCurrency(bsd_detailamount); }
         public decimal bsd_discount { get; set; } // chiết khấu
+        public string bsd_discount_format { get => StringFormatHelper.FormatCurrency(bsd_discount); }
         public decimal bsd_packagesellingamount { get; set; } // đkbg
+        public string bsd_packagesellingamount_format { get => StringFormatHelper.FormatCurrency(bsd_packagesellingamount); }
         public decimal bsd_totalamountlessfreight { get; set; } // giá bán thực
+        public string bsd_totalamountlessfreight_format { get => StringFormatHelper.FormatCurrency(bsd_totalamountlessfreight); }
         public decimal bsd_landvaluededuction { get; set; } // giá trị qsdđ
+        public string bsd_landvaluededuction_format { get => StringFormatHelper.FormatCurrency(bsd_landvaluededuction); }
         public decimal totaltax { get; set; } // thuế
+        public string totaltax_format { get => StringFormatHelper.FormatCurrency(totaltax); }
         public decimal bsd_freightamount { get; set; } // phí bảo trì
+        public string bsd_freightamount_format { get => StringFormatHelper.FormatCurrency(bsd_freightamount); }
         public decimal totalamount { get; set; } // tổng tiền
+        public string totalamount_format { get => StringFormatHelper.FormatCurrency(totalamount); }
 
         // phí quản lý
         public decimal bsd_managementfee { get; set; } // phí quản lý 
+        public string bsd_managementfee_format { get => StringFormatHelper.FormatCurrency(bsd_managementfee); }
         public int bsd_numberofmonthspaidmf { get; set; } // số tháng đóng phí
         public int bsd_waivermanafeemonth { get; set; } // miễn giảm
 
         // đã nhận tiền đặt cọc 
         public bool bsd_salesdepartmentreceiveddeposit { get; set; }  // nhận tiền đặt cọc 
+        public string bsd_salesdepartmentreceiveddeposit_format { get { return BoolToStringData.GetStringByBool(bsd_salesdepartmentreceiveddeposit); } }
 
         public DateTime? _bsd_receiptdate; // ngày
         public DateTime? bsd_receiptdate

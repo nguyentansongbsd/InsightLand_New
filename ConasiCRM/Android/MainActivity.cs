@@ -11,6 +11,10 @@ using System.IO;
 using ConasiCRM.Droid;
 using Xamarin.Forms;
 using ConasiCRM.Portable.IServices;
+using MediaManager;
+using FFImageLoading;
+using Android.Content.Res;
+using ConasiCRM.Portable;
 
 namespace ConasiCRM.Android
 {
@@ -19,22 +23,25 @@ namespace ConasiCRM.Android
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;          
+            TabLayoutResource = ConasiCRM.Droid.Resource.Layout.Tabbar;
+            ToolbarResource = ConasiCRM.Droid.Resource.Layout.Toolbar;          
 
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             Stormlion.PhotoBrowser.Droid.Platform.Init(this);
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            CrossMediaManager.Current.Init(this);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
             LoadApplication(new Portable.App());
             DependencyService.Get<ILoadingService>().Initilize();
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, global::Android.Content.PM.Permission[] grantResults)
         {
-            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         public static MainActivity Current { private set; get; }

@@ -10,6 +10,10 @@ using FFImageLoading.Forms;
 using System.Collections.Generic;
 using Stormlion.PhotoBrowser;
 using System.Linq;
+using MediaManager;
+using MediaManager.Forms;
+using System.Collections.ObjectModel;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -18,26 +22,23 @@ namespace ConasiCRM.Portable.Views
     {
         public Action<bool> OnCompleted;
         public static bool? NeedToRefreshQueue = null;
+        public static bool? NeedToRefreshQuotation = null;
         private UnitInfoViewModel viewModel;
-        //public List<Photo> GetPhotos = new List<Photo>();
 
         public UnitInfo(Guid id)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new UnitInfoViewModel();
             NeedToRefreshQueue = false;
+            NeedToRefreshQuotation = false;
             viewModel.UnitId = id;
             Init();
         }
         public async void Init()
         {
-            //GetPhotos.Add(new Photo() { URL = "unit1.jpg" });
-            //GetPhotos.Add(new Photo() { URL = "unit2.jpg" });
-
-            //carouseView.ItemsSource = GetPhotos;
-
             await Task.WhenAll(
                 viewModel.LoadUnit(),
+                viewModel.LoadAllCollection(),
                 viewModel.CheckShowBtnBangTinhGia()
                 );
             
@@ -77,7 +78,6 @@ namespace ConasiCRM.Portable.Views
                     viewModel.IsShowBtnBangTinhGia = false;
                 }
                 SetButton();
-
                 OnCompleted?.Invoke(true);
             }
             else
@@ -94,10 +94,20 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 viewModel.PageDanhSachDatCho = 1;
                 viewModel.list_danhsachdatcho.Clear();
-                await viewModel.LoadQueuesForContactForm();
+                await viewModel.LoadQueues();
                 NeedToRefreshQueue = false;
                 LoadingHelper.Hide();
-            }    
+            }
+            if (NeedToRefreshQuotation == true)
+            {
+                LoadingHelper.Show();
+                viewModel.PageBangTinhGia = 1;
+                viewModel.BangTinhGiaList.Clear();
+                await viewModel.LoadDanhSachBangTinhGia();
+                NeedToRefreshQuotation = false;
+                LoadingHelper.Hide();
+            }
+            await CrossMediaManager.Current.Stop();
         }
 
         public void SetButton()
@@ -150,10 +160,12 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.IsLoaded == false)
             {
+                viewModel.BangTinhGiaList = new ObservableCollection<ReservationListModel>();
                 await Task.WhenAll(
-                    viewModel.LoadQueuesForContactForm(),
-                    viewModel.LoadReservationForContactForm(),
-                    viewModel.LoadOptoinEntryForContactForm()
+                    viewModel.LoadQueues(),
+                    viewModel.LoadDanhSachDatCoc(),
+                    viewModel.LoadDanhSachBangTinhGia(),
+                    viewModel.LoadOptoinEntry()
                 );
             }
             LoadingHelper.Hide();
@@ -163,7 +175,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachDatCho++;
-            await viewModel.LoadQueuesForContactForm();
+            await viewModel.LoadQueues();
             LoadingHelper.Hide();
         }
 
@@ -171,7 +183,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachDatCoc++;
-            await viewModel.LoadReservationForContactForm();
+            await viewModel.LoadDanhSachDatCoc();
             LoadingHelper.Hide();
         }
 
@@ -179,7 +191,7 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageDanhSachHopDong++;
-            await viewModel.LoadOptoinEntryForContactForm();
+            await viewModel.LoadOptoinEntry();
             LoadingHelper.Hide();
         }
 
@@ -196,17 +208,32 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy sản phẩm");
+                  //  ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
                 }
             };
-            LoadingHelper.Hide();
         }
 
         private void BangTinhGia_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            ToastMessageHelper.ShortMessage("chua co page");
-            LoadingHelper.Hide();
+            ReservationForm reservationForm = new ReservationForm(Guid.Parse(viewModel.UnitInfo.productid), null, null, null,null);
+            reservationForm.CheckReservation = async (isSuccess) => {
+                if (isSuccess == 0)
+                {
+                    await Navigation.PushAsync(reservationForm);
+                    LoadingHelper.Hide();
+                }
+                else if (isSuccess == 1)
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.san_pham_khong_the_tao_bang_tinh_gia);
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_san_pham);
+                }
+            };
         }
 
         private void GiuChoItem_Tapped(object sender, EventArgs e)
@@ -223,79 +250,115 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                   // ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
                 }
             };
         }
 
-        //private void Button_Clicked(object sender, EventArgs e)
-        //{
-        //    Navigation.PushAsync(new UnitImageGallery("Units", Id.ToString(), viewModel.UnitInfo.name, "Hình Ảnh Căn Hộ"));
-        //}
-
-        //private void Button_Clicked_Video(object sender, EventArgs e)
-        //{
-        //    Navigation.PushAsync(new UnitVideoGallery("Units",Id.ToString(),viewModel.UnitInfo.name,"Phim Căn Hộ"));
-        //}
-
-
-
-
-        /// <summary>
-        /// ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //private async void Meida_Tapped(object sender, EventArgs e)
-        //{
-        //    LoadingHelper.Show();
-        //    Grid mediaElement = (Grid)sender;
-        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-        //    CollectionData item = a.CommandParameter as CollectionData;
-        //    if (item != null)
-        //    {
-        //        LoadingHelper.Show();
-        //        await Navigation.PushAsync(new ShowMedia(item.MediaSource));
-        //        LoadingHelper.Hide();
-        //    }
-        //}
-
-        private void Image_Tapped(object sender, EventArgs e)
+        private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
         {
-            CachedImage image = (CachedImage)sender;
-
-            string url = (image.GestureRecognizers[0] as TapGestureRecognizer).CommandParameter as string;
-            //var img = GetPhotos.Where(x => x.URL == url).SingleOrDefault();
-            //var index = GetPhotos.IndexOf(img);
-            //new PhotoBrowser
-            //{
-            //    Photos = GetPhotos,
-            //    EnableGrid = true,
-            //    StartIndex = index,
-            //}.Show();
-            //var a = (TapGestureRecognizer)image.GestureRecognizers[0];
-            //CollectionData item = a.CommandParameter as CollectionData;
-            //if (item != null)
-            //{
-            //    viewModel.photoBrowser.StartIndex = item.Index;
-            //    viewModel.photoBrowser.Show();
-            //}
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId);
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
+                }
+            };
         }
 
-        //private void MediaElement_MediaOpened(object sender, EventArgs e)
-        //{
-        //    viewModel.OnComplate = false;
-        //}
+        private async void ShowMoreBangTinhGia_Clicked(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            viewModel.PageBangTinhGia++;
+            await viewModel.LoadDanhSachBangTinhGia();
+            LoadingHelper.Hide();
+        }
 
-        //private void MediaElement_MediaFailed(object sender, EventArgs e)
-        //{
-        //    Grid mediaElement = (Grid)sender;
-        //    var a = (TapGestureRecognizer)mediaElement.GestureRecognizers[0];
-        //    CollectionData item = a.CommandParameter as CollectionData;
-        //    if (item != null)
-        //    {
-        //        viewModel.Data.Remove(item);
-        //    }
-        //}
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_vui_long_thu_lai);
+                }
+            };
+        }
+
+        private void ItemSlider_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = (CollectionData)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item.SharePointType == SharePointType.Image)
+            {
+                var img = viewModel.Photos.SingleOrDefault(x => x.URL == item.ImageSource);
+                var index = viewModel.Photos.IndexOf(img);
+
+                new PhotoBrowser()
+                {
+                    Photos = viewModel.Photos,
+                    StartIndex = index,
+                    EnableGrid = true
+                }.Show();
+            }
+            else if (item.SharePointType == SharePointType.Video)
+            {
+                ShowMedia showMedia = new ShowMedia(Config.OrgConfig.SharePointProjectId, item.MediaSourceId);
+                showMedia.OnCompleted = async (isSuccess) => {
+                    if (isSuccess)
+                    {
+                        await Navigation.PushAsync(showMedia);
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage(Language.khong_lay_duoc_video);
+                    }
+                };
+            }
+            LoadingHelper.Hide();
+        }
+
+        private void ScollTo_Video_Tapped(object sender, EventArgs e)
+        {
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Video));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
+
+        private void ScollTo_Image_Tapped(object sender, EventArgs e)
+        {
+            var index = viewModel.Collections.IndexOf(viewModel.Collections.FirstOrDefault(x => x.SharePointType == SharePointType.Image));
+            carouseView.ScrollTo(index, position: ScrollToPosition.End);
+        }
+        private void CloseContentEvent_Tapped(object sender, EventArgs e)
+        {
+            ContentEvent.IsVisible = false;
+        }
+
+        private async void OpenEvent_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.Event == null)
+                await viewModel.LoadDataEvent();
+            ContentEvent.IsVisible = true;
+        }
     }
 }

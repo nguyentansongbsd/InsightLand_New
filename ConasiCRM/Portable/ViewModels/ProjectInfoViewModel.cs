@@ -6,61 +6,30 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Forms;
 namespace ConasiCRM.Portable.ViewModels
 {
     public class ProjectInfoViewModel : BaseViewModel
     {
-        //public ObservableCollection<CollectionData> Data { get; set; }
-        //public List<Photo> Photos;
-        //public List<Photo> Media;
-        //public PhotoBrowser photoBrowser;
+        public ObservableCollection<CollectionData> Collections { get; set; } = new ObservableCollection<CollectionData>();
 
-        //private bool _onComplate;
-        //public bool OnComplate { get => _onComplate; set { _onComplate = value; OnPropertyChanged(nameof(OnComplate)); } }
+        public List<Photo> Photos { get; set; }
+        private bool _showCollections = true;
+        public bool ShowCollections { get => _showCollections; set { _showCollections = value; OnPropertyChanged(nameof(ShowCollections)); } }
 
-        //private ObservableCollection<CollectionData> GetCollectionData()
-        //{
-        //    var list = new List<CollectionData>
-        //    {
-        //        new CollectionData { MediaSource = "https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/videoduan.mp4?alt=media&token=f1b9e0e7-0603-45a8-9261-2de7d6dcf545",ImageSource= null,Index = 1},
-        //        new CollectionData { MediaSource = null,ImageSource="https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/duan1.jpg?alt=media&token=78a2fc63-2009-4b25-b189-2613159a51bd",Index = 1},
-        //        new CollectionData { MediaSource = null,ImageSource="duan2.jpg",Index = 2},
-        //        new CollectionData { MediaSource = null,ImageSource="duan3.jpg",Index = 3},
-        //        new CollectionData { MediaSource = null,ImageSource="duan4.jpg",Index = 4},
-        //        new CollectionData { MediaSource = null,ImageSource="duan5.jpg",Index = 5},
-        //        new CollectionData { MediaSource = null,ImageSource="duan6.jpg",Index = 6},
-        //    };
-        //    var data = new ObservableCollection<CollectionData>();
-        //    Photos = new List<Photo>();
-        //    Media = new List<Photo>();
+        private int _totalMedia;
+        public int TotalMedia { get => _totalMedia; set { _totalMedia = value; OnPropertyChanged(nameof(TotalMedia)); } }
 
-        //    foreach (var item in list)
-        //    {
-        //        if (item.ImageSource != null)
-        //        {
-        //            Photos.Add(new Photo { URL = item.ImageSource });
-        //            data.Add(item);
-        //        }
-        //        else
-        //        {
-        //            Media.Add(new Photo { URL = item.ImageSource });
-        //            data.Add(item);
-        //        }
-        //    }
-        //    return data;
-        //}
-
-
-
+        private int _totalPhoto;
+        public int TotalPhoto { get => _totalPhoto; set { _totalPhoto = value; OnPropertyChanged(nameof(TotalPhoto)); } }
         public Guid ProjectId { get; set; }
-        public List<UnitChartModel> unitChartModels { get; set; }
-        public ObservableCollection<UnitChartModel> UnitChart { get; set; } = new ObservableCollection<UnitChartModel>();
+        public string ProjectName { get; set; }
+        public List<ChartModel> unitChartModels { get; set; }
+        public ObservableCollection<ChartModel> UnitChart { get; set; } = new ObservableCollection<ChartModel>();
 
-        private ObservableCollection<QueueFormModel> _listGiuCho;
-        public ObservableCollection<QueueFormModel> ListGiuCho { get => _listGiuCho; set { _listGiuCho = value; OnPropertyChanged(nameof(ListGiuCho)); } }
+        private ObservableCollection<QueuesModel> _listGiuCho;
+        public ObservableCollection<QueuesModel> ListGiuCho { get => _listGiuCho; set { _listGiuCho = value; OnPropertyChanged(nameof(ListGiuCho)); } }
 
         private ProjectInfoModel _project;
         public ProjectInfoModel Project
@@ -103,6 +72,9 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showMoreBtnGiuCho;
         public bool ShowMoreBtnGiuCho { get => _showMoreBtnGiuCho; set { _showMoreBtnGiuCho = value; OnPropertyChanged(nameof(ShowMoreBtnGiuCho)); } }
 
+        private bool _isHasEvent;
+        public bool IsHasEvent { get=>_isHasEvent; set { _isHasEvent = value; OnPropertyChanged(nameof(IsHasEvent)); } }
+
         public int ChuanBi { get; set; } = 0;
         public int SanSang { get; set; } = 0;
         public int GiuCho { get; set; } = 0;
@@ -112,22 +84,19 @@ namespace ConasiCRM.Portable.ViewModels
         public int ThanhToanDot1 { get; set; } = 0;
         public int DaBan { get; set; } = 0;
 
-        public bool IsHasEvent { get; set; }
         public bool IsLoadedGiuCho { get; set; }
 
         public int PageListGiuCho = 1;
 
+        private ImageSource _ImageSource;
+        public ImageSource ImageSource { get => _ImageSource; set { _ImageSource = value; OnPropertyChanged(nameof(ImageSource)); } }
+        
+        private EventModel _event;
+        public EventModel Event { get => _event; set { _event = value; OnPropertyChanged(nameof(Event)); } }
+
         public ProjectInfoViewModel()
         {
-            ListGiuCho = new ObservableCollection<QueueFormModel>();
-
-            //this.Data = new ObservableCollection<CollectionData>();
-            //this.Data = GetCollectionData();
-            //OnComplate = true;
-            //photoBrowser = new PhotoBrowser
-            //{
-            //    Photos = Photos,
-            //};
+            ListGiuCho = new ObservableCollection<QueuesModel>();
         }
 
         public async Task LoadData()
@@ -163,9 +132,8 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<ProjectInfoModel>>("bsd_projects", FetchXml);
             if (result == null || result.value.Any() == false) return;
             Project = result.value.FirstOrDefault();
-
+            //await LoadAllCollection();
         }
-
         public async Task CheckEvent()
         {
             // ham check su kien hide/show cua du an (show khi du an dang trong thoi gian dien ra su kien, va trang thai la "Approved")
@@ -179,15 +147,11 @@ namespace ConasiCRM.Portable.ViewModels
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
                                   <condition attribute='statuscode' operator='eq' value='100000000' />
+                                  <condition attribute='bsd_project' operator='eq' uitype='bsd_project' value='{ProjectId}' />
                                 </filter>
-                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='aa'>
-                                  <filter type='and'>
-                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
-                                  </filter>
-                                </link-entity>
                               </entity>
                             </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<EventFormModel>>("bsd_events", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<EventModel>>("bsd_events", fetchXml);
             if (result == null || result.value.Any() == false) return;
 
             var data = result.value;
@@ -200,7 +164,6 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
         }
-
         public async Task LoadThongKe()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -216,6 +179,9 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='productid' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
+                                    <condition attribute='statuscode' operator='not-in'>
+                                        <value>0</value>
+                                    </condition>
                                     <condition attribute='bsd_projectcode' operator='eq' uitype='bsd_project' value='" + this.ProjectId + @"'/>
                                   </filter>
                               </entity>
@@ -238,59 +204,32 @@ namespace ConasiCRM.Portable.ViewModels
                 IsShowBtnGiuCho = false;
                 var data = result.value;
                 NumUnit = data.Count;
-                foreach (var item in data)
-                {
-                    switch (item.statuscode)
-                    {
-                        case 1:
-                            ChuanBi++;
-                            break;
-                        case 100000000:
-                            SanSang++;
-                            break;
-                        case 100000004:
-                            GiuCho++;
-                            break;
-                        case 100000006:
-                            DatCoc++;
-                            SoDatCoc++;
-                            break;
-                        case 100000005:
-                            DongYChuyenCoc++;
-                            break;
-                        case 100000003:
-                            DaDuTienCoc++;
-                            break;
-                        case 100000001:
-                            ThanhToanDot1++;
-                            break;
-                        case 100000002:
-                            DaBan++;
-                            break;
-                        default:
-                            break;
-
-                    }
-                }
+                ChuanBi = data.Where(x => x.statuscode == 1).Count();
+                SanSang = data.Where(x => x.statuscode == 100000000).Count();
+                GiuCho = data.Where(x => x.statuscode == 100000004).Count();
+                DatCoc = data.Where(x => x.statuscode == 100000006).Count();
+                DongYChuyenCoc = data.Where(x => x.statuscode == 100000005).Count();
+                DaDuTienCoc = data.Where(x => x.statuscode == 100000003).Count();
+                ThanhToanDot1 = data.Where(x => x.statuscode == 100000001).Count();
+                DaBan = data.Where(x => x.statuscode == 100000002).Count();
             }
 
-            unitChartModels = new List<UnitChartModel>()
+            unitChartModels = new List<ChartModel>()
             {
-                    new UnitChartModel {Category ="Giữ chỗ",Value=GiuCho},
-                    new UnitChartModel { Category = "Đặt cọc", Value = DatCoc },
-                    new UnitChartModel {Category ="Đồng ý chuyển cọc",Value=DongYChuyenCoc },
-                    new UnitChartModel { Category = "Đã đủ tiền cọc", Value = DaDuTienCoc },
-                    new UnitChartModel {Category ="Thanh toán đợt 1",Value=ThanhToanDot1},
-                    new UnitChartModel { Category = "Đã bán", Value =  DaBan},
-                    new UnitChartModel {Category ="Chuẩn bị", Value=ChuanBi},
-                    new UnitChartModel { Category = "Sẵn sàng", Value = SanSang }
+                    new ChartModel {Category ="Giữ chỗ",Value=GiuCho},
+                    new ChartModel { Category = "Đặt cọc", Value = DatCoc },
+                    new ChartModel {Category ="Đồng ý chuyển cọc",Value=DongYChuyenCoc },
+                    new ChartModel { Category = "Đã đủ tiền cọc", Value = DaDuTienCoc },
+                    new ChartModel {Category ="Thanh toán đợt 1",Value=ThanhToanDot1},
+                    new ChartModel { Category = "Đã bán", Value =  DaBan},
+                    new ChartModel {Category ="Chuẩn bị", Value=ChuanBi},
+                    new ChartModel { Category = "Sẵn sàng", Value = SanSang }
             };
             foreach (var item in unitChartModels)
             {
                 UnitChart.Add(item);
             }
         }
-
         public async Task LoadThongKeGiuCho()
         {
             string fetchXml = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -311,13 +250,15 @@ namespace ConasiCRM.Portable.ViewModels
 
             SoGiuCho = result.value.Count();
         }
-
         public async Task LoadThongKeHopDong()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='salesorder'>
                                 <attribute name='name' />
                                 <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                  <condition attribute='statuscode' operator='ne' value='100000006' />
+                                </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ad'>
                                   <filter type='and'>
                                     <condition attribute='bsd_projectid' operator='eq' value ='{ProjectId}'/>
@@ -330,7 +271,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             SoHopDong = result.value.Count();
         }
-
         public async Task LoadThongKeBangTinhGia()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -338,7 +278,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='name' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
-                                  <condition attribute='statuscode' operator='ne' value='100000001' />
+                                  <condition attribute='statuscode' operator='ne' value='100000007' />
                                 </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='inner' alias='ae'>
                                   <filter type='and'>
@@ -351,20 +291,50 @@ namespace ConasiCRM.Portable.ViewModels
             if (result == null || result.value.Any() == false) return;
             SoBangTinhGia = result.value.Count();
         }
-
+        public async Task LoadThongKeDatCoc()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='quote'>
+                                <attribute name='name' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                  <condition attribute='statuscode' operator='in'>
+                                    <value>100000006</value>
+                                    <value>100000000</value>
+                                    <value>3</value>
+                                  </condition>
+                                </filter>
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='inner' alias='ae'>
+                                  <filter type='and'>
+                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
+                                  </filter>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuoteModel>>("quotes", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+            SoDatCoc = result.value.Count();
+        }
         public async Task LoadGiuCho()
         {
             IsLoadedGiuCho = true;
             string fetchXml = $@"<fetch version='1.0' count='10' page='{PageListGiuCho}' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='opportunity'>
                                 <attribute name='name' />
-                                <attribute name='customerid' />
-                                <attribute name='createdon' />
+                                <attribute name='customerid' alias='customer_id'/>
+                                <attribute name='bsd_bookingtime' />
+                                <attribute name='statuscode' />
                                 <attribute name='bsd_queuingexpired' />
                                 <attribute name='opportunityid' />
-                                <order attribute='createdon' descending='true' />
+                                <order attribute='bsd_bookingtime' descending='false' />
+                                <filter type='and'>
+                                  <condition attribute='statuscode' operator='in'>
+                                    <value>100000002</value>
+                                    <value>100000000</value>
+                                  </condition>
+                                </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ab'>
-                                    <attribute name='bsd_name' alias='bsd_project_name'/>
+                                    <attribute name='bsd_name' alias='project_name'/>
                                   <filter type='and'>
                                     <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
                                   </filter>
@@ -383,25 +353,96 @@ namespace ConasiCRM.Portable.ViewModels
                               </entity>
                             </fetch>";
 
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueueFormModel>>("opportunities", fetchXml);
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QueuesModel>>("opportunities", fetchXml);
             if (result == null || result.value.Any() == false) return;
 
-            List<QueueFormModel> data = result.value;
+            List<QueuesModel> data = result.value;
             ShowMoreBtnGiuCho = data.Count < 10 ? false : true;
             foreach (var item in data)
             {
-                QueueFormModel queue = new QueueFormModel();
-                queue = item;
-                if (!string.IsNullOrWhiteSpace(item.contact_name))
+                ListGiuCho.Add(item);
+            }
+        }
+        public async Task LoadAllCollection()
+        {
+            if (ProjectId != null)
+            {
+                string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='sharepointdocument'>
+                                    <attribute name='documentid' />
+                                    <attribute name='absoluteurl' />
+                                    <attribute name='fullname' />
+                                    <attribute name='filetype' />
+                                    <attribute name='relativelocation' />
+                                    <order attribute='relativelocation' descending='false' />
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='regardingobjectid' link-type='inner' alias='ad'>
+                                      <filter type='and'>
+                                        <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}' />
+                                      </filter>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+                var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<SharePonitModel>>("sharepointdocuments", fetchXml);
+
+                if (result == null || result.value.Any() == false)
                 {
-                    queue.customer_name = item.contact_name;
-                }
-                else if (!string.IsNullOrWhiteSpace(item.account_name))
-                {
-                    queue.customer_name = item.account_name;
+                    ShowCollections = false;
+                    return;
                 }
 
-                ListGiuCho.Add(queue);
+                Photos = new List<Photo>();
+                List<SharePonitModel> list = result.value;
+                var videos = list.Where(x => x.filetype == "mp4" || x.filetype == "flv" || x.filetype == "m3u8" || x.filetype == "3gp" || x.filetype == "mov" || x.filetype == "avi" || x.filetype == "wmv").ToList();
+                var images = list.Where(x => x.filetype == "jpg" || x.filetype == "jpeg" || x.filetype == "png").ToList();
+                this.TotalMedia = videos.Count;
+                this.TotalPhoto = images.Count;
+
+                foreach (var item in videos)
+                {
+                    var urlVideo = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<GraphThumbnailsUrlModel>>($"{Config.OrgConfig.SharePointProjectId}/items/{item.documentid}/driveItem/thumbnails");
+                    string url = urlVideo.value.SingleOrDefault().large.url;// retri se lay duoc thumbnails gom 3 kich thuoc : large,medium,small
+                    Collections.Add(new CollectionData {Id = item.documentid, MediaSourceId = item.documentid.ToString(), ImageSource = url, SharePointType = SharePointType.Video, Index = TotalMedia });
+                }
+
+                foreach (var item in images)
+                {
+                    var urlVideo = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<GraphThumbnailsUrlModel>>($"{Config.OrgConfig.SharePointProjectId}/items/{item.documentid}/driveItem/thumbnails");
+                    string url = urlVideo.value.SingleOrDefault().large.url;// retri se lay duoc thumbnails gom 3 kich thuoc : large,medium,small
+                    this.Photos.Add(new Photo { URL = url });
+                    Collections.Add(new CollectionData { Id = item.documentid, MediaSourceId = null, ImageSource = url, SharePointType = SharePointType.Image, Index = TotalMedia });
+                }
+            }
+        }
+        public async Task LoadDataEvent()
+        {
+            if (ProjectId == Guid.Empty) return;
+
+            string FetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_event'>
+                                    <attribute name='bsd_name' />
+                                    <attribute name='bsd_startdate' />
+                                    <attribute name='bsd_eventcode' />
+                                    <attribute name='bsd_enddate' />
+                                    <attribute name='bsd_eventid' />
+                                    <order attribute='bsd_eventcode' descending='true' />
+                                    <filter type='and'>
+                                      <condition attribute='statuscode' operator='eq' value='100000000' />
+                                      <condition attribute='bsd_project' operator='eq' value='{ProjectId}' />
+                                    </filter>
+                                    <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaselaunch' link-type='outer' alias='ab'>
+                                      <attribute name='bsd_name' alias='bsd_phaselaunch_name'/>
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<EventModel>>("bsd_events", FetchXml);
+            if (result == null || result.value.Any() == false) return;
+            var data = result.value.FirstOrDefault();
+            Event = data;
+            if (data.bsd_startdate != null && data.bsd_enddate != null)
+            {
+                Event.bsd_startdate = data.bsd_startdate.Value.ToLocalTime();
+                Event.bsd_enddate = data.bsd_enddate.Value.ToLocalTime();
             }
         }
     }

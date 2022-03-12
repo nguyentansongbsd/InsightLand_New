@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.ViewModels;
 
 namespace ConasiCRM.Portable.Models
@@ -18,24 +19,52 @@ namespace ConasiCRM.Portable.Models
         {
             get
             {
-                if(this.accounts_bsd_name != null)
+                if (activitytypecode == "appointment")
                 {
-                    return this.accounts_bsd_name;
+                    return null;
                 }
-                else if(this.contact_bsd_fullname != null)
+
+                    if (activitytypecode == "phonecall")
                 {
-                    return this.contact_bsd_fullname;
-                }else if(this.lead_fullname != null)
-                {
-                    return this.lead_fullname;
-                }
-                else if(this.systemsetup_bsd_name != null)
-                {
-                    return this.systemsetup_bsd_name;
+                    if (this.callto_contact_name != null)
+                    {
+                        return this.callto_contact_name;
+                    }
+                    else if (this.callto_account_name != null)
+                    {
+                        return this.callto_account_name;
+                    }
+                    else if (this.callto_lead_name != null)
+                    {
+                        return this.callto_lead_name;
+                    }
+                    else
+                    {
+                        return " ";
+                    }
                 }
                 else
                 {
-                    return " ";
+                    if (this.accounts_bsd_name != null)
+                    {
+                        return this.accounts_bsd_name;
+                    }
+                    else if (this.contact_bsd_fullname != null)
+                    {
+                        return this.contact_bsd_fullname;
+                    }
+                    else if (this.lead_fullname != null)
+                    {
+                        return this.lead_fullname;
+                    }
+                    else if (this.systemsetup_bsd_name != null)
+                    {
+                        return this.systemsetup_bsd_name;
+                    }
+                    else
+                    {
+                        return " ";
+                    }
                 }
             }
         }
@@ -47,11 +76,11 @@ namespace ConasiCRM.Portable.Models
                 switch (activitytypecode)
                 {
                     case "task":
-                        return "Task";
+                        return Language.cong_viec_title;
                     case "phonecall":
-                        return "Phone Call";
+                        return Language.cuoc_goi_title;
                     case "appointment":
-                        return "Collection Meeting";
+                        return Language.cuoc_hop_title;
                     default:
                         return " ";
                 }
@@ -65,13 +94,13 @@ namespace ConasiCRM.Portable.Models
                 switch (this.statecode)
                 {
                     case 0:
-                        return "Open";
+                        return Language.activity_open_sts; // activity_open_sts  Open
                     case 1:
-                        return "Completed";
+                        return Language.activity_completed_sts; // activity_completed_sts  Completed
                     case 2:
-                        return "Canceled";
+                        return Language.activity_cancelled_sts; // activity_canceled_sts Canceled
                     case 3:
-                        return "Scheduled";
+                        return Language.activity_scheduled_sts; // activity_scheduled_sts
                     default:
                         return " ";
                 }
@@ -97,14 +126,14 @@ namespace ConasiCRM.Portable.Models
             }
         }
         public DateTime scheduledstart { get; set; }
-        public string scheduledstart_format
+        public DateTime scheduledstart_format
         {
-            get => StringHelper.DateFormat(this.scheduledstart.ToLocalTime());
+            get => scheduledstart.ToLocalTime();
         }
         public DateTime scheduledend { get; set; }
-        public string scheduledend_format
+        public DateTime scheduledend_format
         {
-            get => StringHelper.DateFormat(this.scheduledend.ToLocalTime());
+            get => scheduledend.ToLocalTime();
         }
         public DateTime createdon { get; set; }
         public string createdon_format
@@ -112,5 +141,33 @@ namespace ConasiCRM.Portable.Models
             get => StringHelper.DateFormat(this.createdon);
         }
 
+        public string statecode_color
+        {
+            get
+            {
+                switch (this.statecode)
+                {
+                    case 0:
+                        return "#06CF79"; // open
+                    case 1:
+                        return "#03ACF5"; //com
+                    case 2:
+                        return "#333333"; //can
+                    case 3:
+                        return "#04A388"; //sha
+                    default:
+                        return "#333333";
+                }
+            }
+        }
+
+        // sử dụng cho phonecall
+
+        public string callto_contact_name { get; set; }
+        public string callto_account_name { get; set; }
+        public string callto_lead_name { get; set; }
+
+        public string _customer;
+        public string customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(customer)); } }
     }
 }

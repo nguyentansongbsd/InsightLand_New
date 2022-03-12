@@ -1,10 +1,16 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using Conasi.Portable.Views;
+using ConasiCRM.Portable.Controls;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using ConasiCRM.Portable.ViewModels;
+using Stormlion.PhotoBrowser;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -18,14 +24,19 @@ namespace ConasiCRM.Portable.Views
         public Action<bool> OnCompleted;
         public static bool? NeedToRefresh = null;
         public static bool? NeedToRefreshQueues = null;
+        public static bool? NeedToRefreshActivity = null;
         private ContactDetailPageViewModel viewModel;
         private Guid Id;
+        private PhotoBrowser photoBrowser;
+        PhotoShow photoShow;
+        public static OptionSet FromCustomer = null;
         public ContactDetailPage(Guid contactId)
         {
             InitializeComponent();
             this.BindingContext = viewModel = new ContactDetailPageViewModel();
             LoadingHelper.Show();
             NeedToRefresh = false;
+            NeedToRefreshActivity = false;
             Tab_Tapped(1);
             Id = contactId;
             Init();
@@ -34,17 +45,75 @@ namespace ConasiCRM.Portable.Views
         {
             await LoadDataThongTin(Id.ToString());
 
+            viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_hop, "FontAwesomeRegular", "\uf274", null, NewMeet));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_goi, "FontAwesomeSolid", "\uf095", null, NewPhoneCall));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cong_viec, "FontAwesomeSolid", "\uf073", null, NewTask));
+            viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.chinh_sua, "FontAwesomeRegular", "\uf044", null, EditContact));
             if (viewModel.singleContact.employee_id != UserLogged.Id)
             {
-                frameEdit.IsVisible = false;
+
+                floatingButtonGroup.IsVisible = false;
             }
 
             if (viewModel.singleContact.contactid != Guid.Empty)
+            {
+                FromCustomer = new OptionSet { Val = viewModel.singleContact.contactid.ToString(), Label = viewModel.singleContact.bsd_fullname, Title = viewModel.CodeContac };
                 OnCompleted(true);
+            }
             else
                 OnCompleted(false);
             LoadingHelper.Hide();
         }
+
+        private async void NewMeet(object sender, EventArgs e)
+        {
+            if (viewModel.singleContact != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new MeetingForm());
+                LoadingHelper.Hide();
+            }
+        }
+
+        private async void NewPhoneCall(object sender, EventArgs e)
+        {
+            if (viewModel.singleContact != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new PhoneCallForm());
+                LoadingHelper.Hide();
+            }
+        }
+
+        private async void NewTask(object sender, EventArgs e)
+        {
+            if (viewModel.singleContact != null)
+            {
+                LoadingHelper.Show();
+                await Navigation.PushAsync(new TaskForm());
+                LoadingHelper.Hide();
+            }
+        }
+
+        private void EditContact(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            ContactForm newPage = new ContactForm(Id);
+            newPage.OnCompleted = async (OnCompleted) =>
+            {
+                if (OnCompleted == true)
+                {
+                    await Navigation.PushAsync(newPage);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_khach_hang);
+                }
+            };
+        }
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -67,6 +136,16 @@ namespace ConasiCRM.Portable.Views
                 NeedToRefreshQueues = false;
                 LoadingHelper.Hide();
             }
+            if(NeedToRefreshActivity == true && viewModel.list_chamsockhachhang != null)
+            {
+                LoadingHelper.Show();
+                viewModel.PageChamSocKhachHang = 1;
+                viewModel.list_chamsockhachhang.Clear();
+                await viewModel.LoadCaseForContactForm();
+                ActivityPopup.Refresh();
+                NeedToRefreshActivity = false;
+                LoadingHelper.Hide();
+            }    
         }
 
         // tab thong tin
@@ -76,6 +155,7 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Show();
                 await viewModel.loadOneContact(Id);
+                await viewModel.GetImageCMND();
                 if (viewModel.singleContact.gendercode != null)
                 { 
                    viewModel.singleGender = ContactGender.GetGenderById(viewModel.singleContact.gendercode); 
@@ -88,7 +168,42 @@ namespace ConasiCRM.Portable.Views
                 {
                     viewModel.SingleLocalization = null;
                 }
+                photoShow = new PhotoShow(viewModel.CollectionCMNDs);
                 LoadingHelper.Hide();
+            }
+        }
+
+        private void CMNDFront_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_etag_front_url))
+            {
+                photoBrowser = new PhotoBrowser
+                {
+                    Photos = new List<Photo>
+                {
+                    new Photo{
+                        URL = viewModel.singleContact.bsd_etag_front_url
+                    }
+                }
+                };
+                photoBrowser.Show();
+            }
+        }
+
+        private void CMNDBehind_Tapped(object sender, EventArgs e)
+        {
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.bsd_etag_behind_url))
+            {
+                photoBrowser = new PhotoBrowser
+                {
+                    Photos = new List<Photo>
+                {
+                    new Photo{
+                        URL = viewModel.singleContact.bsd_etag_behind_url
+                    }
+                }
+                };
+                photoBrowser.Show();
             }
         }
 
@@ -104,15 +219,15 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageChamSocKhachHang = 1;
 
                 viewModel.list_danhsachdatcho = new ObservableCollection<QueueFormModel>();
-                viewModel.list_danhsachdatcoc = new ObservableCollection<QuotationReseravtion>();
-                viewModel.list_danhsachhopdong = new ObservableCollection<OptionEntry>();
-                viewModel.list_chamsockhachhang = new ObservableCollection<Case>();
+                viewModel.list_danhsachdatcoc = new ObservableCollection<ReservationListModel>();
+                viewModel.list_danhsachhopdong = new ObservableCollection<ContractModel>();
+                viewModel.list_chamsockhachhang = new ObservableCollection<HoatDongListModel>();
 
                 await Task.WhenAll(
                    viewModel.LoadQueuesForContactForm(Id),
                    viewModel.LoadReservationForContactForm(Id),
                    viewModel.LoadOptoinEntryForContactForm(Id),
-                   viewModel.LoadCaseForContactForm(Id)
+                   viewModel.LoadCaseForContactForm()
                );
                 LoadingHelper.Hide();
             }          
@@ -139,7 +254,7 @@ namespace ConasiCRM.Portable.Views
         private async void ShowMoreDanhSachHopDong_Clicked(object sender, EventArgs e)
         {
             LoadingHelper.Show();
-            viewModel.PageDanhSachDatCoc++;
+            viewModel.PageDanhSachHopDong++;
             await viewModel.LoadOptoinEntryForContactForm(viewModel.singleContact.contactid.ToString());
             LoadingHelper.Hide();
         }
@@ -149,8 +264,57 @@ namespace ConasiCRM.Portable.Views
         {
             LoadingHelper.Show();
             viewModel.PageChamSocKhachHang++;
-            await viewModel.LoadCaseForContactForm(viewModel.singleContact.contactid.ToString());
+            await viewModel.LoadCaseForContactForm();
             LoadingHelper.Hide();
+        }
+
+        private void ChiTietDatCoc_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            BangTinhGiaDetailPage bangTinhGiaDetail = new BangTinhGiaDetailPage(itemId) { Title =Language.dat_coc_title};
+            bangTinhGiaDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(bangTinhGiaDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
+                }
+            };
+        }
+
+        private void ItemHopDong_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var itemId = (Guid)((sender as Grid).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            ContractDetailPage contractDetail = new ContractDetailPage(itemId);
+            contractDetail.OnCompleted = async (isSuccess) =>
+            {
+                if (isSuccess)
+                {
+                    await Navigation.PushAsync(contractDetail);
+                    LoadingHelper.Hide();
+                }
+                else
+                {
+                    LoadingHelper.Hide();
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
+                }
+            };
+        }
+
+        private async void CaseItem_Tapped(object sender, EventArgs e)
+        {
+            var item = (HoatDongListModel)((sender as StackLayout).GestureRecognizers[0] as TapGestureRecognizer).CommandParameter;
+            if (item != null && item.activityid != Guid.Empty)
+            {
+                ActivityPopup.ShowActivityPopup(item.activityid, item.activitytypecode);
+            }
         }
 
         #endregion
@@ -166,74 +330,91 @@ namespace ConasiCRM.Portable.Views
         }
         private void ShowImage_Tapped(object sender, EventArgs e)
         {
-            LookUpImagePhongThuy.IsVisible = true;
+            LookUpImage.IsVisible = true;
+            ImageDetail.Source = viewModel.PhongThuy.image;
         }
 
         protected override bool OnBackButtonPressed()
         {
-            if (LookUpImagePhongThuy.IsVisible)
+            if (LookUpImage.IsVisible)
             {
-                LookUpImagePhongThuy.IsVisible = false;
+                LookUpImage.IsVisible = false;
                 return true;
             }
             return base.OnBackButtonPressed();
         }
 
-        private void Close_LookUpImagePhongThuy_Tapped(object sender, EventArgs e)
+        private void Close_LookUpImage_Tapped(object sender, EventArgs e)
         {
-            LookUpImagePhongThuy.IsVisible = false;
+            LookUpImage.IsVisible = false;
         }
 
         #endregion
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
-        {           
-            string phone = viewModel.singleContact.mobilephone.Trim();
-            if (phone != string.Empty)
+        {
+            //string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                LoadingHelper.Show();
+                string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
                 var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
                 if (checkVadate == true)
                 {
-                    SmsMessage sms = new SmsMessage(null, phone);
-                    await Sms.ComposeAsync(sms);
-                    LoadingHelper.Hide();
+                    try
+                    {
+                        var message = new SmsMessage(null, new[] { phone });
+                        await Sms.ComposeAsync(message);
+                    }
+                    catch (FeatureNotSupportedException ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.sms_khong_duoc_ho_tro_tren_thiet_bi);
+                    }
+                    catch (Exception ex)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
+                    }
                 }
                 else
                 {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
+                    ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
                 }
             }
             else
             {
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
             }
         }
 
         private async void GoiDien_Tapped(object sender, EventArgs e)
-        {          
-            string phone = viewModel.singleContact.mobilephone.Trim();
-            if (phone != string.Empty)
+        {
+            if (viewModel.singleContact != null && !string.IsNullOrWhiteSpace(viewModel.singleContact.mobilephone))
             {
-                LoadingHelper.Show();
-                var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-                if (checkVadate == true)
+                string phone = viewModel.singleContact.mobilephone.Replace(" ", "");
+                if (phone != string.Empty)
                 {
-                   await Launcher.OpenAsync($"tel:{phone}");
-                    LoadingHelper.Hide();
+                    LoadingHelper.Show();
+                    var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
+                    if (checkVadate == true)
+                    {
+                        await Launcher.OpenAsync($"tel:{phone}");
+                        LoadingHelper.Hide();
+                    }
+                    else
+                    {
+                        LoadingHelper.Hide();
+                        ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    }
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Số điện thoại sai định dạng. Vui lòng kiểm tra lại");
+                    ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
                 }
             }
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage("Khách hàng không có số điện thoại. Vui lòng kiểm tra lại");
+                ToastMessageHelper.ShortMessage(Language.khach_hang_khong_co_sdt_vui_long_kiem_tra_lai);
             }
         }
 
@@ -310,30 +491,11 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         LoadingHelper.Hide();
-                        ToastMessageHelper.ShortMessage("Không tìm thấy thông tin công ty");
+                        ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin_cong_ty);
                     }
                 };
             }
-        }
-
-        private void EditContact_Clicked(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            ContactForm newPage = new ContactForm(Id);
-            newPage.OnCompleted = async (OnCompleted) =>
-            {
-                if (OnCompleted == true)
-                {
-                    await Navigation.PushAsync(newPage);
-                    LoadingHelper.Hide();
-                }
-                else
-                {
-                    LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin khách hàng");
-                }
-            };
-        }
+        }      
 
         private void GiuChoItem_Tapped(object sender, EventArgs e)
         {
@@ -349,9 +511,14 @@ namespace ConasiCRM.Portable.Views
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Không tìm thấy thông tin");
+                    ToastMessageHelper.ShortMessage(Language.khong_tim_thay_thong_tin);
                 }
             };
+        }
+
+        private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
+        {
+            OnAppearing();
         }
     }
 }

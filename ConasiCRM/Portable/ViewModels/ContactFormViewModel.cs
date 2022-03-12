@@ -1,11 +1,22 @@
-﻿using ConasiCRM.Portable.Helper;
+﻿using Azure.Identity;
+using ConasiCRM.Portable.Config;
+using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -27,103 +38,22 @@ namespace ConasiCRM.Portable.ViewModels
 
         public ObservableCollection<LookUp> list_lookup { get; set; }
 
-        private string _addressCompositeContac;
-        public string AddressCompositeContac { get => _addressCompositeContac; set { _addressCompositeContac = value; OnPropertyChanged(nameof(AddressCompositeContac)); } }
-
-        private LookUp _addressCountryContac;
-        public LookUp AddressCountryContac
-        {
-            get => _addressCountryContac;
-            set
-            {
-                _addressCountryContac = value;
-                OnPropertyChanged(nameof(AddressCountryContac));
-                AddressStateProvinceContac = null;
-                list_province_lookup.Clear();
-            }
-        }
-
-        private string _addressPostalCodeContac;
-        public string AddressPostalCodeContac { get => _addressPostalCodeContac; set { _addressPostalCodeContac = value; OnPropertyChanged(nameof(AddressPostalCodeContac)); } }
-
-        private LookUp _addressStateProvinceContac;
-        public LookUp AddressStateProvinceContac
-        {
-            get => _addressStateProvinceContac;
-            set
-            {
-                _addressStateProvinceContac = value;
-                OnPropertyChanged(nameof(AddressStateProvinceContac));
-                AddressCityContac = null;
-                list_district_lookup.Clear();
-            }
-        }
-
-        private LookUp _addressCityContac;
-        public LookUp AddressCityContac { get => _addressCityContac; set { _addressCityContac = value; OnPropertyChanged(nameof(AddressCityContac)); } }
-
-        private string _addressLine3Contac;
-        public string AddressLine3Contac { get => _addressLine3Contac; set { _addressLine3Contac = value; OnPropertyChanged(nameof(AddressLine3Contac)); } }
-
-        private string _addressLine2Contac;
-        public string AddressLine2Contac { get => _addressLine2Contac; set { _addressLine2Contac = value; OnPropertyChanged(nameof(AddressLine2Contac)); } }
-
-        private string _addressLine1Contac;
-        public string AddressLine1Contact { get => _addressLine1Contac; set { _addressLine1Contac = value; OnPropertyChanged(nameof(AddressLine1Contact)); } }
-
-        private string _addressCompositePermanent;
-        public string AddressCompositePermanent { get => _addressCompositePermanent; set { _addressCompositePermanent = value; OnPropertyChanged(nameof(AddressCompositePermanent)); } }
-
-        private LookUp _addressCountryPermanent;
-        public LookUp AddressCountryPermanent
-        {
-            get => _addressCountryPermanent;
-            set
-            {
-                _addressCountryPermanent = value;
-                OnPropertyChanged(nameof(AddressCountryPermanent));
-                AddressStateProvincePermanent = null;
-                list_province_lookup.Clear();
-            }
-        }
-
-        private LookUp _addressStateProvincePermanent;
-        public LookUp AddressStateProvincePermanent
-        {
-            get => _addressStateProvincePermanent;
-            set
-            {
-                _addressStateProvincePermanent = value;
-                OnPropertyChanged(nameof(AddressStateProvincePermanent));
-                AddressCityPermanent = null;
-                list_district_lookup.Clear();
-            }
-        }
-
-        private LookUp _addressCityPermanent;
-        public LookUp AddressCityPermanent { get => _addressCityPermanent; set { _addressCityPermanent = value; OnPropertyChanged(nameof(AddressCityPermanent)); } }
-
-        private string _addressLine3Permanent;
-        public string AddressLine3Permanent { get => _addressLine3Permanent; set { _addressLine3Permanent = value; OnPropertyChanged(nameof(AddressLine3Permanent)); } }
-
-        private string _addressLine2Permanent;
-        public string AddressLine2Permanent { get => _addressLine2Permanent; set { _addressLine2Permanent = value; OnPropertyChanged(nameof(AddressLine2Permanent)); } }
-
-        private string _addressLine1Permanent;
-        public string AddressLine1Permanent { get => _addressLine1Permanent; set { _addressLine1Permanent = value; OnPropertyChanged(nameof(AddressLine1Permanent)); } }
-
-        public ObservableCollection<LookUp> list_country_lookup { get; set; }
-        public ObservableCollection<LookUp> list_province_lookup { get; set; }
-        public ObservableCollection<LookUp> list_district_lookup { get; set; }
+        
 
         public ObservableCollection<OptionSet> GenderOptions { get; set; }
         public ObservableCollection<OptionSet> LocalizationOptions { get; set; }
 
-        //private string IMAGE_CMND_FOLDER = "Contact_CMND";
-        //string frontImage_name;
-        //string behindImage_name;
+        private string IMAGE_CMND_FOLDER = "Contact_CMND";
+        private string frontImage_name;
+        private string behindImage_name;
 
         private string checkCMND;
+
+        private AddressModel _contactAddress;
+        public AddressModel ContactAddress { get => _contactAddress; set { _contactAddress = value; OnPropertyChanged(nameof(ContactAddress)); } }
+
+        private AddressModel _permanentAddress;
+        public AddressModel PermanentAddress { get => _permanentAddress; set { _permanentAddress = value; OnPropertyChanged(nameof(PermanentAddress)); } }
 
         public ContactFormViewModel()
         {
@@ -131,9 +61,6 @@ namespace ConasiCRM.Portable.ViewModels
             
             list_lookup = new ObservableCollection<LookUp>();
             list_account_lookup = new ObservableCollection<LookUp>();
-            list_country_lookup = new ObservableCollection<LookUp>();
-            list_province_lookup = new ObservableCollection<LookUp>();
-            list_district_lookup = new ObservableCollection<LookUp>();
             GenderOptions = new ObservableCollection<OptionSet>();
             LocalizationOptions = new ObservableCollection<OptionSet>();
         }
@@ -157,12 +84,12 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='contactid' />
                                 <attribute name='telephone1' />
                                 <attribute name='parentcustomerid' />
-                                <attribute name='bsd_province' />
+                                <attribute name='bsd_province' alias='_bsd_province_value'/>
                                 <attribute name='bsd_placeofissuepassport' />
                                 <attribute name='bsd_placeofissue' />
-                                <attribute name='bsd_permanentprovince' />
-                                <attribute name='bsd_permanentdistrict' />
-                                <attribute name='bsd_permanentcountry' />
+                                <attribute name='bsd_permanentprovince' alias='_bsd_permanentprovince_value'/>
+                                <attribute name='bsd_permanentdistrict' alias='_bsd_permanentdistrict_value'/>
+                                <attribute name='bsd_permanentcountry' alias='_bsd_permanentcountry_value'/>
                                 <attribute name='bsd_permanentaddress1' />
                                 <attribute name='bsd_permanentaddress' />
                                 <attribute name='bsd_passport' />
@@ -170,32 +97,40 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_jobtitlevn' />
                                 <attribute name='bsd_issuedonpassport' />
                                 <attribute name='bsd_housenumberstreet' />
-                                <attribute name='bsd_district' />
+                                <attribute name='bsd_district' alias='_bsd_district_value'/>
                                 <attribute name='bsd_dategrant' />
-                                <attribute name='bsd_country' />
+                                <attribute name='bsd_country' alias='_bsd_country_value'/>
                                 <attribute name='bsd_postalcode' />
+                                <attribute name='bsd_etag_behind' />
+                                <attribute name='bsd_etag_front' />
                                 <attribute name='bsd_contactaddress' />
                                     <link-entity name='account' from='accountid' to='parentcustomerid' visible='false' link-type='outer' alias='aa'>
                                           <attribute name='accountid' alias='_parentcustomerid_value' />
                                           <attribute name='bsd_name' alias='parentcustomerid_label' />
                                     </link-entity>
                                     <link-entity name='bsd_country' from='bsd_countryid' to='bsd_country' visible='false' link-type='outer'>
-                                        <attribute name='bsd_countryname'  alias='bsd_country_label'/>                                        
+                                        <attribute name='bsd_countryname'  alias='bsd_country_label'/>
+                                        <attribute name='bsd_nameen'  alias='bsd_country_label_en'/>
                                     </link-entity>
                                     <link-entity name='new_province' from='new_provinceid' to='bsd_province' visible='false' link-type='outer'>
                                         <attribute name='bsd_provincename'  alias='bsd_province_label'/>
+                                        <attribute name='bsd_nameen'  alias='bsd_province_label_en'/>
                                     </link-entity>
                                     <link-entity name='new_district' from='new_districtid' to='bsd_district' visible='false' link-type='outer'>
-                                        <attribute name='new_name'  alias='bsd_district_label'/>                                      
+                                        <attribute name='new_name'  alias='bsd_district_label'/>  
+                                        <attribute name='bsd_nameen'  alias='bsd_district_label_en'/>
                                     </link-entity>
                                     <link-entity name='bsd_country' from='bsd_countryid' to='bsd_permanentcountry' visible='false' link-type='outer'>
-                                        <attribute name='bsd_countryname'  alias='bsd_permanentcountry_label'/>                                      
+                                        <attribute name='bsd_countryname'  alias='bsd_permanentcountry_label'/>
+                                        <attribute name='bsd_nameen'  alias='bsd_permanentcountry_label_en'/>
                                     </link-entity>
                                     <link-entity name='new_province' from='new_provinceid' to='bsd_permanentprovince' visible='false' link-type='outer'>
                                         <attribute name='bsd_provincename'  alias='bsd_permanentprovince_label'/>                                        
+                                        <attribute name='bsd_nameen'  alias='bsd_permanentprovince_label_en'/>
                                     </link-entity>
                                     <link-entity name='new_district' from='new_districtid' to='bsd_permanentdistrict' visible='false' link-type='outer'>
                                         <attribute name='new_name'  alias='bsd_permanentdistrict_label'/>
+                                        <attribute name='bsd_nameen'  alias='bsd_permanentdistrict_label_en'/>
                                     </link-entity>
                                     <order attribute='createdon' descending='true' />
                                     <filter type='and'>
@@ -213,10 +148,39 @@ namespace ConasiCRM.Portable.ViewModels
             var tmp = result.value.FirstOrDefault();
             this.singleContact = tmp;
 
-            //frontImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_front.jpg";
-            //behindImage_name = tmp.contactid.ToString().Replace("-", String.Empty).ToUpper() + "_behind.jpg";
-
             checkCMND = tmp.bsd_identitycardnumber;
+            ContactAddress = new AddressModel
+            {
+                country_id = singleContact._bsd_country_value,
+                country_name = !string.IsNullOrWhiteSpace(singleContact.bsd_country_label_en) && UserLogged.Language == "en" ? singleContact.bsd_country_label_en : singleContact.bsd_country_label,
+                country_name_en = singleContact.bsd_country_label_en,
+                province_id = singleContact._bsd_province_value,
+                province_name = !string.IsNullOrWhiteSpace(singleContact.bsd_province_label_en) && UserLogged.Language == "en" ? singleContact.bsd_province_label_en : singleContact.bsd_province_label,
+                province_name_en = singleContact.bsd_province_label_en,
+                district_id = singleContact._bsd_district_value,
+                district_name = !string.IsNullOrWhiteSpace(singleContact.bsd_district_label_en) && UserLogged.Language == "en" ? singleContact.bsd_district_label_en : singleContact.bsd_district_label,
+                district_name_en = singleContact.bsd_district_label_en,
+                address = singleContact.bsd_contactaddress,
+                lineaddress = singleContact.bsd_housenumberstreet,
+                address_en = singleContact.bsd_diachi,
+                lineaddress_en = singleContact.bsd_housenumber,
+            };
+            PermanentAddress = new AddressModel
+            {
+                country_id = singleContact._bsd_permanentcountry_value,
+                country_name = !string.IsNullOrWhiteSpace(singleContact.bsd_permanentcountry_label_en) && UserLogged.Language == "en" ? singleContact.bsd_permanentcountry_label_en : singleContact.bsd_permanentcountry_label,
+                country_name_en = singleContact.bsd_permanentcountry_label_en,
+                province_id = singleContact._bsd_permanentprovince_value,
+                province_name = !string.IsNullOrWhiteSpace(singleContact.bsd_permanentprovince_label_en) && UserLogged.Language == "en" ? singleContact.bsd_permanentprovince_label_en : singleContact.bsd_permanentprovince_label,
+                province_name_en = singleContact.bsd_permanentprovince_label_en,
+                district_id = singleContact._bsd_permanentdistrict_value,
+                district_name = !string.IsNullOrWhiteSpace(singleContact.bsd_permanentdistrict_label_en) && UserLogged.Language == "en" ? singleContact.bsd_permanentdistrict_label_en : singleContact.bsd_permanentdistrict_label,
+                district_name_en = singleContact.bsd_permanentdistrict_label_en,
+                address = singleContact.bsd_permanentaddress1,
+                lineaddress = singleContact.bsd_permanentaddress,
+                address_en = singleContact.bsd_diachithuongtru,
+                lineaddress_en = singleContact.bsd_permanenthousenumber,
+            };
         }
 
         public async Task<Boolean> updateContact(ContactFormModel contact)
@@ -228,6 +192,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (result.IsSuccess)
             {
+               // await UpLoadCMND();
                 return true;
             }
             else
@@ -246,6 +211,7 @@ namespace ConasiCRM.Portable.ViewModels
 
             if (result.IsSuccess)
             {
+               // await UpLoadCMND();
                 return contact.contactid;
             }
             else
@@ -264,10 +230,12 @@ namespace ConasiCRM.Portable.ViewModels
         private async Task<object> getContent(ContactFormModel contact)
         {
             IDictionary<string, object> data = new Dictionary<string, object>();
+            data["contactid"] = contact.contactid;
             data["lastname"] = contact.bsd_fullname;
+            data["firstname"] = "";
             data["bsd_fullname"] = contact.bsd_fullname;
             data["emailaddress1"] = contact.emailaddress1;
-            data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToLocalTime()).ToString("yyyy-MM-dd") : null;
+            data["birthdate"] = contact.birthdate.HasValue ? (DateTime.Parse(contact.birthdate.ToString()).ToUniversalTime()).ToString("yyyy-MM-dd") : null;
             data["mobilephone"] = contact.mobilephone;
             data["gendercode"] = contact.gendercode;
             if (checkCMND != contact.bsd_identitycardnumber)
@@ -283,16 +251,16 @@ namespace ConasiCRM.Portable.ViewModels
             data["bsd_jobtitlevn"] = contact.bsd_jobtitlevn;
             data["telephone1"] = contact.telephone1;
 
-            data["bsd_housenumberstreet"] = contact.bsd_housenumberstreet;
-            data["bsd_contactaddress"] = contact.bsd_contactaddress;
-            data["bsd_diachi"] = contact.bsd_diachi;
-            data["bsd_postalcode"] = contact.bsd_postalcode;
-            data["bsd_housenumber"] = contact.bsd_housenumberstreet;
+          //  data["bsd_housenumberstreet"] = contact.bsd_housenumberstreet;
+          //  data["bsd_contactaddress"] = contact.bsd_contactaddress;
+          //  data["bsd_diachi"] = contact.bsd_diachi;
+          ////  data["bsd_postalcode"] = contact.bsd_postalcode;
+          //  data["bsd_housenumber"] = contact.bsd_housenumberstreet;
 
-            data["bsd_permanentaddress1"] = contact.bsd_permanentaddress1;
-            data["bsd_diachithuongtru"] = contact.bsd_diachithuongtru;
-            data["bsd_permanenthousenumber"] = contact.bsd_permanentaddress;
-            data["bsd_permanentaddress"] = contact.bsd_permanentaddress;
+          //  data["bsd_permanentaddress1"] = contact.bsd_permanentaddress1;
+          //  data["bsd_diachithuongtru"] = contact.bsd_diachithuongtru;
+          //  data["bsd_permanenthousenumber"] = contact.bsd_permanentaddress;
+          //  data["bsd_permanentaddress"] = contact.bsd_permanentaddress; //bsd_permanentaddress
 
             if (contact._parentcustomerid_value == null)
             {
@@ -302,61 +270,64 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["parentcustomerid_account@odata.bind"] = "/accounts(" + contact._parentcustomerid_value + ")"; /////Lookup Field
 
+            }           
+
+            if (ContactAddress != null && !string.IsNullOrWhiteSpace(ContactAddress.lineaddress))
+            {
+                if (!string.IsNullOrWhiteSpace(ContactAddress.address))
+                    data["bsd_contactaddress"] = ContactAddress.address;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.lineaddress))
+                    data["bsd_housenumberstreet"] = ContactAddress.lineaddress;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.lineaddress_en))
+                    data["bsd_housenumber"] = ContactAddress.lineaddress_en;
+                if (!string.IsNullOrWhiteSpace(ContactAddress.address_en))
+                    data["bsd_diachi"] = ContactAddress.address_en;
+
+                if (ContactAddress.country_id != Guid.Empty)
+                    data["bsd_country@odata.bind"] = "/bsd_countries(" + ContactAddress.country_id + ")";
+                else
+                    await DeletLookup("bsd_country", contact.contactid);
+
+                if (ContactAddress.province_id != Guid.Empty)
+                    data["bsd_province@odata.bind"] = "/new_provinces(" + ContactAddress.province_id + ")";
+                else
+                    await DeletLookup("bsd_province", contact.contactid);
+
+                if (ContactAddress.district_id != Guid.Empty)
+                    data["bsd_district@odata.bind"] = "/new_districts(" + ContactAddress.district_id + ")";
+                else
+                    await DeletLookup("bsd_district", contact.contactid);
+
             }
 
-            if (contact._bsd_country_value == null)
+            if (PermanentAddress != null && !string.IsNullOrWhiteSpace(PermanentAddress.lineaddress))
             {
-                await DeletLookup("bsd_country", contact.contactid);
-            }
-            else
-            {
-                data["bsd_country@odata.bind"] = "/bsd_countries(" + contact._bsd_country_value + ")"; /////Lookup Field
+                if (!string.IsNullOrWhiteSpace(PermanentAddress.address))
+                    data["bsd_permanentaddress1"] = PermanentAddress.address;
+                if (!string.IsNullOrWhiteSpace(PermanentAddress.lineaddress))
+                    data["bsd_permanentaddress"] = PermanentAddress.lineaddress;
+                if(!string.IsNullOrWhiteSpace(PermanentAddress.lineaddress_en))
+                    data["bsd_permanenthousenumber"] = PermanentAddress.lineaddress_en;
+                if (!string.IsNullOrWhiteSpace(PermanentAddress.address_en))
+                    data["bsd_diachithuongtru"] = PermanentAddress.address_en;
+
+                if (PermanentAddress.country_id != Guid.Empty)
+                    data["bsd_permanentcountry@odata.bind"] = "/bsd_countries(" + PermanentAddress.country_id + ")";
+                else
+                    await DeletLookup("bsd_permanentcountry", contact.contactid);
+
+                if (PermanentAddress.province_id != Guid.Empty)
+                    data["bsd_permanentprovince@odata.bind"] = "/new_provinces(" + PermanentAddress.province_id + ")";
+                else
+                    await DeletLookup("bsd_permanentprovince", contact.contactid);
+
+                if (PermanentAddress.district_id != Guid.Empty)
+                    data["bsd_permanentdistrict@odata.bind"] = "/new_districts(" + PermanentAddress.district_id + ")";
+                else
+                    await DeletLookup("bsd_permanentdistrict", contact.contactid);
+
             }
 
-            if (contact._bsd_province_value == null)
-            {
-                await DeletLookup("bsd_province", contact.contactid);
-            }
-            else
-            {
-                data["bsd_province@odata.bind"] = "/new_provinces(" + contact._bsd_province_value + ")"; /////Lookup Field
-            }
-
-            if (contact._bsd_district_value == null)
-            {
-                await DeletLookup("bsd_district", contact.contactid);
-            }
-            else
-            {
-                data["bsd_district@odata.bind"] = "/new_districts(" + contact._bsd_district_value + ")"; /////Lookup Field
-            }
-
-            if (contact._bsd_permanentcountry_value == null)
-            {
-                await DeletLookup("bsd_permanentcountry", contact.contactid);
-            }
-            else
-            {
-                data["bsd_permanentcountry@odata.bind"] = "/bsd_countries(" + contact._bsd_permanentcountry_value + ")"; /////Lookup Field
-            }
-
-            if (contact._bsd_permanentprovince_value == null)
-            {
-                await DeletLookup("bsd_permanentprovince", contact.contactid);
-            }
-            else
-            {
-                data["bsd_permanentprovince@odata.bind"] = "/new_provinces(" + contact._bsd_permanentprovince_value + ")"; /////Lookup Field
-            }
-
-            if (contact._bsd_permanentdistrict_value == null)
-            {
-                await DeletLookup("bsd_permanentdistrict", contact.contactid);
-            }
-            else
-            {
-                data["bsd_permanentdistrict@odata.bind"] = "/new_districts(" + contact._bsd_permanentdistrict_value + ")"; /////Lookup Field
-            }
             if (UserLogged.Id != null)
             {
                 data["bsd_employee@odata.bind"] = "/bsd_employees(" + UserLogged.Id + ")";
@@ -375,6 +346,9 @@ namespace ConasiCRM.Portable.ViewModels
                                     <entity name='account'>
                                         <attribute name='name' alias='Name'/>
                                         <attribute name='accountid' alias='Id'/>
+                                        <filter type='and'>
+                                            <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
+                                        </filter>
                                     </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("accounts", fetch);
@@ -389,236 +363,121 @@ namespace ConasiCRM.Portable.ViewModels
             }
         }
 
-        public async Task LoadCountryForLookup()
+        public async Task GetImageCMND()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='bsd_country'>
-                                    <attribute name='bsd_countryname' alias='Name'/>
-                                    <attribute name='bsd_countryid' alias='Id'/>
-                                    <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_priority' descending='false' />
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
-            if (result == null)
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_behind) || !string.IsNullOrWhiteSpace(singleContact.bsd_etag_front))
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_behind))
             {
-                return;
+                var urlVideo = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<GraphThumbnailsUrlModel>>($"{Config.OrgConfig.SharePointContact_CMNDId}/items/{singleContact.bsd_etag_behind}/driveItem/thumbnails");
+                singleContact.bsd_matsaucmnd_source = urlVideo.value.SingleOrDefault().large.url;
             }
-            foreach (var x in result.value)
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_front))
             {
-                list_country_lookup.Add(x);
+                var urlVideo = await CrmHelper.RetrieveImagesSharePoint<RetrieveMultipleApiResponse<GraphThumbnailsUrlModel>>($"{Config.OrgConfig.SharePointContact_CMNDId}/items/{singleContact.bsd_etag_front}/driveItem/thumbnails");
+                singleContact.bsd_mattruoccmnd_source = urlVideo.value.SingleOrDefault().large.url;
             }
         }
-
-        public async Task<LookUp> LoadCountryByName(string CountryName)
+        public async Task<bool> UpLoadCMNDFront()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='bsd_country'>
-                                    <attribute name='bsd_countryname' alias='Name'/>
-                                    <attribute name='bsd_countryid' alias='Id'/>
-                                    <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_countryname' descending='false' />
-                                    <filter type='and'>
-                                      <condition attribute='bsd_countryname' operator='eq' value='" + CountryName + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("bsd_countries", fetch);
-            if (result != null && result.value.Count > 0)
+            var frontImage_name =  this.singleContact.contactid.ToString() + "_front.jpg";
+            using (var client = new HttpClient())
             {
-                LookUp country = new LookUp();
-                country = result.value.FirstOrDefault();
-                return country;
-            }
-            else
-            {
-                return null;
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (singleContact.bsd_mattruoccmnd_base64 != null)
+                {
+                    var url = "https://prod-12.southeastasia.logic.azure.com:443/workflows/ead81b97fd1c4e3c800f2614089508ef/triggers/manual/paths/invoke?api-version=2016-06-01&sp=/triggers/manual/run&sv=1.0&sig=e2vS46jv2ziDZCbhy32WbBLBjS5K5kEAOWs8KjXcG5M";
+                    byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
+
+                    ImageCMNDModel data = new ImageCMNDModel {name= frontImage_name, value = arrByteFront };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    using (var response = client.PostAsync(url, content))
+                    {
+                       var body = await response.Result.Content.ReadAsStringAsync();
+                        singleContact.bsd_etag_front = body;
+                        string a = response.Result.Content.ToString();
+                        if (response.Result != null)
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
-
-        public async Task LoadProvincesForLookup(LookUp Country)
+        public async Task<bool> UpLoadCMNDBehind()
         {
-            if (Country == null) return;
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='new_province'>
-                                    <attribute name='bsd_provincename' alias='Name'/>
-                                    <attribute name='new_provinceid' alias='Id'/>
-                                    <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_priority' descending='false' />
-                                    <filter type='and'>
-                                      <condition attribute='bsd_country' operator='eq' value='" + Country.Id + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_provinces", fetch);
-            if (result == null)
+            behindImage_name = this.singleContact.contactid.ToString() + "_behind.jpg";
+            using (var client = new HttpClient())
             {
-                return;
-            }
-            foreach (var x in result.value)
-            {
-                list_province_lookup.Add(x);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (singleContact.bsd_matsaucmnd_base64 != null)
+                {
+                    var url = "https://prod-12.southeastasia.logic.azure.com:443/workflows/ead81b97fd1c4e3c800f2614089508ef/triggers/manual/paths/invoke?api-version=2016-06-01&sp=/triggers/manual/run&sv=1.0&sig=e2vS46jv2ziDZCbhy32WbBLBjS5K5kEAOWs8KjXcG5M";
+                    byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
+
+                    ImageCMNDModel data = new ImageCMNDModel { name = frontImage_name, value = arrByteBehind };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    using (var response = client.PostAsync(url, content))
+                    {
+                        if (response.Result != null)
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
-
-        public async Task<LookUp> LoadProvinceByName(string CountryId, string ProvinceName)
+        public async Task UpLoadCMND()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='new_province'>
-                                    <attribute name='bsd_provincename' alias='Name'/>
-                                    <attribute name='new_provinceid' alias='Id'/>
-                                    <attribute name='bsd_nameen' alias='Detail'/>
-                                    <order attribute='bsd_provincename' descending='false' />
-                                    <filter type='and'>
-                                        <condition attribute='bsd_country' operator='eq' value='" + CountryId + @"' />
-                                        <condition attribute='bsd_provincename' operator='eq' value='" + ProvinceName + @"' />
-                                    </filter>
-                                  </entity>
-                                </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_provinces", fetch);
-            if (result != null && result.value.Count > 0)
+            var frontImage_name = this.singleContact.contactid.ToString() + "_front.jpg";
+            var behindImage_name = this.singleContact.contactid.ToString() + "_behind.jpg";
+            using (var client = new HttpClient())
             {
-                LookUp Province = new LookUp();
-                Province = result.value.FirstOrDefault();
-                return Province;
-            }
-            else
-            {
-                return null;
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var url = "https://prod-12.southeastasia.logic.azure.com:443/workflows/ead81b97fd1c4e3c800f2614089508ef/triggers/manual/paths/invoke?api-version=2016-06-01&sp=/triggers/manual/run&sv=1.0&sig=e2vS46jv2ziDZCbhy32WbBLBjS5K5kEAOWs8KjXcG5M";
+                if (singleContact.bsd_mattruoccmnd_base64 != null)
+                {
+                    byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
+                    ImageCMNDModel data = new ImageCMNDModel { name = frontImage_name, value = arrByteFront };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    using (var response = client.PostAsync(url, content))
+                    {
+                        if (response.Result != null)
+                        {
+                            var body = await response.Result.Content.ReadAsStringAsync();
+                            singleContact.bsd_etag_front = body;
+                            await UpdatContactEtag();
+                        }
+                    }
+                }
+                if (singleContact.bsd_matsaucmnd_base64 != null)
+                {
+                    byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
+                    ImageCMNDModel data = new ImageCMNDModel { name = behindImage_name, value = arrByteBehind };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    using (var response = client.PostAsync(url, content))
+                    {
+                        if (response.Result != null)
+                        {
+                            var body = await response.Result.Content.ReadAsStringAsync();
+                            singleContact.bsd_etag_behind = body;
+                            await UpdatContactEtag();
+                        }
+                    }
+                }
             }
         }
-
-        public async Task LoadDistrictForLookup(LookUp Province)
-        {
-            if (Province == null) return;
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='new_district'>
-                                <attribute name='new_name' alias='Name'/>
-                                <attribute name='new_districtid' alias='Id'/>
-                                <attribute name='bsd_nameen' alias='Detail'/>
-                                <order attribute='new_name' descending='false' />
-                                <filter type='and'>
-                                  <condition attribute='new_province' operator='eq' value='" + Province.Id + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_districts", fetch);
-            if (result == null)
-            {
-                return;
-            }
-            foreach (var x in result.value)
-            {
-                list_district_lookup.Add(x);
-            }
-        }
-
-        public async Task<LookUp> LoadDistrictByName(string ProvinceId, string DistrictName)
-        {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                              <entity name='new_district'>
-                                <attribute name='new_name' alias='Name'/>
-                                <attribute name='new_districtid' alias='Id'/>
-                                <attribute name='bsd_nameen' alias='Detail'/>
-                                <order attribute='new_name' descending='false' />
-                                <filter type='and'>
-                                    <condition attribute='new_province' operator='eq' value='" + ProvinceId + @"' />
-                                    <condition attribute='new_name' operator='eq' value='" + DistrictName + @"' />
-                                </filter>
-                              </entity>
-                            </fetch>";
-            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<LookUp>>("new_districts", fetch);
-            if (result != null && result.value.Count > 0)
-            {
-                LookUp District = new LookUp();
-                District = result.value.FirstOrDefault();
-                return District;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-
-        // chua su dung duoc
-        //public async Task GetImageCMND()
-        //{
-        //    string token = (await CrmHelper.getSharePointToken()).access_token;
-        //    var client = BsdHttpClient.Instance();
-        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        //    var front_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-        //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')/$value");
-        //    var front_result = await client.SendAsync(front_request);
-        //    if (front_result.IsSuccessStatusCode)
-        //    {
-        //        singleContact.bsd_mattruoccmnd_base64 = Convert.ToBase64String(front_result.Content.ReadAsByteArrayAsync().Result);
-        //    }
-
-        //    var behind_request = new HttpRequestMessage(HttpMethod.Get, OrgConfig.SharePointResource
-        //                    + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')/$value");
-        //    var behind_result = await client.SendAsync(behind_request);
-        //    if (behind_result.IsSuccessStatusCode)
-        //    {
-        //        singleContact.bsd_matsaucmnd_base64 = Convert.ToBase64String(behind_result.Content.ReadAsByteArrayAsync().Result);
-        //    }
-        //    //var front_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER +  "/" + frontImage_name + "&access_token=" + token));
-        //    //if(front_result != null)
-        //    //{
-        //    //    using (var memoryStream1 = new MemoryStream())
-        //    //    {
-        //    //        front_result.GetStream().CopyTo(memoryStream);
-        //    //        file.Dispose();
-        //    //        return memoryStream.ToArray();
-        //    //    }
-        //    //}
-
-        //    //var behind_result = ImageSource.FromUri(new Uri(OrgConfig.SharePointResource + "sites/Conasi/_layouts/15/download.aspx?SourceUrl=/sites/Conasi/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "&access_token=" + token));
-        //}
-
-        //public async Task uploadImageCMND()
-        //{
-        //    string token = (await CrmHelper.getSharePointToken()).access_token;
-
-        //    using (var client = new HttpClient())
-        //    {
-        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-        //        if (singleContact.bsd_mattruoccmnd_base64 != null)
-        //        {
-        //            byte[] arrByteFront = Convert.FromBase64String(singleContact.bsd_mattruoccmnd_base64);
-
-        //            using (var response = client.PostAsync
-        //            (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + frontImage_name + "',overwrite=true)")
-        //            , new StreamContent(new MemoryStream(arrByteFront))).Result)
-        //            {
-        //                if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt trước CMND thất bại", "OK"); }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + frontImage_name + "')"));
-        //        }
-
-        //        if (singleContact.bsd_matsaucmnd_base64 != null)
-        //        {
-        //            byte[] arrByteBehind = Convert.FromBase64String(singleContact.bsd_matsaucmnd_base64);
-
-        //            using (var response = client.PostAsync
-        //            (new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFolderByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "')/Files/add(url='" + behindImage_name + "',overwrite=true)")
-        //            , new StreamContent(new MemoryStream(arrByteBehind))).Result)
-        //            {
-        //                if (!response.IsSuccessStatusCode) { await Application.Current.MainPage.DisplayAlert("Lỗi", "Cập nhật ảnh mặt sau CMND thất bại", "OK"); }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            await client.DeleteAsync(new Uri(OrgConfig.SharePointResource + "/sites/" + OrgConfig.SharePointSiteName + "/_api/web/GetFileByServerRelativeUrl('/sites/" + OrgConfig.SharePointSiteName + "/" + IMAGE_CMND_FOLDER + "/" + behindImage_name + "')"));
-        //        }
-        //    }
-        //}
 
         public async Task<bool> CheckCMND(string identitycardnumber, string contactid)
         {
@@ -705,6 +564,26 @@ namespace ConasiCRM.Portable.ViewModels
             else
             {
                 return true;
+            }
+        }
+        public async Task<bool> UpdatContactEtag()
+        {
+            if (singleContact.contactid == Guid.Empty) return false;
+            string path = "/contacts(" + singleContact.contactid + ")";
+
+            IDictionary<string, object> data = new Dictionary<string, object>();
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_front))
+                data["bsd_etag_front"] = singleContact.bsd_etag_front;
+            if (!string.IsNullOrWhiteSpace(singleContact.bsd_etag_behind))
+                data["bsd_etag_behind"] = singleContact.bsd_etag_behind;
+            CrmApiResponse result = await CrmHelper.PatchData(path, data);
+            if (result.IsSuccess)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

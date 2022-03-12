@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
 using ConasiCRM.Portable.Controls;
 using System.Collections.ObjectModel;
 using ConasiCRM.Portable.Models;
+using Xamarin.Essentials;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -27,12 +26,13 @@ namespace ConasiCRM.Portable.Views
 
         public async Task LoadCallLog()
         {
-            if (await PermissionHelper.CheckPermissions(permissionType.Contacts) != permissionStatus.Granted
-                || await PermissionHelper.CheckPermissions(permissionType.Phone) != permissionStatus.Granted)
+            if (await Permissions.CheckStatusAsync<Permissions.Phone>() != PermissionStatus.Granted
+                || await Permissions.CheckStatusAsync<Permissions.ContactsRead>() != PermissionStatus.Granted 
+                || await Permissions.CheckStatusAsync<Permissions.ContactsWrite>() != PermissionStatus.Granted)
             {
                 await Navigation.PopAsync();
                 return;
-            }
+            }         
 
             viewModel.IsBusy = true;
 

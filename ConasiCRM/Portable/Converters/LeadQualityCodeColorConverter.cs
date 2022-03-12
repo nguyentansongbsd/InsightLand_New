@@ -16,11 +16,11 @@ namespace ConasiCRM.Portable.Converters
             }
             else if ((int)value == 2)
             {
-                return Color.FromHex("D96800");
+                return Color.FromHex("ffc43d");
             }
             else if ((int)value == 3)
             {
-                return Color.FromHex("0016D9");
+                return Color.FromHex("1399D5");
             }
             else
             {

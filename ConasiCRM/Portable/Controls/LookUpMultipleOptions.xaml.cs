@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Telerik.XamarinForms.Primitives;
 using ConasiCRM.Portable.Models;
 using Xamarin.Forms;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.Controls
 {
@@ -16,8 +17,8 @@ namespace ConasiCRM.Portable.Controls
 
         public Func<Task> PreShow;
 
-        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(List<OptionSet>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
-        public List<OptionSet> ItemsSource { get => (List<OptionSet>)GetValue(ItemsSourceProperty); set { SetValue(ItemsSourceProperty, value); } }
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(List<OptionSetFilter>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
+        public List<OptionSetFilter> ItemsSource { get => (List<OptionSetFilter>)GetValue(ItemsSourceProperty); set { SetValue(ItemsSourceProperty, value); } }
 
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
@@ -35,8 +36,8 @@ namespace ConasiCRM.Portable.Controls
         public string Text { get => _text; set { _text = value; OnPropertyChanged(nameof(Text)); } }
 
         //edit
-        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSet>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
-        public List<List<OptionSet>> ListListView { get => (List<List<OptionSet>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
+        public static readonly BindableProperty ListListViewProperty = BindableProperty.Create(nameof(ListListView), typeof(List<List<OptionSetFilter>>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null, propertyChanged: ItemSourceChange);
+        public List<List<OptionSetFilter>> ListListView { get => (List<List<OptionSetFilter>>)GetValue(ListListViewProperty); set { SetValue(ListListViewProperty, value); } }
 
         public static readonly BindableProperty ListTabProperty = BindableProperty.Create(nameof(ListTab), typeof(List<string>), typeof(LookUpMultipleOptions), null, BindingMode.TwoWay, null);
         public List<string> ListTab { get => (List<string>)GetValue(ListTabProperty); set { SetValue(ListTabProperty, value); } }
@@ -77,7 +78,7 @@ namespace ConasiCRM.Portable.Controls
         {
             saveButton = new Button()
             {
-                Text = "Lưu",
+                Text = Language.luu,
                 BackgroundColor = (Color)App.Current.Resources["NavigationPrimary"],
                 TextColor = Color.White,
                 Padding = new Thickness(10, 5)
@@ -87,7 +88,7 @@ namespace ConasiCRM.Portable.Controls
 
             Button deleteButton = new Button()
             {
-                Text = "Xoá",
+                Text = Language.xoa,
                 TextColor = (Color)App.Current.Resources["NavigationPrimary"],
                 BackgroundColor = Color.White,
                 BorderColor = (Color)App.Current.Resources["NavigationPrimary"],
@@ -105,7 +106,7 @@ namespace ConasiCRM.Portable.Controls
 
             cancelButton = new Button()
             {
-                Text = "Đóng",
+                Text = Language.dong,
                 TextColor = (Color)App.Current.Resources["NavigationPrimary"],
                 BackgroundColor = Color.White,
                 BorderColor = (Color)App.Current.Resources["NavigationPrimary"],
@@ -163,7 +164,7 @@ namespace ConasiCRM.Portable.Controls
             StackLayout stSearchBar = new StackLayout();          
 
             searchBar = new SearchBar();
-            searchBar.Placeholder = "Từ khoá";
+           // searchBar.Placeholder = Language.tim_kiem;
             searchBar.TextChanged += SearchBar_TextChangedEventArgs;
 
             SearchBarFrame searchBarFrame = new SearchBarFrame();
@@ -216,12 +217,7 @@ namespace ConasiCRM.Portable.Controls
 
             if (ListListView != null && ListListView.Count>0 && ListTab != null && ListTab.Count>0)
             {
-                //ItemsSource = new List<OptionSet>();
-                //for (int i = 0; i < ListListView.Count; i++)
-                //{
-                //    ItemsSource.AddRange(ListListView[i]);
-                //}
-
+                ItemSourceForTabs();
                 Grid tabs = SetUpTabs(ListTab);
                 gridMain = new Grid();
                 gridMain.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
@@ -273,11 +269,27 @@ namespace ConasiCRM.Portable.Controls
             {
                 if (ListListView != null && ListListView.Count > 0 && ListTab != null && ListTab.Count > 0)
                 {
-                    lookUpListView.ItemsSource = this.ListListView[indexTab].Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                    var list = from Item in ListListView[indexTab]
+                               where Item.Label.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.SDT != null && Item.SDT.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CMND != null && Item.CMND.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CCCD != null && Item.CCCD.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.HC != null && Item.HC.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.SoGPKD != null && Item.SoGPKD.ToString().ToLower().Contains(text.ToLower())
+                               select Item;
+                    lookUpListView.ItemsSource = list;
                 }
                 else
                 {
-                    lookUpListView.ItemsSource = this.ItemsSource.Where(x => x.Label.ToString().ToLower().Contains(text.ToLower()));
+                    var list = from Item in ItemsSource
+                               where Item.Label.ToString().ToLower().Contains(text.ToLower())||
+                               Item.SDT != null && Item.SDT.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CMND != null && Item.CMND.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.CCCD != null && Item.CCCD.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.HC != null && Item.HC.ToString().ToLower().Contains(text.ToLower()) ||
+                               Item.SoGPKD != null && Item.SoGPKD.ToString().ToLower().Contains(text.ToLower())
+                               select Item;
+                    lookUpListView.ItemsSource = list;
                 }
             }
         }
@@ -330,8 +342,27 @@ namespace ConasiCRM.Portable.Controls
             OnDelete?.Invoke(this, EventArgs.Empty);
         }
 
-        public void setData()
+        public async void setData()
         {
+            if(ItemsSource == null)
+            {
+                if (ListListView != null && ListListView.Count > 0 && ListTab != null && ListTab.Count > 0)
+                {
+                    ItemSourceForTabs();
+                }   
+                else
+                {
+                    if (PreShow != null)
+                    {
+                        await PreShow();
+                        if (PreOpenOneTime)
+                        {
+                            PreShow = null;
+                        }
+                    }
+                }    
+            }    
+
             if (this.SelectedIds != null && this.SelectedIds.Any() && ItemsSource != null)
             {
                 var selectedInSource = ItemsSource.Where(x => SelectedIds.Any(s => s == x.Val)).ToList();
@@ -349,11 +380,11 @@ namespace ConasiCRM.Portable.Controls
                 ClearFlexLayout();
             }
         }
-        public void SetList(List<OptionSet> selectedInSource)
+        public void SetList(List<OptionSetFilter> selectedInSource)
         {
             this.Entry.IsVisible = false;
             this.flexLayout.IsVisible = true;
-            selectedInSource.Add(new OptionSet()
+            selectedInSource.Add(new OptionSetFilter()
             {
                 Val = "0"
             });
@@ -383,10 +414,20 @@ namespace ConasiCRM.Portable.Controls
 
         private static void ItemSourceChange(BindableObject bindable, object oldValue, object value)
         {
-            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;         
+            LookUpMultipleOptions control = (LookUpMultipleOptions)bindable;
             control.setData();            
+        } 
+        private void ItemSourceForTabs()
+        {
+            if (ItemsSource == null || ItemsSource.Count <= 0)
+            {
+                ItemsSource = new List<OptionSetFilter>();
+                for (int i = 0; i < ListListView.Count; i++)
+                {
+                    ItemsSource.AddRange(ListListView[i]);
+                }
+            }
         }
-
         public async void SetUpModal()
         {
             if (PreShow != null)
@@ -417,7 +458,6 @@ namespace ConasiCRM.Portable.Controls
             CenterModal.Footer = gridButton;
             CenterModal.Body = gridMain;
         }
-
         public Grid SetUpTabs(List<string> tabs)
         {
             ListLabelTab = new List<Label>();
@@ -459,7 +499,6 @@ namespace ConasiCRM.Portable.Controls
             indexTab = ListRadBorderTab.IndexOf(ListRadBorderTab.FirstOrDefault(x => x.Children.Last() == button));
             IndexTab(indexTab);
         }
-
         private void IndexTab(int index)
         {
             if (ListRadBorderTab != null && ListRadBorderTab.Count>0)

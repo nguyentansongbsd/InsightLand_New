@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.ViewModels;
 using Xamarin.Forms;
-using permissionType = Plugin.Permissions.Abstractions.Permission;
-using permissionStatus = Plugin.Permissions.Abstractions.PermissionStatus;
 using ConasiCRM.Portable.Controls;
+using Xamarin.Essentials;
 
 namespace ConasiCRM.Portable.Views
 {
@@ -24,8 +23,9 @@ namespace ConasiCRM.Portable.Views
 
         public async Task LoadSMS()
         {
-            if (await PermissionHelper.CheckPermissions(permissionType.Contacts) != permissionStatus.Granted
-                || await PermissionHelper.CheckPermissions(permissionType.Sms) != permissionStatus.Granted)
+            if (await Permissions.CheckStatusAsync<Permissions.Sms>() != PermissionStatus.Granted
+                 || await Permissions.CheckStatusAsync<Permissions.ContactsRead>() != PermissionStatus.Granted
+                 || await Permissions.CheckStatusAsync<Permissions.ContactsWrite>() != PermissionStatus.Granted)
             {
                 await Navigation.PopAsync();
                 return;

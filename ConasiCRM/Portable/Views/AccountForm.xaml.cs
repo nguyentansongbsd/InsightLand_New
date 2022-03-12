@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Helpers;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Services;
 using ConasiCRM.Portable.ViewModels;
 using System;
@@ -39,17 +40,15 @@ namespace ConasiCRM.Portable.Views
 
         public void Init()
         {
-            this.BindingContext = viewModel = new AccountFormViewModel();
-            centerModalContacAddress.Body.BindingContext = viewModel;            
+            this.BindingContext = viewModel = new AccountFormViewModel();       
             //Lookup_BusinessType.BindingContext = viewModel;
             SetPreOpen();
         }
 
         private void Create()
         {
-            this.Title = "Tạo Mới Khách Hàng Doanh Nghiệp";
-            btnSave.Text = "Tạo Mới";
-            datePickerNgayCap.DefaultDisplay = DateTime.Now;
+            this.Title = Language.tao_moi_khach_hang_doanh_nghiep_title;
+            btnSave.Text = Language.tao_khach_hang;
             btnSave.Clicked += CreateContact_Clicked;
             viewModel.LoadBusinessTypeForLookup();
             viewModel.BusinessType = viewModel.BusinessTypeOptionList.SingleOrDefault(x => x.Val == "100000000");
@@ -63,8 +62,8 @@ namespace ConasiCRM.Portable.Views
         private async void Update()
         {
             viewModel.singleAccount = new AccountFormModel();
-            this.Title = "Cập Nhật Khách Hàng Doanh Nghiệp";
-            btnSave.Text = "Cập Nhật";
+            this.Title = Language.cap_nhat_khach_hang_doanh_nghiep_title;
+            btnSave.Text = Language.cap_nhat_khach_hang;
             btnSave.Clicked += UpdateContact_Clicked;
 
             await viewModel.LoadOneAccount(this.AccountId);
@@ -83,12 +82,12 @@ namespace ConasiCRM.Portable.Views
             //    }
             //    viewModel.BusinessType = ids;
             //}
-            if (viewModel.singleAccount.bsd_localization != null)
+            if (viewModel.singleAccount != null && viewModel.singleAccount.bsd_localization != null)
             {
                 viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
             }
 
-            if (viewModel.singleAccount.primarycontactname != null)
+            if (viewModel.singleAccount != null && viewModel.singleAccount.primarycontactname != null)
             {
                 viewModel.GetPrimaryContactByID();
             }
@@ -158,35 +157,29 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 await viewModel.LoadContactForLookup();
                 LoadingHelper.Hide();
-            };
-            lookUpContacAddressCountry.PreOpenAsync = async () =>
-            {
-                LoadingHelper.Show();
-                await viewModel.LoadCountryForLookup();
-                LoadingHelper.Hide();
-            };          
+            };      
         }
 
         private async void SaveData(string id)
         {
             if (viewModel.Localization == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn loại khách hàng");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_loai_khach_hang);
                 return;
             }
             if (viewModel.singleAccount.bsd_name == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập tên công ty");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_ten_cong_ty);
                 return;
             }
             if (viewModel.PrimaryContact == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng chọn người đại diện");
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_nguoi_dai_dien);
                 return;
             }
             if (viewModel.singleAccount.telephone1 == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số điện thoại công ty");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_sdt_cong_ty);
                 return;
             }
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -195,7 +188,7 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleAccount.emailaddress1);
                 if (!match.Success)
                 {
-                    ToastMessageHelper.ShortMessage("Email sai địng dạng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.email_sai_dinh_dang);
                     return;
                 }
             }
@@ -204,27 +197,32 @@ namespace ConasiCRM.Portable.Views
                 Match match = regex.Match(viewModel.singleAccount.bsd_email2);
                 if (!match.Success)
                 {
-                    ToastMessageHelper.ShortMessage("Email 2 sai địng dạng. Vui lòng thử lại");
+                    ToastMessageHelper.ShortMessage(Language.email_2_sai_dinh_dang);
                     return;
                 }
             }
             if (viewModel.singleAccount.bsd_registrationcode == null)
             {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số giấy phép kinh doanh");
+                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_giay_phep_kinh_doanh);
                 return;
             }
             if (!await viewModel.Check_form_keydata(null, viewModel.singleAccount.bsd_registrationcode, viewModel.singleAccount.accountid.ToString()))
             {
-                ToastMessageHelper.ShortMessage("Số giấy phép kinh doanh đã tạo trong dữ liệu doanh nghiệp");
+                ToastMessageHelper.ShortMessage(Language.so_giay_phep_kinh_doanh_da_tao_trong_du_lieu_doanh_nghiep);
                 return;
             }
             if (viewModel.singleAccount.bsd_vatregistrationnumber != null)
             {
                 if (!await viewModel.Check_form_keydata(viewModel.singleAccount.bsd_vatregistrationnumber, null, viewModel.singleAccount.accountid.ToString()))
                 {
-                    ToastMessageHelper.ShortMessage("Mã số thuế đã tạo trong dữ liệu doanh nghiệp");
+                    ToastMessageHelper.ShortMessage(Language.ma_so_thue_da_tao_trong_du_lieu_doanh_nghiep);
                     return;
                 }
+            }
+            if (string.IsNullOrWhiteSpace(viewModel.Address1.address))
+            {
+                ToastMessageHelper.ShortMessage(Language.vui_long_chon_dia_chi_lien_lac);
+                return;
             }
 
             LoadingHelper.Show();
@@ -245,16 +243,16 @@ namespace ConasiCRM.Portable.Views
                 var created = await viewModel.createAccount();
                 if (created)
                 {
-                    if (QueueForm.NeedToRefreshAccountList.HasValue) QueueForm.NeedToRefreshAccountList = true;
+                    if (QueueForm.NeedToRefresh.HasValue) QueueForm.NeedToRefresh = true;
                     if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
-                    ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thành công");
+                    ToastMessageHelper.ShortMessage(Language.tao_moi_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Tạo khách hàng doanh nghiệp thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_them_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
             else
@@ -265,156 +263,15 @@ namespace ConasiCRM.Portable.Views
                     if (CustomerPage.NeedToRefreshAccount.HasValue) CustomerPage.NeedToRefreshAccount = true;
                     if (AccountDetailPage.NeedToRefreshAccount.HasValue) AccountDetailPage.NeedToRefreshAccount = true;
                     await Navigation.PopAsync();
-                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thành công");
+                    ToastMessageHelper.ShortMessage(Language.cap_nhat_thanh_cong);
                     LoadingHelper.Hide();
                 }
                 else
                 {
                     LoadingHelper.Hide();
-                    ToastMessageHelper.ShortMessage("Cập nhật khách hàng doanh nghiệp thất bại");
+                    ToastMessageHelper.ShortMessage(Language.khong_cap_nhat_duoc_khach_hang_vui_long_thu_lai);
                 }
             }
-        }
-
-        private async void DiaChiLienLac_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();               
-            if (viewModel.AddressLine1Contac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_housenumberstreet))
-            {
-                viewModel.AddressLine1Contac = viewModel.singleAccount.bsd_housenumberstreet;
-            }
-
-            if (viewModel.AddressPostalCodeContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.bsd_postalcode))
-            {
-                viewModel.AddressPostalCodeContac = viewModel.singleAccount.bsd_postalcode;
-            }
-
-            if (viewModel.AddressCountryContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.country_name))
-            {
-                viewModel.AddressCountryContac = await viewModel.LoadCountryByName(viewModel.singleAccount.country_name);
-                await viewModel.LoadProvincesForLookup(viewModel.AddressCountryContac);
-            }
-
-            if (viewModel.AddressStateProvinceContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.province_name))
-            {
-                viewModel.AddressStateProvinceContac = await viewModel.LoadProvinceByName(viewModel.singleAccount._bsd_country_value, viewModel.singleAccount.province_name); ;
-                await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
-            }
-
-            if (viewModel.AddressCityContac == null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.district_name))
-            {
-                viewModel.AddressCityContac = await viewModel.LoadDistrictByName(viewModel.singleAccount._bsd_province_value, viewModel.singleAccount.district_name);
-            }
-
-            LoadingHelper.Hide();
-            await centerModalContacAddress.Show();
-        }      
-
-        private async void ContacAddressCountry_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadProvincesForLookup(viewModel.AddressCountryContac);
-        }
-
-        private async void ContacAddressProvince_Changed(object sender, LookUpChangeEvent e)
-        {
-            await viewModel.LoadDistrictForLookup(viewModel.AddressStateProvinceContac);
-        }
-
-        private async void CloseContacAddress_Clicked(object sender, EventArgs e)
-        {
-            await centerModalContacAddress.Hide();
-        }
-
-        private async void ConfirmContacAddress_Clicked(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
-            {
-                ToastMessageHelper.ShortMessage("Vui lòng nhập số nhà/đường/phường");
-                return;
-            }
-
-            List<string> address = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
-            {
-                viewModel.singleAccount.bsd_housenumberstreet = viewModel.AddressLine1Contac;
-                address.Add(viewModel.AddressLine1Contac);
-            }
-            else
-            {
-                viewModel.singleAccount.bsd_housenumberstreet = null;
-            }         
-
-            if (viewModel.AddressCityContac != null)
-            {
-                viewModel.singleAccount.district_name = viewModel.AddressCityContac.Name;
-                viewModel.singleAccount._bsd_district_value = viewModel.AddressCityContac.Id.ToString();
-                address.Add(viewModel.AddressCityContac.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.district_name = null;
-                viewModel.singleAccount._bsd_district_value = null;
-            }
-            if (viewModel.AddressStateProvinceContac != null)
-            {
-                viewModel.singleAccount.province_name = viewModel.AddressStateProvinceContac.Name;
-                viewModel.singleAccount._bsd_province_value = viewModel.AddressStateProvinceContac.Id.ToString();
-                address.Add(viewModel.AddressStateProvinceContac.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.province_name = null;
-                viewModel.singleAccount._bsd_province_value = null;
-            }
-
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                viewModel.singleAccount.bsd_postalcode = viewModel.AddressPostalCodeContac;
-                address.Add(viewModel.AddressPostalCodeContac);
-            }
-            else
-            {
-                viewModel.singleAccount.bsd_postalcode = null;
-            }
-
-            if (viewModel.AddressCountryContac != null)
-            {
-                viewModel.singleAccount.country_name = viewModel.AddressCountryContac.Name;
-                viewModel.singleAccount._bsd_country_value = viewModel.AddressCountryContac.Id.ToString();
-                address.Add(viewModel.AddressCountryContac.Name);
-            }
-            else
-            {
-                viewModel.singleAccount.country_name = null;
-                viewModel.singleAccount._bsd_country_value = null;
-            }
-            viewModel.singleAccount.bsd_address = viewModel.AddressCompositeContac = string.Join(", ", address);
-
-            //Address En
-            List<string> addressEn = new List<string>();
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressLine1Contac))
-            {
-                addressEn.Add(viewModel.AddressLine1Contac);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCityContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressCityContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressStateProvinceContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressStateProvinceContac.Detail);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressPostalCodeContac))
-            {
-                addressEn.Add(viewModel.AddressPostalCodeContac);
-            }
-            if (!string.IsNullOrWhiteSpace(viewModel.AddressCountryContac?.Detail))
-            {
-                addressEn.Add(viewModel.AddressCountryContac.Detail);
-            }
-            viewModel.singleAccount.bsd_diachi = string.Join(", ", addressEn);
-
-            await centerModalContacAddress.Hide();
-        }
+        }       
     }
 }

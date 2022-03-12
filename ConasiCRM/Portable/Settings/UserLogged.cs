@@ -15,10 +15,34 @@ namespace ConasiCRM.Portable.Settings
             set => AppSettings.AddOrUpdateValue(nameof(Id), value);
         }
 
+        public static string AccessToken
+        {
+            get => AppSettings.GetValueOrDefault(nameof(AccessToken), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(AccessToken), value);
+        }
+
+        public static string RefreshToken
+        {
+            get => AppSettings.GetValueOrDefault(nameof(RefreshToken), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(RefreshToken), value);
+        }
+
+        public static string AccessTokenSharePoint
+        {
+            get => AppSettings.GetValueOrDefault(nameof(AccessTokenSharePoint), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(AccessTokenSharePoint), value);
+        }
+
         public static string Password
         {
             get => AppSettings.GetValueOrDefault(nameof(Password), string.Empty);
             set => AppSettings.AddOrUpdateValue(nameof(Password), value);
+        }
+
+        public static string Avartar
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Avartar), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(Avartar), value);
         }
         public static string User
         {
@@ -29,6 +53,18 @@ namespace ConasiCRM.Portable.Settings
         {
             get => AppSettings.GetValueOrDefault(nameof(IsLogged), false);
             set => AppSettings.AddOrUpdateValue(nameof(IsLogged), value);
+        }
+
+        public static Guid ContactId
+        {
+            get => AppSettings.GetValueOrDefault(nameof(ContactId), Guid.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(ContactId), value);
+        }
+
+        public static string ContactName
+        {
+            get => AppSettings.GetValueOrDefault(nameof(ContactName), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(ContactName), value);
         }
 
         public static Guid ManagerId
@@ -47,6 +83,12 @@ namespace ConasiCRM.Portable.Settings
         {
             get => AppSettings.GetValueOrDefault(nameof(IsSaveInforUser), false);
             set => AppSettings.AddOrUpdateValue(nameof(IsSaveInforUser), value);
+        }
+
+        public static string Language
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Language), "vi"); //en
+            set => AppSettings.AddOrUpdateValue(nameof(Language), value);
         }
     }
 }
