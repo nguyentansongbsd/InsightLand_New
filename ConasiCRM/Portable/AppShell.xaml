@@ -115,7 +115,7 @@
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#666666" Glyph="&#xf0ca;" Size="18"/>
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent Title="{x:Static language:Language.tai_lieu_kinh_doanh_appshell}" ContentTemplate="{DataTemplate views:ListTaiLieuKinhDoanh}">
+    <ShellContent Title="{x:Static language:Language.tai_lieu_kinh_doanh_appshell}" ContentTemplate="{DataTemplate viewapp:BlankPage}">
         <ShellContent.Icon>
             <FontImageSource FontFamily="FontAwesomeSolid" Color="#7D7D7D" Glyph="&#xf07c;" Size="18"/>
         </ShellContent.Icon>

@@ -74,6 +74,7 @@ namespace ConasiCRM.Portable.Views
                 viewModel.PageListGiuCho = 1;
                 viewModel.ListGiuCho.Clear();
                 await viewModel.LoadGiuCho();
+                await viewModel.LoadThongKeGiuCho();
                 NeedToRefreshQueue = false;
                 LoadingHelper.Hide();
             }

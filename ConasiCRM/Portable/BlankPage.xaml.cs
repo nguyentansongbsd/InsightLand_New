@@ -48,13 +48,14 @@ namespace ConasiCRM.Portable
     public partial class BlankPage : ContentPage
     {
         public DateTime? date { get; set; }
+        public ViewModel viewModel;
 
         public BlankPage()
         {
 
             InitializeComponent();
             //this.BindingContext = this;
-           // this.BindingContext = viewModel = new ViewModel();
+            this.BindingContext = viewModel = new ViewModel();
             //media1.Source = MediaSource.FromUri("https://firebasestorage.googleapis.com/v0/b/gglogin-c3e8a.appspot.com/o/Screen%20-%20CNS%20-%20Figma%202021-07-20%2016-28-24.mp4?alt=media&token=4a31d437-ffe2-4a98-8ac3-e39a6ce57fd3");
             //  media1.Source = MediaSource.FromUri("https://www.deviantart.com/sakimichan/art/Ahri-D-vafied-nsfw-optional-681732764");
             //image.Source = "https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg";
@@ -258,16 +259,45 @@ namespace ConasiCRM.Portable
     }
     public class ViewModel : BaseViewModel
     {
+      //  public ObservableCollection<ChartModel> CommissionTransactionChart { get; set; } = new ObservableCollection<ChartModel>();
         public ObservableCollection<CollectionData> Data { get; set; }
         public List<Photo> Photos;
         public List<Photo> Media;
         public PhotoBrowser photoBrowser;
 
-        private bool _onComplate;
-        public bool OnComplate { get => _onComplate; set { _onComplate = value; OnPropertyChanged(nameof(OnComplate)); } }
+        private ObservableCollection<ChartModel> _commissionTransactionChart;
+        public ObservableCollection<ChartModel> CommissionTransactionChart { get => _commissionTransactionChart; set { _commissionTransactionChart = value; OnPropertyChanged(nameof(CommissionTransactionChart)); } }
+        private DateTime _dateBefor;
+        public DateTime dateBefor { get => _dateBefor; set { _dateBefor = value; OnPropertyChanged(nameof(dateBefor)); } }
+        public DateTime dateAfter { get; set; }
+        public DateTime firstMonth { get; set; }
+        public DateTime secondMonth { get; set; }
+        public DateTime thirdMonth { get; set; }
+        public DateTime fourthMonth { get; set; }
 
         public ViewModel()
         {
+            CommissionTransactionChart = new ObservableCollection<ChartModel>();
+            dateBefor = DateTime.Now;
+            DateTime threeMonthsAgo = DateTime.Now.AddMonths(-3);
+            dateAfter = new DateTime(threeMonthsAgo.Year, threeMonthsAgo.Month, 1);
+            firstMonth = dateAfter;
+            secondMonth = dateAfter.AddMonths(1);
+            thirdMonth = secondMonth.AddMonths(1);
+            fourthMonth = dateBefor;
+
+            ChartModel chartFirstMonth = new ChartModel() { Category = firstMonth.ToString("MM/yyyy"), Value = 100000 };
+            ChartModel chartSecondMonth = new ChartModel() { Category = secondMonth.ToString("MM/yyyy"), Value = 300000 };
+            ChartModel chartThirdMonth = new ChartModel() { Category = thirdMonth.ToString("MM/yyyy"), Value = 200000 };
+            ChartModel chartFourthMonth = new ChartModel() { Category = fourthMonth.ToString("MM/yyyy"), Value = 150000 };
+
+            ObservableCollection<ChartModel> list = new ObservableCollection<ChartModel>();
+            list.Add(chartFirstMonth);
+            list.Add(chartSecondMonth);
+            list.Add(chartThirdMonth);
+            list.Add(chartFourthMonth);
+
+            this.CommissionTransactionChart = list;
             //this.Data = new ObservableCollection<CollectionData>();
             //this.Data = GetCollectionData();
             //OnComplate = true;

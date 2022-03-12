@@ -207,7 +207,7 @@ namespace ConasiCRM.Portable.ViewModels
                 ChuanBi = data.Where(x => x.statuscode == 1).Count();
                 SanSang = data.Where(x => x.statuscode == 100000000).Count();
                 GiuCho = data.Where(x => x.statuscode == 100000004).Count();
-                SoDatCoc = DatCoc = data.Where(x => x.statuscode == 100000006).Count();
+                DatCoc = data.Where(x => x.statuscode == 100000006).Count();
                 DongYChuyenCoc = data.Where(x => x.statuscode == 100000005).Count();
                 DaDuTienCoc = data.Where(x => x.statuscode == 100000003).Count();
                 ThanhToanDot1 = data.Where(x => x.statuscode == 100000001).Count();
@@ -256,6 +256,9 @@ namespace ConasiCRM.Portable.ViewModels
                               <entity name='salesorder'>
                                 <attribute name='name' />
                                 <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                  <condition attribute='statuscode' operator='ne' value='100000006' />
+                                </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='inner' alias='ad'>
                                   <filter type='and'>
                                     <condition attribute='bsd_projectid' operator='eq' value ='{ProjectId}'/>
@@ -275,7 +278,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='name' />
                                 <order attribute='createdon' descending='true' />
                                 <filter type='and'>
-                                  <condition attribute='statuscode' operator='ne' value='100000001' />
+                                  <condition attribute='statuscode' operator='ne' value='100000007' />
                                 </filter>
                                 <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='inner' alias='ae'>
                                   <filter type='and'>
@@ -287,6 +290,30 @@ namespace ConasiCRM.Portable.ViewModels
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuoteModel>>("quotes", fetchXml);
             if (result == null || result.value.Any() == false) return;
             SoBangTinhGia = result.value.Count();
+        }
+        public async Task LoadThongKeDatCoc()
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                              <entity name='quote'>
+                                <attribute name='name' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                  <condition attribute='statuscode' operator='in'>
+                                    <value>100000006</value>
+                                    <value>100000000</value>
+                                    <value>3</value>
+                                  </condition>
+                                </filter>
+                                <link-entity name='bsd_project' from='bsd_projectid' to='bsd_projectid' link-type='inner' alias='ae'>
+                                  <filter type='and'>
+                                    <condition attribute='bsd_projectid' operator='eq' value='{ProjectId}'/>
+                                  </filter>
+                                </link-entity>
+                              </entity>
+                            </fetch>";
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<QuoteModel>>("quotes", fetchXml);
+            if (result == null || result.value.Any() == false) return;
+            SoDatCoc = result.value.Count();
         }
         public async Task LoadGiuCho()
         {

@@ -21,6 +21,7 @@ namespace ConasiCRM.Portable.ViewModels
         public ObservableCollection<ChartModel> DataMonthUnit { get; set; } = new ObservableCollection<ChartModel>();
 
         public ObservableCollection<ChartModel> CommissionTransactionChart { get; set; } = new ObservableCollection<ChartModel>();
+        public ObservableCollection<ChartModel> CommissionTransactionChart2 { get; set; } = new ObservableCollection<ChartModel>();
         public ObservableCollection<ChartModel> LeadsChart { get; set; } = new ObservableCollection<ChartModel>();
 
         private bool _isRefreshing;
@@ -109,24 +110,24 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadCommissionTransactions()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='bsd_commissiontransaction'>
-                                    <attribute name='bsd_commissiontransactionid' alias='Id'/>
-                                    <attribute name='createdon' alias='Date'/>
-                                    <attribute name='bsd_totalcommission' alias='CommissionTotal'/>
-                                    <attribute name='statuscode' alias='CommissionStatus'/>
-                                    <order attribute='createdon' descending='false' />
-                                    <filter type='and'>
-                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                                      <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='statuscode' operator='in'>
-                                        <value>100000007</value>
-                                        <value>100000006</value>
-                                        <value>100000004</value>
-                                        <value>100000005</value>
-                                      </condition>
-                                    </filter>
-                                  </entity>
+                                    <entity name='bsd_commissiontransaction'>
+                                        <attribute name='bsd_commissiontransactionid' alias='Id'/>
+                                        <attribute name='createdon' alias='Date'/>
+                                        <attribute name='bsd_totalamountpaid' alias='CommissionTotalPaid'/>
+                                        <attribute name='bsd_totalamount' alias='CommissionTotal'/>
+                                        <attribute name='statuscode' />
+                                        <order attribute='bsd_name' descending='false' />
+                                        <filter type='and'>
+                                            <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
+                                            <condition attribute='statecode' operator='eq' value='0' />
+                                        </filter>
+                                        <link-entity name='bsd_commissioncalculation' from='bsd_commissioncalculationid' to='bsd_commissioncalculation' link-type='inner'>
+                                            <attribute name='statuscode' alias='statuscode_calculator'/>
+                                            <filter type='and'>
+                                                <condition attribute='statuscode' operator='eq' value='100000003' />
+                                            </filter>
+                                        </link-entity>
+                                    </entity>
                                 </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("bsd_commissiontransactions", fetchXml);
             if (result == null) return;
@@ -136,24 +137,42 @@ namespace ConasiCRM.Portable.ViewModels
             decimal countTotalCommissionTh = 0;
             decimal countTotalCommissionFo = 0;
 
-            foreach (var item in result.value.Where(x => x.Date.Month == firstMonth.Month))
+            decimal countTotalPaidFr = 0;
+            decimal countTotalPaidSe = 0;
+            decimal countTotalPaidTh = 0;
+            decimal countTotalPaidFo = 0;
+
+            foreach (var item in result.value)
             {
-                countTotalCommissionFr += item.CommissionTotal;
-            }
-            foreach (var item in result.value.Where(x => x.Date.Month == secondMonth.Month))
-            {
-                countTotalCommissionSe += item.CommissionTotal;
-            }
-            foreach (var item in result.value.Where(x => x.Date.Month == thirdMonth.Month))
-            {
-                countTotalCommissionTh += item.CommissionTotal;
-            }
-            foreach (var item in result.value.Where(x => x.Date.Month == fourthMonth.Month))
-            {
-                countTotalCommissionFo = this.TotalCommissionAMonth += item.CommissionTotal;
-                if (item.CommissionStatus == "100000007")
+                // danh sách các hhgd có sts = Accountant Confirmed lấy từ entity Commission Calculator trong 4 tháng từ ngày hiện tại trở về trước
+                if (item.statuscode_calculator == 100000003 && item.Date.Month == firstMonth.Month)
                 {
-                    this.TotalPaidCommissionAMonth += item.CommissionTotal;
+                    countTotalCommissionFr += item.CommissionTotal;
+                    if (item.statuscode == 100000009)
+                        countTotalPaidFr += item.CommissionTotalPaid;
+                }
+                if (item.statuscode_calculator == 100000003 && item.Date.Month == secondMonth.Month)
+                {
+                    countTotalCommissionSe += item.CommissionTotal;
+                    if (item.statuscode == 100000009)
+                        countTotalPaidSe += item.CommissionTotalPaid;
+                }
+                if (item.statuscode_calculator == 100000003 && item.Date.Month == thirdMonth.Month)
+                {
+                    countTotalCommissionTh += item.CommissionTotal;
+                    if (item.statuscode == 100000009)
+                        countTotalPaidTh += item.CommissionTotalPaid;
+                }
+                if (item.statuscode_calculator == 100000003 && item.Date.Month == fourthMonth.Month)
+                {
+                    // tổng hhgd và hhgd paid được tính ở tháng hiện tại (sử dụng cho 2 giá trị thống kê)
+                    countTotalCommissionFo += item.CommissionTotal;
+                    TotalCommissionAMonth += item.CommissionTotal;
+                    if (item.statuscode == 100000009)
+                    {
+                        countTotalPaidFo += item.CommissionTotalPaid;
+                        TotalPaidCommissionAMonth += item.CommissionTotalPaid;
+                    }
                 }
             }
 
@@ -162,10 +181,21 @@ namespace ConasiCRM.Portable.ViewModels
             ChartModel chartThirdMonth = new ChartModel() { Category = thirdMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalCommissionTh) };
             ChartModel chartFourthMonth = new ChartModel() { Category = fourthMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalCommissionFo) };
 
+            ChartModel chartFirstMonth2 = new ChartModel() { Category = firstMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalPaidFr) };
+            ChartModel chartSecondMonth2 = new ChartModel() { Category = secondMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalPaidSe) };
+            ChartModel chartThirdMonth2 = new ChartModel() { Category = thirdMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalPaidTh) };
+            ChartModel chartFourthMonth2 = new ChartModel() { Category = fourthMonth.ToString("MM/yyyy"), Value = await TotalAMonth(countTotalPaidFo) };
+
             this.CommissionTransactionChart.Add(chartFirstMonth);
             this.CommissionTransactionChart.Add(chartSecondMonth);
             this.CommissionTransactionChart.Add(chartThirdMonth);
             this.CommissionTransactionChart.Add(chartFourthMonth);
+
+            this.CommissionTransactionChart2.Add(chartFirstMonth2);
+            this.CommissionTransactionChart2.Add(chartSecondMonth2);
+            this.CommissionTransactionChart2.Add(chartThirdMonth2);
+            this.CommissionTransactionChart2.Add(chartFourthMonth2);
+
             //format sau khi tính tổng
             TotalCommission = StringFormatHelper.FormatCurrency(TotalCommissionAMonth);
             TotalPaidCommission = StringFormatHelper.FormatCurrency(TotalPaidCommissionAMonth);
@@ -187,22 +217,20 @@ namespace ConasiCRM.Portable.ViewModels
         public async Task LoadQueueFourMonths()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='opportunity'>
-                                    <attribute name='createdon' alias='Date' />
-                                    <attribute name='opportunityid' alias='Id' />
-                                    <order attribute='createdon' descending='true' />
-                                    <filter type='and'>
-                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                                      <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='statuscode' operator='in'>
-                                         <value>100000004</value>
-                                         <value>100000000</value>
-                                         <value>100000002</value>
-                                      </condition>
-                                    </filter>
-                                  </entity>
+                                    <entity name='opportunity'>
+                                        <attribute name='bsd_bookingtime' alias='Date'/>
+                                        <attribute name='opportunityid' alias='Id' />
+                                            <filter type='and'>
+                                                <condition attribute='bsd_bookingtime' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
+                                                <condition attribute='statuscode' operator='in'>
+                                                    <value>100000002</value>
+                                                    <value>100000000</value>
+                                                </condition>
+                                                <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}' />
+                                            </filter>
+                                    </entity>
                                 </fetch>";
+
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("opportunities", fetchXml);
             if (result == null) return;
 
@@ -228,17 +256,16 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='quote'>
-                                    <attribute name='createdon' alias='Date'/>
-                                    <attribute name='quoteid' alias='Id'/>
-                                    <order attribute='createdon' descending='true' />
+                                    <attribute name='bsd_deposittime' alias='Date' />
+                                    <attribute name='quoteid' alias='Id' />
+                                    <attribute name='statuscode' alias='statuscode' />
                                     <filter type='and'>
-                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                                      <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
                                       <condition attribute='statuscode' operator='in'>
-                                        <value>100000000</value>
-                                        <value>4</value>
+                                         <value>3</value>
+                                         <value>4</value>
                                       </condition>
+                                      <condition attribute='bsd_deposittime' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
+                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}' />
                                     </filter>
                                   </entity>
                                 </fetch>";
@@ -254,7 +281,8 @@ namespace ConasiCRM.Portable.ViewModels
             var countQuoteTh = result.value.Where(x => x.Date.Month == thirdMonth.Month).Count();
             ChartModel chartThirdMonth = new ChartModel() { Category = thirdMonth.ToString("MM/yyyy"), Value = countQuoteTh };
 
-            var countQuoteFo = this.numQuote = result.value.Where(x => x.Date.Month == fourthMonth.Month).Count();
+            var countQuoteFo = result.value.Where(x => x.Date.Month == fourthMonth.Month).Count();
+            numQuote = result.value.Where(x => x.Date.Month == fourthMonth.Month && x.statuscode == 3).Count();
             ChartModel chartFourthMonth = new ChartModel() { Category = fourthMonth.ToString("MM/yyyy"), Value = countQuoteFo };
 
             this.DataMonthQuote.Add(chartFirstMonth);
@@ -265,16 +293,21 @@ namespace ConasiCRM.Portable.ViewModels
 
         public async Task LoadOptionEntryFourMonths()
         {
+            // ngoại trừ các sts Terminated , 1st Installment, Option, Qualify
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='salesorder'>
                                     <attribute name='createdon' alias='Date'/>
-                                    <attribute name='salesorderid' alias='Id' />
-                                    <order attribute='createdon' descending='true' />
+                                    <attribute name='quoteid' alias='Id'/>
                                     <filter type='and'>
-                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/>
-                                      <condition attribute='statuscode' operator='ne' value='100000006' />
+                                      <condition attribute='statuscode' operator='not-in'>
+                                        <value>100000001</value>
+                                        <value>100000006</value>
+                                        <value>100000000</value>
+                                        <value>100000005</value>
+                                      </condition>
                                       <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
+                                      <condition attribute='bsd_signedcontractdate' operator='null' />
+                                      <condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}' />
                                     </filter>
                                   </entity>
                                 </fetch>";
@@ -303,17 +336,19 @@ namespace ConasiCRM.Portable.ViewModels
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='product'>
-                                    <attribute name='createdon' alias='Date'/>
                                     <attribute name='productid' alias='Id'/>
-                                    <order attribute='createdon' descending='true' />
                                     <filter type='and'>
-                                      
                                       <condition attribute='statuscode' operator='eq' value='100000002' />
-                                      <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
-                                      <condition attribute='createdon' operator='on-or-before' value='{dateBefor.ToString("yyyy-MM-dd")}' />
                                     </filter>
+                                    <link-entity name='salesorder' from='salesorderid' to='bsd_optionentry' link-type='inner'>
+	                                <attribute name='bsd_signedcontractdate' alias='Date'/>
+                                      <filter type='and'>
+                                        <condition attribute='bsd_signedcontractdate' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
+                                      </filter>
+                                    </link-entity>
                                   </entity>
-                                </fetch>";//<condition attribute='bsd_employee' operator='eq' value='{UserLogged.Id}'/> : chua co filed bsd_employee
+                                </fetch>";
+
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DashboardChartModel>>("products", fetchXml);
             if (result == null) return;
 
@@ -341,13 +376,14 @@ namespace ConasiCRM.Portable.ViewModels
                                   <entity name='lead'>
                                     <attribute name='statuscode' alias='Label'/>
                                     <attribute name='leadid' alias='Val' />
-                                    <order attribute='createdon' descending='true' />
                                     <filter type='and'>
+                                      <condition attribute='createdon' operator='on-or-after' value='{dateAfter.ToString("yyyy-MM-dd")}' />
                                       <condition attribute='statuscode' operator='ne' value='2'/>
                                       <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                                     </filter>
                                   </entity>
                                 </fetch>";
+
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("leads", fetchXml);
             if (result == null || result.value.Count == 0) return;
 
@@ -598,6 +634,11 @@ namespace ConasiCRM.Portable.ViewModels
                  this.LoadCommissionTransactions()
                 );
         }
+
+        public void LoadTotalCommission()
+        {
+
+        }
     }
     public class DashboardChartModel
     {
@@ -605,5 +646,8 @@ namespace ConasiCRM.Portable.ViewModels
         public DateTime Date { get; set; }
         public decimal CommissionTotal { get; set; }
         public string CommissionStatus { get; set; }
+        public decimal CommissionTotalPaid { get; set; }
+        public int statuscode_calculator { get; set; }
+        public int statuscode { get; set; }
     }
 }
