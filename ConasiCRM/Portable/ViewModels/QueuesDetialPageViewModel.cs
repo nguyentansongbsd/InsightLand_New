@@ -151,7 +151,6 @@ namespace ConasiCRM.Portable.ViewModels
 
             this.Queue = data;
         }
-
         public async Task LoadDanhSachBangTinhGia()
         {
             string fetchXml = $@"<fetch version='1.0' count='5' page='{PageBangTinhGia}' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -203,7 +202,6 @@ namespace ConasiCRM.Portable.ViewModels
                 this.BangTinhGiaList.Add(item);
             }
         }
-
         public async Task CheckReserve()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -233,7 +231,6 @@ namespace ConasiCRM.Portable.ViewModels
                 ShowBtnBangTinhGia = false;
             }
         }
-
         public async Task LoadDanhSachDatCoc()
         {
             string fetchXml = $@"<fetch version='1.0' count='5' page='{PageDatCoc}' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -289,7 +286,6 @@ namespace ConasiCRM.Portable.ViewModels
                 this.DatCocList.Add(item);
             }
         }
-
         public async Task LoadDanhSachHopDong()
         {
             string fetchXml = $@"<fetch version='1.0' count='5' page='{PageHopDong}' output-format='xml-platform' mapping='logical' distinct='false'>

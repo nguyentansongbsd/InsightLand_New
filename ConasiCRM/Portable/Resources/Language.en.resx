@@ -2107,7 +2107,7 @@
     <value>Detail Information</value>
   </data>
   <data name="thong_tin_cmnd_ho_chieu" xml:space="preserve">
-    <value>Identity Card Number/Passport Information</value>
+    <value>Identity Card Number/ Passport Information</value>
   </data>
   <data name="thong_tin_cong_ty_title" xml:space="preserve">
     <value>Account Information</value>
@@ -2744,5 +2744,32 @@
   </data>
   <data name="nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc" xml:space="preserve">
     <value>Required and Optional are duplicated. Please check again.</value>
+  </data>
+  <data name="account_customer_type" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="account_developer_type" xml:space="preserve">
+    <value>Developer</value>
+  </data>
+  <data name="account_partner_type" xml:space="preserve">
+    <value>Partner</value>
+  </data>
+  <data name="account_sale_agents_type" xml:space="preserve">
+    <value>Sale agents</value>
+  </data>
+  <data name="ms_active_sts" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ms_applying_sts" xml:space="preserve">
+    <value>Applying</value>
+  </data>
+  <data name="ms_cancel_sts" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ms_inactive_sts" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="dieu_kien_ban_giao_khong_phu_hop_voi_unit_type" xml:space="preserve">
+    <value>Handover Condition is not suitable with Unit type. Please check again or choose another handover condition.</value>
   </data>
 </root>

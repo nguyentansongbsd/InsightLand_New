@@ -13,29 +13,28 @@
     xmlns:helper ="clr-namespace:ConasiCRM.Portable.Helper" 
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures"
-    x:Class="ConasiCRM.Portable.BlankPage">
+    x:Class="ConasiCRM.Portable.BlankPage"
+    xmlns:language="clr-namespace:ConasiCRM.Portable.Resources">
 
     <ContentPage.Content>
         <AbsoluteLayout>
             <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
-                <!--<xct:MediaElement x:Name="media" Source="https://sec.ch9.ms/ch9/5d93/a1eab4bf-3288-4faf-81c4-294402a85d93/XamarinShow_mid.mp4"
-              ShowsPlaybackControls="True" />-->
-                <controls:DatePickerBoderControl Date="{Binding date}" Placeholder="ngay" Margin="20,50" />
-                
-                <Button Text="test" Clicked="Button_Clicked_2"/>
+                <telerikChart:RadCartesianChart HeightRequest="250" >
+                    <telerikChart:RadCartesianChart.HorizontalAxis>
+                        <telerikChart:CategoricalAxis LabelFitMode="MultiLine" PlotMode="BetweenTicks" ShowLabels="True" MajorTickThickness="2" MajorTickBackgroundColor="#A9A9A9"/>
+                    </telerikChart:RadCartesianChart.HorizontalAxis>
+                    <telerikChart:RadCartesianChart.VerticalAxis>
+                        <telerikChart:NumericalAxis Minimum="0" Maximum="300" MajorStep="50" LabelFormat="{x:Static language:Language.format_dashboard}" LineColor="#A9A9A9"/>
+                    </telerikChart:RadCartesianChart.VerticalAxis>
+                    <telerikChart:RadCartesianChart.Grid>
+                        <telerikChart:CartesianChartGrid MajorLinesVisibility="Y" MajorLineThickness="1"/>
+                    </telerikChart:RadCartesianChart.Grid>
+                    <telerikChart:RadCartesianChart.Series>
+                        <telerikChart:BarSeries ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding CommissionTransactionChart}" />
+                        <telerikChart:BarSeries ValueBinding="Value" CategoryBinding="Category" ItemsSource="{Binding CommissionTransactionChart}" />
+                    </telerikChart:RadCartesianChart.Series>
+                </telerikChart:RadCartesianChart>
             </StackLayout>
-            <!--<StackLayout Margin="0,200,0,0">
-                <ffimageloading:CachedImage x:Name="test" HeightRequest="100" WidthRequest="100" LoadingPlaceholder="image_placeholder.jpg"/>
-                <controls:ImageControl x:Name="test"  HeightRequest="100" WidthRequest="100" BackgroundColor="Red"/>
-            </StackLayout>
-
-            <Button Text="click" Clicked="Button_Clicked" VerticalOptions="Center" HorizontalOptions="Center" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"/>
-            <mr:ContentView Swiped="ContentView_Swiped" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" IsVisible="true">
-                <controls:PinchZoomImage>
-                    <Image x:Name="img" Source="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg"/>
-                </controls:PinchZoomImage>
-            </mr:ContentView>
-            <mr:Image IsVisible="false" Source="https://raw.githubusercontent.com/stfalcon-studio/FrescoImageViewer/v.0.5.0/images/posters/Vincent.jpg" Pinching="Image_Pinching" Swiped="Image_Swiped" Pinched="Image_Pinched" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Up="Image_Up" Down="Image_Down"/>-->
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

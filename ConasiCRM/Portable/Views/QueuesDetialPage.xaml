@@ -100,12 +100,12 @@
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="{Binding Source={x:Static language:Language.phi_giu_cho},StringFormat='{0}:'}" FontSize="15" TextColor="#333333" />
-                                    <Label Text="{Binding Queue.bsd_queuingfee,StringFormat='{0:#,0} đ'}" IsVisible="{Binding Queue.bsd_queuingfee,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
+                                    <Label Text="{Binding Queue.bsd_queuingfee_format,StringFormat='{0} đ'}" IsVisible="{Binding Queue.bsd_queuingfee,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">
                                     <Label Text="{Binding Source={x:Static language:Language.ngan_sach},StringFormat='{0}:'}" FontSize="15" TextColor="#333333" />
-                                    <Label Text="{Binding Queue.budgetamount,StringFormat='{0:#,0} đ'}" IsVisible="{Binding Queue.budgetamount,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
+                                    <Label Text="{Binding Queue.budgetamount_format,StringFormat='{0} đ'}" IsVisible="{Binding Queue.budgetamount,Converter={StaticResource NullToHideConverter}}" FontSize="15" TextColor="#333333" />
                                 </StackLayout>
 
                                 <StackLayout Orientation="Horizontal">
@@ -307,7 +307,7 @@
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.tong_tien},StringFormat='{0}:'}" FontSize="15" TextColor="#333333"/>
-                                                            <Label Grid.Column="1" Text="{Binding totalamount_format}" FontSize="15" TextColor="Red" FontAttributes="Bold"/>
+                                                            <Label Grid.Column="1" Text="{Binding totalamount_format,StringFormat='{0} đ'}" FontSize="15" TextColor="Red" FontAttributes="Bold"/>
                                                         </Grid>
                                                     </StackLayout>
                                                 </DataTemplate>
@@ -358,7 +358,7 @@
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*">
                                                             <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.tong_tien},StringFormat='{0}:'}" FontSize="15" TextColor="#333333"/>
-                                                            <Label Grid.Column="1" Text="{Binding totalamount_format}" FontSize="15" TextColor="Red" FontAttributes="Bold"/>
+                                                            <Label Grid.Column="1" Text="{Binding totalamount_format,StringFormat='{0} đ'}" FontSize="15" TextColor="Red" FontAttributes="Bold"/>
                                                         </Grid>
                                                     </StackLayout>
                                                 </DataTemplate>
@@ -409,7 +409,7 @@
                                                         </Grid>
                                                         <Grid ColumnDefinitions="Auto,*" Grid.Row="4">
                                                             <Label Text="{Binding Source={x:Static language:Language.tong_tien},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                                            <Label Text="{Binding totalamount}" TextColor="Red" FontAttributes="Bold" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
+                                                            <Label Text="{Binding totalamount_format,StringFormat='{0} đ'}" TextColor="Red" FontAttributes="Bold" FontSize="15" Grid.Column="1" LineBreakMode="TailTruncation" />
                                                         </Grid>
                                                     </Grid>
                                                 </DataTemplate>

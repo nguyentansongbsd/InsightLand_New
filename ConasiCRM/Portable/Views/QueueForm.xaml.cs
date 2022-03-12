@@ -59,9 +59,9 @@ namespace ConasiCRM.Portable.Views
 
         public async void Create()
         {
-            btnSave.Text = Language.tao_moi_giu_cho_title;
+            btnSave.Text = Language.tao_giu_cho;
             btnSave.Clicked += Create_Clicked; ;
-            this.Title = Language.tao_giu_cho;
+            this.Title = Language.tao_moi_giu_cho_title;
             if(from)
             {
                 await viewModel.LoadFromUnit(viewModel.UnitId);
@@ -79,7 +79,7 @@ namespace ConasiCRM.Portable.Views
             {
                 await viewModel.LoadFromProject(viewModel.UnitId);
                 string res = await viewModel.createQueueDraft(true, viewModel.UnitId);
-                topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyyy");
+                topic.Text = viewModel.QueueFormModel.bsd_project_name +" - "+ DateTime.Now.ToString("dd/MM/yyyy");
                 if (viewModel.QueueFormModel.bsd_project_id != Guid.Empty)
                     OnCompleted?.Invoke(true);
                 else

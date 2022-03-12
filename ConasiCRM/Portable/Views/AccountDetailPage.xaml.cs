@@ -47,7 +47,6 @@ namespace ConasiCRM.Portable.Views
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_hop, "FontAwesomeRegular", "\uf274", null, NewMeet));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cuoc_goi, "FontAwesomeSolid", "\uf095", null, NewPhoneCall));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_cong_viec, "FontAwesomeSolid", "\uf073", null, NewTask));
-                viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.them_nguoi_uy_quyen, "FontAwesomeSolid", "\uf2b5", null, AddMandatorySecondary));
                 viewModel.ButtonCommandList.Add(new FloatButtonItem(Language.chinh_sua, "FontAwesomeRegular", "\uf044", null, Update));
             }
             else
@@ -280,29 +279,7 @@ namespace ConasiCRM.Portable.Views
             {
                 await viewModel.Load_List_Mandatory_Secondary(Id);
             }
-        }
-
-        private async void DeleteMandatory_Clicked(object sender, EventArgs e)
-        {
-            Label lblClicked = (Label)sender;
-            var a = (TapGestureRecognizer)lblClicked.GestureRecognizers[0];
-            MandatorySecondaryModel item = a.CommandParameter as MandatorySecondaryModel;
-            var conform = await DisplayAlert(Language.xac_nhan, Language.ban_co_muon_xoa_nguoi_uy_quyen_nay_khong, Language.dong_y, Language.huy);
-            if (conform == false) return;
-            LoadingHelper.Show();
-            var IsSuccess = await viewModel.DeleteMandatory_Secondary(item);
-            if (IsSuccess)
-            {
-                viewModel.list_MandatorySecondary.Remove(item);
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage(Language.da_xoa_nguoi_uy_quyen_duoc_chon);
-            }
-            else
-            {
-                LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage(Language.xoa_nguoi_uy_quyen_that_bai);
-            }
-        }
+        }        
 
         private async void ShowMoreMandatory_Clicked(object sender, EventArgs e)
         {
@@ -474,14 +451,6 @@ namespace ConasiCRM.Portable.Views
             };
         }
 
-        private async void AddMandatorySecondary(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            MandatorySecondaryForm newPage = new MandatorySecondaryForm(new Models.LookUp { Id = viewModel.singleAccount.accountid, Name = viewModel.singleAccount.bsd_name });
-            await Navigation.PushAsync(newPage);
-            LoadingHelper.Hide();
-        }
-
         private void GiuChoItem_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -516,7 +485,7 @@ namespace ConasiCRM.Portable.Views
             ContentMandatorySecondary.IsVisible = true;
             LoadingHelper.Hide();
         }
-
+        // loadmore
         private async void ListMoreMandatory_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
             if (e.Item != null)
@@ -532,7 +501,6 @@ namespace ConasiCRM.Portable.Views
                 }
             }
         }
-
         private void SetHeightListView()
         {
             double height_item = (viewModel.list_MandatorySecondary.Count() * 110) + 50;
@@ -583,7 +551,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
-
         private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
         {
             OnAppearing();

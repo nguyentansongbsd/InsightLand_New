@@ -2745,4 +2745,31 @@
   <data name="nguoi_tham_du_bat_buoc_phai_khac_nguoi_tham_du_khong_bat_buoc" xml:space="preserve">
     <value>Người tham dự bắt buộc phải khác người tham dự không bắt buộc.</value>
   </data>
+  <data name="account_customer_type" xml:space="preserve">
+    <value>Khách hàng</value>
+  </data>
+  <data name="account_developer_type" xml:space="preserve">
+    <value>Chủ đầu tư</value>
+  </data>
+  <data name="account_partner_type" xml:space="preserve">
+    <value>Đối tác</value>
+  </data>
+  <data name="account_sale_agents_type" xml:space="preserve">
+    <value>Đại lý</value>
+  </data>
+  <data name="ms_active_sts" xml:space="preserve">
+    <value>Nháp</value>
+  </data>
+  <data name="ms_applying_sts" xml:space="preserve">
+    <value>Đang áp dụng</value>
+  </data>
+  <data name="ms_cancel_sts" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="ms_inactive_sts" xml:space="preserve">
+    <value>Vô hiệu lực</value>
+  </data>
+  <data name="dieu_kien_ban_giao_khong_phu_hop_voi_unit_type" xml:space="preserve">
+    <value>Điều kiện bàn giao đã chọn không phù hợp với Loại sản phẩm đang thực hiện giao dịch. Vui lòng kiểm tra lại thông tin hoặc chọn điều kiện bàn giao khác.</value>
+  </data>
 </root>

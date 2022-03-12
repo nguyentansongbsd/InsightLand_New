@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Controls;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
@@ -68,10 +69,10 @@ namespace ConasiCRM.Portable.ViewModels
         public AccountDetailPageViewModel()
         {
             BusinessTypeOptions = new ObservableCollection<OptionSet>();
-            BusinessTypeOptions.Add(new OptionSet("100000000", "Khách hàng"));
-            BusinessTypeOptions.Add(new OptionSet("100000001", "Đối tác"));
-            BusinessTypeOptions.Add(new OptionSet("100000002", "Đại lý"));
-            BusinessTypeOptions.Add(new OptionSet("100000003", "Chủ đầu tư"));
+            BusinessTypeOptions.Add(new OptionSet("100000000", Language.account_customer_type)); //Customer  // account_customer_type
+            BusinessTypeOptions.Add(new OptionSet("100000001", Language.account_partner_type)); //Partner account_partner_type
+            BusinessTypeOptions.Add(new OptionSet("100000002", Language.account_sale_agents_type)); //Sale Agents account_sale_agents_type
+            BusinessTypeOptions.Add(new OptionSet("100000003", Language.account_developer_type)); //Developer account_developer_type
 
             list_thongtinqueing = new ObservableCollection<QueueFormModel>();
             list_thongtinquotation = new ObservableCollection<ReservationListModel>();
@@ -118,6 +119,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_postalcode' />
                                 <attribute name='bsd_housenumberstreet' />
                                 <attribute name='bsd_businesstypesys' />
+                                <attribute name='bsd_specialbuyer' />
                                 <order attribute='createdon' descending='true' />
                                     <link-entity name='contact' from='contactid' to='primarycontactid' visible='false' link-type='outer' alias='contacts'>
                                         <attribute name='bsd_fullname' alias='primarycontactname'/>

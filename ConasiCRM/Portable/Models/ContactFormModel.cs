@@ -397,6 +397,7 @@ namespace ConasiCRM.Portable.Models
 
         private string _bsd_etag_front_url;
         public string bsd_etag_front_url { get => _bsd_etag_front_url; set { _bsd_etag_front_url = value; OnPropertyChanged(nameof(bsd_etag_front_url)); } }
+        public string bsd_specialbuyer { get; set; }
 
     }
 }

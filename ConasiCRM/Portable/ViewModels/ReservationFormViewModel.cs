@@ -117,23 +117,44 @@ namespace ConasiCRM.Portable.ViewModels
         private decimal _totalDiscount = 0;
         public decimal TotalDiscount { get => _totalDiscount; set { _totalDiscount = value; OnPropertyChanged(nameof(TotalDiscount)); } }
 
+        private string _totalDiscount_format;
+        public string TotalDiscount_format { get => _totalDiscount_format; set { _totalDiscount_format = value; OnPropertyChanged(nameof(TotalDiscount_format)); } }
+
         private decimal _totalHandoverCondition = 0;
         public decimal TotalHandoverCondition { get => _totalHandoverCondition; set { _totalHandoverCondition = value; OnPropertyChanged(nameof(TotalHandoverCondition)); } }
+
+        private string _totalHandoverCondition_format;
+        public string TotalHandoverCondition_format { get => _totalHandoverCondition_format; set { _totalHandoverCondition_format = value; OnPropertyChanged(nameof(TotalHandoverCondition_format)); } }
 
         private decimal _netSellingPrice = 0;
         public decimal NetSellingPrice { get => _netSellingPrice; set { _netSellingPrice = value; OnPropertyChanged(nameof(NetSellingPrice));  } }
 
+        private string _netSellingPrice_format;
+        public string NetSellingPrice_format { get => _netSellingPrice_format; set { _netSellingPrice_format = value; OnPropertyChanged(nameof(NetSellingPrice_format)); } }
+
         private decimal _landValueDeduction = 0;
         public decimal LandValueDeduction { get => _landValueDeduction; set { _landValueDeduction = value; OnPropertyChanged(nameof(LandValueDeduction)); } }
+
+        private string _landValueDeduction_format;
+        public string LandValueDeduction_format { get => _landValueDeduction_format; set { _landValueDeduction_format = value; OnPropertyChanged(nameof(LandValueDeduction_format)); } }
 
         private decimal _totalVATTax = 0;
         public decimal TotalVATTax { get => _totalVATTax; set { _totalVATTax = value; OnPropertyChanged(nameof(TotalVATTax)); } }
 
+        private string _totalVATTax_format;
+        public string TotalVATTax_format { get => _totalVATTax_format; set { _totalVATTax_format = value; OnPropertyChanged(nameof(TotalVATTax_format)); } }
+
         private decimal _maintenanceFee = 0;
         public decimal MaintenanceFee { get => _maintenanceFee; set { _maintenanceFee = value; OnPropertyChanged(nameof(MaintenanceFee)); } }
 
+        private string _maintenanceFee_format;
+        public string MaintenanceFee_format { get => _maintenanceFee_format; set { _maintenanceFee_format = value; OnPropertyChanged(nameof(MaintenanceFee_format)); } }
+
         private decimal _totalAmount = 0;
         public decimal TotalAmount { get => Math.Round(_totalAmount,2); set { _totalAmount = value; OnPropertyChanged(nameof(TotalAmount)); } }
+
+        private string _totalAmount_format;
+        public string TotalAmount_format { get => _totalAmount_format; set { _totalAmount_format = value; OnPropertyChanged(nameof(TotalAmount_format)); } }
         #endregion
 
         public OptionSet QuoteDetail { get; set; }
@@ -163,6 +184,7 @@ namespace ConasiCRM.Portable.ViewModels
                 }
             }
             this.TotalDiscount = Math.Round(this.TotalDiscount, 0);
+            TotalDiscount_format = StringFormatHelper.FormatCurrency(TotalDiscount);
         }
 
         public async Task SetTotalHandoverCondition()
@@ -180,6 +202,7 @@ namespace ConasiCRM.Portable.ViewModels
                 this.TotalHandoverCondition = (this.HandoverCondition.bsd_percent * UnitPrice) / 100;
             }
             this.TotalHandoverCondition = Math.Round(this.TotalHandoverCondition, 0);
+            TotalHandoverCondition_format = StringFormatHelper.FormatCurrency(TotalHandoverCondition);
         }
 
         public async Task SetNetSellingPrice()
@@ -188,6 +211,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.NetSellingPrice = 0;
             this.NetSellingPrice = UnitPrice - this.TotalDiscount + this.TotalHandoverCondition;
             this.NetSellingPrice = Math.Round(this.NetSellingPrice, 0);
+            NetSellingPrice_format = StringFormatHelper.FormatCurrency(NetSellingPrice);
         }
 
         public async Task SetLandValueDeduction()
@@ -203,6 +227,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.TotalVATTax = 0;
             this.TotalVATTax = ((this.NetSellingPrice - this.LandValueDeduction) * 10) / 100;
             this.TotalVATTax = Math.Round(this.TotalVATTax, 0);
+            TotalVATTax_format = StringFormatHelper.FormatCurrency(TotalVATTax);
         }
 
         public async Task SetMaintenanceFee()
@@ -211,6 +236,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.MaintenanceFee = 0;
             this.MaintenanceFee = (this.NetSellingPrice * UnitMaintenanceFee) / 100;
             this.MaintenanceFee = Math.Round(this.MaintenanceFee, 0);
+            MaintenanceFee_format = StringFormatHelper.FormatCurrency(MaintenanceFee);
         }
 
         public async Task SetTotalAmount()
@@ -218,6 +244,7 @@ namespace ConasiCRM.Portable.ViewModels
             this.TotalAmount = 0;
             this.TotalAmount = this.NetSellingPrice + this.TotalVATTax + this.MaintenanceFee;
             this.TotalAmount = Math.Round(this.TotalAmount, 0);
+            TotalAmount_format = StringFormatHelper.FormatCurrency(TotalAmount);
         }
         #endregion
 

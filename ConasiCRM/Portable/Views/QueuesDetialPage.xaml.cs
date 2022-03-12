@@ -28,7 +28,6 @@ namespace ConasiCRM.Portable.Views
             NeedToRefreshDC = false;
             Init();
         }
-
         public async void Init()
         {
             await viewModel.LoadQueue();
@@ -40,8 +39,9 @@ namespace ConasiCRM.Portable.Views
 
             if (viewModel.Queue != null)
             {
-                //viewModel.ShowBtnBangTinhGia = 
                 await viewModel.CheckReserve();// co dat co thi an nut btg
+                if (viewModel.QueueProject == Language.co)
+                    viewModel.ShowBtnBangTinhGia = false;
                 SetButtons();
                 OnCompleted?.Invoke(true);
             }
@@ -50,7 +50,6 @@ namespace ConasiCRM.Portable.Views
                 OnCompleted?.Invoke(false);
             }
         }
-
         protected async override void OnAppearing()
         {
             base.OnAppearing();
@@ -76,7 +75,6 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Hide();
             }
         }
-
         private void SetButtons()
         {
             viewModel.ShowButtons = (viewModel.ShowBtnHuyGiuCho == false && viewModel.ShowBtnBangTinhGia == false) ? false : true;
@@ -109,7 +107,6 @@ namespace ConasiCRM.Portable.Views
                 Grid.SetColumn(btnHuyGiuCho, 0);
             }
         }
-
         private void GoToProject_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -240,7 +237,8 @@ namespace ConasiCRM.Portable.Views
             else
             {
                 LoadingHelper.Hide();
-                ToastMessageHelper.ShortMessage(Language.huy_giu_cho_that_bai);
+                ToastMessageHelper.ShortMessage(res.ErrorResponse?.error.message);
+                //This Queue has been convert to Reservation, cannot Cancel!
             }
         }
         private void CreateQuotation_Clicked(object sender, EventArgs e)

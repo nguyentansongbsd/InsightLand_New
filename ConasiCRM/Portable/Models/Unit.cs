@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.ViewModels;
+﻿using ConasiCRM.Portable.Helper;
+using ConasiCRM.Portable.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,7 @@ namespace ConasiCRM.Portable.Models
         public Guid productid { get; set; }
         public string name { get; set; }
         public decimal price { get; set; }
+        public string price_format { get => StringFormatHelper.FormatCurrency(price); }
         public int? statuscode { get; set; }
 
         public Guid floorid { get; set; }

@@ -42,7 +42,7 @@
                                     </Grid>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="5">
                                         <Label Text="{Binding Source={x:Static language:Language.tong_tien},StringFormat='{0}:'}" TextColor="#444444" FontSize="15" Grid.Column="0"/>
-                                        <Label Text="{Binding totalamount,StringFormat='{0:#,0} đ'}" TextColor="Red" FontSize="15" Grid.Column="1" FontAttributes="Bold"/>
+                                        <Label Text="{Binding totalamount_format,StringFormat='{0} đ'}" TextColor="Red" FontSize="15" Grid.Column="1" FontAttributes="Bold"/>
                                     </Grid>
                                 </Grid>
                             </ViewCell>

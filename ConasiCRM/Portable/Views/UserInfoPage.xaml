@@ -63,17 +63,10 @@
                     <controls:DatePickerBoderControl x:Name="datePickerNgaySinh" Date="{Binding ContactModel.birthdate}" Placeholder="{x:Static language:Language.chon_ngay_sinh}"/>
 
                     <controls:FormLabelRequired Text="{x:Static language:Language.gioi_tinh}"/>
-                    <controls:LookUp NameDisplay="Label" BottomModal="{Reference LookUpModal}" Placeholder="{x:Static language:Language.chon_gioi_tinh}" SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"/>
+                    <controls:LookUp NameDisplay="Label" BottomModal="{Reference BottomModal}" Placeholder="{x:Static language:Language.chon_gioi_tinh}" SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"/>
 
                     <controls:FormLabelRequired Text="{x:Static language:Language.dia_chi}"/>
-                    <Grid>
-                        <controls:MainEntry Text="{Binding Address}" ShowClearButton="False" Placeholder="{x:Static language:Language.dia_chi}"/>
-                        <StackLayout>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="ChangeAddress_Tapped"/>
-                            </StackLayout.GestureRecognizers>
-                        </StackLayout>
-                    </Grid>
+                    <controls:LookUpAddress Placeholder="{x:Static language:Language.chon_dia_chi}" BottomModal="{Reference BottomModal}" SelectedItem="{Binding AddressContact}" CenterModal="{Reference CenterModal}"/>
 
                 </StackLayout>
             </ScrollView>
@@ -98,34 +91,9 @@
                     <Button Text="{x:Static language:Language.luu}" Margin="14,8" Clicked="SaveChangedPassword_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" FontSize="15"/>
                 </controls:CenterModal.Footer>
             </controls:CenterModal>
-
-            <controls:CenterModal x:Name="centerModalContactAddress" Title="Địa chỉ">
-                <controls:CenterModal.Body>
-                    <ScrollView>
-                        <StackLayout Margin="10">
-                            <controls:FormLabel Text="Quốc gia"/>
-                            <controls:LookUp x:Name="lookUpContacAddressCountry" Placeholder="Chọn quốc gia" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCountryContact}" ItemsSource="{Binding list_country_lookup}" SelectedItemChange="ContactAddressCountry_Changed"/>
-
-                            <controls:FormLabel Text="ZIP code"/>
-                            <controls:MainEntry Placeholder="Nhập ZIP code" Text="{Binding AddressPostalCodeContact}"/>
-
-                            <controls:FormLabel Text="Tỉnh thành"/>
-                            <controls:LookUp x:Name="lookUpContactAddressProvice" Placeholder="Chọn tỉnh thành" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressStateProvinceContact}" ItemsSource="{Binding list_province_lookup}" SelectedItemChange="ContactAddressProvince_Changed"/>
-
-                            <controls:FormLabel Text="Quận/Huyện"/>
-                            <controls:LookUp x:Name="lookUpContactAddressDistrict" Placeholder="Chọn quận/huyện" BottomModal="{Reference LookUpModal}" NameDisplay="Name" SelectedItem="{Binding AddressCityContact}" ItemsSource="{Binding list_district_lookup}"/>
-
-                            <controls:FormLabelRequired Text="Số nhà/Đường/Phường"/>
-                            <controls:MainEntry Placeholder="Nhập số nhà/đường/phường" Text="{Binding AddressLine1Contact}"/>
-                        </StackLayout>
-                    </ScrollView>
-                </controls:CenterModal.Body>
-                <controls:CenterModal.Footer>
-                    <Button Grid.Column="1" Text="Xác nhận" Margin="10" Clicked="ConfirmContactAddress_Clicked" HeightRequest="40" BackgroundColor="{StaticResource NavigationPrimary}" TextColor="White" BorderWidth="0" CornerRadius="10"/>
-                </controls:CenterModal.Footer>
-            </controls:CenterModal>
-
-            <controls:BottomModal x:Name="LookUpModal"/>
+            
+            <controls:CenterModal x:Name="CenterModal" />
+            <controls:BottomModal x:Name="BottomModal"/>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

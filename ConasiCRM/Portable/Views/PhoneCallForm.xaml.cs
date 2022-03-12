@@ -47,38 +47,41 @@ namespace ConasiCRM.Portable.Views
             DatePickerEnd.DefaultDisplay = DateTime.Now;
             // kiểm tra page trước là page nào
             var page_before = App.Current.MainPage.Navigation.NavigationStack.Last()?.GetType().Name;
-            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage")
+            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage" || page_before == "LeadDetailPage")
             {
                 if (page_before == "ContactDetailPage" && ContactDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(ContactDetailPage.FromCustomer.Val))
                 {
                     viewModel.CallTo = ContactDetailPage.FromCustomer;
-                    Lookup_CallTo.IsVisible = false;
+                    viewModel.Customer = ContactDetailPage.FromCustomer;
+                    Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else if (page_before == "AccountDetailPage" && AccountDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(AccountDetailPage.FromCustomer.Val))
                 {
                     viewModel.CallTo = AccountDetailPage.FromCustomer;
-                    Lookup_CallTo.IsVisible = false;
+                    viewModel.Customer = AccountDetailPage.FromCustomer;
+                    Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else if (page_before == "LeadDetailPage" && LeadDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(LeadDetailPage.FromCustomer.Val))
                 {
                     viewModel.CallTo = LeadDetailPage.FromCustomer;
-                    Lookup_CallTo.IsVisible = false;
+                    viewModel.Customer = LeadDetailPage.FromCustomer;
+                    Lookup_Customer.IsVisible = false;
                     CustomerMapping.IsVisible = true;
                     Lookup_CallTo_SelectedItemChange(null, null);
                 }
                 else
                 {
-                    Lookup_CallTo.IsVisible = true;
+                    Lookup_Customer.IsVisible = true;
                     CustomerMapping.IsVisible = false;
                 }
             }
             else
             {
-                Lookup_CallTo.IsVisible = true;
+                Lookup_Customer.IsVisible = true;
                 CustomerMapping.IsVisible = false;
             }
         }
@@ -98,11 +101,11 @@ namespace ConasiCRM.Portable.Views
 
         private async void Update()
         {
-            BtnSave.Text = Language.cap_nhat_cuoc_goi_title;
+            BtnSave.Text = Language.cap_nhat_cuoc_goi;
             BtnSave.Clicked += Update_Clicked;
             await viewModel.loadPhoneCall(this.PhoneCallId);
             await viewModel.loadFromTo(this.PhoneCallId);
-            this.Title = Language.cap_nhat_cuoc_goi;
+            this.Title = Language.cap_nhat_cuoc_goi_title;
             if (viewModel.PhoneCellModel.activityid != Guid.Empty)
             {
                 OnCompleted?.Invoke(true);
@@ -205,7 +208,9 @@ namespace ConasiCRM.Portable.Views
         {
             if (date != null && date1 != null )
             {
-                int result = DateTime.Compare(date.Value, date1.Value);
+                DateTime timeStart = new DateTime(date.Value.Year, date.Value.Month,date.Value.Day,date.Value.Hour,date.Value.Minute,0);
+                DateTime timeEnd = new DateTime(date1.Value.Year, date1.Value.Month, date1.Value.Day, date1.Value.Hour, date1.Value.Minute, 0);
+                int result = DateTime.Compare(timeStart, timeEnd);
                 if (result < 0)
                     return -1;
                 else if (result == 0)

@@ -22,6 +22,7 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='accountid' />
                     <attribute name='address1_composite' alias='bsd_address' />
                     <attribute name='bsd_postalcode' />
+                    <attribute name='bsd_specialbuyer' />
                     <attribute name='bsd_housenumberstreet' />
                     <order attribute='createdon' descending='true' />
                     <filter type='or'>
@@ -43,7 +44,7 @@ namespace ConasiCRM.Portable.ViewModels
                     </link-entity>
                     <filter type='and'>
                         <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='" + UserLogged.Id + @"' />
-                       </filter>
+                    </filter>
                   </entity>
                 </fetch>";
             });
