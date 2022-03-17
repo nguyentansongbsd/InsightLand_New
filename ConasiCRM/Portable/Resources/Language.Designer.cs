@@ -2122,6 +2122,24 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đánh giá (↓).
+        /// </summary>
+        internal static string danh_gia_a_z {
+            get {
+                return ResourceManager.GetString("danh_gia_a_z", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đánh giá (↑).
+        /// </summary>
+        internal static string danh_gia_z_a {
+            get {
+                return ResourceManager.GetString("danh_gia_z_a", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Danh Sách Tệp Tải Xuống.
         /// </summary>
         internal static string danh_sach_tep_tai_xuong_title {
@@ -4633,6 +4651,24 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày tạo (↓).
+        /// </summary>
+        internal static string ngay_tao_a_z {
+            get {
+                return ResourceManager.GetString("ngay_tao_a_z", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày tạo (↑).
+        /// </summary>
+        internal static string ngay_tao_z_a {
+            get {
+                return ResourceManager.GetString("ngay_tao_z_a", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngày TTĐC/VBTT.
         /// </summary>
         internal static string ngay_ttdc_vbtt {
@@ -7135,11 +7171,29 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tình trạng (↓).
+        /// </summary>
+        internal static string tinh_trang_a_z {
+            get {
+                return ResourceManager.GetString("tinh_trang_a_z", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tình trạng sản phẩm.
         /// </summary>
         internal static string tinh_trang_san_pham {
             get {
                 return ResourceManager.GetString("tinh_trang_san_pham", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tình trạng (↑).
+        /// </summary>
+        internal static string tinh_trang_z_a {
+            get {
+                return ResourceManager.GetString("tinh_trang_z_a", resourceCulture);
             }
         }
         

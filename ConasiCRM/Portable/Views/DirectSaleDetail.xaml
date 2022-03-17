@@ -240,7 +240,7 @@
 
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.dien_tich_su_dung},StringFormat='{0}:'}" FontSize="15" TextColor="#333333"/>
-                                <Label Grid.Column="1" Text="{Binding Unit.bsd_constructionarea,StringFormat='{0:#,0.#0}'}" FontSize="15" TextColor="#333333"/>
+                                <Label Grid.Column="1" Text="{Binding Unit.bsd_netsaleablearea_format}" FontSize="15" TextColor="#333333"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="{Binding Source={x:Static language:Language.loai},StringFormat='{0}:'}" FontSize="15" TextColor="#333333"/>

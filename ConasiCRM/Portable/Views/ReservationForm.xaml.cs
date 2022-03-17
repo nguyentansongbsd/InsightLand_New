@@ -232,7 +232,7 @@ namespace ConasiCRM.Portable.Views
             lookupDaiLySanGiaoDich.PreOpenAsync = async () =>
             {
                 LoadingHelper.Show();
-                await viewModel.LoadSalesAgents();
+                await viewModel.LoadSalesAgent();
                 LoadingHelper.Hide();
             };
         }

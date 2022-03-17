@@ -78,6 +78,7 @@ namespace ConasiCRM.Portable.Views
                     viewModel.IsShowBtnBangTinhGia = false;
                 }
                 SetButton();
+                gridButton.IsVisible = !viewModel.UnitInfo.bsd_vippriority;
                 OnCompleted?.Invoke(true);
             }
             else

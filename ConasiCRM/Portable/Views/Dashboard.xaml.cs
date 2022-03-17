@@ -28,6 +28,7 @@ namespace ConasiCRM.Portable.Views
             LoadingHelper.Show();
             NeedToRefreshQueue = false;
             NeedToRefreshLeads = false;
+            NeedToRefreshActivity = false;
             Init();
         }
 
@@ -100,6 +101,11 @@ namespace ConasiCRM.Portable.Views
                 ActivityPopup.ShowActivityPopup(item.activityid, item.activitytypecode);
             }
             LoadingHelper.Hide();
+        }
+
+        private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
+        {
+            OnAppearing();
         }
     }
 }
