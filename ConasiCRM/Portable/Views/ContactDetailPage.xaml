@@ -7,6 +7,9 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms" 
              xmlns:views="clr-namespace:ConasiCRM.Portable.Views"
              x:Class="ConasiCRM.Portable.Views.ContactDetailPage"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+             xmlns:scroll="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling" 
+             ios:Page.UseSafeArea="true"
              Title="{x:Static language:Language.khach_hang_ca_nhan}"
              x:Name="this"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources">

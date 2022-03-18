@@ -249,7 +249,7 @@ namespace ConasiCRM.Portable.Views
                     if (this.compareDateTime(viewModel.PhoneCellModel.scheduledstart, viewModel.PhoneCellModel.scheduledend) != -1)
                     {
                         ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
-                        viewModel.PhoneCellModel.scheduledend = viewModel.PhoneCellModel.scheduledstart;
+                        viewModel.PhoneCellModel.scheduledend = viewModel.PhoneCellModel.scheduledstart.Value.AddMinutes(1);
                     }    
                 }
                 else

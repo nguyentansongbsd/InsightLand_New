@@ -1,4 +1,5 @@
-﻿using ConasiCRM.Portable.ViewModels;
+﻿using ConasiCRM.Portable.Resources;
+using ConasiCRM.Portable.ViewModels;
 using System;
 namespace ConasiCRM.Portable.Models
 {
@@ -25,5 +26,39 @@ namespace ConasiCRM.Portable.Models
         public string callto_contact_name { get; set; }
         public string callto_accounts_name { get; set; }
         public string callto_lead_name { get; set; }
+        public string activitytypecode_format
+        {
+            get
+            {
+                switch (activitytypecode)
+                {
+                    case "task":
+                        return Language.cong_viec_title;
+                    case "phonecall":
+                        return Language.cuoc_goi_title;
+                    case "appointment":
+                        return Language.cuoc_hop_title;
+                    default:
+                        return " ";
+                }
+            }
+        }
+        public string activitytypecode_color
+        {
+            get
+            {
+                switch (activitytypecode)
+                {
+                    case "task":
+                        return "#2196F3";
+                    case "phonecall":
+                        return "#0DB302";
+                    case "appointment":
+                        return "#D42A16";
+                    default:
+                        return "#808080";
+                }
+            }
+        }
     }
 }

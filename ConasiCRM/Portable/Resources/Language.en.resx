@@ -1069,7 +1069,7 @@
     <value>Contract</value>
   </data>
   <data name="ho_ten" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Full name</value>
   </data>
   <data name="huong" xml:space="preserve">
     <value>Direction</value>
@@ -1228,7 +1228,7 @@
     <value>Failed to load province.</value>
   </data>
   <data name="khong_quan_tam" xml:space="preserve">
-    <value>No Longer Interested</value>
+    <value>No longer interested</value>
   </data>
   <data name="khong_them_duoc_khach_hang_vui_long_thu_lai" xml:space="preserve">
     <value>Failed to create Customer. Please try again.</value>
@@ -2200,7 +2200,7 @@
     <value>Total land value</value>
   </data>
   <data name="tong_hop_title" xml:space="preserve">
-    <value>Synthetic</value>
+    <value>Sumarry</value>
   </data>
   <data name="tong_thoi_gian" xml:space="preserve">
     <value>Total time</value>
@@ -2771,5 +2771,23 @@
   </data>
   <data name="dieu_kien_ban_giao_khong_phu_hop_voi_unit_type" xml:space="preserve">
     <value>Handover Condition is not suitable with Unit type. Please check again or choose another handover condition.</value>
+  </data>
+  <data name="danh_gia_a_z" xml:space="preserve">
+    <value>Rating (↓)</value>
+  </data>
+  <data name="danh_gia_z_a" xml:space="preserve">
+    <value>Rating (↑)</value>
+  </data>
+  <data name="ngay_tao_a_z" xml:space="preserve">
+    <value>Create on (↓)</value>
+  </data>
+  <data name="ngay_tao_z_a" xml:space="preserve">
+    <value>Create on (↑)</value>
+  </data>
+  <data name="tinh_trang_a_z" xml:space="preserve">
+    <value>Status (↓)</value>
+  </data>
+  <data name="tinh_trang_z_a" xml:space="preserve">
+    <value>Status (↑)</value>
   </data>
 </root>

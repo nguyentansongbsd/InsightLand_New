@@ -31,6 +31,7 @@ namespace ConasiCRM.Portable.Views
             NeedToRefreshActivity = false;
             NeedToRefreshLeadDetail = false;
             Init();
+            Tab_Tapped(1);
         }
 
         public async void Init()
@@ -56,6 +57,8 @@ namespace ConasiCRM.Portable.Views
                 await viewModel.LoadOneLead(Id.ToString());
                 if (viewModel.singleLead.new_gender != null) { await viewModel.loadOneGender(viewModel.singleLead.new_gender); }
                 if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
+                viewModel.ButtonCommandList?.Clear();
+                SetButtonFloatingButton();
                 NeedToRefreshLeadDetail = false;
             }
             if (NeedToRefreshActivity == true)
@@ -219,6 +222,7 @@ namespace ConasiCRM.Portable.Views
                 if (isSuccess)
                 {
                     if (Dashboard.NeedToRefreshLeads.HasValue) Dashboard.NeedToRefreshLeads = true;
+                    if (CustomerPage.NeedToRefreshLead.HasValue) CustomerPage.NeedToRefreshLead = true;
                     await viewModel.LoadOneLead(Id.ToString());
                     viewModel.ButtonCommandList.Clear();
                     SetButtonFloatingButton();
@@ -318,7 +322,6 @@ namespace ConasiCRM.Portable.Views
             if (leadid != null && viewModel.singleLead == null)
             {
                 await viewModel.LoadOneLead(leadid);
-                await viewModel.LoadCase(leadid);
                 if (viewModel.singleLead.new_gender != null) { await viewModel.loadOneGender(viewModel.singleLead.new_gender); }
                 if (viewModel.singleLead.industrycode != null) { await viewModel.loadOneIndustrycode(viewModel.singleLead.industrycode); }
             }
@@ -453,6 +456,44 @@ namespace ConasiCRM.Portable.Views
         private void ActivityPopup_HidePopupActivity(object sender, EventArgs e)
         {
             OnAppearing();
+        }
+        private void ThongTin_Tapped(object sender, EventArgs e)
+        {
+            Tab_Tapped(1);
+        }
+
+        private async void ChamSocKH_Tapped(object sender, EventArgs e)
+        {
+            Tab_Tapped(2);
+            if (viewModel.list_case?.Count == 0)
+                await viewModel.LoadCase(Id.ToString());
+        }
+        private void Tab_Tapped(int tab)
+        {
+            if (tab == 1)
+            {
+                VisualStateManager.GoToState(radBorderThongTin, "Selected");
+                VisualStateManager.GoToState(lbThongTin, "Selected");
+                TabThongTin.IsVisible = true;
+            }
+            else
+            {
+                VisualStateManager.GoToState(radBorderThongTin, "Normal");
+                VisualStateManager.GoToState(lbThongTin, "Normal");
+                TabThongTin.IsVisible = false;
+            }
+            if (tab == 2)
+            {
+                VisualStateManager.GoToState(radBorderChamSocKH, "Selected");
+                VisualStateManager.GoToState(lbChamSocKH, "Selected");
+                TabCSKH.IsVisible = true;
+            }
+            else
+            {
+                VisualStateManager.GoToState(radBorderChamSocKH, "Normal");
+                VisualStateManager.GoToState(lbChamSocKH, "Normal");
+                TabCSKH.IsVisible = false;
+            }
         }
     }
 }
