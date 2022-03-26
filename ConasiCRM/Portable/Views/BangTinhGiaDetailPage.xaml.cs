@@ -103,7 +103,7 @@ namespace ConasiCRM.Portable.Views
                     );
                 await viewModel.LoadHandoverCondition(ReservationId);
                 await viewModel.LoadDiscounts();
-                SutUpSpecialDiscount();
+               // SutUpSpecialDiscount();
             }
         }
 
@@ -542,8 +542,17 @@ namespace ConasiCRM.Portable.Views
             lb.HorizontalOptions = LayoutOptions.End;
             lb.FontAttributes = FontAttributes.Bold;
             grid.Children.Add(lb);
+            TapGestureRecognizer item_tap = new TapGestureRecognizer();
+            item_tap.SetBinding(TapGestureRecognizer.CommandParameterProperty, new Binding("."));
+            item_tap.Tapped += SpecialDiscountItem_Tapped;
             return grid;
         }
+
+        private void SpecialDiscountItem_Tapped(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Project_Tapped(object sender, EventArgs e)
         {
             if (viewModel.Reservation.project_id != Guid.Empty)
@@ -626,6 +635,83 @@ namespace ConasiCRM.Portable.Views
                     };
                 }
             }
+        }
+
+        private void CloseContentPromotion_Tapped(object sender, EventArgs e)
+        {
+            ContentPromotion.IsVisible = false;
+        }
+
+        private async void stackLayoutPromotions_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = ((TapGestureRecognizer)((Label)sender).GestureRecognizers[0]).CommandParameter as OptionSet;
+            if (item != null && item.Val != string.Empty)
+            {
+                if (viewModel.PromotionItem == null)
+                {
+                    await viewModel.LoadPromotionItem(item.Val);
+                }
+                else if (viewModel.PromotionItem.bsd_promotionid.ToString() != item.Val)
+                {
+                    await viewModel.LoadPromotionItem(item.Val);
+                }
+            }
+            if (viewModel.PromotionItem != null)
+                ContentPromotion.IsVisible = true;
+            LoadingHelper.Hide();
+        }
+
+        private void ContentHandoverCondition_Tapped(object sender, EventArgs e)
+        {
+            ContentHandoverCondition.IsVisible = false;
+        }
+
+        //private async Task HandoverConditionItem_Tapped(object sender, EventArgs e)
+        //{
+        //    LoadingHelper.Show();
+        //    if (viewModel.HandoverConditionItem == null && viewModel.Reservation.handovercondition_id != Guid.Empty)
+        //    {
+        //        await viewModel.LoadHandoverConditionItem(viewModel.Reservation.handovercondition_id);
+        //        ContentPromotion.IsVisible = true;
+        //    }
+        //    LoadingHelper.Hide();
+        //}
+        private async void HandoverConditionItem_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            if (viewModel.HandoverConditionItem == null && viewModel.Reservation.handovercondition_id != Guid.Empty)
+            {
+                await viewModel.LoadHandoverConditionItem(viewModel.Reservation.handovercondition_id);
+            }
+            if (viewModel.HandoverConditionItem != null)
+                ContentHandoverCondition.IsVisible = true;
+            LoadingHelper.Hide();
+        }
+
+        private void ContentSpecialDiscount_Tapped(object sender, EventArgs e)
+        {
+            ContentSpecialDiscount.IsVisible = false;
+        }
+
+        private async void stackLayoutSpecialDiscount_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            var item = ((TapGestureRecognizer)((Label)sender).GestureRecognizers[0]).CommandParameter as OptionSet;
+            if (item != null && item.Val != string.Empty)
+            {
+                if (viewModel.DiscountSpecialItem == null)
+                {
+                    await viewModel.LoadDiscountSpecialItem(item.Val);
+                }
+                else if (viewModel.DiscountSpecialItem.bsd_discountspecialid.ToString() != item.Val)
+                {
+                    await viewModel.LoadDiscountSpecialItem(item.Val);
+                }
+            }
+            if (viewModel.DiscountSpecialItem != null)
+                ContentSpecialDiscount.IsVisible = true;
+            LoadingHelper.Hide();
         }
     }
 }

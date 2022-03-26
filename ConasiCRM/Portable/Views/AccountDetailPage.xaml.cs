@@ -293,29 +293,21 @@ namespace ConasiCRM.Portable.Views
 
         private async void NhanTin_Tapped(object sender, EventArgs e)
         {
-            if(viewModel.singleAccount != null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.telephone1))
+            if (viewModel.singleAccount != null && !string.IsNullOrWhiteSpace(viewModel.singleAccount.telephone1))
             {
                 string phone = viewModel.singleAccount.telephone1.Replace(" ", "");
-                var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-                if (checkVadate == true)
+                try
                 {
-                    try
-                    {
-                        var message = new SmsMessage(null, phone);
-                        await Sms.ComposeAsync(message);
-                    }
-                    catch (FeatureNotSupportedException ex)
-                    {
-                        ToastMessageHelper.ShortMessage(Language.sms_khong_duoc_ho_tro_tren_thiet_bi);
-                    }
-                    catch (Exception ex)
-                    {
-                        ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
-                    }
+                    var message = new SmsMessage(null, phone);
+                    await Sms.ComposeAsync(message);
                 }
-                else
+                catch (FeatureNotSupportedException ex)
                 {
-                    ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    ToastMessageHelper.ShortMessage(Language.sms_khong_duoc_ho_tro_tren_thiet_bi);
+                }
+                catch (Exception ex)
+                {
+                    ToastMessageHelper.ShortMessage(Language.da_xay_ra_loi_vui_long_thu_lai);
                 }
             }
             else
@@ -331,15 +323,7 @@ namespace ConasiCRM.Portable.Views
                 string phone = viewModel.singleAccount.telephone1.Replace(" ", "");
                 if (phone != string.Empty)
                 {
-                    var checkVadate = PhoneNumberFormatVNHelper.CheckValidate(phone);
-                    if (checkVadate == true)
-                    {
-                        await Launcher.OpenAsync($"tel:{phone}");
-                    }
-                    else
-                    {
-                        ToastMessageHelper.ShortMessage(Language.sdt_sai_dinh_dang_vui_long_kiem_tra_lai);
-                    }
+                    await Launcher.OpenAsync($"tel:{phone}");
                 }
                 else
                 {

@@ -39,11 +39,9 @@ namespace ConasiCRM.Portable.ViewModels
 
         private LookUp _daiLyOption;
         public LookUp DailyOption { get => _daiLyOption; set { _daiLyOption = value; OnPropertyChanged(nameof(DailyOption)); } }
-
         public Guid idQueueDraft { get; set; }
-
         public Guid UnitId { get; set; }
-
+        public string Error_update_queue { get; set; }
         public QueueFormViewModel()
         {
             QueueFormModel = new QueueFormModel();
@@ -677,6 +675,7 @@ namespace ConasiCRM.Portable.ViewModels
                 }
                 else
                 {
+                    Error_update_queue = result.ErrorResponse?.error.message;
                     return false;
                 }
             }

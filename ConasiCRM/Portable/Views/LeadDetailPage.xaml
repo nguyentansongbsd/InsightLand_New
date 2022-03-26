@@ -347,7 +347,7 @@
                         </StackLayout>
                         <!-- Tab CSKH-->
                         <StackLayout x:Name="TabCSKH" IsVisible="true" Margin="0,10,0,0">
-                            <telerikPrimitives:RadExpander x:Name="RadExpanderCase" IsExpanded="False" BorderColor="Transparent">
+                            <telerikPrimitives:RadExpander x:Name="RadExpanderCase" IsExpanded="True" BorderColor="Transparent">
                                 <telerikPrimitives:RadExpander.Header>
                                     <telerikPrimitives:ExpanderHeader Style="{StaticResource ExpanderHeaderStyle}">
                                         <Label Style="{StaticResource ExpanderHeadingText}" Text="{x:Static language:Language.cham_soc_khach_hang_title}"/>

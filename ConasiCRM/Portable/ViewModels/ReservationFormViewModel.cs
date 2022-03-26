@@ -174,11 +174,11 @@ namespace ConasiCRM.Portable.ViewModels
             this.TotalDiscount = 0;
             foreach (var item in this.DiscountChilds)
             {
-                if (item.Selected == true && item.new_type == "100000000") // percent
+                if (item.Selected == true && item.new_type == 100000000) // percent
                 {
                     this.TotalDiscount += (item.bsd_percentage * UnitPrice) / 100;
                 }
-                if (item.Selected == true && item.new_type == "100000001") // amount
+                if (item.Selected == true && item.new_type == 100000001) // amount
                 {
                     this.TotalDiscount += item.bsd_amount;
                 }

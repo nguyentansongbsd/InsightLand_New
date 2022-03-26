@@ -144,7 +144,7 @@ namespace ConasiCRM.Portable.Views
                 if (DirectSaleDetail.NeedToRefreshDirectSale.HasValue) DirectSaleDetail.NeedToRefreshDirectSale = true;
                 if (UnitInfo.NeedToRefreshQueue.HasValue) UnitInfo.NeedToRefreshQueue = true;
                 if (Dashboard.NeedToRefreshQueue.HasValue) Dashboard.NeedToRefreshQueue = true;
-                await Navigation.PopAsync();       
+                await Navigation.PopAsync();
                 ToastMessageHelper.ShortMessage(Language.tao_giu_cho_thanh_cong);
                 LoadingHelper.Hide();
             }
@@ -152,7 +152,10 @@ namespace ConasiCRM.Portable.Views
             {
                 LoadingHelper.Hide();
                 btnSave.Text = Language.tao_giu_cho;
-                ToastMessageHelper.ShortMessage(Language.tao_giu_cho_that_bai);
+                if (!string.IsNullOrWhiteSpace(viewModel.Error_update_queue))
+                    ToastMessageHelper.ShortMessage(viewModel.Error_update_queue);
+                else
+                    ToastMessageHelper.ShortMessage(Language.tao_giu_cho_that_bai);
             }
         }
     }
