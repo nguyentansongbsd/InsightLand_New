@@ -118,6 +118,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_managementamount' />
                                 <attribute name='bsd_bookingfee' />
                                 <attribute name='bsd_depositamount' />
+                                <attribute name='bsd_unitspersalesman' />
+                                <attribute name='bsd_queuesperunit' />
+                                <attribute name='bsd_longqueuingtime' />
+                                <attribute name='bsd_shortqueingtime' />
                                 <order attribute='bsd_name' descending='false' />
                                 <filter type='and'>
                                   <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + ProjectId.ToString() + @"' />

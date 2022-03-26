@@ -34,6 +34,6 @@ namespace ConasiCRM.Portable.Models
         public DateTime createdon { get; set; }
         public bool is_event { get { if (event_id != Guid.Empty) return true; else return false; } }
         public decimal bsd_netsaleablearea { get; set; }
-        public string bsd_netsaleablearea_format { get => StringFormatHelper.FormatCurrency(bsd_netsaleablearea); }
+        public string bsd_netsaleablearea_format { get => StringFormatHelper.FormatPercent(bsd_netsaleablearea); }
     }
 }

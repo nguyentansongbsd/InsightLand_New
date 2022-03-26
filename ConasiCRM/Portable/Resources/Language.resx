@@ -2790,4 +2790,52 @@
   <data name="tinh_trang_z_a" xml:space="preserve">
     <value>Tình trạng (↑)</value>
   </data>
+  <data name="kh_dac_biet" xml:space="preserve">
+    <value>KH quan trọng</value>
+  </data>
+  <data name="giu_cho_cho_moi_unit" xml:space="preserve">
+    <value>Giữ chỗ cho mỗi Unit</value>
+  </data>
+  <data name="quy_trinh_ban_title" xml:space="preserve">
+    <value>Quy Trình Bán</value>
+  </data>
+  <data name="thoi_gian_giu_cho_dai_han" xml:space="preserve">
+    <value>Thời gian giữ chỗ dài hạn</value>
+  </data>
+  <data name="thoi_gian_giu_cho_ngan_han" xml:space="preserve">
+    <value>Thời gian giữ chỗ ngắn hạn</value>
+  </data>
+  <data name="thong_tin_chung_title" xml:space="preserve">
+    <value>Thông Tin Chung</value>
+  </data>
+  <data name="unit_cho_moi_nhan_vien" xml:space="preserve">
+    <value>Unit cho mỗi nhân viên</value>
+  </data>
+  <data name="so_thang_mien_giam_phi_quan_ly_sai_dinh_dang_vui_long_kiem_tra_lai" xml:space="preserve">
+    <value>Số miễn giảm (tháng) sai định dạng. Vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="gia_tri" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="khuyen_mai_title" xml:space="preserve">
+    <value>Khuyến Mãi</value>
+  </data>
+  <data name="chiet_khau_dac_biet_title" xml:space="preserve">
+    <value>Chiết Khấu Đặc Biệt</value>
+  </data>
+  <data name="dieu_kien_ban_giao_title" xml:space="preserve">
+    <value>Điều Kiện Bàn Giao</value>
+  </data>
+  <data name="loai_unit" xml:space="preserve">
+    <value>Loại Unit</value>
+  </data>
+  <data name="phan_tram_giam" xml:space="preserve">
+    <value>Phần trăm giảm</value>
+  </data>
+  <data name="phuong_thuc" xml:space="preserve">
+    <value>Phương thức</value>
+  </data>
+  <data name="theo_loai_unit" xml:space="preserve">
+    <value>Theo loại Unit</value>
+  </data>
 </root>

@@ -119,7 +119,7 @@ namespace ConasiCRM.Portable.ViewModels
                                           </link-entity>
                                         </link-entity>" : "";
 
-            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='name' operator='like' value='%25" + Filter.Unit + "%25' />" : "";
+            string UnitCode_Condition = !string.IsNullOrEmpty(Filter.Unit) ? "<condition attribute='productnumber' operator='like' value='%25" + Filter.Unit + "%25' />" : "";
 
             string Direction_Condition = string.Empty;
             if (!string.IsNullOrWhiteSpace(Filter.Direction))
@@ -285,6 +285,7 @@ namespace ConasiCRM.Portable.ViewModels
                                         <filter type='and'>
                                             <condition attribute='statuscode' operator='eq' value='100000000' />
                                             <condition attribute='bsd_eventid' operator='not-null' />
+                                            <condition attribute='bsd_enddate' operator='on-or-after' value='{DateTime.Now.ToString("yyyy-MM-dd")}' />
                                         </filter>
                                       </link-entity>
                                     </link-entity>

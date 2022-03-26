@@ -1,5 +1,6 @@
 ﻿using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -165,7 +166,7 @@ namespace ConasiCRM.Portable.ViewModels
                 {
                     if (item.typemask == 1) // from call
                     {
-                        PhoneCall.call_from = item.user_name;
+                       // PhoneCall.call_from = item.user_name;
                     }
                     else if (item.typemask == 2) // to call
                     {
@@ -187,7 +188,8 @@ namespace ConasiCRM.Portable.ViewModels
                     }
                 }
             }
-
+            if (!string.IsNullOrWhiteSpace(UserLogged.ContactName))
+                PhoneCall.call_from = UserLogged.ContactName;
         }
 
         public async Task<bool> UpdateStatusPhoneCall(string update)

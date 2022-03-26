@@ -1,6 +1,7 @@
 ﻿using ConasiCRM.Portable.Config;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
+using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
 using Newtonsoft.Json;
 using System;
@@ -203,9 +204,9 @@ namespace ConasiCRM.Portable.ViewModels
         }
         public void loadGender()
         {
-            list_gender_optionset.Add(new OptionSet() { Val = ("1"), Label = "Nam", });
-            list_gender_optionset.Add(new OptionSet() { Val = ("2"), Label = "Nữ", });
-            list_gender_optionset.Add(new OptionSet() { Val = ("100000000"), Label = "Khác", });
+            list_gender_optionset.Add(new OptionSet() { Val = ("1"), Label = Language.gender_male_sts, });
+            list_gender_optionset.Add(new OptionSet() { Val = ("2"), Label = Language.gender_female_sts, });
+            list_gender_optionset.Add(new OptionSet() { Val = ("100000000"), Label = Language.gender_other_sts, });
         }
         public async Task<OptionSet> loadOneGender(string id)
         {
@@ -443,13 +444,14 @@ namespace ConasiCRM.Portable.ViewModels
         }
         public async Task LoadCountryByName()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='bsd_country'>
                                     <attribute name='bsd_countryname' alias='Name'/>
                                     <attribute name='bsd_countryid' alias='Id'/>
                                     <order attribute='bsd_countryname' descending='false' />
-                                    <filter type='and'>
-                                      <condition attribute='bsd_countryname' operator='eq' value='" + singleLead.address1_country + @"' />
+                                    <filter type='or'>
+                                      <condition attribute='bsd_countryname' operator='eq' value='{singleLead.address1_country}' />
+                                      <condition attribute='bsd_nameen' operator='eq' value='{singleLead.address1_country}' />
                                     </filter>
                                   </entity>
                                 </fetch>";
@@ -462,14 +464,17 @@ namespace ConasiCRM.Portable.ViewModels
         }
         public async Task LoadProvinceByName()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='new_province'>
                                     <attribute name='bsd_provincename' alias='Name'/>
                                     <attribute name='new_provinceid' alias='Id'/>
                                     <order attribute='bsd_provincename' descending='false' />
                                     <filter type='and'>
-                                        <condition attribute='bsd_country' operator='eq' value='" + Country.Id + @"' />
-                                        <condition attribute='bsd_provincename' operator='eq' value='" + singleLead.address1_stateorprovince + @"' />
+                                        <condition attribute='bsd_country' operator='eq' value='{Country.Id}' />
+                                        <filter type='or'>
+                                            <condition attribute='bsd_provincename' operator='eq' value='{singleLead.address1_stateorprovince}' />
+                                            <condition attribute='bsd_nameen' operator='eq' value='{singleLead.address1_stateorprovince}' />
+                                        </filter>
                                     </filter>
                                   </entity>
                                 </fetch>";
@@ -482,15 +487,18 @@ namespace ConasiCRM.Portable.ViewModels
         }
         public async Task LoadDistrictByName()
         {
-            string fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            string fetch = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                               <entity name='new_district'>
                                 <attribute name='new_name' alias='Name'/>
                                 <attribute name='new_districtid' alias='Id'/>
                                 <attribute name='bsd_nameen' alias='Detail'/>
                                 <order attribute='new_name' descending='false' />
                                 <filter type='and'>
-                                    <condition attribute='new_province' operator='eq' value='" + Province.Id + @"' />
-                                    <condition attribute='new_name' operator='eq' value='" + singleLead.address1_city + @"' />
+                                    <condition attribute='new_province' operator='eq' value='{Province.Id}' />
+                                    <filter type='or'>
+                                        <condition attribute='bsd_nameen' operator='eq' value='{singleLead.address1_city}' />
+                                        <condition attribute='new_name' operator='eq' value='{singleLead.address1_city}' />
+                                    </filter>
                                 </filter>
                               </entity>
                             </fetch>";

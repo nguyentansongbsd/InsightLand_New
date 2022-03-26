@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Resources;
 
 namespace ConasiCRM.Portable.ViewModels
 {
@@ -253,10 +254,10 @@ namespace ConasiCRM.Portable.ViewModels
         public void LoadBusinessTypeForLookup()
         {
             BusinessTypeOptionList = new List<OptionSet>();
-            BusinessTypeOptionList.Add(new OptionSet("100000000", "Khách hàng"));
-            BusinessTypeOptionList.Add(new OptionSet("100000001", "Đối tác"));
-            BusinessTypeOptionList.Add(new OptionSet("100000002", "Đại lý"));
-            BusinessTypeOptionList.Add(new OptionSet("100000003", "Chủ đầu tư"));
+            BusinessTypeOptionList.Add(new OptionSet("100000000", Language.account_customer_type));
+            BusinessTypeOptionList.Add(new OptionSet("100000001", Language.account_partner_type));
+            BusinessTypeOptionList.Add(new OptionSet("100000002", Language.account_sale_agents_type));
+            BusinessTypeOptionList.Add(new OptionSet("100000003", Language.account_developer_type));
         }
 
         public async Task LoadContactForLookup() // bubg
