@@ -1,9 +1,11 @@
 ﻿using System;
+using Android.App;
 using Android.Content;
 using ConasiCRM.Droid.Renderers;
 using ConasiCRM.Portable.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using ConasiCRM.Portable.Helper;
 
 [assembly: ExportRenderer(typeof(DatePickerBorder),typeof(DatePickerBorderRenderer))]
 namespace ConasiCRM.Droid.Renderers

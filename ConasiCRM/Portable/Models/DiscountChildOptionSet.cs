@@ -1,11 +1,24 @@
-﻿using System;
+﻿using ConasiCRM.Portable.Helper;
+using System;
 namespace ConasiCRM.Portable.Models
 {
     public class DiscountChildOptionSet : OptionSet
     {
+        public string name_format
+        {
+            get
+            {
+                if (new_type == 100000001)
+                    return Label + $" - {StringFormatHelper.FormatCurrency(bsd_amount)} đ";
+                else if (new_type == 100000000)
+                    return Label + $" - {StringFormatHelper.FormatPercent(bsd_percentage)}%";
+                else
+                    return null;
+            }
+        }
         public decimal bsd_amount { get; set; }
         public decimal bsd_percentage { get; set; }
-        public string new_type { get; set; }
+        public int new_type { get; set; }
         public DateTime? bsd_startdate { get; set; }
         public DateTime? bsd_enddate { get; set; }
         public DateTime createdon { get; set; }

@@ -71,9 +71,9 @@ namespace ConasiCRM.Portable.Views
                         List<OptionSetFilter> item = new List<OptionSetFilter>();
                         item.Add(new OptionSetFilter
                         {
-                            Val = ContactDetailPage.FromCustomer.Val,
-                            Label = ContactDetailPage.FromCustomer.Label,
-                            Title = ContactDetailPage.FromCustomer.Title,
+                            Val = AccountDetailPage.FromCustomer.Val,
+                            Label = AccountDetailPage.FromCustomer.Label,
+                            Title = AccountDetailPage.FromCustomer.Title,
                             Selected = true
                         });
                         viewModel.Required = item;
@@ -90,9 +90,9 @@ namespace ConasiCRM.Portable.Views
                         List<OptionSetFilter> item = new List<OptionSetFilter>();
                         item.Add(new OptionSetFilter
                         {
-                            Val = ContactDetailPage.FromCustomer.Val,
-                            Label = ContactDetailPage.FromCustomer.Label,
-                            Title = ContactDetailPage.FromCustomer.Title,
+                            Val = LeadDetailPage.FromCustomer.Val,
+                            Label = LeadDetailPage.FromCustomer.Label,
+                            Title = LeadDetailPage.FromCustomer.Title,
                             Selected = true
                         });
                         viewModel.Required = item;
@@ -342,9 +342,9 @@ namespace ConasiCRM.Portable.Views
                     else
                     {
                         viewModel.MeetingModel.scheduleddurationminutes = 0;
-                    }    
+                    }
 
-                    viewModel.MeetingModel.scheduledstart = new DateTime(timeStart.Year, timeStart.Month, timeStart.Day, 8, 0, 0);
+                    viewModel.MeetingModel.scheduledstart = new DateTime(timeStart.Year, timeStart.Month, timeStart.Day, 7, 0, 0);
                     viewModel.MeetingModel.scheduledend = viewModel.MeetingModel.scheduledstart.Value.AddDays(1);
                 }
                 else
@@ -352,7 +352,11 @@ namespace ConasiCRM.Portable.Views
                     var dateStart = viewModel.MeetingModel.scheduledstart.Value;
                     TimeSpan timeStart = viewModel.MeetingModel.timeStart;
 
-                    viewModel.MeetingModel.scheduledstart = new DateTime(dateStart.Year, dateStart.Month, dateStart.Day, timeStart.Hours, timeStart.Minutes, timeStart.Seconds);
+                    if (viewModel.MeetingModel.timeStart != new TimeSpan(0, 0, 0))
+                        viewModel.MeetingModel.scheduledstart = new DateTime(dateStart.Year, dateStart.Month, dateStart.Day, timeStart.Hours, timeStart.Minutes, timeStart.Seconds);
+                    else
+                        viewModel.MeetingModel.scheduledstart = new DateTime(dateStart.Year, dateStart.Month, dateStart.Day, dateStart.Hour, dateStart.Minute, dateStart.Second);
+
                     viewModel.MeetingModel.scheduledend = viewModel.MeetingModel.scheduledstart.Value.AddMinutes(viewModel.MeetingModel.scheduleddurationminutes);
                 }
             }

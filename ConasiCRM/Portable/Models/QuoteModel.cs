@@ -16,15 +16,15 @@ namespace ConasiCRM.Portable.Models
 
         private decimal _bsd_constructionarea;
         public decimal bsd_constructionarea { get=> _bsd_constructionarea; set { _bsd_constructionarea = value;OnPropertyChanged(nameof(bsd_constructionarea)); } }
-        public string bsd_constructionarea_format { get => StringFormatHelper.FormatCurrency(bsd_constructionarea); }
+        public string bsd_constructionarea_format { get => StringFormatHelper.FormatPercent(bsd_constructionarea); }
 
         private decimal _bsd_netusablearea;
         public decimal bsd_netusablearea { get=> _bsd_netusablearea; set { _bsd_netusablearea = value;OnPropertyChanged(nameof(bsd_netusablearea)); } }
-        public string bsd_netusablearea_format { get => StringFormatHelper.FormatCurrency(bsd_netusablearea); }
+        public string bsd_netusablearea_format { get => StringFormatHelper.FormatPercent(bsd_netusablearea); }
 
         private decimal _bsd_actualarea;
         public decimal bsd_actualarea { get=> _bsd_actualarea; set { _bsd_actualarea = value;OnPropertyChanged(nameof(bsd_actualarea)); } }
-        public string bsd_actualarea_format { get => StringFormatHelper.FormatCurrency(bsd_actualarea); }
+        public string bsd_actualarea_format { get => StringFormatHelper.FormatPercent(bsd_actualarea); }
         public string bsd_unitstatus { get; set; }
 
         public Guid discountlist_id { get; set; }

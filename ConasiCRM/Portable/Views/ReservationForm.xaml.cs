@@ -106,7 +106,7 @@ namespace ConasiCRM.Portable.Views
                 _isEnableCheck = true;
 
                 if (viewModel.Queue == null)
-                { 
+                {
                     lblGiuCho.IsVisible = false;
                     lookupGiuCho.IsVisible = false;
                 }
@@ -121,7 +121,7 @@ namespace ConasiCRM.Portable.Views
                     viewModel.LoadCoOwners()
                     );
                 SetPreOpen();
-                
+
                 if (viewModel.IsHadLichThanhToan == true)
                 {
                     lookupDieuKienBanGiao.IsEnabled = true;
@@ -819,10 +819,23 @@ namespace ConasiCRM.Portable.Views
                 ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_thang_mien_giam_phi_quan_ly);
                 return;
             }
-            if (int.Parse(viewModel.Quote.bsd_waivermanafeemonth) > 100)
+            else
             {
-                ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_thang_mien_giam_phi_quan_ly_khong_qua_100);
-                return;
+                int number;
+                bool success = int.TryParse(viewModel.Quote.bsd_waivermanafeemonth, out number);
+                if (success)
+                { if (number > 100)
+                    {
+                        ToastMessageHelper.ShortMessage(Language.vui_long_nhap_so_thang_mien_giam_phi_quan_ly_khong_qua_100);
+                        return;
+                    }
+                }
+                else
+                {
+                    ToastMessageHelper.ShortMessage(Language.so_thang_mien_giam_phi_quan_ly_sai_dinh_dang_vui_long_kiem_tra_lai);
+                    return;
+                }
+
             }
 
             if (viewModel.CustomerCoOwner?.Val == viewModel.Buyer?.Val)

@@ -17,7 +17,7 @@
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" BackgroundColor ="White" Padding="20" Margin="0,1">
                                     <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
                                         <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Column="0"/>
-                                        <Label Text="&#xf005;" Grid.Column="1" IsVisible="{Binding bsd_specialbuyer}" FontFamily="FontAwesomeSolid" FontSize="16" TextColor="#FEC93D" HorizontalOptions="End"/>
+                                        <Label Text="&#xf3a5;" Grid.Column="1" IsVisible="{Binding bsd_specialbuyer}" FontFamily="FontAwesomeRegular" FontSize="16" TextColor="#7260F0" HorizontalOptions="End"/>
                                     </Grid>
                                     <Label Text="{Binding bsd_name}" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource NavigationPrimary}" Grid.Row="0"/>
                                     <Grid ColumnDefinitions="Auto,*" Grid.Row="1">

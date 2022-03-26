@@ -144,6 +144,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='name' />
                                 <attribute name='customerid' />
                                 <attribute name='createdon' />
+                                <attribute name='statuscode' />
                                 <attribute name='bsd_queuingexpired' />
                                 <attribute name='opportunityid' />
                                 <order attribute='createdon' descending='true' />

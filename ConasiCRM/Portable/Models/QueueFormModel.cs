@@ -38,6 +38,8 @@ namespace ConasiCRM.Portable.Models
         public string bsd_collaborator_name { get; set; }
 
         public int statuscode { get; set; } // chi su dung trong form update.
+        public string statuscode_format { get { return QueuesStatusCodeData.GetQueuesById(statuscode.ToString())?.Name; } }
+        public string statuscode_color { get { return QueuesStatusCodeData.GetQueuesById(statuscode.ToString())?.BackGroundColor; } }
 
         public DateTime _createdon;
         public DateTime createdon { get => _createdon.AddHours(7); set { _createdon = value; OnPropertyChanged(nameof(createdon)); } } // Thời gian đặt chỗ 
