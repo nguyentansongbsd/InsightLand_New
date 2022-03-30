@@ -29,7 +29,7 @@ namespace ConasiCRM.Android
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Stormlion.PhotoBrowser.Droid.Platform.Init(this);
-            CrossMediaManager.Current.Init(this);
+            //CrossMediaManager.Current.Init(this);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

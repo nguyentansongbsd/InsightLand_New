@@ -13,13 +13,14 @@
 	<uses-permission android:name="android.permission.BROADCAST_SMS" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 	<queries>
 		<intent>
 			<action android:name="android.intent.action.VIEW" />
 			<data android:scheme="smsto" />
 		</intent>
 	</queries>
-	<application android:icon="@drawable/cns_logo_icon_app" android:label="Insight Land" android:theme="@style/Theme.Splash">
+	<application android:icon="@drawable/cns_logo_icon_app" android:label="Conasi CRM" android:theme="@style/Theme.Splash">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
 		</provider>
