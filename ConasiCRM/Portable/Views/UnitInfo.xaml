@@ -351,6 +351,7 @@
                                                             <Label.FormattedText>
                                                                 <FormattedString>
                                                                     <Span Text="{Binding Source={x:Static language:Language.khach_hang},StringFormat='{0}:'}"/>
+                                                                    <Span Text=" "/>
                                                                     <Span Text="{Binding customername}"/>
                                                                 </FormattedString>
                                                             </Label.FormattedText>
@@ -359,6 +360,7 @@
                                                             <Label.FormattedText>
                                                                 <FormattedString>
                                                                     <Span Text="{Binding Source={x:Static language:Language.du_an},StringFormat='{0}:'}"/>
+                                                                    <Span Text=" "/>
                                                                     <Span Text="{Binding project_name}"/>
                                                                 </FormattedString>
                                                             </Label.FormattedText>
@@ -367,6 +369,7 @@
                                                             <Label.FormattedText>
                                                                 <FormattedString>
                                                                     <Span Text="{Binding Source={x:Static language:Language.thoi_gian_het_han},StringFormat='{0}:'}"/>
+                                                                    <Span Text=" "/>
                                                                     <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:dd/MM/yyyy} - '}"/>
                                                                     <Span Text="{Binding bsd_queuingexpired,StringFormat='{0:HH:mm}'}"/>
                                                                 </FormattedString>

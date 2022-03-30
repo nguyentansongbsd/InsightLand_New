@@ -9,10 +9,6 @@ namespace ConasiCRM.Portable.Helper
 {
     public class StringFormatHelper
     {
-        // text android render
-        public static string dong = Language.dong;
-        public static string xac_nhan = Language.xac_nhan;
-
         public static string FormatCurrency(decimal? input)
         {
             if (input.HasValue)

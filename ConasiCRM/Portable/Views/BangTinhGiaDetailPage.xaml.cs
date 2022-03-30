@@ -667,16 +667,6 @@ namespace ConasiCRM.Portable.Views
             ContentHandoverCondition.IsVisible = false;
         }
 
-        //private async Task HandoverConditionItem_Tapped(object sender, EventArgs e)
-        //{
-        //    LoadingHelper.Show();
-        //    if (viewModel.HandoverConditionItem == null && viewModel.Reservation.handovercondition_id != Guid.Empty)
-        //    {
-        //        await viewModel.LoadHandoverConditionItem(viewModel.Reservation.handovercondition_id);
-        //        ContentPromotion.IsVisible = true;
-        //    }
-        //    LoadingHelper.Hide();
-        //}
         private async void HandoverConditionItem_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();

@@ -165,7 +165,9 @@ namespace ConasiCRM.Portable.ViewModels
                         <attribute name='statuscode' />
                         <attribute name='bsd_queuingexpired' />
                         <attribute name='opportunityid' />
-                        <order attribute='bsd_bookingtime' descending='false' />
+                        <attribute name='bsd_bookingtime' />
+                        <order attribute='statecode' descending='false' />
+                        <order attribute='statuscode' descending='true' />
                         <filter type='and'>
                           <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
                           <condition attribute='bsd_units' operator='eq' value='{UnitInfo.productid}' />
@@ -188,8 +190,15 @@ namespace ConasiCRM.Portable.ViewModels
             IsLoaded = true;
             var data = result.value;
             ShowMoreDanhSachDatCho = data.Count < 5 ? false : true;
-
+           
             foreach (var item in data)
+            {
+                list_danhsachdatcho.Add(item);
+            }
+            List<QueuesModel> list_sort = new List<QueuesModel>();
+            list_sort = list_danhsachdatcho.OrderByDescending(num => num, new QueuesModel()).ToList();
+            list_danhsachdatcho.Clear();
+            foreach (var item in list_sort)
             {
                 list_danhsachdatcho.Add(item);
             }
