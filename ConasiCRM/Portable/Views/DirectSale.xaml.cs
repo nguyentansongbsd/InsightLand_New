@@ -144,7 +144,6 @@ namespace ConasiCRM.Portable.Views
                 };
             }
         }
-
         private void ShowInfo(object sender, EventArgs e)
         {
             LoadingHelper.Show();
@@ -169,6 +168,17 @@ namespace ConasiCRM.Portable.Views
                     LoadingHelper.Hide();
                 }
             };
-        }       
+        }
+        private void Clear_Clicked(object sender, EventArgs e)
+        {
+            viewModel.Project = null;
+            viewModel.PhasesLaunch = null;
+            viewModel.IsEvent = false;
+            viewModel.UnitCode = null;
+            viewModel.SelectedDirections = null;
+            viewModel.SelectedUnitStatus = null;
+            viewModel.NetArea = null;
+            viewModel.Price = null;
+        }
     }
 }

@@ -385,7 +385,8 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var x in result.value)
             {
-                x.bsd_duedate = x.bsd_duedate.ToLocalTime();
+                if(x.bsd_duedate != null)
+                    x.bsd_duedate = x.bsd_duedate.Value.ToLocalTime();
                 InstallmentList.Add(x);
             }
             NumberInstallment = InstallmentList.Count();
