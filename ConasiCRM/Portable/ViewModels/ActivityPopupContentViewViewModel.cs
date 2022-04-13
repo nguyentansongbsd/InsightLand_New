@@ -120,7 +120,7 @@ namespace ConasiCRM.Portable.ViewModels
                 };
             }
 
-            if (PhoneCall.statecode == 0)
+            if (PhoneCall.statecode == 0 || PhoneCall.statecode == 3)
                 ShowGridButton = true;
             else
                 ShowGridButton = false;
@@ -284,7 +284,7 @@ namespace ConasiCRM.Portable.ViewModels
                 };
             }
 
-            if (Task.statecode == 0)
+            if (Task.statecode == 0 || Task.statecode == 3)
                 ShowGridButton = true;
             else
                 ShowGridButton = false;
@@ -389,7 +389,7 @@ namespace ConasiCRM.Portable.ViewModels
                 };
             }
 
-            if (Meet.statecode == 0)
+            if (Meet.statecode == 0 || Meet.statecode == 3)
                 ShowGridButton = true;
             else
                 ShowGridButton = false;

@@ -184,6 +184,11 @@ namespace ConasiCRM.Portable.ViewModels
                 }
                 BusinessTypes = string.Join(", ", listType);
             }
+            else
+            {
+                // lỗi khi lead qualify 
+                BusinessTypes = Language.account_customer_type;
+            }    
         }
 
         private string LoadAddress(string address)

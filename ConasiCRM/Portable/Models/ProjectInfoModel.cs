@@ -43,5 +43,6 @@ namespace ConasiCRM.Portable.Models
         public decimal bsd_queuesperunit { get; set; } // giữ chỗ trên dự án
         public decimal bsd_longqueuingtime { get; set; } // thời gian giữ chỗ dài hạn
         public decimal bsd_shortqueingtime { get; set; } // thời gian giữ chỗ ngắn hạn
+        public string bsd_logo { get; set; }
     }
 }

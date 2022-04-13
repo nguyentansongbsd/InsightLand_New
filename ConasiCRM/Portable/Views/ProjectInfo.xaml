@@ -8,7 +8,7 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
-             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
+             xmlns:language="clr-namespace:ConasiCRM.Portable.Resources" xmlns:ffimagetransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              BackgroundColor="White"
              Title="{x:Static language:Language.thong_tin_du_an_title}"
              x:Class="ConasiCRM.Portable.Views.ProjectInfo">
@@ -60,6 +60,7 @@
             </Style>
             <converter:DecimalToVndConverter x:Key="DecimalToVndConverter" />
             <converter:NullToHideConverter x:Key="nullToHideConverter"/>
+            <converter:Base64ToImageSourceConverter x:Key="Base64ToImagesource"/>
             <!--tab thong tin-->
             <Style x:Key="ExpanderHeaderStyle" TargetType="telerikPrimitives:ExpanderHeader">
                 <Setter Property="IndicatorText" Value="&#xf105;"/>
@@ -130,27 +131,36 @@
                             </Grid>
                             <telerikPrimitives:RadBorder BorderColor="#808080" CornerRadius="10" BorderThickness="1" BackgroundColor="White" Grid.Row="1" >
                                 <StackLayout Margin="15" Spacing="10">
-                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
-                                        <Label Grid.Column="0" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
-                                            <Label.Text>
-                                                <MultiBinding StringFormat="{}{0} - {1}">
-                                                    <Binding Path="Project.bsd_name" />
-                                                    <Binding Path="Project.bsd_projectcode" />
-                                                </MultiBinding>
-                                            </Label.Text>
-                                        </Label>
-                                        <StackLayout Grid.Column="1" IsVisible="{Binding IsHasEvent}" HorizontalOptions="End" Orientation="Horizontal">
-                                            <Label Text="{x:Static language:Language.su_kien}" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
-                                            <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
-                                            <StackLayout.GestureRecognizers>
-                                                <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OpenEvent_Tapped"/>
-                                            </StackLayout.GestureRecognizers>
+                                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                                        <controls:ExtendedFrame Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Padding="5" CornerRadius="50" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,0,5,0">
+                                            <ffimageloading:CachedImage Source="{Binding Project.bsd_logo, Converter={StaticResource Base64ToImagesource}}" LoadingPlaceholder="user.png" DownsampleWidth="100">
+                                                <ffimageloading:CachedImage.Transformations>
+                                                    <ffimagetransformations:CircleTransformation/>
+                                                </ffimageloading:CachedImage.Transformations>
+                                            </ffimageloading:CachedImage>
+                                        </controls:ExtendedFrame>
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto" Grid.Row="0" Grid.Column="1">
+                                            <Label Grid.Column="0" TextColor="#1C78C2" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                                        <Binding Path="Project.bsd_name" />
+                                                        <Binding Path="Project.bsd_projectcode" />
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                            <StackLayout Grid.Column="1" IsVisible="{Binding IsHasEvent}" HorizontalOptions="End" Orientation="Horizontal">
+                                                <Label Text="{x:Static language:Language.su_kien}" FontSize="15" FontAttributes="Bold" VerticalOptions="Center" TextColor="#FEC93D"/>
+                                                <Label Text="&#xf005;" FontFamily="FontAwesomeSolid" VerticalOptions="Center" FontSize="13" TextColor="#FEC93D"/>
+                                                <StackLayout.GestureRecognizers>
+                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OpenEvent_Tapped"/>
+                                                </StackLayout.GestureRecognizers>
+                                            </StackLayout>
+                                        </Grid>
+                                        <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                                            <Label Text="{Binding ProjectType.Label}" FontSize="15" TextColor="#444444"/>
+                                            <Label Text="{Binding PropertyUsageType.Label,StringFormat='- {0}'}" FontSize="15" TextColor="#444444"/>
                                         </StackLayout>
                                     </Grid>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="{Binding ProjectType.Label}" FontSize="15" TextColor="#444444"/>
-                                        <Label Text="{Binding PropertyUsageType.Label,StringFormat='- {0}'}" FontSize="15" TextColor="#444444"/>
-                                    </StackLayout>
                                     <Label FontSize="15" TextColor="#444444">
                                         <Label.FormattedText>
                                             <FormattedString>
