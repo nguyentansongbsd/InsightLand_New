@@ -48,6 +48,9 @@ namespace ConasiCRM.Portable.Models
         public Guid lead_id { get; set; }
         public string lead_name { get; set; }
 
+        public Guid queue_id { get; set; }
+        public string queue_name { get; set; }
+
         private CustomerLookUp _customer;
         public CustomerLookUp Customer
         {

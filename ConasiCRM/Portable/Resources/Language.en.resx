@@ -2940,4 +2940,16 @@
   <data name="da_het_han" xml:space="preserve">
     <value>Expired</value>
   </data>
+  <data name="discount_no" xml:space="preserve">
+    <value>Discount No.</value>
+  </data>
+  <data name="gia_tri_bat_dau" xml:space="preserve">
+    <value>Begin quantity</value>
+  </data>
+  <data name="gia_tri_ket_thuc" xml:space="preserve">
+    <value>End Quantity</value>
+  </data>
+  <data name="loai_chiet_khau" xml:space="preserve">
+    <value>Discount type</value>
+  </data>
 </root>

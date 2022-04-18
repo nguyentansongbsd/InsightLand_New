@@ -79,6 +79,10 @@ namespace ConasiCRM.Portable.ViewModels
                     <attribute name='leadid' alias='lead_id'/>                  
                     <attribute name='fullname' alias='lead_name'/>
                 </link-entity>
+                <link-entity name='opportunity' from='opportunityid' to='regardingobjectid' link-type='outer' alias='ab'>
+                    <attribute name='opportunityid' alias='queue_id'/>                  
+                    <attribute name='name' alias='queue_name'/>
+                </link-entity>
                 <link-entity name='bsd_employee' from='bsd_employeeid' to='bsd_employee' link-type='outer' alias='aa'>
                     <attribute name='bsd_name' alias='user_name'/>
                     <attribute name='bsd_employeeid' alias='user_id'/>
@@ -117,6 +121,13 @@ namespace ConasiCRM.Portable.ViewModels
                 PhoneCall.Customer = new CustomerLookUp
                 {
                     Name = PhoneCall.lead_name
+                };
+            }
+            else if (PhoneCall.queue_id != Guid.Empty)
+            {
+                PhoneCall.Customer = new CustomerLookUp
+                {
+                    Name = PhoneCall.queue_name
                 };
             }
 
@@ -249,6 +260,10 @@ namespace ConasiCRM.Portable.ViewModels
 	                            <attribute name='leadid' alias='lead_id'/>                  
                                     <attribute name='fullname' alias='lead_name'/>
                                 </link-entity>
+                                <link-entity name='opportunity' from='opportunityid' to='regardingobjectid' link-type='outer' alias='ab'>
+                                    <attribute name='opportunityid' alias='queue_id'/>                  
+                                    <attribute name='name' alias='queue_name'/>
+                                </link-entity>
                               </entity>
                             </fetch>";
 
@@ -281,6 +296,13 @@ namespace ConasiCRM.Portable.ViewModels
                 Task.Customer = new CustomerLookUp
                 {
                     Name = Task.lead_name
+                };
+            }
+            else if (Task.queue_id != Guid.Empty)
+            {
+                Task.Customer = new CustomerLookUp
+                {
+                    Name = Task.queue_name
                 };
             }
 
@@ -352,6 +374,10 @@ namespace ConasiCRM.Portable.ViewModels
                                     <attribute name='leadid' alias='lead_id'/>                  
                                     <attribute name='fullname' alias='lead_name'/>
                                 </link-entity>
+                                <link-entity name='opportunity' from='opportunityid' to='regardingobjectid' link-type='outer' alias='ab'>
+                                    <attribute name='opportunityid' alias='queue_id'/>                  
+                                    <attribute name='name' alias='queue_name'/>
+                                </link-entity>
                             </entity>
                           </fetch>";
 
@@ -386,6 +412,13 @@ namespace ConasiCRM.Portable.ViewModels
                 Meet.Customer = new CustomerLookUp
                 {
                     Name = Meet.lead_name
+                };
+            }
+            else if (Meet.queue_id != Guid.Empty)
+            {
+                Meet.Customer = new CustomerLookUp
+                {
+                    Name = Meet.queue_name
                 };
             }
 

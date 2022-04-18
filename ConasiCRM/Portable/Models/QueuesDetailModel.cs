@@ -5,7 +5,7 @@ namespace ConasiCRM.Portable.Models
 {
     public class QueuesDetailModel : BaseViewModel
     {
-        public string opportunityid { get; set; }
+        public Guid opportunityid { get; set; }
         public string name { get; set; }
         public string description { get; set; }
 
@@ -48,6 +48,5 @@ namespace ConasiCRM.Portable.Models
         public DateTime _bsd_queuingexpired;
         public DateTime bsd_queuingexpired { get => _bsd_queuingexpired.AddHours(7); set { _bsd_queuingexpired = value; OnPropertyChanged(nameof(bsd_queuingexpired)); } }
         public bool isexpired { get => bsd_queuingexpired < DateTime.Now ? true : false; }
-        int a = 0;
     }
 }

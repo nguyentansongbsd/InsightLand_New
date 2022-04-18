@@ -2482,6 +2482,15 @@ namespace ConasiCRM.Portable.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discount No..
+        /// </summary>
+        internal static string discount_no {
+            get {
+                return ResourceManager.GetString("discount_no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Doanh nghiệp.
         /// </summary>
         internal static string doanh_nghiep {
@@ -2937,6 +2946,24 @@ namespace ConasiCRM.Portable.Resources {
         internal static string gia_tri {
             get {
                 return ResourceManager.GetString("gia_tri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị bắt đầu.
+        /// </summary>
+        internal static string gia_tri_bat_dau {
+            get {
+                return ResourceManager.GetString("gia_tri_bat_dau", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị kết thúc.
+        /// </summary>
+        internal static string gia_tri_ket_thuc {
+            get {
+                return ResourceManager.GetString("gia_tri_ket_thuc", resourceCulture);
             }
         }
         
@@ -4485,6 +4512,15 @@ namespace ConasiCRM.Portable.Resources {
         internal static string loai {
             get {
                 return ResourceManager.GetString("loai", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loại chiết khấu.
+        /// </summary>
+        internal static string loai_chiet_khau {
+            get {
+                return ResourceManager.GetString("loai_chiet_khau", resourceCulture);
             }
         }
         

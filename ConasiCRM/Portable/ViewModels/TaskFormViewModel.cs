@@ -2,6 +2,7 @@
 using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace ConasiCRM.Portable.ViewModels
         public string Codelead = LookUpMultipleTabs.CodeLead;
         public string CodeContact = LookUpMultipleTabs.CodeContac;
         public string CodeAccount = LookUpMultipleTabs.CodeAccount;
-
+        public string CodeQueue = QueuesDetialPage.CodeQueue;
         public TaskFormViewModel()
         {
             TaskFormModel = new TaskFormModel();
@@ -62,6 +63,10 @@ namespace ConasiCRM.Portable.ViewModels
                                 <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='aj'>
 	                                <attribute name='leadid' alias='lead_id'/>                  
                                     <attribute name='lastname' alias='lead_name'/>
+                                </link-entity>
+                                <link-entity name='opportunity' from='opportunityid' to='regardingobjectid' link-type='outer' alias='ab'>
+                                    <attribute name='opportunityid' alias='queue_id'/>                  
+                                    <attribute name='name' alias='queue_name'/>
                                 </link-entity>
                               </entity>
                             </fetch>";
@@ -100,6 +105,14 @@ namespace ConasiCRM.Portable.ViewModels
                 customer.Val = this.TaskFormModel.account_id.ToString();
                 customer.Label = this.TaskFormModel.account_name;
                 customer.Title = "3";
+                this.Customer = customer;
+            }
+            else if (this.TaskFormModel.queue_id != Guid.Empty)
+            {
+                OptionSet customer = new OptionSet();
+                customer.Val = this.TaskFormModel.queue_id.ToString();
+                customer.Label = this.TaskFormModel.queue_name;
+                customer.Title = CodeQueue;
                 this.Customer = customer;
             }
         }
@@ -158,6 +171,10 @@ namespace ConasiCRM.Portable.ViewModels
             else if(Customer != null && Customer.Title == CodeAccount)
             {
                 data["regardingobjectid_account_task@odata.bind"] = "/accounts(" + Customer.Val+ ")";
+            }
+            else if (Customer != null && Customer.Title == CodeQueue)
+            {
+                data["regardingobjectid_opportunity_task@odata.bind"] = "/opportunities(" + Customer.Val + ")";
             }
 
             if (UserLogged.Id != Guid.Empty)
