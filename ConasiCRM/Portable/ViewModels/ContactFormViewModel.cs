@@ -55,6 +55,8 @@ namespace ConasiCRM.Portable.ViewModels
         private AddressModel _permanentAddress;
         public AddressModel PermanentAddress { get => _permanentAddress; set { _permanentAddress = value; OnPropertyChanged(nameof(PermanentAddress)); } }
 
+        private AddressModel _addressCopy;
+        public AddressModel AddressCopy { get => _addressCopy; set { _addressCopy = value; OnPropertyChanged(nameof(AddressCopy)); } }
         public ContactFormViewModel()
         {
             singleContact = new ContactFormModel();

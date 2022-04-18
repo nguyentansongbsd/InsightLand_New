@@ -9,14 +9,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Telerik.XamarinForms.Primitives;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ConasiCRM.Portable.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LookUpAddress : Grid
+    public partial class LookUpAddress : StackLayout
     {
         public static readonly BindableProperty PlaceholderProperty = BindableProperty.Create(nameof(Placeholder), typeof(string), typeof(LookUpAddress), null, BindingMode.TwoWay);
         public string Placeholder { get => (string)GetValue(PlaceholderProperty); set => SetValue(PlaceholderProperty, value); }
@@ -51,6 +51,18 @@ namespace ConasiCRM.Portable.Controls
         public static readonly BindableProperty AddressProperty = BindableProperty.Create(nameof(Address), typeof(string), typeof(LookUpAddress), null, BindingMode.TwoWay);
         public string Address { get => (string)GetValue(AddressProperty); set { SetValue(AddressProperty, value); } }
         private StackLayout stackLayoutMain { get; set; }
+        private Grid gridFooter { get; set; }
+
+        public static readonly BindableProperty AddressCopyProperty = BindableProperty.Create(nameof(AddressCopy), typeof(AddressModel), typeof(LookUpAddress), null, BindingMode.TwoWay, propertyChanged: AddressCopyChang);
+
+        private static void AddressCopyChang(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (newValue == null) return;
+            LookUpAddress control = (LookUpAddress)bindable;
+            control.BtnCopy.SetBinding(Label.IsVisibleProperty, new Binding("AddressCopy") { Source = control, Converter = new Converters.NullToHideConverter() });
+        }
+
+        public AddressModel AddressCopy { get => (AddressModel)GetValue(AddressCopyProperty); set { SetValue(AddressCopyProperty, value); } }
         public LookUpAddress()
         {
             InitializeComponent();
@@ -58,6 +70,7 @@ namespace ConasiCRM.Portable.Controls
             this.Entry.SetBinding(EntryNoneBorder.PlaceholderProperty, "Placeholder");
             this.Entry.SetBinding(EntryNoneBorder.TextProperty, "Address");
             this.BtnClear.SetBinding(Button.IsVisibleProperty, new Binding("Address") { Source = this, Converter = new Converters.NullToHideConverter() });
+            this.BtnCopy.SetBinding(Label.IsVisibleProperty, new Binding("AddressCopy") { Source = this, Converter = new Converters.NullToHideConverter() });
 
             list_country_lookup = new ObservableCollection<Models.LookUp>();
             list_province_lookup = new ObservableCollection<Models.LookUp>();
@@ -82,13 +95,13 @@ namespace ConasiCRM.Portable.Controls
         {
             if (BottomModal == null || CenterModal == null) return;
             if (stackLayoutMain == null)
-            {
                 setLookUp();
+            if (gridFooter == null)
+                Footer();
 
-                CenterModal.Body = stackLayoutMain;
-                CenterModal.Footer = Footer();
-                CenterModal.Title = Placeholder;
-            }
+            CenterModal.Body = stackLayoutMain;
+            CenterModal.Footer = gridFooter;
+            CenterModal.Title = Placeholder;
             await CenterModal.Show();
         }
 
@@ -384,12 +397,12 @@ namespace ConasiCRM.Portable.Controls
                 Address = SelectedItem.address;
         }
 
-        public Grid Footer()
+        public void Footer()
         {
-            Grid grid = new Grid();
-            grid.Padding = 10;
-            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            gridFooter = new Grid();
+            gridFooter.Padding = 10;
+            gridFooter.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            gridFooter.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             Button btnClose = new Button();
             btnClose.Text = Language.dong;
             btnClose.BackgroundColor = Color.White;
@@ -399,7 +412,7 @@ namespace ConasiCRM.Portable.Controls
             btnClose.BorderWidth = 1;
             btnClose.HeightRequest = 40;
             btnClose.Clicked += CloseAddress_Clicked;
-            grid.Children.Add(btnClose);
+            gridFooter.Children.Add(btnClose);
             Grid.SetColumn(btnClose, 0);
             Grid.SetRow(btnClose, 0);
 
@@ -412,11 +425,9 @@ namespace ConasiCRM.Portable.Controls
             btnSave.BorderWidth = 1;
             btnSave.HeightRequest = 40;
             btnSave.Clicked += ConfirmAddress_Clicked;
-            grid.Children.Add(btnSave);
+            gridFooter.Children.Add(btnSave);
             Grid.SetColumn(btnSave, 1);
             Grid.SetRow(btnSave, 0);
-
-            return grid;
         }
 
         private async void CloseAddress_Clicked(object sender, EventArgs e)
@@ -483,7 +494,43 @@ namespace ConasiCRM.Portable.Controls
             }
             Address = SelectedItem.address = string.Join(", ", _address);
             SelectedItem.address_en = string.Join(", ", _address_en);
+            AddressCopy = new AddressModel
+            {
+                country_id = SelectedItem.country_id,
+                country_name = SelectedItem.country_name,
+                country_name_en = SelectedItem.country_name_en,
+                province_id = SelectedItem.province_id,
+                province_name = SelectedItem.province_name,
+                province_name_en = SelectedItem.province_name_en,
+                district_id = SelectedItem.district_id,
+                district_name = SelectedItem.district_name,
+                district_name_en = SelectedItem.district_name_en,
+                address = SelectedItem.address,
+                address_en = SelectedItem.address_en,
+                lineaddress = SelectedItem.lineaddress,
+                lineaddress_en = SelectedItem.lineaddress_en
+            };
             await CenterModal.Hide();
+        }
+        private void CopyAddress_Tapped(object sender, EventArgs e)
+        {
+            if (AddressCopy != null)
+                SelectedItem = new AddressModel
+                {
+                    country_id = AddressCopy.country_id,
+                    country_name = AddressCopy.country_name,
+                    country_name_en = AddressCopy.country_name_en,
+                    province_id = AddressCopy.province_id,
+                    province_name = AddressCopy.province_name,
+                    province_name_en = AddressCopy.province_name_en,
+                    district_id = AddressCopy.district_id,
+                    district_name = AddressCopy.district_name,
+                    district_name_en = AddressCopy.district_name_en,
+                    address = AddressCopy.address,
+                    address_en = AddressCopy.address_en,
+                    lineaddress = AddressCopy.lineaddress,
+                    lineaddress_en = AddressCopy.lineaddress_en
+                };
         }
     }
 }

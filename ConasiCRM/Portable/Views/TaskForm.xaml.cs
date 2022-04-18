@@ -45,7 +45,8 @@ namespace ConasiCRM.Portable.Views
             this.BindingContext = viewModel = new TaskFormViewModel();
             // kiểm tra page trước là page nào
             var page_before = App.Current.MainPage.Navigation.NavigationStack.Last()?.GetType().Name;
-            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage" || page_before == "LeadDetailPage")
+            if (page_before == "ContactDetailPage" || page_before == "AccountDetailPage" 
+                || page_before == "LeadDetailPage" || page_before == "QueuesDetialPage")
             {
                 if (page_before == "ContactDetailPage" && ContactDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(ContactDetailPage.FromCustomer.Val))
                 {
@@ -62,6 +63,12 @@ namespace ConasiCRM.Portable.Views
                 else if (page_before == "LeadDetailPage" && LeadDetailPage.FromCustomer != null && !string.IsNullOrWhiteSpace(LeadDetailPage.FromCustomer.Val))
                 {
                     viewModel.Customer = LeadDetailPage.FromCustomer;
+                    Lookup_NguoiLienQuan.IsVisible = false;
+                    ContactMapping.IsVisible = true;
+                }
+                else if (page_before == "QueuesDetialPage" && QueuesDetialPage.FromQueue != null && !string.IsNullOrWhiteSpace(QueuesDetialPage.FromQueue.Val))
+                {
+                    viewModel.Customer = QueuesDetialPage.FromQueue;
                     Lookup_NguoiLienQuan.IsVisible = false;
                     ContactMapping.IsVisible = true;
                 }
@@ -201,6 +208,7 @@ namespace ConasiCRM.Portable.Views
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
                     if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
+                    if (QueuesDetialPage.NeedToRefreshActivity.HasValue) QueuesDetialPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage(Language.tao_cong_viec_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();
@@ -224,6 +232,7 @@ namespace ConasiCRM.Portable.Views
                     if (ContactDetailPage.NeedToRefreshActivity.HasValue) ContactDetailPage.NeedToRefreshActivity = true;
                     if (AccountDetailPage.NeedToRefreshActivity.HasValue) AccountDetailPage.NeedToRefreshActivity = true;
                     if (LeadDetailPage.NeedToRefreshActivity.HasValue) LeadDetailPage.NeedToRefreshActivity = true;
+                    if (QueuesDetialPage.NeedToRefreshActivity.HasValue) QueuesDetialPage.NeedToRefreshActivity = true;
                     ToastMessageHelper.ShortMessage(Language.cap_nhat_cong_viec_thanh_cong);
                     await Navigation.PopAsync();
                     LoadingHelper.Hide();

@@ -122,6 +122,7 @@ namespace ConasiCRM.Portable.ViewModels
                                 <attribute name='bsd_queuesperunit' />
                                 <attribute name='bsd_longqueuingtime' />
                                 <attribute name='bsd_shortqueingtime' />
+                                <attribute name='bsd_logo'/>
                                 <order attribute='bsd_name' descending='false' />
                                 <filter type='and'>
                                   <condition attribute='bsd_projectid' operator='eq' uitype='bsd_project' value='" + ProjectId.ToString() + @"' />

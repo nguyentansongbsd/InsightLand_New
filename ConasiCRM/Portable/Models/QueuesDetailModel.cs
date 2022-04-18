@@ -5,7 +5,7 @@ namespace ConasiCRM.Portable.Models
 {
     public class QueuesDetailModel : BaseViewModel
     {
-        public string opportunityid { get; set; }
+        public Guid opportunityid { get; set; }
         public string name { get; set; }
         public string description { get; set; }
 
@@ -28,7 +28,7 @@ namespace ConasiCRM.Portable.Models
         public Guid _bsd_salesagentcompany_value { get; set; }
         public string salesagentcompany_name { get; set; }
 
-        public decimal? bsd_queuingfee { get; set; }
+        public decimal bsd_queuingfee { get; set; }
         public string bsd_queuingfee_format { get => StringFormatHelper.FormatCurrency(bsd_queuingfee); }
         public decimal? budgetamount { get; set; }
         public string budgetamount_format { get => StringFormatHelper.FormatCurrency(budgetamount); }
@@ -47,5 +47,6 @@ namespace ConasiCRM.Portable.Models
 
         public DateTime _bsd_queuingexpired;
         public DateTime bsd_queuingexpired { get => _bsd_queuingexpired.AddHours(7); set { _bsd_queuingexpired = value; OnPropertyChanged(nameof(bsd_queuingexpired)); } }
+        public bool isexpired { get => bsd_queuingexpired < DateTime.Now ? true : false; }
     }
 }

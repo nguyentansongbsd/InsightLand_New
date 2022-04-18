@@ -415,7 +415,7 @@ namespace ConasiCRM.Portable.ViewModels
             data["sic"] = singleLead.sic;
             data["description"] = singleLead.description;
             data["address1_composite"] = singleLead.address1_composite;
-
+            data["bsd_address"] = singleLead.address1_composite;
             data["bsd_housenumberstreet"] = singleLead.address1_line1;
 
             data["bsd_postalcode"] = singleLead.address1_postalcode;
@@ -462,6 +462,9 @@ namespace ConasiCRM.Portable.ViewModels
             {
                 data["ownerid@odata.bind"] = "/systemusers(" + UserLogged.ManagerId + ")";
             }
+            // fix lỗi k có loại khách hàng
+            data["bsd_businesstypesys"] = "100000000";
+
             return data;
         }
         public async Task<Boolean> DeletLookup(string Entity, string fieldName, Guid Id)

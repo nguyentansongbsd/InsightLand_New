@@ -9,6 +9,13 @@
              x:Name="rootPage"
              xmlns:language="clr-namespace:ConasiCRM.Portable.Resources"
              x:Class="ConasiCRM.Portable.Views.DirectSale">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="Clear_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xf0e2;" FontFamily="FontAwesomeSolid" Size="18" Color="White"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <AbsoluteLayout>
             <ScrollView  AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="0,0,0,60">

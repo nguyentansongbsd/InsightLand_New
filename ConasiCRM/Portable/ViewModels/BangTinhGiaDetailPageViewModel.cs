@@ -45,6 +45,9 @@ namespace ConasiCRM.Portable.ViewModels
         private DiscountSpecialModel _discountSpecialItem;
         public DiscountSpecialModel DiscountSpecialItem { get => _discountSpecialItem; set { _discountSpecialItem = value; OnPropertyChanged(nameof(DiscountSpecialItem)); } }
 
+        private DiscountListModel _discount;
+        public DiscountListModel Discount { get => _discount; set { _discount = value; OnPropertyChanged(nameof(Discount)); } }
+
         public string UpdateQuote = "1";
         public string UpdateQuotation = "2";
         public string ConfirmReservation = "3";
@@ -385,7 +388,8 @@ namespace ConasiCRM.Portable.ViewModels
 
             foreach (var x in result.value)
             {
-                x.bsd_duedate = x.bsd_duedate.ToLocalTime();
+                if(x.bsd_duedate != null)
+                    x.bsd_duedate = x.bsd_duedate.Value.ToLocalTime();
                 InstallmentList.Add(x);
             }
             NumberInstallment = InstallmentList.Count();
@@ -686,6 +690,44 @@ namespace ConasiCRM.Portable.ViewModels
                 return;
             }
             DiscountSpecialItem = result.value.SingleOrDefault();
+        }
+        public async Task LoadDiscountList(string discount_id)
+        {
+            string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                  <entity name='bsd_discount'>
+                                    <attribute name='bsd_discountid' />
+                                    <attribute name='bsd_name' />
+                                    <attribute name='createdon' />
+                                    <attribute name='new_type' />
+                                    <attribute name='bsd_startdate' />
+                                    <attribute name='bsd_project' />
+                                    <attribute name='bsd_phaseslaunch' />
+                                    <attribute name='bsd_highquantity' />
+                                    <attribute name='bsd_enddate' />
+                                    <attribute name='bsd_discounttype' />
+                                    <attribute name='bsd_discountnumber' />
+                                    <attribute name='bsd_lowquantity' />
+                                    <attribute name='bsd_amount' />
+                                    <attribute name='bsd_percentage' />
+                                    <order attribute='bsd_discountnumber' descending='false' />
+                                    <filter type='and'>
+                                        <condition attribute='bsd_discountid' operator='eq' value='{discount_id}' />
+                                    </filter>
+                                    <link-entity name='bsd_project' from='bsd_projectid' to='bsd_project' link-type='outer' alias='aa'>
+                                        <attribute name='bsd_name' alias='project_name' />
+                                    </link-entity>
+                                    <link-entity name='bsd_phaseslaunch' from='bsd_phaseslaunchid' to='bsd_phaseslaunch' link-type='outer' alias='ab'>
+                                        <attribute name='bsd_name' alias='phaseslaunch_name' />
+                                    </link-entity>
+                                  </entity>
+                                </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<DiscountListModel>>("bsd_discounts", fetchXml);
+            if (result == null || result.value.Count == 0)
+            {
+                return;
+            }
+            Discount = result.value.FirstOrDefault();
         }
     }
 }

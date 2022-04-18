@@ -2937,4 +2937,19 @@
   <data name="lead_9_industry" xml:space="preserve">
     <value>Quản lý Thiết kế, Chỉ đạo và Quảng cáo</value>
   </data>
+  <data name="da_het_han" xml:space="preserve">
+    <value>Hết Hạn</value>
+  </data>
+  <data name="discount_no" xml:space="preserve">
+    <value>Discount No.</value>
+  </data>
+  <data name="gia_tri_bat_dau" xml:space="preserve">
+    <value>Giá trị bắt đầu</value>
+  </data>
+  <data name="gia_tri_ket_thuc" xml:space="preserve">
+    <value>Giá trị kết thúc</value>
+  </data>
+  <data name="loai_chiet_khau" xml:space="preserve">
+    <value>Loại chiết khấu</value>
+  </data>
 </root>

@@ -32,8 +32,10 @@ namespace ConasiCRM.Portable.ViewModels
         public LookUp PrimaryContact { get => _PrimaryContact; set { _PrimaryContact = value; OnPropertyChanged(nameof(PrimaryContact)); } }
 
         private AddressModel _address1;
-        public AddressModel Address1 { get => _address1; set { _address1 = value; OnPropertyChanged(nameof(Address1)); } }        
+        public AddressModel Address1 { get => _address1; set { _address1 = value; OnPropertyChanged(nameof(Address1)); } }
 
+        private AddressModel _addressCopy;
+        public AddressModel AddressCopy { get => _addressCopy; set { _addressCopy = value; OnPropertyChanged(nameof(AddressCopy)); } }
         public AccountFormViewModel()
         {
             singleAccount = new AccountFormModel();
@@ -126,6 +128,7 @@ namespace ConasiCRM.Portable.ViewModels
                 //address_en = singleAccount.bsd_diachi,
                 //lineaddress_en = singleAccount.bsd_street,
             };
+            int a = 0;
         }
 
         public void GetPrimaryContactByID()

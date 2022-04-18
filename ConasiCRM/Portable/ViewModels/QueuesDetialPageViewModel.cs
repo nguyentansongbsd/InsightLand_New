@@ -11,6 +11,7 @@ namespace ConasiCRM.Portable.ViewModels
 {
     public class QueuesDetialPageViewModel : BaseViewModel
     {
+        public ObservableCollection<FloatButtonItem> ButtonCommandList { get; set; } = new ObservableCollection<FloatButtonItem>();
         public Guid QueueId { get; set; }
         public string NumPhone { get; set; }
 
@@ -22,6 +23,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         private ObservableCollection<ContractModel> _hopDongList;
         public ObservableCollection<ContractModel> HopDongList { get => _hopDongList; set { _hopDongList = value; OnPropertyChanged(nameof(HopDongList)); } }
+        public ObservableCollection<HoatDongListModel> list_thongtincase { get; set; }
 
         private QueuesDetailModel _queue;
         public QueuesDetailModel Queue { get => _queue; set { _queue = value; OnPropertyChanged(nameof(Queue)); } }
@@ -53,9 +55,12 @@ namespace ConasiCRM.Portable.ViewModels
         private bool _showMoreHopDong;
         public bool ShowMoreHopDong { get => _showMoreHopDong; set { _showMoreHopDong = value; OnPropertyChanged(nameof(ShowMoreHopDong)); } }
 
+        private bool _showMoreCase;
+        public bool ShowMoreCase { get => _showMoreCase; set { _showMoreCase = value; OnPropertyChanged(nameof(ShowMoreCase)); } }
         public int PageBangTinhGia { get; set; } = 1;
         public int PageDatCoc { get; set; } = 1;
         public int PageHopDong { get; set; } = 1;
+        public int PageCase { get; set; } = 1;
 
         public string CodeContact = "2";
 
@@ -63,6 +68,7 @@ namespace ConasiCRM.Portable.ViewModels
 
         public QueuesDetialPageViewModel()
         {
+            list_thongtincase = new ObservableCollection<HoatDongListModel>();
         }
 
         public async Task LoadQueue()
@@ -145,10 +151,9 @@ namespace ConasiCRM.Portable.ViewModels
             }
 
             ShowBtnHuyGiuCho = (data.statuscode == 100000000 || data.statuscode == 100000002) ? true : false;
-            ShowBtnBangTinhGia = (data.statuscode == 100000000 && !string.IsNullOrWhiteSpace(data.phaselaunch_name)) ? true : false;
-
+            //  ShowBtnBangTinhGia = (data.statuscode == 100000000 && !string.IsNullOrWhiteSpace(data.phaselaunch_name)) ? true : false;
+            ShowButtons = (data.statuscode == 100000008 || data.statuscode == 100000009 || data.statuscode == 100000010) ? false : true;
             this.QueueStatusCode = QueuesStatusCodeData.GetQueuesById(data.statuscode.ToString());
-
             this.Queue = data;
         }
         public async Task LoadDanhSachBangTinhGia()
@@ -202,7 +207,7 @@ namespace ConasiCRM.Portable.ViewModels
                 this.BangTinhGiaList.Add(item);
             }
         }
-        public async Task CheckReserve()
+        public async Task<bool> CheckReserve()
         {
             string fetchXml = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                       <entity name='quote'>
@@ -221,14 +226,14 @@ namespace ConasiCRM.Portable.ViewModels
                       </entity>
                     </fetch>";
             var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<OptionSet>>("quotes", fetchXml);
-            if (result == null) return;
+            if (result == null) return false;
             if (result.value.Any() == false && this.Queue.statuscode == 100000000)
             {
-                ShowBtnBangTinhGia = true;
+                return (Queue.statuscode == 100000000 && !string.IsNullOrWhiteSpace(Queue.phaselaunch_name)) ? true : false;
             }
             else
             {
-                ShowBtnBangTinhGia = false;
+                return false;
             }
         }
         public async Task LoadDanhSachDatCoc()
@@ -325,6 +330,74 @@ namespace ConasiCRM.Portable.ViewModels
                 this.HopDongList.Add(item);
             }
         }
+        public async Task LoadCaseForQueue()
+        {
+            if (list_thongtincase != null && Queue != null && Queue.opportunityid != Guid.Empty)
+            {
+                await Task.WhenAll(
+                    LoadActiviy(Queue.opportunityid, "task", "tasks"),
+                    LoadActiviy(Queue.opportunityid, "phonecall", "phonecalls"),
+                    LoadActiviy(Queue.opportunityid, "appointment", "appointments")
+                );
+            }
+            ShowMoreCase = list_thongtincase?.Count < (3 * PageCase) ? false : true;
+        }
+        public async Task LoadActiviy(Guid queueID, string entity, string entitys)
+        {
+            string forphonecall = null;
+            if (entity == "phonecall")
+            {
+                forphonecall = @"<link-entity name='activityparty' from='activityid' to='activityid' link-type='outer' alias='aee'>
+                                        <filter type='and'>
+                                            <condition attribute='participationtypemask' operator='eq' value='2' />
+                                        </filter>
+                                        <link-entity name='contact' from='contactid' to='partyid' link-type='outer' alias='aff'>
+                                            <attribute name='fullname' alias='callto_contact_name'/>
+                                        </link-entity>
+                                        <link-entity name='account' from='accountid' to='partyid' link-type='outer' alias='agg'>
+                                            <attribute name='bsd_name' alias='callto_account_name'/>
+                                        </link-entity>
+                                        <link-entity name='lead' from='leadid' to='partyid' link-type='outer' alias='ahh'>
+                                            <attribute name='fullname' alias='callto_lead_name'/>
+                                        </link-entity>
+                                    </link-entity>";
+            }
 
+            string fetch = $@"<fetch version='1.0' count='3' page='{PageCase}' output-format='xml-platform' mapping='logical' distinct='true'>
+                                <entity name='{entity}'>
+                                    <attribute name='subject' />
+                                    <attribute name='statecode' />
+                                    <attribute name='activityid' />
+                                    <attribute name='scheduledstart' />
+                                    <attribute name='scheduledend' /> 
+                                    <attribute name='activitytypecode' /> 
+                                    <order attribute='modifiedon' descending='true' />
+                                    <filter type='and'>
+                                        <condition attribute='regardingobjectid' operator='eq' value='{queueID}' />
+                                        <condition attribute='bsd_employee' operator='eq' uitype='bsd_employee' value='{UserLogged.Id}' />
+                                    </filter>
+                                    <link-entity name='activityparty' from='activityid' to='activityid' link-type='inner' alias='party'/>
+                                    <link-entity name='account' from='accountid' to='regardingobjectid' link-type='outer' alias='ae'>
+                                        <attribute name='bsd_name' alias='accounts_bsd_name'/>
+                                    </link-entity>
+                                    <link-entity name='contact' from='contactid' to='regardingobjectid' link-type='outer' alias='af'>
+                                        <attribute name='fullname' alias='contact_bsd_fullname'/>
+                                    </link-entity>
+                                    <link-entity name='lead' from='leadid' to='regardingobjectid' link-type='outer' alias='ag'>
+                                        <attribute name='fullname' alias='lead_fullname'/>
+                                    </link-entity>
+                                    {forphonecall}
+                                </entity>
+                            </fetch>";
+
+            var result = await CrmHelper.RetrieveMultiple<RetrieveMultipleApiResponse<HoatDongListModel>>(entitys, fetch);
+            if (result == null || result.value.Count == 0) return;
+
+            var data = result.value;
+            foreach (var x in data)
+            {
+                list_thongtincase.Add(x);
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ using ConasiCRM.Portable.Helper;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,10 +54,9 @@ namespace ConasiCRM.Portable.ViewModels
         public List<OptionSetFilter> Optional { get => _optional; set { _optional = value; OnPropertyChanged(nameof(Optional)); } }
 
         public string CodeAccount = LookUpMultipleTabs.CodeAccount;
-
         public string CodeContac = LookUpMultipleTabs.CodeContac;
-
         public string CodeLead = LookUpMultipleTabs.CodeLead;
+        public string CodeQueue = QueuesDetialPage.CodeQueue;
 
         public bool _showButton;
         public bool ShowButton { get => _showButton; set { _showButton = value; OnPropertyChanged(nameof(ShowButton)); } }
@@ -111,6 +111,10 @@ namespace ConasiCRM.Portable.ViewModels
                           <attribute name='accountid' alias='account_id' />                  
                           <attribute name='bsd_name' alias='account_name'/>
                       </link-entity>
+                    <link-entity name='opportunity' from='opportunityid' to='regardingobjectid' link-type='outer' alias='ab'>
+                        <attribute name='opportunityid' alias='queue_id'/>                  
+                        <attribute name='name' alias='queue_name'/>
+                    </link-entity>
                       <link-entity name='lead' from='leadid' to='regardingobjectid' visible='false' link-type='outer' alias='leads'>
                           <attribute name='leadid' alias='lead_id'/>                  
                           <attribute name='fullname' alias='lead_name'/>
@@ -165,8 +169,26 @@ namespace ConasiCRM.Portable.ViewModels
                     Label = data.lead_name
                 };
             }
+            else if (data.lead_id != Guid.Empty)
+            {
+                Customer = new OptionSetFilter
+                {
+                    Title = CodeLead,
+                    Val = data.lead_id.ToString(),
+                    Label = data.lead_name
+                };
+            }
+            else if (data.queue_id != Guid.Empty)
+            {
+                Customer = new OptionSetFilter
+                {
+                    Title = CodeQueue,
+                    Val = data.queue_id.ToString(),
+                    Label = data.queue_name
+                };
+            }
 
-            if (MeetingModel.statecode == 0)
+            if (MeetingModel.statecode == 0 || MeetingModel.statecode == 3)
                 ShowButton = true;
             else
                 ShowButton = false;
@@ -327,6 +349,10 @@ namespace ConasiCRM.Portable.ViewModels
                     arrayMeeting.Add(item_required);
 
                     data["regardingobjectid_lead_appointment@odata.bind"] = "/leads(" + CustomerMapping.Val + ")";
+                }
+                else if (CustomerMapping.Title == CodeQueue)
+                {
+                    data["regardingobjectid_opportunity_appointment@odata.bind"] = "/opportunities(" + CustomerMapping.Val + ")";
                 }
             }
 

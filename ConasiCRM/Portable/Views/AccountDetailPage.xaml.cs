@@ -72,10 +72,7 @@ namespace ConasiCRM.Portable.Views
                 LoadingHelper.Show();
                 await viewModel.LoadOneAccount(AccountId.ToString());
                 viewModel.singleAccount.bsd_address = await SetAddress();
-                if (viewModel.singleAccount.bsd_businesstypesys != null)
-                {
-                    viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
-                }
+                viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
                 if (viewModel.singleAccount.bsd_localization != null)
                 {
                     viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
@@ -123,10 +120,7 @@ namespace ConasiCRM.Portable.Views
 
                 viewModel.singleAccount.bsd_address = await SetAddress();
 
-                if (viewModel.singleAccount.bsd_businesstypesys != null)
-                {
-                    viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
-                }
+                viewModel.GetTypeById(viewModel.singleAccount.bsd_businesstypesys);
                 if (viewModel.singleAccount.bsd_localization != null)
                 {
                     viewModel.Localization = AccountLocalization.GetLocalizationById(viewModel.singleAccount.bsd_localization);
