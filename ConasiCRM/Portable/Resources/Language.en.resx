@@ -2952,4 +2952,43 @@
   <data name="loai_chiet_khau" xml:space="preserve">
     <value>Discount type</value>
   </data>
+  <data name="quen_mat_khau">
+        <value>Forgot password ?</value>
+    </data>
+    <data name="user_name_khong_dung" xml:space="preserve">
+    <value>User name incorrect.</value>
+  </data>
+	<data name="xac_nhan_ma_otp">
+		<value>Validate OTP</value>
+	</data>
+	<data name="otp_duoc_gui_ve_so_dien_thoai">
+		<value>OTP has been sent to</value>
+	</data>
+	<data name="vui_long_nhap_otp_de_xac_nhan_tai_khoan">
+		<value>Please enter the OTP to verify your account</value>
+	</data>
+	<data name="ban_chua_nhan_duoc_ma_gui_lai">
+		<value>Didn't receive the code? Resend OTP</value>
+	</data>
+	<data name="ma_xac_thuc_khong_dung">
+		<value>OTP code is incorrect</value>
+	</data>
+	<data name="mat_khau_khong_khop">
+		<value>Password don't match</value>
+	</data>
+	<data name="xac_nhan_mat_khau">
+		<value>Confirm password</value>
+	</data>
+	<data name="vui_long_nhap_mat_khau">
+        <value>Please enter your password</value>
+    </data>
+	<data name="vui_long_nhap_xac_nhan_mat_khau">
+        <value>Please enter confirm your password</value>
+    </data>
+    <data name="vui_long_nhap_so_dien_thoai" xml:space="preserve">
+    <value>Please enter phone number.</value>
+  </data>
+  <data name="mat_khau_it_nhat_6_ky_tu" xml:space="preserve">
+		<value>Password must be at least 6 characters.</value>
+	  </data>
 </root>
