@@ -5,6 +5,7 @@ using ConasiCRM.Portable.IServices;
 using ConasiCRM.Portable.Models;
 using ConasiCRM.Portable.Resources;
 using ConasiCRM.Portable.Settings;
+using ConasiCRM.Portable.Views;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -309,6 +310,13 @@ namespace ConasiCRM.Portable
                 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             }
             Application.Current.MainPage = new Login();
+            LoadingHelper.Hide();
+        }
+
+        private async void ForgotPassword_Tapped(object sender, EventArgs e)
+        {
+            LoadingHelper.Show();
+            await Navigation.PushAsync(new ForgotPassWordPage());
             LoadingHelper.Hide();
         }
     }
