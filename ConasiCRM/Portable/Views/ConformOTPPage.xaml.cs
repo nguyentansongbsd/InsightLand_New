@@ -46,7 +46,7 @@ namespace ConasiCRM.Portable.Views
                 OTPModel data = new OTPModel()
                 {
                     Id = Guid.NewGuid(),
-                    Content = $"{otpCode} is your PhuLongCRM verification code.",
+                    Content = $"{otpCode} is your ConasiCRM verification code.",
                     Phone = $"{Phone}",
                     OTPCode = otpCode,
                     IsSend = false,

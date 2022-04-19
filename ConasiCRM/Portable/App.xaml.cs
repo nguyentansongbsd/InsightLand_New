@@ -22,7 +22,8 @@ namespace ConasiCRM.Portable
             CrossMediaManager.Current.Init();
             CultureInfo cultureInfo = new CultureInfo(UserLogged.Language);
             Language.Culture = cultureInfo;
-            MainPage = new Login();
+            MainPage = new AppShell();
+            Shell.Current.Navigation.PushAsync(new Login(), false);
         }
 
 
