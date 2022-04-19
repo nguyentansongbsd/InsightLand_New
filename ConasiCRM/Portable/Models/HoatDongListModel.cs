@@ -14,6 +14,7 @@ namespace ConasiCRM.Portable.Models
         public string accounts_bsd_name { get; set; }
         public string contact_bsd_fullname { get; set; }
         public string lead_fullname { get; set; }
+        public string queue_name { get; set; }
         public string systemsetup_bsd_name { get; set; }
         public string regarding_name
         {
@@ -38,6 +39,10 @@ namespace ConasiCRM.Portable.Models
                     {
                         return this.callto_lead_name;
                     }
+                    else if (this.callto_queue_name != null)
+                    {
+                        return this.callto_queue_name;
+                    }
                     else
                     {
                         return " ";
@@ -60,6 +65,10 @@ namespace ConasiCRM.Portable.Models
                     else if (this.systemsetup_bsd_name != null)
                     {
                         return this.systemsetup_bsd_name;
+                    }
+                    else if (this.queue_name != null)
+                    {
+                        return this.queue_name;
                     }
                     else
                     {
@@ -166,6 +175,7 @@ namespace ConasiCRM.Portable.Models
         public string callto_contact_name { get; set; }
         public string callto_account_name { get; set; }
         public string callto_lead_name { get; set; }
+        public string callto_queue_name { get; set; }
 
         public string _customer;
         public string customer { get => _customer; set { _customer = value; OnPropertyChanged(nameof(customer)); } }
