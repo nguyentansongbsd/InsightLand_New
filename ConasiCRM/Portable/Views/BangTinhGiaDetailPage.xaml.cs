@@ -703,34 +703,14 @@ namespace ConasiCRM.Portable.Views
             if (viewModel.DiscountSpecialItem != null)
                 ContentSpecialDiscount.IsVisible = true;
             LoadingHelper.Hide();
-        }
-
-        private async void DiscountList_Tapped(object sender, EventArgs e)
-        {
-            LoadingHelper.Show();
-            var item = ((TapGestureRecognizer)((RadBorder)sender).GestureRecognizers[0]).CommandParameter as OptionSet;
-            if (item != null && item.Val != string.Empty)
-            {
-                if (viewModel.DiscountSpecialItem == null)
-                {
-                    await viewModel.LoadDiscountList(item.Val);
-                }
-                else if (viewModel.DiscountSpecialItem.bsd_discountspecialid.ToString() != item.Val)
-                {
-                    await viewModel.LoadDiscountList(item.Val);
-                }
-            }
-            if (viewModel.Discount != null)
-                ContentDiscountList.IsVisible = true;
-            LoadingHelper.Hide();
-        }
+        }      
 
         private void CloseContentDiscount_Tapped(object sender, EventArgs e)
         {
             ContentDiscountList.IsVisible = false;
         }
 
-        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        private async void DiscountList_Tapped(object sender, EventArgs e)
         {
             LoadingHelper.Show();
             var item = ((TapGestureRecognizer)((RadBorder)sender).GestureRecognizers[0]).CommandParameter as OptionSet;

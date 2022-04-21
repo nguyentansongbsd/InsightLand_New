@@ -19,6 +19,7 @@ namespace ConasiCRM.Portable.Views
         public MeetingViewModel viewModel;
         private Guid MeetId;
         private bool IsInit;
+        private bool isEventclick;
         public MeetingForm()
         {
             InitializeComponent();
@@ -101,11 +102,6 @@ namespace ConasiCRM.Portable.Views
                     Lookup_Customer.IsVisible = false;
                     RegardingMapping.IsVisible = true;
                     Lookup_Option.ne_customer = Guid.Parse(viewModel.CustomerMapping.Val);
-                }
-                else
-                {
-                    Lookup_Customer.IsVisible = true;
-                    RegardingMapping.IsVisible = false;
                 }
             }
             else if (page_before == "QueuesDetialPage" && QueuesDetialPage.FromQueue != null && !string.IsNullOrWhiteSpace(QueuesDetialPage.FromQueue.Val))
@@ -312,8 +308,11 @@ namespace ConasiCRM.Portable.Views
                         ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                         viewModel.MeetingModel.scheduledstart = viewModel.MeetingModel.scheduledend;
                     }
+                    if (viewModel.MeetingModel.isalldayevent == true && isEventclick == false)
+                        viewModel.MeetingModel.isalldayevent = false;
                 }
             }
+            isEventclick = false;
         }
 
         private void DatePickerEnd_DateSelected(object sender, EventArgs e)
@@ -327,16 +326,20 @@ namespace ConasiCRM.Portable.Views
                         ToastMessageHelper.ShortMessage(Language.thoi_gian_ket_thuc_phai_lon_hon_thoi_gian_bat_dau);
                         viewModel.MeetingModel.scheduledend = viewModel.MeetingModel.scheduledstart.Value.AddMinutes(1);
                     }
+                    if (viewModel.MeetingModel.isalldayevent == true && isEventclick == false)
+                        viewModel.MeetingModel.isalldayevent = false;
                 }
                 else
                 {
                     ToastMessageHelper.ShortMessage(Language.vui_long_chon_thoi_gian_bat_dau);
                 }
             }
+            isEventclick = false;
         }
 
         private void AllDayEvent_changeChecked(object sender, EventArgs e)
         {
+            isEventclick = true;
             if (viewModel.MeetingModel.scheduledstart != null)
             {
                 if (viewModel.MeetingModel.isalldayevent)

@@ -118,11 +118,7 @@
                                         </Grid>
                                         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" BackgroundColor="White" >
                                             <controls:FormLabel Text="{x:Static language:Language.chiet_khau}" Grid.Row="0" Grid.Column="0" FontSize="15" TextColor="#444444" Padding="25,10,0,10" VerticalOptions="Start"/>
-                                            <controls:FormLabelValue Text="{Binding Reservation.discountlist_name}" Grid.Row="0" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="0,10,25,10" HorizontalTextAlignment="End">
-                                                <controls:FormLabelValue.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiscountList_Tapped"/>
-                                                </controls:FormLabelValue.GestureRecognizers>
-                                            </controls:FormLabelValue>
+                                            <controls:FormLabelValue Text="{Binding Reservation.discountlist_name}" Grid.Row="0" FontAttributes="Bold" Grid.Column="1" FontSize="15" TextColor="#1399D5" Padding="0,10,25,10" HorizontalTextAlignment="End"/>
                                             <ScrollView x:Name="scrolltDiscount" Orientation="Horizontal" HorizontalScrollBarVisibility="Always" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="25,0,25,10">
                                                 <StackLayout BindableLayout.ItemsSource="{Binding ListDiscount}" HorizontalOptions="End" Orientation="Horizontal">
                                                     <BindableLayout.ItemTemplate>
@@ -130,7 +126,7 @@
                                                             <telerikPrimitives:RadBorder CornerRadius="5" BorderColor="#f1f1f1" BorderThickness="1" Padding="5">
                                                                 <Label Text="{Binding Label}" FontSize="15" TextColor="#1399D5" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"/>
                                                                 <telerikPrimitives:RadBorder.GestureRecognizers>
-                                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped" CommandParameter="{Binding .}"/>
+                                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="DiscountList_Tapped" CommandParameter="{Binding .}"/>
                                                                 </telerikPrimitives:RadBorder.GestureRecognizers>
                                                             </telerikPrimitives:RadBorder>
                                                         </DataTemplate>
